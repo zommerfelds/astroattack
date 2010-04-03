@@ -1,2 +1,2 @@
 SUBDIRS = src
-EXTRA_DIST = bootstrap bin vs2008
+EXTRA_DIST = bootstrap data bin_win32 vs2008
