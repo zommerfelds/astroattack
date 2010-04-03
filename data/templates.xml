@@ -1,0 +1,36 @@
+<?xml version="1.0" ?>
+<root>
+      <EntityTemplateDef id = "Collectable">
+            <params
+                  animname = "4dots"
+                  animcenterx = "0.0"
+                  animcentery = "0.0"
+                  animhw = "0.6"
+                  animhh = "0.6"
+                  posx = "0.0"
+                  posy = "0.0"
+                  angle = "0.0"
+                  shapehw = "0.5"
+                  shapehh = "0.5"
+                  varname = "Collected"/>
+            <Component id = "CompVisualAnimation">
+                  <anim name = "$animname"/>
+                  <center x = "$animcenterx" y = "$animcentery"/>
+                  <dim hw = "$animhw" hh = "$animhh"/>
+                  <start/>
+            </Component>
+            <Component id = "CompPhysics">
+                  <pos
+                        x = "$posx"
+                        y = "$posy"
+                        a = "$angle"/>
+                  <shape name = "main">
+                        <isSensor/>
+                        <box hw = "$shapehw" hh = "$shapehh"/>
+                  </shape>
+            </Component>
+            <Component id = "CompCollectable">
+                  <var name = "$varname"/>
+            </Component>
+      </EntityTemplateDef>
+</root>

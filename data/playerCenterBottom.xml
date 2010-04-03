@@ -1,0 +1,54 @@
+<?xml version="1.0" ?>
+<root>
+    <Entity name = "Player">
+        <Component id = "CompVisualAnimation" name = "jetpack">
+            <anim name = "jetpack"/>
+            <center x = "-0.5" y = "0.78"/>
+            <dim hw = "0.3" hh = "1.0"/>
+        </Component>
+        <Component id = "CompVisualAnimation" name = "bodyAnim">
+            <anim name = "astro"/>
+            <center x = "0.05" y = "0.78"/>
+            <dim hw = "0.74" hh = "0.88"/>
+        </Component>
+        <Component id = "CompVisualTexture">
+                <tex name = "brick"/>
+            </Component>
+        <Component id = "CompPhysics">
+            <pos
+                  x = "0.0"
+                  y = "10.0"
+                  a = "0.0"/>
+            <fixedRotation/>
+            <isBullet/>
+            <!--saveContacts/-->
+            <dynamic />
+            <damping linear = "0.1"/>
+
+            <shape name = "middle">
+                <box hw="0.44" hh="0.35" x="0" y="0.75"/>
+                <phys density = "40.0" friction = "0.2"/>
+            </shape>
+            <shape name = "top">
+                <circle x = "0" y = "1.1" r="0.45"/>
+                <phys density = "1.0" friction = "0.2"/>
+            </shape>
+            <shape name = "mid2">
+                <vertex x="-0.18" y="0.09" />
+                <vertex x="0.18" y="0.09" />
+                <vertex x="0.440" y="0.4" />
+                <vertex x="-0.440" y="0.4" />
+                <phys density = "40.0" friction = "0.1"/>
+            </shape>
+            <shape name = "bottom">
+                <circle x = "0" y = "0.25" r="0.250"/>
+                <phys density = "40.0" friction = "0.1"/>
+            </shape>
+            <!--shape name = "bottom2">
+                        <circle x = "0" y = "-0.3" r="0.450"/>
+                        <phys density = "40.0" friction = "5"/>
+                  </shape-->
+        </Component>
+        <Component id = "CompPlayerController" />
+    </Entity>
+</root>

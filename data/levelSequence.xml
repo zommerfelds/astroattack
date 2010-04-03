@@ -1,0 +1,13 @@
+<root>
+  <slides file="data/Intro/introShow.xml" name="Intro">Spielintro</slides>
+  <level file="data/Levels/levelBig.xml" name="Tutorial (alt)"></level>
+  <level file="data/Levels/level1.xml" name="Level #1">Das erste Level</level>
+  <level file="data/Levels/level2.xml" name="Level #2">Das zweite Level</level>
+  <level file="data/Levels/level3.xml" name="Level #3">Das zweite Level</level>
+  <level file="data/Levels/level_linux.xml" name="Level Linux">Das zweite Level</level>
+  <level file="data/Levels/level_visita.xml" name="Oi!">Das zweite Level</level>
+  <level file="data/Levels/level_grav.xml" name="Grav Test">Das zweite Level</level>
+  <level file="data/Levels/level_grav2.xml" name="Grav Test2">Das zweite Level</level>
+  <level file="data/Levels/level_new.xml" name="Nu">Das zweite Level</level>
+  <!--slides file="data/intro/introShow.xml" name="Ende">Das Ende</level-->
+</root>

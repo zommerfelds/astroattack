@@ -1,0 +1,39 @@
+<?xml version="1.0" ?>
+<level name="My level">
+    <Entity name="EdBlock00000">
+        <Component id="CompPhysics" name="std">
+            <pos x="0.000000" y="0.000000" a="0.000000" />
+            <damping linear="0.000000" angular="0.000000" />
+            <shape name="shape1">
+                <phys density="0.000000" friction="0.300000" restitution="0.000000" />
+                <vertex x="-5.000000" y="-1.500000" />
+                <vertex x="-5.000000" y="-4.000000" />
+                <vertex x="5.500000" y="-4.000000" />
+                <vertex x="5.500000" y="-1.500000" />
+            </shape>
+        </Component>
+        <Component id="CompVisualTexture" name="std">
+            <tex name="Ancient Stone Slabs" />
+        </Component>
+    </Entity>
+    <Entity name="grav">
+        <Component id="CompPhysics" name="std">
+            <pos x="0.000000" y="0.000000" a="0.000000" />
+            <damping linear="0.000000" angular="0.000000" />
+            <shape name="shape1">
+                <isSensor />
+                <phys density="0.000000" friction="0.300000" restitution="0.000000" />
+                <vertex x="-5.000000" y="3.500000" />
+                <vertex x="-5.000000" y="-1.500000" />
+                <vertex x="5.500000" y="-1.500000" />
+                <vertex x="5.500000" y="3.500000" />
+            </shape>
+        </Component>
+        <Component id="CompGravField" name="std">
+            <grav type="directional" gx="0" gy="-20"/>
+        </Component>
+        <!--Component id="CompVisualTexture" name="std">
+            <tex name="Craterscape" />
+        </Component-->
+    </Entity>
+</level>

@@ -1,0 +1,20 @@
+*** Astro Attack ***
+--------------------
+
+./configure CXXFLAGS="-Wall" 
+
+Game by Christian Zommerfelds
+
+To install, open the Terminal and go to this directory.
+Type:
+./configure
+Then (When everything goes well):
+make
+
+To play, go to bin:
+cd bin
+Run the game
+./../src/AstroAttack
+
+Have fun! :-)
+Please send me an E-mail if you have any problems/wishes.

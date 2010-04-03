@@ -1,0 +1,297 @@
+/*----------------------------------------------------------\
+|                    PlayingState.cpp                       |
+|                    ----------------                       |
+|               Quelldatei von Astro Attack                 |
+|                  Christian Zommerfelds                    |
+|                          2009                             |
+\----------------------------------------------------------*/
+// PlayingState.h für mehr Informationen
+
+#include "../GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
+#include "PlayingState.h"
+#include "GameOverState.h"
+#include "../World.h"
+#include "../Camera.h"
+#include "../GameApp.h"
+#include "../Renderer.h"
+#include "../Physics.h"
+#include "../Input.h"
+#include "../Entity.h"
+#include "../Logger.h"
+#include "../EventManager.h"
+#include "../XmlLoader.h"
+#include "../Sound.h"
+#include <SDL/SDL.h>
+
+#include "../main.h"
+
+#include <boost/bind.hpp>
+
+#include <sstream>
+
+
+// TEMP !
+//#include "../Vector2D.h"
+#include "../components/CompGravField.h"
+#include "../components/CompPhysics.h"
+std::string levelName = "";
+
+// Nur um Warnungen zu vermeiden (dass x nicht benutzt wird)
+#define NOT_USED(x) x
+
+// Alle Entities in der Welt werden in dieser Datei aufgelistet
+const char* cWordLogFileName = "data/world.txt";
+
+StateIdType PlayingState::stateId = "PlayingState";
+
+PlayingState::PlayingState( SubSystems* pSubSystems, std::string levelFileName )
+: GameState( pSubSystems ),
+  m_pGameWorld ( new GameWorld( GetSubSystems()->eventManager.get() ) ),
+  m_pGameCamera ( new GameCamera( GetSubSystems()->input.get(), GetSubSystems()->renderer.get(), m_pGameWorld.get() ) ),
+  m_curentDeleteSet (1), m_wantToEndGame( false ), m_alphaOverlay( 0.0 ),
+  m_levelFileName ( levelFileName )
+{
+    // TEMP!
+    levelName = levelFileName;
+}
+
+PlayingState::~PlayingState()
+{
+}
+
+void PlayingState::Init()        // State starten
+{
+    //GetSubSystems()->renderer->DisplayLoadingScreen();
+    
+	SDL_WarpMouse((Uint16)(gAaConfig.GetInt("ScreenWidth")/2), (Uint16)(gAaConfig.GetInt("ScreenHeight")/2));
+
+    m_pGameCamera->Init();
+    m_pGameCamera->SetFollowPlayer ( true );
+
+    gAaLog.Write ( "Loading world...\n\n" );
+    gAaLog.IncreaseIndentationLevel();
+
+    m_pGameWorld->SetVariable( "Collected", 0 );
+    m_pGameWorld->SetVariable( "JetpackEnergy", 1000 );
+
+    // Welt von XML-Datei laden
+    XmlLoader loader;
+    loader.LoadXmlToWorld( "data/player.xml", m_pGameWorld.get(), GetSubSystems() );
+    loader.LoadXmlToWorld( /*"data/Levels/level.xml"*/ m_levelFileName.c_str(), m_pGameWorld.get(), GetSubSystems() );
+    //loader.LoadXmlToWorld( "data/Levels/editorLevel.xml", m_pGameWorld.get(), GetSubSystems() ); // Level des Editors
+
+    GetSubSystems()->sound->LoadMusic( "data/Music/Aerospace.ogg", "music" );
+    GetSubSystems()->sound->PlayMusic( "music", true, 0 );
+
+    gAaLog.DecreaseIndentationLevel();
+    gAaLog.Write ( "[ Done loading world ]\n\n" );
+
+    // Alle Entities und Komponenten in Text Datei anzeigen
+    Logger log ( cWordLogFileName );
+    log.Write( "World Entities:\n\n" );
+    m_pGameWorld->WriteWorldToLogger( log );
+    log.CloseFile();
+
+    m_registerObj.RegisterListener( WantToDeleteEntity, boost::bind( &PlayingState::EntityDeleted, this, _1 ) );
+    m_registerObj2.RegisterListener( LevelEnd_Lose, boost::bind( &PlayingState::GameOver, this, _1 ) );
+}
+
+void PlayingState::Cleanup()     // State abbrechen
+{
+    GetSubSystems()->sound->StopMusic( 500 );
+    GetSubSystems()->sound->FreeMusic( "music" );
+
+    m_pGameWorld.reset();
+    m_pGameCamera.reset();
+}
+
+void PlayingState::Pause()       // State anhalten
+{
+}
+
+void PlayingState::Resume()      // State wiederaufnehmen
+{
+}
+
+void PlayingState::Frame( float deltaTime )
+{
+    NOT_USED(deltaTime);
+    //GetSubSystems()->input->Update();   // neue Eingaben lesen
+    //m_pGameCamera->Update( deltaTime ); // Kamera updaten
+}
+
+void PlayingState::Update()      // Spiel aktualisieren
+{
+    GetSubSystems()->input->Update();   // neue Eingaben lesen
+    m_pGameCamera->Update( PHYS_DELTA_TIME ); // Kamera updaten
+
+    if ( m_wantToEndGame )
+    {
+        if ( m_alphaOverlay > 1.0f )
+        {
+            boost::shared_ptr<GameOverState> gameOverStateState ( new GameOverState( GetSubSystems(), m_gameOverMessage ) );
+            GetSubSystems()->stateManager->ChangeState( gameOverStateState );
+            return;
+        }
+        m_alphaOverlay += 0.10f;
+    }
+
+    //temp test this!
+    //static int a = 0;
+    //if (a == 0)
+    GetSubSystems()->physics->Update();                       // Physik aktualisieren
+    //a++;
+    //if (a > 3)
+    //    a = 0;
+    GetSubSystems()->eventManager->InvokeEvent( Event(GameUpdate,NULL) );
+
+    if ( m_curentDeleteSet == 1 )
+    {
+        m_curentDeleteSet = 2;
+        for ( std::set< std::string >::iterator it = m_entitiesToDelete1.begin(); it != m_entitiesToDelete1.end(); ++it )
+        {
+            m_pGameWorld->RemoveEntity( *it );
+        }
+
+        m_entitiesToDelete1.clear();
+    }
+    else
+    {
+        m_curentDeleteSet = 1;
+        for ( std::set< std::string >::iterator it = m_entitiesToDelete2.begin(); it != m_entitiesToDelete2.end(); ++it )
+        {
+            m_pGameWorld->RemoveEntity( *it );
+        }
+
+        m_entitiesToDelete2.clear();
+    }
+}
+
+void PlayingState::Draw( float accumulator )        // Spiel zeichnen
+{
+    RenderSubSystem* pRenderer = GetSubSystems()->renderer.get();
+
+    // Bildschirm leeren
+    pRenderer->ClearScreen();
+    // GUI modus (Grafische Benutzeroberfläche)
+    pRenderer->MatrixGUI();
+    // Menühintergrund zeichnen
+    {
+        float texCoord[8] = { 0.0f, 0.0f,
+                             0.0f, 1.0f,
+                             1.0f, 1.0f,
+                             1.0f, 0.0f };
+        float vertexCoord[8] = { 0.0f, 0.0f,
+                                 0.0f, 3.0f,
+                                 4.0f, 3.0f,
+                                 4.0f, 0.0f };
+        pRenderer->DrawTexturedQuad( texCoord, vertexCoord, "_starfield" );
+    }
+    // Weltmodus
+    pRenderer->MatrixWorld();
+    m_pGameCamera->Look();
+    // Animationen zeichnen
+    pRenderer->DrawVisualAnimationComps( accumulator );
+    // Texturen zeichnen
+    pRenderer->DrawVisualTextureComps( accumulator );
+
+    // Draw debug info
+#if 0
+    Entity* player = m_pGameWorld->GetEntity("Player").get();
+    if ( player )
+    {
+        CompPhysics* player_phys = static_cast<CompPhysics*>(player->GetFirstComponent("CompPhysics"));
+        if ( player_phys )
+        {
+            const CompGravField* grav = player_phys->GetGravField();
+            if ( grav )
+            {
+                Vector2D vec = grav->GetAcceleration( player_phys->GetBody()->GetWorldCenter() );
+                pRenderer->DrawVector( vec*0.1f, player_phys->GetBody()->GetWorldCenter() );
+            }
+            pRenderer->DrawPoint( player_phys->GetLocalGravitationPoint().Rotated( player_phys->GetBody()->GetAngle() ) + player_phys->GetBody()->GetPosition() );
+            pRenderer->DrawPoint( player_phys->GetLocalRotationPoint().Rotated( player_phys->GetBody()->GetAngle() ) + player_phys->GetBody()->GetPosition() );
+        }
+    }
+#endif
+    
+    // Weltgrenze zeichnen
+    /*{
+        const b2AABB* bound = GetSubSystems()->physics->GetWorldBound();
+        float vertexCoord[8] = { bound->lowerBound.x, bound->lowerBound.y,
+                                 bound->lowerBound.x, bound->upperBound.y,
+                                 bound->upperBound.x, bound->upperBound.y,
+                                 bound->upperBound.x, bound->lowerBound.y };
+        pRenderer->DrawColorQuad( vertexCoord, 0.0f, 0.0f, 0.0f, 0.0f, true );
+    }*/
+    // Fadenkreuz zeichnen
+    pRenderer->DrawCrosshairs ( *m_pGameCamera->GetCursorPosInWorld() );
+    // GUI modus (Grafische Benutzeroberfläche)
+    pRenderer->MatrixGUI();
+    // Jetpack %-Anzeige
+    {
+        float vertexCoord[8] = { 0.5f, 0.08f,
+                                0.5f, 0.2f,
+                                0.5f + (m_pGameWorld->GetVariable("JetpackEnergy"))/1000.f*1.0f, 0.2f,
+                                0.5f + (m_pGameWorld->GetVariable("JetpackEnergy"))/1000.f*1.0f, 0.08f };
+        pRenderer->DrawColorQuad( vertexCoord, 0.2f, 0.9f, 0.3f, 0.6f, true );
+    }
+    // Texte zeichnen
+    pRenderer->DrawVisualMessageComps();
+
+    std::stringstream ss;
+    ss << "Hex: " << m_pGameWorld->GetVariable("hex");
+    pRenderer->DrawString( ss.str().c_str(), 1.7f, 0.08f, "FontW_b" );
+
+    ss.str("");
+    ss.clear();
+
+    ss.precision( 1 );
+    ss.setf(std::ios::fixed,std::ios::floatfield);
+    ss << "Jetpack: " << m_pGameWorld->GetVariable("JetpackEnergy")/10.0f << "%";
+    pRenderer->DrawString( ss.str().c_str(), 0.1f, 0.08f, "FontW_b" );
+
+    // TEMP
+    /*ss.str("");
+    ss.clear();
+
+    Vector2D vec ( *GetSubSystems()->input->RelMousePos() );
+    ss << "X: " << vec.x << " Y: " << vec.y;
+    pRenderer->DrawString( ss.str().c_str(), 0.1f, 0.2f, "FontW_b" );*/
+    // END OF TEMP
+
+    if ( m_alphaOverlay != 0.0f )
+    {
+        pRenderer->DrawOverlay( 0.3f, 0.0f, 0.0f, m_alphaOverlay );
+    }
+
+    // Erzeugtes Bild zeigen
+    pRenderer->FlipBuffer(); // (vom Backbuffer zum Frontbuffer wechseln)
+}
+
+void PlayingState::EntityDeleted( const Event* deletedEvent )
+{
+    if ( deletedEvent == NULL || deletedEvent->data == NULL )
+        return;
+    Entity* entity = static_cast< Entity* >(deletedEvent->data);
+    if ( entity )
+    {
+        std::string id = entity->GetId();
+        if ( m_curentDeleteSet == 1 )
+        {
+            m_entitiesToDelete1.insert( id );
+        }
+        else
+        {
+            m_entitiesToDelete2.insert( id );
+        }
+    }
+}
+
+void PlayingState::GameOver( const Event* endGameEvent )
+{
+    m_wantToEndGame = true;
+    m_gameOverMessage = static_cast<char*>(endGameEvent->data);
+}
+
+// Astro Attack - Christian Zommerfelds - 2009

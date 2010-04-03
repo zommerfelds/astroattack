@@ -1,0 +1,21 @@
+<root>
+      <music file="data/Music/130463___.mp3.OGG"/><!--ParagonX9___Chaoz_C.ogg"/-->
+      <timer delayms="5000"/>
+      <slide image="data/Intro/1 Planet.png">Auf einem kleinem Planeten weit weit weg von der Erde<n/>lebt eine kleine Zivilisation von Menschen.</slide>
+      <slide image="data/Intro/2 Kristall.png">Das Zentrum dieses Planeten ist reich an Xymin-Kristall,<n/>eine Kristallsorte, die sehr selten in dieser Galaxie ist.</slide>
+      <slide image="data/Intro/3 Monument.png">Mit dem Kristall bauten die Bewohner ein grosses Monument,<n/>das sehr viel Energie ausstrahlt.</slide>
+      <slide image="data/Intro/4 Dr Alpha.png">Das ist Doktor Alpha, ein galaxieweit bekannter Verbrecher.</slide>
+      <slide image="data/Intro/5 Dr Alpha Traum.png">Er wollte schon immer das Monument rauben...<n/>(Mit dem hätte er genug Energie um die ganze Galaxie zu erobern)</slide>
+      <slide image="data/Intro/6 Dr Alpha Attack.png">Eines Tages kommt Doktor Alpha mit seinem Riesenstaubsauger mit<n/>Superkraft. Er saugt nicht nur das Xymin-Kristall-Monument, sondern<n/>auch alle Einwohner des kleinen Planeten...</slide>
+      <slide image="data/Intro/7 Jack and Prof.png">Nur 2 Personen schafften es, nicht gesaugt zu werden: Jack und Professor Z.</slide>
+      <slide image="data/Intro/8 Dr Alpha fliegt.png">Dr. Alpha fliegt schwer beladen los -<n/>mit dem Monument und alle Einwohner im Sack.</slide>
+      <slide image="data/Intro/9 Jack and Prof folgen.png">5, 4, 3, 2,...  Jack und Professor Z starten ihre Rakete und folgen Dr. Alpha.</slide>
+      <!--slide image="data/intro/6 Dr Alpha Attack.png">Bei dieser Verfolgungsjagd gelangen alle in der nähe eines<n/>Schwarzen Lochs....</slide>
+      <slide image="data/intro/6 Dr Alpha Attack.png">Dr. Alpha hat nicht genug Kraft, um mit der ganzen Ladung<n/>davon zu kommen. Er öffnet sein Container und lässt alle Menschen fallen.</slide>
+      <slide image="data/intro/6 Dr Alpha Attack.png">Er entkommt.</slide>
+      <slide image="data/intro/6 Dr Alpha Attack.png">Jetzt bleibt es noch für Jack und Professor Z übrig die anderen Menschen<n/>zu retten... Doch die Anziehung ist so gross, dass alle, auch Jack und Professor,<n/>innerhalb von Sekunden vom Schwarzem Loch geschluckt werden...</slide>
+      <slide image="data/intro/6 Dr Alpha Attack.png">BAAAAAAAAM</slide>
+      <slide image="data/intro/6 Dr Alpha Attack.png">"Wo sind wir nur gelandet?", fragt Jack. "Interessant, wir haben etwas<n/>absolut neues über Schwarze Löcher entdeckt! Aber ich habe keine<n/>Ahnung wo wir sind...", antwortete Professor.</slide>
+      <slide image="data/intro/6 Dr Alpha Attack.png">"Ich hoffe, dass wir noch auf dem gleichen Universum sind...",<n/>sagte Jack nach einer kurzen Pause.</slide>
+      <slide image="data/intro/6 Dr Alpha Attack.png">Professor Z überlegte ein Weilchen und versicherte Jack:<n/>"Natürlich sind wir noch im gleichem Universum, doch unsere Freunde sind<n/>auch irgendwo verloren, wie wir." "Dann wollen wir sie suchen!"</slide-->
+</root>

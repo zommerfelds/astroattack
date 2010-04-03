@@ -1,0 +1,5 @@
+<?xml version="1.0" ?>
+<Graphics>
+   <Texture file="data/GUI/AstroAttackMenu.png" id="menu" mipMaps="0" texRepeat="0"/>
+   <Texture file="data/GUI/AstroAttackTitle.png" id="title" mipMaps="0" texRepeat="0"/>
+</Graphics>

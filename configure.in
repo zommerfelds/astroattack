@@ -1,0 +1,21 @@
+AC_INIT(src/main.cpp)
+AM_CONFIG_HEADER(config.h)
+AM_INIT_AUTOMAKE(AstroAttack, 0.1.0)
+
+AC_PROG_CXX
+AC_LANG(C++)
+
+AC_PROG_INSTALL
+
+AC_CHECK_LIB(SDL, SDL_Init, [], [AC_MSG_ERROR("SDL required!")])
+AC_CHECK_LIB(SDL_ttf, TTF_Init, [], [AC_MSG_ERROR("SDL_ttf required!")])
+AC_CHECK_LIB(SDL_mixer, Mix_OpenAudio, [], [AC_MSG_ERROR("SDL_mixer required!")])
+AC_CHECK_LIB(GL, glViewport, [], [AC_MSG_ERROR("OpenGL required!")])
+AC_CHECK_LIB(GLU, gluBuild2DMipmaps, [], [AC_MSG_ERROR("OpenGL Utility Library (libGLU) required!")])
+AC_CHECK_LIB(IL, ilInit, [], [AC_MSG_ERROR("DevIL (libIL) required!")])
+AC_CHECK_LIB(ILU, iluInit, [], [AC_MSG_ERROR("DevIL (libILU) required!")])
+AC_CHECK_HEADER(boost/shared_ptr.hpp, [], [AC_MSG_ERROR("boost/shared_ptr.hpp required!")] )
+AC_CHECK_HEADER(boost/scoped_ptr.hpp, [], [AC_MSG_ERROR("boost/scoped_ptr.hpp required!")] )
+AC_CHECK_HEADER(boost/bind.hpp, [], [AC_MSG_ERROR("boost/bind.hpp required!")] )
+
+AC_OUTPUT(Makefile src/Makefile)

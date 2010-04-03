@@ -1,0 +1,8 @@
+Die Events (Erreignisse) sind Konstant und können/sollten also nicht verändert werden!
+data ist ein void Zeiger und muss mit static_cast<const typ*>(pEvent->data) zum entsprechendem Typ umgewandelt werden:
+
+NewEntity
+data => Entity* (Die Entity, die neu erstellt worden ist)
+
+InputUpdated
+data => double* (Zeit seit letzter Eingabeaktualisierung in Sekunden)

@@ -1,0 +1,614 @@
+<?xml version="1.0" ?>
+<level name="My level">
+    <Entity name="EdBlock00000">
+        <Component id="CompPhysics" name="std">
+            <pos x="0.000000" y="0.000000" a="0.000000" />
+            <damping linear="0.000000" angular="0.000000" />
+            <shape name="shape1">
+                <phys density="0.000000" friction="0.300000" restitution="0.000000" />
+                <vertex x="-6.000000" y="-1.000000" />
+                <vertex x="-6.000000" y="-4.000000" />
+                <vertex x="5.500000" y="-4.000000" />
+                <vertex x="5.500000" y="-1.000000" />
+            </shape>
+        </Component>
+        <Component id="CompVisualTexture" name="std">
+            <tex name="Kirks Entry" />
+        </Component>
+    </Entity>
+    <Entity name="EdBlock00001">
+        <Component id="CompPhysics" name="std">
+            <pos x="0.000000" y="0.000000" a="0.000000" />
+            <damping linear="0.000000" angular="0.000000" />
+            <shape name="shape1">
+                <phys density="0.000000" friction="0.300000" restitution="0.000000" />
+                <vertex x="5.500000" y="-2.000000" />
+                <vertex x="5.500000" y="-4.000000" />
+                <vertex x="12.000000" y="-4.000000" />
+                <vertex x="12.000000" y="-2.000000" />
+            </shape>
+        </Component>
+        <Component id="CompVisualTexture" name="std">
+            <tex name="Kirks Entry" />
+        </Component>
+    </Entity>
+    <Entity name="EdBlock00002">
+        <Component id="CompPhysics" name="std">
+            <pos x="0.000000" y="0.000000" a="0.000000" />
+            <damping linear="0.000000" angular="0.000000" />
+            <shape name="shape1">
+                <phys density="0.000000" friction="0.300000" restitution="0.000000" />
+                <vertex x="12.000000" y="-3.000000" />
+                <vertex x="12.000000" y="-4.000000" />
+                <vertex x="20.500000" y="-4.000000" />
+                <vertex x="20.500000" y="-3.000000" />
+            </shape>
+        </Component>
+        <Component id="CompVisualTexture" name="std">
+            <tex name="Kirks Entry" />
+        </Component>
+    </Entity>
+    <Entity name="EdBlock00003">
+        <Component id="CompPhysics" name="std">
+            <pos x="0.000000" y="0.000000" a="0.000000" />
+            <damping linear="0.000000" angular="0.000000" />
+            <shape name="shape1">
+                <phys density="0.000000" friction="0.300000" restitution="0.000000" />
+                <vertex x="23.000000" y="-1.500000" />
+                <vertex x="23.000000" y="-6.000000" />
+                <vertex x="24.000000" y="-5.000000" />
+                <vertex x="24.000000" y="-2.500000" />
+            </shape>
+        </Component>
+        <Component id="CompVisualTexture" name="std">
+            <tex name="Liquid Crystal 2" />
+        </Component>
+    </Entity>
+    <Entity name="EdBlock00004">
+        <Component id="CompPhysics" name="std">
+            <pos x="0.000000" y="0.000000" a="0.000000" />
+            <damping linear="0.000000" angular="0.000000" />
+            <shape name="shape1">
+                <phys density="0.000000" friction="0.300000" restitution="0.000000" />
+                <vertex x="24.000000" y="-2.500000" />
+                <vertex x="25.000000" y="-2.500000" />
+                <vertex x="26.000000" y="-1.500000" />
+                <vertex x="23.000000" y="-1.500000" />
+            </shape>
+        </Component>
+        <Component id="CompVisualTexture" name="std">
+            <tex name="Liquid Crystal 2" />
+        </Component>
+    </Entity>
+    <Entity name="EdBlock00005">
+        <Component id="CompPhysics" name="std">
+            <pos x="0.000000" y="0.000000" a="0.000000" />
+            <damping linear="0.000000" angular="0.000000" />
+            <shape name="shape1">
+                <phys density="0.000000" friction="0.300000" restitution="0.000000" />
+                <vertex x="23.000000" y="-6.000000" />
+                <vertex x="26.000000" y="-6.000000" />
+                <vertex x="25.000000" y="-5.000000" />
+                <vertex x="24.000000" y="-5.000000" />
+            </shape>
+        </Component>
+        <Component id="CompVisualTexture" name="std">
+            <tex name="Liquid Crystal 2" />
+        </Component>
+    </Entity>
+    <Entity name="EdBlock00006">
+        <Component id="CompPhysics" name="std">
+            <pos x="0.000000" y="0.000000" a="0.000000" />
+            <damping linear="0.000000" angular="0.000000" />
+            <shape name="shape1">
+                <phys density="0.000000" friction="0.300000" restitution="0.000000" />
+                <vertex x="25.000000" y="-2.500000" />
+                <vertex x="25.000000" y="-5.000000" />
+                <vertex x="26.000000" y="-6.000000" />
+                <vertex x="26.000000" y="-1.500000" />
+            </shape>
+        </Component>
+        <Component id="CompVisualTexture" name="std">
+            <tex name="Liquid Crystal 2" />
+        </Component>
+    </Entity>
+    <Entity name="EdBlock00007">
+        <Component id="CompPhysics" name="std">
+            <pos x="0.000000" y="0.000000" a="0.000000" />
+            <damping linear="0.000000" angular="0.000000" />
+            <shape name="shape1">
+                <phys density="0.000000" friction="0.300000" restitution="0.000000" />
+                <vertex x="26.500000" y="-3.000000" />
+                <vertex x="26.500000" y="-6.000000" />
+                <vertex x="27.500000" y="-6.000000" />
+                <vertex x="27.500000" y="-3.000000" />
+            </shape>
+        </Component>
+        <Component id="CompVisualTexture" name="std">
+            <tex name="Liquid Crystal 2" />
+        </Component>
+    </Entity>
+    <Entity name="EdBlock00008">
+        <Component id="CompPhysics" name="std">
+            <pos x="0.000000" y="0.000000" a="0.000000" />
+            <damping linear="0.000000" angular="0.000000" />
+            <shape name="shape1">
+                <phys density="0.000000" friction="0.300000" restitution="0.000000" />
+                <vertex x="26.500000" y="-1.500000" />
+                <vertex x="26.500000" y="-2.500000" />
+                <vertex x="27.500000" y="-2.500000" />
+                <vertex x="27.500000" y="-1.500000" />
+            </shape>
+        </Component>
+        <Component id="CompVisualTexture" name="std">
+            <tex name="Liquid Crystal 2" />
+        </Component>
+    </Entity>
+    <Entity name="EdBlock00009">
+        <Component id="CompPhysics" name="std">
+            <pos x="0.000000" y="0.000000" a="0.000000" />
+            <damping linear="0.000000" angular="0.000000" />
+            <shape name="shape1">
+                <phys density="0.000000" friction="0.300000" restitution="0.000000" />
+                <vertex x="29.500000" y="-1.500000" />
+                <vertex x="29.500000" y="-6.000000" />
+                <vertex x="30.500000" y="-5.000000" />
+                <vertex x="30.500000" y="-2.500000" />
+            </shape>
+        </Component>
+        <Component id="CompVisualTexture" name="std">
+            <tex name="Liquid Crystal 2" />
+        </Component>
+    </Entity>
+    <Entity name="EdBlock00010">
+        <Component id="CompPhysics" name="std">
+            <pos x="0.000000" y="0.000000" a="0.000000" />
+            <damping linear="0.000000" angular="0.000000" />
+            <shape name="shape1">
+                <phys density="0.000000" friction="0.300000" restitution="0.000000" />
+                <vertex x="29.500000" y="-6.000000" />
+                <vertex x="32.500000" y="-6.000000" />
+                <vertex x="31.500000" y="-5.000000" />
+                <vertex x="30.500000" y="-5.000000" />
+            </shape>
+        </Component>
+        <Component id="CompVisualTexture" name="std">
+            <tex name="Liquid Crystal 2" />
+        </Component>
+    </Entity>
+    <Entity name="EdBlock00011">
+        <Component id="CompPhysics" name="std">
+            <pos x="0.000000" y="0.000000" a="0.000000" />
+            <damping linear="0.000000" angular="0.000000" />
+            <shape name="shape1">
+                <phys density="0.000000" friction="0.300000" restitution="0.000000" />
+                <vertex x="31.500000" y="-5.000000" />
+                <vertex x="32.500000" y="-6.000000" />
+                <vertex x="32.500000" y="-4.000000" />
+                <vertex x="31.500000" y="-4.000000" />
+            </shape>
+        </Component>
+        <Component id="CompVisualTexture" name="std">
+            <tex name="Liquid Crystal 2" />
+        </Component>
+    </Entity>
+    <Entity name="EdBlock00012">
+        <Component id="CompPhysics" name="std">
+            <pos x="0.000000" y="0.000000" a="0.000000" />
+            <damping linear="0.000000" angular="0.000000" />
+            <shape name="shape1">
+                <phys density="0.000000" friction="0.300000" restitution="0.000000" />
+                <vertex x="31.000000" y="-3.500000" />
+                <vertex x="31.000000" y="-4.000000" />
+                <vertex x="32.500000" y="-4.000000" />
+                <vertex x="32.500000" y="-3.500000" />
+            </shape>
+        </Component>
+        <Component id="CompVisualTexture" name="std">
+            <tex name="Liquid Crystal 2" />
+        </Component>
+    </Entity>
+    <Entity name="EdBlock00013">
+        <Component id="CompPhysics" name="std">
+            <pos x="0.000000" y="0.000000" a="0.000000" />
+            <damping linear="0.000000" angular="0.000000" />
+            <shape name="shape1">
+                <phys density="0.000000" friction="0.300000" restitution="0.000000" />
+                <vertex x="29.500000" y="-1.500000" />
+                <vertex x="30.500000" y="-2.500000" />
+                <vertex x="32.500000" y="-2.500000" />
+                <vertex x="32.500000" y="-1.500000" />
+            </shape>
+        </Component>
+        <Component id="CompVisualTexture" name="std">
+            <tex name="Liquid Crystal 2" />
+        </Component>
+    </Entity>
+    <Entity name="EdBlock00014">
+        <Component id="CompPhysics" name="std">
+            <pos x="0.000000" y="0.000000" a="0.000000" />
+            <damping linear="0.000000" angular="0.000000" />
+            <shape name="shape1">
+                <phys density="0.000000" friction="0.300000" restitution="0.000000" />
+                <vertex x="33.000000" y="-1.500000" />
+                <vertex x="33.000000" y="-6.000000" />
+                <vertex x="34.000000" y="-5.000000" />
+                <vertex x="34.000000" y="-2.500000" />
+            </shape>
+        </Component>
+        <Component id="CompVisualTexture" name="std">
+            <tex name="Liquid Crystal 2" />
+        </Component>
+    </Entity>
+    <Entity name="EdBlock00015">
+        <Component id="CompPhysics" name="std">
+            <pos x="0.000000" y="0.000000" a="0.000000" />
+            <damping linear="0.000000" angular="0.000000" />
+            <shape name="shape1">
+                <phys density="0.000000" friction="0.300000" restitution="0.000000" />
+                <vertex x="34.000000" y="-2.500000" />
+                <vertex x="36.000000" y="-2.500000" />
+                <vertex x="36.000000" y="-1.500000" />
+                <vertex x="33.000000" y="-1.500000" />
+            </shape>
+        </Component>
+        <Component id="CompVisualTexture" name="std">
+            <tex name="Liquid Crystal 2" />
+        </Component>
+    </Entity>
+    <Entity name="EdBlock00016">
+        <Component id="CompPhysics" name="std">
+            <pos x="0.000000" y="0.000000" a="0.000000" />
+            <damping linear="0.000000" angular="0.000000" />
+            <shape name="shape1">
+                <phys density="0.000000" friction="0.300000" restitution="0.000000" />
+                <vertex x="34.000000" y="-3.500000" />
+                <vertex x="34.000000" y="-4.000000" />
+                <vertex x="35.500000" y="-4.000000" />
+                <vertex x="35.500000" y="-3.500000" />
+            </shape>
+        </Component>
+        <Component id="CompVisualTexture" name="std">
+            <tex name="Liquid Crystal 2" />
+        </Component>
+    </Entity>
+    <Entity name="EdBlock00017">
+        <Component id="CompPhysics" name="std">
+            <pos x="0.000000" y="0.000000" a="0.000000" />
+            <damping linear="0.000000" angular="0.000000" />
+            <shape name="shape1">
+                <phys density="0.000000" friction="0.300000" restitution="0.000000" />
+                <vertex x="33.000000" y="-6.000000" />
+                <vertex x="36.000000" y="-6.000000" />
+                <vertex x="36.000000" y="-5.000000" />
+                <vertex x="34.000000" y="-5.000000" />
+            </shape>
+        </Component>
+        <Component id="CompVisualTexture" name="std">
+            <tex name="Liquid Crystal 2" />
+        </Component>
+    </Entity>
+    <Entity name="EdBlock00018">
+        <Component id="CompPhysics" name="std">
+            <pos x="0.000000" y="0.000000" a="0.000000" />
+            <damping linear="0.000000" angular="0.000000" />
+            <shape name="shape1">
+                <phys density="0.000000" friction="0.300000" restitution="0.000000" />
+                <vertex x="36.500000" y="-1.500000" />
+                <vertex x="36.500000" y="-6.000000" />
+                <vertex x="37.500000" y="-6.000000" />
+                <vertex x="37.500000" y="-1.500000" />
+            </shape>
+        </Component>
+        <Component id="CompVisualTexture" name="std">
+            <tex name="Liquid Crystal 2" />
+        </Component>
+    </Entity>
+    <Entity name="EdBlock00019">
+        <Component id="CompPhysics" name="std">
+            <pos x="0.000000" y="0.000000" a="0.000000" />
+            <damping linear="0.000000" angular="0.000000" />
+            <shape name="shape1">
+                <phys density="0.000000" friction="0.300000" restitution="0.000000" />
+                <vertex x="37.500000" y="-1.500000" />
+                <vertex x="37.500000" y="-3.000000" />
+                <vertex x="38.500000" y="-6.000000" />
+                <vertex x="38.500000" y="-4.500000" />
+            </shape>
+        </Component>
+        <Component id="CompVisualTexture" name="std">
+            <tex name="Liquid Crystal 2" />
+        </Component>
+    </Entity>
+    <Entity name="EdBlock00020">
+        <Component id="CompPhysics" name="std">
+            <pos x="0.000000" y="0.000000" a="0.000000" />
+            <damping linear="0.000000" angular="0.000000" />
+            <shape name="shape1">
+                <phys density="0.000000" friction="0.300000" restitution="0.000000" />
+                <vertex x="38.500000" y="-6.000000" />
+                <vertex x="39.500000" y="-6.000000" />
+                <vertex x="39.500000" y="-1.500000" />
+                <vertex x="38.500000" y="-1.500000" />
+            </shape>
+        </Component>
+        <Component id="CompVisualTexture" name="std">
+            <tex name="Liquid Crystal 2" />
+        </Component>
+    </Entity>
+    <Entity name="EdBlock00021">
+        <Component id="CompPhysics" name="std">
+            <pos x="0.000000" y="0.000000" a="0.000000" />
+            <damping linear="0.000000" angular="0.000000" />
+            <shape name="shape1">
+                <phys density="0.000000" friction="0.300000" restitution="0.000000" />
+                <vertex x="40.000000" y="-1.500000" />
+                <vertex x="40.000000" y="-2.500000" />
+                <vertex x="43.000000" y="-2.500000" />
+                <vertex x="43.000000" y="-1.500000" />
+            </shape>
+        </Component>
+        <Component id="CompVisualTexture" name="std">
+            <tex name="Liquid Crystal 2" />
+        </Component>
+    </Entity>
+    <Entity name="EdBlock00022">
+        <Component id="CompPhysics" name="std">
+            <pos x="0.000000" y="0.000000" a="0.000000" />
+            <damping linear="0.000000" angular="0.000000" />
+            <shape name="shape1">
+                <phys density="0.000000" friction="0.300000" restitution="0.000000" />
+                <vertex x="41.000000" y="-2.500000" />
+                <vertex x="41.000000" y="-6.000000" />
+                <vertex x="42.000000" y="-6.000000" />
+                <vertex x="42.000000" y="-2.500000" />
+            </shape>
+        </Component>
+        <Component id="CompVisualTexture" name="std">
+            <tex name="Liquid Crystal 2" />
+        </Component>
+    </Entity>
+    <Entity name="EdBlock00023">
+        <Component id="CompPhysics" name="std">
+            <pos x="0.000000" y="0.000000" a="0.000000" />
+            <damping linear="0.000000" angular="0.000000" />
+            <shape name="shape1">
+                <phys density="0.000000" friction="0.300000" restitution="0.000000" />
+                <vertex x="43.500000" y="-1.500000" />
+                <vertex x="43.500000" y="-6.000000" />
+                <vertex x="44.500000" y="-5.000000" />
+                <vertex x="44.500000" y="-2.500000" />
+            </shape>
+        </Component>
+        <Component id="CompVisualTexture" name="std">
+            <tex name="Liquid Crystal 2" />
+        </Component>
+    </Entity>
+    <Entity name="EdBlock00024">
+        <Component id="CompPhysics" name="std">
+            <pos x="0.000000" y="0.000000" a="0.000000" />
+            <damping linear="0.000000" angular="0.000000" />
+            <shape name="shape1">
+                <phys density="0.000000" friction="0.300000" restitution="0.000000" />
+                <vertex x="43.500000" y="-1.500000" />
+                <vertex x="44.500000" y="-2.500000" />
+                <vertex x="46.000000" y="-2.500000" />
+                <vertex x="46.000000" y="-1.500000" />
+            </shape>
+        </Component>
+        <Component id="CompVisualTexture" name="std">
+            <tex name="Liquid Crystal 2" />
+        </Component>
+    </Entity>
+    <Entity name="EdBlock00025">
+        <Component id="CompPhysics" name="std">
+            <pos x="0.000000" y="0.000000" a="0.000000" />
+            <damping linear="0.000000" angular="0.000000" />
+            <shape name="shape1">
+                <phys density="0.000000" friction="0.300000" restitution="0.000000" />
+                <vertex x="44.500000" y="-4.000000" />
+                <vertex x="45.500000" y="-4.000000" />
+                <vertex x="45.500000" y="-3.500000" />
+                <vertex x="44.500000" y="-3.500000" />
+            </shape>
+        </Component>
+        <Component id="CompVisualTexture" name="std">
+            <tex name="Liquid Crystal 2" />
+        </Component>
+    </Entity>
+    <Entity name="EdBlock00026">
+        <Component id="CompPhysics" name="std">
+            <pos x="0.000000" y="0.000000" a="0.000000" />
+            <damping linear="0.000000" angular="0.000000" />
+            <shape name="shape1">
+                <phys density="0.000000" friction="0.300000" restitution="0.000000" />
+                <vertex x="43.500000" y="-6.000000" />
+                <vertex x="46.000000" y="-6.000000" />
+                <vertex x="46.000000" y="-5.000000" />
+                <vertex x="44.500000" y="-5.000000" />
+            </shape>
+        </Component>
+        <Component id="CompVisualTexture" name="std">
+            <tex name="Liquid Crystal 2" />
+        </Component>
+    </Entity>
+    <Entity name="EdBlock00027">
+        <Component id="CompPhysics" name="std">
+            <pos x="0.000000" y="0.000000" a="0.000000" />
+            <damping linear="0.000000" angular="0.000000" />
+            <shape name="shape1">
+                <phys density="0.000000" friction="0.300000" restitution="0.000000" />
+                <vertex x="51.000000" y="-1.500000" />
+                <vertex x="51.000000" y="-4.500000" />
+                <vertex x="52.000000" y="-4.500000" />
+                <vertex x="52.000000" y="-1.500000" />
+            </shape>
+        </Component>
+        <Component id="CompVisualTexture" name="std">
+            <tex name="Liquid Crystal 2" />
+        </Component>
+    </Entity>
+    <Entity name="EdBlock00028">
+        <Component id="CompPhysics" name="std">
+            <pos x="0.000000" y="0.000000" a="0.000000" />
+            <damping linear="0.000000" angular="0.000000" />
+            <shape name="shape1">
+                <phys density="0.000000" friction="0.300000" restitution="0.000000" />
+                <vertex x="51.000000" y="-5.000000" />
+                <vertex x="51.000000" y="-6.000000" />
+                <vertex x="52.000000" y="-6.000000" />
+                <vertex x="52.000000" y="-5.000000" />
+            </shape>
+        </Component>
+        <Component id="CompVisualTexture" name="std">
+            <tex name="Liquid Crystal 2" />
+        </Component>
+    </Entity>
+    <Entity name="EdBlock00029">
+        <Component id="CompPhysics" name="std">
+            <pos x="0.000000" y="0.000000" a="0.000000" />
+            <damping linear="0.000000" angular="0.000000" />
+            <shape name="shape1">
+                <phys density="0.000000" friction="0.300000" restitution="0.000000" />
+                <vertex x="56.000000" y="-1.500000" />
+                <vertex x="56.000000" y="-4.500000" />
+                <vertex x="57.000000" y="-4.500000" />
+                <vertex x="57.000000" y="-1.500000" />
+            </shape>
+        </Component>
+        <Component id="CompVisualTexture" name="std">
+            <tex name="Liquid Crystal 2" />
+        </Component>
+    </Entity>
+    <Entity name="EdBlock00030">
+        <Component id="CompPhysics" name="std">
+            <pos x="0.000000" y="0.000000" a="0.000000" />
+            <damping linear="0.000000" angular="0.000000" />
+            <shape name="shape1">
+                <phys density="0.000000" friction="0.300000" restitution="0.000000" />
+                <vertex x="56.000000" y="-5.000000" />
+                <vertex x="56.000000" y="-6.000000" />
+                <vertex x="57.000000" y="-6.000000" />
+                <vertex x="57.000000" y="-5.000000" />
+            </shape>
+        </Component>
+        <Component id="CompVisualTexture" name="std">
+            <tex name="Liquid Crystal 2" />
+        </Component>
+    </Entity>
+    <Entity name="EdBlock00031">
+        <Component id="CompPhysics" name="std">
+            <pos x="0.000000" y="0.000000" a="0.000000" />
+            <damping linear="0.000000" angular="0.000000" />
+            <shape name="shape1">
+                <phys density="0.000000" friction="0.300000" restitution="0.000000" />
+                <vertex x="65.000000" y="-1.500000" />
+                <vertex x="65.000000" y="-4.500000" />
+                <vertex x="66.000000" y="-4.500000" />
+                <vertex x="66.000000" y="-1.500000" />
+            </shape>
+        </Component>
+        <Component id="CompVisualTexture" name="std">
+            <tex name="Liquid Crystal 2" />
+        </Component>
+    </Entity>
+    <Entity name="EdBlock00032">
+        <Component id="CompPhysics" name="std">
+            <pos x="0.000000" y="0.000000" a="0.000000" />
+            <damping linear="0.000000" angular="0.000000" />
+            <shape name="shape1">
+                <phys density="0.000000" friction="0.300000" restitution="0.000000" />
+                <vertex x="65.000000" y="-5.000000" />
+                <vertex x="65.000000" y="-6.000000" />
+                <vertex x="66.000000" y="-6.000000" />
+                <vertex x="66.000000" y="-5.000000" />
+            </shape>
+        </Component>
+        <Component id="CompVisualTexture" name="std">
+            <tex name="Liquid Crystal 2" />
+        </Component>
+    </Entity>
+    <Entity name="EdBlock00033">
+        <Component id="CompPhysics" name="std">
+            <pos x="0.000000" y="0.000000" a="0.000000" />
+            <damping linear="0.000000" angular="0.000000" />
+            <shape name="shape1">
+                <phys density="0.000000" friction="0.300000" restitution="0.000000" />
+                <vertex x="75.000000" y="3.500000" />
+                <vertex x="78.500000" y="1.000000" />
+                <vertex x="82.000000" y="3.500000" />
+            </shape>
+        </Component>
+        <Component id="CompVisualTexture" name="std">
+            <tex name="Plaster Blocks" />
+        </Component>
+    </Entity>
+    <Entity name="EdBlock00034">
+        <Component id="CompPhysics" name="std">
+            <pos x="0.000000" y="0.000000" a="0.000000" />
+            <damping linear="0.000000" angular="0.000000" />
+            <shape name="shape1">
+                <phys density="0.000000" friction="0.300000" restitution="0.000000" />
+                <vertex x="85.500000" y="6.500000" />
+                <vertex x="88.000000" y="5.000000" />
+                <vertex x="90.000000" y="6.500000" />
+            </shape>
+        </Component>
+        <Component id="CompVisualTexture" name="std">
+            <tex name="Plaster Blocks" />
+        </Component>
+    </Entity>
+    <Entity name="EdBlock00035">
+        <Component id="CompPhysics" name="std">
+            <pos x="0.000000" y="0.000000" a="0.000000" />
+            <damping linear="0.000000" angular="0.000000" />
+            <shape name="shape1">
+                <phys density="0.000000" friction="0.300000" restitution="0.000000" />
+                <vertex x="94.500000" y="2.500000" />
+                <vertex x="97.000000" y="-1.500000" />
+                <vertex x="98.000000" y="2.500000" />
+            </shape>
+        </Component>
+        <Component id="CompVisualTexture" name="std">
+            <tex name="Plaster Blocks" />
+        </Component>
+    </Entity>
+    <Entity name="EdBlock00036">
+        <Component id="CompPhysics" name="std">
+            <pos x="0.000000" y="0.000000" a="0.000000" />
+            <damping linear="0.000000" angular="0.000000" />
+            <shape name="shape1">
+                <phys density="0.000000" friction="0.300000" restitution="0.000000" />
+                <vertex x="101.500000" y="4.500000" />
+                <vertex x="101.500000" y="1.000000" />
+                <vertex x="106.000000" y="1.000000" />
+                <vertex x="106.000000" y="4.500000" />
+            </shape>
+        </Component>
+        <Component id="CompVisualTexture" name="std">
+            <tex name="Purple" />
+        </Component>
+    </Entity>
+    <Entity name="area">
+        <Component id="CompPhysics" name="std">
+            <pos x="0.000000" y="0.000000" a="0.000000" />
+            <damping linear="0.000000" angular="0.000000" />
+            <shape name="shape1">
+                <phys density="0.000000" friction="0.300000" restitution="0.000000" />
+                <isSensor />
+                <vertex x="102.500000" y="7.500000" />
+                <vertex x="102.500000" y="4.500000" />
+                <vertex x="105.000000" y="4.500000" />
+                <vertex x="105.000000" y="7.500000" />
+            </shape>
+        </Component>
+        <Component id="CompTrigger" name="std">
+            <Condition id="EntityTouchedThis">
+                <params entity="Player" />
+            </Condition>
+            <Effect id="DispMessage">
+                <params msg="Boa viagem para a Espanha!" timems="5000" />
+            </Effect>
+        </Component>
+    </Entity>
+</level>

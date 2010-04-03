@@ -1,0 +1,72 @@
+-----------------
+   AstroAttack   
+-----------------
+
+TODO:
+
+- Parameters (-- instead of -)
+- Clean up TODO (high/low priority)
+- Zoom out when cursor is far away
+- Change V-Sync to yes/no in log
+- Walk animation velocity according to player speed
+- Change isSensor to sensor and check XML node names (maybe capital beginning?)
+- Kontakt Events nicht für jeden Box2D Kontakt erzeugen, sonders Box2D Kontakte zuerst verarbeiten und zusammenfügen.
+- Event Manager verbessern (keine void*)
+- Check static_cast<> and dynamic_cast<> (e.g. PhysicsSubSystem::RegisterGravFieldComp() )
+- Delay wenn Gravitationsfeld wechselt
+- GUI System
+- Konkave Polygone im Editor
+- Kamera-Interpolation bei MoveAbsolute und RotateRelative
+- Soundklasse erweitern (ausschaltbar;beim Faden nicht warten;abfragen können, ob ein Sound gerade abgespielt wird)
+- Bessere Jumpanimation
+- Animation für Kiste stossen
+- Energie und Energie-Killer
+- Level-Missionen (Trigger)
+- Gegner (Monster)
+- Game Menu
+- Spiel stoppen (pausieren) wenn fenster nicht aktiv ist.
+- Jede C++,h Datei oben kurz Dokumentieren
+- Fehlerchecking und Beschreibung beim Level Laden
+- Align text
+- ========= OpenGL Error: 1280: invalid enumerant =========
+- Level editor extra
+- Sound and Music
+- Port to CMake
+
+DONE:
+- Delay wenn Jack Seite wechselt
+- Never set string = NULL in XmlLoader
+- Korrektur in Intro-Bild
+- Maussensivität einstellbar
+- Flexiblere Einstellungen (mit xml)
+- Ein- und Ausgabe von XML-Dateien
+- Wenn Links- / Rechtstaste nur kurz gedrückt wird, keine ganze Schrittanimation machen
+- Font Klasse kann sagen wie breit und hoch ein bestimmter string sein wird.
+- Slide Show: Zurückgehen-Taste
+- Trigger
+- Fix: Mega Jump, Collision at head, stop problem
+- Time Akkumulator verbessern
+- Renderer Interface-Funktionen (nie direkt OpenGL aufrufen)
+- Read level from file
+- EventManager Registrierungsobjekt anstatt Funktion
+- Spielersteuerung (mit Physikbibliothek)
+- Basic physics
+- Config file with options like window informations
+- Dokumentation auf Deutsch
+- Change name of Vector__2D
+- Compillierung beschleunigen (unnötige #includes weg)
+- Standart C++ Names
+- Initialize pointer members in the constructor's initialization list
+- Minimize dependencies by storing members as pointers
+> For the 2 above: ( http://www.goingware.com/tips/parameters/membervars.html#ptrmembers )
+- Check if constructors realy allocated space (if new has found space) -> GameApp.cpp
+- Dir() function in Vector__2D class that returns the direction of the vector (unit vector)
+- Initialize oder set pointers to NULL if they havent an address (after delete always set to NULL)
+- Check if pointers are NULL before using (ex. PolygonCollision::Intersect)
+- Camera Bug if too much zoom (have to update cursor pos in world)
+- Make unchangeable variables or parameters const
+- More security in Logger class (check if file is open)
+- Smart Pointers - Exception Sicherheit
+- Physik optimieren (mit Box2D)
+  (Quadtree / Space partitioning) nicht nötig wegen Box2D
+- Von double auf float vechseln

@@ -1,0 +1,43 @@
+<?xml version="1.0" ?>
+<Graphics>
+      <!--noMipmaps/-->
+      <Texture file = "data/Textures/GeneticaTextures/Ancient Mayan Blocks.jpg" id = "blocks" mipMaps = "1" texRepeat = "1" scale="0.4"/>
+      <Texture file = "data/Textures/GeneticaTextures/Worn Brown Brickwork.jpg" id = "brick" mipMaps = "1" texRepeat = "1" scale="0.4"/>
+      <Texture file = "data/Textures/GeneticaTextures/Age of the Canyon.jpg" id = "canyon" mipMaps = "1" texRepeat = "1" scale="0.4"/>
+      <Texture file = "data/Textures/GeneticaTextures/Barren Reds.jpg" id = "red" mipMaps = "1" texRepeat = "1" scale="0.3"/>
+      <Texture file = "data/Textures/GeneticaTextures/Fault Zone.jpg" id = "fault" mipMaps = "1" texRepeat = "1" scale="0.4"/>
+      <Texture file = "data/Textures/GeneticaTextures/Grassy Fissures.jpg" id = "fissures" mipMaps = "1" texRepeat = "1" scale="0.4"/>
+      <Texture file = "data/Textures/GeneticaTextures/Inundation.jpg" id = "inundation" mipMaps = "1" texRepeat = "1" scale="0.4"/>
+      <Texture file = "data/Textures/GeneticaTextures/Sulfur Wasteland.jpg" id = "sulfur" mipMaps = "1" texRepeat = "1" scale="0.4"/>
+
+      <Texture file = "data/Textures/GeneticaTextures/Ancient Stone Slabs.jpg" id = "Ancient Stone Slabs" mipMaps = "1" texRepeat = "1" scale="0.4"/>
+      <Texture file = "data/Textures/GeneticaTextures/Craterscape.jpg" id = "Craterscape" mipMaps = "1" texRepeat = "1" scale="0.4"/>
+      <Texture file = "data/Textures/GeneticaTextures/Frozen Home.jpg" id = "Frozen Home" mipMaps = "1" texRepeat = "1" scale="0.4"/>
+      <Texture file = "data/Textures/GeneticaTextures/Hunting Grounds.jpg" id = "Hunting Grounds" mipMaps = "1" texRepeat = "1" scale="0.4"/>
+      <Texture file = "data/Textures/GeneticaTextures/Kirks Entry.jpg" id = "Kirks Entry" mipMaps = "1" texRepeat = "1" scale="0.4"/>
+      <Texture file = "data/Textures/GeneticaTextures/Liquid Crystal 2.jpg" id = "Liquid Crystal 2" mipMaps = "1" texRepeat = "1" scale="0.4"/>
+      <Texture file = "data/Textures/GeneticaTextures/Lunar Target.jpg" id = "Lunar Target" mipMaps = "1" texRepeat = "1" scale="0.4"/>
+      <Texture file = "data/Textures/GeneticaTextures/November Tundra.jpg" id = "November Tundra" mipMaps = "1" texRepeat = "1" scale="0.4"/>
+      <Texture file = "data/Textures/GeneticaTextures/Plaster Blocks.jpg" id = "Plaster Blocks" mipMaps = "1" texRepeat = "1" scale="0.4"/>
+      <Texture file = "data/Textures/GeneticaTextures/Rainbow Shards.jpg" id = "Rainbow Shards" mipMaps = "1" texRepeat = "1" scale="0.4"/>
+      <Texture file = "data/Textures/GeneticaTextures/Silver Hex.jpg" id = "Silver Hex" mipMaps = "1" texRepeat = "1" scale="0.4"/>
+      <Texture file = "data/Textures/GeneticaTextures/Solar Plate.jpg" id = "Solar Plate" mipMaps = "1" texRepeat = "1" scale="0.4"/>
+      <Texture file = "data/Textures/GeneticaTextures/Steel Vault.jpg" id = "Steel Vault" mipMaps = "1" texRepeat = "1" scale="0.4"/>
+      <Texture file = "data/Textures/GeneticaTextures/Trilithium Ore.jpg" id = "Trilithium Ore" mipMaps = "1" texRepeat = "1" scale="0.4"/>
+
+      <Texture file = "data/Textures/purple.png" id = "Purple" mipMaps = "1" texRepeat = "1" scale="0.4"/>
+      <Texture file = "data/Textures/stones.png" id = "Stones" mipMaps = "1" texRepeat = "1" scale="0.4"/>
+
+      <Texture file = "data/Textures/Starfield.png" id = "_starfield" mipMaps = "0" texRepeat = "1" scale="1.0"/>
+      <Texture file = "data/GUI/Cursor.png" id = "_cursor" mipMaps = "0" texRepeat = "0" scale="1.0"/>
+
+      <Animation file = "data/Animation/4dots/4dots.anim" id = "4dots" mipMaps = "1" texRepeat = "0"/>
+      <Animation file = "data/Animation/astro/astro.anim" id = "astro" mipMaps = "0" texRepeat = "0"/>
+      <Animation file = "data/Animation/jetpack/jetpack.anim" id = "jetpack" mipMaps = "1" texRepeat = "0"/>
+      <Animation file = "data/Animation/flame/flame.anim" id = "flame" mipMaps = "1" texRepeat = "0"/>
+      <Animation file = "data/Animation/killer/killer.anim" id = "killer" mipMaps = "1" texRepeat = "0"/>
+      <Animation file = "data/Animation/hexagon/hexagon.anim" id = "hexagon" mipMaps = "1" texRepeat = "0"/>
+
+      <Font file = "data/Fonts/font.ttf" id = "FontW_b" size = "40"/>
+      <Font file = "data/Fonts/font.ttf" id = "FontW_s" size = "25"/>
+</Graphics>
