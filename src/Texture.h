@@ -41,7 +41,7 @@ class TextureManager
 public:
     TextureManager();
     ~TextureManager();
-    void LoadTexture( const char* name,TextureIdType id,const LoadTextureInfo& loadTexInfo, int quality, int* pW=NULL, int* pH=NULL );
+    void LoadTexture( const std::string& name,TextureIdType id,const LoadTextureInfo& loadTexInfo, int quality, int* pW=NULL, int* pH=NULL );
     void FreeTexture( const TextureIdType& id );
     void SetTexture( const TextureIdType& id );
     std::vector<TextureIdType> GetTextureList() const;

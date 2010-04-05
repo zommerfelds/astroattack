@@ -1,4 +1,4 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <Graphics>
       <!--noMipmaps/-->
       <Texture file = "data/Textures/GeneticaTextures/Ancient Mayan Blocks.jpg" id = "blocks" mipMaps = "1" texRepeat = "1" scale="0.4"/>

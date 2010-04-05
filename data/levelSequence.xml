@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <root>
   <slides file="data/Intro/introShow.xml" name="Intro">Spielintro</slides>
   <level file="data/Levels/levelBig.xml" name="Tutorial (alt)"></level>

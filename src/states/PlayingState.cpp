@@ -40,7 +40,7 @@ std::string levelName = "";
 #define NOT_USED(x) x
 
 // Alle Entities in der Welt werden in dieser Datei aufgelistet
-const char* cWordLogFileName = "data/world.txt";
+const char* cWordLogFileName = "world.txt";
 
 StateIdType PlayingState::stateId = "PlayingState";
 

@@ -67,7 +67,7 @@ int getNext2PowN( int x )
 }
 
 // Textur laden
-void TextureManager::LoadTexture( const char* name, TextureIdType id, const LoadTextureInfo& loadTexInfo, int quality, int* pW, int* pH )
+void TextureManager::LoadTexture( const std::string& name, TextureIdType id, const LoadTextureInfo& loadTexInfo, int quality, int* pW, int* pH )
 {
     if ( m_textures.count( id )==1 )
     {
@@ -78,12 +78,12 @@ void TextureManager::LoadTexture( const char* name, TextureIdType id, const Load
     {
         gAaLog.Write ( "Loading Texture \"%s\"... ", name );
 
-        ILuint devIl_tex_id;                        // ID des DevIL Bildes
-        ILboolean success;                          // Speichert ob die Funktionen erfolgreich sind
-        ilGenImages(1, &devIl_tex_id);              // neue Bild ID
-        ilBindImage(devIl_tex_id);                  // Textur binden (als aktuelle setzen)
-        success = ilLoadImage( (ILstring)name );    // bild laden
-        if (success)                                // Falls keine Fehler
+        ILuint devIl_tex_id;                              // ID des DevIL Bildes
+        ILboolean success;                                // Speichert ob die Funktionen erfolgreich sind
+        ilGenImages(1, &devIl_tex_id);                    // neue Bild ID
+        ilBindImage(devIl_tex_id);                        // Textur binden (als aktuelle setzen)
+        success = ilLoadImage( (ILstring)name.c_str() );  // bild laden
+        if (success)                                      // Falls keine Fehler
         {
             if ( pW != NULL )
                 *pW = ilGetInteger(IL_IMAGE_WIDTH);
@@ -267,7 +267,7 @@ void AnimationManager::LoadAnimation( const char* name, AnimationIdType id,const
             digits_str << i;
             std::string file_to_load = path + prefix + digits_str.str() + suffix;
             TextureIdType tex_id = std::string("_")+id+digits_str.str();
-            m_pTM->LoadTexture((ILstring)file_to_load.c_str(),tex_id,texInfo,quality);
+            m_pTM->LoadTexture(file_to_load,tex_id,texInfo,quality);
         }
         pAnimInfo->totalFrames = num_frames;
         pAnimInfo->numDigits = num_digits;

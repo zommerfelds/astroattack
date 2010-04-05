@@ -1,4 +1,4 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <Graphics>
    <Texture file="data/GUI/AstroAttackMenu.png" id="menu" mipMaps="0" texRepeat="0"/>
    <Texture file="data/GUI/AstroAttackTitle.png" id="title" mipMaps="0" texRepeat="0"/>
