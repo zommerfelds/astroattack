@@ -14,6 +14,7 @@
 
 #include <map>
 #include <string>
+#include <list>
 #include <boost/shared_ptr.hpp>
 
 typedef std::string FontIdType;
@@ -24,11 +25,15 @@ typedef std::string FontIdType;
 struct Box;
 struct Font;
 
+class FTFont;
+
 enum Align
 {
     AlignLeft,
     AlignCenter,
-    AlignRight
+    AlignRight,
+    AlignTop = AlignLeft,
+    AlignBottom = AlignRight
 };
 
 //----------------------------------------//
@@ -41,31 +46,12 @@ public:
     ~FontManager();
     void LoadFont( const char* fileName, int size, FontIdType id );
     void FreeFont( FontIdType id );
-    void DrawString(const std::string &str, float x, float y, const FontIdType &fontId, bool orientation, float alpha, Align horizAlign, Align vertAlign );
-    void GetDimensionsOfText(const std::string &str, float& w, float& h, const FontIdType &fontId) const;
+    void DrawString(const std::string &str, const FontIdType &fontId, float x, float y, Align horizAlign, Align vertAlign, float red, float green, float blue, float alpha );
+    void GetDimensionsOfText(const std::string &text, const FontIdType &fontId, float& w, float& h) const;
 
 private:
-    std::map< FontIdType,boost::shared_ptr<Font> > m_fonts;      // Texturen
-};
-
-// ---- STRUKTUREN ----
-
-// Ein Rechteck
-struct Box
-{
-    int x,y;
-    int w,h;
-};
-
-// Informationen einer Schrift
-struct Font
-{
-    int width, height;  // Breite und Höhe der Textur, wo die Zeichen gespeichert sind
-    Box coord[256];     // Genaue Box für jedes Zeichen damit man weiss wo genau das Zeichen in der Textur liegt.
-    bool isValid[256];  // gültiger Symbol? Kann man es Zeichnen?
-    unsigned int texId; // OpenGL Texturadresse (wo die Font-Bilder gespeichert sind), das gleiche wie GLuint
-    int lineSkip;       // Wie viele Punkte der Abstand zwischen zwei Zeilen dieser Schrift beträgt
-    ~Font();            // Wenn diese Klasse gelöscht wird, wird auch die Textur in OpenGL gelöscht.
+    void GetDetailedDimensionsOfTextLines(const std::string &text, const FontIdType &fontId, float& totalWidth, float& totalHeight, std::list<std::string>* lines, std::list<float>* lineWidths, std::list<float>* lineHeights, float* lineSpacing) const;
+    std::map< FontIdType,boost::shared_ptr<FTFont> > m_fonts;      // Texturen
 };
 
 #endif

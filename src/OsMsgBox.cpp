@@ -26,7 +26,8 @@ void OsMsgBox ( const std::string& message, const std::string& title )
 {
 
 #ifdef WIN32 // Windows
-    MessageBoxA ( NULL, message.c_str(), title.c_str(), MB_OK ); // Dialogbox in Windows anzeigen
+    // TODO: change to MessageBox (unicode)
+    MessageBoxA( NULL, message.c_str(), title.c_str(), MB_OK ); // Dialogbox in Windows anzeigen
     // ( | MB_ICONERROR  für Fehlerdialogbox  )
 
 #elif defined( __APPLE__ ) && defined( __MACH__ ) // Mac OS X

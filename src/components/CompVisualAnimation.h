@@ -28,7 +28,7 @@ class Vector2D;
 class CompVisualAnimation : public Component
 {
 public:
-    CompVisualAnimation( AnimInfo* pAnimInfo );
+    CompVisualAnimation( const AnimInfo* pAnimInfo );
     ~CompVisualAnimation();
 	const CompIdType& ComponentId() const { return m_componentId; }
 
@@ -75,7 +75,7 @@ private:
     // für Animation
     int m_currentFrame;
     int m_updateCounter;
-    AnimInfo * m_animInfo;
+    const AnimInfo * m_animInfo;
     StateIdType m_curState;
     bool m_running;
     bool m_wantToFinish;

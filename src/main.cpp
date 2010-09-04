@@ -86,15 +86,18 @@ void ParseArguments( int argc, char* args[] )
         std::string strArg = args[1];
         std::string titleStr = "";
         std::string outputStr = "";
-        if ( strArg=="-v" || strArg=="-version" )
+        if ( strArg=="-v" || strArg=="--version" )
         {
             outputStr = GAME_NAME " " GAME_VERSION "\n";
             titleStr = "Version";
             quit = true;
         }
-        else if ( strArg=="-h" || strArg=="-help" )
+        else if ( strArg=="-h" || strArg=="--help" )
         {
-            outputStr = "Usage: " GAME_NAME " [option]\n -v, -version = show version\n -h, -help = show help\nSee readme.txt for more info.\n";
+            outputStr = "Usage: " GAME_NAME " [options]\n"
+                        "-v, --version = show version\n"
+                        "-h, --help = show help\n"
+                        "See readme.txt for more info.\n";
             titleStr = "Help";
             quit = true;
         }

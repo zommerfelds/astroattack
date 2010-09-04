@@ -40,8 +40,8 @@ float mod360(float x) // Modulo 360 -> immer positiv
 }
 
 // 8:5
-const float STDViewWidth_8_3 = 26.4f; // horizontal lenght (units) of the view
-const float STDViewHeight_8_3 = 16.5f; // vertical lenght (units) of the view
+const float STDViewWidth_8_5 = 26.4f; // horizontal lenght (units) of the view
+const float STDViewHeight_8_5 = 16.5f; // vertical lenght (units) of the view
 
 // 4:3
 const float STDViewWidth_4_3 = 24.f; // horizontal lenght (units) of the view
@@ -55,13 +55,14 @@ GameCamera::GameCamera( const InputSubSystem* pInputSubSystem, RenderSubSystem* 
   : m_pTranslation ( new Vector2D ),
     m_scaleValue ( 1.0f ),
     m_rotationAngleDeg ( 0.0f ),
-    m_viewWidth ( gAaConfig.GetInt("WideScreen")?STDViewWidth_8_3:STDViewWidth_4_3 ),
-    m_viewHeight ( gAaConfig.GetInt("WideScreen")?STDViewHeight_8_3:STDViewHeight_4_3 ),
+    m_viewWidth ( gAaConfig.GetInt("WideScreen")?STDViewWidth_8_5:STDViewWidth_4_3 ),
+    m_viewHeight ( gAaConfig.GetInt("WideScreen")?STDViewHeight_8_5:STDViewHeight_4_3 ),
     m_pInputSubSystem ( pInputSubSystem ),
     m_pRenderSubSystem ( pRenderSubSystem ),
     m_pWorld ( pWorld ),
     m_isFollowingPlayer ( false ),
 	m_framesTillAnimSwitchHeadingIsPossible ( 0 ),
+    m_playerOldHeading ( 0 ),
     m_pCursorPosInworld ( new Vector2D ),
     m_isMovingSmoothly ( false ),
     m_pCameraDeparture ( new Vector2D ),
@@ -84,12 +85,12 @@ GameCamera::~GameCamera()
 // Initialisierung der 2D Kamera (ganz am Anfang aufrufen)
 void GameCamera::Init ()
 {
-    m_pRenderSubSystem->MatrixWorld();
+    m_pRenderSubSystem->SetMatrix(RenderSubSystem::World);
     glMatrixMode ( GL_PROJECTION );
     glLoadIdentity(); //Reset projection matrix
 
     // orthogonalen 2D-Rendermodus
-    glOrtho ( -m_viewWidth/2, m_viewWidth/2, -m_viewHeight/2, m_viewHeight/2, -1.0f, 1.0f ); // (z ist nicht wichtig)
+    gluOrtho2D( -m_viewWidth/2, m_viewWidth/2, -m_viewHeight/2, m_viewHeight/2 ); // (z ist nicht wichtig)
     glMatrixMode ( GL_MODELVIEW );
 
     m_isFollowingPlayer = false;
@@ -236,24 +237,24 @@ void GameCamera::Update ( float deltaTime ) // time_span in seconds
 
                 std::vector<Component*> player_anims = player->GetComponents("CompVisualAnimation");
                 // ACHTUNG
-				//const CompGravField* grav = player_phys->GetGravField();
+				const CompGravField* grav = player_phys->GetGravField();
 				Vector2D upVector(0.0f,1.0f);
-				/*if ( grav!=NULL )
-					upVector = grav->GetAcceleration( Vector2D(player_phys->GetBody()->GetWorldCenter()) ).GetUnitVector()*-1;*/
+				if ( grav!=NULL )
+					upVector = grav->GetAcceleration( Vector2D(player_phys->GetBody()->GetWorldCenter()) ).GetUnitVector()*-1;
 				bool right = upVector.IsRight( *m_pCursorPosInworld - Vector2D(player_phys->GetBody()->GetWorldCenter()) );
-				static bool old_right = false;
-				if ( right!=old_right ) {
+				if ( m_playerOldHeading == 0 || right != (m_playerOldHeading==1) ) {
 					if ( m_framesTillAnimSwitchHeadingIsPossible == 0 ) {
-						old_right = right;
+						if (right)
+                            m_playerOldHeading = 1;
+                        else
+                            m_playerOldHeading = -1;
 						m_framesTillAnimSwitchHeadingIsPossible = cFramesTillAnimSwitchHeadingIsPossible;
-					}
-					else
-						right=old_right;
 
-					for ( unsigned int i = 0; i < player_anims.size(); ++i )
-					{
-						CompVisualAnimation* anim = static_cast<CompVisualAnimation*>( player_anims[i] );
-						anim->SetFlip( !right );
+					    for ( unsigned int i = 0; i < player_anims.size(); ++i )
+					    {
+						    CompVisualAnimation* anim = static_cast<CompVisualAnimation*>( player_anims[i] );
+						    anim->SetFlip( !right );
+					    }
 					}
 				}
             }
@@ -313,8 +314,6 @@ void GameCamera::Update ( float deltaTime ) // time_span in seconds
     }
     UpdateCurPosInWorld();
 
-    Look();
-
     //gAaLog.Write( "Cx = %f Cy = %f r = %f\n",CAMERA_POS.x,CAMERA_POS.y,m_rotationAngleDeg);
 }
 
@@ -359,8 +358,8 @@ void GameCamera::Zoom ( float zoom )
         m_scaleValue = cMaxScale;
     else if ( m_scaleValue < cMinScale )
         m_scaleValue = cMinScale;
-    m_viewWidth = (gAaConfig.GetInt("WideScreen")?STDViewWidth_8_3:STDViewWidth_4_3) * 1.0f/m_scaleValue;
-    m_viewHeight = (gAaConfig.GetInt("WideScreen")?STDViewHeight_8_3:STDViewHeight_4_3) * 1.0f/m_scaleValue;
+    m_viewWidth = (gAaConfig.GetInt("WideScreen")?STDViewWidth_8_5:STDViewWidth_4_3) * 1.0f/m_scaleValue;
+    m_viewHeight = (gAaConfig.GetInt("WideScreen")?STDViewHeight_8_5:STDViewHeight_4_3) * 1.0f/m_scaleValue;
 }
 
 void GameCamera::Look() const

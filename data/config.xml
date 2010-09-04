@@ -9,7 +9,7 @@
     <ScreenWidth val="1280" type="int" />
     <TexQuality val="0" type="int" />
     <V-Sync val="1" type="int" />
-    <VolMaster val="0.7" type="float" />
+    <VolMaster val="0.6" type="float" />
     <VolMusic val="0" type="float" />
     <VolSound val="1" type="float" />
     <WideScreen val="1" type="int" />

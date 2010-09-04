@@ -99,6 +99,7 @@ private:
 
     bool m_isFollowingPlayer;
 	int m_framesTillAnimSwitchHeadingIsPossible;
+    char m_playerOldHeading; // -1: left, 0: not yet defined, 1: right
 
     boost::scoped_ptr<Vector2D> m_pCursorPosInworld;
 

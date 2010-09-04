@@ -23,7 +23,7 @@ class Vector2D;
 enum GravType { Directional, Radial };
 
 //--------------------------------------------//
-//--------- CompGravField Klasse -----------//
+//--------- CompGravField Klasse -------------//
 //--------------------------------------------//
 class CompGravField : public Component
 {

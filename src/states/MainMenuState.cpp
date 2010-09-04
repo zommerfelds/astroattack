@@ -77,7 +77,7 @@ void MainMenuState::Init()        // State starten
     GetSubSystems()->sound->PlayMusic( "menuMusic", true, 0 );
 
     // GUI modus (Graphical User Interface)
-    GetSubSystems()->renderer->MatrixGUI();
+    GetSubSystems()->renderer->SetMatrix(RenderSubSystem::GUI);
 
     ///////////// GUI ////////////
     GetSubSystems()->gui->HideGroup( menuNames[0] );
@@ -87,7 +87,8 @@ void MainMenuState::Init()        // State starten
     GetSubSystems()->gui->ShowGroup( menuNames[m_subMenu] );
 
     // *** Hauptbildschirm ***
-    GetSubSystems()->gui->InsertWidget( menuNames[Main], boost::shared_ptr<Widget>(new WidgetLabel( 0.2f, 0.8f, "Willkommen zu AstroAttack! [Version " GAME_VERSION "]", GetSubSystems()->renderer->GetFontManager() )) );
+    GetSubSystems()->gui->InsertWidget( menuNames[Main], boost::shared_ptr<Widget>(new WidgetLabel( 0.1f, 0.9f, "Willkommen zu AstroAttack! [v" GAME_VERSION "]", GetSubSystems()->renderer->GetFontManager() )) );
+
 
     float x = 0.35f;
     float y = 0.36f;
@@ -146,23 +147,44 @@ void MainMenuState::Init()        // State starten
     }
 
     // *** Über ***
-    GetSubSystems()->gui->InsertWidget( menuNames[Credits], boost::shared_ptr<Widget>(new WidgetLabel(  0.1f, 0.25f,
-                              "== AstroAttack " GAME_VERSION " ==\n"
-                              "von Christian Zommerfelds\n\n"
-                              "* Musik *\n"
-                              " - Dj Mitch (SRT-M1tch) -> Menu\n"
-                              " - Sir LardyLarLar AKA Robin (FattysLoyalKnight) -> Intro\n"
-                              " - sr4cld - 4clD -> Spiel\n"
-                              "* Sound *\n"
-                              " - soundsnap.com\n"
-                              "* Bibliotheken *\n"
-                              " - OpenGL, SDL, DevIL, SDL_ttf, SDL_mixer, Box2D\n\n"
-                              "== Danke fürs Spielen! =="
-                              , GetSubSystems()->renderer->GetFontManager() )) );
+    x=0.2f;
+    y=0.25f;
+    GetSubSystems()->gui->InsertWidget( menuNames[Credits], boost::shared_ptr<Widget>(new WidgetLabel( x, y,
+                              "== AstroAttack " GAME_VERSION " ==", GetSubSystems()->renderer->GetFontManager() )) );
+    y+=0.05f;
+    GetSubSystems()->gui->InsertWidget( menuNames[Credits], boost::shared_ptr<Widget>(new WidgetLabel( x, y,
+                              "von Christian Zommerfelds", GetSubSystems()->renderer->GetFontManager() )) );
+    y+=0.09f;
+    GetSubSystems()->gui->InsertWidget( menuNames[Credits], boost::shared_ptr<Widget>(new WidgetLabel( x, y,
+                              "* Musik *", GetSubSystems()->renderer->GetFontManager() )) );
+    y+=0.04f;
+    GetSubSystems()->gui->InsertWidget( menuNames[Credits], boost::shared_ptr<Widget>(new WidgetLabel( x, y,
+                              " - Dj Mitch (SRT-M1tch) -> Menu", GetSubSystems()->renderer->GetFontManager() )) );
+    y+=0.04f;
+    GetSubSystems()->gui->InsertWidget( menuNames[Credits], boost::shared_ptr<Widget>(new WidgetLabel( x, y,
+                              " - Sir LardyLarLar AKA Robin (FattysLoyalKnight) -> Intro", GetSubSystems()->renderer->GetFontManager() )) );
+    y+=0.04f;
+    GetSubSystems()->gui->InsertWidget( menuNames[Credits], boost::shared_ptr<Widget>(new WidgetLabel( x, y,
+                              " - sr4cld - 4clD -> Spiel", GetSubSystems()->renderer->GetFontManager() )) );
+    y+=0.09f;
+    GetSubSystems()->gui->InsertWidget( menuNames[Credits], boost::shared_ptr<Widget>(new WidgetLabel( x, y,
+                              "* Sound *", GetSubSystems()->renderer->GetFontManager() )) );
+    y+=0.04f;
+    GetSubSystems()->gui->InsertWidget( menuNames[Credits], boost::shared_ptr<Widget>(new WidgetLabel( x, y,
+                              " - soundsnap.com", GetSubSystems()->renderer->GetFontManager() )) );
+    y+=0.09f;
+    GetSubSystems()->gui->InsertWidget( menuNames[Credits], boost::shared_ptr<Widget>(new WidgetLabel( x, y,
+                              "* Bibliotheken *", GetSubSystems()->renderer->GetFontManager() )) );
+    y+=0.04f;
+    GetSubSystems()->gui->InsertWidget( menuNames[Credits], boost::shared_ptr<Widget>(new WidgetLabel( x, y,
+                              " - OpenGL, SDL, DevIL, GLFT, SDL_mixer, Box2D, TinyXML, UTF8-CPP", GetSubSystems()->renderer->GetFontManager() )) );
+    y+=0.09f;
+    GetSubSystems()->gui->InsertWidget( menuNames[Credits], boost::shared_ptr<Widget>(new WidgetLabel( x, y,
+                              "Danke fürs Spielen!", GetSubSystems()->renderer->GetFontManager() )) );
 
     // *** Optionen ***
     GetSubSystems()->gui->InsertWidget( menuNames[Options], boost::shared_ptr<Widget>(new WidgetLabel(  0.3f, 0.1f, "Auflösung:", GetSubSystems()->renderer->GetFontManager() )) );
-    GetSubSystems()->gui->InsertWidget( menuNames[Options], boost::shared_ptr<Widget>(new WidgetLabel(  0.1f, 0.8f, "Erweiterte Optionen können in der Datei \"config.xml\"\ngeändert werden.", GetSubSystems()->renderer->GetFontManager() )) );
+    GetSubSystems()->gui->InsertWidget( menuNames[Options], boost::shared_ptr<Widget>(new WidgetLabel(  0.1f, 0.8f, "Erweiterte Optionen können in der Datei \"config.xml\" geändert werden.", GetSubSystems()->renderer->GetFontManager() )) );
     
     x=0.3f;
     y=0.92f;
@@ -188,7 +210,6 @@ void MainMenuState::Cleanup()     // State abbrechen
     if ( m_appliedConfig == false )
         gAaConfig.DiscardConfig();
     GetSubSystems()->sound->StopMusic( 300 );
-    GetSubSystems()->sound->FreeMusic( "menuMusic" );
     GetSubSystems()->sound->FreeSound( "mouseover" );
     GetSubSystems()->sound->FreeSound( "mouseclick" );
 
@@ -197,6 +218,8 @@ void MainMenuState::Cleanup()     // State abbrechen
     xml.UnLoadGraphics( cMenuGraphicsFileName, GetSubSystems()->renderer->GetTextureManager(), NULL, NULL );
 
     GetSubSystems()->gui->Clear();
+
+    GetSubSystems()->sound->FreeMusic( "menuMusic" );
 }
 
 void MainMenuState::Pause()       // State anhalten
@@ -345,6 +368,36 @@ void MainMenuState::Draw( float accumulator )        // Spiel zeichnen
                                  (mousePos->x+w)*4, mousePos->y*3 };
         pRenderer->DrawTexturedQuad( texCoord, vertexCoord, "_cursor" );
     }
+
+    pRenderer->GetTextureManager()->SetTexture("inundation");
+
+    /*// Create a pixmap font from a TrueType file.
+    FTGLTextureFont font("data/Fonts/font.ttf");
+
+    // If something went wrong, bail out.
+    if(font.Error())
+        assert(false);
+
+    // Set the font size and render a small text.
+    font.FaceSize(20);
+    //font.Render("Hello World 1!",-1,FTPoint(650,400));
+    //font.Render("Hello World 2!",-1,FTPoint(0,0));
+    //font.Render("Hello World 3!",-1,FTPoint(1,1));*/
+
+    //pRenderer->MatrixText();
+    ////glColor4f( 1.0f, 1.0f, 1.0f, 0.9f );
+    //glColor4ub( 244, 255, 255, 230 );
+    //glMatrixMode(GL_TEXTURE);
+    //glLoadIdentity();
+    //glMatrixMode(GL_MODELVIEW);
+    ////glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
+    ////font.Render("Hello World 4!",-1,FTPoint(650,400));
+    //glColor4ub( 244, 255, 255, 230 );
+    ////font.Render("Hello World 5!",-1,FTPoint(0,0));
+    ////font.Render("Hello World 6!",-1,FTPoint(1,1));
+
+    //pRenderer->DrawString("hoi",0.1f,0.1f,"FontW_b");
+    //pRenderer->MatrixGUI();
 
     pRenderer->FlipBuffer(); // vom Backbuffer zum Frontbuffer wechseln (neues Bild zeigen)
 }

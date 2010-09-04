@@ -19,7 +19,7 @@
 // einduetige ID
 CompIdType CompVisualAnimation::m_componentId = "CompVisualAnimation";
 
-CompVisualAnimation::CompVisualAnimation( AnimInfo* pAnimInfo )
+CompVisualAnimation::CompVisualAnimation( const AnimInfo* pAnimInfo )
 : m_registerObj(),
   m_center( new Vector2D ),
   m_halfWidth ( 0.0f ),
@@ -66,7 +66,11 @@ void CompVisualAnimation::SetState( StateIdType new_state )
         return;
     m_curState = new_state; // neuer Animationsstand
     if ( m_animInfo!=NULL )
-        m_currentFrame = m_animInfo->states[new_state]->begin; // Startframe setzen
+    {
+        StateInfoMap::const_iterator cit = m_animInfo->states.find(new_state);
+        assert (cit != m_animInfo->states.end());
+        m_currentFrame = cit->second->begin; // Startframe setzen
+    }
 }
 
 void CompVisualAnimation::Start()
@@ -74,7 +78,11 @@ void CompVisualAnimation::Start()
     m_running = true;
     m_wantToFinish = false;
     if ( m_animInfo!=NULL )
-        m_currentFrame = m_animInfo->states[m_curState]->begin;
+    {
+        StateInfoMap::const_iterator cit = m_animInfo->states.find(m_curState);
+        assert (cit != m_animInfo->states.end());
+        m_currentFrame = cit->second->begin;
+    }
 }
 
 void CompVisualAnimation::Continue()
@@ -95,23 +103,25 @@ void CompVisualAnimation::Update( const Event* gameUpdatedEvent )
         return;       // abbrechen!
 
     ++m_updateCounter;
-    if ( m_updateCounter > m_animInfo->states[m_curState].get()->speed ) // ein Frame vorbei ist
+    StateInfoMap::const_iterator animStateInfoIter = m_animInfo->states.find(m_curState);
+    assert (animStateInfoIter != m_animInfo->states.end());
+    if ( m_updateCounter > animStateInfoIter->second->speed ) // ein Frame vorbei ist
     {
         m_updateCounter = 0;
         m_currentFrame += m_direction; // +1 oder -1 je nach Richtung der Animation
         if ( m_direction == 1 )
         {
-            if ( m_currentFrame > m_animInfo->states[m_curState].get()->end ) // wenn letzter Frame erreicht wurde
-                m_currentFrame = m_animInfo->states[m_curState]->begin; // wieder zum start setzen
+            if ( m_currentFrame > animStateInfoIter->second->end ) // wenn letzter Frame erreicht wurde
+                m_currentFrame = animStateInfoIter->second->begin; // wieder zum start setzen
         }
         else
         {
-            if ( m_currentFrame < m_animInfo->states[m_curState].get()->begin ) // wenn letzter Frame erreicht wurde
-                m_currentFrame = m_animInfo->states[m_curState]->end; // wieder zum start setzen
+            if ( m_currentFrame < animStateInfoIter->second->begin ) // wenn letzter Frame erreicht wurde
+                m_currentFrame = animStateInfoIter->second->end; // wieder zum start setzen
         }
         if ( m_wantToFinish ) // falls man die Animation Stoppen möchte
         {
-            if ( m_animInfo->states[m_curState]->stops.count( m_currentFrame ) )
+            if ( animStateInfoIter->second->stops.count( m_currentFrame ) )
                 m_running = false;
         }
     }

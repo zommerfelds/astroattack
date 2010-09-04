@@ -4,6 +4,15 @@
 
 TODO:
 
+- Use make_shared
+- Improve jump animation
+- Startup beschleunigen
+- Replace if (var==NULL) by assert(false)
+- Test OpenGL error checking (glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR) did not generate error)
+- Bug in Logger: Loading Texture "(null)"... Done!
+- Remove static local variables
+- Make data creation Wiki/howto. Tools: OptiPNG
+- Time Accumulator besser anwenden
 - Parameters (-- instead of -)
 - Clean up TODO (high/low priority)
 - Zoom out when cursor is far away
@@ -37,7 +46,7 @@ DONE:
 - Delay wenn Jack Seite wechselt
 - Never set string = NULL in XmlLoader
 - Korrektur in Intro-Bild
-- Maussensivität einstellbar
+- Maussensibilität einstellbar
 - Flexiblere Einstellungen (mit xml)
 - Ein- und Ausgabe von XML-Dateien
 - Wenn Links- / Rechtstaste nur kurz gedrückt wird, keine ganze Schrittanimation machen

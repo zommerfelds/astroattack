@@ -24,6 +24,7 @@
 #include "components/CompVisualMessage.h"
 
 #include "contrib/tinyxml/tinyxml.h"
+
 #include "Renderer.h"
 #include "Physics.h"
 

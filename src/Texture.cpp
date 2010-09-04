@@ -21,16 +21,21 @@
 TextureManager::TextureManager()
 {
     // Version von DevIL überprüfen.
-    ILint IL_version = ilGetInteger(IL_VERSION_NUM);
-    ILint ILU_version = iluGetInteger(ILU_VERSION_NUM);
-    if ( IL_version < IL_VERSION || ILU_version < ILU_VERSION )
+    ILint il_dynamic_library_version = ilGetInteger(IL_VERSION_NUM);
+    if ( il_dynamic_library_version < IL_VERSION )
     {
         // falsche Version
-        throw Exception ( gAaLog.Write ( "Wrong DevIL version!\nFound %i, need %i.", IL_version, IL_VERSION ) );
+        throw Exception( gAaLog.Write ( "DevIL (IL) library is too old!\nFound %i, need > %i.", il_dynamic_library_version, IL_VERSION ) );
+    }
+    ILint ilu_dynamic_library_version = iluGetInteger(ILU_VERSION_NUM);
+    if ( ilu_dynamic_library_version < ILU_VERSION )
+    {
+        // falsche Version
+        throw Exception( gAaLog.Write ( "DevIL (ILU) library is too old!\nFound %i, need > %i.", ilu_dynamic_library_version, ILU_VERSION ) );
     }
 
-    ilInit(); // Initialization von DevIL
-    iluInit(); // Initialization von DevIL
+    ilInit(); // Initialization von DevIL (IL)
+    iluInit(); // Initialization von DevIL (ILU)
 }
 
 // Destruktor
@@ -71,12 +76,13 @@ void TextureManager::LoadTexture( const std::string& name, TextureIdType id, con
 {
     if ( m_textures.count( id )==1 )
     {
-        gAaLog.Write ( "*** WARNING: Loading texture: Texture with ID \"%s\" already exists! (new texture was not loaded) ***\n", id.c_str() );
+        gAaLog.Write( "*** WARNING: Loading texture: Texture with ID \"%s\" already exists! (new texture was not loaded) ***\n", id.c_str() );
         return;
     }
     try
     {
-        gAaLog.Write ( "Loading Texture \"%s\"... ", name );
+        //TODO: check for DevIL errors ilGetError()
+        gAaLog.Write( "Loading Texture \"%s\"... ", name );
 
         ILuint devIl_tex_id;                              // ID des DevIL Bildes
         ILboolean success;                                // Speichert ob die Funktionen erfolgreich sind
@@ -96,6 +102,7 @@ void TextureManager::LoadTexture( const std::string& name, TextureIdType id, con
             
             //gAaLog.Write( "GL: w=%i, h=%i\n", width_2pown, height_2pown );
 
+            // TODO: don't shift small numbers
             if ( quality == TEX_QUALITY_BEST )
                 iluScale( width_2pown, height_2pown, ilGetInteger(IL_IMAGE_DEPTH));
             // Bild verkleinern, falls man eine schlechtere Qualität wünscht.
@@ -123,7 +130,7 @@ void TextureManager::LoadTexture( const std::string& name, TextureIdType id, con
             if (loadTexInfo.loadMipmaps)
             {
                 // Textur-Parameter setzen -> bestimmt die Qualität
-                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
                 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 
                 // Textur wird hier in die Grafikkarte geladen! Dabei werden Mipmaps generiert.
@@ -214,6 +221,9 @@ std::vector<TextureIdType> TextureManager::GetTextureList() const
 void TextureManager::Clear()
 {
     //glBindTexture(GL_TEXTURE_2D, 0 );
+    glMatrixMode(GL_TEXTURE);
+    glLoadIdentity();
+    glMatrixMode(GL_MODELVIEW);
     glDisable(GL_TEXTURE_2D);
 }
 
@@ -225,7 +235,7 @@ AnimationManager::AnimationManager( TextureManager* pTM )
 // Lädt eine Animationsdatei
 void AnimationManager::LoadAnimation( const char* name, AnimationIdType id,const LoadTextureInfo& texInfo, int quality )
 {
-    if ( m_animInfo.count( id )==1 )
+    if ( m_animInfoMap.count( id )==1 )
     {
         gAaLog.Write ( "Warning loading animation: Animation with ID \"%s\" exists already! (new animation was not loaded)\n", id.c_str() );
         return;
@@ -294,7 +304,7 @@ void AnimationManager::LoadAnimation( const char* name, AnimationIdType id,const
                     throw 0;
                 it->second->stops.insert( stop );
             }
-            m_animInfo.insert( std::pair< AnimationIdType, boost::shared_ptr<AnimInfo> >( id, pAnimInfo ) );
+            m_animInfoMap.insert( std::pair< AnimationIdType, boost::shared_ptr<AnimInfo> >( id, pAnimInfo ) );
         }
     }
     catch (...)
@@ -305,9 +315,18 @@ void AnimationManager::LoadAnimation( const char* name, AnimationIdType id,const
     input_stream.close();
 }
 
+const AnimInfo* AnimationManager::GetAnimInfo( AnimationIdType animId ) const
+{
+    AnimInfoMap::const_iterator cit = m_animInfoMap.find( animId );
+    if (cit!=m_animInfoMap.end())
+        return cit->second.get();
+    else
+        return NULL;
+}
+
 void AnimationManager::FreeAnimation( AnimationIdType id )
 {
-    AnimInfo* animInfo = m_animInfo[id].get();
+    AnimInfo* animInfo = m_animInfoMap[id].get();
     for ( int i = 0; i < animInfo->totalFrames; ++i )
     {
         std::stringstream digits_str;

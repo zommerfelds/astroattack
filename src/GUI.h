@@ -33,7 +33,7 @@ typedef std::map< GroupId, std::vector< boost::shared_ptr<Widget> > > WidgetMap;
 class GuiSubSystem
 {
 public:
-    GuiSubSystem( const RenderSubSystem* pRenderer, InputSubSystem* pInput );
+    GuiSubSystem( RenderSubSystem* pRenderer, InputSubSystem* pInput );
     ~GuiSubSystem();
 
     void Update();
@@ -45,7 +45,7 @@ public:
     void ShowGroup( GroupId groupId ) { m_groupsToHide.erase( groupId ); }
     void Clear() { if (m_isUpdating) m_clear = true; else ClearContainers(); }
 private:
-    const RenderSubSystem* m_pRenderer;
+    RenderSubSystem* m_pRenderer;
     InputSubSystem* m_pInput;
     void ClearContainers() { m_widgets.clear(); m_groupsToHide.clear(); m_clear = false; }
 
@@ -63,7 +63,7 @@ public:
 
     virtual ~Widget() {};
 
-    virtual void Draw( const RenderSubSystem* pRenderer ) const { pRenderer; /* not used */ };
+    virtual void Draw( RenderSubSystem* pRenderer ) { pRenderer; /* not used */ };
     virtual void MouseStateChanged( MouseState newState ) { newState; /* not used */ }
 
     void SetArea( Rect area ) { m_area = area; }
@@ -81,7 +81,7 @@ public:
     WidgetLabel( float x, float y, std::string text, const FontManager* fontMngr );
     ~WidgetLabel();
 
-    void Draw( const RenderSubSystem* pRenderer ) const;
+    void Draw( RenderSubSystem* pRenderer );
     //void MouseStateChanged( MouseState newState ) const {}
 private:
     std::string m_text;
@@ -96,7 +96,7 @@ public:
     WidgetButton( Rect area, std::string caption, ButCallbackFunc clickedCallbackFunc, ButCallbackFunc mouseOverCallbackFunc );
     ~WidgetButton();
 
-    void Draw( const RenderSubSystem* pRenderer ) const;
+    void Draw( RenderSubSystem* pRenderer );
     void MouseStateChanged( MouseState newState );
 private:
     std::string m_caption;

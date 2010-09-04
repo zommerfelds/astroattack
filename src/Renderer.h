@@ -46,53 +46,60 @@ public:
     void Init( int width, int height );
     bool LoadData();
 
-    void ClearScreen() const;
-    void FlipBuffer() const;
+    void ClearScreen();
+    void FlipBuffer();
 
-    void MatrixWorld();
-    void MatrixGUI();
+    enum MatrixId
+    {
+        World, GUI, Text
+    };
+
+    void SetMatrix(MatrixId matrix);
 
     // Visuele Komponenten anzeigen
-    void DrawVisualTextureComps( float accumulator ) const;
-    void DrawVisualAnimationComps( float accumulator ) const;
-    void DrawVisualMessageComps() const;
+    void DrawVisualTextureComps( float accumulator );
+    void DrawVisualAnimationComps( float accumulator );
+    void DrawVisualMessageComps();
 
     // ******** Zeichnungsfunktionen ********* //
 
     // einen Texturierten Quadrat zeichnen
-    void DrawTexturedQuad( float texCoord[8], float vertexCoord[8], std::string texId, bool border = false, float alpha = 1.0f ) const;
+    void DrawTexturedQuad( float texCoord[8], float vertexCoord[8], std::string texId, bool border=false, float alpha=1.0f );
     // einen Quadrat zeichnen
-    void DrawColorQuad( float vertexCoord[8], float r, float g, float b, float a, bool border = false ) const;
+    void DrawColorQuad( float vertexCoord[8], float r, float g, float b, float a, bool border = false );
     // Schreibt Text
-    void DrawString ( const std::string &str, float x, float y, const FontIdType &fontId, float alpha = 1.0f, Align horizAlign = AlignLeft, Align vertAlign = AlignLeft ) const;
+    void DrawString ( const std::string &str, const FontIdType &fontId, float x, float y, Align horizAlign=AlignLeft, Align vertAlign=AlignTop, float red=1.0f, float green=1.0f, float blue=1.0f, float alpha=1.0f );
 
     // -------- nur für MatrixWorld Modus --------   
 
     // Box2D Polygon zeichnen
-    void DrawPolygonShape ( const b2PolygonShape* rPoly, bool border = false ) const;
+    void DrawPolygonShape ( const b2PolygonShape* rPoly, bool border = false );
     // Box2D Kreis zeichnen
-    void DrawCircleShape ( const b2CircleShape* rCircle, bool border = false ) const;
+    void DrawCircleShape ( const b2CircleShape* rCircle, bool border = false );
     // Zeichnet einen Vector2D (Pfeil) an einer bestimmten Postion
-    void DrawVector ( const Vector2D& rVector, const Vector2D& rPos ) const;
+    void DrawVector ( const Vector2D& rVector, const Vector2D& rPos );
     // Zeichnet einen punkt an einer bestimmten Postion
-    void DrawPoint ( const Vector2D& rPos ) const;
+    void DrawPoint ( const Vector2D& rPos );
     // Zeichnet den Fadenkreuz
-    void DrawCrosshairs ( const Vector2D& rCrosshairsPos ) const;
+    void DrawCrosshairs ( const Vector2D& rCrosshairsPos );
 
     // -------- nur für MatrixGUI Modus --------   
 
     // Zeichnet den Mauszeiger für den Editor
-    void DrawEditorCursor ( const Vector2D& rPos ) const;
+    void DrawEditorCursor ( const Vector2D& rPos );
     // das ganze Bildschirm mit einer Farbe überdecken
-    void DrawOverlay( float r, float g, float b, float a ) const;
+    void DrawOverlay( float r, float g, float b, float a );
 
     // ****************************************//
 
     void DisplayLoadingScreen();
 
-    TextureManager* GetTextureManager() const { return m_pTextureManager.get(); }
-    AnimationManager* GetAnimationManager() const { return m_pAnimationManager.get(); }
-    FontManager* GetFontManager() const { return m_pFontManager.get(); }
+    const TextureManager* GetTextureManager() const { return m_pTextureManager.get(); }
+    const AnimationManager* GetAnimationManager() const { return m_pAnimationManager.get(); }
+    const FontManager* GetFontManager() const { return m_pFontManager.get(); }
+    TextureManager* GetTextureManager() { return m_pTextureManager.get(); }
+    AnimationManager* GetAnimationManager() { return m_pAnimationManager.get(); }
+    FontManager* GetFontManager() { return m_pFontManager.get(); }
 
 private:
     void InitOpenGL( int width, int height ); // OpenGL initialisieren
@@ -111,9 +118,9 @@ private:
     void RegisterCompVisual( const Event* pEvent );
     void UnregisterCompVisual( const Event* pEvent );
 
-    bool m_currentMatrixIsWorld;
-    float m_matrixWorld[16];
+    MatrixId m_currentMatrix;
     float m_matrixGUI[16];
+    float m_matrixText[16];
 };
 
 #endif

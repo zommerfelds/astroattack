@@ -32,7 +32,7 @@ const char* Logger::Write( const char *format, ... )
 {
     // Parameterliste
     va_list List;
-    va_start ( List,format );
+    va_start( List,format );
 
     int num_chars = 0; // Anzahl Zeichen die in m_buf geschrieben werden
     // Text in m_buf speichern

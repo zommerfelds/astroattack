@@ -227,4 +227,21 @@
             <tex name="Craterscape" />
         </Component>
     </Entity>
+    <Entity name="EdBlock00015">
+        <Component id="CompPhysics" name="std">
+            <pos x="0.000000" y="0.000000" a="0.000000" />
+            <damping linear="0.000000" angular="0.000000" />
+            <shape name="shape1">
+                <phys density="0.000000" friction="0.300000" restitution="0.000000" />
+                <vertex x="-71.500000" y="13.000000" />
+                <vertex x="-71.000000" y="13.500000" />
+                <vertex x="-70.500000" y="14.000000" />
+                <vertex x="-71.500000" y="14.000000" />
+                <vertex x="-72.000000" y="15.500000" />
+            </shape>
+        </Component>
+        <Component id="CompVisualTexture" name="std">
+            <tex name="Ancient Stone Slabs" />
+        </Component>
+    </Entity>
 </level>

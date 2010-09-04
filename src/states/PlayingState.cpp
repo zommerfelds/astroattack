@@ -32,6 +32,7 @@
 
 // TEMP !
 //#include "../Vector2D.h"
+#include <SDL/sdl_opengl.h>
 #include "../components/CompGravField.h"
 #include "../components/CompPhysics.h"
 std::string levelName = "";
@@ -169,13 +170,15 @@ void PlayingState::Update()      // Spiel aktualisieren
 
 void PlayingState::Draw( float accumulator )        // Spiel zeichnen
 {
+    glColor4ub( 243, 255, 255, 230 );
     RenderSubSystem* pRenderer = GetSubSystems()->renderer.get();
 
     // Bildschirm leeren
     pRenderer->ClearScreen();
     // GUI modus (Grafische Benutzeroberfläche)
-    pRenderer->MatrixGUI();
-    // Menühintergrund zeichnen
+    //pRenderer->SetMatrix(RenderSubSystem::World);
+    pRenderer->SetMatrix(RenderSubSystem::GUI);
+    // Hintergrundbild zeichnen
     {
         float texCoord[8] = { 0.0f, 0.0f,
                              0.0f, 1.0f,
@@ -188,7 +191,7 @@ void PlayingState::Draw( float accumulator )        // Spiel zeichnen
         pRenderer->DrawTexturedQuad( texCoord, vertexCoord, "_starfield" );
     }
     // Weltmodus
-    pRenderer->MatrixWorld();
+    pRenderer->SetMatrix(RenderSubSystem::World);
     m_pGameCamera->Look();
     // Animationen zeichnen
     pRenderer->DrawVisualAnimationComps( accumulator );
@@ -227,7 +230,7 @@ void PlayingState::Draw( float accumulator )        // Spiel zeichnen
     // Fadenkreuz zeichnen
     pRenderer->DrawCrosshairs ( *m_pGameCamera->GetCursorPosInWorld() );
     // GUI modus (Grafische Benutzeroberfläche)
-    pRenderer->MatrixGUI();
+    pRenderer->SetMatrix(RenderSubSystem::GUI);
     // Jetpack %-Anzeige
     {
         float vertexCoord[8] = { 0.5f, 0.08f,
@@ -240,33 +243,25 @@ void PlayingState::Draw( float accumulator )        // Spiel zeichnen
     pRenderer->DrawVisualMessageComps();
 
     std::stringstream ss;
-    ss << "Hex: " << m_pGameWorld->GetVariable("hex");
-    pRenderer->DrawString( ss.str().c_str(), 1.7f, 0.08f, "FontW_b" );
-
-    ss.str("");
-    ss.clear();
-
     ss.precision( 1 );
     ss.setf(std::ios::fixed,std::ios::floatfield);
-    ss << "Jetpack: " << m_pGameWorld->GetVariable("JetpackEnergy")/10.0f << "%";
-    pRenderer->DrawString( ss.str().c_str(), 0.1f, 0.08f, "FontW_b" );
-
-    // TEMP
-    /*ss.str("");
-    ss.clear();
-
-    Vector2D vec ( *GetSubSystems()->input->RelMousePos() );
-    ss << "X: " << vec.x << " Y: " << vec.y;
-    pRenderer->DrawString( ss.str().c_str(), 0.1f, 0.2f, "FontW_b" );*/
-    // END OF TEMP
+    ss << m_pGameWorld->GetVariable("JetpackEnergy")/10.0f << "%";
+    pRenderer->DrawString( ss.str().c_str(), "FontW_s", 0.55f, 0.133f, AlignLeft, AlignCenter, 1.0f, 1.0f, 1.0f, 1.0f );
+    pRenderer->DrawString( "Jetpack", "FontW_s", 0.45f, 0.133f, AlignRight, AlignCenter, 1.0f, 1.0f, 1.0f, 1.0f );
 
     if ( m_alphaOverlay != 0.0f )
     {
-        pRenderer->DrawOverlay( 0.3f, 0.0f, 0.0f, m_alphaOverlay );
+        pRenderer->DrawOverlay( 0.0f, 0.0f, 0.5f, m_alphaOverlay );
     }
 
+    
     // Erzeugtes Bild zeigen
     pRenderer->FlipBuffer(); // (vom Backbuffer zum Frontbuffer wechseln)
+
+    pRenderer->SetMatrix(RenderSubSystem::World);
+    pRenderer->SetMatrix(RenderSubSystem::GUI);
+    glColor4ub( 244, 255, 255, 230 );
+    
 }
 
 void PlayingState::EntityDeleted( const Event* deletedEvent )

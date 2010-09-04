@@ -30,7 +30,7 @@ GameOverState::~GameOverState()
 void GameOverState::Init()        // State starten
 {
     // GUI modus (Graphical User Interface)
-    GetSubSystems()->renderer->MatrixGUI();
+    GetSubSystems()->renderer->SetMatrix(RenderSubSystem::GUI);
 }
 
 void GameOverState::Cleanup()     // State abbrechen
@@ -71,9 +71,9 @@ void GameOverState::Draw( float accumulator )        // Spiel zeichnen
     pRenderer->ClearScreen();
 
     pRenderer->DrawOverlay( 0.3f, 0.0f, 0.0f, 1.0f );
-    pRenderer->DrawString( m_stringToShow.c_str(), 1.5f, 1.40f, "FontW_b" );
+    pRenderer->DrawString( m_stringToShow.c_str(), "FontW_b", 1.5f, 1.40f );
 
-    pRenderer->DrawString( "ENTER: erneut starten   ESC: abbrechen", 1.45f, 2.92f, "FontW_s" );
+    pRenderer->DrawString( "ENTER: erneut starten   ESC: abbrechen", "FontW_s", 1.45f, 2.92f );
 
     pRenderer->FlipBuffer(); // vom Backbuffer zum Frontbuffer wechseln (neues Bild zeigen)
 }

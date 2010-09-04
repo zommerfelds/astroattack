@@ -1,2 +1,32 @@
 Texturen in diesem Ordner kommen von Spiral Graphics Inc.
 http://www.spiralgraphics.biz/packs/browse.htm
+
+Spiral Graphics makes available a number of royalty-free textures, both as presets included in our software and as texture packs that can be downloaded from our website.  This page describes in what ways these textures may be used.
+
+
+1.  If you are a "Paying Customer" (someone who has purchased a Genetica license):
+
+a. You may use the preset and pack textures in both commercial and noncommercial projects such as games, movies, publications, and artwork.  You will not owe us any fee for this activity.
+
+b. You may modify our textures and then distribute or sell the results.  The modifications may be as extensive as you wish, including no modifications at all.  You will not owe us any fee for this activity.
+
+c. You may choose to credit or to not credit our website as the source of the textures as you see fit.
+
+d. The rights listed above apply only to textures that can be edited or rendered in the version and edition of Genetica for which you have purchased a license.  If a texture will only work in a higher version or edition of Genetica than the one that you have licensed, then for that specific texture you are considered a Free User, and your rights are governed by point 2 below.
+
+
+2.  If you are a "Free User" (someone who has not purchased an appropriate Genetica license and instead uses free or demo software):
+
+a. You may use the preset and pack textures in both commercial and noncommercial projects such as games, movies, publications, and artwork. You will not owe us any fee for this activity.
+
+b. You may modify our textures to whatever extent you see fit.  You will not owe us any fee for this activity.
+
+c. You may redistribute our textures, but must clearly and visibly link to our website as the source of the textures.  If you do not wish to credit our website, then you may instead become a Paying Customer by purchasing a license for Genetica, at which point your rights will be governed by point 1 above.
+
+
+3.  Under no circumstance will your activities reduce Spiral Graphics Inc's ownership of its textures or diminish its rights to use and distribute them.
+
+
+If you are unsure whether your intended usage is covered by the above points, please contact us with a description of your intended usage.
+
+These usage rights apply only to textures created by Spiral Graphics.  They do not apply to textures that have been posted to our forum by other parties.  If you see a work on our forum that you would like to use, you should contact the creator of the work for permission.

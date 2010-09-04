@@ -38,21 +38,26 @@ const char* cGraphisFileName = "data/graphics.xml";
 RenderSubSystem::RenderSubSystem( /*const GameWorld* pWorld, const GameCamera* pCamera,*/ EventManager* pEventManager )
 : m_registerObj1( new RegisterObj ), m_registerObj2( new RegisterObj ), m_pEventManager ( pEventManager ),
   m_pTextureManager ( new TextureManager ), m_pAnimationManager ( new AnimationManager(m_pTextureManager.get()) ),
-  m_pFontManager ( new FontManager ), m_currentMatrixIsWorld (true)
+  m_pFontManager ( new FontManager ), m_currentMatrix (World)
 {
-    m_matrixWorld[0] = 1; m_matrixWorld[1] = 0; m_matrixWorld[2] = 0; m_matrixWorld[3] = 0;
-    m_matrixWorld[4] = 0; m_matrixWorld[5] = 1; m_matrixWorld[6] = 0; m_matrixWorld[7] = 0;
-    m_matrixWorld[8] = 0; m_matrixWorld[9] = 0; m_matrixWorld[10] = 1; m_matrixWorld[11] = 0;
-    m_matrixWorld[12] = 0; m_matrixWorld[13] = 0; m_matrixWorld[14] = 0; m_matrixWorld[15] = 1;
+    m_matrixText[0] = 1; m_matrixText[4] = 0; m_matrixText[8] = 0; m_matrixText[12] = 0;
+    m_matrixText[1] = 0; m_matrixText[5] = 1; m_matrixText[9] = 0; m_matrixText[13] = 0;
+    m_matrixText[2] = 0; m_matrixText[6] = 0; m_matrixText[10] = 1; m_matrixText[14] = 0;
+    m_matrixText[3] = 0; m_matrixText[7] = 0; m_matrixText[11] = 0; m_matrixText[15] = 1;
 
-    m_matrixGUI[0] = 1; m_matrixGUI[1] = 0; m_matrixGUI[2] = 0; m_matrixGUI[3] = 0;
-    m_matrixGUI[4] = 0; m_matrixGUI[5] = 1; m_matrixGUI[6] = 0; m_matrixGUI[7] = 0;
-    m_matrixGUI[8] = 0; m_matrixGUI[9] = 0; m_matrixGUI[10] = 1; m_matrixGUI[11] = 0;
-    m_matrixGUI[12] = 0; m_matrixGUI[13] = 0; m_matrixGUI[14] = 0; m_matrixGUI[15] = 1;
+    m_matrixGUI[0] = 1; m_matrixGUI[4] = 0; m_matrixGUI[8] = 0; m_matrixGUI[12] = 0;
+    m_matrixGUI[1] = 0; m_matrixGUI[5] = 1; m_matrixGUI[9] = 0; m_matrixGUI[13] = 0;
+    m_matrixGUI[2] = 0; m_matrixGUI[6] = 0; m_matrixGUI[10] = 1; m_matrixGUI[14] = 0;
+    m_matrixGUI[3] = 0; m_matrixGUI[7] = 0; m_matrixGUI[11] = 0; m_matrixGUI[15] = 1;
 }
 
 RenderSubSystem::~RenderSubSystem()
 {
+    if (m_currentMatrix != World) {
+        glMatrixMode( GL_PROJECTION );
+        glPopMatrix();
+        glMatrixMode ( GL_MODELVIEW );
+    }
 }
 
 // RenderSubSystem initialisieren
@@ -100,25 +105,34 @@ void RenderSubSystem::InitOpenGL ( int width, int height )
     glEnable( GL_POINT_SMOOTH );                                  // Kanten-Antialiasing bei Punkten
     glLineWidth( 2.0f );                                          // Liniendicke
     glPointSize( 6.0f );                                          // Punktgrösse
-    glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE ); // Farben sollen Texturen nicht überdecken
+    //glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE ); // Farben sollen Texturen nicht überdecken
+
+    // TEMP
+    //glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
+
+    glMatrixMode ( GL_PROJECTION );
 
     // GUI Matrix aufstellen
-    glMatrixMode ( GL_PROJECTION );
     glLoadIdentity(); // Reset
-    glOrtho ( 0, 4, 3, 0, -1.0f, 1.0f ); // orthogonalen 2D-Rendermodus
+    gluOrtho2D( 0, 4, 3, 0 ); // orthogonalen 2D-Rendermodus
     glGetFloatv(GL_PROJECTION_MATRIX, m_matrixGUI); // Matrix wird gespeichert
+
+    // Text Matrix aufstellen
+    glLoadIdentity(); // Reset
+    gluOrtho2D( 0, width, 0, height ); // orthogonalen 2D-Rendermodus
+    glGetFloatv(GL_PROJECTION_MATRIX, m_matrixText); // Matrix wird gespeichert
 
     glMatrixMode ( GL_MODELVIEW );
     glLoadIdentity();
 }
 
-void RenderSubSystem::ClearScreen() const
+void RenderSubSystem::ClearScreen()
 {
     // Bildschirm leeren
     glClear ( GL_COLOR_BUFFER_BIT );
 }
 
-void RenderSubSystem::FlipBuffer() const
+void RenderSubSystem::FlipBuffer()
 {
     GLenum errCode;
     const GLubyte *errString;
@@ -132,35 +146,44 @@ void RenderSubSystem::FlipBuffer() const
     SDL_GL_SwapBuffers(); // vom Backbuffer zum Frontbuffer wechseln (neues Bild zeigen)
 }
 
-void RenderSubSystem::MatrixWorld()
+void RenderSubSystem::SetMatrix(MatrixId matrix)
 {
-    if (m_currentMatrixIsWorld)
+    if (m_currentMatrix == matrix)
         return;
 
-    glMatrixMode( GL_PROJECTION );
-    glPopMatrix();
-    glMatrixMode( GL_MODELVIEW );
+    if (matrix == World)
+    {
+        glMatrixMode( GL_PROJECTION );
+        glPopMatrix();
+        glMatrixMode( GL_MODELVIEW );
 
-    m_currentMatrixIsWorld = true;
+        m_currentMatrix = World;
+    }
+    else
+    {
+        glMatrixMode ( GL_PROJECTION );
+        if (m_currentMatrix == World)
+            glPushMatrix();
+
+        if (matrix == GUI)
+        {
+            glLoadMatrixf( m_matrixGUI );
+            m_currentMatrix = GUI;
+        }
+        else if (matrix == Text)
+        {
+            glLoadMatrixf( m_matrixText );
+            m_currentMatrix = Text;
+        }
+        glMatrixMode ( GL_MODELVIEW );
+        glLoadIdentity();
+    }
 }
 
-void RenderSubSystem::MatrixGUI()
-{
-    glMatrixMode ( GL_PROJECTION );
-    if (m_currentMatrixIsWorld)
-        glPushMatrix();
-
-    glLoadMatrixf( m_matrixGUI );
-    glMatrixMode ( GL_MODELVIEW );
-    glLoadIdentity();
-
-    m_currentMatrixIsWorld = false;
-}
-
-void RenderSubSystem::DrawTexturedQuad( float texCoord[8], float vertexCoord[8], std::string texId, bool border, float alpha ) const
+void RenderSubSystem::DrawTexturedQuad( float texCoord[8], float vertexCoord[8], std::string texId, bool border, float alpha )
 {
     m_pTextureManager->SetTexture( texId );
-    glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
+    //glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
     glColor4f( 1.0f, 1.0f, 1.0f, alpha );
     glBegin ( GL_QUADS );
         // Oben links
@@ -173,7 +196,7 @@ void RenderSubSystem::DrawTexturedQuad( float texCoord[8], float vertexCoord[8],
         glTexCoord2f(texCoord[6], texCoord[7]);
         glVertex2f(vertexCoord[6], vertexCoord[7]);
     glEnd();
-    glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE );
+    //glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE );
     if ( border )
     {
         glColor3ub ( 220, 220, 220 );
@@ -186,7 +209,7 @@ void RenderSubSystem::DrawTexturedQuad( float texCoord[8], float vertexCoord[8],
     }
 }
 
-void RenderSubSystem::DrawColorQuad( float vertexCoord[8], float r, float g, float b, float a, bool border ) const
+void RenderSubSystem::DrawColorQuad( float vertexCoord[8], float r, float g, float b, float a, bool border )
 {
     m_pTextureManager->Clear();
     if ( a > 0.01f ) // Falls eine Füllung vorhanden ist
@@ -209,7 +232,7 @@ void RenderSubSystem::DrawColorQuad( float vertexCoord[8], float r, float g, flo
     }
 }
 
-void RenderSubSystem::DrawOverlay( float r, float g, float b, float a ) const
+void RenderSubSystem::DrawOverlay( float r, float g, float b, float a )
 {
     m_pTextureManager->Clear();
     glColor4f ( r, g, b, a );
@@ -228,10 +251,14 @@ void RenderSubSystem::DrawOverlay( float r, float g, float b, float a ) const
     glEnd();
 }
 
-void RenderSubSystem::DrawPolygonShape ( const b2PolygonShape* rPoly, bool border ) const
+void RenderSubSystem::DrawPolygonShape ( const b2PolygonShape* rPoly, bool border )
 {
     //m_pTextureManager->Clear();
     //glColor4ub ( 180, 0, 0, 150 );
+
+    /*glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
+    glColor4ub ( 255, 255, 255, 100 );
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);*/
 
     glBegin ( GL_POLYGON );
     for ( int iCountVertices = 0; iCountVertices < rPoly->GetVertexCount(); ++iCountVertices )
@@ -252,7 +279,7 @@ void RenderSubSystem::DrawPolygonShape ( const b2PolygonShape* rPoly, bool borde
     }
 }
 
-void RenderSubSystem::DrawCircleShape ( const b2CircleShape* rCircle, bool border ) const
+void RenderSubSystem::DrawCircleShape ( const b2CircleShape* rCircle, bool border )
 {
     //m_pTextureManager->Clear();
     //glColor4ub ( 180, 0, 0, 150 );
@@ -279,7 +306,7 @@ void RenderSubSystem::DrawCircleShape ( const b2CircleShape* rCircle, bool borde
 }
 
 // Zeichnet einen Vector2D (Pfeil) in einer bestimmten Postion
-void RenderSubSystem::DrawVector ( const Vector2D& rVector, const Vector2D& rPos ) const
+void RenderSubSystem::DrawVector ( const Vector2D& rVector, const Vector2D& rPos )
 {
     m_pTextureManager->Clear();
     glColor4ub ( 0, 0, 255, 150 );
@@ -307,7 +334,7 @@ void RenderSubSystem::DrawVector ( const Vector2D& rVector, const Vector2D& rPos
 }
 
 // Zeichnet einen punkt an einer bestimmten Postion
-void RenderSubSystem::DrawPoint ( const Vector2D& rPos ) const
+void RenderSubSystem::DrawPoint ( const Vector2D& rPos )
 {
     m_pTextureManager->Clear();
     glColor4ub ( 255, 0, 0, 150 );
@@ -329,7 +356,7 @@ void RenderSubSystem::DrawPoint ( const Vector2D& rPos ) const
 }
 
 // Zeichnet den Fadenkreuz
-void RenderSubSystem::DrawCrosshairs ( const Vector2D& rCrosshairsPos ) const
+void RenderSubSystem::DrawCrosshairs ( const Vector2D& rCrosshairsPos )
 {
     m_pTextureManager->Clear();
     glColor4ub ( 0, 255, 0, 150 );
@@ -364,7 +391,7 @@ void RenderSubSystem::DrawCrosshairs ( const Vector2D& rCrosshairsPos ) const
 }
 
 // Zeichnet den Fadenkreuz
-void RenderSubSystem::DrawEditorCursor ( const Vector2D& rPos ) const
+void RenderSubSystem::DrawEditorCursor ( const Vector2D& rPos )
 {
     m_pTextureManager->Clear();
 
@@ -379,17 +406,15 @@ void RenderSubSystem::DrawEditorCursor ( const Vector2D& rPos ) const
     glEnd();
 }
 
-void RenderSubSystem::DrawString ( const std::string &str, float x, float y, const FontIdType &fontId, float alpha, Align horizAlign, Align vertAlign ) const
+void RenderSubSystem::DrawString( const std::string &str, const FontIdType &fontId, float x, float y, Align horizAlign, Align vertAlign, float red, float green, float blue, float alpha )
 {
-    bool orientation; // je nach Matrix eine andere Ausrichtung
-    if( m_currentMatrixIsWorld )
-        orientation = ORIENT_CCW;
-    else
-        orientation = ORIENT_CW;
-    m_pFontManager->DrawString( str, x, y, fontId, orientation, alpha, horizAlign, vertAlign );
+    MatrixId stored_matrix = m_currentMatrix;
+    SetMatrix(Text);
+    m_pFontManager->DrawString(str, fontId, x, y, horizAlign, vertAlign, red, green, blue, alpha);
+    SetMatrix(stored_matrix);
 }
 
-void RenderSubSystem::DrawVisualTextureComps( float accumulator ) const
+void RenderSubSystem::DrawVisualTextureComps( float accumulator )
 {
     for ( CompVisualTextureMap::const_iterator it = m_visualTextureComps.begin(); it != m_visualTextureComps.end(); ++it )
     {
@@ -401,7 +426,7 @@ void RenderSubSystem::DrawVisualTextureComps( float accumulator ) const
             glRotatef ( radToDeg(angle), 0.0, 0.0, 1.0f);
             Vector2D v(compPhys->GetBody()->GetPosition().x + compPhys->GetBody()->GetLinearVelocity().x * accumulator,compPhys->GetBody()->GetPosition().y + compPhys->GetBody()->GetLinearVelocity().y * accumulator);
             v.Rotate( -angle );
-            glTranslated(v.x, v.y, 0.0f);
+            glTranslatef(v.x, v.y, 0.0f);
             b2Fixture* fixture = compPhys->GetFixture();
             while ( fixture != NULL )
             {
@@ -429,7 +454,7 @@ void RenderSubSystem::DrawVisualTextureComps( float accumulator ) const
     }
 }
 
-void RenderSubSystem::DrawVisualAnimationComps( float accumulator ) const
+void RenderSubSystem::DrawVisualAnimationComps( float accumulator )
 {
     for ( CompVisualAnimationMap::const_iterator it = m_visualAnimComps.begin(); it != m_visualAnimComps.end(); ++it )
     {
@@ -493,14 +518,14 @@ void RenderSubSystem::DrawVisualAnimationComps( float accumulator ) const
     }
 }
 
-void RenderSubSystem::DrawVisualMessageComps() const
+void RenderSubSystem::DrawVisualMessageComps()
 {
     int y = 0;
     float lineHeight = 0.2f;
     for ( CompVisualMessageMap::const_iterator it = m_visualMsgComps.begin(); it != m_visualMsgComps.end(); ++it )
     {
-        DrawString( std::string("- "), 0.5f, 0.6f + y*lineHeight, "FontW_b" );
-        DrawString( it->second->GetMsg(), 0.55f, 0.6f + y*lineHeight, "FontW_b" );
+        DrawString( std::string("- "), "FontW_b", 0.5f, 0.6f + y*lineHeight );
+        DrawString( it->second->GetMsg(), "FontW_b", 0.55f, 0.6f + y*lineHeight );
         ++y;
     }
 }
@@ -577,7 +602,7 @@ void RenderSubSystem::DisplayLoadingScreen()
     float w = (float)gAaConfig.GetInt("ScreenWidth");
     float h = (float)gAaConfig.GetInt("ScreenHeight");
 
-    glOrtho ( 0, w, h, 0, -1.0f, 1.0f ); // orthographic mode (z is not important)
+    gluOrtho2D( 0, w, h, 0 ); // orthographic mode (z is not important)
     glMatrixMode ( GL_MODELVIEW );
     glPushMatrix();
 

@@ -73,7 +73,7 @@ void SlideShowState::Init()        // State starten
         GetSubSystems()->renderer->GetTextureManager()->LoadTexture( m_slideShow.slides[i].imageFileName.c_str(), m_slideShow.slides[i].imageFileName,info,gAaConfig.GetInt("TexQuality") );
     
     // GUI modus
-    GetSubSystems()->renderer->MatrixGUI();
+    GetSubSystems()->renderer->SetMatrix(RenderSubSystem::GUI);
 
     // TEST
     GetSubSystems()->sound->LoadSound( "data/Sounds/scifi01.wav", "sound" );
@@ -284,7 +284,7 @@ void SlideShowState::Draw( float accumulator )        // Spiel zeichnen
         pRenderer->DrawTexturedQuad( texCoord, vertexCoord, m_slideShow.slides[m_currentSlide].imageFileName.c_str(), true );
     }
     // Text zeichnen
-    pRenderer->DrawString( m_slideShow.slides[m_currentSlide].text.substr(0,m_dispCharCount), 0.3f, 2.53f, "FontW_b" );
+    pRenderer->DrawString( m_slideShow.slides[m_currentSlide].text.substr(0,m_dispCharCount), "FontW_b", 0.3f, 2.53f );
     
     // Farbe über dem Text (nur Test)
     /*{
@@ -301,7 +301,7 @@ void SlideShowState::Draw( float accumulator )        // Spiel zeichnen
     pRenderer->DrawOverlay( 0.0f, 0.0f, 0.0f, m_overlayAlpha );
 
     // Info-Text
-    pRenderer->DrawString( "PFEIL NACH RECHTS: weiterfahren   PFEIL NACH LINKS: zurück   DELETE: Intro überspringen", 0.8f, 2.92f, "FontW_s" );
+    pRenderer->DrawString( "PFEIL NACH RECHTS: weiterfahren   PFEIL NACH LINKS: zurück   DELETE: Intro überspringen", "FontW_s", 0.8f, 2.92f );
 
     // Maus zeichnen
     /*{

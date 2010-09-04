@@ -261,7 +261,7 @@ void EditorState::Draw( float accumulator )        // Spiel zeichnen
     // Bildschirm leeren
     pRenderer->ClearScreen();
     // Weltmodus
-    pRenderer->MatrixWorld();        
+    pRenderer->SetMatrix(RenderSubSystem::World);        
     // Texturen zeichnen
     pRenderer->DrawVisualTextureComps( accumulator );
     // Animationen zeichnen
@@ -288,28 +288,28 @@ void EditorState::Draw( float accumulator )        // Spiel zeichnen
     }*/
     
     // GUI modus (Grafische Benutzeroberfläche)
-    pRenderer->MatrixGUI();
+    pRenderer->SetMatrix(RenderSubSystem::GUI);
     // Texte zeichnen
     pRenderer->DrawVisualMessageComps();
     
-    pRenderer->DrawString( "Editor", 0.02f, 0.02f, "FontW_b" );
+    pRenderer->DrawString( "Editor", "FontW_b", 0.02f, 0.02f );
 
     if ( m_helpTextOn )
     {
-        pRenderer->DrawString( "Linksklick:   Eckpunkt erzeugen", 2.6f, 0.02f, "FontW_s" );
-        pRenderer->DrawString( "Enter:   Aus Eckpunkte ein Polygon erzeugen", 2.6f, 0.12f, "FontW_s" );
-        pRenderer->DrawString( "Backspace:   Letzter Eckpunkt löschen", 2.6f, 0.22f, "FontW_s" );
-        pRenderer->DrawString( "Delete:   Alle aktuelle Eckpunkte löschen", 2.6f, 0.32f, "FontW_s" );
-        pRenderer->DrawString( "Page Up/Down:   Textur wählen", 2.6f, 0.42f, "FontW_s" );
-        pRenderer->DrawString( "H:   Hilfe ausblenden", 2.6f, 0.52f, "FontW_s" );
+        pRenderer->DrawString( "Linksklick:   Eckpunkt erzeugen", "FontW_s", 2.6f, 0.02f );
+        pRenderer->DrawString( "Enter:   Aus Eckpunkte ein Polygon erzeugen", "FontW_s", 2.6f, 0.12f );
+        pRenderer->DrawString( "Backspace:   Letzter Eckpunkt löschen", "FontW_s", 2.6f, 0.22f );
+        pRenderer->DrawString( "Delete:   Alle aktuelle Eckpunkte löschen", "FontW_s", 2.6f, 0.32f );
+        pRenderer->DrawString( "Page Up/Down:   Textur wählen", "FontW_s", 2.6f, 0.42f );
+        pRenderer->DrawString( "H:   Hilfe ausblenden", "FontW_s", 2.6f, 0.52f );
 
-        pRenderer->DrawString( "* Wichtig *", 2.6f, 0.72f, "FontW_s" );
-        pRenderer->DrawString( "Nur konvexe Polygone!", 2.6f, 0.82f, "FontW_s" );
-        pRenderer->DrawString( "Eckpunkte im Gegenuhrzeigersinn erstellen!", 2.6f, 0.92f, "FontW_s" );
+        pRenderer->DrawString( "* Wichtig *", "FontW_s", 2.6f, 0.72f );
+        pRenderer->DrawString( "Nur konvexe Polygone!", "FontW_s", 2.6f, 0.82f );
+        pRenderer->DrawString( "Eckpunkte im Gegenuhrzeigersinn erstellen!", "FontW_s", 2.6f, 0.92f );
     }
     else
     {
-        pRenderer->DrawString( "H für Hilfe", 3.5f, 0.02f, "FontW_s" );
+        pRenderer->DrawString( "H für Hilfe", "FontW_s", 3.5f, 0.02f );
     }
 
     // Fadenkreuz zeichnen
@@ -328,7 +328,7 @@ void EditorState::Draw( float accumulator )        // Spiel zeichnen
                                  0.5f, 2.9f,
                                  0.5f, 2.5f };
         pRenderer->DrawTexturedQuad( texCoord, vertexCoord, m_currentTexture, true );
-        pRenderer->DrawString( m_currentTexture, 0.1f, 2.91f, "FontW_s" );
+        pRenderer->DrawString( m_currentTexture, "FontW_s", 0.1f, 2.91f );
     }
 
     mousePos = m_pGameCamera->ScreenToWorld(mousePos);

@@ -54,6 +54,9 @@ typedef std::string StateIdType;
 struct StateInfo;
 struct AnimInfo;
 
+typedef std::map< StateIdType, boost::shared_ptr<StateInfo> > StateInfoMap;
+typedef std::map<AnimationIdType, boost::shared_ptr<AnimInfo> > AnimInfoMap;
+
 //------------------------------------------//
 // Klasse für das Verwalten von Animationen //
 //------------------------------------------//
@@ -64,10 +67,10 @@ public:
     ~AnimationManager() {}
     void LoadAnimation( const char* name,AnimationIdType id,const LoadTextureInfo& texInfo, int quality );
     void FreeAnimation( AnimationIdType id );
-    AnimInfo* GetAnimInfo( AnimationIdType animId ) { return m_animInfo[animId].get(); }
+    const AnimInfo* GetAnimInfo( AnimationIdType animId ) const;
 
 private:
-    std::map<AnimationIdType, boost::shared_ptr<AnimInfo> > m_animInfo;      // Texturen
+    AnimInfoMap m_animInfoMap;      // Texturen
     TextureManager* m_pTM;
 };
 
@@ -102,7 +105,7 @@ struct AnimInfo
     AnimationIdType name;
     int totalFrames;
     int numDigits;
-    std::map< StateIdType, boost::shared_ptr<StateInfo> > states;
+    StateInfoMap states;
 };
 
 #endif

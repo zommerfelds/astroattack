@@ -6,25 +6,28 @@
 |                          2009                             |
 \----------------------------------------------------------*/
 
-#include "GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (fÃ¼r Linux Systeme)
+#include "GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
 
 #include "Font.h"
-#include <SDL/SDL_ttf.h>
 
-// Simple DirectMedia Layer (freie Plattform-Ãbergreifende Multimedia-Programmierschnittstelle)
+// Simple DirectMedia Layer (freie Plattform-Übergreifende Multimedia-Programmierschnittstelle)
 #include <SDL/SDL.h>
-// OpenGL via SDL inkludieren (Plattform-Ãbergreifende Definitionen)
+// OpenGL via SDL inkludieren (Plattform-Übergreifende Definitionen)
 #include <SDL/SDL_opengl.h>
+
+//#include "contrib/utfcpp/utf8.h"
+#include <FTGL/ftgl.h>
+
+#include <utility>
+
+#include "main.h"
 
 FontManager::FontManager()
 {
-    // SDL_ttf initialisieren
-    TTF_Init();
 }
 
 FontManager::~FontManager()
 {
-    TTF_Quit();
 }
 
 int PowerOf2(int num)
@@ -44,148 +47,47 @@ void FontManager::LoadFont( const char* fileName, int size, FontIdType id )
     if ( m_fonts.find(id) != m_fonts.end() )
         return;
 
-    TTF_Font *font;
+    // Create a pixmap font from a TrueType file.
+    boost::shared_ptr<FTTextureFont> font(new FTTextureFont(fileName) );
 
-    // Font Ã¶ffnen (.ttf)
-    font = TTF_OpenFont( fileName, size );
-    
-    // Falls fehler
-    if( font == NULL )
-    {
+    // If something went wrong, return
+    if(font->Error())
         return;
-    }
 
-    int textureWidth = 512;
-    int textureHeight = 0;
-    int fontHeight = TTF_FontHeight( font )+1;
-    int numLines = 1;
-    Font* newFont = m_fonts.insert( std::pair< FontIdType,boost::shared_ptr<Font> >(id, boost::shared_ptr<Font>(new Font) ) ).first->second.get();
-    
-    newFont->lineSkip = TTF_FontLineSkip(font);
+    // Set the font size and render a small text.
+    font->FaceSize(size);
 
-    for ( int i = 0; i < 256; ++i )
-    {
-        newFont->coord[i].x = 0;
-        newFont->coord[i].y = 0;
-        newFont->coord[i].w = 0;
-        newFont->coord[i].h = 0;
-        newFont->isValid[i] = false;
-    }
-    int currentWidth = 0;
-    for ( int i = 32; i < 256; ++i )
-    {
-        int w = 0;
-        int h = 0;
-        const char c[2] = {(char)i,'\0'};
-        TTF_SizeText( font, c, &w, &h );
-
-        if ( currentWidth+w > textureWidth )
-        {
-            ++numLines;
-            currentWidth = 0;
-        }
-
-        newFont->coord[i].w = w;
-        newFont->coord[i].h = h;
-        newFont->coord[i].x = currentWidth;
-        newFont->coord[i].y = fontHeight*(numLines-1);
-        if ( newFont->coord[i].w > 0 && newFont->coord[i].h > 0 )
-            newFont->isValid[i] = true;
-        //textureWidth += w;
-        
-        currentWidth += w;
-    }
-
-    //textureWidth = PowerOf2(textureWidth);
-    textureHeight = PowerOf2( numLines*fontHeight );
-    if ( !(textureWidth == 0 || textureHeight == 0) )
-    {        
-        newFont->width = textureWidth;
-        newFont->height = textureHeight;
-        SDL_Surface* sdlFontSurface = SDL_CreateRGBSurface(SDL_SWSURFACE,
-				     textureWidth, textureHeight,
-				     32,
-#if SDL_BYTEORDER == SDL_LIL_ENDIAN // RGBA Masken
-				     0x000000FF, 
-				     0x0000FF00, 
-				     0x00FF0000, 
-				     0xFF000000
-#else
-				     0xFF000000,
-				     0x00FF0000, 
-				     0x0000FF00, 
-				     0x000000FF
-#endif
-				     );
-
-        for ( int i = 31; i < 256; ++i )
-        {
-            if ( !newFont->isValid[i] )
-                continue;
-            const char c[2] = {(char)i,'\0'};
-            //SDL_Color textColor = {0x00, 0x00, 0x00};
-            SDL_Color textColor = {0xFF, 0xFF, 0xFF};
-            SDL_Surface *sdlCharSurface = TTF_RenderText_Blended( font, c, textColor );
-            if( sdlCharSurface == NULL )
-                continue;
-
-            SDL_Rect offset;
-            offset.x = (Sint16)newFont->coord[i].x;
-            offset.y = (Sint16)newFont->coord[i].y;
-
-            SDL_SetAlpha( sdlCharSurface, 0, 0 );
-            SDL_BlitSurface( sdlCharSurface, NULL, sdlFontSurface, &offset );
-            SDL_FreeSurface( sdlCharSurface );
-        }
-        // Falls man das Resultat der bisherigen Befehlen sehen mÃ¶chte, kann man die folgende Zeile unkommentieren:
-        //SDL_SaveBMP(sdlFontSurface,"font.bmp");
-
-        // OpenGL Textur aufbauen
-        glGenTextures(1, &newFont->texId);
-        glBindTexture(GL_TEXTURE_2D, newFont->texId);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexImage2D(GL_TEXTURE_2D,
-               0,
-               GL_RGBA,
-               textureWidth, textureHeight,
-               0,
-               GL_RGBA,
-               GL_UNSIGNED_BYTE,
-               sdlFontSurface->pixels);
-
-        SDL_FreeSurface( sdlFontSurface );
-    }
-
-    TTF_CloseFont(font);
+    m_fonts.insert( std::make_pair(id, font) );
 }
 
 void FontManager::FreeFont( FontIdType id )
 {
-    std::map< FontIdType,boost::shared_ptr<Font> >::iterator c_it = m_fonts.find( id );
+    std::map< FontIdType,boost::shared_ptr<FTFont> >::iterator c_it = m_fonts.find( id );
     if ( c_it != m_fonts.end() )
-        m_fonts.erase( c_it );        
+        m_fonts.erase( c_it ); 
 }
 
-const float s = 0.0025f;
+//const float s = 0.0025f;
+//const float line_height = 1.2f;
 
-// only AlignLeft!
-void FontManager::DrawString(const std::string &str, float x, float y, const FontIdType &fontId, bool orientation, float alpha, Align horizAlign, Align vertAlign )
+void FontManager::DrawString(const std::string &str, const FontIdType &fontId, float x, float y, Align horizAlign, Align vertAlign, float red, float green, float blue, float alpha )
 {
-    glEnable(GL_TEXTURE_2D);
-    glMatrixMode(GL_TEXTURE);
-    glLoadIdentity();
-    glMatrixMode(GL_MODELVIEW);
+    std::map< FontIdType,boost::shared_ptr<FTFont> >::iterator font_it = m_fonts.find( fontId );
+    assert ( font_it != m_fonts.end() );
 
-    glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
-    glColor4f( 1.0f, 1.0f, 1.0f, alpha );
+    FTFont* font = font_it->second.get();
+    
+    glColor4f( red, green, blue, alpha );
 
     float w,h;
-    GetDimensionsOfText( str, w, h, fontId );
+    //GetDimensionsOfText( str, fontId, w, h );
 
-    switch ( horizAlign )
+    std::list<std::string> lines;
+    std::list<float> lineWidths;
+    float lineSpacing = 0.0f;
+    GetDetailedDimensionsOfTextLines(str, fontId, w, h, &lines, &lineWidths, NULL, &lineSpacing);
+
+    /*switch ( horizAlign )
     {
     case AlignLeft:
         break;
@@ -195,143 +97,93 @@ void FontManager::DrawString(const std::string &str, float x, float y, const Fon
     case AlignRight:
         x -= w;
         break;
-    }
+    }*/
     switch ( vertAlign )
     {
-    case AlignLeft:
+    case AlignTop:
+        y += h;
         break;
     case AlignCenter:
-        y -= h/2;
+        y += h/2;
         break;
-    case AlignRight:
-        y -= h;
+    case AlignBottom:
         break;
     }
 
-    std::map< FontIdType,boost::shared_ptr<Font> >::iterator font_it = m_fonts.find( fontId );
-    if ( font_it == m_fonts.end() )
-        return;
-    glBindTexture(GL_TEXTURE_2D, font_it->second->texId );
-
-    float cursorPosX = x;
-    float cursorPosY = y;
-
-    glBegin ( GL_QUADS );
-
-    for ( unsigned int i = 0; i < str.size(); ++i )
+    float lineX = 0.0f;
+    float lineY = y-lineSpacing*(lines.size()-1);
+    std::list<float>::iterator lineWidthsIt = lineWidths.begin();
+    for (std::list<std::string>::iterator lineIt=lines.begin(); lineIt != lines.end(); lineIt++, lineWidthsIt++)
     {
-        const char c = str[i];
-        int c_i = c;
-        if ( c_i < 0 )
-            c_i += 256;
-
-        if ( c == '\n' || (c == '\\' && (i+1 < str.size()) && str[i+1] == 'n') )
+        switch ( horizAlign )
         {
-            cursorPosX = x;
-            cursorPosY += font_it->second->lineSkip*s;
-            if ( c == '\\' )
-                ++i;
-            continue;
+        case AlignLeft:
+            lineX = x;
+            break;
+        case AlignCenter:
+            lineX = x-*lineWidthsIt/2;
+            break;
+        case AlignRight:
+            lineX = x-*lineWidthsIt;
+            break;
         }
-
-        float tex_x1 = font_it->second->coord[ c_i ].x / (float)font_it->second->width;
-        float tex_x2 = tex_x1 + font_it->second->coord[ c_i ].w / (float)font_it->second->width;
-
-        float tex_y1 = font_it->second->coord[ c_i ].y / (float)font_it->second->height;
-        float tex_y2 = tex_y1 + font_it->second->coord[c_i ].h / (float)font_it->second->height;
-
-        // Oben links
-        if ( orientation == ORIENT_CW )
-            glTexCoord2f(tex_x1, tex_y1);
-        else
-            glTexCoord2f(tex_x1, tex_y2);
-        glVertex2f(cursorPosX, cursorPosY);
-
-        if ( orientation == ORIENT_CW )
-        {
-            // Unten links
-            glTexCoord2f(tex_x1, tex_y2);
-            glVertex2f(cursorPosX, cursorPosY + font_it->second->coord[ c_i ].h*s);
-        }
-        else
-        {
-            // Oben rechts
-            glTexCoord2f(tex_x2, tex_y2);
-            glVertex2f(cursorPosX + font_it->second->coord[ c_i ].w*s, cursorPosY);
-        }
-
-        // Unten rechts
-        if ( orientation == ORIENT_CW )
-            glTexCoord2f(tex_x2, tex_y2);
-        else
-            glTexCoord2f(tex_x2, tex_y1);
-        glVertex2f(cursorPosX + font_it->second->coord[ c_i ].w*s, cursorPosY + font_it->second->coord[ c_i ].h*s);
-
-        if ( orientation == ORIENT_CW )
-        {
-            // Oben rechts
-            glTexCoord2f(tex_x2, tex_y1);
-            glVertex2f(cursorPosX + font_it->second->coord[ c_i ].w*s, cursorPosY);
-        }
-        else
-        {
-            // Unten links
-            glTexCoord2f(tex_x1, tex_y1);
-            glVertex2f(cursorPosX, cursorPosY + font_it->second->coord[ c_i ].h*s);
-        }
-        
-        cursorPosX += font_it->second->coord[ c_i ].w*s;
+        font->Render(lineIt->c_str(),-1,FTPoint(lineX/4.0*gAaConfig.GetInt("ScreenWidth"),(1.0-lineY/3.0)*gAaConfig.GetInt("ScreenHeight")));
+        lineY += lineSpacing;
     }
-    glEnd();
-
-    glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE );
 }
 
-void FontManager::GetDimensionsOfText(const std::string &str, float& w, float& h, const FontIdType &fontId) const
+void FontManager::GetDimensionsOfText(const std::string &text, const FontIdType &fontId, float& w, float& h) const
 {
-    std::map< FontIdType,boost::shared_ptr<Font> >::const_iterator font_it = m_fonts.find( fontId );
-    if ( font_it == m_fonts.end() )
-        return;
-
-    w = 0.0f;
-    h = -1.0f;
-    float max_w = 0.0f;
-
-    for ( unsigned int i = 0; i < str.size(); ++i )
-    {
-        const char c = str[i];
-        int c_i = c;
-        if ( c_i < 0 )
-            c_i += 256;
-
-        if ( h < 0.0f )
-            h = font_it->second->coord[ c_i ].h*s;
-
-        if ( c == '\n' || (c == '\\' && (i+1 < str.size()) && str[i+1] == 'n') )
-        {
-            h += font_it->second->lineSkip*s;
-            if ( c == '\\' )
-                ++i;
-            if ( w > max_w )
-                max_w = w;
-            w = 0.0f;
-            continue;
-        }
-
-        w += font_it->second->coord[ c_i ].w*s;
-    }
-    if ( w < max_w )
-        w = max_w;
+    GetDetailedDimensionsOfTextLines(text, fontId, w, h, NULL, NULL, NULL, NULL);
 }
 
-Font::~Font()
+void FontManager::GetDetailedDimensionsOfTextLines(const std::string &text, const FontIdType &fontId, float& totalWidth, float& totalHeight, std::list<std::string>* lines, std::list<float>* lineWidths, std::list<float>* lineHeights, float* lineSpacing) const
 {
-    GLint curTexId = 0;
-    glGetIntegerv( GL_TEXTURE_BINDING_2D, &curTexId );
+    std::map< FontIdType,boost::shared_ptr<FTFont> >::const_iterator font_it = m_fonts.find( fontId );
+    assert ( font_it != m_fonts.end() );
 
-    if ( curTexId == (GLint)texId )
-        glDisable( GL_TEXTURE_2D );
-    glDeleteTextures(1, &texId);
+    FTFont* font = font_it->second.get();
+
+    int lineCount = 0;
+    float cur_width = 0.0f;
+    float max_width = 0.0f;
+    float last_line_height = 0.0f;
+    for(size_t cur_pos=0,last_pos=0;;last_pos=cur_pos)
+    {
+        lineCount++;
+        cur_pos=text.find('\n',cur_pos);
+
+        if (cur_pos==std::string::npos)
+            cur_pos=text.size();
+        std::string line = text.substr(last_pos,cur_pos-last_pos);
+        FTBBox bbox = font->BBox(line.c_str(),-1);
+        cur_width = bbox.Upper().Xf();
+        if (cur_width>max_width)
+            max_width=cur_width;
+
+        if (lines != NULL)
+            lines->push_back( line );
+        if (lineWidths != NULL)
+            lineWidths->push_back(cur_width/gAaConfig.GetInt("ScreenWidth")*4.0f);
+        if (lineHeights != NULL)
+            lineHeights->push_back(bbox.Upper().Yf()/gAaConfig.GetInt("ScreenHeight")*3.0f);
+
+        if (cur_pos>=text.size())
+        {
+            last_line_height = bbox.Upper().Yf();
+            break;
+        }
+        cur_pos += 1;
+    }
+    totalWidth = max_width/gAaConfig.GetInt("ScreenWidth")*4.0f;
+    float line_spacing = font->LineHeight();
+    if (lineSpacing != NULL)
+        *lineSpacing = line_spacing/gAaConfig.GetInt("ScreenHeight")*3.0f;
+    totalHeight = ((lineCount-1)*line_spacing+last_line_height)/gAaConfig.GetInt("ScreenHeight")*3.0f;
+
+    /*FTBBox bbox = font->BBox(str.c_str(),-1);
+    totalWidth = bbox.Upper().Xf()/gAaConfig.GetInt("ScreenWidth")*4.0f;
+    totalHeight = bbox.Upper().Yf()/gAaConfig.GetInt("ScreenHeight")*3.0f;*/
 }
 
 // Astro Attack - Christian Zommerfelds - 2009
