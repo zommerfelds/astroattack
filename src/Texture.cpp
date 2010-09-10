@@ -82,7 +82,7 @@ void TextureManager::LoadTexture( const std::string& name, TextureIdType id, con
     try
     {
         //TODO: check for DevIL errors ilGetError()
-        gAaLog.Write( "Loading Texture \"%s\"... ", name );
+        gAaLog.Write( "Loading Texture \"%s\"... ", name.c_str() );
 
         ILuint devIl_tex_id;                              // ID des DevIL Bildes
         ILboolean success;                                // Speichert ob die Funktionen erfolgreich sind
@@ -167,7 +167,7 @@ void TextureManager::LoadTexture( const std::string& name, TextureIdType id, con
     catch (...)
     {
         // Error
-        throw Exception ( gAaLog.Write ( "Error while loading the texture \"%s\"!\n%s\n", name, (const char*)iluErrorString(ilGetError()) ) );
+        throw Exception ( gAaLog.Write ( "Error while loading the texture \"%s\"!\n%s\n", name.c_str(), (const char*)iluErrorString(ilGetError()) ) );
     }
     CheckOpenlGlError();
     //gAaLog.Write ( "IL error: %s\n", (const char*)iluErrorString(ilGetError()) );

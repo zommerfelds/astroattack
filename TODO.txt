@@ -7,7 +7,7 @@ TODO:
 - Use make_shared
 - Improve jump animation
 - Startup beschleunigen
-- Replace if (var==NULL) by assert(false)
+- Replace if (var==NULL) by assert(var!=NULL)
 - Test OpenGL error checking (glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR) did not generate error)
 - Bug in Logger: Loading Texture "(null)"... Done!
 - Remove static local variables

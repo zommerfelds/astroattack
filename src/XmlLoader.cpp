@@ -1079,7 +1079,7 @@ void XmlLoader::SaveWorldToXml( const char* pFileName, GameWorld* pGameWorld )
                         TiXmlElement* paramsElement = new TiXmlElement( "params" );
                         paramsElement->SetAttribute( "msg", effctWin->GetMessage().c_str() );
                         std::stringstream ss;
-                        ss << effctWin->GetWin()?1:0;
+                        ss << (effctWin->GetWin()?1:0);
                         paramsElement->SetAttribute( "win", ss.str().c_str() );
                         effctEl->LinkEndChild( paramsElement );
                     }

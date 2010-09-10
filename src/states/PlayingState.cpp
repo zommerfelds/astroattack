@@ -32,7 +32,7 @@
 
 // TEMP !
 //#include "../Vector2D.h"
-#include <SDL/sdl_opengl.h>
+#include <SDL/SDL_opengl.h>
 #include "../components/CompGravField.h"
 #include "../components/CompPhysics.h"
 std::string levelName = "";
