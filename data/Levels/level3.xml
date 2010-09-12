@@ -16,10 +16,11 @@
             <tex name="Kirks Entry" />
         </Component>
     </Entity>
-    <Entity name="EdBlock00001">
+    <Entity name="box00001">
         <Component id="CompPhysics" name="std">
             <pos x="0.000000" y="0.000000" a="0.000000" />
             <damping linear="0.000000" angular="0.000000" />
+            <dynamic />
             <shape name="shape1">
                 <phys density="10.000000" friction="0.300000" restitution="0.000000" />
                 <vertex x="6.000000" y="-1.000000" />
@@ -32,10 +33,11 @@
             <tex name="blocks" />
         </Component>
     </Entity>
-    <Entity name="EdBlock00002">
+    <Entity name="box00002">
         <Component id="CompPhysics" name="std">
             <pos x="0.000000" y="0.000000" a="0.000000" />
             <damping linear="0.000000" angular="0.000000" />
+            <dynamic />
             <shape name="shape1">
                 <phys density="10.000000" friction="0.300000" restitution="0.000000" />
                 <vertex x="7.500000" y="-1.000000" />
@@ -48,10 +50,11 @@
             <tex name="blocks" />
         </Component>
     </Entity>
-    <Entity name="EdBlock00003">
+    <Entity name="box00003">
         <Component id="CompPhysics" name="std">
             <pos x="0.000000" y="0.000000" a="0.000000" />
             <damping linear="0.000000" angular="0.000000" />
+            <dynamic />
             <shape name="shape1">
                 <phys density="10.000000" friction="0.300000" restitution="0.000000" />
                 <vertex x="4.000000" y="-1.000000" />
@@ -64,10 +67,11 @@
             <tex name="blocks" />
         </Component>
     </Entity>
-    <Entity name="EdBlock00004">
+    <Entity name="box00004">
         <Component id="CompPhysics" name="std">
             <pos x="0.000000" y="0.000000" a="0.000000" />
             <damping linear="0.000000" angular="0.000000" />
+            <dynamic />
             <shape name="shape1">
                 <phys density="10.000000" friction="0.300000" restitution="0.000000" />
                 <vertex x="4.000000" y="0.000000" />
@@ -80,10 +84,11 @@
             <tex name="blocks" />
         </Component>
     </Entity>
-    <Entity name="EdBlock00005">
+    <Entity name="box00005">
         <Component id="CompPhysics" name="std">
             <pos x="0.000000" y="0.000000" a="0.000000" />
             <damping linear="0.000000" angular="0.000000" />
+            <dynamic />
             <shape name="shape1">
                 <phys density="10.000000" friction="0.300000" restitution="0.000000" />
                 <vertex x="4.000000" y="1.000000" />
@@ -96,10 +101,11 @@
             <tex name="blocks" />
         </Component>
     </Entity>
-    <Entity name="EdBlock00006">
+    <Entity name="box00006">
         <Component id="CompPhysics" name="std">
             <pos x="0.000000" y="0.000000" a="0.000000" />
             <damping linear="0.000000" angular="0.000000" />
+            <dynamic />
             <shape name="shape1">
                 <phys density="10.000000" friction="0.300000" restitution="0.000000" />
                 <vertex x="4.500000" y="2.000000" />
@@ -112,10 +118,11 @@
             <tex name="blocks" />
         </Component>
     </Entity>
-    <Entity name="EdBlock00007">
+    <Entity name="box00007">
         <Component id="CompPhysics" name="std">
             <pos x="0.000000" y="0.000000" a="0.000000" />
             <damping linear="0.000000" angular="0.000000" />
+            <dynamic />
             <shape name="shape1">
                 <phys density="10.000000" friction="0.300000" restitution="0.000000" />
                 <vertex x="3.500000" y="2.000000" />
@@ -128,10 +135,11 @@
             <tex name="blocks" />
         </Component>
     </Entity>
-    <Entity name="EdBlock00008">
+    <Entity name="box00008">
         <Component id="CompPhysics" name="std">
             <pos x="0.000000" y="0.000000" a="0.000000" />
             <damping linear="0.000000" angular="0.000000" />
+            <dynamic />
             <shape name="shape1">
                 <phys density="10.000000" friction="0.300000" restitution="0.000000" />
                 <vertex x="4.000000" y="3.000000" />
@@ -144,10 +152,11 @@
             <tex name="blocks" />
         </Component>
     </Entity>
-    <Entity name="EdBlock00009">
+    <Entity name="box00009">
         <Component id="CompPhysics" name="std">
             <pos x="0.000000" y="0.000000" a="0.000000" />
             <damping linear="0.000000" angular="0.000000" />
+            <dynamic />
             <shape name="shape1">
                 <phys density="10.000000" friction="0.300000" restitution="0.000000" />
                 <vertex x="4.000000" y="4.000000" />
@@ -693,6 +702,7 @@
         <Component id="CompPhysics" name="std">
             <pos x="0.000000" y="0.000000" a="0.000000" />
             <damping linear="0.000000" angular="0.000000" />
+            <dynamic />
             <shape name="shape1">
                 <phys density="20.000000" friction="0.300000" restitution="0.000000" />
                 <circle x="72.500000" y="14.500000" r="0.400000" />
@@ -706,6 +716,7 @@
         <Component id="CompPhysics" name="std">
             <pos x="0.000000" y="0.000000" a="0.000000" />
             <damping linear="0.000000" angular="0.000000" />
+            <dynamic />
             <shape name="shape1">
                 <phys density="10.000000" friction="0.300000" restitution="0.800000" />
                 <circle x="29.000000" y="3.500000" r="0.300000" />
@@ -719,6 +730,7 @@
         <Component id="CompPhysics" name="std">
             <pos x="0.000000" y="0.000000" a="0.000000" />
             <damping linear="0.000000" angular="0.000000" />
+            <dynamic />
             <shape name="shape1">
                 <phys density="10.000000" friction="0.300000" restitution="0.800000" />
                 <circle x="30.000000" y="3.500000" r="0.300000" />
@@ -732,6 +744,7 @@
         <Component id="CompPhysics" name="std">
             <pos x="0.000000" y="0.000000" a="0.000000" />
             <damping linear="0.000000" angular="0.000000" />
+            <dynamic />
             <shape name="shape1">
                 <phys density="10.000000" friction="0.300000" restitution="0.800000" />
                 <circle x="29.000000" y="4.500000" r="0.300000" />
@@ -745,6 +758,7 @@
         <Component id="CompPhysics" name="std">
             <pos x="0.000000" y="0.000000" a="0.000000" />
             <damping linear="0.000000" angular="0.000000" />
+            <dynamic />
             <shape name="shape1">
                 <phys density="10.000000" friction="0.300000" restitution="0.800000" />
                 <circle x="29.000000" y="3.500000" r="0.300000" />
@@ -758,6 +772,7 @@
         <Component id="CompPhysics" name="std">
             <pos x="0.000000" y="0.000000" a="0.000000" />
             <damping linear="0.000000" angular="0.000000" />
+            <dynamic />
             <shape name="shape1">
                 <phys density="10.000000" friction="0.300000" restitution="0.800000" />
                 <circle x="28.000000" y="3.500000" r="0.300000" />
@@ -771,6 +786,7 @@
         <Component id="CompPhysics" name="std">
             <pos x="0.000000" y="0.000000" a="0.000000" />
             <damping linear="0.000000" angular="0.000000" />
+            <dynamic />
             <shape name="shape1">
                 <phys density="10.000000" friction="0.300000" restitution="0.800000" />
                 <circle x="31.000000" y="3.500000" r="0.300000" />
@@ -784,6 +800,7 @@
         <Component id="CompPhysics" name="std">
             <pos x="0.000000" y="0.000000" a="0.000000" />
             <damping linear="0.000000" angular="0.000000" />
+            <dynamic />
             <shape name="shape1">
                 <phys density="10.000000" friction="0.300000" restitution="0.800000" />
                 <circle x="30.000000" y="3.500000" r="0.300000" />
@@ -797,6 +814,7 @@
         <Component id="CompPhysics" name="std">
             <pos x="0.000000" y="0.000000" a="0.000000" />
             <damping linear="0.000000" angular="0.000000" />
+            <dynamic />
             <shape name="shape1">
                 <phys density="10.000000" friction="0.300000" restitution="0.800000" />
                 <circle x="30.000000" y="4.500000" r="0.300000" />

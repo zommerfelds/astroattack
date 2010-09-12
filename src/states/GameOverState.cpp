@@ -70,7 +70,7 @@ void GameOverState::Draw( float accumulator )        // Spiel zeichnen
     // Bildschirm leeren
     pRenderer->ClearScreen();
 
-    pRenderer->DrawOverlay( 0.3f, 0.0f, 0.0f, 1.0f );
+    pRenderer->DrawOverlay( 0.3f, 0.0f, 0.5f, 1.0f );
     pRenderer->DrawString( m_stringToShow.c_str(), "FontW_b", 1.5f, 1.40f );
 
     pRenderer->DrawString( "ENTER: erneut starten   ESC: abbrechen", "FontW_s", 1.45f, 2.92f );

@@ -4,6 +4,7 @@
         <Component id="CompPhysics">
             <pos x="0.000000" y="0.000000" a="0.000000" />
             <damping linear="0.000000" angular="0.000000" />
+            <dynamic />
             <shape name="shape1">
                 <phys density="30.000000" friction="0.300000" restitution="0.000000" />
                 <vertex x="2.500000" y="2.500000" />
@@ -20,6 +21,7 @@
         <Component id="CompPhysics">
             <pos x="0.000000" y="0.000000" a="0.000000" />
             <damping linear="0.000000" angular="0.000000" />
+            <dynamic />
             <shape name="shape1">
                 <phys density="30.000000" friction="0.300000" restitution="0.000000" />
                 <vertex x="13.000000" y="3.000000" />
@@ -36,6 +38,7 @@
         <Component id="CompPhysics">
             <pos x="0.000000" y="0.000000" a="0.000000" />
             <damping linear="0.000000" angular="0.000000" />
+            <dynamic />
             <shape name="shape1">
                 <phys density="30.000000" friction="0.300000" restitution="0.000000" />
                 <vertex x="7.000000" y="7.000000" />
@@ -52,6 +55,7 @@
         <Component id="CompPhysics">
             <pos x="0.000000" y="0.000000" a="0.000000" />
             <damping linear="0.000000" angular="0.000000" />
+            <dynamic />
             <shape name="shape1">
                 <phys density="30.000000" friction="0.300000" restitution="0.000000" />
                 <vertex x="-2.000000" y="4.500000" />

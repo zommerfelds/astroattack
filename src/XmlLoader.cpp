@@ -404,7 +404,7 @@ void XmlLoader::LoadXmlToWorld( const char* pFileName, GameWorld* pGameWorld, Su
                         TiXmlElement* paramsElement = condElement->FirstChildElement( "params" );
                         std::string varName;
                         std::string strCompareType;
-                        CompareType compareType = EqualTo;
+                        CompareOperator compareType = EqualTo;
                         int numToCompare = 0;
                         if (paramsElement)
                         {

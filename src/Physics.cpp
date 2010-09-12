@@ -71,6 +71,7 @@ void PhysicsSubSystem::RegisterPhysicsComp( const Event* pEvent )
                     result.first->second.pFixture = comp_phys->m_body->CreateFixture( comp_phys->m_fixtureDefs[i].second.get() );
                     result.first->second.pFixture->SetUserData( comp_phys );
                 }
+                // TODO: else
             }
 
             m_physicsComps.push_back( comp_phys );

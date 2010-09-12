@@ -4,6 +4,7 @@
 
 TODO:
 
+- Simplify playerCompPhysics->GetBody()->GetContactList() (in CompPlayerController.cpp)
 - Use make_shared
 - Improve jump animation
 - Startup beschleunigen

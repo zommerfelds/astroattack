@@ -13,7 +13,7 @@
 #include <map>
 #include <string>
 
-enum CompareType
+enum CompareOperator
 {
     GreaterThan,
     GreaterThanOrEqualTo,
@@ -26,17 +26,17 @@ enum CompareType
 class ConditionCompareVariable : public Condition
 {
 public:
-    ConditionCompareVariable( std::map<const std::string, int>::iterator itVariable, CompareType comp, int numToCompareWith );
+    ConditionCompareVariable( std::map<const std::string, int>::iterator itVariable, CompareOperator comp, int numToCompareWith );
     bool ConditionIsTrue();
     ConditionIdType ID() const { return "CompareVariable"; }
-    CompareType GetCompareType() const { return m_compareType; }
+    CompareOperator GetCompareType() const { return m_compareType; }
     int GetNum() const { return m_numToCompareWith; }
     std::string GetVariable() const { return m_itVariable->first; }
 private:
     
     std::map<const std::string, int>::iterator m_itVariable;
 
-    CompareType m_compareType;
+    CompareOperator m_compareType;
     int m_numToCompareWith;
 };
 
@@ -48,11 +48,11 @@ public:
     ConditionIdType ID() const { return "EntityTouchedThis"; }
     std::string GetEntityName() const { return m_entityName; }
 private:
-    void Collision( const Event* contactEvent );
+    //void Collision( const Event* contactEvent );
 
     std::string m_entityName;
-    RegisterObj m_registerObj;
-    bool m_touched;
+    //RegisterObj m_registerObj;
+    //bool m_touched;
 };
 
 // Astro Attack - Christian Zommerfelds - 2009

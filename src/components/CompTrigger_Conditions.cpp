@@ -8,8 +8,9 @@
 
 #include "../GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
 #include "CompTrigger_Conditions.h"
+#include "CompPhysics.h"
 
-ConditionCompareVariable::ConditionCompareVariable( std::map<const std::string, int>::iterator itVariable, CompareType comp, int numToCompareWith )
+ConditionCompareVariable::ConditionCompareVariable( std::map<const std::string, int>::iterator itVariable, CompareOperator comp, int numToCompareWith )
 : m_itVariable ( itVariable ),
   m_compareType ( comp ),
   m_numToCompareWith ( numToCompareWith )
@@ -43,17 +44,40 @@ bool ConditionCompareVariable::ConditionIsTrue()
 #include "../Component.h"
 
 ConditionEntityTouchedThis::ConditionEntityTouchedThis( std::string entityName )
-: m_entityName ( entityName ), m_touched ( false )
+: m_entityName ( entityName )/*, m_touched ( false )*/
 {
-    m_registerObj.RegisterListener( ContactAdd, boost::bind( &ConditionEntityTouchedThis::Collision, this, _1 ) );
+    //m_registerObj.RegisterListener( ContactAdd, boost::bind( &ConditionEntityTouchedThis::Collision, this, _1 ) );
 }
 
 bool ConditionEntityTouchedThis::ConditionIsTrue()
 {
-    return m_touched;
+    //return m_touched;
+
+    // TODO: all physics components
+    CompPhysics* thisCompPhysics = static_cast<CompPhysics*>( m_pCompTrigger->GetOwnerEntity()->GetFirstComponent("CompPhysics") );
+    if ( thisCompPhysics == NULL )
+        return false; // TODO: handle this
+
+    b2ContactEdge* contactEdge = thisCompPhysics->GetBody()->GetContactList();
+
+    for ( b2ContactEdge* contact_edge = contactEdge; contact_edge; contact_edge = contact_edge->next ) // TODO: refactor
+        if ( contact_edge->contact->IsTouching() )
+        {
+            Component* otherCompPhys[2] = { static_cast<Component*>(  contact_edge->contact->GetFixtureA()->GetUserData() ),
+                static_cast<Component*>( contact_edge->contact->GetFixtureB()->GetUserData() ) };
+            for (int i=0;i<2;i++)
+            {                
+                if ( otherCompPhys[i] && otherCompPhys[i]->GetOwnerEntity()->GetId() == m_entityName )
+                {
+                    return true;
+                }
+                
+            }
+        }
+    return false;
 }
 
-void ConditionEntityTouchedThis::Collision( const Event* contactEvent )
+/*void ConditionEntityTouchedThis::Collision( const Event* contactEvent )
 {
     if ( contactEvent == NULL )
         return;
@@ -86,6 +110,6 @@ void ConditionEntityTouchedThis::Collision( const Event* contactEvent )
             }
         }
     }
-}
+}*/
 
 // Astro Attack - Christian Zommerfelds - 2009
