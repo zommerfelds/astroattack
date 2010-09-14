@@ -63,8 +63,8 @@ public:
 
     virtual ~Widget() {};
 
-    virtual void Draw( RenderSubSystem* pRenderer ) { pRenderer; /* not used */ };
-    virtual void MouseStateChanged( MouseState newState ) { newState; /* not used */ }
+    virtual void Draw( RenderSubSystem* /*pRenderer*/ ) {};
+    virtual void MouseStateChanged( MouseState /*newState*/ ) {}
 
     void SetArea( Rect area ) { m_area = area; }
     const Rect& GetArea() const { return m_area; }

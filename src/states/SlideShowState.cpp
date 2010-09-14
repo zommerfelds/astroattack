@@ -256,16 +256,13 @@ void SlideShowState::Update()      // Spiel aktualisieren
     }
 }
 
-#define NOT_USED(x) x
-void SlideShowState::Frame( float deltaTime )
+void SlideShowState::Frame( float /*deltaTime*/ )
 {
-    NOT_USED(deltaTime);
     GetSubSystems()->input->Update(); // neue Eingaben lesen
 }
 
-void SlideShowState::Draw( float accumulator )        // Spiel zeichnen
+void SlideShowState::Draw( float /*accumulator*/ )        // Spiel zeichnen
 {
-    NOT_USED(accumulator);
     RenderSubSystem* pRenderer = GetSubSystems()->renderer.get();
 
     // Bildschirm leeren

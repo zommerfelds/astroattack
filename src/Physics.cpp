@@ -285,10 +285,9 @@ void PhysicsSubSystem::ContactListener::CheckContactPoint(const b2ContactPoint* 
     }
 }
 */
-void PhysicsSubSystem::Refilter( b2Shape* pShape )
+void PhysicsSubSystem::Refilter( b2Shape* /*pShape*/ )
 {
     // ACHTUNG!
-    pShape;
     //m_world->Refilter( pShape );
 }
 

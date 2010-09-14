@@ -13,9 +13,6 @@
 // eindeutige ID
 CompIdType CompTrigger::m_componentId = "CompTrigger";
 
-// Nur um Warnungen zu vermeiden (dass x nicht benutzt wird)
-#define NOT_USED(x) x
-
 CompTrigger::CompTrigger() : m_fired ( false )
 {
     m_registerObj.RegisterListener( GameUpdate, boost::bind( &CompTrigger::Update, this, _1 ) );
@@ -25,10 +22,8 @@ CompTrigger::~CompTrigger()
 {
 }
 
-void CompTrigger::Update( const Event* gameUpdatedEvent )
+void CompTrigger::Update( const Event* /*gameUpdatedEvent*/ )
 {
-    NOT_USED(gameUpdatedEvent); // gameUpdatedEvent wird nie gebraucht (NOT_USED is um Warnungen zu vermeiden)
-
     if ( !m_fired )
     {
         bool conditionsAreTrue = true;

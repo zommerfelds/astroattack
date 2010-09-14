@@ -313,16 +313,13 @@ void MainMenuState::Update()      // Spiel aktualisieren
     //--- end of moving AstroAttack banner ---//
 }
 
-#define NOT_USED(x) x
-void MainMenuState::Frame( float deltaTime )
+void MainMenuState::Frame( float /*deltaTime*/ )
 {
-    NOT_USED(deltaTime);
     //GetSubSystems()->input->Update(); // neue Eingaben lesen
 }
 
-void MainMenuState::Draw( float accumulator )        // Spiel zeichnen
+void MainMenuState::Draw( float /*accumulator*/ )        // Spiel zeichnen
 {
-    NOT_USED(accumulator);
     RenderSubSystem* pRenderer = GetSubSystems()->renderer.get();
     const Vector2D* mousePos = GetSubSystems()->input->MousePos();
 

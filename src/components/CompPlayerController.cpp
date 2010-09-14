@@ -21,9 +21,6 @@
 #include <boost/bind.hpp>
 #include <Box2D/Box2D.h>
 
-// Nur um Warnungen zu vermeiden (dass x nicht benutzt wird)
-#define NOT_USED(x) x
-
 // eindeutige ID
 CompIdType CompPlayerController::m_componentId = "CompPlayerController";
 
@@ -46,10 +43,8 @@ CompPlayerController::~CompPlayerController()
 
 // Funktion die Tastendrücke in Physikalische Reaktionen umwandelt.
 // Wird immer aktualisiert.
-void CompPlayerController::Update( const Event* gameUpdatedEvent )
-{
-    NOT_USED(gameUpdatedEvent); // gameUpdatedEvent wird nie gebraucht (NOT_USED is um Warnungen zu vermeiden)
-    
+void CompPlayerController::Update( const Event* /*gameUpdatedEvent*/ )
+{    
     // Physikkomponente vom Spieler suchen, damit wir Kräfte an ihm ausüben können
     CompPhysics* playerCompPhysics = static_cast<CompPhysics*>( GetOwnerEntity()->GetFirstComponent("CompPhysics") );
     if ( playerCompPhysics == NULL )

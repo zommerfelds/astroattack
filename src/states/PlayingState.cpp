@@ -114,9 +114,8 @@ void PlayingState::Resume()      // State wiederaufnehmen
 {
 }
 
-void PlayingState::Frame( float deltaTime )
+void PlayingState::Frame( float /*deltaTime*/ )
 {
-    NOT_USED(deltaTime);
     //GetSubSystems()->input->Update();   // neue Eingaben lesen
     //m_pGameCamera->Update( deltaTime ); // Kamera updaten
 }

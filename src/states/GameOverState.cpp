@@ -55,16 +55,13 @@ void GameOverState::Update()      // Spiel aktualisieren
     }
 }
 
-#define NOT_USED(x) x
-void GameOverState::Frame( float deltaTime )
+void GameOverState::Frame( float /*deltaTime*/ )
 {
-    NOT_USED(deltaTime);
     GetSubSystems()->input->Update(); // neue Eingaben lesen
 }
 
-void GameOverState::Draw( float accumulator )        // Spiel zeichnen
+void GameOverState::Draw( float /*accumulator*/ )        // Spiel zeichnen
 {
-    NOT_USED(accumulator);
     RenderSubSystem* pRenderer = GetSubSystems()->renderer.get();
 
     // Bildschirm leeren

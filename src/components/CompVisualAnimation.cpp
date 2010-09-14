@@ -91,13 +91,11 @@ void CompVisualAnimation::Continue()
     m_wantToFinish = false;
 }
 
-#define NOT_USED(x) x
 // ------- Aktualisieren! --------
-void CompVisualAnimation::Update( const Event* gameUpdatedEvent )
+void CompVisualAnimation::Update( const Event* /*gameUpdatedEvent*/ )
 {
     if ( m_animInfo==NULL )
         return;
-    NOT_USED(gameUpdatedEvent);
 
     if ( !m_running ) // falls Animation nicht aktiv ist:
         return;       // abbrechen!

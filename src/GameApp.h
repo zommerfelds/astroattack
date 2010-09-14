@@ -50,7 +50,7 @@ private:
 
     RegisterObj m_registerObj;
     bool m_quit; // Ob Programm beenden werden soll
-    void Quit( const Event* quitEvent ) { quitEvent; m_quit = true; } // Spiel beenden (Wird vom EventManager aufgerufen)
+    void Quit( const Event* ) { m_quit = true; } // Spiel beenden (Wird vom EventManager aufgerufen)
 
     void UpdateGame();
     void HandleSdlQuitEvents( SDL_Event& rSdlEvent, bool& rQuit );
