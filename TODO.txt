@@ -8,16 +8,14 @@ TODO:
 - Use make_shared
 - Improve jump animation
 - Startup beschleunigen
-- Replace if (var==NULL) by assert(var!=NULL)
+- Replace if (var==NULL) by assert(var!=NULL) (really?)
 - Test OpenGL error checking (glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR) did not generate error)
 - Bug in Logger: Loading Texture "(null)"... Done!
 - Remove static local variables
 - Make data creation Wiki/howto. Tools: OptiPNG
 - Time Accumulator besser anwenden
-- Parameters (-- instead of -)
 - Clean up TODO (high/low priority)
 - Zoom out when cursor is far away
-- Change V-Sync to yes/no in log
 - Walk animation velocity according to player speed
 - Change isSensor to sensor and check XML node names (maybe capital beginning?)
 - Kontakt Events nicht für jeden Box2D Kontakt erzeugen, sonders Box2D Kontakte zuerst verarbeiten und zusammenfügen.
@@ -38,12 +36,14 @@ TODO:
 - Jede C++,h Datei oben kurz Dokumentieren
 - Fehlerchecking und Beschreibung beim Level Laden
 - Align text
-- ========= OpenGL Error: 1280: invalid enumerant =========
 - Level editor extra
 - Sound and Music
 - Port to CMake
 
 DONE:
+- Parameters: -- instead of -
+- Change V-Sync to on/off in log
+- ========= OpenGL Error: 1280: invalid enumerant =========
 - Delay wenn Jack Seite wechselt
 - Never set string = NULL in XmlLoader
 - Korrektur in Intro-Bild

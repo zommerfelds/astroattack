@@ -21,7 +21,6 @@
                   a = "0.0"/>
             <fixedRotation/>
             <bullet/>
-            <!--saveContacts/-->
             <dynamic />
             <damping linear = "0.1"/>
             <rotationPoint x="0.0" y="-0.75"/>

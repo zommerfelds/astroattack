@@ -27,7 +27,7 @@
                   </Effect>
             </Component>
 <Component id = "CompVisualMessage">
-                  <msg text = "Willkommen zu AstroAttack! Mit den Tasten A und D kann der\nAstronaut nach links und rechts bewegen."/>
+                  <msg text = "Willkommen zu AstroAttack! Mit den Tasten A und D kann der&#10;Astronaut nach links und rechts bewegen."/>
             </Component>
     </Entity>
     <Entity name="EdBlock00001">

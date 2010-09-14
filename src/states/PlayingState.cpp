@@ -67,7 +67,7 @@ void PlayingState::Init()        // State starten
 	SDL_WarpMouse((Uint16)(gAaConfig.GetInt("ScreenWidth")/2), (Uint16)(gAaConfig.GetInt("ScreenHeight")/2));
 
     m_pGameCamera->Init();
-    m_pGameCamera->SetFollowPlayer ( true );
+    m_pGameCamera->SetFollowPlayer( true );
 
     gAaLog.Write ( "Loading world...\n\n" );
     gAaLog.IncreaseIndentationLevel();

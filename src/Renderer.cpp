@@ -524,8 +524,7 @@ void RenderSubSystem::DrawVisualMessageComps()
     float lineHeight = 0.2f;
     for ( CompVisualMessageMap::const_iterator it = m_visualMsgComps.begin(); it != m_visualMsgComps.end(); ++it )
     {
-        DrawString( std::string("- "), "FontW_b", 0.5f, 0.6f + y*lineHeight );
-        DrawString( it->second->GetMsg(), "FontW_b", 0.55f, 0.6f + y*lineHeight );
+        DrawString( std::string("- ")+it->second->GetMsg(), "FontW_s", 0.4f, 0.6f + y*lineHeight );
         ++y;
     }
 }

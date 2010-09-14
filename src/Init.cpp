@@ -88,26 +88,21 @@ bool GameApp::InitVideo()
     SDL_GL_GetAttribute ( SDL_GL_BUFFER_SIZE, &value );
     gAaConfig.SetInt( "ScreenBpp", value );
     gAaLog.Write ( "Resolution: %dx%d\n", vidInfo->current_w, vidInfo->current_h );
-    if ( gAaConfig.GetInt("WideScreen") )
-        gAaLog.Write ( "Widescreen: On\n" );
-    else
-        gAaLog.Write ( "Widescreen: Off\n" );
+    gAaLog.Write ( "Widescreen: %s\n", (gAaConfig.GetInt("WideScreen")?"on":"off") );
     gAaLog.Write ( "Bits per pixel: %d\n", value );
     SDL_GL_GetAttribute ( SDL_GL_DOUBLEBUFFER, &value );
-    gAaLog.Write ( "Double buffer: " );
-    if ( value == 1 )
-        gAaLog.Write ( "yes\n" );
-    else
-        gAaLog.Write ( "no\n" );
+    gAaLog.Write ( "Double buffer: %s\n", (value?"on":"off") );
     value = 1;
     SDL_GL_GetAttribute ( SDL_GL_MULTISAMPLESAMPLES, &value );
     gAaConfig.SetInt("AntiAliasing",value);
-    value = 1;
-    gAaLog.Write ( "Anti-aliasing: %dx\n", value );
+    if (value==1)
+        gAaLog.Write ( "Anti-aliasing: off\n" );
+    else
+        gAaLog.Write ( "Anti-aliasing: %dx\n", value );
     SDL_GL_GetAttribute ( SDL_GL_SWAP_CONTROL, &value );
     gAaConfig.SetInt("V-Sync",value);
     value = 1;
-    gAaLog.Write ( "V-Sync: %d\n\n", value );
+    gAaLog.Write ( "V-Sync: %s\n\n", (value?"on":"off") );
     gAaLog.DecreaseIndentationLevel();
 
     return true;

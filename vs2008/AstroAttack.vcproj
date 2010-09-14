@@ -555,23 +555,23 @@
 			>
 		</File>
 		<File
-			RelativePath="..\bin\data\graphics.xml"
+			RelativePath="..\data\graphics.xml"
 			>
 		</File>
 		<File
-			RelativePath="..\bin\data\graphicsMenu.xml"
+			RelativePath="..\data\graphicsMenu.xml"
 			>
 		</File>
 		<File
-			RelativePath="..\bin\data\levelSequence.xml"
+			RelativePath="..\data\levelSequence.xml"
 			>
 		</File>
 		<File
-			RelativePath="..\bin\data\player.xml"
+			RelativePath="..\data\player.xml"
 			>
 		</File>
 		<File
-			RelativePath="..\bin\data\templates.xml"
+			RelativePath="..\data\templates.xml"
 			>
 		</File>
 		<File

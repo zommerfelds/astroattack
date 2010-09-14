@@ -249,36 +249,26 @@ void CompPlayerController::Update( const Event* gameUpdatedEvent )
             // Je nachdem ob der Spieler am Boden ist oder an der Wand anders abstossen
             if ( (minAngleL < cPi - cJumpAngle*2) || (minAngleR < cPi - cJumpAngle*2) ) // Normal Springen
             {
-				Vector2D tmp = upVector;
-				tmp *= 600;
-                impulse.Set(tmp.x,tmp.y);
+                impulse = *(upVector*500).To_b2Vec2();
             }
             else if ( m_pInputSubSystem->KeyState ( Right ) && minAngleR > cPi*2 - cJumpAngle*2 ) // Von Wand rechts abstossen
             {
-				Vector2D tmp = upVector;
-				tmp *= 700;
-				tmp.Rotate( cPi*0.2f );
-                impulse.Set(tmp.x,tmp.y);
+                impulse = *(upVector*600).Rotated(cPi*0.2f).To_b2Vec2();
 
                 Vector2D vel ( playerCompPhysics->GetBody()->GetLinearVelocity() );
                 vel = upVector * (vel*upVector);
                 playerCompPhysics->GetBody()->SetLinearVelocity( *vel.To_b2Vec2() );
 
-                //impulse.Set(-500.0f,800.0f); // schräg nach oben
                 //bodyAngleAbs = maxAngleRel;
             }
             else if ( m_pInputSubSystem->KeyState ( Left ) && minAngleL > cPi*2 - cJumpAngle*2 ) // Von Wand links abstossen
             {
-				Vector2D tmp = upVector;
-				tmp *= 700;
-				tmp.Rotate( -cPi*0.2f );
-                impulse.Set(tmp.x,tmp.y);
+                impulse = *(upVector*600).Rotated(-cPi*0.2f).To_b2Vec2();
 
                 Vector2D vel ( playerCompPhysics->GetBody()->GetLinearVelocity() );
                 vel = upVector * (vel*upVector);
                 playerCompPhysics->GetBody()->SetLinearVelocity( *vel.To_b2Vec2() );
 
-                //impulse.Set(500.0f,800.0f); // schräg nach oben
                 //bodyAngleAbs = -maxAngleRel;
             }
             
@@ -296,6 +286,8 @@ void CompPlayerController::Update( const Event* gameUpdatedEvent )
             float amountPerBody = 1.0f/i;
             for ( b2ContactEdge* contact_edge = contactEdge; contact_edge; contact_edge = contact_edge->next )
             {
+                if ( !contact_edge->contact->IsTouching() )
+                    continue;
                 // Gegenimpuls auf Grundobjekt wirken lassen
                 b2WorldManifold worldManifold;
                 contact_edge->contact->GetWorldManifold( &worldManifold );
@@ -309,10 +301,10 @@ void CompPlayerController::Update( const Event* gameUpdatedEvent )
 
     // Kräfte (Betrag)
     const float jetpack_force_magnitude = 3000.0f;
-    const float walk_force_magnitude = 900.0f;
+    const float walk_force_magnitude = 800.0f;
     const float fly_force_magnitude = 600.0f;
     const float fly_jet_force_magnitude = 1000.0f;
-    const float steepness_bonus = 800.0f; // je grösser, desto besser kann der Astronaut steile hänge laufen
+    const float steepness_compensation = 800.0f; // je grösser, desto besser kann der Astronaut steile hänge laufen
                                           // und desto langsamer abhänge hinunterlaufen
 
 	// Jetpack nach oben
@@ -340,7 +332,7 @@ void CompPlayerController::Update( const Event* gameUpdatedEvent )
     // Falls der Spieler am Boden ist
     if ( canWalkR || canWalkL )
     {
-        const float maxVelXWalk = 14.5f;
+        const float maxVelXWalk = 13.5f;
         const float smallMass = 10.0f;
         // Laufen nach rechts
         if ( canWalkR && m_pInputSubSystem->KeyState ( Right ) )
@@ -352,7 +344,7 @@ void CompPlayerController::Update( const Event* gameUpdatedEvent )
             // wenn es steil, ist wird die Kraft verstärkt
             //float angle = atan2( force.y / fabs(force.x) );
 			float angle = cPi*0.5f-acos( force.GetUnitVector() * upVector );
-            force += force.GetUnitVector()*angle*steepness_bonus;
+            force += force.GetUnitVector()*angle*steepness_compensation;
 
             // Impuls auf Spielerfigur wirken lassen
             if ( playerCompPhysics->GetBody()->GetLinearVelocity().x < maxVelXWalk )
@@ -380,7 +372,7 @@ void CompPlayerController::Update( const Event* gameUpdatedEvent )
             // wenn es steil, ist wird die Kraft verstärkt
             //float angle = atan( force.y / fabs(force.x) );
 			float angle = cPi*0.5f-acos( force.GetUnitVector() * upVector );
-            force += force.GetUnitVector()*angle*steepness_bonus;
+            force += force.GetUnitVector()*angle*steepness_compensation;
 
             // Impuls auf Spielerfigur wirken lassen
             if ( playerCompPhysics->GetBody()->GetLinearVelocity().x > -maxVelXWalk )

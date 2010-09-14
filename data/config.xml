@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <config>
-    <AntiAliasing val="4" type="int" />
+    <AntiAliasing val="2" type="int" />
     <EditorLevel val="data/Levels/level_new.xml" type="string" />
     <FullScreen val="0" type="int" />
     <MouseSensitivity val="1" type="float" />
