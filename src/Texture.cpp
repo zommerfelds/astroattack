@@ -16,6 +16,7 @@
 #include <sstream>
 #include <cmath>
 #include <SDL/SDL_opengl.h> // OpenlGL via SDL inkludieren
+#include <boost/make_shared.hpp>
 
 // Konstruktor
 TextureManager::TextureManager()
@@ -248,7 +249,7 @@ void AnimationManager::LoadAnimation( const char* name, AnimationIdType id,const
         throw Exception ( gAaLog.Write ( "Animation file \"%s\" could not be opened.\n", name ) );
     }
 
-    boost::shared_ptr<AnimInfo> pAnimInfo ( new AnimInfo );
+    boost::shared_ptr<AnimInfo> pAnimInfo ( boost::make_shared<AnimInfo>() );
 
     try
     {
@@ -287,7 +288,7 @@ void AnimationManager::LoadAnimation( const char* name, AnimationIdType id,const
         while ( input_stream >> stateId )
         {
             std::map< StateIdType, boost::shared_ptr<StateInfo> >::const_iterator it = 
-                pAnimInfo->states.insert( std::pair< StateIdType, boost::shared_ptr<StateInfo> >( stateId, boost::shared_ptr<StateInfo>( new StateInfo ) ) ).first;
+                pAnimInfo->states.insert( std::pair< StateIdType, boost::shared_ptr<StateInfo> >( stateId, boost::shared_ptr<StateInfo>( boost::make_shared<StateInfo>() ) ) ).first;
             if ( !(input_stream >> it->second->begin ) )
                 throw 0;
             if ( !(input_stream >> it->second->end ) )

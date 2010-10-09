@@ -9,6 +9,7 @@
 #include "../GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
 #include "CompTrigger_Effects.h"
 #include "../World.h"
+#include <boost/make_shared.hpp>
 
 EffectKillEntity::EffectKillEntity( std::string entityToKill, GameWorld* pGW )
 : m_entityToKill ( entityToKill ), m_pGW ( pGW )
@@ -45,9 +46,9 @@ void EffectDispMessage::Fire()
         }
     }
     m_msgEntityName = entityName;
-    boost::shared_ptr<Entity> pEntity( new Entity( entityName ) );
+    boost::shared_ptr<Entity> pEntity = boost::make_shared<Entity>(entityName);
     m_pMsgEntity = pEntity.get();
-    boost::shared_ptr<CompVisualMessage> compMsg( new CompVisualMessage(m_message) );
+    boost::shared_ptr<CompVisualMessage> compMsg = boost::make_shared<CompVisualMessage>(m_message);
     compMsg->SetName( "autoname" );
     pEntity->SetComponent( compMsg );
 

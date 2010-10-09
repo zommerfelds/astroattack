@@ -27,6 +27,8 @@
 #include <cmath>
 #include <sstream>
 
+#include <boost/make_shared.hpp>
+
 StateIdType EditorState::stateId = "EditorState";
 
 // temp!
@@ -168,10 +170,10 @@ void EditorState::Update()      // Spiel aktualisieren
                     break;
                 }
             }
-            boost::shared_ptr<Entity> pEntity( new Entity( entityName ) );
+            boost::shared_ptr<Entity> pEntity = boost::make_shared<Entity>(entityName);
 
-            boost::shared_ptr<CompPhysics> compPhysics( new CompPhysics( new b2BodyDef/*, false*/ ) );
-            boost::shared_ptr<b2FixtureDef> fixtureDef ( new b2FixtureDef );
+            boost::shared_ptr<CompPhysics> compPhysics = boost::make_shared<CompPhysics>(new b2BodyDef/*, false*/ );
+            boost::shared_ptr<b2FixtureDef> fixtureDef = boost::make_shared<b2FixtureDef>();
             b2PolygonShape* shape = new b2PolygonShape;
             b2Vec2 vertices[b2_maxPolygonVertices];
             for ( int i = 0; i < m_currentPoint; ++i )
@@ -186,7 +188,7 @@ void EditorState::Update()      // Spiel aktualisieren
             pEntity->SetComponent( compPhysics );
 
             TextureIdType textureName = m_currentTexture;
-            boost::shared_ptr<CompVisualTexture> compPolyTex( new CompVisualTexture(textureName) );
+            boost::shared_ptr<CompVisualTexture> compPolyTex = boost::make_shared<CompVisualTexture>(textureName);
             pEntity->SetComponent( compPolyTex );
 
             m_pGameWorld->AddEntity( pEntity );

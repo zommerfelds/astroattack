@@ -11,6 +11,7 @@
 
 #include "CompPhysics.h"
 #include <Box2D/Box2D.h>       // extere Physikbibliothek
+#include <boost/make_shared.hpp>
 
 // Number of game updates a CompPhysics has to wait till it can change to an other GravField
 const unsigned int cUpdatesTillGravFieldChangeIsPossible = 10;
@@ -19,17 +20,15 @@ const unsigned int cUpdatesTillGravFieldChangeIsPossible = 10;
 CompIdType CompPhysics::m_componentId = "CompPhysics";
 
 // Konstruktor
-CompPhysics::CompPhysics( b2BodyDef* pBodyDef/*, bool saveContacts*/ ) : m_body ( NULL ),
-                                                                     m_bodyDef( pBodyDef ),
-                                                                     m_localRotationPoint (),
-                                                                     m_localGravitationPoint (),
-                                                                     //m_saveContacts ( saveContacts ),
-                                                                     //m_contacts (),
-																	 m_gravField ( NULL ),
-                                                                     m_remainingUpdatesTillGravFieldChangeIsPossible ( 0 )
-																	 //m_oldGravField ( NULL ),
-                                                                     //m_gravFieldIsChanging ( false ),
-																	 //m_updatesSinceLastGravFieldChange ( 0 )
+CompPhysics::CompPhysics( b2BodyDef* pBodyDef ) : m_body ( NULL ),
+                                                  m_bodyDef( pBodyDef ),
+                                                  m_localRotationPoint (),
+                                                  m_localGravitationPoint (),
+                                                  m_gravField ( NULL ),
+                                                  m_remainingUpdatesTillGravFieldChangeIsPossible ( 0 )
+                                                  //m_oldGravField ( NULL ),
+                                                  //m_gravFieldIsChanging ( false ),
+                                                  //m_updatesSinceLastGravFieldChange ( 0 )
 {
 }
 
@@ -107,6 +106,31 @@ void CompPhysics::Rotate( float deltaAngle, const Vector2D& localPoint )
     Vector2D worldRotationCenterToBodyCenter ( -localPoint.Rotated(current_angle+deltaAngle) );
 
     m_body->SetTransform( *(worldRotationCenter+worldRotationCenterToBodyCenter).To_b2Vec2(), current_angle+deltaAngle );
+}
+
+ContactVector CompPhysics::GetContacts(bool getSensors) const
+{
+    std::vector<boost::shared_ptr<ContactInfo> > vecTouchInfo;
+    for ( b2ContactEdge* contactEdge = m_body->GetContactList();
+          contactEdge;
+          contactEdge = contactEdge->next )
+    {
+        if ( !contactEdge->contact->IsTouching() ||
+             ( !getSensors && ( contactEdge->contact->GetFixtureA()->IsSensor() ||
+               contactEdge->contact->GetFixtureB()->IsSensor() ) ) )
+            continue;
+        boost::shared_ptr<ContactInfo> touchInfo = boost::make_shared<ContactInfo>();
+        b2WorldManifold worldManifold;
+        contactEdge->contact->GetWorldManifold( &worldManifold );
+        touchInfo->normal = worldManifold.normal;
+        if (contactEdge->contact->GetFixtureA()->GetBody() != m_body) // is this needed?
+            touchInfo->normal = -touchInfo->normal;
+        touchInfo->comp = static_cast<CompPhysics*>(contactEdge->other->GetUserData());
+        touchInfo->point = worldManifold.points[0]; // TODO: use all points
+
+        vecTouchInfo.push_back(touchInfo);
+    }
+    return vecTouchInfo;
 }
 
 /*bool CompPhysics::GetSaveContacts() const

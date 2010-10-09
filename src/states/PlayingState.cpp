@@ -26,6 +26,7 @@
 #include "../main.h"
 
 #include <boost/bind.hpp>
+#include <boost/make_shared.hpp>
 
 #include <sstream>
 
@@ -129,7 +130,7 @@ void PlayingState::Update()      // Spiel aktualisieren
     {
         if ( m_alphaOverlay > 1.0f )
         {
-            boost::shared_ptr<GameOverState> gameOverStateState ( new GameOverState( GetSubSystems(), m_gameOverMessage ) );
+            boost::shared_ptr<GameOverState> gameOverStateState ( boost::make_shared<GameOverState>( GetSubSystems(), m_gameOverMessage ) );
             GetSubSystems()->stateManager->ChangeState( gameOverStateState );
             return;
         }

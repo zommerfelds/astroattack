@@ -20,6 +20,7 @@
 #include "../Sound.h"
 #include "../XmlLoader.h"
 #include <boost/shared_ptr.hpp>
+#include <boost/make_shared.hpp>
 
 // temp!
 #include <SDL/SDL_opengl.h> // OpenlGL via SDL inkludieren
@@ -170,7 +171,7 @@ void SlideShowState::Update()      // Spiel aktualisieren
     {
         //boost::shared_ptr<PlayingState> playState ( new PlayingState( GetSubSystems() ) ); // Zum Spiel-Stadium wechseln
         //GetSubSystems()->stateManager->ChangeState( playState ); // State wird gewechselt (und diese wird gelöscht)
-        boost::shared_ptr<MainMenuState> menuState ( new MainMenuState( GetSubSystems(), Play ) );
+        boost::shared_ptr<MainMenuState> menuState ( boost::make_shared<MainMenuState>( GetSubSystems(), Play ) );
         GetSubSystems()->stateManager->ChangeState( menuState ); // State wird gewechselt (und diese wird gelöscht)
         return; // Sofort raus, da dieser State nicht mehr existiert!
     }
@@ -210,7 +211,7 @@ void SlideShowState::Update()      // Spiel aktualisieren
             {
                 //boost::shared_ptr<PlayingState> playState ( new PlayingState( GetSubSystems() ) ); // Zum Spiel-Stadium wechseln
                 //GetSubSystems()->stateManager->ChangeState( playState ); // State wird gewechselt (und diese wird gelöscht)
-                boost::shared_ptr<MainMenuState> menuState ( new MainMenuState( GetSubSystems(), Play ) );
+                boost::shared_ptr<MainMenuState> menuState ( boost::make_shared<MainMenuState>( GetSubSystems(), Play ) );
                 GetSubSystems()->stateManager->ChangeState( menuState ); // State wird gewechselt (und diese wird gelöscht)
                 return; // Sofort raus, da dieser State nicht mehr existiert!
             }

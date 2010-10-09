@@ -14,6 +14,8 @@
 #include "../GameApp.h"
 #include "../Input.h"
 
+#include <boost/make_shared.hpp>
+
 // eindeutige ID
 StateIdType GameOverState::stateId = "GameOverState";
 
@@ -49,7 +51,7 @@ void GameOverState::Update()      // Spiel aktualisieren
 {
     if ( GetSubSystems()->input->KeyState( Enter ) )
     {
-        boost::shared_ptr<PlayingState> playState ( new PlayingState( GetSubSystems(), levelName.c_str() ) ); // Zum Spiel-Stadium wechseln
+        boost::shared_ptr<PlayingState> playState = boost::make_shared<PlayingState>(GetSubSystems(), levelName.c_str()); // Zum Spiel-Stadium wechseln
         GetSubSystems()->stateManager->ChangeState( playState );
         return;
     }

@@ -48,8 +48,19 @@ struct FixtureInfo
     float density;
 };
 
+class CompPhysics;
+
+struct ContactInfo
+{
+    ContactInfo() : comp (NULL) {}
+	CompPhysics* comp; // the component that is touching
+	Vector2D point; // touching point
+	Vector2D normal; // contact normal (pointing away from body)
+};
+
 typedef std::string FixtureIdType;
 typedef std::map< FixtureIdType, FixtureInfo > FixtureMap;
+typedef std::vector<boost::shared_ptr<ContactInfo> > ContactVector;
 
 //--------------------------------------------//
 //----------- CompPhysics Klasse -------------//
@@ -58,7 +69,7 @@ class CompPhysics : public Component
 {
 public:
 
-    CompPhysics( b2BodyDef* pBodyDef/*, bool saveContacts*/ );
+    CompPhysics(b2BodyDef* pBodyDef);
     ~CompPhysics();
     const CompIdType& ComponentId() const { return m_componentId; }
 
@@ -75,6 +86,8 @@ public:
     const FixtureMap* GetFixtureList() const { return &m_fixtureList; }
     //float GetDensity() { return m_density; }
 
+    ContactVector GetContacts(bool getSensors=false) const;
+
     const Vector2D& GetLocalRotationPoint() const { return m_localRotationPoint; }
     void SetLocalRotationPoint(const Vector2D& rotPoint) { m_localRotationPoint = rotPoint; }
     const Vector2D& GetLocalGravitationPoint() const { return m_localGravitationPoint; }
@@ -85,9 +98,6 @@ public:
     float GetAngularDamping() const;
     bool IsFixedRotation() const;
     /*bool GetSaveContacts() const;*/
-
-    // Alle Kontakte für diesen Körper erhalten
-    /*const std::vector< Contact >* GetContacts() const { return &m_contacts; }*/
 
     void Rotate( float deltaAngle, const Vector2D& localPoint ); // Rotate the body by daltaAngle counterclockwise around a local point
 

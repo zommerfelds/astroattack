@@ -29,6 +29,7 @@
 
 #include <boost/shared_ptr.hpp>
 #include <boost/bind.hpp>
+#include <boost/make_shared.hpp>
 #include <string>
 
 const char* cMainLogFileName = "data/config.xml";
@@ -109,7 +110,7 @@ void GameApp::Init( int argc, char* args[] )
     gAaLog.DecreaseIndentationLevel(); // Nicht mehr einrücken
     gAaLog.Write ( "\n* Finished initialization *\n" );
 
-    boost::shared_ptr<MainMenuState> menuState ( new MainMenuState( m_pSubSystems.get() ) );
+    boost::shared_ptr<MainMenuState> menuState ( boost::make_shared<MainMenuState>( m_pSubSystems.get() ) );
     m_pSubSystems->stateManager->ChangeState( menuState );
     //boost::shared_ptr<PlayingState> playState ( new PlayingState( m_pSubSystems.get() ) );
     //m_pSubSystems->stateManager->ChangeState( playState );
@@ -245,7 +246,7 @@ void GameApp::HandleSdlQuitEvents( SDL_Event& rSdlEvent, bool& rQuit )
                 }
                 else
                 {
-                    boost::shared_ptr<MainMenuState> menuState ( new MainMenuState( m_pSubSystems.get() ) );
+                    boost::shared_ptr<MainMenuState> menuState ( boost::make_shared<MainMenuState>( m_pSubSystems.get() ) );
                     m_pSubSystems->stateManager->ChangeState( menuState );
                 }
                 break;

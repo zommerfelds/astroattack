@@ -4,8 +4,6 @@
 
 TODO:
 
-- Simplify playerCompPhysics->GetBody()->GetContactList() (in CompPlayerController.cpp)
-- Use make_shared
 - Improve jump animation
 - Startup beschleunigen
 - Replace if (var==NULL) by assert(var!=NULL) (really?)
@@ -41,6 +39,8 @@ TODO:
 - Port to CMake
 
 DONE:
+- Use make_shared
+- Simplify playerCompPhysics->GetBody()->GetContactList() (in CompPlayerController.cpp)
 - Parameters: -- instead of -
 - Change V-Sync to on/off in log
 - ========= OpenGL Error: 1280: invalid enumerant =========

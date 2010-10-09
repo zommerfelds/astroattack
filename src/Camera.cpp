@@ -25,6 +25,7 @@
 
 #include <math.h>
 #include <Box2D/Box2D.h>
+#include <boost/make_shared.hpp>
 
 #define CAMERA_POS (*m_pTranslation * -1)
 
@@ -373,7 +374,7 @@ void GameCamera::Look() const
 
 boost::shared_ptr<Vector2D> GameCamera::GetCameraPos () const
 {
-    boost::shared_ptr<Vector2D> pos( new Vector2D );
+    boost::shared_ptr<Vector2D> pos( boost::make_shared<Vector2D>() );
     *pos = CAMERA_POS; // = *m_pTranslation * (-1) , siehe #define zu oberst
     return pos;
     // Translation is der Kehrwert der Position weil

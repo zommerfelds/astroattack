@@ -58,22 +58,12 @@ bool ConditionEntityTouchedThis::ConditionIsTrue()
     if ( thisCompPhysics == NULL )
         return false; // TODO: handle this
 
-    b2ContactEdge* contactEdge = thisCompPhysics->GetBody()->GetContactList();
+    ContactVector contacts = thisCompPhysics->GetContacts(true);
 
-    for ( b2ContactEdge* contact_edge = contactEdge; contact_edge; contact_edge = contact_edge->next ) // TODO: refactor
-        if ( contact_edge->contact->IsTouching() )
-        {
-            Component* otherCompPhys[2] = { static_cast<Component*>(  contact_edge->contact->GetFixtureA()->GetUserData() ),
-                static_cast<Component*>( contact_edge->contact->GetFixtureB()->GetUserData() ) };
-            for (int i=0;i<2;i++)
-            {                
-                if ( otherCompPhys[i] && otherCompPhys[i]->GetOwnerEntity()->GetId() == m_entityName )
-                {
-                    return true;
-                }
-                
-            }
-        }
+    for (unsigned int i=0; i<contacts.size(); i++)
+        if (contacts[i]->comp->GetOwnerEntity()->GetId() == m_entityName)
+            return true;
+
     return false;
 }
 

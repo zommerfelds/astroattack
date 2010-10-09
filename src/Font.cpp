@@ -19,6 +19,7 @@
 #include <FTGL/ftgl.h>
 
 #include <utility>
+#include <boost/make_shared.hpp>
 
 #include "main.h"
 
@@ -48,7 +49,7 @@ void FontManager::LoadFont( const char* fileName, int size, FontIdType id )
         return;
 
     // Create a pixmap font from a TrueType file.
-    boost::shared_ptr<FTTextureFont> font(new FTTextureFont(fileName) );
+    boost::shared_ptr<FTTextureFont> font(boost::make_shared<FTTextureFont>(fileName) );
 
     // If something went wrong, return
     if(font->Error())

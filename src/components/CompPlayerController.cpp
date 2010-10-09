@@ -77,16 +77,8 @@ void CompPlayerController::Update( const Event* /*gameUpdatedEvent*/ )
     const float incStep = 0.05f;                     // Winkelschritt pro Aktualisierung beim Vergrössern
     const float decStep = 0.02f;                     // Winkelschritt pro Aktualisierung beim Verkleinern
 
-    // Kontaktpunkte
-    b2ContactEdge* contactEdge = playerCompPhysics->GetBody()->GetContactList();
-
-    for ( b2ContactEdge* contact_edge = contactEdge; contact_edge; contact_edge = contact_edge->next ) // TODO: refactor
-        if ( contact_edge->contact->IsTouching() &&
-             !(contact_edge->contact->GetFixtureA()->IsSensor() || contact_edge->contact->GetFixtureB()->IsSensor()) )
-        {
-            isTouchingSth = true;
-            break;
-        }
+    std::vector<boost::shared_ptr<ContactInfo> > contacts = playerCompPhysics->GetContacts();
+    isTouchingSth = !contacts.empty();
 
     // Bemerkung: in contacts sind die Kontaktinformationen des Spielerblocks gespeichert. (wichtig sind die Normalen)
     // Meistens gibt es nur einen Block, das die Spielfigur berührt, also nur eine Normale.
@@ -102,10 +94,8 @@ void CompPlayerController::Update( const Event* /*gameUpdatedEvent*/ )
     float minAngleL = 2*cPi; // Je grösser desto mehr ist der Boden von der steilsten Links-Anstiegsmöchglichkeit im Gegenuhrzeigersinn gedreht
 
     // Die Körper mit denen die Spielfigur Kontakt hat (um auf sie ein Gegenimpuls zu geben -> Impulserhaltung)
-    //const Contact* pContactRight = NULL;
-    //const Contact* pContactLeft = NULL;
-    const b2ContactEdge* pContactRight = NULL;
-    const b2ContactEdge* pContactLeft = NULL;
+    int iContactRight = 0;
+    int iContactLeft = 0;
 
     // Maximaler Winkel, wo Spieler klettern/laufen kann (zwischen Gravitationsgegenrichtung und Bodenrichtung)
     //const float cMaxWalkAngle = (cPi*0.125f);
@@ -129,22 +119,14 @@ void CompPlayerController::Update( const Event* /*gameUpdatedEvent*/ )
 
 			float min_angle = 2.0f*cPi;       // kleinster gefundener Winkel
 
-            for ( b2ContactEdge* contact_edge = contactEdge; contact_edge; contact_edge = contact_edge->next )
+            for (unsigned int i=0; i<contacts.size(); i++)
 			{
-                if ( !contact_edge->contact->IsTouching() )
-                    continue;
-                b2WorldManifold worldManifold;
-                contact_edge->contact->GetWorldManifold( &worldManifold );
-                Vector2D normal (worldManifold.normal);
-                if (contact_edge->contact->GetFixtureA()->GetBody() != playerCompPhysics->GetBody())
-                    normal = -normal;
-
 				float angle; // Winkeln zwischen maximum und momentane Wegrichtung (Radian)
 
-                if ( normWalkable.IsRight( normal ) )  // angle ist <= 180
-					angle = acos( normal * normWalkable );
+                if ( normWalkable.IsRight( contacts[i]->normal ) )  // angle ist <= 180
+					angle = acos( contacts[i]->normal * normWalkable );
 				else // angle ist > 180
-					angle = 2*cPi - ( acos( normal * normWalkable ) );
+					angle = 2*cPi - ( acos( contacts[i]->normal * normWalkable ) );
 
 				if ( angle > 1.5f*cPi-cMaxWalkAngle-0.1f )
 				{
@@ -155,22 +137,22 @@ void CompPlayerController::Update( const Event* /*gameUpdatedEvent*/ )
 				if ( angle < min_angle ) // fals ein kleinerer Winkel gefunden Wurde
 				{
 					min_angle = angle;
-					normalSteepestRight = normal; // Zeiger speichern
-					pContactRight = contact_edge;
+					normalSteepestRight = contacts[i]->normal; // Zeiger speichern
+					iContactRight = i;
 				}
 			}
 			minAngleR = min_angle;
 		}
 
 		// normalSteepestLeft finden
-        if ( contactEdge->next == NULL ) // Da es sowieso meistens nur eine Normale gibt, wird hier aus der rechten Normale die Linke gerechnet (das gleiche! ausser der Winkel ist anders)
+        if ( contacts.size()==1 ) // Da es sowieso meistens nur eine Normale gibt, wird hier aus der rechten Normale die Linke gerechnet (das gleiche! ausser der Winkel ist anders)
 		{
 			/*if ( normalSteepestRight == NULL ) // wenn Rechts nicht gültig ist, dann ist Links auch nicht gültig
 				minAngleL = 2*cPi;
 			else
 			{*/
 				normalSteepestLeft = normalSteepestRight;                // es gibt ja nur eine, die Gleiche
-				pContactLeft = pContactRight;                            // auch gleicher Körper
+				iContactLeft = iContactRight;                            // auch gleicher Körper
 				minAngleL = 2*cPi-minAngleR + (cPi*0.5f-cMaxWalkAngle)*2;  // Winkel berechnen (orientierung ändern + verschiebung)
 				if ( minAngleL > 2*cPi )                                  // > als 360 wird wieder bei 0 angefangen
 					minAngleL -= 2*cPi;
@@ -184,23 +166,14 @@ void CompPlayerController::Update( const Event* /*gameUpdatedEvent*/ )
 
 			float min_angle = 2*cPi;
 
-			for ( b2ContactEdge* contact_edge = contactEdge; contact_edge; contact_edge = contact_edge->next )
+			for (unsigned int i=0; i<contacts.size(); i++)
 			{
-                if ( !contact_edge->contact->IsTouching() )
-                    continue;
-                b2WorldManifold worldManifold;
-                contact_edge->contact->GetWorldManifold( &worldManifold );
-                Vector2D normal (worldManifold.normal);
-                if (contact_edge->contact->GetFixtureA()->GetBody() != playerCompPhysics->GetBody())
-                    normal = -normal;
-                //assert( normal.LengthSquared() == 1);
-
 				float angle;
 
-                if ( !normWalkable.IsRight( normal ) )  // angle ist <= 180
-					angle = acos( normal * normWalkable );
+                if ( !normWalkable.IsRight( contacts[i]->normal ) )  // angle ist <= 180
+					angle = acos( contacts[i]->normal * normWalkable );
 				else // angle ist > 180
-					angle = 2*cPi - ( acos( normal * normWalkable ) );
+					angle = 2*cPi - ( acos( contacts[i]->normal * normWalkable ) );
 
 				if ( angle > 1.5f*cPi-cMaxWalkAngle-0.1f )
 				{
@@ -211,8 +184,8 @@ void CompPlayerController::Update( const Event* /*gameUpdatedEvent*/ )
 				if ( angle < min_angle )
 				{
 					min_angle = angle;
-					normalSteepestLeft = normal;
-					pContactLeft = contact_edge;
+					normalSteepestLeft = contacts[i]->normal;
+					iContactLeft = i;
 				}
 			}
 			minAngleL = min_angle;
@@ -271,22 +244,11 @@ void CompPlayerController::Update( const Event* /*gameUpdatedEvent*/ )
             playerCompPhysics->GetBody()->ApplyLinearImpulse( impulse , playerCompPhysics->GetBody()->GetWorldCenter() );
             
             // Gegenimpulse auf andere Objekte (physikalisch korrektere Simulation)
-            int i = 0;
-            for ( b2ContactEdge* contact_edge = contactEdge; contact_edge; contact_edge = contact_edge->next ) // TODO: refactor
+            float amountPerBody = 1.0f/contacts.size();
+            for (unsigned int i=0; i<contacts.size(); i++)
             {
-                if ( !contact_edge->contact->IsTouching() )
-                    continue;
-                i++;
-            }
-            float amountPerBody = 1.0f/i;
-            for ( b2ContactEdge* contact_edge = contactEdge; contact_edge; contact_edge = contact_edge->next )
-            {
-                if ( !contact_edge->contact->IsTouching() )
-                    continue;
                 // Gegenimpuls auf Grundobjekt wirken lassen
-                b2WorldManifold worldManifold;
-                contact_edge->contact->GetWorldManifold( &worldManifold );
-                contact_edge->other->ApplyForce( -b2Vec2(impulse.x*cReactionJump*amountPerBody,impulse.y*cReactionJump*amountPerBody) , worldManifold.points[0] ); // TODO: get middle between 2 points
+                contacts[i]->comp->GetBody()->ApplyForce( -b2Vec2(impulse.x*cReactionJump*amountPerBody,impulse.y*cReactionJump*amountPerBody), *contacts[i]->point.To_b2Vec2() ); // TODO: get middle between 2 points
             }
             spaceKeyDownLastUpdate = true;
         }
@@ -348,11 +310,10 @@ void CompPlayerController::Update( const Event* /*gameUpdatedEvent*/ )
 		        
                 // Gegenimpuls auf Grundobjekt wirken lassen
                 float factor = 1.0f;
-                if ( pContactRight->other->GetMass() < smallMass )
-                    factor = pContactRight->other->GetMass()/smallMass;
-                b2WorldManifold worldManifold;
-                pContactRight->contact->GetWorldManifold( &worldManifold );
-                pContactRight->other->ApplyForce( -b2Vec2(force.x*cReactionWalk*factor,force.y*cReactionWalk*factor) , worldManifold.points[0] ); // TODO: get middle between 2 points
+                float mass = contacts[iContactRight]->comp->GetBody()->GetMass();
+                if ( mass < smallMass )
+                    factor = mass/smallMass;
+                contacts[iContactRight]->comp->GetBody()->ApplyForce( -b2Vec2(force.x*cReactionWalk*factor,force.y*cReactionWalk*factor), *contacts[iContactRight]->point.To_b2Vec2() ); // TODO: get middle between 2 points
             }
             hasMovedOnGround = true;
         }
@@ -373,13 +334,12 @@ void CompPlayerController::Update( const Event* /*gameUpdatedEvent*/ )
             if ( playerCompPhysics->GetBody()->GetLinearVelocity().x > -maxVelXWalk )
             {
                 playerCompPhysics->GetBody()->ApplyForce( b2Vec2(force.x,force.y) , playerCompPhysics->GetBody()->GetWorldCenter() );
-		        // Gegenimpuls auf Grundobjekt wirken lassen
+
                 float factor = 1.0f;
-                if ( pContactRight->other->GetMass() < smallMass )
-                    factor = pContactRight->other->GetMass()/smallMass;
-                b2WorldManifold worldManifold;
-                pContactLeft->contact->GetWorldManifold( &worldManifold );
-                pContactLeft->other->ApplyForce( -b2Vec2(force.x*cReactionWalk*factor,force.y*cReactionWalk*factor) , worldManifold.points[0] ); // TODO: get middle between 2 points
+                float mass = contacts[iContactLeft]->comp->GetBody()->GetMass();
+                if ( mass < smallMass )
+                    factor = mass/smallMass;
+                contacts[iContactLeft]->comp->GetBody()->ApplyForce( -b2Vec2(force.x*cReactionWalk*factor,force.y*cReactionWalk*factor), *contacts[iContactLeft]->point.To_b2Vec2() ); // TODO: get middle between 2 points
             }
             hasMovedOnGround = true;
         }

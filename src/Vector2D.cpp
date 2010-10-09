@@ -10,6 +10,7 @@
 
 #include "Vector2D.h"
 #include <Box2D/Box2D.h>
+#include <boost/make_shared.hpp>
 
 const float cPi = 3.141592653589793238462643383279502884f;
 
@@ -27,7 +28,7 @@ Vector2D::Vector2D ( const b2Vec2& v ) : x ( v.x ), y ( v.y ) {}
 
 boost::shared_ptr<b2Vec2> Vector2D::To_b2Vec2()
 {
-    return boost::shared_ptr<b2Vec2>(new b2Vec2(x,y));
+    return boost::shared_ptr<b2Vec2>(boost::make_shared<b2Vec2>(x,y));
 }
 
 // Macht den Vektor zu einem Einheitsvektor

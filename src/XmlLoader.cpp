@@ -34,6 +34,7 @@
 #include <sstream>
 #include <boost/scoped_ptr.hpp>
 #include <boost/bind.hpp>
+#include <boost/make_shared.hpp>
 
 #include "Font.h"
 #include "Texture.h"
@@ -41,6 +42,9 @@
 // Load Level from XML
 void XmlLoader::LoadXmlToWorld( const char* pFileName, GameWorld* pGameWorld, SubSystems* pSubSystems )
 {
+	using boost::shared_ptr;
+	using boost::make_shared;
+
     // OPEN XML
     gAaLog.Write ( "Loading XML file \"%s\"...\n", pFileName );
     gAaLog.IncreaseIndentationLevel();
@@ -69,7 +73,7 @@ void XmlLoader::LoadXmlToWorld( const char* pFileName, GameWorld* pGameWorld, Su
     for( ; entityElement; entityElement = entityElement->NextSiblingElement() )
     {
         const char* entityName = entityElement->Attribute("name");
-        boost::shared_ptr<Entity> pEntity( new Entity( entityName ) );
+        shared_ptr<Entity> pEntity( make_shared<Entity>( entityName ) );
         gAaLog.Write ( "Creating entity \"%s\"\n", entityName );
         gAaLog.IncreaseIndentationLevel();
 
@@ -154,7 +158,7 @@ void XmlLoader::LoadXmlToWorld( const char* pFileName, GameWorld* pGameWorld, Su
                 body_def->position.Set( posX, posY );
                 if (dynamic)
                     body_def->type = b2_dynamicBody;
-                boost::shared_ptr<CompPhysics> compPhysics( new CompPhysics( body_def/*, saveContacts*/ ) );
+                shared_ptr<CompPhysics> compPhysics( make_shared<CompPhysics>( body_def/*, saveContacts*/ ) );
                 compPhysics->SetLocalRotationPoint( rotationPoint );
                 compPhysics->SetLocalGravitationPoint( gravitationPoint );
 
@@ -231,7 +235,7 @@ void XmlLoader::LoadXmlToWorld( const char* pFileName, GameWorld* pGameWorld, Su
                         }
                     }
 
-                    boost::shared_ptr<b2FixtureDef> fixtureDef ( new b2FixtureDef );
+                    shared_ptr<b2FixtureDef> fixtureDef ( make_shared<b2FixtureDef>() );
                     {
                         TiXmlElement* physElement = shapeElement->FirstChildElement( "phys" );
                         if ( physElement )
@@ -269,7 +273,7 @@ void XmlLoader::LoadXmlToWorld( const char* pFileName, GameWorld* pGameWorld, Su
             }
             else if ( componentId == "CompPlayerController" )
             {
-                boost::shared_ptr<CompPlayerController> compPlayerController( new CompPlayerController( pSubSystems->input.get(), pGameWorld->GetItToVariable( "JetpackEnergy" ), boost::bind( &PhysicsSubSystem::Refilter, pSubSystems->physics.get(), _1 ) ) );
+                shared_ptr<CompPlayerController> compPlayerController( make_shared<CompPlayerController>( pSubSystems->input.get(), pGameWorld->GetItToVariable( "JetpackEnergy" ), boost::bind( &PhysicsSubSystem::Refilter, pSubSystems->physics.get(), _1 ) ) );
                 if ( componentName )
                     compPlayerController->SetName( componentName );
                 pEntity->SetComponent( compPlayerController );
@@ -282,7 +286,7 @@ void XmlLoader::LoadXmlToWorld( const char* pFileName, GameWorld* pGameWorld, Su
                 posElement->QueryFloatAttribute( "x", &x );
                 posElement->QueryFloatAttribute( "y", &y );
 
-                boost::shared_ptr<CompPosition> compPos( new CompPosition );
+                shared_ptr<CompPosition> compPos( make_shared<CompPosition>() );
                 compPos->Position()->x = x;
                 compPos->Position()->y = y;
                 if ( componentName )
@@ -311,7 +315,7 @@ void XmlLoader::LoadXmlToWorld( const char* pFileName, GameWorld* pGameWorld, Su
                 if ( startElement )
                     start = true;
 
-                boost::shared_ptr<CompVisualAnimation> compAnim( new CompVisualAnimation(pSubSystems->renderer->GetAnimationManager()->GetAnimInfo(animName) ) );
+                shared_ptr<CompVisualAnimation> compAnim( make_shared<CompVisualAnimation>(pSubSystems->renderer->GetAnimationManager()->GetAnimInfo(animName) ) );
                 compAnim->Center()->Set(centerX,centerY);
                 compAnim->SetDimensions( hw, hh );
                 if ( componentName )
@@ -325,7 +329,7 @@ void XmlLoader::LoadXmlToWorld( const char* pFileName, GameWorld* pGameWorld, Su
                 TiXmlElement* texElement = componentElement->FirstChildElement( "tex" );
                 const char* texName = texElement->Attribute("name");
 
-                boost::shared_ptr<CompVisualTexture> compPolyTex( new CompVisualTexture(texName) );
+                shared_ptr<CompVisualTexture> compPolyTex( make_shared<CompVisualTexture>(texName) );
                 if ( componentName )
                     compPolyTex->SetName( componentName );
                 pEntity->SetComponent( compPolyTex );
@@ -335,7 +339,7 @@ void XmlLoader::LoadXmlToWorld( const char* pFileName, GameWorld* pGameWorld, Su
                 TiXmlElement* msgElement = componentElement->FirstChildElement( "msg" );
                 const char* msg = msgElement->Attribute("text");
 
-                boost::shared_ptr<CompVisualMessage> compMsg( new CompVisualMessage(msg) );
+                shared_ptr<CompVisualMessage> compMsg( make_shared<CompVisualMessage>(msg) );
                 if ( componentName )
                     compMsg->SetName( componentName );
                 pEntity->SetComponent( compMsg );
@@ -350,7 +354,7 @@ void XmlLoader::LoadXmlToWorld( const char* pFileName, GameWorld* pGameWorld, Su
                 else
                     typeStr = tmpType;
 
-                boost::shared_ptr<CompGravField> compGrav( new CompGravField() );
+                shared_ptr<CompGravField> compGrav( make_shared<CompGravField>() );
 
 				if ( typeStr == "directional" )
 				{
@@ -380,14 +384,14 @@ void XmlLoader::LoadXmlToWorld( const char* pFileName, GameWorld* pGameWorld, Su
                 TiXmlElement* colElement = componentElement->FirstChildElement( "var" );
                 const char* varName = colElement->Attribute("name");
 
-                boost::shared_ptr<CompCollectable> compCollect( new CompCollectable( pGameWorld->GetItToVariable( varName ) ) );
+                shared_ptr<CompCollectable> compCollect( make_shared<CompCollectable>( pGameWorld->GetItToVariable( varName ) ) );
                 if ( componentName )
                     compCollect->SetName( componentName );
                 pEntity->SetComponent( compCollect );
             }*/
             else if ( componentId == "CompTrigger" )
             {
-                boost::shared_ptr<CompTrigger> compTrig ( new CompTrigger );
+                shared_ptr<CompTrigger> compTrig ( make_shared<CompTrigger>() );
 
                 TiXmlElement* condElement = componentElement->FirstChildElement( "Condition" );
                 for ( ; condElement ; condElement = condElement->NextSiblingElement( "Condition" ) )
@@ -434,7 +438,7 @@ void XmlLoader::LoadXmlToWorld( const char* pFileName, GameWorld* pGameWorld, Su
                             else
                                 gAaLog.Write ( "WARNING: No compare operation with name \"%s\" found!", strCompareType.c_str() ); 
                         }
-                        boost::shared_ptr<ConditionCompareVariable> pCompare ( new ConditionCompareVariable( pGameWorld->GetItToVariable(varName),compareType,numToCompare) );
+                        shared_ptr<ConditionCompareVariable> pCompare ( make_shared<ConditionCompareVariable>( pGameWorld->GetItToVariable(varName),compareType,numToCompare) );
                         compTrig->AddCondition( pCompare );
                     }
                     else if ( condId == "EntityTouchedThis" )
@@ -449,7 +453,7 @@ void XmlLoader::LoadXmlToWorld( const char* pFileName, GameWorld* pGameWorld, Su
                             else
                                 continue;
                         }
-                        boost::shared_ptr<ConditionEntityTouchedThis> pTouched ( new ConditionEntityTouchedThis(entityName) );
+                        shared_ptr<ConditionEntityTouchedThis> pTouched ( make_shared<ConditionEntityTouchedThis>(entityName) );
                         compTrig->AddCondition( pTouched );
                     }
                     else
@@ -471,7 +475,7 @@ void XmlLoader::LoadXmlToWorld( const char* pFileName, GameWorld* pGameWorld, Su
                         TiXmlElement* paramsElement = effectElement->FirstChildElement( "params" );
                         const char* entity = paramsElement->Attribute( "entity" );
 
-                        boost::shared_ptr<EffectKillEntity> pDestroy ( new EffectKillEntity( entity, pGameWorld ) );
+                        shared_ptr<EffectKillEntity> pDestroy ( make_shared<EffectKillEntity>( entity, pGameWorld ) );
                         compTrig->AddEffect( pDestroy );
                     }
                     else if ( effctId == "DispMessage" )
@@ -480,7 +484,7 @@ void XmlLoader::LoadXmlToWorld( const char* pFileName, GameWorld* pGameWorld, Su
                         const char* msg = paramsElement->Attribute( "msg" );
                         int time = 3000;
                         paramsElement->QueryIntAttribute( "timems", &time );
-                        boost::shared_ptr<EffectDispMessage> pMsg ( new EffectDispMessage( msg, time, pGameWorld ) );
+                        shared_ptr<EffectDispMessage> pMsg ( make_shared<EffectDispMessage>( msg, time, pGameWorld ) );
                         compTrig->AddEffect( pMsg );
                     }
                     else if ( effctId == "EndLevel" )
@@ -489,14 +493,14 @@ void XmlLoader::LoadXmlToWorld( const char* pFileName, GameWorld* pGameWorld, Su
                         const char* msg = paramsElement->Attribute( "msg" );
                         int win = 0;
                         paramsElement->QueryIntAttribute( "win", &win );
-                        boost::shared_ptr<EffectEndLevel> pEndGame ( new EffectEndLevel( msg, win==1 ) );
+                        shared_ptr<EffectEndLevel> pEndGame ( make_shared<EffectEndLevel>( msg, win==1 ) );
                         compTrig->AddEffect( pEndGame );
                     }
                     /*else if ( effctId == "LoseLevel" )
                     {
                         TiXmlElement* paramsElement = effectElement->FirstChildElement( "params" );
                         const char* msg = paramsElement->Attribute( "msg" );
-                        boost::shared_ptr<EffectLoseLevel> pEndGame ( new EffectLoseLevel( msg ) );
+                        shared_ptr<EffectLoseLevel> pEndGame ( make_shared<EffectLoseLevel>( msg ) );
                         compTrig->AddEffect( pEndGame );
                     }*/
                     else if ( effctId == "ChangeVariable" )
@@ -530,7 +534,7 @@ void XmlLoader::LoadXmlToWorld( const char* pFileName, GameWorld* pGameWorld, Su
                             else
                                 gAaLog.Write ( "WARNING: No change operation with name \"%s\" found!", strChangeType.c_str() ); 
                         }
-                        boost::shared_ptr<EffectChangeVariable> pChange ( new EffectChangeVariable( pGameWorld->GetItToVariable(varName),changeType,num) );
+                        shared_ptr<EffectChangeVariable> pChange ( make_shared<EffectChangeVariable>( pGameWorld->GetItToVariable(varName),changeType,num) );
                         compTrig->AddEffect( pChange );
                     }
                     else
