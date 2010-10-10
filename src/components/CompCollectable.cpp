@@ -14,7 +14,7 @@
 #include "../Entity.h"
 
 // eindeutige ID
-CompIdType CompCollectable::m_componentId = "CompCollectable";
+const CompIdType CompCollectable::m_componentId = "CompCollectable";
 
 // Konstruktor
 CompCollectable::CompCollectable( std::map<const std::string, int>::iterator itCollectableVariable )

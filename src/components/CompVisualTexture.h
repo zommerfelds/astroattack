@@ -34,7 +34,7 @@ public:
     // Aktive Textur
     TextureIdType GetTexture() const { return m_textureId; }
 private:
-	static CompIdType m_componentId;
+	static const CompIdType m_componentId;
     TextureIdType m_textureId;
 };
 //--------------------------------------------//

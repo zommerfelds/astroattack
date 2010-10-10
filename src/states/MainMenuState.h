@@ -49,7 +49,7 @@ public:
 	void Update();      // Spiel aktualisieren
 	void Draw( float accumulator ); // Spiel zeichnen
 private:
-    static StateIdType stateId;
+    static const StateIdType stateId;
 
     // --- Callbacks für GUI ---
     void CallbackButPlay();
@@ -66,8 +66,12 @@ private:
     void CallbackButDiscardConfig();
 
     // Bannerinformationen
-    float m_titleVertexCoord[8];
-    float m_intensityTitle;
+    float m_titleVertexOffsetXTarget[4];
+    float m_titleVertexOffsetYTarget[4];
+    float m_titleVertexOffsetXDir[4];
+    float m_titleVertexOffsetYDir[4];
+    float m_titleVertexCoordOffset[8];
+    float m_titleIntensityAngle;
 
     SubMenu m_subMenu;
 

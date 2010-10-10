@@ -11,7 +11,7 @@
 #include "CompVisualTexture.h"
 
 // eindeutige ID
-CompIdType CompVisualTexture::m_componentId = "CompVisualTexture";
+const CompIdType CompVisualTexture::m_componentId = "CompVisualTexture";
 
 CompVisualTexture::CompVisualTexture( TextureIdType texId ): m_textureId(texId)
 {

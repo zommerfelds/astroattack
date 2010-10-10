@@ -44,7 +44,7 @@ std::string levelName = "";
 // Alle Entities in der Welt werden in dieser Datei aufgelistet
 const char* cWordLogFileName = "world.txt";
 
-StateIdType PlayingState::stateId = "PlayingState";
+const StateIdType PlayingState::stateId = "PlayingState";
 
 PlayingState::PlayingState( SubSystems* pSubSystems, std::string levelFileName )
 : GameState( pSubSystems ),
@@ -137,13 +137,7 @@ void PlayingState::Update()      // Spiel aktualisieren
         m_alphaOverlay += 0.10f;
     }
 
-    //temp test this!
-    //static int a = 0;
-    //if (a == 0)
     GetSubSystems()->physics->Update();                       // Physik aktualisieren
-    //a++;
-    //if (a > 3)
-    //    a = 0;
     GetSubSystems()->eventManager->InvokeEvent( Event(GameUpdate,NULL) );
 
     if ( m_curentDeleteSet == 1 )

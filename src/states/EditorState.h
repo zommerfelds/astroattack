@@ -41,7 +41,7 @@ public:
 	void Update();                  // Spiel aktualisieren
 	void Draw( float accumulator ); // Spiel zeichnen
 private:
-    static StateIdType stateId;
+    static const StateIdType stateId;
 
     boost::scoped_ptr<GameWorld> m_pGameWorld;          // Spielwelt
     boost::scoped_ptr<GameCamera> m_pGameCamera;        // Kamera
@@ -52,6 +52,12 @@ private:
     unsigned int m_currentTextureNum;
     bool m_helpTextOn;
 
+    bool m_mouseButDownOld;
+    bool m_cancelVertexKeyDownOld;
+    bool m_createEntityKeyDownOld;
+    bool m_nextTextureKeyDownOld;
+    bool m_prevTextureKeyDownOld;
+    bool m_helpKeyDownOld;
 };
 //--------------------------------------------//
 //--------- Ende EditorState Klasse ----------//

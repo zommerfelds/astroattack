@@ -51,6 +51,7 @@ private:
     Mix_Music* m_currentPlayingMusic;
     bool m_deletePlayingMusicAtEnd;
 
+    // does this really has to be static?
     static void MusicFinishedCallback();
     static SoundSubSystem* soundSystemToNotifyMusicFinished;
     void MusicFinished();

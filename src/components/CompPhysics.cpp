@@ -17,7 +17,7 @@
 const unsigned int cUpdatesTillGravFieldChangeIsPossible = 10;
 
 // eindeutige ID
-CompIdType CompPhysics::m_componentId = "CompPhysics";
+const CompIdType CompPhysics::m_componentId = "CompPhysics";
 
 // Konstruktor
 CompPhysics::CompPhysics( b2BodyDef* pBodyDef ) : m_body ( NULL ),

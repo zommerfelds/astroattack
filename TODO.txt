@@ -9,7 +9,6 @@ TODO:
 - Replace if (var==NULL) by assert(var!=NULL) (really?)
 - Test OpenGL error checking (glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR) did not generate error)
 - Bug in Logger: Loading Texture "(null)"... Done!
-- Remove static local variables
 - Make data creation Wiki/howto. Tools: OptiPNG
 - Time Accumulator besser anwenden
 - Clean up TODO (high/low priority)
@@ -39,6 +38,7 @@ TODO:
 - Port to CMake
 
 DONE:
+- Changed static local variables to member variables
 - Use make_shared
 - Simplify playerCompPhysics->GetBody()->GetContactList() (in CompPlayerController.cpp)
 - Parameters: -- instead of -

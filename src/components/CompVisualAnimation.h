@@ -64,7 +64,7 @@ private:
     // Animation Aktualisieren
     void Update( const Event* inputUpdatedEvent );
 
-	static CompIdType m_componentId;
+	static const CompIdType m_componentId;
     RegisterObj m_registerObj;
 
     // für Anzeige

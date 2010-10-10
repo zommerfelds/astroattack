@@ -10,6 +10,6 @@
 
 #include "CompVisual.h"
 
-CompIdType CompVisual::m_familyID = "CompVisual";
+const CompIdType CompVisual::m_familyID = "CompVisual";
 
 // Astro Attack - Christian Zommerfelds - 2008

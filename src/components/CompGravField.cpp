@@ -17,7 +17,7 @@
 //#include "../main.h"
 
 // eindeutige ID
-CompIdType CompGravField::m_componentId = "CompGravField";
+const CompIdType CompGravField::m_componentId = "CompGravField";
 
 // Konstruktor
 CompGravField::CompGravField() : m_gravType ( Directional ), m_pGravitationDir ( new Vector2D ),

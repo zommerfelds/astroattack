@@ -17,7 +17,7 @@
 #include <boost/make_shared.hpp>
 
 // eindeutige ID
-StateIdType GameOverState::stateId = "GameOverState";
+const StateIdType GameOverState::stateId = "GameOverState";
 
 GameOverState::GameOverState( SubSystems* pSubSystems, std::string stringToShow )
 : GameState( pSubSystems ),

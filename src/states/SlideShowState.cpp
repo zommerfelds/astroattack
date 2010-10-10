@@ -26,7 +26,7 @@
 #include <SDL/SDL_opengl.h> // OpenlGL via SDL inkludieren
 
 // eindeutige ID
-StateIdType SlideShowState::stateId = "SlideShowState";
+const StateIdType SlideShowState::stateId = "SlideShowState";
 
 // Konstruktor
 // slideXmlFile ist der Name der Bildshow-Datei
@@ -38,17 +38,20 @@ SlideShowState::SlideShowState( SubSystems* pSubSystems, std::string slideXmlFil
   m_fadeOut ( false ),
   m_imageCornerOffsetMasterX ( 0.0f ),
   m_imageCornerOffsetMasterY ( 0.0f ),
-  m_dispCharCount ( 0 )
+  m_dispCharCount ( 0 ),
+  m_textUpdateCounter ( 0 ),
+  m_nextKeyDownOld ( false ),
+  m_backKeyDownOld ( false )
 {
-    m_imageCornerOffsetX[0] = 0.0f;
-    m_imageCornerOffsetX[1] = 0.0f;
-    m_imageCornerOffsetX[2] = 0.0f;
-    m_imageCornerOffsetX[3] = 0.0f;
-
-    m_imageCornerOffsetY[0] = 0.0f;
-    m_imageCornerOffsetY[1] = 0.0f;
-    m_imageCornerOffsetY[2] = 0.0f;
-    m_imageCornerOffsetY[3] = 0.0f;
+    for (int i=0; i<4; i++)
+    {
+        m_imageCornerOffsetX[i] = 0.0f;
+        m_imageCornerOffsetY[i] = 0.0f;
+        m_imageCornerOffsetXTarget[i] = 0.0f;
+        m_imageCornerOffsetYTarget[i] = 0.0f;
+        m_imageCornerOffsetXDir[i] = 0.0f;
+        m_imageCornerOffsetYDir[i] = 0.0f;
+    }
 }
 
 SlideShowState::~SlideShowState()
@@ -115,56 +118,53 @@ void SlideShowState::Resume()      // State wiederaufnehmen
 #define OVERLAY_STEP 0.03f
 void SlideShowState::Update()      // Spiel aktualisieren
 {
-    static unsigned int update_counter = 0;
-    ++update_counter;
-    if( update_counter > 1 )
+    ++m_textUpdateCounter;
+    if( m_textUpdateCounter > 1 )
     {
         if ( m_slideShow.slides[m_currentSlide].text.size() > m_dispCharCount )
         {
             GetSubSystems()->sound->PlaySound( "write" );
             ++m_dispCharCount;
         }
-        update_counter = 0;
+        m_textUpdateCounter = 0;
     }
 
-    static bool pressedNext = false;
     if ( GetSubSystems()->input->KeyState( SlideShowNext ) )
     {
-        if ( pressedNext == false && m_overlayAlpha == 0.0f )
+        if ( m_nextKeyDownOld == false && m_overlayAlpha == 0.0f )
         {
             GetSubSystems()->sound->PlaySound( "sound" );
             m_fadeOut = true;
             m_overlayAlpha = OVERLAY_STEP;
-            pressedNext = true;
+            m_nextKeyDownOld = true;
             m_goBack = false;
             //if ( m_currentSlide == 4 )
             //    GetSubSystems()->sound->StopMusic( 700 );
             return;
         }
-        pressedNext = true;
+        m_nextKeyDownOld = true;
     }
     else
     {
-        pressedNext = false;
+        m_nextKeyDownOld = false;
     }
 
-    static bool pressedBack = false;
     if ( GetSubSystems()->input->KeyState( SlideShowBack ) )
     {
-        if ( pressedBack == false && m_overlayAlpha == 0.0f && m_currentSlide != 0 )
+        if ( m_backKeyDownOld == false && m_overlayAlpha == 0.0f && m_currentSlide != 0 )
         {
             GetSubSystems()->sound->PlaySound( "sound" );
             m_fadeOut = true;
             m_overlayAlpha = OVERLAY_STEP;
-            pressedBack = true;
+            m_backKeyDownOld = true;
             m_goBack = true;
             return;
         }
-        pressedBack = true;
+        m_backKeyDownOld = true;
     }
     else
     {
-        pressedBack = false;
+        m_backKeyDownOld = false;
     }
 
     if ( GetSubSystems()->input->KeyState( SlideShowSkip ) )
@@ -223,33 +223,29 @@ void SlideShowState::Update()      // Spiel aktualisieren
     const float maxOffset = 0.05f;
     const int cSteps = 180;
     //const float randMaxOffset = 0.005f;
-    static float imageCornerOffsetXTarget[4] = {0.0f};
-    static float imageCornerOffsetYTarget[4] = {0.0f};
-    static float imageCornerOffsetXDir[4] = {0.0f};
-    static float imageCornerOffsetYDir[4] = {0.0f};
     const float epsilon = 0.001f;
 
     // Randomize
     for ( int i = 0; i < 4; ++i )
     {
-        if ( (m_imageCornerOffsetX[i] > imageCornerOffsetXTarget[i] - epsilon && m_imageCornerOffsetX[i] < imageCornerOffsetXTarget[i] + epsilon) &&
-             (m_imageCornerOffsetY[i] > imageCornerOffsetYTarget[i] - epsilon && m_imageCornerOffsetY[i] < imageCornerOffsetYTarget[i] + epsilon) )
+        if ( (m_imageCornerOffsetX[i] > m_imageCornerOffsetXTarget[i] - epsilon && m_imageCornerOffsetX[i] < m_imageCornerOffsetXTarget[i] + epsilon) &&
+             (m_imageCornerOffsetY[i] > m_imageCornerOffsetYTarget[i] - epsilon && m_imageCornerOffsetY[i] < m_imageCornerOffsetYTarget[i] + epsilon) )
         {
             float randomX = rand()%(int)(2*maxOffset*10000.0f)/10000.0f - maxOffset;
             float randomY = rand()%(int)(2*maxOffset*10000.0f)/10000.0f - maxOffset;
-            imageCornerOffsetXTarget[i] = randomX;
-            imageCornerOffsetYTarget[i] = randomY;
-            imageCornerOffsetXDir[i] = (imageCornerOffsetXTarget[i] - m_imageCornerOffsetX[i])/cSteps;
-            imageCornerOffsetYDir[i] = (imageCornerOffsetYTarget[i] - m_imageCornerOffsetY[i])/cSteps;
+            m_imageCornerOffsetXTarget[i] = randomX;
+            m_imageCornerOffsetYTarget[i] = randomY;
+            m_imageCornerOffsetXDir[i] = (m_imageCornerOffsetXTarget[i] - m_imageCornerOffsetX[i])/cSteps;
+            m_imageCornerOffsetYDir[i] = (m_imageCornerOffsetYTarget[i] - m_imageCornerOffsetY[i])/cSteps;
         }
 
-        m_imageCornerOffsetX[i] += imageCornerOffsetXDir[i];
+        m_imageCornerOffsetX[i] += m_imageCornerOffsetXDir[i];
         if ( m_imageCornerOffsetX[i] > maxOffset )
             m_imageCornerOffsetX[i] = maxOffset;
         else if ( m_imageCornerOffsetX[i] < -maxOffset )
             m_imageCornerOffsetX[i] = -maxOffset;
 
-        m_imageCornerOffsetY[i] += imageCornerOffsetYDir[i];
+        m_imageCornerOffsetY[i] += m_imageCornerOffsetYDir[i];
         if ( m_imageCornerOffsetY[i] > maxOffset )
             m_imageCornerOffsetY[i] = maxOffset;
         else if ( m_imageCornerOffsetY[i] < -maxOffset )

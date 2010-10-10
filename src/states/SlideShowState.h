@@ -53,7 +53,7 @@ public:
 	void Update();      // Spiel aktualisieren
 	void Draw( float accumulator );        // Spiel zeichnen
 private:
-    static StateIdType stateId;
+    static const StateIdType stateId;
 
     // Slideshow Informationen
     std::string m_slideXmlFile;
@@ -69,6 +69,16 @@ private:
     float m_imageCornerOffsetMasterY;
 
     unsigned int m_dispCharCount; // Anzahl zu zeichnende Buchstaben vom Text, das momentan angezeigt wird
+
+    unsigned int m_textUpdateCounter;
+    bool m_nextKeyDownOld;
+    bool m_backKeyDownOld;
+
+    float m_imageCornerOffsetXTarget[4];
+    float m_imageCornerOffsetYTarget[4];
+    float m_imageCornerOffsetXDir[4];
+    float m_imageCornerOffsetYDir[4];
+
 };
 //--------------------------------------------//
 //------- Ende SlideShowState Klasse ---------//

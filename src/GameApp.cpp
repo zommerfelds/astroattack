@@ -39,7 +39,9 @@ Configuration gAaConfig; // Spieleinstellungen.
 // Konstruktor
 GameApp::GameApp() : m_isInit ( false ),
         m_pSubSystems ( new SubSystems ),
-        m_quit ( false )
+        m_quit ( false ),
+        m_fpsMeasureStart ( SDL_GetTicks() ),
+        m_framesCounter ( 0 )
 {
     m_registerObj.RegisterListener( QuitGame, boost::bind( &GameApp::Quit, this, _1 ) );
 }
@@ -76,7 +78,7 @@ GameApp::~GameApp()
 // Alle Objekte von GameApp initialisieren
 void GameApp::Init( int argc, char* args[] )
 {
-    gAaLog.Write ( "* Started initialization *\n\n" );  // In Log-Datei schreiben
+    gAaLog.Write ( "* m_fpsMeasureStarted initialization *\n\n" );  // In Log-Datei schreiben
     gAaLog.IncreaseIndentationLevel();                  // Text ab jetzt einrücken
 
     // Einstellung lesen
@@ -122,7 +124,7 @@ void GameApp::Init( int argc, char* args[] )
 // Alles deinitialisieren
 void GameApp::DeInit()
 {
-    gAaLog.Write ( "* Started deinitialization *\n\n" );      // In Log-Datei schreiben
+    gAaLog.Write ( "* m_fpsMeasureStarted deinitialization *\n\n" );      // In Log-Datei schreiben
     gAaLog.IncreaseIndentationLevel();
 
     gAaLog.Write ( "Deleting SubSystems..." );
@@ -143,7 +145,7 @@ void GameApp::DeInit()
     m_isInit = false;
 }
 
-// Nach der Initialisation Spiel starten (d.h. Hauptschleife starten)
+// Nach der Initialisation Spiel m_fpsMeasureStarten (d.h. Hauptschleife m_fpsMeasureStarten)
 void GameApp::Run()
 {
     if ( m_isInit == false )
@@ -159,7 +161,7 @@ void GameApp::Run()
 // Hauptschleife des Spieles
 void GameApp::MainLoop()
 {
-    gAaLog.Write ( "Main loop started\n" );
+    gAaLog.Write ( "Main loop m_fpsMeasureStarted\n" );
 
     // Variablen um Zeit zu messen
     Uint32 current_time_msecs = 0;              // momentane Zeit
@@ -177,7 +179,7 @@ void GameApp::MainLoop()
 
     ////////////////////////////////////////////////////////
     //                                                    //
-    //            START DER HAUPTSCHLEIFE                 //
+    //            m_fpsMeasureStart DER HAUPTSCHLEIFE                 //
     //                                                    //
     ////////////////////////////////////////////////////////
 
@@ -282,17 +284,15 @@ void GameApp::HandleSdlQuitEvents( SDL_Event& rSdlEvent, bool& rQuit )
 // Einmal pro frame aufrufen
 void GameApp::CalcFPS( Uint32 curTime )
 {
-    static Uint32 start = SDL_GetTicks();
-    static Uint32 total_frames = 0;
-    if ( (signed)start < (signed)curTime - 1000 )
+    if ( (signed)m_fpsMeasureStart + 1000 < (signed)curTime )
     {
-        // total_frames ist jetzt die Anzahl Frames in dieser Sekunde, also die FPS
+        // m_framesCounter ist jetzt die Anzahl Frames in dieser Sekunde, also die FPS
 
-        gAaLog.Write ( "FPS: %i\n", total_frames );
-        total_frames = 0;
-        start = SDL_GetTicks();
+        gAaLog.Write ( "FPS: %i\n", m_framesCounter );
+        m_framesCounter = 0;
+        m_fpsMeasureStart = SDL_GetTicks();
     }
-    ++total_frames;
+    ++m_framesCounter;
 }
 
 // Programmargumente verarbeiten

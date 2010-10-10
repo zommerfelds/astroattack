@@ -30,7 +30,7 @@ public:
     const CompIdType& ComponentId() const { return m_componentId; }
 
 private:
-	static CompIdType m_componentId;
+	static const CompIdType m_componentId;
 
 public:
     // =========== Zugriff ==========

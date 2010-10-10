@@ -22,7 +22,7 @@
 class Logger
 {
 public:
-    Logger( const char *pFileName ) : m_isOpen ( false ), m_indentationLevel ( 0 ) { OpenFile( pFileName ); } // Konstruktor mit Parameter
+    Logger( const char *pFileName ); // Konstruktor mit Parameter
     ~Logger();
     bool OpenFile( const char *pFileName ); // Neue Datei öffnen
 	void CloseFile(); // Datei schliessen
@@ -36,13 +36,16 @@ public:
     void WriteInfoStart();  // Gibt einige Informationen in der Logdatei aus -> Titel und Startzeit (für den Anfang des Dokumentes)
     void WriteInfoEnd();    // Gibt einige Informationen in der Logdatei aus -> Endzeit (für den Schluss des Dokumentes)
 private:
-    Logger() : m_isOpen ( false ), m_indentationLevel ( 0 ) {} // Default Konstruktor ist privat, weil man das andere Konstruktor
+    Logger() {} // Default Konstruktor ist privat, weil man das andere Konstruktor
                                                            // verwenden muss: Logger( const char *pFileName )
                                                            // So wird versichert, dass schon an Anfang eine Datei offen ist.
     std::ofstream m_LogStreamOut;
     char m_buf[LOG_BUF_SIZE];
     bool m_isOpen;
     unsigned int m_indentationLevel;
+
+    bool m_lastCharWasNewline;
+
 };
 
 #endif

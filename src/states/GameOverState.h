@@ -35,7 +35,7 @@ public:
 	void Update();      // Spiel aktualisieren
 	void Draw( float accumulator );        // Spiel zeichnen
 private:
-    static StateIdType stateId;
+    static const StateIdType stateId;
 
     std::string m_stringToShow;
 };

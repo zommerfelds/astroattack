@@ -22,15 +22,23 @@
 #include <Box2D/Box2D.h>
 
 // eindeutige ID
-CompIdType CompPlayerController::m_componentId = "CompPlayerController";
+const CompIdType CompPlayerController::m_componentId = "CompPlayerController";
+
+// Constants
+const int cMaxRecharge = 15;                    // wie wie muss der Spieler warten bis der Racketenrucksack startet?
 
 // Konstruktor der Komponente
 CompPlayerController::CompPlayerController( const InputSubSystem* pInputSubSystem, std::map<const std::string, int>::iterator itJetPackVar, boost::function1<void,b2Shape*> refiltelFunc ) :
          m_pInputSubSystem ( pInputSubSystem ),
-         m_currentFrictionIsLow( false ),
+         m_currentFrictionIsLow ( false ),
          m_registerObj (),
          m_itJetPackVar ( itJetPackVar ),
-         m_refilterFunc ( refiltelFunc )
+         m_refilterFunc ( refiltelFunc ),
+         m_spaceKeyDownLastUpdate ( false ),
+         m_playerCouldWalkLastUpdate ( false ),
+         m_rechargeTime ( cMaxRecharge ),
+         m_bodyAngleAbs ( cPi*0.5f ),
+         m_walkingTime ( 0 )
 {
     // Update-Methode registrieren, damit sie in jede Aktualisierung (GameUpdate) aufgerufen wird:
     m_registerObj.RegisterListener( GameUpdate, boost::bind( &CompPlayerController::Update, this, _1 ) );
@@ -50,10 +58,7 @@ void CompPlayerController::Update( const Event* /*gameUpdatedEvent*/ )
     if ( playerCompPhysics == NULL )
         return; // keine Physikkomponente, also abbrechen
 
-    // TODO: important: change every static variable to member variable
-
 	// Jump
-    static bool spaceKeyDownLastUpdate = false;     // ob die Leerschlagtaste letztes Frame gerade gedrückt wurde
     bool hasMovedOnGround = false;                  // ob der Spieler sich am Boden bewegt hat
     bool canWalkR = false;                          // ob der Spieler nach rechts Laufen kann (am Boden?, Steiligkeit)
     bool canWalkL = false;                          // ob der Spieler nach links Laufen kann (am Boden?, Steiligkeit)
@@ -62,17 +67,12 @@ void CompPlayerController::Update( const Event* /*gameUpdatedEvent*/ )
     bool usedJetpack = false;                       // ob der Spieler den Jetpack brauchen will
     //bool air = false;                             // ob der Spieler sich in der Luft befindet (Sprung/Fliegen)
     bool jumped = false;
-    static bool couldWalk = false;                  // ob der Spieler in der letzte überprüfung laufen konnte
-    const int cMaxRecharge = 15;                    // wie wie muss der Spieler warten bis der Racketenrucksack startet?
-    static int recharged = cMaxRecharge;            // wie lange hat der Spieler schon den Racketenrucksack aufgeladen?
     bool wantToMoveSidewards = false;               // ob der Spieler sich seitwärts bewegen will
-    static bool oldWantToMoveSidewards = false;     // ob der Spieler sich seitwärts bewegen wollte
     bool isPushing = false;                         // ob der Spieler einen Gegenstand stösst
 
     bool isIncreasingAngle = false;                 // ob die Spielerfigur sich neigt (zum fliegen)
     bool directionClw = false;                      // in welche Richtung neigt sich die Figur (true wenn Uhrzeigersinn)
 
-    static float bodyAngleAbs = cPi*0.5f;            // Neigungswinkel Absolut (0:Kopf nach links,cPi/2:Kopf nach oben,-cPi/2:Kopf nach unten)
     const float maxAngleRel = 0.25f;                 // maximaler Neigungswinkel +/- (Relativ zu upVector)
     const float incStep = 0.05f;                     // Winkelschritt pro Aktualisierung beim Vergrössern
     const float decStep = 0.02f;                     // Winkelschritt pro Aktualisierung beim Verkleinern
@@ -209,7 +209,7 @@ void CompPlayerController::Update( const Event* /*gameUpdatedEvent*/ )
     if ( m_pInputSubSystem->KeyState ( Jump ) )
     {
         // Taste muss erst gerade gedrück werden und nicht schon gedrück sein (und Spielerfigur muss ein Block berühren)
-        if ( !spaceKeyDownLastUpdate && isTouchingSth )
+        if ( !m_spaceKeyDownLastUpdate && isTouchingSth )
         {
             jumped = true;
             b2Vec2 impulse( 0.0f, 0.0f ); // Impuls
@@ -227,7 +227,7 @@ void CompPlayerController::Update( const Event* /*gameUpdatedEvent*/ )
                 vel = upVector * (vel*upVector);
                 playerCompPhysics->GetBody()->SetLinearVelocity( *vel.To_b2Vec2() );
 
-                //bodyAngleAbs = maxAngleRel;
+                //m_bodyAngleAbs = maxAngleRel;
             }
             else if ( m_pInputSubSystem->KeyState ( Left ) && minAngleL > cPi*2 - cJumpAngle*2 ) // Von Wand links abstossen
             {
@@ -237,7 +237,7 @@ void CompPlayerController::Update( const Event* /*gameUpdatedEvent*/ )
                 vel = upVector * (vel*upVector);
                 playerCompPhysics->GetBody()->SetLinearVelocity( *vel.To_b2Vec2() );
 
-                //bodyAngleAbs = -maxAngleRel;
+                //m_bodyAngleAbs = -maxAngleRel;
             }
             
             // Impuls auf Spielerfigur wirken lassen
@@ -250,11 +250,11 @@ void CompPlayerController::Update( const Event* /*gameUpdatedEvent*/ )
                 // Gegenimpuls auf Grundobjekt wirken lassen
                 contacts[i]->comp->GetBody()->ApplyForce( -b2Vec2(impulse.x*cReactionJump*amountPerBody,impulse.y*cReactionJump*amountPerBody), *contacts[i]->point.To_b2Vec2() ); // TODO: get middle between 2 points
             }
-            spaceKeyDownLastUpdate = true;
+            m_spaceKeyDownLastUpdate = true;
         }
     }
     else
-        spaceKeyDownLastUpdate = false; // Leertaste wird nicht mehr gedrückt
+        m_spaceKeyDownLastUpdate = false; // Leertaste wird nicht mehr gedrückt
 
     // Kräfte (Betrag)
     const float jetpack_force_magnitude = 3000.0f;
@@ -265,7 +265,7 @@ void CompPlayerController::Update( const Event* /*gameUpdatedEvent*/ )
                                           // und desto langsamer abhänge hinunterlaufen
 
 	// Jetpack nach oben
-    if ( m_pInputSubSystem->KeyState ( Up ) && m_itJetPackVar->second > 0 && (recharged==cMaxRecharge || !isTouchingSth ) )
+    if ( m_pInputSubSystem->KeyState ( Up ) && m_itJetPackVar->second > 0 && (m_rechargeTime==cMaxRecharge || !isTouchingSth ) )
     {
         const float maxVelYJetpack = 12.0f;
         jumped = true;
@@ -274,7 +274,7 @@ void CompPlayerController::Update( const Event* /*gameUpdatedEvent*/ )
         if (m_itJetPackVar->second < 0)
         {
             m_itJetPackVar->second = 0;
-            recharged = 0;
+            m_rechargeTime = 0;
         }
         if ( playerCompPhysics->GetBody()->GetLinearVelocity().y < maxVelYJetpack )
 		{
@@ -344,9 +344,9 @@ void CompPlayerController::Update( const Event* /*gameUpdatedEvent*/ )
             hasMovedOnGround = true;
         }
 
-        ++recharged;
-        if ( recharged > cMaxRecharge )
-            recharged = cMaxRecharge;
+        ++m_rechargeTime;
+        if ( m_rechargeTime > cMaxRecharge )
+            m_rechargeTime = cMaxRecharge;
 
         if ( !usedJetpack )
             m_itJetPackVar->second += 13;
@@ -389,7 +389,7 @@ void CompPlayerController::Update( const Event* /*gameUpdatedEvent*/ )
         }
     }
 
-	float diffAngle = bodyAngleAbs - upAngleAbs;
+	float diffAngle = m_bodyAngleAbs - upAngleAbs;
 	if ( diffAngle<-cPi )
 		diffAngle+=2*cPi;
 	else if ( diffAngle>cPi )
@@ -397,22 +397,22 @@ void CompPlayerController::Update( const Event* /*gameUpdatedEvent*/ )
 
 	bool decrease = true;
     //#if 0
-    if ( isIncreasingAngle && !couldWalk && (fabs(diffAngle)<maxAngleRel) )
+    if ( isIncreasingAngle && !m_playerCouldWalkLastUpdate && (fabs(diffAngle)<maxAngleRel) )
     {
 		decrease = false;
         if ( directionClw )
 		{
 			if ( maxAngleRel-fabs(diffAngle) < incStep )
-				bodyAngleAbs = upAngleAbs - maxAngleRel;
+				m_bodyAngleAbs = upAngleAbs - maxAngleRel;
 			else
-				bodyAngleAbs -= incStep;
+				m_bodyAngleAbs -= incStep;
 		}
         else
 		{
 			if ( maxAngleRel-fabs(diffAngle) < incStep )
-				bodyAngleAbs = upAngleAbs + maxAngleRel;
+				m_bodyAngleAbs = upAngleAbs + maxAngleRel;
 			else
-				bodyAngleAbs += incStep;
+				m_bodyAngleAbs += incStep;
 		}
     }
     //#endif
@@ -431,60 +431,30 @@ void CompPlayerController::Update( const Event* /*gameUpdatedEvent*/ )
 
 			if ( returnClw )
 			{
-				bodyAngleAbs -= decStep*bonusFactor;
+				m_bodyAngleAbs -= decStep*bonusFactor;
 				if ( fabs(diffAngle) < decStep*bonusFactor ) {
-					bodyAngleAbs = upAngleAbs;
+					m_bodyAngleAbs = upAngleAbs;
                     //std::cout << "inside!   fabs(diffAngle) = " << fabs(diffAngle) << "; decStep*bonusFactor = " << decStep*bonusFactor << std::endl;
                 }
 			}
 			else
 			{
-				bodyAngleAbs += decStep*bonusFactor;
+				m_bodyAngleAbs += decStep*bonusFactor;
                 if ( fabs(diffAngle) < decStep*bonusFactor ) {
-					bodyAngleAbs = upAngleAbs;
+					m_bodyAngleAbs = upAngleAbs;
                     //std::cout << "inside!   fabs(diffAngle) = " << fabs(diffAngle) << "; decStep*bonusFactor = " << decStep*bonusFactor << std::endl;
                 }
 			}
 		}
     }
 
-	if (bodyAngleAbs>cPi)
-		bodyAngleAbs-=2*cPi;
-	else if (bodyAngleAbs<-cPi)
-		bodyAngleAbs+=2*cPi;
-
-    /*static float tmpAngle = bodyAngleAbs-cPi*0.5f;
-    static float tmpOldAngle = tmpAngle;
-    tmpOldAngle = tmpAngle;
-    tmpAngle = bodyAngleAbs-cPi*0.5f;
-    float tmpCorrectionAngle = tmpAngle-tmpOldAngle;
-
-    Vector2D tmpCorrection2 ( 0.0f, 0.75f );
-    tmpCorrection2.Rotate(-tmpAngle);
-    Vector2D tmpCorrection3 ( 0.0f, 0.75f );
-    tmpCorrection3.Rotate(-tmpAngle-tmpCorrectionAngle);
-    //Vector2D tmpCorrection ( sin(tmpCorrectionAngle)*0.75f,(-1+cos(tmpCorrectionAngle))*0.75f );
-    Vector2D tmpCorrection ( -tmpCorrection2+tmpCorrection3 );
-
-    //tmpCorrection.Rotate(-tmpAngle);
-    playerCompPhysics->GetBody()->SetTransform( playerCompPhysics->GetBody()->GetPosition()+*tmpCorrection.To_b2Vec2(), tmpAngle );
-*/
+	if (m_bodyAngleAbs>cPi)
+		m_bodyAngleAbs-=2*cPi;
+	else if (m_bodyAngleAbs<-cPi)
+		m_bodyAngleAbs+=2*cPi;
     
-    /*// TEMP FOR TESTING
-    Vector2D myLocalRotationCenter( 0.5f, -0.75f );
-    static float myangle = 0.0f;
-    const float mydiff = -0.007f;
-    myangle += mydiff;
-    if (myangle>2*cPi)
-		myangle-=2*cPi;    
-    playerCompPhysics->Rotate( mydiff, myLocalRotationCenter );
-    */// END OF TEMP FOR TESTING
-
+    playerCompPhysics->Rotate( m_bodyAngleAbs-cPi*0.5f-playerCompPhysics->GetBody()->GetAngle(), playerCompPhysics->GetLocalRotationPoint() );
     
-    playerCompPhysics->Rotate( bodyAngleAbs-cPi*0.5f-playerCompPhysics->GetBody()->GetAngle(), playerCompPhysics->GetLocalRotationPoint() );
-    
-    //playerCompPhysics->GetBody()->SetTransform( playerCompPhysics->GetBody()->GetPosition(), /*upVector.GetAngle()-cPi*0.5f+*/bodyAngleAbs-cPi*0.5f );
-
     if ( !isTouchingSth )
         SetLowFriction( playerCompPhysics ); // wenn der Spieler in der Luft ist, soll die Reibung der "Schuhe" schon verkleinert werden
                                              // damit wenn er landet, er auf der Oberfläche etwas rutscht und nicht abrupt stoppt
@@ -508,8 +478,6 @@ void CompPlayerController::Update( const Event* /*gameUpdatedEvent*/ )
 
     if ( bodyAnim )
     {
-        static int timesMovedOnGround = 0;
-
         if ( jumped )
         {
             bodyAnim->SetState( "Jumping" );
@@ -522,23 +490,21 @@ void CompPlayerController::Update( const Event* /*gameUpdatedEvent*/ )
             bodyAnim->SetState( "Running" );
             bodyAnim->Continue(); // Wenn Spieler läuft (Laufanimation starten)
         }
-        else if ( timesMovedOnGround!=0 )
+        else if ( m_walkingTime!=0 )
         {
-            if (timesMovedOnGround<12)
+            if (m_walkingTime<12)
             {
-                bodyAnim->SetDirection( -1 );
+                bodyAnim->SetDirection( -1 ); // jack will take his legs back (not finish his current step)
                 bodyAnim->Finish();
-                //bodyAnim->Start();
-                //bodyAnim->End();
             }
             else
-                bodyAnim->Finish();
+                bodyAnim->Finish(); // jack has to finish his step
         }
 
         if ( hasMovedOnGround )
-            ++timesMovedOnGround;
+            ++m_walkingTime;
         else
-            timesMovedOnGround = 0;
+            m_walkingTime = 0;
     }
     
     if ( jetpackAnim ) // Raketenrucksack animation
@@ -572,9 +538,8 @@ void CompPlayerController::Update( const Event* /*gameUpdatedEvent*/ )
         }
     }
 
-    oldWantToMoveSidewards = wantToMoveSidewards;
     wasTouchingSth = isTouchingSth;
-    couldWalk = ( canWalkR || canWalkL );
+    m_playerCouldWalkLastUpdate = ( canWalkR || canWalkL );
 }
 
 void CompPlayerController::SetLowFriction( CompPhysics* playerCompPhysics )
@@ -584,21 +549,6 @@ void CompPlayerController::SetLowFriction( CompPhysics* playerCompPhysics )
     m_currentFrictionIsLow = true;
 
     playerCompPhysics->GetFixture("bottom")->SetFriction(0.3f);
-    //playerCompPhysics->GetFixture("mid2")->SetFriction(0.3f);
-
-    /*b2Filter filter;
-
-    filter.categoryBits = 1;
-    filter.groupIndex = 1;
-    filter.maskBits = 1;
-    playerCompPhysics->GetFixture("bottom")->SetFilterData( filter ); // ACHTUNG
-
-    filter.maskBits = 0;
-    playerCompPhysics->GetFixture("bottom2")->SetFilterData( filter ); // ACHTUNG*/
-    
-    // ACHTUNG!
-    //m_refilterFunc( playerCompPhysics->GetFixture("bottom") );
-    //m_refilterFunc( playerCompPhysics->GetFixture("bottom2") );
 }
 
 void CompPlayerController::SetHighFriction( CompPhysics* playerCompPhysics )

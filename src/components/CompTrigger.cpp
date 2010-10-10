@@ -11,7 +11,7 @@
 #include <boost/bind.hpp>
 
 // eindeutige ID
-CompIdType CompTrigger::m_componentId = "CompTrigger";
+const CompIdType CompTrigger::m_componentId = "CompTrigger";
 
 CompTrigger::CompTrigger() : m_fired ( false )
 {

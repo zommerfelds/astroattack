@@ -17,6 +17,15 @@
 
 #define INDENT_SPACE "   " // pro indentation level (Texteinrückung) wird dieser Zeichensatz eingefügt
 
+// Constructor
+Logger::Logger( const char *pFileName )
+: m_isOpen ( false ),
+  m_indentationLevel ( 0 ),
+  m_lastCharWasNewline ( false )
+{
+    OpenFile( pFileName );
+}
+
 // Destruktor
 Logger::~Logger()
 {
@@ -51,8 +60,7 @@ const char* Logger::Write( const char *format, ... )
     // Texteinrückung wird beachtet
     if( num_chars>0 )
     {
-        static bool last_char_was_newline = false;
-        if (last_char_was_newline) // wenn eine Zeile gerade neu angefangen wird, den Text entsprechend einrücken
+        if (m_lastCharWasNewline) // wenn eine Zeile gerade neu angefangen wird, den Text entsprechend einrücken
             for( unsigned int a = 0; a < m_indentationLevel; ++a)
                 m_LogStreamOut << INDENT_SPACE;
         for( int i = 0; i < num_chars; ++i) // für jedes einzelne Zeichen
@@ -64,7 +72,7 @@ const char* Logger::Write( const char *format, ... )
                     for( unsigned int a = 0; a < m_indentationLevel; ++a)
                         m_LogStreamOut << INDENT_SPACE;
         }
-        last_char_was_newline = m_buf[num_chars-1]=='\n'; // Speichern ob das letzte Zeichen einen Zeilenumbruch war,
+        m_lastCharWasNewline = m_buf[num_chars-1]=='\n'; // Speichern ob das letzte Zeichen einen Zeilenumbruch war,
                                                           // damit nächstes mal am anfang eine Texteinrückckung gemacht wird.
                                                           // (wir wissen hier noch nicht wie viel)
     }

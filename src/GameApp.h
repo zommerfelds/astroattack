@@ -54,7 +54,10 @@ private:
 
     void UpdateGame();
     void HandleSdlQuitEvents( SDL_Event& rSdlEvent, bool& rQuit );
-    static void CalcFPS( Uint32 curTime );
+    void CalcFPS( Uint32 curTime );
+
+    Uint32 m_fpsMeasureStart;
+    Uint32 m_framesCounter;
 
     // Initialisationsfunktionen in Init.cpp
     bool InitSDL();

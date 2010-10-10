@@ -7,6 +7,7 @@ Copyright (c) 2010
 
 Please send me an E-mail if you have any problems/suggestions.
 
+
 How to build on GNU/Linux
 -------------------------
 
@@ -40,7 +41,13 @@ To play the game:
 
 ./src/AstroAttack
 
-Building with warnings activated
+
+Useful commands for developpment
 --------------------------------
 
+Building with warnings activated:
 ./configure CXXFLAGS="-Wall"
+
+Building with warnings activated and using colorgcc for color output
+./configure CXX="colorgcc -lstdc++" CXXFLAGS="-Wall"
+

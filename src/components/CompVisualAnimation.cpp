@@ -17,7 +17,7 @@
 #include <sstream>
 
 // einduetige ID
-CompIdType CompVisualAnimation::m_componentId = "CompVisualAnimation";
+const CompIdType CompVisualAnimation::m_componentId = "CompVisualAnimation";
 
 CompVisualAnimation::CompVisualAnimation( const AnimInfo* pAnimInfo )
 : m_registerObj(),

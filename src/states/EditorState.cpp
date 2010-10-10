@@ -29,7 +29,7 @@
 
 #include <boost/make_shared.hpp>
 
-StateIdType EditorState::stateId = "EditorState";
+const StateIdType EditorState::stateId = "EditorState";
 
 // temp!
 #include <SDL/SDL_opengl.h>
@@ -42,7 +42,13 @@ EditorState::EditorState( SubSystems* pSubSystems )
   m_currentPoint ( 0 ),
   m_currentTexture (),
   m_currentTextureNum ( 0 ),
-  m_helpTextOn ( false )
+  m_helpTextOn ( false ),
+  m_mouseButDownOld ( false ),
+  m_cancelVertexKeyDownOld ( false ),
+  m_createEntityKeyDownOld ( false ),
+  m_nextTextureKeyDownOld ( false ),
+  m_prevTextureKeyDownOld ( false ),
+  m_helpKeyDownOld ( false )
 {
     for ( int i = 0; i < 8; ++i )
     {
@@ -122,39 +128,36 @@ void SnapToGrid( Vector2D* worldCoordinates )
 
 void EditorState::Update()      // Spiel aktualisieren
 {
-    static bool pressedMouse = false;
     if ( GetSubSystems()->input->LMouseKeyState() )
     {
-        if ( pressedMouse == false && m_currentPoint < 8 )
+        if ( m_mouseButDownOld == false && m_currentPoint < 8 )
         {
             *m_pClickedPoints[m_currentPoint] = m_pGameCamera->ScreenToWorld( *GetSubSystems()->input->MousePos() );
             SnapToGrid( m_pClickedPoints[m_currentPoint].get() );
             ++m_currentPoint;
         }
-        pressedMouse = true;
+        m_mouseButDownOld = true;
     }
     else
-        pressedMouse = false;
+        m_mouseButDownOld = false;
 
     if ( GetSubSystems()->input->KeyState( EditorCancelBlock ) )
     {
         m_currentPoint = 0;
     }
 
-    static bool pressedCancelVertex = false;
     if ( GetSubSystems()->input->KeyState( EditorCancelVertex ) )
     {
-        if ( pressedCancelVertex == false && m_currentPoint > 0 )
+        if ( m_cancelVertexKeyDownOld == false && m_currentPoint > 0 )
             --m_currentPoint;
-        pressedCancelVertex = true;
+        m_cancelVertexKeyDownOld = true;
     }
     else
-        pressedCancelVertex = false;
+        m_cancelVertexKeyDownOld = false;
 
-    static bool pressedCreateEntity = false;
     if ( GetSubSystems()->input->KeyState( EditorCreateEntity ) )
     {
-        if ( pressedCreateEntity == false && m_currentPoint > 2 )
+        if ( m_createEntityKeyDownOld == false && m_currentPoint > 2 )
         {
             std::string entityName;
             for ( int i = 0;; ++i )
@@ -195,15 +198,14 @@ void EditorState::Update()      // Spiel aktualisieren
 
             m_currentPoint = 0;
         }
-        pressedCreateEntity = true;
+        m_createEntityKeyDownOld = true;
     }
     else
-        pressedCreateEntity = false;
+        m_createEntityKeyDownOld = false;
 
-    static bool pressedEditorNextTexture = false;
     if ( GetSubSystems()->input->KeyState( EditorNextTexture ) )
     {
-        if ( !pressedEditorNextTexture )
+        if ( !m_nextTextureKeyDownOld )
         {
             unsigned int old_currentTextureNum = m_currentTextureNum;
             std::vector<std::string> texList ( GetSubSystems()->renderer->GetTextureManager()->GetTextureList() );
@@ -217,15 +219,14 @@ void EditorState::Update()      // Spiel aktualisieren
                     break;
             } while ( old_currentTextureNum != m_currentTextureNum );
         }
-        pressedEditorNextTexture = true;
+        m_nextTextureKeyDownOld = true;
     }
     else
-        pressedEditorNextTexture = false;
+        m_nextTextureKeyDownOld = false;
 
-    static bool pressedEditorPrevTexture = false;
     if ( GetSubSystems()->input->KeyState( EditorPrevTexture ) )
     {
-        if ( !pressedEditorPrevTexture )
+        if ( !m_prevTextureKeyDownOld )
         {
             std::vector<std::string> texList ( GetSubSystems()->renderer->GetTextureManager()->GetTextureList() );
             unsigned int old_currentTextureNum = m_currentTextureNum;
@@ -240,20 +241,19 @@ void EditorState::Update()      // Spiel aktualisieren
                     break;
             } while ( old_currentTextureNum != m_currentTextureNum );
         }
-        pressedEditorPrevTexture = true;
+        m_prevTextureKeyDownOld = true;
     }
     else
-        pressedEditorPrevTexture = false;
+        m_prevTextureKeyDownOld = false;
 
-    static bool pressedHelp = false;
     if ( GetSubSystems()->input->KeyState( EditorToggleHelp ) )
     {
-        if ( pressedHelp == false )
+        if ( m_helpKeyDownOld == false )
             m_helpTextOn = !m_helpTextOn;
-        pressedHelp = true;
+        m_helpKeyDownOld = true;
     }
     else
-        pressedHelp = false;
+        m_helpKeyDownOld = false;
 }
 
 void EditorState::Draw( float accumulator )        // Spiel zeichnen

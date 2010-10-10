@@ -46,7 +46,7 @@ public:
 	void Update();      // Spiel aktualisieren
 	void Draw( float accumulator );        // Spiel zeichnen
 private:
-    static StateIdType stateId;
+    static const StateIdType stateId;
     
     boost::scoped_ptr<GameWorld> m_pGameWorld;          // Spielwelt
     boost::scoped_ptr<GameCamera> m_pGameCamera;        // Kamera

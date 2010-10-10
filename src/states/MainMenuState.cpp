@@ -29,7 +29,7 @@
 const char* cIntroFileName   = "data/intro/introShow.xml";
 const char* cLevelSequenceFileName = "data/levelSequence.xml";
 const char* cMenuGraphicsFileName = "data/graphicsMenu.xml"; // hier sind Menügrafiken angegeben
-StateIdType MainMenuState::stateId = "MainMenuState";        // eindeutige ID
+const StateIdType MainMenuState::stateId = "MainMenuState";        // eindeutige ID
 
 const std::string menuNames[] =
 { 
@@ -38,6 +38,11 @@ const std::string menuNames[] =
     "CreditsMenu",
     "OptionsMenu",
 };
+
+const float cTitleVertexCoord[8] = { 0.3f, 0.2f,
+                                     0.3f, 0.7f,
+                                     3.5f, 0.7f,
+                                     3.5f, 0.2f };
 
 struct Button
 {
@@ -49,7 +54,7 @@ struct Button
 
 MainMenuState::MainMenuState( SubSystems* pSubSystems, SubMenu startingSubMenu )
 : GameState( pSubSystems ),
-  m_intensityTitle ( 1.0f ),
+  m_titleIntensityAngle ( 0.0f ),
   m_subMenu ( startingSubMenu ),
   m_wantToQuit ( false ),
   m_goToEditor ( false ),
@@ -57,6 +62,15 @@ MainMenuState::MainMenuState( SubSystems* pSubSystems, SubMenu startingSubMenu )
   m_goToSlideShow ( false ),
   m_appliedConfig ( false )
 {
+    for (int i=0; i<4; i++)
+    {
+        m_titleVertexOffsetXTarget[i] = 0.0f;
+        m_titleVertexOffsetYTarget[i] = 0.0f;
+        m_titleVertexOffsetXDir[i] = 0.0f;
+        m_titleVertexOffsetYDir[i] = 0.0f;
+    }
+    for (int i=0; i<4; i++)
+        m_titleVertexCoordOffset[i] = 0.0f;
 }
 
 MainMenuState::~MainMenuState()
@@ -266,54 +280,38 @@ void MainMenuState::Update()      // Spiel aktualisieren
     //--- moving AstroAttack banner ---//
     const float maxOffset = 0.2f;
     const int cSteps = 220;
-    static float titleVertexOffsetXTarget[4] = {0.0f};
-    static float titleVertexOffsetYTarget[4] = {0.0f};
-    static float titleVertexOffsetXDir[4] = {0.0f};
-    static float titleVertexOffsetYDir[4] = {0.0f};
     const float epsilon = 0.001f;
-
-    const float cVertexCoord0[8] = { 0.3f, 0.2f,
-                                 0.3f, 0.7f,
-                                 3.5f, 0.7f,
-                                 3.5f, 0.2f };
-
-    static float titleVertexCoordOffset[8] = {0.0f};
 
     // Randomize
     for ( int i = 0; i < 4; ++i )
     {
-        if ( (titleVertexCoordOffset[2*i] > titleVertexOffsetXTarget[i] - epsilon && titleVertexCoordOffset[2*i] < titleVertexOffsetXTarget[i] + epsilon) &&
-             (titleVertexCoordOffset[2*i+1] > titleVertexOffsetYTarget[i] - epsilon && titleVertexCoordOffset[2*i+1] < titleVertexOffsetYTarget[i] + epsilon) )
+        if ( (m_titleVertexCoordOffset[2*i] > m_titleVertexOffsetXTarget[i] - epsilon && m_titleVertexCoordOffset[2*i] < m_titleVertexOffsetXTarget[i] + epsilon) &&
+             (m_titleVertexCoordOffset[2*i+1] > m_titleVertexOffsetYTarget[i] - epsilon && m_titleVertexCoordOffset[2*i+1] < m_titleVertexOffsetYTarget[i] + epsilon) )
         {
             float randomX = rand()%(int)(2*maxOffset*10000.0f)/10000.0f - maxOffset;
             float randomY = rand()%(int)(2*maxOffset*10000.0f)/10000.0f - maxOffset;
-            titleVertexOffsetXTarget[i] = randomX;
-            titleVertexOffsetYTarget[i] = randomY;
-            titleVertexOffsetXDir[i] = (titleVertexOffsetXTarget[i] - titleVertexCoordOffset[2*i])/cSteps;
-            titleVertexOffsetYDir[i] = (titleVertexOffsetYTarget[i] - titleVertexCoordOffset[2*i+1])/cSteps;
+            m_titleVertexOffsetXTarget[i] = randomX;
+            m_titleVertexOffsetYTarget[i] = randomY;
+            m_titleVertexOffsetXDir[i] = (m_titleVertexOffsetXTarget[i] - m_titleVertexCoordOffset[2*i])/cSteps;
+            m_titleVertexOffsetYDir[i] = (m_titleVertexOffsetYTarget[i] - m_titleVertexCoordOffset[2*i+1])/cSteps;
         }
 
-        titleVertexCoordOffset[2*i] += titleVertexOffsetXDir[i];
-        if ( titleVertexCoordOffset[2*i] > maxOffset )
-            titleVertexCoordOffset[2*i] = maxOffset;
-        else if ( titleVertexCoordOffset[2*i] < -maxOffset )
-            titleVertexCoordOffset[2*i] = -maxOffset;
+        m_titleVertexCoordOffset[2*i] += m_titleVertexOffsetXDir[i];
+        if ( m_titleVertexCoordOffset[2*i] > maxOffset )
+            m_titleVertexCoordOffset[2*i] = maxOffset;
+        else if ( m_titleVertexCoordOffset[2*i] < -maxOffset )
+            m_titleVertexCoordOffset[2*i] = -maxOffset;
 
-        titleVertexCoordOffset[2*i+1] += titleVertexOffsetYDir[i];
-        if ( titleVertexCoordOffset[2*i+1] > maxOffset )
-            titleVertexCoordOffset[2*i+1] = maxOffset;
-        else if ( titleVertexCoordOffset[2*i+1] < -maxOffset )
-            titleVertexCoordOffset[2*i+1] = -maxOffset;
+        m_titleVertexCoordOffset[2*i+1] += m_titleVertexOffsetYDir[i];
+        if ( m_titleVertexCoordOffset[2*i+1] > maxOffset )
+            m_titleVertexCoordOffset[2*i+1] = maxOffset;
+        else if ( m_titleVertexCoordOffset[2*i+1] < -maxOffset )
+            m_titleVertexCoordOffset[2*i+1] = -maxOffset;
     }
 
-    for ( int i = 0; i < 8; ++i )
-        m_titleVertexCoord[i] = cVertexCoord0[i] + titleVertexCoordOffset[i];
-
-    static float curAngle = 0.0f;
-    curAngle += 0.01f;
-    if ( curAngle > 2*cPi )
-        curAngle -= 2*cPi;
-    m_intensityTitle = (sin(curAngle)/2.0f+0.5f) * 0.6f + 0.3f;
+    m_titleIntensityAngle += 0.01f;
+    if ( m_titleIntensityAngle > 2*cPi )
+        m_titleIntensityAngle -= 2*cPi;
     //--- end of moving AstroAttack banner ---//
 }
 
@@ -350,7 +348,11 @@ void MainMenuState::Draw( float /*accumulator*/ )        // Spiel zeichnen
                              0.0f, 1.0f,
                              1.0f, 1.0f,
                              1.0f, 0.0f };
-        pRenderer->DrawTexturedQuad( texCoord, m_titleVertexCoord, "title", false, m_intensityTitle );
+        float titleVertexCoord[8] = {0.0f};
+        for ( int i = 0; i < 8; ++i )
+                titleVertexCoord[i] = cTitleVertexCoord[i] + m_titleVertexCoordOffset[i];
+        float intensity = (sin(m_titleIntensityAngle)/2.0f+0.5f) * 0.6f + 0.3f;
+        pRenderer->DrawTexturedQuad( texCoord, titleVertexCoord, "title", false, intensity );
     }
 
     GetSubSystems()->gui->Draw();

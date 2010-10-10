@@ -45,7 +45,7 @@ public:
 
 private:
 
-	static CompIdType m_componentId; // eindeutige ID für diese Komponentenart (gleich wie Klassennamen, siehe CompCollectable.cpp)
+	static const CompIdType m_componentId; // eindeutige ID für diese Komponentenart (gleich wie Klassennamen, siehe CompCollectable.cpp)
 
     std::vector< boost::shared_ptr<Condition> > m_conditions;
     std::vector< boost::shared_ptr<Effect> > m_effects;
