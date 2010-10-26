@@ -11,7 +11,6 @@
 #include "main.h" // wichtige Definitionen und Dateien einbinden
 #include "GameApp.h"
 
-#include "EventManager.h"
 #include "Input.h"
 #include "Physics.h"
 #include "World.h"
@@ -21,6 +20,7 @@
 #include "GUI.h"
 #include "GameStates.h"
 #include "states/MainMenuState.h"
+#include "Component.h"
 
 // TEMP
 #include "states/PlayingState.h"
@@ -40,17 +40,19 @@ Configuration gAaConfig; // Spieleinstellungen.
 GameApp::GameApp() : m_isInit ( false ),
         m_pSubSystems ( new SubSystems ),
         m_quit ( false ),
+        m_eventConnection (),
         m_fpsMeasureStart ( SDL_GetTicks() ),
         m_framesCounter ( 0 )
 {
-    m_registerObj.RegisterListener( QuitGame, boost::bind( &GameApp::Quit, this, _1 ) );
+    Component::gameEvents = m_pSubSystems->events.get();
+    m_eventConnection = m_pSubSystems->events->quitGame.RegisterListener( boost::bind( &GameApp::OnQuit, this ) );
 }
 SubSystems::SubSystems()
       : stateManager ( new StateManager ),
-        eventManager ( new EventManager ),
+        events ( new GameEvents ),
         input ( new InputSubSystem ),
-        physics( new PhysicsSubSystem( eventManager.get() ) ),
-        renderer ( new RenderSubSystem( eventManager.get() ) ),
+        physics( new PhysicsSubSystem( events.get() ) ),
+        renderer ( new RenderSubSystem( events.get() ) ),
         sound ( new SoundSubSystem() ),
         gui ( new GuiSubSystem( renderer.get(), input.get() ) ),
         isLoading ( false )
@@ -60,12 +62,14 @@ SubSystems::SubSystems()
 SubSystems::~SubSystems()
 {
     stateManager.reset();   // Spielstatus
-    eventManager.reset();   // Spielereignisse
     input.reset();          // Eingabe
     physics.reset();        // Physik
     renderer.reset();       // Ausgabe
     sound.reset();          // Sound
     gui.reset();            // Grafische Benutzeroberfläche
+
+    // must be deleted at last because other systems use this system when destructing
+    events.reset();         // Spielereignisse
 }
 
 // Destruktor
@@ -127,7 +131,10 @@ void GameApp::DeInit()
     gAaLog.Write ( "* m_fpsMeasureStarted deinitialization *\n\n" );      // In Log-Datei schreiben
     gAaLog.IncreaseIndentationLevel();
 
-    gAaLog.Write ( "Deleting SubSystems..." );
+    // delete the event connection before we delete the event system
+    //m_eventConnection.reset();
+
+    gAaLog.Write ( "Cleaning up SubSystems..." );
     // Die Objekten löschen sich eigentlich von selbst. Es wird jedoch gewünscht dass sie jetzt gelöscht werden:
     m_pSubSystems.reset();
     gAaLog.Write ( "[ Done ]\n" );
@@ -173,6 +180,7 @@ void GameApp::MainLoop()
     float delta_time_secs = 0.0; // Zeit seit letzter Frame -> um Bewegungen in einer konstanten Rate zu aktualisieren
 
     SDL_Event sdl_window_events; // SDL Eingabe-Ereignisse (nur für den Fall, wann der Benutzer das Fenster schliessen will)
+    //memset(&sdl_window_events,0,sizeof(SDL_Event));
     // Die restlichen Eingaben werden in Input.cpp gemacht.
 
     gAaLog.IncreaseIndentationLevel();
@@ -231,7 +239,7 @@ void GameApp::MainLoop()
 // SDL Fensterereignisse behandeln (ob man das Fenster schliessen will)
 void GameApp::HandleSdlQuitEvents( SDL_Event& rSdlEvent, bool& rQuit )
 {
-    while ( SDL_PollEvent ( &rSdlEvent ) )
+    while ( SDL_PollEvent( &rSdlEvent ) )
     {
         switch ( rSdlEvent.type )
         {

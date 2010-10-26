@@ -152,7 +152,7 @@ bool Configuration::Load( const char *pFileName )
             cfgEntry.valString = "";
             cfgEntry.valString = entryElement->Attribute( "val" );
         }
-        m_appliedConfigEntries.insert( std::pair<std::string, ConfigEntry>(id,cfgEntry) );
+        m_appliedConfigEntries.insert( std::make_pair(id,cfgEntry) );
     }
     m_unappliedConfigEntries = m_appliedConfigEntries;
     return true;

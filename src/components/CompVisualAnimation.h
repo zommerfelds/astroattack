@@ -17,7 +17,7 @@
 
 #include "../Component.h"
 #include "../Texture.h"
-#include "../EventManager.h"
+#include "../GameEvents.h"
 #include <boost/scoped_ptr.hpp>
 
 class Vector2D;
@@ -62,10 +62,10 @@ public:
 private:
 
     // Animation Aktualisieren
-    void Update( const Event* inputUpdatedEvent );
+    void OnUpdate();
 
 	static const CompIdType m_componentId;
-    RegisterObj m_registerObj;
+    EventConnection m_eventConnection;
 
     // für Anzeige
     boost::scoped_ptr<Vector2D> m_center;

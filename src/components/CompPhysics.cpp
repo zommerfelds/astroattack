@@ -36,10 +36,10 @@ CompPhysics::~CompPhysics()
 {
 }
 
-void CompPhysics::AddFixtureDef( boost::shared_ptr<b2FixtureDef> pFixtureDef, FixtureIdType name )
+void CompPhysics::AddFixtureDef( const boost::shared_ptr<b2FixtureDef>& pFixtureDef, FixtureIdType name )
 {
     // shape zur Liste hinzufügen
-    m_fixtureDefs.push_back( std::pair< FixtureIdType, boost::shared_ptr<b2FixtureDef> >(name,pFixtureDef) );    
+    m_fixtureDefs.push_back( std::make_pair(name,pFixtureDef) );
 }
 
 const b2Body* CompPhysics::GetBody() const

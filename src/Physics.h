@@ -16,14 +16,17 @@
 #include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>
 #include <Box2D/Box2D.h>
+#include "Event.h" // TODO: use pimpl to hide this
 extern const float PHYS_DELTA_TIME;
 
-class Event;
+class GameEvents;
+class Entity;
+class EventConnection;
 class CompPhysics;
 class CompGravField;
 class Vector2D;
 class RegisterObj;
-class EventManager;
+class GameEvents;
 class b2World;
 class ContactListener;
 class b2Shape;
@@ -34,7 +37,7 @@ class b2Shape;
 class PhysicsSubSystem
 {
 public:
-    PhysicsSubSystem( EventManager* pEventManager);
+    PhysicsSubSystem( GameEvents* pGameEvents);
     ~PhysicsSubSystem();
 
     void Init();
@@ -48,16 +51,16 @@ private:
     std::vector< CompPhysics* > m_physicsComps;
 	std::vector< CompGravField* > m_gravFields;
 
-    boost::scoped_ptr<RegisterObj> m_registerObj;
-    boost::scoped_ptr<RegisterObj> m_registerObj2;
-	boost::scoped_ptr<RegisterObj> m_registerObj3;
-    boost::scoped_ptr<RegisterObj> m_registerObj4;
-    EventManager* m_pEventManager;
+    EventConnection m_eventConnection1;
+    EventConnection m_eventConnection2;
+	EventConnection m_eventConnection3;
+    EventConnection m_eventConnection4;
+    GameEvents* m_pGameEvents;
 
-    void RegisterPhysicsComp( const Event* pEvent );
-    void UnregisterPhysicsComp( const Event* pEvent );
-	void RegisterGravFieldComp( const Event* pEvent );
-    void UnregisterGravFieldComp( const Event* pEvent );
+    void RegisterPhysicsComp( Entity* pEntity );
+    void UnregisterPhysicsComp( Entity* pEntity );
+	void RegisterGravFieldComp( Entity* pEntity );
+    void UnregisterGravFieldComp( Entity* pEntity );
 
     boost::scoped_ptr<b2World> m_world;
     float m_timeStep;
@@ -67,13 +70,13 @@ private:
     class ContactListener : public b2ContactListener
     {
     public:
-        ContactListener( EventManager* pEM ) : m_pEventManager(pEM) {}
+        ContactListener( GameEvents* pEM ) : m_pEventManager(pEM) {}
 	    /*void Add(const b2ContactPoint* point);
         void Persist(const b2ContactPoint* point);
 	    void Remove(const b2ContactPoint* point);*/
     private:
         /*void CheckContactPoint(const b2ContactPoint* point);*/
-        EventManager* m_pEventManager;
+        GameEvents* m_pEventManager;
     };
 
     boost::scoped_ptr<ContactListener> m_contactListener;

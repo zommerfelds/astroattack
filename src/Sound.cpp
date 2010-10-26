@@ -101,7 +101,7 @@ void SoundSubSystem::LoadSound( const char *name, SoundIdType id )
         return;
     }
 
-    m_sounds.insert( std::pair<SoundIdType,Mix_Chunk* >(id,sample) );
+    m_sounds.insert( std::make_pair(id,sample) );
 }
 
 void SoundSubSystem::FreeSound(const SoundIdType &id)
@@ -155,7 +155,7 @@ void SoundSubSystem::LoadMusic(const char *name, MusicIdType id)
         return;
     }
 
-    m_music.insert( std::pair<MusicIdType,Mix_Music* >(id,music) );
+    m_music.insert( std::make_pair(id,music) );
 }
 
 void SoundSubSystem::FreeMusic(const MusicIdType &id)

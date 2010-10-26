@@ -18,7 +18,7 @@
 #include <string>
 
 class Vector2D;
-class EventManager;
+class GameEvents;
 class Logger;
 
 #include "Entity.h"
@@ -37,10 +37,10 @@ typedef std::map<const WorldVariableType, int> WorldVariblesMap;
 class GameWorld
 {
 public:
-    GameWorld( EventManager* pEventManager );
+    GameWorld( GameEvents* pEventManager );
     ~GameWorld();
 
-    void AddEntity( boost::shared_ptr<Entity> pEntity );
+    void AddEntity( const boost::shared_ptr<Entity>& pEntity );
     void RemoveEntity( EntityIdType id );
     boost::shared_ptr<Entity> GetEntity( EntityIdType id ) const;
     const EntityMap* GetAllEntities() const;
@@ -52,7 +52,7 @@ public:
     void WriteWorldToLogger( Logger& log );
 
 private:
-    EventManager* m_pEventManager;
+    GameEvents* m_pGameEvents;
 
     EntityMap m_entities;
     WorldVariblesMap m_variables;

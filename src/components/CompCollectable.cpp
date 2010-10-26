@@ -18,10 +18,11 @@ const CompIdType CompCollectable::m_componentId = "CompCollectable";
 
 // Konstruktor
 CompCollectable::CompCollectable( std::map<const std::string, int>::iterator itCollectableVariable )
-: m_wasCollected ( false ),
+: m_eventConnection (),
+  m_wasCollected ( false ),
   m_itCollectableVariable ( itCollectableVariable )
 {
-    m_registerObj.RegisterListener( ContactAdd, boost::bind( &CompCollectable::Collision, this, _1 ) );
+    //m_eventConnection = gameEvents->.RegisterListener( ContactAdd, boost::bind( &CompCollectable::Collision, this, _1 ) );
 }
 
 CompCollectable::~CompCollectable()
@@ -30,8 +31,9 @@ CompCollectable::~CompCollectable()
 
 // Is einer der zwei Entities ich selber und der Spieler?
 // Wenn ja, dann wurde dieses Objekt gesammelt.
-void CompCollectable::Collision( const Event* contactEvent ) // callback wird gelöscht und iterator wird ungültig
+void CompCollectable::OnCollision() // callback wird gelöscht und iterator wird ungültig
 {
+#if 0
     if ( contactEvent == NULL )
         return;
     if ( m_wasCollected )
@@ -48,7 +50,7 @@ void CompCollectable::Collision( const Event* contactEvent ) // callback wird ge
             if ( comp->GetOwnerEntity()->GetId() == "Player" )
             {
                 ++m_itCollectableVariable->second;
-                eventManager->InvokeEvent( Event(WantToDeleteEntity,GetOwnerEntity()) );
+                gameEvents->InvokeEvent( Event(WantToDeleteEntity,GetOwnerEntity()) );
                 m_wasCollected = true;
                 return;
             }
@@ -63,12 +65,13 @@ void CompCollectable::Collision( const Event* contactEvent ) // callback wird ge
             if ( comp->GetOwnerEntity()->GetId() == "Player" )
             {
                 ++m_itCollectableVariable->second;
-                eventManager->InvokeEvent( Event(WantToDeleteEntity,GetOwnerEntity()) );
+                gameEvents->InvokeEvent( Event(WantToDeleteEntity,GetOwnerEntity()) );
                 m_wasCollected = true;
                 return;
             }
         }
     }
+#endif
 }
 
 // Astro Attack - Christian Zommerfelds - 2009

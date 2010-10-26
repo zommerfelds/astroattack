@@ -39,7 +39,7 @@ public:
     void Update();
     void Draw();
 
-    void InsertWidget( GroupId groupId, boost::shared_ptr<Widget> pWidget );
+    void InsertWidget( GroupId groupId, const boost::shared_ptr<Widget>& pWidget );
     void DeleteGroup( GroupId groupId );
     void HideGroup( GroupId groupId ) { m_groupsToHide.insert( groupId ); }
     void ShowGroup( GroupId groupId ) { m_groupsToHide.erase( groupId ); }

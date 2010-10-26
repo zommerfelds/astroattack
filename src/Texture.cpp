@@ -157,7 +157,7 @@ void TextureManager::LoadTexture( const std::string& name, TextureIdType id, con
             TexInfo texInfo;
             texInfo.texAddress = openGl_tex_id;
             texInfo.scale = loadTexInfo.scale;
-            m_textures.insert( std::pair<TextureIdType,TexInfo >(id,texInfo) ); // Textur in m_textures eintragen
+            m_textures.insert( std::make_pair(id,texInfo) ); // Textur in m_textures eintragen
         }
         else
              throw 0; // Error
@@ -288,7 +288,7 @@ void AnimationManager::LoadAnimation( const char* name, AnimationIdType id,const
         while ( input_stream >> stateId )
         {
             std::map< StateIdType, boost::shared_ptr<StateInfo> >::const_iterator it = 
-                pAnimInfo->states.insert( std::pair< StateIdType, boost::shared_ptr<StateInfo> >( stateId, boost::shared_ptr<StateInfo>( boost::make_shared<StateInfo>() ) ) ).first;
+                pAnimInfo->states.insert( std::make_pair( stateId, boost::make_shared<StateInfo>() ) ).first;
             if ( !(input_stream >> it->second->begin ) )
                 throw 0;
             if ( !(input_stream >> it->second->end ) )
@@ -305,7 +305,7 @@ void AnimationManager::LoadAnimation( const char* name, AnimationIdType id,const
                     throw 0;
                 it->second->stops.insert( stop );
             }
-            m_animInfoMap.insert( std::pair< AnimationIdType, boost::shared_ptr<AnimInfo> >( id, pAnimInfo ) );
+            m_animInfoMap.insert( std::make_pair( id, pAnimInfo ) );
         }
     }
     catch (...)

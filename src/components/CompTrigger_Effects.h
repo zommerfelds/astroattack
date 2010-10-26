@@ -10,6 +10,7 @@
 #include "../GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
 #include "CompTrigger.h"
 #include <string>
+#include <map>
 class GameWorld;
 
 class EffectKillEntity : public Effect

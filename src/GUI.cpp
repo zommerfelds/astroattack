@@ -50,11 +50,11 @@ void GuiSubSystem::Draw()
     }
 }
 
-void GuiSubSystem::InsertWidget( GroupId groupId, boost::shared_ptr<Widget> pWidget )
+void GuiSubSystem::InsertWidget( GroupId groupId, const boost::shared_ptr<Widget>& pWidget )
 {
     WidgetMap::iterator it = m_widgets.find( groupId );
     if ( it == m_widgets.end() )
-        m_widgets.insert( std::pair< GroupId, std::vector< boost::shared_ptr<Widget> > >(groupId,std::vector< boost::shared_ptr<Widget> >(1,pWidget) ) );
+        m_widgets.insert( std::make_pair(groupId,std::vector< boost::shared_ptr<Widget> >(1,pWidget) ) );
     else
         it->second.push_back( pWidget );
 }

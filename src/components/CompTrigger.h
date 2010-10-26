@@ -15,7 +15,7 @@
 #include "../GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
 
 #include "../Component.h"
-#include "../EventManager.h"
+#include "../GameEvents.h"
 
 #include <boost/shared_ptr.hpp>
 #include <vector>
@@ -37,8 +37,8 @@ public:
     ~CompTrigger();
     const CompIdType& ComponentId() const { return m_componentId; }
 
-    void AddCondition( boost::shared_ptr<Condition> );
-    void AddEffect( boost::shared_ptr<Effect> );
+    void AddCondition( const boost::shared_ptr<Condition>& );
+    void AddEffect( const boost::shared_ptr<Effect>& );
 
     const std::vector< boost::shared_ptr<Condition> >& GetConditions() const { return m_conditions; }
     const std::vector< boost::shared_ptr<Effect> >& GetEffects() const { return m_effects; }
@@ -50,10 +50,10 @@ private:
     std::vector< boost::shared_ptr<Condition> > m_conditions;
     std::vector< boost::shared_ptr<Effect> > m_effects;
 
-    RegisterObj m_registerObj;
+    EventConnection m_eventConnection;
 
     // Hier werden alle nötigen aktionen Durgeführt pro Aktualisierung
-    void Update( const Event* gameUpdatedEvent );
+    void OnUpdate();
 
     bool m_fired;
 };

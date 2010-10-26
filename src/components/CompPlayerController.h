@@ -15,9 +15,10 @@
 #include "../GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
 
 #include "../Component.h"
-#include "../EventManager.h"
+#include "../GameEvents.h"
 
 #include <boost/function.hpp>
+#include <map>
 
 class b2Shape;
 
@@ -39,13 +40,13 @@ private:
     const InputSubSystem* m_pInputSubSystem;
 
     // Hier werden alle nötigen aktionen Durgeführt pro Aktualisierung
-    void Update( const Event* gameUpdatedEvent );
+    void OnUpdate();
 
     void SetLowFriction( CompPhysics* playerCompPhysics );
     void SetHighFriction( CompPhysics* playerCompPhysics );
     bool m_currentFrictionIsLow;
 
-    RegisterObj m_registerObj;
+    EventConnection m_eventConnection;
     std::map<const std::string, int>::iterator m_itJetPackVar;
     boost::function1<void,b2Shape*> m_refilterFunc;
 

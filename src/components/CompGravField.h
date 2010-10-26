@@ -13,7 +13,7 @@
 #include "../GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
 
 #include "../Component.h"
-#include "../EventManager.h"
+#include "../GameEvents.h"
 #include <set>
 #include <boost/scoped_ptr.hpp>
 

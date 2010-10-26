@@ -37,7 +37,7 @@ const StateIdType EditorState::stateId = "EditorState";
 
 EditorState::EditorState( SubSystems* pSubSystems )
 : GameState( pSubSystems ),
-  m_pGameWorld ( new GameWorld( GetSubSystems()->eventManager.get() ) ),
+  m_pGameWorld ( new GameWorld( GetSubSystems()->events.get() ) ),
   m_pGameCamera ( new GameCamera( GetSubSystems()->input.get(), GetSubSystems()->renderer.get(), m_pGameWorld.get() ) ),
   m_currentPoint ( 0 ),
   m_currentTexture (),

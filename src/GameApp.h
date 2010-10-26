@@ -13,9 +13,9 @@
 #include <boost/scoped_ptr.hpp>
 // Simple DirectMedia Layer (freie Plattform-übergreifende Multimedia-Programmierschnittstelle)
 #include <SDL/SDL.h>
-#include "EventManager.h"
+#include "GameEvents.h"
 
-class EventManager;
+//struct GameEvents;
 class InputSubSystem;
 class PhysicsSubSystem;
 class GameWorld;
@@ -48,9 +48,10 @@ private:
 
     boost::scoped_ptr<SubSystems> m_pSubSystems; // Untersysteme
 
-    RegisterObj m_registerObj;
     bool m_quit; // Ob Programm beenden werden soll
-    void Quit( const Event* ) { m_quit = true; } // Spiel beenden (Wird vom EventManager aufgerufen)
+    void OnQuit() { m_quit = true; } // Spiel beenden (Wird von einem Event aufgerufen)
+
+    EventConnection m_eventConnection; // TODO: scoped_ptr
 
     void UpdateGame();
     void HandleSdlQuitEvents( SDL_Event& rSdlEvent, bool& rQuit );
@@ -73,7 +74,7 @@ struct SubSystems
     SubSystems();
     ~SubSystems();
     boost::scoped_ptr<StateManager> stateManager;   // States
-    boost::scoped_ptr<EventManager> eventManager;   // Spielereignisse
+    boost::scoped_ptr<GameEvents> events;           // Spielereignisse
     boost::scoped_ptr<InputSubSystem> input;        // Eingabe
     boost::scoped_ptr<PhysicsSubSystem> physics;    // Physik
     boost::scoped_ptr<RenderSubSystem> renderer;    // Ausgabe

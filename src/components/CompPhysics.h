@@ -75,7 +75,7 @@ public:
 
     // Eine zusätzliche geometrische Form für den Körper definieren
     // Nur am Anfang benützen, bevor die Einheit (Entity) zur Welt hinzugefügt wurde!
-    void AddFixtureDef( boost::shared_ptr<b2FixtureDef> pFixtureDef, FixtureIdType name );
+    void AddFixtureDef( const boost::shared_ptr<b2FixtureDef>& pFixtureDef, FixtureIdType name );
 
     // Box2D Body zurückgeben
     const b2Body* GetBody() const;

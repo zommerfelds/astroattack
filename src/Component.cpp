@@ -9,8 +9,8 @@
 #include "GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
 
 #include "Component.h"
-#include "EventManager.h" // Steuert die Spielerreignisse
+#include "GameEvents.h" // Steuert die Spielerreignisse
 
-EventManager* Component::eventManager = NULL;
+GameEvents* Component::gameEvents = NULL;
 
 // Astro Attack - Christian Zommerfelds - 2009

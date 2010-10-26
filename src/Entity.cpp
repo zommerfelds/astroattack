@@ -38,10 +38,10 @@ std::vector<Component*> Entity::GetComponents(const CompIdType& rCompId )
 }
 
  // Setzt eine neue Komponente in die Einheit
-void Entity::SetComponent(boost::shared_ptr<Component> pNewComp)
+void Entity::SetComponent(const boost::shared_ptr<Component>& pNewComp)
 {
     CompIdType compId = pNewComp->ComponentId();
-    m_components.insert( std::pair< CompIdType, boost::shared_ptr<Component> >(compId, boost::shared_ptr<Component>(pNewComp) ) );
+    m_components.insert( std::make_pair(compId, pNewComp) );
     pNewComp->SetOwnerEntity( this );
 }
 

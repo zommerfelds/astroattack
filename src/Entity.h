@@ -50,7 +50,7 @@ public:
     
     std::vector<Component*> GetComponents(const CompIdType& rCompId );
     const ComponentMap* GetAllComponents();
-    void SetComponent(boost::shared_ptr<Component> pNewComp); // Setzt eine neue Komponente in die Einheit
+    void SetComponent(const boost::shared_ptr<Component>& pNewComp); // Setzt eine neue Komponente in die Einheit
     //ComponentMap* GetAllComponents() { return &m_components; }
 
     void ClearComponents()

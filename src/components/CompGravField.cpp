@@ -27,7 +27,7 @@ m_pGravitationCenter ( new Vector2D ), m_priority( 50 )
     m_pGravitationCenter->Set( 0.0, 1.0 );
 
     //m_registerObj1.RegisterListener( ContactPersist, boost::bind( &CompGravField::OnGameUpdate, this, _1 ) );
-    //m_registerObj1.RegisterListener( ContactPersist, boost::bind( &CompGravField::Contact, this, _1 ) );
+    //m_registerObj1.RegisterListener( ContactPersist, boost::bind( &CompGravField::OnContact, this, _1 ) );
     //m_registerObj2.RegisterListener( ContactAdd, boost::bind( &CompGravField::DeleteContact, this, _1 ) );
 }
 
@@ -40,7 +40,7 @@ CompGravField::~CompGravField()
 }*/
 
 #if 0
-void CompGravField::Contact( const Event* contactEvent )
+void CompGravField::OnContact( const Event* contactEvent )
 {
     if ( contactEvent == NULL )
         return;

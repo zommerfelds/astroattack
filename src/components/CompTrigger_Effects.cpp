@@ -18,7 +18,7 @@ EffectKillEntity::EffectKillEntity( std::string entityToKill, GameWorld* pGW )
 
 void EffectKillEntity::Fire()
 {
-    m_pCompTrigger->eventManager->InvokeEvent( Event(WantToDeleteEntity,m_pGW->GetEntity(m_entityToKill).get()) );
+    m_pCompTrigger->gameEvents->wantToDeleteEntity.Fire( m_pGW->GetEntity(m_entityToKill).get() );
     return;
 }
 
@@ -60,7 +60,7 @@ bool EffectDispMessage::Update()
     --m_remainingUpdates;
     if ( m_remainingUpdates == 0 )
     {
-        m_pCompTrigger->eventManager->InvokeEvent( Event(WantToDeleteEntity, m_pMsgEntity) );
+        m_pCompTrigger->gameEvents->wantToDeleteEntity.Fire(m_pMsgEntity);
         return true;
     }
     else if ( m_remainingUpdates < 0 )
@@ -74,15 +74,15 @@ bool EffectDispMessage::Update()
 EffectDispMessage::~EffectDispMessage()
 {
     if ( m_pMsgEntity && m_fired && m_remainingUpdates > 0 && m_pGW->GetEntity(m_msgEntityName) )
-        m_pCompTrigger->eventManager->InvokeEvent( Event(WantToDeleteEntity, m_pMsgEntity) );
+        m_pCompTrigger->gameEvents->wantToDeleteEntity.Fire(m_pMsgEntity);
 }
 
 void EffectEndLevel::Fire()
 {
     if ( m_win )
-        m_pCompTrigger->eventManager->InvokeEvent( Event(LevelEnd_Win, (void*)m_message.c_str()) );
+        m_pCompTrigger->gameEvents->levelEnd.Fire(true, m_message);
     else
-        m_pCompTrigger->eventManager->InvokeEvent( Event(LevelEnd_Lose, (void*)m_message.c_str()) );
+        m_pCompTrigger->gameEvents->levelEnd.Fire(false, m_message);
 }
 
 /*void EffectLoseLevel::Fire()

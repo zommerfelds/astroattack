@@ -15,14 +15,14 @@ const CompIdType CompTrigger::m_componentId = "CompTrigger";
 
 CompTrigger::CompTrigger() : m_fired ( false )
 {
-    m_registerObj.RegisterListener( GameUpdate, boost::bind( &CompTrigger::Update, this, _1 ) );
+    m_eventConnection = gameEvents->gameUpdate.RegisterListener( boost::bind( &CompTrigger::OnUpdate, this ) );
 }
 
 CompTrigger::~CompTrigger()
 {
 }
 
-void CompTrigger::Update( const Event* /*gameUpdatedEvent*/ )
+void CompTrigger::OnUpdate()
 {
     if ( !m_fired )
     {
@@ -55,13 +55,13 @@ void CompTrigger::Update( const Event* /*gameUpdatedEvent*/ )
     }
 }
 
-void CompTrigger::AddCondition( boost::shared_ptr<Condition> pCond )
+void CompTrigger::AddCondition( const boost::shared_ptr<Condition>& pCond )
 {
     pCond->m_pCompTrigger = this;
     m_conditions.push_back( pCond );
 }
 
-void CompTrigger::AddEffect( boost::shared_ptr<Effect> pTrig )
+void CompTrigger::AddEffect( const boost::shared_ptr<Effect>& pTrig )
 {
     pTrig->m_pCompTrigger = this;
     m_effects.push_back( pTrig );

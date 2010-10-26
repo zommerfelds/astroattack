@@ -50,8 +50,8 @@ public:
     StateManager();
     ~StateManager();
 
-    void ChangeState( boost::shared_ptr<GameState> pState );
-	void PushState( boost::shared_ptr<GameState> pState );
+    void ChangeState( const boost::shared_ptr<GameState>& pState );
+	void PushState( const boost::shared_ptr<GameState>& pState );
 	void PopState();
 
     GameState* GetCurrentState() { return m_states.back().get(); }

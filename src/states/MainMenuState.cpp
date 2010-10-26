@@ -69,7 +69,7 @@ MainMenuState::MainMenuState( SubSystems* pSubSystems, SubMenu startingSubMenu )
         m_titleVertexOffsetXDir[i] = 0.0f;
         m_titleVertexOffsetYDir[i] = 0.0f;
     }
-    for (int i=0; i<4; i++)
+    for (int i=0; i<8; i++)
         m_titleVertexCoordOffset[i] = 0.0f;
 }
 
@@ -255,7 +255,7 @@ void MainMenuState::Update()      // Spiel aktualisieren
 
     if ( m_wantToQuit )
     {
-        GetSubSystems()->eventManager->InvokeEvent( Event(QuitGame) );
+        GetSubSystems()->events->quitGame.Fire();
         return;
     }
     if ( m_goToEditor || GetSubSystems()->input->KeyState( EnterEditor ) )

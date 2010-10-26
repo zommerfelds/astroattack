@@ -10,7 +10,7 @@
 #include "../GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
 
 #include "CompVisualAnimation.h"
-#include "../EventManager.h"
+#include "../GameEvents.h"
 #include "../main.h"
 #include <boost/bind.hpp>
 #include "../Vector2D.h"
@@ -20,7 +20,7 @@
 const CompIdType CompVisualAnimation::m_componentId = "CompVisualAnimation";
 
 CompVisualAnimation::CompVisualAnimation( const AnimInfo* pAnimInfo )
-: m_registerObj(),
+: m_eventConnection(),
   m_center( new Vector2D ),
   m_halfWidth ( 0.0f ),
   m_halfHeight ( 0.0f ),
@@ -37,8 +37,9 @@ CompVisualAnimation::CompVisualAnimation( const AnimInfo* pAnimInfo )
         m_curState = pAnimInfo->states.begin()->first;
     else
         gAaLog.Write ( "*** WARNING ***: pointer passed to CompVisualAnimation is NULL! (Animation does not exist?) " );
+
     // Update() registrieren. Das hat die Folge, dass Update() pro Aktualisierung (GameUpdate) aufgerufen wird.
-    m_registerObj.RegisterListener( GameUpdate, boost::bind( &CompVisualAnimation::Update, this, _1 ) );
+    m_eventConnection = gameEvents->gameUpdate.RegisterListener( boost::bind( &CompVisualAnimation::OnUpdate, this ) );
 }
 
 CompVisualAnimation::~CompVisualAnimation()
@@ -92,7 +93,7 @@ void CompVisualAnimation::Continue()
 }
 
 // ------- Aktualisieren! --------
-void CompVisualAnimation::Update( const Event* /*gameUpdatedEvent*/ )
+void CompVisualAnimation::OnUpdate()
 {
     if ( m_animInfo==NULL )
         return;

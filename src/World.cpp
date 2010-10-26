@@ -9,11 +9,11 @@
 #include "GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
 
 #include "World.h"
-#include "EventManager.h" // Steuert die Spielerreignisse
+#include "GameEvents.h" // Steuert die Spielerreignisse
 
 // Konstruktor
-GameWorld::GameWorld( EventManager* pEventManager )
-: m_pEventManager ( pEventManager )
+GameWorld::GameWorld( GameEvents* pEventManager )
+: m_pGameEvents ( pEventManager )
 {
 }
 
@@ -31,14 +31,12 @@ GameWorld::~GameWorld()
     }
 }
 
-void GameWorld::AddEntity( boost::shared_ptr<Entity> pEntity )
+void GameWorld::AddEntity( const boost::shared_ptr<Entity>& pEntity )
 {
     EntityIdType id = pEntity->GetId();
-    boost::shared_ptr<Entity> pOldEntity = m_entities[id];
-    pOldEntity.reset();
-    m_entities[id] = pEntity;
+    m_entities[id] = pEntity; // if there is an entity with the same ID before, it will get deleted
 
-    m_pEventManager->InvokeEvent( Event( NewEntity, pEntity.get() ) );
+    m_pGameEvents->newEntity.Fire( pEntity.get() );
 }
 
 boost::shared_ptr<Entity> GameWorld::GetEntity( EntityIdType id ) const
@@ -52,7 +50,7 @@ boost::shared_ptr<Entity> GameWorld::GetEntity( EntityIdType id ) const
 
 void GameWorld::RemoveEntity( EntityIdType id )
 {
-    m_pEventManager->InvokeEvent( Event( DeleteEntity, m_entities[id].get() ) );
+    m_pGameEvents->deleteEntity.Fire( m_entities[id].get() );
     m_entities.erase( id );
 }
 
@@ -81,11 +79,11 @@ void GameWorld::SetVariable( const WorldVariableType varName, int value )
 WorldVariblesMap::iterator GameWorld::GetItToVariable( const WorldVariableType& varName )
 {
     // es wird nur ein neues Elemen hinzugefügt, falls noch keines existiert
-    return m_variables.insert( std::pair<const WorldVariableType, int>( varName, 0 ) ).first;
+    return m_variables.insert( std::make_pair( varName, 0 ) ).first;
 
     /*WorldVariblesMap::iterator it = m_variables.find( varName );
     if ( it == m_variables.end() )
-        m_variables.insert( std::pair<const WorldVariableType, int>( varName, 0 ) ).first;
+        m_variables.insert( std::make_pair( varName, 0 ) ).first;
     else
         return m_variables.find( varName );*/
 }

@@ -18,7 +18,7 @@
 #include "../Input.h"
 #include "../Entity.h"
 #include "../Logger.h"
-#include "../EventManager.h"
+#include "../GameEvents.h"
 #include "../XmlLoader.h"
 #include "../Sound.h"
 #include <SDL/SDL.h>
@@ -48,8 +48,9 @@ const StateIdType PlayingState::stateId = "PlayingState";
 
 PlayingState::PlayingState( SubSystems* pSubSystems, std::string levelFileName )
 : GameState( pSubSystems ),
-  m_pGameWorld ( new GameWorld( GetSubSystems()->eventManager.get() ) ),
+  m_pGameWorld ( new GameWorld( GetSubSystems()->events.get() ) ),
   m_pGameCamera ( new GameCamera( GetSubSystems()->input.get(), GetSubSystems()->renderer.get(), m_pGameWorld.get() ) ),
+  m_eventConnection1 (), m_eventConnection2 (),
   m_curentDeleteSet (1), m_wantToEndGame( false ), m_alphaOverlay( 0.0 ),
   m_levelFileName ( levelFileName )
 {
@@ -94,8 +95,8 @@ void PlayingState::Init()        // State starten
     m_pGameWorld->WriteWorldToLogger( log );
     log.CloseFile();
 
-    m_registerObj.RegisterListener( WantToDeleteEntity, boost::bind( &PlayingState::EntityDeleted, this, _1 ) );
-    m_registerObj2.RegisterListener( LevelEnd_Lose, boost::bind( &PlayingState::GameOver, this, _1 ) );
+    m_eventConnection1 = GetSubSystems()->events->wantToDeleteEntity.RegisterListener( boost::bind( &PlayingState::OnEntityDeleted, this, _1 ) );
+    m_eventConnection2 = GetSubSystems()->events->levelEnd.RegisterListener( boost::bind( &PlayingState::OnLevelEnd, this, _1, _2 ) );
 }
 
 void PlayingState::Cleanup()     // State abbrechen
@@ -138,7 +139,7 @@ void PlayingState::Update()      // Spiel aktualisieren
     }
 
     GetSubSystems()->physics->Update();                       // Physik aktualisieren
-    GetSubSystems()->eventManager->InvokeEvent( Event(GameUpdate,NULL) );
+    GetSubSystems()->events->gameUpdate.Fire();
 
     if ( m_curentDeleteSet == 1 )
     {
@@ -258,14 +259,11 @@ void PlayingState::Draw( float accumulator )        // Spiel zeichnen
     
 }
 
-void PlayingState::EntityDeleted( const Event* deletedEvent )
+void PlayingState::OnEntityDeleted( Entity* pEntity )
 {
-    if ( deletedEvent == NULL || deletedEvent->data == NULL )
-        return;
-    Entity* entity = static_cast< Entity* >(deletedEvent->data);
-    if ( entity )
+    if ( pEntity )
     {
-        std::string id = entity->GetId();
+        std::string id = pEntity->GetId();
         if ( m_curentDeleteSet == 1 )
         {
             m_entitiesToDelete1.insert( id );
@@ -277,10 +275,10 @@ void PlayingState::EntityDeleted( const Event* deletedEvent )
     }
 }
 
-void PlayingState::GameOver( const Event* endGameEvent )
+void PlayingState::OnLevelEnd(bool win,std::string msg)
 {
     m_wantToEndGame = true;
-    m_gameOverMessage = static_cast<char*>(endGameEvent->data);
+    m_gameOverMessage = msg;
 }
 
 // Astro Attack - Christian Zommerfelds - 2009

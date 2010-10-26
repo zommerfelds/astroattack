@@ -12,12 +12,12 @@
 
 #include "GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
 #include <boost/scoped_ptr.hpp>
+#include "Event.h" // TODO: use pimpl to hide this
 
 class GameCamera;
+class Entity;
 class GameWorld;
-class Event;
-class RegisterObj;
-class EventManager;
+class GameEvents;
 class CompVisualTexture;
 class CompVisualAnimation;
 class CompVisualMessage;
@@ -40,7 +40,7 @@ typedef std::multimap<const std::string, CompVisualMessage* > CompVisualMessageM
 class RenderSubSystem
 {
 public:
-    RenderSubSystem( /*const GameWorld* pWorld, const GameCamera* pCamera,*/ EventManager* pEventManager );
+    RenderSubSystem( /*const GameWorld* pWorld, const GameCamera* pCamera,*/ GameEvents* pGameEvents );
     ~RenderSubSystem();
 
     void Init( int width, int height );
@@ -104,9 +104,9 @@ public:
 private:
     void InitOpenGL( int width, int height ); // OpenGL initialisieren
 
-    boost::scoped_ptr<RegisterObj> m_registerObj1;
-    boost::scoped_ptr<RegisterObj> m_registerObj2;
-    EventManager* m_pEventManager;
+    EventConnection m_eventConnection1;
+    EventConnection m_eventConnection2;
+    GameEvents* m_pGameEvents;
     boost::scoped_ptr<TextureManager> m_pTextureManager;
     boost::scoped_ptr<AnimationManager> m_pAnimationManager;
     boost::scoped_ptr<FontManager> m_pFontManager;
@@ -115,8 +115,8 @@ private:
     CompVisualAnimationMap m_visualAnimComps;
     CompVisualMessageMap m_visualMsgComps;
 
-    void RegisterCompVisual( const Event* pEvent );
-    void UnregisterCompVisual( const Event* pEvent );
+    void RegisterCompVisual( Entity* pEntity );
+    void UnregisterCompVisual( Entity* pEntity );
 
     MatrixId m_currentMatrix;
     float m_matrixGUI[16];

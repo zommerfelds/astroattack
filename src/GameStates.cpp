@@ -31,7 +31,7 @@ StateManager::~StateManager()
 	}
 }
 
-void StateManager::ChangeState( boost::shared_ptr<GameState> pState ) 
+void StateManager::ChangeState( const boost::shared_ptr<GameState>& pState )
 {
     gAaLog.Write ( "\n=== Changing State to \"%s\" ===\n\n", pState->StateID().c_str() );
 
@@ -48,7 +48,7 @@ void StateManager::ChangeState( boost::shared_ptr<GameState> pState )
     m_states.back()->GetSubSystems()->isLoading = true;
 }
 
-void StateManager::PushState( boost::shared_ptr<GameState> pState )
+void StateManager::PushState( const boost::shared_ptr<GameState>& pState )
 {
 	// Momentaner State anhalten
 	if ( !m_states.empty() )

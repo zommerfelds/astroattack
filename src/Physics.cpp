@@ -9,7 +9,7 @@
 #include "GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
 
 #include "Physics.h"
-#include "EventManager.h"
+#include "GameEvents.h"
 #include "Entity.h"
 #include "Vector2D.h"
 
@@ -25,11 +25,11 @@
 const float PHYS_DELTA_TIME = 1.0f/60.0f;
 const int PHYS_ITERATIONS = 10;
 
-PhysicsSubSystem::PhysicsSubSystem( EventManager* pEventManager)
-: m_pGravitationalAcc ( new Vector2D ), m_registerObj( new RegisterObj ), m_registerObj2( new RegisterObj ),
-  m_registerObj3( new RegisterObj ), m_registerObj4( new RegisterObj ), m_pEventManager ( pEventManager ), m_world (),
+PhysicsSubSystem::PhysicsSubSystem( GameEvents* pGameEvents)
+: m_pGravitationalAcc ( new Vector2D ), m_eventConnection1 (), m_eventConnection2 (),
+  m_eventConnection3 (), m_eventConnection4 (), m_pGameEvents ( pGameEvents ), m_world (),
   m_timeStep ( PHYS_DELTA_TIME ), m_velocityIterations( PHYS_ITERATIONS ), m_positionIterations( PHYS_ITERATIONS ),
-  m_contactListener( new ContactListener( m_pEventManager ) )
+  m_contactListener( new ContactListener( m_pGameEvents ) )
 {
     // Gravitationsvektor
     //b2Vec2 gravity(0.0f, -25.0f);
@@ -49,60 +49,54 @@ PhysicsSubSystem::~PhysicsSubSystem()
 {
 }
 
-void PhysicsSubSystem::RegisterPhysicsComp( const Event* pEvent )
+void PhysicsSubSystem::RegisterPhysicsComp( Entity* pEntity )
 {
-    if( pEvent != NULL && pEvent->type == NewEntity )
+    CompPhysics* comp_phys = static_cast<CompPhysics*>( pEntity->GetFirstComponent("CompPhysics") );
+    if ( comp_phys != NULL ) // Falls es eine "CompPhysics"-Komponente gibt
     {
-        CompPhysics* comp_phys = static_cast<CompPhysics*>( static_cast<Entity*>(pEvent->data)->GetFirstComponent("CompPhysics") );
-        if ( comp_phys != NULL ) // Falls es eine "CompPhysics"-Komponente gibt
+        comp_phys->m_body = m_world->CreateBody( comp_phys->m_bodyDef.get() );
+        comp_phys->m_body->SetUserData( comp_phys );
+        for ( unsigned int i = 0; i < comp_phys->m_fixtureDefs.size(); ++i )
         {
-            comp_phys->m_body = m_world->CreateBody( comp_phys->m_bodyDef.get() );
-            comp_phys->m_body->SetUserData( comp_phys );
-            for ( unsigned int i = 0; i < comp_phys->m_fixtureDefs.size(); ++i )
+            std::pair< FixtureMap::iterator,bool> result (
+                comp_phys->m_fixtureList.insert( std::make_pair(
+                         comp_phys->m_fixtureDefs[i].first,
+                         FixtureInfo( NULL, comp_phys->m_fixtureDefs[i].second->density )
+                ) ) );
+            if ( result.second )
             {
-                std::pair< FixtureMap::iterator,bool> result (
-                    comp_phys->m_fixtureList.insert( std::pair< FixtureIdType, FixtureInfo >(
-                             comp_phys->m_fixtureDefs[i].first,
-                             FixtureInfo( NULL, comp_phys->m_fixtureDefs[i].second->density )
-                    ) ) );
-                if ( result.second )
-                {                
-                    comp_phys->m_fixtureDefs[i].second->filter.maskBits = 1;
-                    result.first->second.pFixture = comp_phys->m_body->CreateFixture( comp_phys->m_fixtureDefs[i].second.get() );
-                    result.first->second.pFixture->SetUserData( comp_phys );
-                }
-                // TODO: else
+                comp_phys->m_fixtureDefs[i].second->filter.maskBits = 1;
+                result.first->second.pFixture = comp_phys->m_body->CreateFixture( comp_phys->m_fixtureDefs[i].second.get() );
+                result.first->second.pFixture->SetUserData( comp_phys );
             }
-
-            m_physicsComps.push_back( comp_phys );
-
-            // Definitionen löschen (sie werden nur für das Initialisieren gebraucht):
-            comp_phys->m_bodyDef.reset();
-            comp_phys->m_fixtureDefs.clear();
+            // TODO: else
         }
+
+        m_physicsComps.push_back( comp_phys );
+
+        // Definitionen löschen (sie werden nur für das Initialisieren gebraucht):
+        comp_phys->m_bodyDef.reset();
+        comp_phys->m_fixtureDefs.clear();
     }
 }
 
-void PhysicsSubSystem::UnregisterPhysicsComp( const Event* pEvent )
+void PhysicsSubSystem::UnregisterPhysicsComp( Entity* pEntity )
 {
-    if( pEvent != NULL && pEvent->type == DeleteEntity )
+    CompPhysics* comp_phys = static_cast<CompPhysics*>(pEntity->GetFirstComponent("CompPhysics") );
+    if ( comp_phys != NULL ) // Falls es eine "CompPhysics"-Komponente gibt
     {
-        CompPhysics* comp_phys = static_cast<CompPhysics*>( static_cast<Entity*>(pEvent->data)->GetFirstComponent("CompPhysics") );
-        if ( comp_phys != NULL ) // Falls es eine "CompPhysics"-Komponente gibt
+        if ( comp_phys->m_body != NULL )
         {
-            if ( comp_phys->m_body != NULL )
+            m_world->DestroyBody( comp_phys->m_body );
+            comp_phys->m_body = NULL;
+        }
+        for ( unsigned int i = 0; i < m_physicsComps.size(); ++i )
+        {
+            if ( m_physicsComps[i] == comp_phys )
             {
-                m_world->DestroyBody( comp_phys->m_body );
-                comp_phys->m_body = NULL;
+                m_physicsComps.erase( m_physicsComps.begin()+i );
+                break;
             }
-            for ( unsigned int i = 0; i < m_physicsComps.size(); ++i )
-            {
-                if ( m_physicsComps[i] == comp_phys )
-				{
-                    m_physicsComps.erase( m_physicsComps.begin()+i );
-					break;
-				}
-			}
         }
     }
 }
@@ -110,10 +104,10 @@ void PhysicsSubSystem::UnregisterPhysicsComp( const Event* pEvent )
 // PhysicsSubSystem initialisieren
 void PhysicsSubSystem::Init()
 {
-    m_registerObj->RegisterListener( NewEntity, boost::bind( &PhysicsSubSystem::RegisterPhysicsComp, this, _1 ) );
-    m_registerObj2->RegisterListener( DeleteEntity, boost::bind( &PhysicsSubSystem::UnregisterPhysicsComp, this, _1 ) );
-	m_registerObj3->RegisterListener( NewEntity, boost::bind( &PhysicsSubSystem::RegisterGravFieldComp, this, _1 ) );
-    m_registerObj4->RegisterListener( DeleteEntity, boost::bind( &PhysicsSubSystem::UnregisterGravFieldComp, this, _1 ) );
+    m_eventConnection1 = m_pGameEvents->newEntity.RegisterListener( boost::bind( &PhysicsSubSystem::RegisterPhysicsComp, this, _1 ) );
+    m_eventConnection2 = m_pGameEvents->deleteEntity.RegisterListener( boost::bind( &PhysicsSubSystem::UnregisterPhysicsComp, this, _1 ) );
+    m_eventConnection3 = m_pGameEvents->newEntity.RegisterListener( boost::bind( &PhysicsSubSystem::RegisterGravFieldComp, this, _1 ) );
+    m_eventConnection4 = m_pGameEvents->deleteEntity.RegisterListener( boost::bind( &PhysicsSubSystem::UnregisterGravFieldComp, this, _1 ) );
 
     m_pGravitationalAcc->x = 0.0f;
     m_pGravitationalAcc->y = -25.0f;
@@ -291,32 +285,26 @@ void PhysicsSubSystem::Refilter( b2Shape* /*pShape*/ )
     //m_world->Refilter( pShape );
 }
 
-void PhysicsSubSystem::RegisterGravFieldComp( const Event* pEvent )
+void PhysicsSubSystem::RegisterGravFieldComp( Entity* pEntity )
 {
-    if( pEvent != NULL && pEvent->type == NewEntity )
+    CompGravField* comp_grav = static_cast<CompGravField*>( pEntity->GetFirstComponent("CompGravField") );
+    if ( comp_grav != NULL ) // Falls es eine "CompGravField"-Komponente gibt
     {
-        CompGravField* comp_grav = static_cast<CompGravField*>( static_cast<Entity*>(pEvent->data)->GetFirstComponent("CompGravField") );
-        if ( comp_grav != NULL ) // Falls es eine "CompGravField"-Komponente gibt
-        {
-            m_gravFields.push_back( comp_grav );
-        }
+        m_gravFields.push_back( comp_grav );
     }
 }
 
-void PhysicsSubSystem::UnregisterGravFieldComp( const Event* pEvent )
+void PhysicsSubSystem::UnregisterGravFieldComp( Entity* pEntity )
 {
-    if( pEvent != NULL && pEvent->type == DeleteEntity )
+    CompGravField* comp_grav = static_cast<CompGravField*>( pEntity->GetFirstComponent("CompGravField") );
+    if ( comp_grav != NULL ) // Falls es eine "CompGravField"-Komponente gibt
     {
-        CompGravField* comp_grav = static_cast<CompGravField*>( static_cast<Entity*>(pEvent->data)->GetFirstComponent("CompGravField") );
-        if ( comp_grav != NULL ) // Falls es eine "CompGravField"-Komponente gibt
+        for ( unsigned int i = 0; i < m_gravFields.size(); ++i )
         {
-			for ( unsigned int i = 0; i < m_gravFields.size(); ++i )
+            if ( m_gravFields[i] == comp_grav )
             {
-                if ( m_gravFields[i] == comp_grav )
-				{
-                    m_gravFields.erase( m_gravFields.begin()+i );
-					break;
-				}
+                m_gravFields.erase( m_gravFields.begin()+i );
+                break;
             }
         }
     }

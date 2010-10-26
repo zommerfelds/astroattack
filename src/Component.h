@@ -14,7 +14,7 @@
 
 #include <string>
 
-class EventManager;
+class GameEvents;
 class Entity;
 typedef std::string CompIdType;
 
@@ -31,7 +31,7 @@ public:
     void SetOwnerEntity( Entity* obj ) { m_pOwnerEntity = obj; } // Einheit, die die Komponente besitzt, festlegen
     Entity* GetOwnerEntity() { return m_pOwnerEntity; } // Einheit, die die Komponente besitzt, abfragen
 
-    static EventManager* eventManager; // EventManager für alle Komponenten
+    static GameEvents* gameEvents; // EventManager für alle Komponenten
 
 private:
     Entity* m_pOwnerEntity; // Einheit, die die Komponente besitzt

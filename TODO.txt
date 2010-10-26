@@ -1,43 +1,61 @@
------------------
-   AstroAttack   
------------------
+ /-------------------------\
+    AstroAttack TODO list   
+ \-------------------------/
 
-TODO:
+* High priority *
 
-- Improve jump animation
-- Startup beschleunigen
-- Replace if (var==NULL) by assert(var!=NULL) (really?)
+- Organize components
+- Clean up events
+- Refactor
+- Time Accumulator besser anwenden
+- Check static_cast<> and dynamic_cast<> (e.g. PhysicsSubSystem::RegisterGravFieldComp() )
+
+
+* Medium priority *
+
 - Test OpenGL error checking (glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR) did not generate error)
 - Bug in Logger: Loading Texture "(null)"... Done!
-- Make data creation Wiki/howto. Tools: OptiPNG
-- Time Accumulator besser anwenden
-- Clean up TODO (high/low priority)
-- Zoom out when cursor is far away
-- Walk animation velocity according to player speed
 - Change isSensor to sensor and check XML node names (maybe capital beginning?)
 - Kontakt Events nicht für jeden Box2D Kontakt erzeugen, sonders Box2D Kontakte zuerst verarbeiten und zusammenfügen.
 - Event Manager verbessern (keine void*)
-- Check static_cast<> and dynamic_cast<> (e.g. PhysicsSubSystem::RegisterGravFieldComp() )
-- Delay wenn Gravitationsfeld wechselt
 - GUI System
 - Konkave Polygone im Editor
+- Fehlerchecking und Beschreibung beim Level Laden
+- Check widescreen mode
+- Bug: can't fly away from wall if you jump near a wall
+- "Conditional jump or move depends on uninitialised value(s)" in SDL_PollEvent
+- Improve program shutdown (show message)
+- Use pimpl pattern
+
+
+* Low priority *
+
+- Options screen
+- Improve level editor
+- Startup beschleunigen
+- Improve jump animation
+- Replace if (var==NULL) by assert(var!=NULL) (really?)
+- Make data creation Wiki/howto. Tools: OptiPNG
+- Zoom out when cursor is far away
+- Walk animation velocity according to player speed
 - Kamera-Interpolation bei MoveAbsolute und RotateRelative
 - Soundklasse erweitern (ausschaltbar;beim Faden nicht warten;abfragen können, ob ein Sound gerade abgespielt wird)
-- Bessere Jumpanimation
 - Animation für Kiste stossen
 - Energie und Energie-Killer
-- Level-Missionen (Trigger)
 - Gegner (Monster)
-- Game Menu
+- Port to CMake
+- Use unordered_map
+
+* ? *
+
+- Delay wenn Gravitationsfeld wechselt
 - Spiel stoppen (pausieren) wenn fenster nicht aktiv ist.
 - Jede C++,h Datei oben kurz Dokumentieren
-- Fehlerchecking und Beschreibung beim Level Laden
 - Align text
-- Level editor extra
-- Sound and Music
-- Port to CMake
+
 
 DONE:
+- Clean up TODO (high/low priority)
 - Changed static local variables to member variables
 - Use make_shared
 - Simplify playerCompPhysics->GetBody()->GetContactList() (in CompPlayerController.cpp)
@@ -80,3 +98,4 @@ DONE:
 - Physik optimieren (mit Box2D)
   (Quadtree / Space partitioning) nicht nötig wegen Box2D
 - Von double auf float vechseln
+- Level-Missionen (Trigger)

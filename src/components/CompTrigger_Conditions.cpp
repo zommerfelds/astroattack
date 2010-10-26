@@ -46,7 +46,7 @@ bool ConditionCompareVariable::ConditionIsTrue()
 ConditionEntityTouchedThis::ConditionEntityTouchedThis( std::string entityName )
 : m_entityName ( entityName )/*, m_touched ( false )*/
 {
-    //m_registerObj.RegisterListener( ContactAdd, boost::bind( &ConditionEntityTouchedThis::Collision, this, _1 ) );
+    //m_registerObj.RegisterListener( ContactAdd, boost::bind( &ConditionEntityTouchedThis::OnCollision, this, _1 ) );
 }
 
 bool ConditionEntityTouchedThis::ConditionIsTrue()
@@ -67,7 +67,7 @@ bool ConditionEntityTouchedThis::ConditionIsTrue()
     return false;
 }
 
-/*void ConditionEntityTouchedThis::Collision( const Event* contactEvent )
+/*void ConditionEntityTouchedThis::OnCollision( const Event* contactEvent )
 {
     if ( contactEvent == NULL )
         return;

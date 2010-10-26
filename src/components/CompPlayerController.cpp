@@ -31,7 +31,7 @@ const int cMaxRecharge = 15;                    // wie wie muss der Spieler wart
 CompPlayerController::CompPlayerController( const InputSubSystem* pInputSubSystem, std::map<const std::string, int>::iterator itJetPackVar, boost::function1<void,b2Shape*> refiltelFunc ) :
          m_pInputSubSystem ( pInputSubSystem ),
          m_currentFrictionIsLow ( false ),
-         m_registerObj (),
+         m_eventConnection (),
          m_itJetPackVar ( itJetPackVar ),
          m_refilterFunc ( refiltelFunc ),
          m_spaceKeyDownLastUpdate ( false ),
@@ -41,7 +41,7 @@ CompPlayerController::CompPlayerController( const InputSubSystem* pInputSubSyste
          m_walkingTime ( 0 )
 {
     // Update-Methode registrieren, damit sie in jede Aktualisierung (GameUpdate) aufgerufen wird:
-    m_registerObj.RegisterListener( GameUpdate, boost::bind( &CompPlayerController::Update, this, _1 ) );
+    m_eventConnection = gameEvents->gameUpdate.RegisterListener( boost::bind( &CompPlayerController::OnUpdate, this ) );
 }
 
 // Destruktor
@@ -51,7 +51,7 @@ CompPlayerController::~CompPlayerController()
 
 // Funktion die Tastendrücke in Physikalische Reaktionen umwandelt.
 // Wird immer aktualisiert.
-void CompPlayerController::Update( const Event* /*gameUpdatedEvent*/ )
+void CompPlayerController::OnUpdate()
 {    
     // Physikkomponente vom Spieler suchen, damit wir Kräfte an ihm ausüben können
     CompPhysics* playerCompPhysics = static_cast<CompPhysics*>( GetOwnerEntity()->GetFirstComponent("CompPhysics") );

@@ -28,15 +28,15 @@
 #include "components/CompVisualAnimation.h"
 #include "components/CompVisualMessage.h"
 
-#include "EventManager.h" // Steuert die Spielerreignisse
+#include "GameEvents.h" // Steuert die Spielerreignisse
 
 #include <boost/bind.hpp>
 #include <Box2D/Box2D.h>
 
 const char* cGraphisFileName = "data/graphics.xml";
 
-RenderSubSystem::RenderSubSystem( /*const GameWorld* pWorld, const GameCamera* pCamera,*/ EventManager* pEventManager )
-: m_registerObj1( new RegisterObj ), m_registerObj2( new RegisterObj ), m_pEventManager ( pEventManager ),
+RenderSubSystem::RenderSubSystem( /*const GameWorld* pWorld, const GameCamera* pCamera,*/ GameEvents* pGameEvents )
+: m_eventConnection1 (), m_eventConnection2(), m_pGameEvents ( pGameEvents ),
   m_pTextureManager ( new TextureManager ), m_pAnimationManager ( new AnimationManager(m_pTextureManager.get()) ),
   m_pFontManager ( new FontManager ), m_currentMatrix (World)
 {
@@ -74,8 +74,8 @@ void RenderSubSystem::Init ( int width, int height )
         gAaLog.Write ( " OpenGL Error: %s ", errString );
     }
 
-    m_registerObj1->RegisterListener( NewEntity, boost::bind( &RenderSubSystem::RegisterCompVisual, this, _1 ) );
-    m_registerObj2->RegisterListener( DeleteEntity, boost::bind( &RenderSubSystem::UnregisterCompVisual, this, _1 ) );
+    m_eventConnection1 = m_pGameEvents->newEntity.RegisterListener( boost::bind( &RenderSubSystem::RegisterCompVisual, this, _1 ) );
+    m_eventConnection2 = m_pGameEvents->deleteEntity.RegisterListener(  boost::bind( &RenderSubSystem::UnregisterCompVisual, this, _1 ) );
 }
 
 bool RenderSubSystem::LoadData()
@@ -529,66 +529,57 @@ void RenderSubSystem::DrawVisualMessageComps()
     }
 }
 
-void RenderSubSystem::RegisterCompVisual( const Event* pEvent )
+void RenderSubSystem::RegisterCompVisual( Entity* pEntity )
 {
-    if ( pEvent != NULL && pEvent->type == NewEntity )
+    std::vector<Component*> comps = pEntity->GetComponents("CompVisualTexture");
+    for ( unsigned int i = 0; i < comps.size(); ++i )
     {
-        std::vector<Component*> comps = static_cast<Entity*>(pEvent->data)->GetComponents("CompVisualTexture");
-        for ( unsigned int i = 0; i < comps.size(); ++i )
-        {
-            CompVisualTexture* comp = static_cast<CompVisualTexture*>( comps[i] );
-            if (comp != NULL) // Falls es eine "CompVisualTexture"-Komponente gibt
-                m_visualTextureComps.insert( std::pair<const std::string, CompVisualTexture* >(
-                    comp->GetOwnerEntity()->GetId(), comp ) );
-        }
+        CompVisualTexture* comp = static_cast<CompVisualTexture*>( comps[i] );
+        if (comp != NULL) // Falls es eine "CompVisualTexture"-Komponente gibt
+            m_visualTextureComps.insert( std::make_pair( comp->GetOwnerEntity()->GetId(), comp ) );
+    }
 
-        comps = static_cast<Entity*>(pEvent->data)->GetComponents("CompVisualAnimation");
-        for ( unsigned int i = 0; i < comps.size(); ++i )
-        {
-            CompVisualAnimation* comp = static_cast<CompVisualAnimation*>( comps[i] );
-            if (comp != NULL) // Falls es eine "CompVisualAnimation"-Komponente gibt
-                m_visualAnimComps.insert( std::pair<const std::string, CompVisualAnimation* >(
-                    comp->GetOwnerEntity()->GetId(), comp ) );
-        }
+    comps = pEntity->GetComponents("CompVisualAnimation");
+    for ( unsigned int i = 0; i < comps.size(); ++i )
+    {
+        CompVisualAnimation* comp = static_cast<CompVisualAnimation*>( comps[i] );
+        if (comp != NULL) // Falls es eine "CompVisualAnimation"-Komponente gibt
+            m_visualAnimComps.insert( std::make_pair( comp->GetOwnerEntity()->GetId(), comp ) );
+    }
 
-        comps = static_cast<Entity*>(pEvent->data)->GetComponents("CompVisualMessage");
-        for ( unsigned int i = 0; i < comps.size(); ++i )
-        {
-            CompVisualMessage* comp = static_cast<CompVisualMessage*>( comps[i] );
-            if (comp != NULL) // Falls es eine "CompVisualMessage"-Komponente gibt
-                m_visualMsgComps.insert( std::pair<const std::string, CompVisualMessage* >(
-                    comp->GetOwnerEntity()->GetId(), comp ) );
-        }
+    comps = pEntity->GetComponents("CompVisualMessage");
+    for ( unsigned int i = 0; i < comps.size(); ++i )
+    {
+        CompVisualMessage* comp = static_cast<CompVisualMessage*>( comps[i] );
+        if (comp != NULL) // Falls es eine "CompVisualMessage"-Komponente gibt
+            m_visualMsgComps.insert( std::make_pair( comp->GetOwnerEntity()->GetId(), comp ) );
     }
 }
 
-void RenderSubSystem::UnregisterCompVisual( const Event* pEvent )
+void RenderSubSystem::UnregisterCompVisual( Entity* pEntity )
 {
-    if ( pEvent != NULL && pEvent->type == DeleteEntity )
+    std::vector<Component*> comps = pEntity->GetComponents("CompVisualTexture");
+    for ( unsigned int i = 0; i < comps.size(); ++i )
     {
-        std::vector<Component*> comps = static_cast<Entity*>(pEvent->data)->GetComponents("CompVisualTexture");
-        for ( unsigned int i = 0; i < comps.size(); ++i )
-        {
-            CompVisualTexture* comp = static_cast<CompVisualTexture*>( comps[i] );
-            if (comp != NULL) // Falls es eine "CompVisualTexture"-Komponente gibt
-                m_visualTextureComps.erase( comp->GetOwnerEntity()->GetId() );
-        }
+        CompVisualTexture* comp = static_cast<CompVisualTexture*>( comps[i] );
+        if (comp != NULL) // Falls es eine "CompVisualTexture"-Komponente gibt
+            m_visualTextureComps.erase( comp->GetOwnerEntity()->GetId() );
+    }
 
-        comps = static_cast<Entity*>(pEvent->data)->GetComponents("CompVisualAnimation");
-        for ( unsigned int i = 0; i < comps.size(); ++i )
-        {
-            CompVisualAnimation* comp = static_cast<CompVisualAnimation*>( comps[i] );
-            if (comp != NULL) // Falls es eine "CompVisualAnimation"-Komponente gibt
-                m_visualAnimComps.erase( comp->GetOwnerEntity()->GetId() );
-        }
+    comps = pEntity->GetComponents("CompVisualAnimation");
+    for ( unsigned int i = 0; i < comps.size(); ++i )
+    {
+        CompVisualAnimation* comp = static_cast<CompVisualAnimation*>( comps[i] );
+        if (comp != NULL) // Falls es eine "CompVisualAnimation"-Komponente gibt
+            m_visualAnimComps.erase( comp->GetOwnerEntity()->GetId() );
+    }
 
-        comps = static_cast<Entity*>(pEvent->data)->GetComponents("CompVisualMessage");
-        for ( unsigned int i = 0; i < comps.size(); ++i )
-        {
-            CompVisualMessage* comp = static_cast<CompVisualMessage*>( comps[i] );
-            if (comp != NULL) // Falls es eine "CompVisualMessage"-Komponente gibt
-                m_visualMsgComps.erase( comp->GetOwnerEntity()->GetId() );
-        }
+    comps = pEntity->GetComponents("CompVisualMessage");
+    for ( unsigned int i = 0; i < comps.size(); ++i )
+    {
+        CompVisualMessage* comp = static_cast<CompVisualMessage*>( comps[i] );
+        if (comp != NULL) // Falls es eine "CompVisualMessage"-Komponente gibt
+            m_visualMsgComps.erase( comp->GetOwnerEntity()->GetId() );
     }
 }
 
