@@ -422,11 +422,13 @@ void RenderSubSystem::DrawVisualTextureComps( float accumulator )
         if ( compPhys != NULL )
         {
             glPushMatrix();
-            float angle = compPhys->GetBody()->GetAngle() + compPhys->GetBody()->GetAngularVelocity() * accumulator;
+
+            float angle = compPhys->GetSmoothAngle();
+            Vector2D position = compPhys->GetSmoothPosition();
+
+            glTranslatef(position.x, position.y, 0.0f);
             glRotatef ( radToDeg(angle), 0.0, 0.0, 1.0f);
-            Vector2D v(compPhys->GetBody()->GetPosition().x + compPhys->GetBody()->GetLinearVelocity().x * accumulator,compPhys->GetBody()->GetPosition().y + compPhys->GetBody()->GetLinearVelocity().y * accumulator);
-            v.Rotate( -angle );
-            glTranslatef(v.x, v.y, 0.0f);
+
             b2Fixture* fixture = compPhys->GetFixture();
             while ( fixture != NULL )
             {
@@ -464,19 +466,19 @@ void RenderSubSystem::DrawVisualAnimationComps( float accumulator )
             m_pTextureManager->SetTexture( it->second->GetCurrentTexture() );
 
             glPushMatrix();
-            float angle = compPhys->GetBody()->GetAngle() + compPhys->GetBody()->GetAngularVelocity() * accumulator;
-            glRotatef ( radToDeg(angle), 0.0, 0.0, 1.0f);
-            Vector2D v(compPhys->GetBody()->GetPosition().x + compPhys->GetBody()->GetLinearVelocity().x * accumulator,compPhys->GetBody()->GetPosition().y + compPhys->GetBody()->GetLinearVelocity().y * accumulator);
-            
-            v.Rotate( -angle );
-            glTranslated(v.x, v.y, 0.0f);
+
+            float angle = compPhys->GetSmoothAngle();
+            Vector2D translation = compPhys->GetSmoothPosition();
+
             bool isFlipped = it->second->GetFlip();
+            Vector2D center = *it->second->Center();
             if ( isFlipped )
-            {
-                glTranslated(-it->second->Center()->x,it->second->Center()->y, 0.0f);
-            }
-            else
-                glTranslated( it->second->Center()->x,it->second->Center()->y, 0.0f);
+                center.x = -center.x;
+            center.Rotate(angle);
+            translation += center;
+
+            glTranslated(translation.x, translation.y, 0.0f);
+            glRotatef ( radToDeg(angle), 0.0, 0.0, 1.0f);
 
             {
                 // FLIP ONCE

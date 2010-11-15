@@ -41,7 +41,7 @@ GameApp::GameApp() : m_isInit ( false ),
         m_pSubSystems ( new SubSystems ),
         m_quit ( false ),
         m_eventConnection (),
-        m_fpsMeasureStart ( SDL_GetTicks() ),
+        m_fpsMeasureStart ( 0 ),
         m_framesCounter ( 0 )
 {
     Component::gameEvents = m_pSubSystems->events.get();
@@ -68,7 +68,7 @@ SubSystems::~SubSystems()
     sound.reset();          // Sound
     gui.reset();            // Grafische Benutzeroberfläche
 
-    // must be deleted at last because other systems use this system when destructing
+    // must be deleted at last because other systems may use this system when destructing
     events.reset();         // Spielereignisse
 }
 
@@ -82,7 +82,7 @@ GameApp::~GameApp()
 // Alle Objekte von GameApp initialisieren
 void GameApp::Init( int argc, char* args[] )
 {
-    gAaLog.Write ( "* m_fpsMeasureStarted initialization *\n\n" );  // In Log-Datei schreiben
+    gAaLog.Write ( "* Started initialization *\n\n" );  // In Log-Datei schreiben
     gAaLog.IncreaseIndentationLevel();                  // Text ab jetzt einrücken
 
     // Einstellung lesen
@@ -128,13 +128,12 @@ void GameApp::Init( int argc, char* args[] )
 // Alles deinitialisieren
 void GameApp::DeInit()
 {
-    gAaLog.Write ( "* m_fpsMeasureStarted deinitialization *\n\n" );      // In Log-Datei schreiben
+    gAaLog.Write ( "* Started deinitialization *\n\n" );      // In Log-Datei schreiben
     gAaLog.IncreaseIndentationLevel();
 
-    // delete the event connection before we delete the event system
-    //m_eventConnection.reset();
-
     gAaLog.Write ( "Cleaning up SubSystems..." );
+    Component::gameEvents = NULL; // set the component's GameEvents pointer to zero,
+                                  // so the components know its no longer valid
     // Die Objekten löschen sich eigentlich von selbst. Es wird jedoch gewünscht dass sie jetzt gelöscht werden:
     m_pSubSystems.reset();
     gAaLog.Write ( "[ Done ]\n" );
@@ -168,7 +167,8 @@ void GameApp::Run()
 // Hauptschleife des Spieles
 void GameApp::MainLoop()
 {
-    gAaLog.Write ( "Main loop m_fpsMeasureStarted\n" );
+    gAaLog.Write ( "Main loop started\n" );
+    m_fpsMeasureStart = SDL_GetTicks();
 
     // Variablen um Zeit zu messen
     Uint32 current_time_msecs = 0;              // momentane Zeit
@@ -209,19 +209,20 @@ void GameApp::MainLoop()
 
         //gAaLog.Write ( "State: %i\n", (int)SDL_GetAppState() );
         // TEST THIS !!!!!!! (getstate)
+        // The update loop stops, but the frame loop does not stop (camera)
         if ( m_pSubSystems->isLoading || delta_time_secs>0.5f || ((SDL_GetAppState()&SDL_APPINPUTFOCUS)==0) ) // falls etwas gerade am laden war, wird der Akkumultor zurückgesetzt,
         {                                                       // damit delta_time_secs nicht ultra gross wird und eine grosse Anzahl von Uptates verlangt wird
             accumulator_secs = 0;
             m_pSubSystems->isLoading = false;
         }
         
-        while ( accumulator_secs >= PHYS_DELTA_TIME/*+0.2f*/ )
+        while ( accumulator_secs >= PHYS_DELTA_TIME/*+0.3f*/ )
         {
             UPDATE(); // Hier wird das gesammte Spiel aktualisiert (Physik und Spiellogik)
-            accumulator_secs -= PHYS_DELTA_TIME/*+0.2f*/;
+            accumulator_secs -= PHYS_DELTA_TIME/*+0.3f*/;
         }
 
-        DRAW( 0 ); // Spiel zeichnen
+        DRAW( accumulator_secs/*/(PHYS_DELTA_TIME+0.3f)*PHYS_DELTA_TIME*/ ); // Spiel zeichnen
     }
 
     ////////////////////////////////////////////////////////
@@ -292,11 +293,12 @@ void GameApp::HandleSdlQuitEvents( SDL_Event& rSdlEvent, bool& rQuit )
 // Einmal pro frame aufrufen
 void GameApp::CalcFPS( Uint32 curTime )
 {
-    if ( (signed)m_fpsMeasureStart + 1000 < (signed)curTime )
+    if ( (signed)m_fpsMeasureStart + 1000 < (signed long long)curTime )
     {
         // m_framesCounter ist jetzt die Anzahl Frames in dieser Sekunde, also die FPS
 
         gAaLog.Write ( "FPS: %i\n", m_framesCounter );
+        //cerr << "FPS: " << m_framesCounter << endl;
         m_framesCounter = 0;
         m_fpsMeasureStart = SDL_GetTicks();
     }

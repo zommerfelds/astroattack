@@ -8,7 +8,7 @@
     <ScreenHeight val="800" type="int" />
     <ScreenWidth val="1280" type="int" />
     <TexQuality val="0" type="int" />
-    <V-Sync val="1" type="int" />
+    <V-Sync val="0" type="int" />
     <VolMaster val="0.6" type="float" />
     <VolMusic val="0" type="float" />
     <VolSound val="1" type="float" />

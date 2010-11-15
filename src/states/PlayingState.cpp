@@ -116,17 +116,14 @@ void PlayingState::Resume()      // State wiederaufnehmen
 {
 }
 
-void PlayingState::Frame( float /*deltaTime*/ )
+void PlayingState::Frame( float deltaTime )
 {
-    //GetSubSystems()->input->Update();   // neue Eingaben lesen
-    //m_pGameCamera->Update( deltaTime ); // Kamera updaten
+    GetSubSystems()->input->Update();   // neue Eingaben lesen
+    m_pGameCamera->Update( deltaTime ); // Kamera updaten
 }
 
 void PlayingState::Update()      // Spiel aktualisieren
 {
-    GetSubSystems()->input->Update();   // neue Eingaben lesen
-    m_pGameCamera->Update( PHYS_DELTA_TIME ); // Kamera updaten
-
     if ( m_wantToEndGame )
     {
         if ( m_alphaOverlay > 1.0f )
@@ -165,6 +162,10 @@ void PlayingState::Update()      // Spiel aktualisieren
 
 void PlayingState::Draw( float accumulator )        // Spiel zeichnen
 {
+	// maybe put this in PhysicsSubSystem::Update
+	// (but then the physics subsystem would need an accumulator for itself)
+    GetSubSystems()->physics->CalculateSmoothPositions(accumulator);
+
     glColor4ub( 243, 255, 255, 230 );
     RenderSubSystem* pRenderer = GetSubSystems()->renderer.get();
 

@@ -19,17 +19,26 @@
 
 // Connection
 // ----------
-// It is returned by the Event class.
+// Reference counted object. It is returned by the Event class.
 // When destructed, the event knows that the listener is no longer valid and should be unregistered.
 // If copied, the event will only be unregistered if the copy is also destructed (so don't copy it!)
+// It is implemented with the help of a boost::shared_ptr
 class EventConnection
 {
 public:
-    EventConnection() {}
-    EventConnection(const EventConnection& evCon) : m_p (evCon.m_p) {}
-    bool IsValid() const { return m_p.use_count()>1; }
+    EventConnection() : m_sharedPtr ( boost::make_shared<SharedType>() ) {}
+    EventConnection(const EventConnection& evCon) : m_sharedPtr (evCon.m_sharedPtr) {}
+    EventConnection& operator = (const EventConnection& con) {
+        m_sharedPtr = con.m_sharedPtr; // share the same smart pointer
+        return *this;  // by convention, always return *this
+    }
+    
+    // IsValid: returns true if this connection has objects connected on both ends
+    bool IsValid() const { return m_sharedPtr.use_count()>1; }
 private:
-    boost::shared_ptr<char> m_p;
+	typedef char SharedType; // this type should be as small as possible, because we are using the
+	                         // reference counting feature of shared_ptr only, not the memory (not so elegant)
+    boost::shared_ptr<SharedType> m_sharedPtr;
 };
 
 // template <typename ArgType1, typename ArgType2, ..., typename ArgTypeN>
@@ -68,7 +77,7 @@ public:
         {
             FunctionList::iterator cur_pos = it++; // store the current position and set (it) to
                                                    // point to the next element (cur_pos can get deleted)
-            if (cur_pos->second.IsValid()) // if the connection is no longer valid
+            if (!cur_pos->second.IsValid()) // if the connection is no longer valid
                 m_listenerFuncs.erase(cur_pos); // the listener probably got deleted
             else
                 (cur_pos->first)(); // call the function
@@ -101,7 +110,7 @@ public:
         for (typename FunctionList::iterator it = m_listenerFuncs.begin(); it != m_listenerFuncs.end();)
         {
             typename FunctionList::iterator cur_pos = it++;
-            if (cur_pos->second.IsValid())
+            if (!cur_pos->second.IsValid())
                 m_listenerFuncs.erase(cur_pos);
             else
                 (cur_pos->first)(arg); // call the function
@@ -132,7 +141,7 @@ public:
         for (typename FunctionList::iterator it = m_listenerFuncs.begin(); it != m_listenerFuncs.end();)
         {
             typename FunctionList::iterator cur_pos = it++;
-            if (cur_pos->second.IsValid())
+            if (!cur_pos->second.IsValid())
                 m_listenerFuncs.erase(cur_pos);
             else
                 (cur_pos->first)(arg1,arg2); // call the function

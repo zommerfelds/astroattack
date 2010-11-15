@@ -13,9 +13,6 @@
 #include <Box2D/Box2D.h>       // extere Physikbibliothek
 #include <boost/make_shared.hpp>
 
-// Number of game updates a CompPhysics has to wait till it can change to an other GravField
-const unsigned int cUpdatesTillGravFieldChangeIsPossible = 10;
-
 // eindeutige ID
 const CompIdType CompPhysics::m_componentId = "CompPhysics";
 
@@ -24,6 +21,8 @@ CompPhysics::CompPhysics( b2BodyDef* pBodyDef ) : m_body ( NULL ),
                                                   m_bodyDef( pBodyDef ),
                                                   m_localRotationPoint (),
                                                   m_localGravitationPoint (),
+                                                  m_smoothPosition (),
+                                                  m_smoothAngle (0.0f),
                                                   m_gravField ( NULL ),
                                                   m_remainingUpdatesTillGravFieldChangeIsPossible ( 0 )
                                                   //m_oldGravField ( NULL ),

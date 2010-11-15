@@ -16,6 +16,11 @@
 #include <config.h>
 #endif
 
+// Put code code here that should be included by all source files
+// This should be used for debugging only!
+//#include <iostream>
+//using namespace std;
+
 #endif
 
 // Astro Attack - Christian Zommerfelds - 2009

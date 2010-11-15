@@ -364,7 +364,9 @@ void CompPlayerController::OnUpdate()
                 isIncreasingAngle = true;
                 directionClw = true;
             }
-            if ( (!isTouchingSth || usedJetpack) && playerCompPhysics->GetBody()->GetLinearVelocity().x < maxVelXFly )
+            // TODO: think about that
+            //if ( (!isTouchingSth || usedJetpack) && playerCompPhysics->GetBody()->GetLinearVelocity().x < maxVelXFly )
+            if ( playerCompPhysics->GetBody()->GetLinearVelocity().x < maxVelXFly )
 			{
 				Vector2D force (upVector * (usedJetpack?fly_jet_force_magnitude:fly_force_magnitude));
 				force.Rotate(-cPi*0.5f);
@@ -380,7 +382,9 @@ void CompPlayerController::OnUpdate()
                 isIncreasingAngle = true;
                 directionClw = false;
             }
-            if ( (!isTouchingSth || usedJetpack) && playerCompPhysics->GetBody()->GetLinearVelocity().x > -maxVelXFly )
+            // TODO: same here
+            //if ( (!isTouchingSth || usedJetpack) && playerCompPhysics->GetBody()->GetLinearVelocity().x > -maxVelXFly )
+            if ( playerCompPhysics->GetBody()->GetLinearVelocity().x > -maxVelXFly )
             {
 				Vector2D force (upVector * (usedJetpack?fly_jet_force_magnitude:fly_force_magnitude));
 				force.Rotate(cPi*0.5f);

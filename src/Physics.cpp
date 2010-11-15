@@ -25,6 +25,9 @@
 const float PHYS_DELTA_TIME = 1.0f/60.0f;
 const int PHYS_ITERATIONS = 10;
 
+// Number of game updates a CompPhysics has to wait till it can change to an other GravField
+const unsigned int cUpdatesTillGravFieldChangeIsPossible = 10;
+
 PhysicsSubSystem::PhysicsSubSystem( GameEvents* pGameEvents)
 : m_pGravitationalAcc ( new Vector2D ), m_eventConnection1 (), m_eventConnection2 (),
   m_eventConnection3 (), m_eventConnection4 (), m_pGameEvents ( pGameEvents ), m_world (),
@@ -218,6 +221,24 @@ void PhysicsSubSystem::Update()
 		//m_gravFields[i]->ClearBodiesInField();
 	}*/
 }
+
+void PhysicsSubSystem::CalculateSmoothPositions(float accumulator)
+{
+    for ( unsigned int i = 0; i < m_physicsComps.size(); ++i )
+    {
+        b2Body* pBody = m_physicsComps[i]->GetBody();
+
+        float extra_angle = pBody->GetAngularVelocity() * accumulator;
+        float angle = pBody->GetAngle();
+        Vector2D v = pBody->GetPosition() + accumulator * pBody->GetLinearVelocity();
+        Vector2D c = pBody->GetLocalCenter();
+        v += (c - c.Rotated(extra_angle)).Rotated(angle); // TODO: can we optimize this?
+
+        m_physicsComps[i]->m_smoothAngle = angle + extra_angle;
+        m_physicsComps[i]->m_smoothPosition = v;
+    }
+}
+
 /*
 // b2ContactListener implementation um Kontakte von Box2D zu erhalten
 // Neuer Kontakt

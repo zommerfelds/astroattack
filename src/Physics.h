@@ -45,6 +45,8 @@ public:
 
     void Refilter( b2Shape* pShape ); // Recalculate collision filtering of pShape
 
+    void CalculateSmoothPositions(float accumulator);
+
 private:
     boost::scoped_ptr<Vector2D> m_pGravitationalAcc; // Fallbeschleunigung [m/s^2]
 

@@ -39,8 +39,6 @@ class CompGravField;
     Vector2D pos;    // Weltkoordinaten des Kontaktpunkts
 };*/
 
-extern const unsigned int cUpdatesTillGravFieldChangeIsPossible;
-
 struct FixtureInfo
 {
     FixtureInfo(b2Fixture* f,float d) : pFixture (f), density (d) {}
@@ -88,6 +86,9 @@ public:
 
     ContactVector GetContacts(bool getSensors=false) const;
 
+    const Vector2D& GetSmoothPosition() const { return m_smoothPosition; }
+    float GetSmoothAngle() const { return m_smoothAngle; }
+
     const Vector2D& GetLocalRotationPoint() const { return m_localRotationPoint; }
     void SetLocalRotationPoint(const Vector2D& rotPoint) { m_localRotationPoint = rotPoint; }
     const Vector2D& GetLocalGravitationPoint() const { return m_localGravitationPoint; }
@@ -120,16 +121,12 @@ private:
     Vector2D m_localRotationPoint;
     Vector2D m_localGravitationPoint;
 
-    /*// ob Kontakte gespeichert werden sollen
-    bool m_saveContacts;
-    // Kontakte
-    std::vector< Contact > m_contacts;*/
+    Vector2D m_smoothPosition;
+    float m_smoothAngle;
 
     //float m_density;
 
 	const CompGravField* m_gravField;
-    //bool m_gravFieldIsChanging; // true wenn das Physik Subsystem die GravFields gerade ändert
-	//int m_updatesSinceLastGravFieldChange;
     unsigned int m_remainingUpdatesTillGravFieldChangeIsPossible;
 
     friend class PhysicsSubSystem; // Das Physik-System darf auf alles hier zugreifen!

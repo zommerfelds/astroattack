@@ -26,7 +26,12 @@ void EffectKillEntity::Fire()
 #include "CompVisualMessage.h"
 #include <sstream>
 EffectDispMessage::EffectDispMessage( std::string message, int timeMs, GameWorld* pGW )
-: m_message (message), m_remainingUpdates ( (int)((float)timeMs*0.001f/PHYS_DELTA_TIME) ), m_fired (false), m_pGW ( pGW ), m_totalTimeMs ( timeMs )
+: m_message (message),
+  m_remainingUpdates ( (int)((float)timeMs*0.001f/PHYS_DELTA_TIME) ),
+  m_fired (false),
+  m_pGW ( pGW ),
+  m_pMsgEntity (NULL),
+  m_totalTimeMs ( timeMs )
 {
 }
 
@@ -58,7 +63,7 @@ void EffectDispMessage::Fire()
 bool EffectDispMessage::Update()
 {
     --m_remainingUpdates;
-    if ( m_remainingUpdates == 0 )
+    if ( m_remainingUpdates == 0 && m_pMsgEntity != NULL )
     {
         m_pCompTrigger->gameEvents->wantToDeleteEntity.Fire(m_pMsgEntity);
         return true;
