@@ -24,8 +24,10 @@
 #include "components/CompGravField.h"
 
 #include <math.h>
-#include <Box2D/Box2D.h>
 #include <boost/make_shared.hpp>
+
+// TODO: remove Box2D dependencies
+#include <Box2D/Box2D.h>
 
 #define CAMERA_POS (*m_pTranslation * -1)
 

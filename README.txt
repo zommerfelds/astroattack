@@ -20,7 +20,14 @@ libftgl-dev
 libsdl-mixer1.2-dev
 libdevil-dev
 libboost1.40-dev
+libtinyxml-dev
 cmake (for Box2D)
+libxi-dev (for Box2D with examples)
+
+When:
+/usr/include/ft2build.h:56: fatal error: freetype/config/ftheader.h: No such file or directory
+Do:
+sudo ln -s /usr/include/freetype2/freetype /usr/include/freetype
 
 Download Box2D 2.1.x.
 Build the Box2D package (see Building.txt) with "cmake -DBOX2D_INSTALL=ON -DBOX2D_BUILD_SHARED=ON -DBOX2D_BUILD_EXAMPLES=OFF .."

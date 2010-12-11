@@ -19,6 +19,8 @@
 #include "../Vector2D.h"
 
 #include <boost/bind.hpp>
+
+// TODO: remove Box2D dependencies
 #include <Box2D/Box2D.h>
 
 // eindeutige ID

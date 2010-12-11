@@ -9,6 +9,7 @@
 - Check static_cast<> and dynamic_cast<> (e.g. PhysicsSubSystem::RegisterGravFieldComp() )
 - Make whole camera functionality frame rate independant
 - Text is too big
+- Abstract Box2D (remove Box2D dependencies in non-physics parts)
 
 
 * Medium priority *

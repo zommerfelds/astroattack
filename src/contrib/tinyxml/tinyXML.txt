@@ -1,6 +1,0 @@
-TinyXml ist ein simpler XML parser in C++.
-Es steht unter der zlib Lizenz.
-
-http://www.grinninglizard.com/tinyxml/index.html
-
-Changed line 357 of file tinyxmlparser.cpp to avoid warnings.

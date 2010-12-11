@@ -31,9 +31,13 @@
 #include "GameEvents.h" // Steuert die Spielerreignisse
 
 #include <boost/bind.hpp>
+
+// TODO: remove dependency on Box2D
 #include <Box2D/Box2D.h>
 
 const char* cGraphisFileName = "data/graphics.xml";
+
+const int cCircleSlices = 20; // number of slices for drawing a circle
 
 RenderSubSystem::RenderSubSystem( /*const GameWorld* pWorld, const GameCamera* pCamera,*/ GameEvents* pGameEvents )
 : m_eventConnection1 (), m_eventConnection2(), m_pGameEvents ( pGameEvents ),
@@ -291,14 +295,14 @@ void RenderSubSystem::DrawCircleShape ( const b2CircleShape* rCircle, bool borde
     glPushMatrix();
     glTranslatef(rCircle->m_p.x, rCircle->m_p.y, 0.0f);
 
-    gluDisk(pQuacric, 0.0f, rCircle->m_radius, 20,  1);
+    gluDisk(pQuacric, 0.0f, rCircle->m_radius, cCircleSlices,  1);
     
     if ( border )
     {
         m_pTextureManager->Clear();
         glColor3ub ( 220, 220, 220 );
         gluQuadricDrawStyle(pQuacric, GLU_SILHOUETTE);
-        gluDisk(pQuacric, 0.0f, rCircle->m_radius, 20,  1);
+        gluDisk(pQuacric, 0.0f, rCircle->m_radius, cCircleSlices,  1);
     }
 
     glPopMatrix();

@@ -11,7 +11,6 @@
 #include "main.h"
 #include "GameApp.h"
 
-#include "components/CompCollectable.h"
 #include "components/CompGravField.h"
 #include "components/CompVisualTexture.h"
 #include "components/CompPhysics.h"
@@ -23,13 +22,14 @@
 #include "components/CompTrigger_Conditions.h"
 #include "components/CompVisualMessage.h"
 
-#include "contrib/tinyxml/tinyxml.h"
+#include <tinyxml.h>
 
 #include "Renderer.h"
 #include "Physics.h"
 
 #include "states/SlideShowState.h"
 
+// TODO: remove Box2D dependancies
 #include <Box2D/Box2D.h>
 #include <sstream>
 #include <boost/scoped_ptr.hpp>
@@ -38,6 +38,8 @@
 
 #include "Font.h"
 #include "Texture.h"
+
+// TODO: don't read XML file again to unload textures
 
 // Load Level from XML
 void XmlLoader::LoadXmlToWorld( const char* pFileName, GameWorld* pGameWorld, SubSystems* pSubSystems )

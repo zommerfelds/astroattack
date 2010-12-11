@@ -20,7 +20,7 @@
 #include "../Input.h"
 #include "../Vector2D.h"
 #include "../Texture.h"
-#include "../contrib/tinyxml/tinyxml.h"
+#include <tinyxml.h>
 #include "../XmlLoader.h"
 #include <cmath>
 #include <boost/bind.hpp>
