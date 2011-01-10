@@ -69,7 +69,7 @@ void GuiSubSystem::DeleteGroup( GroupId groupId )
 //** Label
 WidgetLabel::WidgetLabel( float x, float y, std::string text, const FontManager* fontMngr ) : m_text ( text )
 {
-    float w=0,h=0;
+    float w = 0.0f, h = 0.0f;
     fontMngr->GetDimensionsOfText( text,"FontW_s",w,h);
     SetArea( Rect( x, x+w/4.0f, y, y+h/3.0f ) );
 }

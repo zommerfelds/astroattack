@@ -17,7 +17,7 @@
 class GameCamera;
 class Entity;
 class GameWorld;
-class GameEvents;
+struct GameEvents;
 class CompVisualTexture;
 class CompVisualAnimation;
 class CompVisualMessage;
@@ -57,8 +57,8 @@ public:
     void SetMatrix(MatrixId matrix);
 
     // Visuele Komponenten anzeigen
-    void DrawVisualTextureComps( float accumulator );
-    void DrawVisualAnimationComps( float accumulator );
+    void DrawVisualTextureComps();
+    void DrawVisualAnimationComps();
     void DrawVisualMessageComps();
 
     // ******** Zeichnungsfunktionen ********* //

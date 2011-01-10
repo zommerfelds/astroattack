@@ -163,7 +163,7 @@ void PlayingState::Update()      // Spiel aktualisieren
 void PlayingState::Draw( float accumulator )        // Spiel zeichnen
 {
 	// maybe put this in PhysicsSubSystem::Update
-	// (but then the physics subsystem would need an accumulator for itself)
+	// (then the physics subsystem would need an accumulator for itself)
     GetSubSystems()->physics->CalculateSmoothPositions(accumulator);
 
     glColor4ub( 243, 255, 255, 230 );
@@ -190,9 +190,9 @@ void PlayingState::Draw( float accumulator )        // Spiel zeichnen
     pRenderer->SetMatrix(RenderSubSystem::World);
     m_pGameCamera->Look();
     // Animationen zeichnen
-    pRenderer->DrawVisualAnimationComps( accumulator );
+    pRenderer->DrawVisualAnimationComps();
     // Texturen zeichnen
-    pRenderer->DrawVisualTextureComps( accumulator );
+    pRenderer->DrawVisualTextureComps();
 
     // Draw debug info
 #if 0
@@ -276,7 +276,7 @@ void PlayingState::OnEntityDeleted( Entity* pEntity )
     }
 }
 
-void PlayingState::OnLevelEnd(bool win,std::string msg)
+void PlayingState::OnLevelEnd(bool /*win*/, std::string msg)
 {
     m_wantToEndGame = true;
     m_gameOverMessage = msg;

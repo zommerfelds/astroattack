@@ -56,7 +56,7 @@ private:
     EventConnection m_eventConnection1;
     EventConnection m_eventConnection2;
     void OnEntityDeleted( Entity* pEntity );
-    void OnLevelEnd(bool win,std::string msg);
+    void OnLevelEnd(bool win, std::string msg);
     std::set< std::string > m_entitiesToDelete1;
     std::set< std::string > m_entitiesToDelete2;
     int m_curentDeleteSet;

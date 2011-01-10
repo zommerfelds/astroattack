@@ -18,7 +18,7 @@
 #include <string>
 
 class Vector2D;
-class GameEvents;
+struct GameEvents;
 class Logger;
 
 #include "Entity.h"

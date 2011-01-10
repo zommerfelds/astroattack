@@ -610,7 +610,7 @@ void XmlLoader::LoadSlideShow( const char* pFileName, SlideShow* pSlideShow )
         {
             int t = child->Type(); // ELEMENT=1 TEXT=3
 
-            if ( t == TiXmlNode::ELEMENT )
+            if ( t == TiXmlNode::TINYXML_ELEMENT ) // ELEMENT changed to TINYXML_ELEMENT in tinyxml Revision 1.102
             {
                 TiXmlElement* el = child->ToElement();
                 const char* value_temp = el->Value();
@@ -620,7 +620,7 @@ void XmlLoader::LoadSlideShow( const char* pFileName, SlideShow* pSlideShow )
                 if ( value == "n" )
                     slide.text += "\n";
             }
-            else if ( t == TiXmlNode::TEXT )
+            else if ( t == TiXmlNode::TINYXML_TEXT )
             {
                 TiXmlText* tx = child->ToText();
                 slide.text += tx->Value();

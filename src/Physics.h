@@ -19,14 +19,13 @@
 #include "Event.h" // TODO: use pimpl to hide this
 extern const float PHYS_DELTA_TIME;
 
-class GameEvents;
+struct GameEvents;
 class Entity;
 class EventConnection;
 class CompPhysics;
 class CompGravField;
 class Vector2D;
 class RegisterObj;
-class GameEvents;
 class b2World;
 class ContactListener;
 class b2Shape;

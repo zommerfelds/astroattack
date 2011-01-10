@@ -258,6 +258,8 @@ void EditorState::Update()      // Spiel aktualisieren
 
 void EditorState::Draw( float accumulator )        // Spiel zeichnen
 {
+    GetSubSystems()->physics->CalculateSmoothPositions(accumulator);
+
     RenderSubSystem* pRenderer = GetSubSystems()->renderer.get();
 
     // Bildschirm leeren
@@ -265,9 +267,9 @@ void EditorState::Draw( float accumulator )        // Spiel zeichnen
     // Weltmodus
     pRenderer->SetMatrix(RenderSubSystem::World);        
     // Texturen zeichnen
-    pRenderer->DrawVisualTextureComps( accumulator );
+    pRenderer->DrawVisualTextureComps();
     // Animationen zeichnen
-    pRenderer->DrawVisualAnimationComps( accumulator );
+    pRenderer->DrawVisualAnimationComps();
 
     pRenderer->GetTextureManager()->Clear();
 

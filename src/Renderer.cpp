@@ -418,7 +418,7 @@ void RenderSubSystem::DrawString( const std::string &str, const FontIdType &font
     SetMatrix(stored_matrix);
 }
 
-void RenderSubSystem::DrawVisualTextureComps( float accumulator )
+void RenderSubSystem::DrawVisualTextureComps()
 {
     for ( CompVisualTextureMap::const_iterator it = m_visualTextureComps.begin(); it != m_visualTextureComps.end(); ++it )
     {
@@ -460,7 +460,7 @@ void RenderSubSystem::DrawVisualTextureComps( float accumulator )
     }
 }
 
-void RenderSubSystem::DrawVisualAnimationComps( float accumulator )
+void RenderSubSystem::DrawVisualAnimationComps()
 {
     for ( CompVisualAnimationMap::const_iterator it = m_visualAnimComps.begin(); it != m_visualAnimComps.end(); ++it )
     {

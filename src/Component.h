@@ -14,7 +14,7 @@
 
 #include <string>
 
-class GameEvents;
+struct GameEvents;
 class Entity;
 typedef std::string CompIdType;
 
