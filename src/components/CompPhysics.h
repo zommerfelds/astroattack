@@ -30,15 +30,7 @@ struct b2FixtureDef;
 
 class CompGravField;
 
-// Kontakt (wenn sich zwei CompPhysics berühren)
-/*struct Contact
-{
-	b2Fixture* own_shape; // shape von CompPhysics, das diese Struktur besitzt
-	b2Fixture* foreign_shape; // shape von einem anderen CompPhysics
-	Vector2D normal; // Kontaktnormale (zeigt immer weg von own_shape)
-    Vector2D pos;    // Weltkoordinaten des Kontaktpunkts
-};*/
-
+// TODO: is this realy needed?
 struct FixtureInfo
 {
     FixtureInfo(b2Fixture* f,float d) : pFixture (f), density (d) {}
@@ -74,6 +66,20 @@ public:
     // Eine zusätzliche geometrische Form für den Körper definieren
     // Nur am Anfang benützen, bevor die Einheit (Entity) zur Welt hinzugefügt wurde!
     void AddFixtureDef( const boost::shared_ptr<b2FixtureDef>& pFixtureDef, FixtureIdType name );
+
+    struct ShapeDef {
+        	ShapeDef() : density (0.0f), friction (0.0f), restitution (0.0f), isSensor (false) {}
+        	ShapeDef(CompNameType n, float d, float f, float r, bool s) : compName (n), density (d), friction (f), restitution (r), isSensor (s) {}
+
+        	CompNameType compName; // the name of the CompShape component
+        	float density;
+        	float friction;
+        	float restitution;
+        	bool isSensor;
+    };
+
+    // Add a shape to the object. Only do this before attaching the Entity to the world.
+    void AddShapeDef( const boost::shared_ptr<CompPhysics::ShapeDef>& pShapeDef );
 
     // Box2D Body zurückgeben
     const b2Body* GetBody() const;
@@ -125,6 +131,8 @@ private:
     float m_smoothAngle;
 
     //float m_density;
+
+    std::vector< boost::shared_ptr<ShapeDef> > m_shapes;
 
 	const CompGravField* m_gravField;
     unsigned int m_remainingUpdatesTillGravFieldChangeIsPossible;

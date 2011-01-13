@@ -11,9 +11,31 @@
             <center x = "0.05" y = "0.03"/>
             <dim hw = "0.74" hh = "0.88"/>
         </Component>
-        <!--<Component id = "CompVisualTexture">
+        <!--Component id = "CompVisualTexture">
                 <tex name = "brick"/>
-            </Component>-->
+        </Component-->
+        <Component id="CompShape" name="middle">
+            <polygon>
+                <vertex x="-0.44" y="-0.35" />
+                <vertex x="0.44" y="-0.35" />
+                <vertex x="0.44" y="0.35" />
+                <vertex x="-0.44" y="0.35" />
+            </polygon>
+        </Component>
+        <Component id="CompShape" name="top">
+            <circle x="0" y="0.35" r="0.45" />
+        </Component>
+        <Component id="CompShape" name="mid2">
+            <polygon>
+                <vertex x="-0.18" y="-0.66" />
+                <vertex x="0.18" y="-0.66" />
+                <vertex x="0.440" y="-0.35" />
+                <vertex x="-0.440" y="-0.35" />
+            </polygon>
+        </Component>
+        <Component id="CompShape" name="bottom">
+            <circle x="0" y="-0.5" r="0.25" />
+        </Component>
         <Component id = "CompPhysics">
             <pos
                   x = "0.0"
@@ -26,29 +48,10 @@
             <rotationPoint x="0.0" y="-0.75"/>
             <gravitationPoint x="0.0" y="-0.65"/>
 
-            <shape name = "middle">
-                <box hw="0.44" hh="0.35" x="0" y="0"/>
-                <phys density = "40.0" friction = "0.2"/>
-            </shape>
-            <shape name = "top">
-                <circle x = "0" y = "0.35" r="0.45"/>
-                <phys density = "1.0" friction = "0.2"/>
-            </shape>
-            <shape name = "mid2">
-                <vertex x="-0.18" y="-0.66" />
-                <vertex x="0.18" y="-0.66" />
-                <vertex x="0.440" y="-0.35" />
-                <vertex x="-0.440" y="-0.35" />
-                <phys density = "40.0" friction = "0.1"/>
-            </shape>
-            <shape name = "bottom">
-                <circle x = "0" y = "-0.5" r="0.250"/>
-                <phys density = "40.0" friction = "0.1"/>
-            </shape>
-            <!--shape name = "bottom2">
-                        <circle x = "0" y = "-0.3" r="0.450"/>
-                        <phys density = "40.0" friction = "5"/>
-                  </shape-->
+            <shape comp_name = "middle" density = "40.0" friction = "0.2"/>
+            <shape comp_name = "top" density = "1.0" friction = "0.2"/>
+            <shape comp_name = "mid2" density = "40.0" friction = "0.1"/>
+            <shape comp_name = "bottom" density = "40.0" friction = "0.1"/>
         </Component>
         <Component id = "CompPlayerController" />
     </Entity>

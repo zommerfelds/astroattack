@@ -14,6 +14,8 @@
 
 * Medium priority *
 
+- Migrate to pugixml or rapidxml
+- Use size_t instead of unsigned int (string::npos)
 - Use physical state interpolation instead of extrapolation
 - Strange physical behavior under "arrow" of level 2
 - Test OpenGL error checking (glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR) did not generate error)

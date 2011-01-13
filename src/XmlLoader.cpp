@@ -21,6 +21,7 @@
 #include "components/CompTrigger_Effects.h"
 #include "components/CompTrigger_Conditions.h"
 #include "components/CompVisualMessage.h"
+#include "components/CompShape.h"
 
 #include <tinyxml.h>
 
@@ -32,7 +33,7 @@
 // TODO: remove Box2D dependancies
 #include <Box2D/Box2D.h>
 #include <sstream>
-#include <boost/scoped_ptr.hpp>
+//#include <boost/scoped_ptr.hpp>
 #include <boost/bind.hpp>
 #include <boost/make_shared.hpp>
 
@@ -40,6 +41,7 @@
 #include "Texture.h"
 
 // TODO: don't read XML file again to unload textures
+// TODO: a lot of work to do here (error checking etc..)
 
 // Load Level from XML
 void XmlLoader::LoadXmlToWorld( const char* pFileName, GameWorld* pGameWorld, SubSystems* pSubSystems )
@@ -92,7 +94,13 @@ void XmlLoader::LoadXmlToWorld( const char* pFileName, GameWorld* pGameWorld, Su
             const char* componentName = componentElement->Attribute("name");
             gAaLog.Write ( "Creating component \"%s\"... ", componentId.c_str() );
 
-            if ( componentId == "CompPhysics" )
+            shared_ptr<Component> component;
+
+            if ( componentId == "CompShape" )
+            {
+                component = CompShape::LoadFromXml( *componentElement );
+            }
+            else if ( componentId == "CompPhysics" )
             {
                 bool allowSleep = true;
                 float angle = 0.0f;
@@ -158,13 +166,45 @@ void XmlLoader::LoadXmlToWorld( const char* pFileName, GameWorld* pGameWorld, Su
                 body_def->bullet = isBullet;
                 body_def->linearDamping = linearDamping;
                 body_def->position.Set( posX, posY );
-                if (dynamic)
-                    body_def->type = b2_dynamicBody;
+                //if (dynamic)
+                    //body_def->type = b2_dynamicBody;
                 shared_ptr<CompPhysics> compPhysics( make_shared<CompPhysics>( body_def/*, saveContacts*/ ) );
                 compPhysics->SetLocalRotationPoint( rotationPoint );
                 compPhysics->SetLocalGravitationPoint( gravitationPoint );
 
-                TiXmlElement* shapeElement = componentElement->FirstChildElement( "shape" );
+                TiXmlElement* shapeElement = componentElement->FirstChildElement("shape");
+				for (; shapeElement; shapeElement = shapeElement->NextSiblingElement("shape"))
+				{
+					//TODO: tell tinyxml to use std::strings
+					const char* name = shapeElement->Attribute("comp_name");
+					std::string shapeName;
+					if (name != NULL)
+						shapeName = name;
+
+                    float density = 0.0f;
+                    float friction = 0.0f;
+                    float restitution = 0.0f;
+                    bool isSensor = false;
+
+                    shapeElement->QueryFloatAttribute("density", &density);
+                    shapeElement->QueryFloatAttribute("friction", &friction);
+                    shapeElement->QueryFloatAttribute("restitution", &restitution);
+
+
+                    if (density != 0.0f)
+                        body_def->type = b2_dynamicBody;
+
+                    //body_def->
+
+					const char* strIsSensor = shapeElement->Attribute("isSensor");
+					if (strIsSensor != NULL && std::string(strIsSensor)=="true") {
+						isSensor = true;
+					}
+
+					compPhysics->AddShapeDef( boost::make_shared<CompPhysics::ShapeDef>(shapeName, density, friction, restitution, isSensor) );
+				}
+
+                /*shapeElement = componentElement->FirstChildElement( "shape" );
                 for( ; shapeElement; shapeElement = shapeElement->NextSiblingElement( "shape" ) )
                 {
                     const char* name = shapeElement->Attribute("name");
@@ -267,18 +307,15 @@ void XmlLoader::LoadXmlToWorld( const char* pFileName, GameWorld* pGameWorld, Su
                     }
                     
                     compPhysics->AddFixtureDef( fixtureDef, shapeName );
-                }
+                }*/
 
-                if ( componentName )
-                    compPhysics->SetName( componentName );
-                pEntity->SetComponent( compPhysics );
+                component = compPhysics;
             }
             else if ( componentId == "CompPlayerController" )
             {
                 shared_ptr<CompPlayerController> compPlayerController( make_shared<CompPlayerController>( pSubSystems->input.get(), pGameWorld->GetItToVariable( "JetpackEnergy" ), boost::bind( &PhysicsSubSystem::Refilter, pSubSystems->physics.get(), _1 ) ) );
-                if ( componentName )
-                    compPlayerController->SetName( componentName );
-                pEntity->SetComponent( compPlayerController );
+
+                component = compPlayerController;
             }
             /*else if ( componentId == "CompPosition" )
             {
@@ -320,21 +357,13 @@ void XmlLoader::LoadXmlToWorld( const char* pFileName, GameWorld* pGameWorld, Su
                 shared_ptr<CompVisualAnimation> compAnim( make_shared<CompVisualAnimation>(pSubSystems->renderer->GetAnimationManager()->GetAnimInfo(animName) ) );
                 compAnim->Center()->Set(centerX,centerY);
                 compAnim->SetDimensions( hw, hh );
-                if ( componentName )
-                    compAnim->SetName( componentName );
-                pEntity->SetComponent( compAnim );
+                component = compAnim;
                 if ( start )
                     compAnim->Start();
             }
             else if ( componentId == "CompVisualTexture" )
             {
-                TiXmlElement* texElement = componentElement->FirstChildElement( "tex" );
-                const char* texName = texElement->Attribute("name");
-
-                shared_ptr<CompVisualTexture> compPolyTex( make_shared<CompVisualTexture>(texName) );
-                if ( componentName )
-                    compPolyTex->SetName( componentName );
-                pEntity->SetComponent( compPolyTex );
+                component = CompVisualTexture::LoadFromXml( *componentElement );
             }
             else if ( componentId == "CompVisualMessage" )
             {
@@ -342,9 +371,8 @@ void XmlLoader::LoadXmlToWorld( const char* pFileName, GameWorld* pGameWorld, Su
                 const char* msg = msgElement->Attribute("text");
 
                 shared_ptr<CompVisualMessage> compMsg( make_shared<CompVisualMessage>(msg) );
-                if ( componentName )
-                    compMsg->SetName( componentName );
-                pEntity->SetComponent( compMsg );
+
+                component = compMsg;
             }
 			else if ( componentId == "CompGravField" ) // uidaternuditarendutirane
             {
@@ -379,18 +407,8 @@ void XmlLoader::LoadXmlToWorld( const char* pFileName, GameWorld* pGameWorld, Su
 
 					compGrav->SetGravCenter( Vector2D( cx, cy ), s );
 				}
-                pEntity->SetComponent( compGrav );
+                component = compGrav;
             }
-            /*else if ( componentId == "CompCollectable" )
-            {
-                TiXmlElement* colElement = componentElement->FirstChildElement( "var" );
-                const char* varName = colElement->Attribute("name");
-
-                shared_ptr<CompCollectable> compCollect( make_shared<CompCollectable>( pGameWorld->GetItToVariable( varName ) ) );
-                if ( componentName )
-                    compCollect->SetName( componentName );
-                pEntity->SetComponent( compCollect );
-            }*/
             else if ( componentId == "CompTrigger" )
             {
                 shared_ptr<CompTrigger> compTrig ( make_shared<CompTrigger>() );
@@ -542,16 +560,24 @@ void XmlLoader::LoadXmlToWorld( const char* pFileName, GameWorld* pGameWorld, Su
                     else
                         gAaLog.Write ( "WARNING: No effect found with id \"%s\"!", effctId.c_str() );
                 }
-
-                if ( componentName )
-                    compTrig->SetName( componentName );
-                pEntity->SetComponent( compTrig );
+                component = compTrig;
             }
             else
             {
                 gAaLog.Write ( "Component ID not found!" );
                 continue;
             }
+
+            if ( !component )
+            {
+                gAaLog.Write ( "Error, component was not allocated!" );
+                continue;
+            }
+
+            if ( componentName )
+            	component->SetName( componentName );
+            pEntity->SetComponent( component );
+
             gAaLog.Write ( "[ Done ]\n" );
         }
 
@@ -610,7 +636,7 @@ void XmlLoader::LoadSlideShow( const char* pFileName, SlideShow* pSlideShow )
         {
             int t = child->Type(); // ELEMENT=1 TEXT=3
 
-            if ( t == TiXmlNode::TINYXML_ELEMENT ) // ELEMENT changed to TINYXML_ELEMENT in tinyxml Revision 1.102
+            if ( t == TiXmlNode::/*TINYXML_*/ELEMENT ) // ELEMENT changed to TINYXML_ELEMENT in tinyxml Revision 1.102
             {
                 TiXmlElement* el = child->ToElement();
                 const char* value_temp = el->Value();
@@ -620,7 +646,7 @@ void XmlLoader::LoadSlideShow( const char* pFileName, SlideShow* pSlideShow )
                 if ( value == "n" )
                     slide.text += "\n";
             }
-            else if ( t == TiXmlNode::TINYXML_TEXT )
+            else if ( t == TiXmlNode::/*TINYXML_*/TEXT )
             {
                 TiXmlText* tx = child->ToText();
                 slide.text += tx->Value();

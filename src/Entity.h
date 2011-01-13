@@ -17,6 +17,8 @@
 #include <boost/shared_ptr.hpp>
 #include "Component.h"
 
+// TODO: get comp by name
+
 class Logger;
 
 typedef std::string EntityIdType;

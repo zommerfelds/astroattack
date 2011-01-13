@@ -19,6 +19,8 @@
 #include "../Component.h"
 #include "../Texture.h"
 
+class TiXmlElement;
+
 //--------------------------------------------//
 //-------- CompVisualTexture Klasse ----------//
 //--------------------------------------------//
@@ -33,6 +35,9 @@ public:
     void SetTexture( TextureIdType texId ) { m_textureId = texId; }
     // Aktive Textur
     TextureIdType GetTexture() const { return m_textureId; }
+
+    static boost::shared_ptr<CompVisualTexture> LoadFromXml(const TiXmlElement& compElem);
+    void StoreToXml(TiXmlElement& compElem);
 private:
 	static const CompIdType m_componentId;
     TextureIdType m_textureId;

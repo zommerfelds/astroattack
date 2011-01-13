@@ -17,6 +17,7 @@
 #include "components/CompPosition.h"
 #include "components/CompPlayerController.h"
 #include "components/CompGravField.h"
+#include "components/CompShape.h"
 
 #include <boost/bind.hpp>
 
@@ -59,6 +60,33 @@ void PhysicsSubSystem::RegisterPhysicsComp( Entity* pEntity )
     {
         comp_phys->m_body = m_world->CreateBody( comp_phys->m_bodyDef.get() );
         comp_phys->m_body->SetUserData( comp_phys );
+
+		std::vector<Component*> compShapes = pEntity->GetComponents("CompShape");
+
+    	for (unsigned int i=0; i < comp_phys->m_shapes.size(); i++)
+    	{
+    		boost::shared_ptr<b2FixtureDef> fixtureDef = boost::make_shared<b2FixtureDef>();
+
+    		CompShape* pCompShape = NULL;
+    		for (unsigned int a=0; a < compShapes.size(); a++) // TODO: improve this!
+    		{
+    			if (compShapes[i]->GetName() == comp_phys->m_shapes[i]->compName)
+    			{
+    				pCompShape = static_cast<CompShape*>(compShapes[i]);
+    				break;
+    			}
+    		}
+    		if (pCompShape == NULL)
+    			continue; // error
+
+            fixtureDef->shape = pCompShape->toB2Shape();
+            fixtureDef->density = comp_phys->m_shapes[i]->density;
+            fixtureDef->friction = comp_phys->m_shapes[i]->friction;
+            fixtureDef->restitution = comp_phys->m_shapes[i]->restitution;
+            fixtureDef->isSensor = comp_phys->m_shapes[i]->isSensor;
+    		comp_phys->AddFixtureDef(fixtureDef, comp_phys->m_shapes[i]->compName); // TODO
+    	}
+
         for ( unsigned int i = 0; i < comp_phys->m_fixtureDefs.size(); ++i )
         {
             std::pair< FixtureMap::iterator,bool> result (

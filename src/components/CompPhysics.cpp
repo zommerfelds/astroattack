@@ -41,6 +41,11 @@ void CompPhysics::AddFixtureDef( const boost::shared_ptr<b2FixtureDef>& pFixture
     m_fixtureDefs.push_back( std::make_pair(name,pFixtureDef) );
 }
 
+void CompPhysics::AddShapeDef( const boost::shared_ptr<ShapeDef>& pShapeDef )
+{
+    m_shapes.push_back( pShapeDef );
+}
+
 const b2Body* CompPhysics::GetBody() const
 {
     return m_body;

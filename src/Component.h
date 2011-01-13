@@ -17,6 +17,7 @@
 struct GameEvents;
 class Entity;
 typedef std::string CompIdType;
+typedef std::string CompNameType;
 
 class Component {
 public:
@@ -25,7 +26,7 @@ public:
     virtual ~Component() {} // Destruktor
 
     virtual const CompIdType& ComponentId() const = 0;   // Komponent ID -> Name des Komponententyps
-    const std::string GetName() const { return m_name; } // Eigener Namen (optional)
+    const CompNameType& GetName() const { return m_name; } // Eigener Namen (optional)
     void SetName( std::string name ) { m_name = name; }
 
     void SetOwnerEntity( Entity* obj ) { m_pOwnerEntity = obj; } // Einheit, die die Komponente besitzt, festlegen

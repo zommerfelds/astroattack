@@ -15,5 +15,3 @@ AstroAttack_SOURCES = Camera.cpp Component.cpp Configuration.cpp \
 	states/EditorState.cpp \
 	states/GameOverState.cpp states/MainMenuState.cpp \
 	states/PlayingState.cpp states/SlideShowState.cpp
-
-
