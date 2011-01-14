@@ -909,53 +909,55 @@ void XmlLoader::SaveWorldToXml( const char* pFileName, GameWorld* pGameWorld )
                 //for ( b2Shape* s = compPhys->GetShape(); s; s = s->GetNext() )
                 {
                     TiXmlElement* shapeElement = new TiXmlElement( "shape" );
-                    shapeElement->SetAttribute( "name", it->first.c_str() ); // Namen der Form
+                    shapeElement->SetAttribute( "comp_name", it->first.c_str() ); // Namen der Form
                     compElement->LinkEndChild( shapeElement );
 
                     {
-                        TiXmlElement* physElement = new TiXmlElement( "phys" );
                         // TODO: find density
-                        physElement->SetDoubleAttribute( "density", it->second.density );
-                        physElement->SetDoubleAttribute( "friction", it->second.pFixture->GetFriction() );
-                        physElement->SetDoubleAttribute( "restitution", it->second.pFixture->GetRestitution() );
-                        shapeElement->LinkEndChild( physElement );
-                    }
+                        shapeElement->SetDoubleAttribute( "density", it->second.density );
+                        shapeElement->SetDoubleAttribute( "friction", it->second.pFixture->GetFriction() );
+                        shapeElement->SetDoubleAttribute( "restitution", it->second.pFixture->GetRestitution() );
 
-                    if ( it->second.pFixture->IsSensor() )
-                    {
-                        TiXmlElement* isElement = new TiXmlElement( "isSensor" );
-                        shapeElement->LinkEndChild( isElement );
-                    }
-
-                    switch( it->second.pFixture->GetType() )
-                    {
-                        case b2Shape::e_polygon:
+                        if ( it->second.pFixture->IsSensor() )
                         {
-                            b2PolygonShape* ps = static_cast<b2PolygonShape*>(it->second.pFixture->GetShape());
-                            for ( int i = 0; i < ps->GetVertexCount(); ++i )
-                            {
-                                TiXmlElement* vertexElement = new TiXmlElement( "vertex" );
-                                vertexElement->SetDoubleAttribute( "x", ps->GetVertex(i).x );
-                                vertexElement->SetDoubleAttribute( "y", ps->GetVertex(i).y );
-                                shapeElement->LinkEndChild( vertexElement );
-                            }
-                            break;
+                        	shapeElement->SetAttribute("isSensor", "true");
                         }
-                        case b2Shape::e_circle:
-                        {
-                            b2CircleShape* cs = static_cast<b2CircleShape*>(it->second.pFixture->GetShape());
-
-                            TiXmlElement* circleElement = new TiXmlElement( "circle" );
-                            circleElement->SetDoubleAttribute( "x", cs->m_p.x );
-                            circleElement->SetDoubleAttribute( "y", cs->m_p.y );
-                            circleElement->SetDoubleAttribute( "r", cs->m_radius );
-                            shapeElement->LinkEndChild( circleElement );
-                            break;
-                        }
-                        default:
-                            break;
                     }
-                    
+                }
+            }
+            else if ( c_it->second->ComponentId() == "CompShape" )
+            {
+
+            	CompShape* compShape = static_cast<CompShape*>(c_it->second.get());
+            	switch (compShape->GetType()) {
+                    case CompShape::Polygon:
+                    {
+        				TiXmlElement* polyElement = new TiXmlElement( "polygon" );
+                    	compElement->LinkEndChild( polyElement );
+
+                    	CompShapePolygon* sp = static_cast<CompShapePolygon*>(compShape);
+                        for ( size_t i = 0; i < sp->GetVertexCount(); ++i )
+                        {
+                            TiXmlElement* vertexElement = new TiXmlElement( "vertex" );
+                            vertexElement->SetDoubleAttribute( "x", sp->GetVertex(i)->x );
+                            vertexElement->SetDoubleAttribute( "y", sp->GetVertex(i)->y );
+                            polyElement->LinkEndChild( vertexElement );
+                        }
+                        break;
+                    }
+                    case CompShape::Circle:
+                    {
+                    	CompShapeCircle* sc = static_cast<CompShapeCircle*>(compShape);
+
+                        TiXmlElement* circleElement = new TiXmlElement( "circle" );
+                        circleElement->SetDoubleAttribute( "x", sc->GetCenter().x );
+                        circleElement->SetDoubleAttribute( "y", sc->GetCenter().y );
+                        circleElement->SetDoubleAttribute( "r", sc->GetRadius() );
+                        compElement->LinkEndChild( circleElement );
+                        break;
+                    }
+                    default:
+                        break;
                 }
             }
             else if ( c_it->second->ComponentId() == "CompVisualTexture" )

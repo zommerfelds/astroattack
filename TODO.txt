@@ -8,12 +8,12 @@
 - Refactor
 - Check static_cast<> and dynamic_cast<> (e.g. PhysicsSubSystem::RegisterGravFieldComp() )
 - Make whole camera functionality frame rate independant
-- Text is too big
 - Abstract Box2D (remove Box2D dependencies in non-physics parts)
 
 
 * Medium priority *
 
+- No OpenGL call out of Renderer.cpp (e.g. glColor4f in EditorState.cpp)
 - Migrate to pugixml or rapidxml
 - Use size_t instead of unsigned int (string::npos)
 - Use physical state interpolation instead of extrapolation
@@ -62,6 +62,7 @@
 
 
 DONE:
+- Text is too big
 - Time Accumulator besser anwenden
 - Refactored event system (using templates now)
 - Clean up TODO (high/low priority)

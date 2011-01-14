@@ -21,6 +21,7 @@
 
 #include "../components/CompVisualTexture.h"
 #include "../components/CompPhysics.h"
+#include "../components/CompShape.h"
 
 #include <Box2D/Box2D.h>
 
@@ -176,25 +177,28 @@ void EditorState::Update()      // Spiel aktualisieren
             boost::shared_ptr<Entity> pEntity = boost::make_shared<Entity>(entityName);
 
             boost::shared_ptr<CompPhysics> compPhysics = boost::make_shared<CompPhysics>(new b2BodyDef/*, false*/ );
-            boost::shared_ptr<b2FixtureDef> fixtureDef = boost::make_shared<b2FixtureDef>();
-            b2PolygonShape* shape = new b2PolygonShape;
-            b2Vec2 vertices[b2_maxPolygonVertices];
+            boost::shared_ptr<CompPhysics::ShapeDef> shapeDef = boost::make_shared<CompPhysics::ShapeDef>();
+            shapeDef->friction = 0.3f;
+            shapeDef->compName = "shape1";
+            compPhysics->AddShapeDef( shapeDef );
+            pEntity->SetComponent( compPhysics );
+
+            boost::shared_ptr<CompShapePolygon> compShape = boost::make_shared<CompShapePolygon>();
+            compShape->SetName("shape1");
             for ( int i = 0; i < m_currentPoint; ++i )
             {
-                vertices[i].x = m_pClickedPoints[i]->x;
-                vertices[i].y = m_pClickedPoints[i]->y;
+            	compShape->SetVertex(i, *m_pClickedPoints[i]);
             }
-            shape->Set( vertices, m_currentPoint );
-            fixtureDef->shape = shape;
-            fixtureDef->friction = 0.3f;
-            compPhysics->AddFixtureDef( fixtureDef, "shape1" );
-            pEntity->SetComponent( compPhysics );
+            //compShape->SetVertex(i, m_currentPoint);
+            pEntity->SetComponent( compShape );
 
             TextureIdType textureName = m_currentTexture;
             boost::shared_ptr<CompVisualTexture> compPolyTex = boost::make_shared<CompVisualTexture>(textureName);
             pEntity->SetComponent( compPolyTex );
 
             m_pGameWorld->AddEntity( pEntity );
+
+
 
             m_currentPoint = 0;
         }
@@ -265,7 +269,10 @@ void EditorState::Draw( float accumulator )        // Spiel zeichnen
     // Bildschirm leeren
     pRenderer->ClearScreen();
     // Weltmodus
-    pRenderer->SetMatrix(RenderSubSystem::World);        
+    pRenderer->SetMatrix(RenderSubSystem::World);
+    m_pGameCamera->Look();
+
+    glColor4f ( 1.0f, 1.0f, 1.0f, 1.0f );
     // Texturen zeichnen
     pRenderer->DrawVisualTextureComps();
     // Animationen zeichnen
@@ -332,7 +339,7 @@ void EditorState::Draw( float accumulator )        // Spiel zeichnen
                                  0.5f, 2.9f,
                                  0.5f, 2.5f };
         pRenderer->DrawTexturedQuad( texCoord, vertexCoord, m_currentTexture, true );
-        pRenderer->DrawString( m_currentTexture, "FontW_s", 0.1f, 2.91f );
+        pRenderer->DrawString( m_currentTexture, "FontW_s", 0.09f, 2.91f );
     }
 
     mousePos = m_pGameCamera->ScreenToWorld(mousePos);

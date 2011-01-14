@@ -38,6 +38,7 @@
       <Animation file = "data/Animation/killer/killer.anim" id = "killer" mipMaps = "1" texRepeat = "0"/>
       <Animation file = "data/Animation/hexagon/hexagon.anim" id = "hexagon" mipMaps = "1" texRepeat = "0"/>
 
-      <Font file = "data/Fonts/font.ttf" id = "FontW_b" size = "40"/>
-      <Font file = "data/Fonts/font.ttf" id = "FontW_s" size = "25"/>
+      <Font file = "data/Fonts/font.ttf" id = "FontW_b" size = "35"/>
+      <Font file = "data/Fonts/font.ttf" id = "FontW_m" size = "25"/>
+      <Font file = "data/Fonts/font.ttf" id = "FontW_s" size = "18"/>
 </Graphics>

@@ -97,6 +97,26 @@ b2Shape* CompShapePolygon::toB2Shape()
     return poly_shape;
 }
 
+void CompShapePolygon::SetVertex(size_t i, const Vector2D& v)
+{
+	if (i==GetVertexCount())
+	{
+		m_vertices.push_back(boost::make_shared<Vector2D>(v));
+	}
+	else if (i<GetVertexCount())
+	{
+		*m_vertices[i]=v;
+	}
+	// out of range
+}
+
+const Vector2D* CompShapePolygon::GetVertex(size_t i) const
+{
+	if (i>=GetVertexCount())
+		return NULL;
+	return m_vertices[i].get();
+}
+
 CompShapeCircle::CompShapeCircle() :
 		m_center ( new Vector2D ),
 		m_radius (1.0f)

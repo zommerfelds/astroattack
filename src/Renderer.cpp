@@ -403,8 +403,7 @@ void RenderSubSystem::DrawEditorCursor ( const Vector2D& rPos )
     glBegin ( GL_LINES );
         glVertex2f(0.0f, rPos.y);
         glVertex2f(4.0f, rPos.y);
-    glEnd();
-    glBegin ( GL_LINES );
+
         glVertex2f(rPos.x, 0.0f);
         glVertex2f(rPos.x, 3.0f);
     glEnd();
@@ -530,7 +529,7 @@ void RenderSubSystem::DrawVisualMessageComps()
     float lineHeight = 0.2f;
     for ( CompVisualMessageMap::const_iterator it = m_visualMsgComps.begin(); it != m_visualMsgComps.end(); ++it )
     {
-        DrawString( std::string("- ")+it->second->GetMsg(), "FontW_s", 0.4f, 0.6f + y*lineHeight );
+        DrawString( std::string("- ")+it->second->GetMsg(), "FontW_m", 0.4f, 0.6f + y*lineHeight );
         ++y;
     }
 }

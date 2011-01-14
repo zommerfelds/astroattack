@@ -27,12 +27,17 @@ class b2Shape;
 class CompShape : public Component
 {
 public:
+	~CompShape() {}
+
     const CompIdType& ComponentId() const { return m_componentId; }
 
     static boost::shared_ptr<CompShape> LoadFromXml(const TiXmlElement& compElem);
     virtual void StoreToXml(TiXmlElement& compElem) = 0;
 
     virtual b2Shape* toB2Shape() = 0;
+
+    enum Type { Polygon, Circle };
+    virtual Type GetType() = 0;
 
 private:
 	static const CompIdType m_componentId;
@@ -52,6 +57,13 @@ public:
     void StoreToXml(TiXmlElement& compElem) {};
 
     b2Shape* toB2Shape(); // up to the caller to delete the shape
+
+    void SetVertex(size_t i, const Vector2D& v);
+
+    const Vector2D* GetVertex(size_t i) const;
+    size_t GetVertexCount() const { return m_vertices.size(); }
+
+    Type GetType() { return Polygon; }
 
     static const int cMaxVertices = 8;
 
@@ -75,6 +87,11 @@ public:
     void StoreToXml(TiXmlElement& compElem) {};
 
     b2Shape* toB2Shape();
+
+    float GetRadius() const { return m_radius; }
+    const Vector2D& GetCenter() const { return *m_center; }
+
+    Type GetType() { return Circle; }
 
 private:
     boost::scoped_ptr<Vector2D> m_center;

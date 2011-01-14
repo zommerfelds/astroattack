@@ -172,7 +172,6 @@ void PlayingState::Draw( float accumulator )        // Spiel zeichnen
     // Bildschirm leeren
     pRenderer->ClearScreen();
     // GUI modus (Grafische Benutzeroberfläche)
-    //pRenderer->SetMatrix(RenderSubSystem::World);
     pRenderer->SetMatrix(RenderSubSystem::GUI);
     // Hintergrundbild zeichnen
     {
@@ -242,8 +241,8 @@ void PlayingState::Draw( float accumulator )        // Spiel zeichnen
     ss.precision( 1 );
     ss.setf(std::ios::fixed,std::ios::floatfield);
     ss << m_pGameWorld->GetVariable("JetpackEnergy")/10.0f << "%";
-    pRenderer->DrawString( ss.str().c_str(), "FontW_s", 0.55f, 0.133f, AlignLeft, AlignCenter, 1.0f, 1.0f, 1.0f, 1.0f );
-    pRenderer->DrawString( "Jetpack", "FontW_s", 0.45f, 0.133f, AlignRight, AlignCenter, 1.0f, 1.0f, 1.0f, 1.0f );
+    pRenderer->DrawString( ss.str().c_str(), "FontW_m", 0.55f, 0.133f, AlignLeft, AlignCenter, 1.0f, 1.0f, 1.0f, 1.0f );
+    pRenderer->DrawString( "Jetpack", "FontW_m", 0.45f, 0.133f, AlignRight, AlignCenter, 1.0f, 1.0f, 1.0f, 1.0f );
 
     if ( m_alphaOverlay != 0.0f )
     {
