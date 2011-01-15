@@ -71,7 +71,8 @@ void SlideShowState::Init()        // State starten
     // Dazugehörende Bilder laden
     LoadTextureInfo info;
     info.loadMipmaps = false;
-    info.textureWrapMode = TEX_CLAMP;
+    info.textureWrapModeX = TEX_CLAMP;
+    info.textureWrapModeY = TEX_CLAMP;
     info.scale = 1.0;
     for ( unsigned int i = 0; i < m_slideShow.slides.size(); ++i )
         GetSubSystems()->renderer->GetTextureManager()->LoadTexture( m_slideShow.slides[i].imageFileName.c_str(), m_slideShow.slides[i].imageFileName,info,gAaConfig.GetInt("TexQuality") );

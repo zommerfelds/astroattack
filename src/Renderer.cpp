@@ -17,6 +17,7 @@
 #include "Texture.h"
 #include "Entity.h"
 #include <fstream>
+#include <cmath>
 #include "main.h"
 #include "XmlLoader.h"
 
@@ -310,12 +311,15 @@ void RenderSubSystem::DrawTexturedCircle ( const CompShapeCircle& rCircle, const
     //tex = "EdgeGrass1";
     if (tex != "")
     {
+        float angle = cPi*2/cCircleSlices;
+        float edgeLenght = tan(angle/2)*2.0f*rCircle.GetRadius();
+        float textureCut = fmod(edgeLenght, 1.0f);
+
         for ( size_t i = 0; i < cCircleSlices; ++i )
         {
             Vector2D cross ( rCircle.GetRadius(), 0.0f );
-            float angle = cPi*2/cCircleSlices;
 
-            DrawEdge(cross.Rotated(angle*i), cross.Rotated(angle*(i+1)), tex);
+            DrawEdge(cross.Rotated(angle*i), cross.Rotated(angle*(i+1)), tex, textureCut*i, edgeLenght);
         }
     }
 
@@ -331,10 +335,12 @@ void RenderSubSystem::DrawTexturedCircle ( const CompShapeCircle& rCircle, const
     gluDeleteQuadric(pQuacric);
 }
 
-void RenderSubSystem::DrawEdge(const Vector2D& vertexA, const Vector2D& vertexB, std::string& tex)
+void RenderSubSystem::DrawEdge(const Vector2D& vertexA, const Vector2D& vertexB, std::string& tex, float offset, float preCalcEdgeLenght)
 {
     Vector2D edgeNorm = vertexB - vertexA;
-    float edgeLenght = edgeNorm.Length();
+    float edgeLenght = preCalcEdgeLenght;
+    if (edgeLenght < 0.0f)
+        edgeLenght = edgeNorm.Length();
     edgeNorm.Normalise();
     edgeNorm.Rotate(cPi/2);
     Vector2D vertex1 = vertexA - edgeNorm*0.01f;
@@ -342,10 +348,10 @@ void RenderSubSystem::DrawEdge(const Vector2D& vertexA, const Vector2D& vertexB,
     Vector2D vertex3 = vertex2 + edgeNorm;
     Vector2D vertex4 = vertex1 + edgeNorm;
 
-    float texCoord[8] = { 0.0f, 0.0f,
-                          0.0f, 1.0f,
-                          edgeLenght, 1.0f,
-                          edgeLenght, 0.0f };
+    float texCoord[8] = { 0.0f+offset, 0.0f,
+                          0.0f+offset, 1.0f,
+                          edgeLenght+offset, 1.0f,
+                          edgeLenght+offset, 0.0f };
     float vertexCoord[8] = { vertex2.x, vertex2.y,
                              vertex3.x, vertex3.y,
                              vertex4.x, vertex4.y,
@@ -646,7 +652,8 @@ void RenderSubSystem::DisplayLoadingScreen()
 
     LoadTextureInfo info;
     info.loadMipmaps = false;
-    info.textureWrapMode = GL_CLAMP;
+    info.textureWrapModeX = GL_CLAMP;
+    info.textureWrapModeY = GL_CLAMP;
     info.scale = 1.0;
     int picw=0,pich=0;
     m_pTextureManager->LoadTexture("data/Loading.png","loading",info,gAaConfig.GetInt("TexQuality"),&picw,&pich);

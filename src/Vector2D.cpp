@@ -42,7 +42,7 @@ void Vector2D::Normalise()
     ( *this ) *= ( 1.0f / fLength );
 }
 
-// Ob rV sich Rechts von diesem Vektor befindet (=kleinster Winkel ist im Uhrzeigersinn von rV aus)
+// Ob rV sich Rechts von diesem Vektor befindet (=kleinster Winkel ist im Uhrzeigersinn)
 bool Vector2D::IsRight( const Vector2D &rV ) const
 {
 	if ( x * rV.y - y * rV.x < 0.0f )

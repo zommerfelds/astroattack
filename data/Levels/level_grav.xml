@@ -113,6 +113,7 @@
         </Component>
         <Component id="CompVisualTexture" name="std">
             <tex name="Liquid Crystal 2" />
+            <edge tex="EdgeMud1" edges="0" />
         </Component>
     </Entity>
     <Entity name="grav_circular">

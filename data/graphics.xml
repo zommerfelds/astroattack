@@ -31,8 +31,8 @@
       <Texture file = "data/Textures/Starfield.png" id = "_starfield" mipMaps = "0" texRepeat = "1" scale="1.0"/>
       <Texture file = "data/GUI/Cursor.png" id = "_cursor" mipMaps = "0" texRepeat = "0" scale="1.0"/>
       
-      <Texture file = "data/Textures/Edges/EdgeGrass1.png" id = "EdgeGrass1" mipMaps = "1" texRepeat = "1" scale="1.0"/>
-      <Texture file = "data/Textures/Edges/EdgeMud1.png" id = "EdgeMud1" mipMaps = "1" texRepeat = "1" scale="1.0"/>
+      <Texture file = "data/Textures/Edges/EdgeGrass1.png" id = "EdgeGrass1" mipMaps = "1" texRepeatX = "1" texRepeatY = "0" scale="1.0"/>
+      <Texture file = "data/Textures/Edges/EdgeMud1.png" id = "EdgeMud1" mipMaps = "1" texRepeatX = "1" texRepeatY = "0" scale="1.0"/>
 
       <Animation file = "data/Animation/4dots/4dots.anim" id = "4dots" mipMaps = "1" texRepeat = "0"/>
       <Animation file = "data/Animation/astro/astro.anim" id = "astro" mipMaps = "0" texRepeat = "0"/>

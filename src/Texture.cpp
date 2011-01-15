@@ -125,8 +125,8 @@ void TextureManager::LoadTexture( const std::string& name, TextureIdType id, con
             glGenTextures(1, &openGl_tex_id); // OpenGL Texture generieren
             glBindTexture(GL_TEXTURE_2D, openGl_tex_id); // binden
 
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, loadTexInfo.textureWrapMode);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, loadTexInfo.textureWrapMode);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, loadTexInfo.textureWrapModeX);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, loadTexInfo.textureWrapModeY);
 
             if (loadTexInfo.loadMipmaps)
             {

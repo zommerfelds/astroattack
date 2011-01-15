@@ -163,7 +163,7 @@ public:
     // Skaliert den Vektor auf Länge 1
     void Normalise();
 
-	// Gibt zurück ob rV sich Rechts von diesem Vektor befindet (=kleinster Winkel ist im Uhrzeigersinn von rV aus)
+	// Gibt zurück ob rV sich Rechts von diesem Vektor befindet (=kleinster Winkel ist im Uhrzeigersinn)
 	bool IsRight( const Vector2D &rV ) const;
 
 	// Winkel herausfinden, dass der Vektor mit der X-Achse schliesst ( [1,0] hat Winkel 0, im Gegenuhrzeigersinn +, im Uhrzeigersinn - )

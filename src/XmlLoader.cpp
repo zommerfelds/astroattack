@@ -699,8 +699,17 @@ void XmlLoader::LoadGraphics( const char* pFileName, TextureManager* pTextureMan
             const char* id = texElement->Attribute("id");
             int mipMaps = 0;
             texElement->QueryIntAttribute("mipMaps",&mipMaps);
-            int texRepeat = 0;
+            int texRepeat = 0; // deprecated
+            int texRepeatX = 0;
+            int texRepeatY = 0;
             texElement->QueryIntAttribute("texRepeat",&texRepeat);
+            texElement->QueryIntAttribute("texRepeatX",&texRepeatX);
+            texElement->QueryIntAttribute("texRepeatY",&texRepeatY);
+            if (texRepeat)
+            {
+                texRepeatX = 1;
+                texRepeatY = 1;
+            }
             float scale = 1.0f;
             texElement->QueryFloatAttribute("scale",&scale);
 
@@ -710,10 +719,14 @@ void XmlLoader::LoadGraphics( const char* pFileName, TextureManager* pTextureMan
             else
                 info.loadMipmaps = false;
 
-            if ( texRepeat )
-                info.textureWrapMode = TEX_REPEAT;
+            if ( texRepeatX )
+                info.textureWrapModeX = TEX_REPEAT;
             else
-                info.textureWrapMode = TEX_CLAMP;
+                info.textureWrapModeX = TEX_CLAMP;
+            if ( texRepeatY )
+                info.textureWrapModeY = TEX_REPEAT;
+            else
+                info.textureWrapModeY = TEX_CLAMP;
 
             info.scale = scale;
 
@@ -731,8 +744,17 @@ void XmlLoader::LoadGraphics( const char* pFileName, TextureManager* pTextureMan
             const char* id = animElement->Attribute("id");
             int mipMaps = 0;
             animElement->QueryIntAttribute("mipMaps",&mipMaps);
-            int texRepeat = 0;
+            int texRepeat = 0; // deprecated
+            int texRepeatX = 0;
+            int texRepeatY = 0;
             animElement->QueryIntAttribute("texRepeat",&texRepeat);
+            animElement->QueryIntAttribute("texRepeatX",&texRepeatX);
+            animElement->QueryIntAttribute("texRepeatY",&texRepeatY);
+            if (texRepeat)
+            {
+                texRepeatX = 1;
+                texRepeatY = 1;
+            }
 
             LoadTextureInfo info;
             if ( mipMaps && !noMipmaps )
@@ -740,10 +762,14 @@ void XmlLoader::LoadGraphics( const char* pFileName, TextureManager* pTextureMan
             else
                 info.loadMipmaps = false;
 
-            if ( texRepeat )
-                info.textureWrapMode = TEX_REPEAT;
+            if ( texRepeatX )
+                info.textureWrapModeX = TEX_REPEAT;
             else
-                info.textureWrapMode = TEX_CLAMP;
+                info.textureWrapModeX = TEX_CLAMP;
+            if ( texRepeatY )
+                info.textureWrapModeY = TEX_REPEAT;
+            else
+                info.textureWrapModeY = TEX_CLAMP;
 
             info.scale = 1.0f;
 

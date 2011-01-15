@@ -77,7 +77,7 @@ public:
     // Kreis zeichnen
     void DrawTexturedCircle( const CompShapeCircle& rCircle, const CompVisualTexture& rTex, bool border = false );
     // Draw an edge effect
-    void DrawEdge(const Vector2D& vertexA, const Vector2D& vertexB, std::string& tex);
+    void DrawEdge(const Vector2D& vertexA, const Vector2D& vertexB, std::string& tex, float offset = 0.0f, float preCalcEdgeLenght = -1.0f);
     // Zeichnet einen Vector2D (Pfeil) an einer bestimmten Postion
     void DrawVector( const Vector2D& rVector, const Vector2D& rPos );
     // Zeichnet einen punkt an einer bestimmten Postion

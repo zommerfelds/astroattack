@@ -80,7 +80,8 @@ private:
 struct LoadTextureInfo
 {
     bool loadMipmaps;
-    int textureWrapMode; // GL_CLAMP oder GL_REPEAT
+    int textureWrapModeX; // GL_CLAMP oder GL_REPEAT
+    int textureWrapModeY; // GL_CLAMP oder GL_REPEAT
     float scale;
 };
 
