@@ -24,6 +24,7 @@
 #include "Vector2D.h"
 
 #include "components/CompVisualTexture.h"
+#include "components/CompShape.h"
 #include "components/CompPhysics.h"
 #include "components/CompVisualAnimation.h"
 #include "components/CompVisualMessage.h"
@@ -32,12 +33,9 @@
 
 #include <boost/bind.hpp>
 
-// TODO: remove dependency on Box2D
-#include <Box2D/Box2D.h>
-
 const char* cGraphisFileName = "data/graphics.xml";
 
-const int cCircleSlices = 20; // number of slices for drawing a circle
+const unsigned int cCircleSlices = 20; // number of slices for drawing a circle
 
 RenderSubSystem::RenderSubSystem( /*const GameWorld* pWorld, const GameCamera* pCamera,*/ GameEvents* pGameEvents )
 : m_eventConnection1 (), m_eventConnection2(), m_pGameEvents ( pGameEvents ),
@@ -255,7 +253,7 @@ void RenderSubSystem::DrawOverlay( float r, float g, float b, float a )
     glEnd();
 }
 
-void RenderSubSystem::DrawPolygonShape ( const b2PolygonShape* rPoly, bool border )
+void RenderSubSystem::DrawTexturedPolygon ( const CompShapePolygon& rPoly, const CompVisualTexture& rTex, bool border )
 {
     //m_pTextureManager->Clear();
     //glColor4ub ( 180, 0, 0, 150 );
@@ -265,25 +263,36 @@ void RenderSubSystem::DrawPolygonShape ( const b2PolygonShape* rPoly, bool borde
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);*/
 
     glBegin ( GL_POLYGON );
-    for ( int iCountVertices = 0; iCountVertices < rPoly->GetVertexCount(); ++iCountVertices )
+    for ( size_t iCountVertices = 0; iCountVertices < rPoly.GetVertexCount(); ++iCountVertices )
     {
-        glTexCoord2f( rPoly->GetVertex( iCountVertices ).x, rPoly->GetVertex( iCountVertices ).y );
-        glVertex2f ( rPoly->GetVertex( iCountVertices ).x, rPoly->GetVertex( iCountVertices ).y );
+        glTexCoord2f( rPoly.GetVertex( iCountVertices )->x, rPoly.GetVertex( iCountVertices )->y );
+        glVertex2f ( rPoly.GetVertex( iCountVertices )->x, rPoly.GetVertex( iCountVertices )->y );
     }
     glEnd();
+
+    for ( size_t iCountVertices = 0; iCountVertices < rPoly.GetVertexCount(); ++iCountVertices )
+    {
+    	std::string tex = rTex.GetEdgeTexture(iCountVertices);
+        //tex = "EdgeGrass1";
+    	if (tex == "")
+    		continue;
+
+        size_t vetex2Index = (iCountVertices==rPoly.GetVertexCount()-1) ? (0) : (iCountVertices+1);
+    	DrawEdge( *rPoly.GetVertex( iCountVertices ), *rPoly.GetVertex( vetex2Index ), tex);
+    }
 
     if ( border )
     {
         m_pTextureManager->Clear();
         glColor3ub ( 220, 220, 220 );
         glBegin ( GL_LINE_LOOP );
-        for ( int iCountVertices = 0; iCountVertices < rPoly->GetVertexCount(); ++iCountVertices )
-            glVertex2f ( rPoly->GetVertex( iCountVertices ).x, rPoly->GetVertex( iCountVertices ).y );
+        for ( size_t iCountVertices = 0; iCountVertices < rPoly.GetVertexCount(); ++iCountVertices )
+            glVertex2f ( rPoly.GetVertex( iCountVertices )->x, rPoly.GetVertex( iCountVertices )->y );
         glEnd();
     }
 }
 
-void RenderSubSystem::DrawCircleShape ( const b2CircleShape* rCircle, bool border )
+void RenderSubSystem::DrawTexturedCircle ( const CompShapeCircle& rCircle, const CompVisualTexture& rTex, bool border )
 {
     //m_pTextureManager->Clear();
     //glColor4ub ( 180, 0, 0, 150 );
@@ -293,20 +302,55 @@ void RenderSubSystem::DrawCircleShape ( const b2CircleShape* rCircle, bool borde
     gluQuadricDrawStyle(pQuacric, GLU_FILL);
 
     glPushMatrix();
-    glTranslatef(rCircle->m_p.x, rCircle->m_p.y, 0.0f);
+    glTranslatef(rCircle.GetCenter().x, rCircle.GetCenter().y, 0.0f);
 
-    gluDisk(pQuacric, 0.0f, rCircle->m_radius, cCircleSlices,  1);
+    gluDisk(pQuacric, 0.0f, rCircle.GetRadius(), cCircleSlices,  1);
     
+    std::string tex = rTex.GetEdgeTexture(0);
+    //tex = "EdgeGrass1";
+    if (tex != "")
+    {
+        for ( size_t i = 0; i < cCircleSlices; ++i )
+        {
+            Vector2D cross ( rCircle.GetRadius(), 0.0f );
+            float angle = cPi*2/cCircleSlices;
+
+            DrawEdge(cross.Rotated(angle*i), cross.Rotated(angle*(i+1)), tex);
+        }
+    }
+
     if ( border )
     {
         m_pTextureManager->Clear();
         glColor3ub ( 220, 220, 220 );
         gluQuadricDrawStyle(pQuacric, GLU_SILHOUETTE);
-        gluDisk(pQuacric, 0.0f, rCircle->m_radius, cCircleSlices,  1);
+        gluDisk(pQuacric, 0.0f, rCircle.GetRadius(), cCircleSlices,  1);
     }
 
     glPopMatrix();
     gluDeleteQuadric(pQuacric);
+}
+
+void RenderSubSystem::DrawEdge(const Vector2D& vertexA, const Vector2D& vertexB, std::string& tex)
+{
+    Vector2D edgeNorm = vertexB - vertexA;
+    float edgeLenght = edgeNorm.Length();
+    edgeNorm.Normalise();
+    edgeNorm.Rotate(cPi/2);
+    Vector2D vertex1 = vertexA - edgeNorm*0.01f;
+    Vector2D vertex2 = vertexB - edgeNorm*0.01f;
+    Vector2D vertex3 = vertex2 + edgeNorm;
+    Vector2D vertex4 = vertex1 + edgeNorm;
+
+    float texCoord[8] = { 0.0f, 0.0f,
+                          0.0f, 1.0f,
+                          edgeLenght, 1.0f,
+                          edgeLenght, 0.0f };
+    float vertexCoord[8] = { vertex2.x, vertex2.y,
+                             vertex3.x, vertex3.y,
+                             vertex4.x, vertex4.y,
+                             vertex1.x, vertex1.y, };
+    DrawTexturedQuad( texCoord, vertexCoord, tex, false, 1.0f );
 }
 
 // Zeichnet einen Vector2D (Pfeil) in einer bestimmten Postion
@@ -422,7 +466,8 @@ void RenderSubSystem::DrawVisualTextureComps()
     for ( CompVisualTextureMap::const_iterator it = m_visualTextureComps.begin(); it != m_visualTextureComps.end(); ++it )
     {
         CompPhysics* compPhys = static_cast<CompPhysics*>( it->second->GetOwnerEntity()->GetFirstComponent("CompPhysics") );
-        if ( compPhys != NULL )
+        std::vector<Component*> compShapes = it->second->GetOwnerEntity()->GetComponents("CompShape");
+        if ( compPhys != NULL)
         {
             glPushMatrix();
 
@@ -432,27 +477,25 @@ void RenderSubSystem::DrawVisualTextureComps()
             glTranslatef(position.x, position.y, 0.0f);
             glRotatef ( radToDeg(angle), 0.0, 0.0, 1.0f);
 
-            b2Fixture* fixture = compPhys->GetFixture();
-            while ( fixture != NULL )
+            for ( size_t i=0; i<compShapes.size(); ++i )
             {
-                b2Shape* shape = fixture->GetShape();
                 m_pTextureManager->SetTexture( it->second->GetTexture() );
+                const CompShape* shape = static_cast<CompShape*>(compShapes[i]);
                 switch( shape->GetType() )
                 {
-                    case b2Shape::e_polygon:
+                    case CompShape::Polygon:
                         {
-                            DrawPolygonShape( static_cast<const b2PolygonShape*>(shape) );
+                            DrawTexturedPolygon( *static_cast<const CompShapePolygon*>(shape), *it->second );
                             break;
                         }
-                    case b2Shape::e_circle:
+                    case CompShape::Circle:
                         {
-                            DrawCircleShape( static_cast<const b2CircleShape*>(shape) );
+                            DrawTexturedCircle( *static_cast<const CompShapeCircle*>(shape), *it->second );
                             break;
                         }
                     default:
                         break;
                 }
-                fixture = fixture->GetNext();
             }
             glPopMatrix();
         }

@@ -53,7 +53,7 @@ boost::shared_ptr<CompShapePolygon> CompShapePolygon::LoadFromXml(
 	boost::shared_ptr<CompShapePolygon> pPoly = boost::make_shared<CompShapePolygon>();
 
 	const TiXmlElement* vertexElement = compPolygon.FirstChildElement("vertex");
-	for (int i=0; vertexElement && i<cMaxVertices; vertexElement = vertexElement->NextSiblingElement("vertex"))
+	for (size_t i=0; vertexElement && i<cMaxVertices; vertexElement = vertexElement->NextSiblingElement("vertex"))
 	{
 		float x = 0.0f, y = 0.0f;
 		vertexElement->QueryFloatAttribute("x", &x);

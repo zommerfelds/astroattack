@@ -16,11 +16,12 @@
         </Component>
         <Component id="CompVisualTexture" name="std">
             <tex comp_name="shape1" name="Kirks Entry" />
+            <edge tex="EdgeGrass1" edges="3" />
         </Component>
     </Entity>
     <Entity name="EdBlock00001">
         <Component id="CompShape" name="shape1">
-            <circle x="7" y="-3" r="1" />
+            <circle x="9" y="-3" r="1" />
         </Component>
         <Component id="CompPhysics" name="std">
             <pos x="0.000000" y="0.000000" a="0.000000" />
@@ -29,6 +30,7 @@
         </Component>
         <Component id="CompVisualTexture" name="std">
             <tex name="Kirks Entry" />
+            <edge tex="EdgeMud1" edges="0" />
         </Component>
     </Entity>
     <Entity name="EdBlock00002">
@@ -47,6 +49,7 @@
         </Component>
         <Component id="CompVisualTexture" name="std">
             <tex name="Kirks Entry" />
+            <edge tex="EdgeGrass1" edges="3" />
         </Component>
     </Entity>
     <Entity name="EdBlock00003">

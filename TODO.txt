@@ -62,6 +62,7 @@
 
 
 DONE:
+- Edge effect (texture)
 - Text is too big
 - Time Accumulator besser anwenden
 - Refactored event system (using templates now)

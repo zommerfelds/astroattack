@@ -23,8 +23,8 @@ class CompVisualAnimation;
 class CompVisualMessage;
 class TextureManager;
 class AnimationManager;
-class b2PolygonShape;
-class b2CircleShape;
+class CompShapePolygon;
+class CompShapeCircle;
 class Vector2D;
 
 #include "Font.h"
@@ -68,20 +68,22 @@ public:
     // einen Quadrat zeichnen
     void DrawColorQuad( float vertexCoord[8], float r, float g, float b, float a, bool border = false );
     // Schreibt Text
-    void DrawString ( const std::string &str, const FontIdType &fontId, float x, float y, Align horizAlign=AlignLeft, Align vertAlign=AlignTop, float red=1.0f, float green=1.0f, float blue=1.0f, float alpha=1.0f );
+    void DrawString( const std::string &str, const FontIdType &fontId, float x, float y, Align horizAlign=AlignLeft, Align vertAlign=AlignTop, float red=1.0f, float green=1.0f, float blue=1.0f, float alpha=1.0f );
 
     // -------- nur für MatrixWorld Modus --------   
 
-    // Box2D Polygon zeichnen
-    void DrawPolygonShape ( const b2PolygonShape* rPoly, bool border = false );
-    // Box2D Kreis zeichnen
-    void DrawCircleShape ( const b2CircleShape* rCircle, bool border = false );
+    // Polygon zeichnen
+    void DrawTexturedPolygon( const CompShapePolygon& rPoly, const CompVisualTexture& rTex, bool border = false );
+    // Kreis zeichnen
+    void DrawTexturedCircle( const CompShapeCircle& rCircle, const CompVisualTexture& rTex, bool border = false );
+    // Draw an edge effect
+    void DrawEdge(const Vector2D& vertexA, const Vector2D& vertexB, std::string& tex);
     // Zeichnet einen Vector2D (Pfeil) an einer bestimmten Postion
-    void DrawVector ( const Vector2D& rVector, const Vector2D& rPos );
+    void DrawVector( const Vector2D& rVector, const Vector2D& rPos );
     // Zeichnet einen punkt an einer bestimmten Postion
-    void DrawPoint ( const Vector2D& rPos );
+    void DrawPoint( const Vector2D& rPos );
     // Zeichnet den Fadenkreuz
-    void DrawCrosshairs ( const Vector2D& rCrosshairsPos );
+    void DrawCrosshairs( const Vector2D& rCrosshairsPos );
 
     // -------- nur für MatrixGUI Modus --------   
 

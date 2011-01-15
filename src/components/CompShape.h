@@ -37,7 +37,7 @@ public:
     virtual b2Shape* toB2Shape() = 0;
 
     enum Type { Polygon, Circle };
-    virtual Type GetType() = 0;
+    virtual Type GetType() const = 0;
 
 private:
 	static const CompIdType m_componentId;
@@ -63,9 +63,9 @@ public:
     const Vector2D* GetVertex(size_t i) const;
     size_t GetVertexCount() const { return m_vertices.size(); }
 
-    Type GetType() { return Polygon; }
+    Type GetType() const { return Polygon; }
 
-    static const int cMaxVertices = 8;
+    static const unsigned int cMaxVertices = 8;
 
 private:
     std::vector<boost::shared_ptr<Vector2D> > m_vertices;
@@ -91,7 +91,7 @@ public:
     float GetRadius() const { return m_radius; }
     const Vector2D& GetCenter() const { return *m_center; }
 
-    Type GetType() { return Circle; }
+    Type GetType() const { return Circle; }
 
 private:
     boost::scoped_ptr<Vector2D> m_center;
