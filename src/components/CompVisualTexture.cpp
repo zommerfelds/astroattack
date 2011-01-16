@@ -16,7 +16,7 @@
 #include <sstream>
 
 // eindeutige ID
-const CompIdType CompVisualTexture::m_componentId = "CompVisualTexture";
+const CompIdType CompVisualTexture::COMPONENT_ID = "CompVisualTexture";
 
 CompVisualTexture::CompVisualTexture( TextureIdType texId ): m_textureId(texId)
 {

@@ -31,7 +31,8 @@ class CompVisualTexture : public Component
 public:
     CompVisualTexture( TextureIdType texId );
     ~CompVisualTexture();
-	const CompIdType& ComponentId() const { return m_componentId; }
+	const CompIdType& ComponentId() const { return COMPONENT_ID; }
+	static const CompIdType COMPONENT_ID;
 
     // Textur setzen
     void SetTexture( TextureIdType texId ) { m_textureId = texId; }
@@ -41,8 +42,8 @@ public:
 
     static boost::shared_ptr<CompVisualTexture> LoadFromXml(const TiXmlElement& compElem);
     void StoreToXml(TiXmlElement& compElem);
+
 private:
-	static const CompIdType m_componentId;
     TextureIdType m_textureId;
     TextureIdType m_edgeTexId[CompShapePolygon::cMaxVertices];
 };

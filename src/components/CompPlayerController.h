@@ -32,11 +32,10 @@ class CompPlayerController : public Component
 public:
     CompPlayerController( const InputSubSystem*, std::map<const std::string, int>::iterator itJetPackVar, boost::function1<void,b2Shape*> refiltelFunc );
     ~CompPlayerController();
-    const CompIdType& ComponentId() const { return m_componentId; }
+    const CompIdType& ComponentId() const { return COMPONENT_ID; }
+    static const CompIdType COMPONENT_ID;
 
 private:
-    static const CompIdType m_componentId;
-
     const InputSubSystem* m_pInputSubSystem;
 
     // Hier werden alle nötigen aktionen Durgeführt pro Aktualisierung

@@ -21,17 +21,14 @@
 class CompVisualMessage : public Component
 {
 public:
-
     CompVisualMessage( std::string text );
     ~CompVisualMessage();
-    const CompIdType& ComponentId() const { return m_componentId; }
+    const CompIdType& ComponentId() const { return COMPONENT_ID; }
+	static const CompIdType COMPONENT_ID; // eindeutige ID für diese Komponentenart (gleich wie Klassennamen, siehe CompCollectable.cpp)
 
     std::string GetMsg() { return m_text; }
 
 private:
-
-	static const CompIdType m_componentId; // eindeutige ID für diese Komponentenart (gleich wie Klassennamen, siehe CompCollectable.cpp)
-
     std::string m_text;
 };
 //--------------------------------------------//

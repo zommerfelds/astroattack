@@ -26,13 +26,10 @@ class CompPosition : public Component
 public:
     CompPosition();
     ~CompPosition();
-	const CompIdType& FamilyID() const { return m_componentId; }
-    const CompIdType& ComponentId() const { return m_componentId; }
+	const CompIdType& FamilyID() const { return COMPONENT_ID; }
+    const CompIdType& ComponentId() const { return COMPONENT_ID; }
+	static const CompIdType COMPONENT_ID;
 
-private:
-	static const CompIdType m_componentId;
-
-public:
     // =========== Zugriff ==========
     Vector2D* Position() const
     {

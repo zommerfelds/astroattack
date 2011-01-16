@@ -223,7 +223,7 @@ void GameCamera::Update ( float deltaTime ) // time_span in seconds
         boost::shared_ptr<Entity> player = m_pWorld->GetEntity("Player");
         if ( player )
         {
-            CompPhysics* player_phys = static_cast<CompPhysics*>(player->GetFirstComponent("CompPhysics"));
+            CompPhysics* player_phys = player->GetComponent<CompPhysics>();
             if ( player_phys )
             {
                 // Blickpunkt der Kamera festsetzten (in der Mitte zwischen Spieler und Cursor)

@@ -198,7 +198,7 @@ void PlayingState::Draw( float accumulator )        // Spiel zeichnen
     Entity* player = m_pGameWorld->GetEntity("Player").get();
     if ( player )
     {
-        CompPhysics* player_phys = static_cast<CompPhysics*>(player->GetFirstComponent("CompPhysics"));
+        CompPhysics* player_phys = static_cast<CompPhysics*>(player->GetComponent("CompPhysics"));
         if ( player_phys )
         {
             const CompGravField* grav = player_phys->GetGravField();

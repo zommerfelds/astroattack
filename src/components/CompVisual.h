@@ -16,9 +16,7 @@
 class CompVisual : public Component
 {
 public:
-	const CompIdType& FamilyID() const { return m_familyID; }
 private:
-	static const CompIdType m_familyID;
 };
 
 #endif

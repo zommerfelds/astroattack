@@ -24,7 +24,7 @@
 #include <Box2D/Box2D.h>
 
 // eindeutige ID
-const CompIdType CompPlayerController::m_componentId = "CompPlayerController";
+const CompIdType CompPlayerController::COMPONENT_ID = "CompPlayerController";
 
 // Constants
 const int cMaxRecharge = 15;                    // wie wie muss der Spieler warten bis der Racketenrucksack startet?
@@ -56,7 +56,7 @@ CompPlayerController::~CompPlayerController()
 void CompPlayerController::OnUpdate()
 {    
     // Physikkomponente vom Spieler suchen, damit wir Kräfte an ihm ausüben können
-    CompPhysics* playerCompPhysics = static_cast<CompPhysics*>( GetOwnerEntity()->GetFirstComponent("CompPhysics") );
+    CompPhysics* playerCompPhysics = GetOwnerEntity()->GetComponent<CompPhysics>();
     if ( playerCompPhysics == NULL )
         return; // keine Physikkomponente, also abbrechen
 

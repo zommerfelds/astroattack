@@ -48,7 +48,19 @@ public:
     }
 
     // Gibt einen Zeiger zur aufgeforderten Komponente. Fall es keinen Komponent des gefragten Typs gibt, gibt es NULL zurück.
-    Component* GetFirstComponent(const CompIdType& rCompId );
+    template<typename CompType>
+    CompType* GetComponent()
+    {
+        ComponentMap::const_iterator i = m_components.find( CompType::COMPONENT_ID );
+        if ( i == m_components.end() )
+            return NULL;
+        else
+            return static_cast<CompType*>(i->second.get());
+    }
+
+    // Get component from string
+    // Only use this version if you can only get the component name at runtime (as a string)
+    Component* GetComponent(const CompIdType& rCompId );
     
     std::vector<Component*> GetComponents(const CompIdType& rCompId );
     const ComponentMap* GetAllComponents();

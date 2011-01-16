@@ -12,7 +12,7 @@
 #include "Logger.h"
 
 // Gibt einen Zeiger zur aufgeforderten Komponente. Fall es keinen Komponent des gefragten Typs gibt, gibt es NULL zurück.
-Component* Entity::GetFirstComponent(const CompIdType& rCompId )
+Component* Entity::GetComponent(const CompIdType& rCompId )
 {
     ComponentMap::const_iterator i = m_components.find( rCompId );
     if ( i == m_components.end() )

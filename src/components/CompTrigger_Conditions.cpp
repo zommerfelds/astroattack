@@ -54,7 +54,7 @@ bool ConditionEntityTouchedThis::ConditionIsTrue()
     //return m_touched;
 
     // TODO: all physics components
-    CompPhysics* thisCompPhysics = static_cast<CompPhysics*>( m_pCompTrigger->GetOwnerEntity()->GetFirstComponent("CompPhysics") );
+    CompPhysics* thisCompPhysics = m_pCompTrigger->GetOwnerEntity()->GetComponent<CompPhysics>();
     if ( thisCompPhysics == NULL )
         return false; // TODO: handle this
 

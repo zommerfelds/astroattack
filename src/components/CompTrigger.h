@@ -35,7 +35,8 @@ public:
 
     CompTrigger();
     ~CompTrigger();
-    const CompIdType& ComponentId() const { return m_componentId; }
+    const CompIdType& ComponentId() const { return COMPONENT_ID; }
+	static const CompIdType COMPONENT_ID; // eindeutige ID für diese Komponentenart (gleich wie Klassennamen, siehe CompCollectable.cpp)
 
     void AddCondition( const boost::shared_ptr<Condition>& );
     void AddEffect( const boost::shared_ptr<Effect>& );
@@ -43,10 +44,8 @@ public:
     const std::vector< boost::shared_ptr<Condition> >& GetConditions() const { return m_conditions; }
     const std::vector< boost::shared_ptr<Effect> >& GetEffects() const { return m_effects; }
 
+
 private:
-
-	static const CompIdType m_componentId; // eindeutige ID für diese Komponentenart (gleich wie Klassennamen, siehe CompCollectable.cpp)
-
     std::vector< boost::shared_ptr<Condition> > m_conditions;
     std::vector< boost::shared_ptr<Effect> > m_effects;
 

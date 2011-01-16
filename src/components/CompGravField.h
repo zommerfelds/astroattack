@@ -31,7 +31,8 @@ public:
 
     CompGravField();
     ~CompGravField();
-    const CompIdType& ComponentId() const { return m_componentId; }
+    const CompIdType& ComponentId() const { return COMPONENT_ID; }
+    static const CompIdType COMPONENT_ID; // eindeutige ID für diese Komponentenart (gleich wie Klassennamen, siehe CompGravField.cpp)
 
     // Setters
 	void SetGravType( GravType t ) { m_gravType = t; }
@@ -69,8 +70,6 @@ private:
 	boost::scoped_ptr<Vector2D> m_pGravitationCenter;
 	float m_strenght; // only with Radial
     unsigned int m_priority; // Gravitationsfeld-priorität: wenn sich 2 felder überlappen, gilt der mit der grössten priorität (0-100 is gültig)
-
-	static const CompIdType m_componentId; // eindeutige ID für diese Komponentenart (gleich wie Klassennamen, siehe CompGravField.cpp)
 
     //friend class PhysicsSubSystem; // Das Physik-System darf auf alles hier zugreifen!
 };

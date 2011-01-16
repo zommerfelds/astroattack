@@ -17,7 +17,7 @@
 #include <boost/make_shared.hpp>
 
 // eindeutige ID
-const CompIdType CompShape::m_componentId = "CompShape";
+const CompIdType CompShape::COMPONENT_ID = "CompShape";
 
 boost::shared_ptr<CompShape> CompShape::LoadFromXml(
 		const TiXmlElement& compElem)

@@ -471,7 +471,7 @@ void RenderSubSystem::DrawVisualTextureComps()
 {
     for ( CompVisualTextureMap::const_iterator it = m_visualTextureComps.begin(); it != m_visualTextureComps.end(); ++it )
     {
-        CompPhysics* compPhys = static_cast<CompPhysics*>( it->second->GetOwnerEntity()->GetFirstComponent("CompPhysics") );
+        CompPhysics* compPhys = it->second->GetOwnerEntity()->GetComponent<CompPhysics>();
         std::vector<Component*> compShapes = it->second->GetOwnerEntity()->GetComponents("CompShape");
         if ( compPhys != NULL)
         {
@@ -512,7 +512,7 @@ void RenderSubSystem::DrawVisualAnimationComps()
 {
     for ( CompVisualAnimationMap::const_iterator it = m_visualAnimComps.begin(); it != m_visualAnimComps.end(); ++it )
     {
-        CompPhysics* compPhys = static_cast<CompPhysics*>( it->second->GetOwnerEntity()->GetFirstComponent("CompPhysics") );
+        CompPhysics* compPhys = it->second->GetOwnerEntity()->GetComponent<CompPhysics>();
         if ( compPhys != NULL )
         {
             m_pTextureManager->SetTexture( it->second->GetCurrentTexture() );

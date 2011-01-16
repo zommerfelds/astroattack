@@ -61,7 +61,7 @@ public:
 
     CompPhysics(b2BodyDef* pBodyDef);
     ~CompPhysics();
-    const CompIdType& ComponentId() const { return m_componentId; }
+    const CompIdType& ComponentId() const { return COMPONENT_ID; }
 
     // Eine zusätzliche geometrische Form für den Körper definieren
     // Nur am Anfang benützen, bevor die Einheit (Entity) zur Welt hinzugefügt wurde!
@@ -114,9 +114,9 @@ public:
     // pGravField will be set to a pointer to the GravField, pUpdatesSinceLastGravFieldChange and pGravFieldIsChanging will be filled with data
 	//void GetGravFieldInfo(const CompGravField* pGravField, int* pUpdatesSinceLastGravFieldChange, bool* pGravFieldIsChanging) const;
 
-private:
+	static const CompIdType COMPONENT_ID; // eindeutige ID für diese Komponentenart (gleich wie Klassennamen, siehe CompPhysics.cpp)
 
-	static const CompIdType m_componentId; // eindeutige ID für diese Komponentenart (gleich wie Klassennamen, siehe CompPhysics.cpp)
+private:
 
     // Box2D Informationen
     b2Body* m_body;

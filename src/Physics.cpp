@@ -55,7 +55,7 @@ PhysicsSubSystem::~PhysicsSubSystem()
 
 void PhysicsSubSystem::RegisterPhysicsComp( Entity* pEntity )
 {
-    CompPhysics* comp_phys = static_cast<CompPhysics*>( pEntity->GetFirstComponent("CompPhysics") );
+    CompPhysics* comp_phys = pEntity->GetComponent<CompPhysics>();
     if ( comp_phys != NULL ) // Falls es eine "CompPhysics"-Komponente gibt
     {
         comp_phys->m_body = m_world->CreateBody( comp_phys->m_bodyDef.get() );
@@ -113,7 +113,7 @@ void PhysicsSubSystem::RegisterPhysicsComp( Entity* pEntity )
 
 void PhysicsSubSystem::UnregisterPhysicsComp( Entity* pEntity )
 {
-    CompPhysics* comp_phys = static_cast<CompPhysics*>(pEntity->GetFirstComponent("CompPhysics") );
+    CompPhysics* comp_phys = pEntity->GetComponent<CompPhysics>();
     if ( comp_phys != NULL ) // Falls es eine "CompPhysics"-Komponente gibt
     {
         if ( comp_phys->m_body != NULL )
@@ -165,7 +165,7 @@ void PhysicsSubSystem::Update()
             CompPhysics* compContact = static_cast<CompPhysics*>(body->GetUserData());
             if ( compContact == NULL ) // TODO: should not happen
                 continue;
-            CompGravField* grav = static_cast<CompGravField*>(compContact->GetOwnerEntity()->GetFirstComponent("CompGravField"));
+            CompGravField* grav = compContact->GetOwnerEntity()->GetComponent<CompGravField>();
             if ( grav == NULL )
                 continue;
             //if ( compContact->GetFixture()->TestPoint( pBody->GetWorldCenter() ) ) // TODO: handle multiple shapes
@@ -336,7 +336,7 @@ void PhysicsSubSystem::Refilter( b2Shape* /*pShape*/ )
 
 void PhysicsSubSystem::RegisterGravFieldComp( Entity* pEntity )
 {
-    CompGravField* comp_grav = static_cast<CompGravField*>( pEntity->GetFirstComponent("CompGravField") );
+    CompGravField* comp_grav = pEntity->GetComponent<CompGravField>();
     if ( comp_grav != NULL ) // Falls es eine "CompGravField"-Komponente gibt
     {
         m_gravFields.push_back( comp_grav );
@@ -345,7 +345,7 @@ void PhysicsSubSystem::RegisterGravFieldComp( Entity* pEntity )
 
 void PhysicsSubSystem::UnregisterGravFieldComp( Entity* pEntity )
 {
-    CompGravField* comp_grav = static_cast<CompGravField*>( pEntity->GetFirstComponent("CompGravField") );
+    CompGravField* comp_grav = pEntity->GetComponent<CompGravField>();
     if ( comp_grav != NULL ) // Falls es eine "CompGravField"-Komponente gibt
     {
         for ( unsigned int i = 0; i < m_gravFields.size(); ++i )

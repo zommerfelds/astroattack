@@ -29,7 +29,7 @@ class CompShape : public Component
 public:
 	~CompShape() {}
 
-    const CompIdType& ComponentId() const { return m_componentId; }
+    const CompIdType& ComponentId() const { return COMPONENT_ID; }
 
     static boost::shared_ptr<CompShape> LoadFromXml(const TiXmlElement& compElem);
     virtual void StoreToXml(TiXmlElement& compElem) = 0;
@@ -39,8 +39,7 @@ public:
     enum Type { Polygon, Circle };
     virtual Type GetType() const = 0;
 
-private:
-	static const CompIdType m_componentId;
+	static const CompIdType COMPONENT_ID;
 };
 //--------------------------------------------//
 //--------  End of CompShape class   ---------//

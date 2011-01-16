@@ -36,6 +36,7 @@
 
 * Low priority *
 
+- Don't use GL_RGBA if not needed (Texture.cpp)
 - Main menu performance is lower than game?
 - Options screen
 - Improve level editor

@@ -30,7 +30,8 @@ class CompVisualAnimation : public Component
 public:
     CompVisualAnimation( const AnimInfo* pAnimInfo );
     ~CompVisualAnimation();
-	const CompIdType& ComponentId() const { return m_componentId; }
+	const CompIdType& ComponentId() const { return COMPONENT_ID; }
+	static const CompIdType COMPONENT_ID;
 
     // Welche Textur muss rerade gezeichnet werden? (Eine Animation besteht aus mehreren Texturen)
     TextureIdType GetCurrentTexture() const;
@@ -64,7 +65,6 @@ private:
     // Animation Aktualisieren
     void OnUpdate();
 
-	static const CompIdType m_componentId;
     EventConnection m_eventConnection;
 
     // für Anzeige

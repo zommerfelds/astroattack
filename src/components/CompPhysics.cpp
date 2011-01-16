@@ -14,7 +14,7 @@
 #include <boost/make_shared.hpp>
 
 // eindeutige ID
-const CompIdType CompPhysics::m_componentId = "CompPhysics";
+const CompIdType CompPhysics::COMPONENT_ID = "CompPhysics";
 
 // Konstruktor
 CompPhysics::CompPhysics( b2BodyDef* pBodyDef ) : m_body ( NULL ),

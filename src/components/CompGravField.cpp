@@ -17,7 +17,7 @@
 //#include "../main.h"
 
 // eindeutige ID
-const CompIdType CompGravField::m_componentId = "CompGravField";
+const CompIdType CompGravField::COMPONENT_ID = "CompGravField";
 
 // Konstruktor
 CompGravField::CompGravField() : m_gravType ( Directional ), m_pGravitationDir ( new Vector2D ),
@@ -48,7 +48,7 @@ void CompGravField::OnContact( const Event* contactEvent )
     if( pContact == NULL )
         return;
 
-    CompPhysics* fieldCompPhysics = static_cast<CompPhysics*>( GetOwnerEntity()->GetFirstComponent("CompPhysics") );
+    CompPhysics* fieldCompPhysics = static_cast<CompPhysics*>( GetOwnerEntity()->GetComponent("CompPhysics") );
     if ( fieldCompPhysics == NULL )
         return; // keine Physikkomponente, also abbrechen
 

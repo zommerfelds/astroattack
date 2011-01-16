@@ -11,7 +11,7 @@
 #include "CompVisualMessage.h"
 
 // eindeutige ID
-const CompIdType CompVisualMessage::m_componentId = "CompVisualMessage";
+const CompIdType CompVisualMessage::COMPONENT_ID = "CompVisualMessage";
 
 // Konstruktor
 CompVisualMessage::CompVisualMessage( std::string text )
