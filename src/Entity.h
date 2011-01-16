@@ -49,14 +49,7 @@ public:
 
     // Gibt einen Zeiger zur aufgeforderten Komponente. Fall es keinen Komponent des gefragten Typs gibt, gibt es NULL zurück.
     template<typename CompType>
-    CompType* GetComponent()
-    {
-        ComponentMap::const_iterator i = m_components.find( CompType::COMPONENT_ID );
-        if ( i == m_components.end() )
-            return NULL;
-        else
-            return static_cast<CompType*>(i->second.get());
-    }
+    CompType* GetComponent();
 
     // Get component from string
     // Only use this version if you can only get the component name at runtime (as a string)
@@ -79,6 +72,17 @@ private:
 
     ComponentMap m_components;  // map of all components
 };
+
+// needs to be implemented here
+template <typename CompType>
+CompType* Entity::GetComponent()
+{
+   ComponentMap::const_iterator i = m_components.find( CompType::COMPONENT_ID );
+   if ( i == m_components.end() )
+       return NULL;
+   else
+       return static_cast<CompType*>(i->second.get());
+}
 
 #endif
 

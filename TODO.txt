@@ -13,6 +13,7 @@
 
 * Medium priority *
 
+- configure script is not usable right away
 - No OpenGL call out of Renderer.cpp (e.g. glColor4f in EditorState.cpp)
 - Migrate to pugixml or rapidxml
 - Use size_t instead of unsigned int (string::npos)
@@ -36,6 +37,7 @@
 
 * Low priority *
 
+- Use boost::signals instead of Event.h
 - Don't use GL_RGBA if not needed (Texture.cpp)
 - Main menu performance is lower than game?
 - Options screen
