@@ -355,6 +355,9 @@ void MainMenuState::Draw( float /*accumulator*/ )        // Spiel zeichnen
         pRenderer->DrawTexturedQuad( texCoord, titleVertexCoord, "title", false, intensity );
     }
 
+    // testing
+    //pRenderer->DrawString( "Hallo", "FontW_b", 0.0f, 1.0f/*, AlignLeft, AlignTop*/ );
+
     GetSubSystems()->gui->Draw();
 
     // Cursor (Mauszeiger) zeichnen
@@ -372,7 +375,7 @@ void MainMenuState::Draw( float /*accumulator*/ )        // Spiel zeichnen
         pRenderer->DrawTexturedQuad( texCoord, vertexCoord, "_cursor" );
     }
 
-    pRenderer->GetTextureManager()->SetTexture("inundation");
+    //pRenderer->GetTextureManager()->SetTexture("inundation");
 
     /*// Create a pixmap font from a TrueType file.
     FTGLTextureFont font("data/Fonts/font.ttf");

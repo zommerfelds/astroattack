@@ -63,7 +63,7 @@ void FontManager::LoadFont( const char* fileName, int size, FontIdType id )
 
 void FontManager::FreeFont( FontIdType id )
 {
-    std::map< FontIdType,boost::shared_ptr<FTFont> >::iterator c_it = m_fonts.find( id );
+    FontMap::iterator c_it = m_fonts.find( id );
     if ( c_it != m_fonts.end() )
         m_fonts.erase( c_it ); 
 }
@@ -73,46 +73,37 @@ void FontManager::FreeFont( FontIdType id )
 
 void FontManager::DrawString(const std::string &str, const FontIdType &fontId, float x, float y, Align horizAlign, Align vertAlign, float red, float green, float blue, float alpha )
 {
-    std::map< FontIdType,boost::shared_ptr<FTFont> >::iterator font_it = m_fonts.find( fontId );
+    FontMap::iterator font_it = m_fonts.find( fontId );
     assert ( font_it != m_fonts.end() );
 
-    FTFont* font = font_it->second.get();
-    
-    glColor4f( red, green, blue, alpha );
+    // convert to FTGL coordinates
+    x = x / 4.0f * gAaConfig.GetInt("ScreenWidth");
+    y = (1.0f - y / 3.0f) * gAaConfig.GetInt("ScreenHeight");
 
-    float w,h;
-    //GetDimensionsOfText( str, fontId, w, h );
+    FTFont* font = font_it->second.get();
+
+    glColor4f( red, green, blue, alpha );
 
     std::list<std::string> lines;
     std::list<float> lineWidths;
     float lineSpacing = 0.0f;
-    GetDetailedDimensionsOfTextLines(str, fontId, w, h, &lines, &lineWidths, NULL, &lineSpacing);
+    GetDetailedDimensions(str, *font, NULL, NULL, &lines, &lineWidths, &lineSpacing);
 
-    /*switch ( horizAlign )
-    {
-    case AlignLeft:
-        break;
-    case AlignCenter:
-        x -= w/2;
-        break;
-    case AlignRight:
-        x -= w;
-        break;
-    }*/
+    float lineY = 0.0f;
     switch ( vertAlign )
     {
     case AlignTop:
-        y += h;
+        lineY = y - font->Ascender();
         break;
     case AlignCenter:
-        y += h/2;
+        lineY = y + (lineSpacing * (lines.size() - 1) - font->Ascender() - font->Descender()) / 2;
         break;
     case AlignBottom:
+        lineY = y + lineSpacing * (lines.size() - 1) - font->Descender();
         break;
     }
 
     float lineX = 0.0f;
-    float lineY = y-lineSpacing*(lines.size()-1);
     std::list<float>::iterator lineWidthsIt = lineWidths.begin();
     for (std::list<std::string>::iterator lineIt=lines.begin(); lineIt != lines.end(); lineIt++, lineWidthsIt++)
     {
@@ -128,63 +119,60 @@ void FontManager::DrawString(const std::string &str, const FontIdType &fontId, f
             lineX = x-*lineWidthsIt;
             break;
         }
-        font->Render(lineIt->c_str(),-1,FTPoint(lineX/4.0*gAaConfig.GetInt("ScreenWidth"),(1.0-lineY/3.0)*gAaConfig.GetInt("ScreenHeight")));
-        lineY += lineSpacing;
+        font->Render(lineIt->c_str(),-1,FTPoint(lineX, lineY));
+        lineY -= lineSpacing;
     }
 }
 
-void FontManager::GetDimensionsOfText(const std::string &text, const FontIdType &fontId, float& w, float& h) const
+void FontManager::GetDimensions(const std::string &text, const FontIdType &fontId, float& w, float& h) const
 {
-    GetDetailedDimensionsOfTextLines(text, fontId, w, h, NULL, NULL, NULL, NULL);
+
+    FontMap::const_iterator font_it = m_fonts.find( fontId );
+    if ( font_it == m_fonts.end() )
+        return; // TODO: log error
+
+    GetDetailedDimensions(text, *font_it->second.get(), &w, &h, NULL, NULL, NULL);
+    w = w/gAaConfig.GetInt("ScreenWidth")*4.0f;
+    h = h/gAaConfig.GetInt("ScreenHeight")*3.0f;
 }
 
-void FontManager::GetDetailedDimensionsOfTextLines(const std::string &text, const FontIdType &fontId, float& totalWidth, float& totalHeight, std::list<std::string>* lines, std::list<float>* lineWidths, std::list<float>* lineHeights, float* lineSpacing) const
+void FontManager::GetDetailedDimensions(const std::string &text, FTFont& font, float* totalWidth, float* totalHeight,
+        std::list<std::string>* lines, std::list<float>* lineWidths, float* lineSpacing) const
 {
-    std::map< FontIdType,boost::shared_ptr<FTFont> >::const_iterator font_it = m_fonts.find( fontId );
-    assert ( font_it != m_fonts.end() );
-
-    FTFont* font = font_it->second.get();
-
-    int lineCount = 0;
+    int line_count = 1;
     float cur_width = 0.0f;
     float max_width = 0.0f;
-    float last_line_height = 0.0f;
-    for(size_t cur_pos=0,last_pos=0;;last_pos=cur_pos)
+    for(size_t cur_pos=0, last_pos=0;; last_pos=cur_pos, line_count++)
     {
-        lineCount++;
-        cur_pos=text.find('\n',cur_pos);
-
+        cur_pos=text.find('\n',cur_pos); // find next new line
         if (cur_pos==std::string::npos)
             cur_pos=text.size();
-        std::string line = text.substr(last_pos,cur_pos-last_pos);
-        FTBBox bbox = font->BBox(line.c_str(),-1);
-        cur_width = bbox.Upper().Xf();
-        if (cur_width>max_width)
-            max_width=cur_width;
 
-        if (lines != NULL)
+        std::string line = text.substr(last_pos,cur_pos-last_pos); // extract the next line
+
+        cur_width = font.BBox(line.c_str(), -1).Upper().Xf(); // get line size
+
+        max_width = std::max(cur_width, max_width);
+
+        if (lines)
             lines->push_back( line );
-        if (lineWidths != NULL)
-            lineWidths->push_back(cur_width/gAaConfig.GetInt("ScreenWidth")*4.0f);
-        if (lineHeights != NULL)
-            lineHeights->push_back(bbox.Upper().Yf()/gAaConfig.GetInt("ScreenHeight")*3.0f);
+        if (lineWidths)
+            lineWidths->push_back(cur_width);
 
-        if (cur_pos>=text.size())
-        {
-            last_line_height = bbox.Upper().Yf();
-            break;
-        }
         cur_pos += 1;
+        if (cur_pos>=text.size())
+            break;
     }
-    totalWidth = max_width/gAaConfig.GetInt("ScreenWidth")*4.0f;
-    float line_spacing = font->LineHeight();
-    if (lineSpacing != NULL)
-        *lineSpacing = line_spacing/gAaConfig.GetInt("ScreenHeight")*3.0f;
-    totalHeight = ((lineCount-1)*line_spacing+last_line_height)/gAaConfig.GetInt("ScreenHeight")*3.0f;
 
-    /*FTBBox bbox = font->BBox(str.c_str(),-1);
-    totalWidth = bbox.Upper().Xf()/gAaConfig.GetInt("ScreenWidth")*4.0f;
-    totalHeight = bbox.Upper().Yf()/gAaConfig.GetInt("ScreenHeight")*3.0f;*/
+    if (totalWidth)
+        *totalWidth = max_width;
+
+    float line_spacing = font.LineHeight()*0.8;
+    if (lineSpacing)
+        *lineSpacing = line_spacing;
+    if (totalHeight) {
+        *totalHeight = ((line_count-1) * line_spacing) + font.Ascender() - font.Descender();
+    }
 }
 
 // Astro Attack - Christian Zommerfelds - 2009

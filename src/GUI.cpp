@@ -70,7 +70,7 @@ void GuiSubSystem::DeleteGroup( GroupId groupId )
 WidgetLabel::WidgetLabel( float x, float y, std::string text, const FontManager* fontMngr ) : m_text ( text )
 {
     float w = 0.0f, h = 0.0f;
-    fontMngr->GetDimensionsOfText(text, "FontW_b", w, h);
+    fontMngr->GetDimensions(text, "FontW_m", w, h);
     SetArea( Rect( x, x+w/4.0f, y, y+h/3.0f ) );
 }
 
@@ -81,7 +81,7 @@ void WidgetLabel::Draw( RenderSubSystem* pRenderer )
                              GetArea().x2*4.0f, GetArea().y2*3.0f,
                              GetArea().x2*4.0f, GetArea().y1*3.0f };
     pRenderer->DrawColorQuad( vertexCoord, 0.1f, 0.9f, 0.3f, 0.3f, true );*/
-    pRenderer->DrawString( m_text, "FontW_b", GetArea().x1*4, GetArea().y1*3 );
+    pRenderer->DrawString( m_text, "FontW_m", GetArea().x1*4, GetArea().y1*3 );
 }
 
 WidgetLabel::~WidgetLabel() {}
@@ -109,11 +109,11 @@ void WidgetButton::MouseStateChanged( MouseState newState )
 
 void WidgetButton::Draw( RenderSubSystem* pRenderer )
 {
-    /*float vertexCoord[8] = { GetArea().x1*4.0f, GetArea().y1*3.0f,
+    float vertexCoord[8] = { GetArea().x1*4.0f, GetArea().y1*3.0f,
                              GetArea().x1*4.0f, GetArea().y2*3.0f,
                              GetArea().x2*4.0f, GetArea().y2*3.0f,
-                             GetArea().x2*4.0f, GetArea().y1*3.0f };*/
-    //pRenderer->DrawColorQuad( vertexCoord, 0.1f, 0.9f, 0.3f, (GetMouseState()==MouseOver||GetMouseState()==PressedL)?0.3f:0.0f, true );
+                             GetArea().x2*4.0f, GetArea().y1*3.0f };
+    pRenderer->DrawColorQuad( vertexCoord, 0.1f, 0.9f, 0.3f, (GetMouseState()==MouseOver||GetMouseState()==PressedL)?0.3f:0.0f, true );
     pRenderer->DrawString( m_caption, "FontW_m", (GetArea().x1+GetArea().x2)*2.0f /* /2*4 */, (GetArea().y1+GetArea().y2)*1.5f /* /2*3 */, AlignCenter, AlignCenter, 1.0f, 1.0f, 1.0f, (GetMouseState()==MouseOver||GetMouseState()==PressedL)?1.0f:0.5f );
 }
 

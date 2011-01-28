@@ -13,30 +13,27 @@
 
 #include <list>
 #include <boost/function.hpp>
-#include <boost/bind.hpp>
-#include <boost/shared_ptr.hpp>
-#include <boost/make_shared.hpp>
 
 // Connection
 // ----------
 // Reference counted object. It is returned by the Event class.
 // When destructed, the event knows that the listener is no longer valid and should be unregistered.
-// If copied, the event will only be unregistered if the copy is also destructed (so don't copy it!)
-// It is implemented with the help of a boost::shared_ptr
+// If copied, the event will only be unregistered if the copy is also destructed (so be careful!)
+// It is implemented with a reference counter
 class EventConnection
 {
 public:
-    EventConnection() : m_sharedPtr ( boost::make_shared<SharedType>() ) {}
-    EventConnection(const EventConnection& evCon) : m_sharedPtr (evCon.m_sharedPtr) {}
+    EventConnection();
+    EventConnection(const EventConnection& evCon);
+    ~EventConnection();
     EventConnection& operator = (const EventConnection& con);
     
     // IsValid: returns true if this connection has objects connected on both ends
     bool IsValid() const;
 
 private:
-	typedef char SharedType; // this type should be as small as possible, because we are using the
-	                         // reference counting feature of shared_ptr only, not the memory (not so elegant)
-    boost::shared_ptr<SharedType> m_sharedPtr;
+    int* m_refCount;
+    void Release(); // release the current counter
 };
 
 // template <typename ArgType1, typename ArgType2, ..., typename ArgTypeN>

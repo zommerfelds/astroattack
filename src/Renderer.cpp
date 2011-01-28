@@ -156,6 +156,7 @@ void RenderSubSystem::SetMatrix(MatrixId matrix)
 
     if (matrix == World)
     {
+        // the world matrix is always stored on stack
         glMatrixMode( GL_PROJECTION );
         glPopMatrix();
         glMatrixMode( GL_MODELVIEW );
@@ -165,16 +166,20 @@ void RenderSubSystem::SetMatrix(MatrixId matrix)
     else
     {
         glMatrixMode ( GL_PROJECTION );
+
+        // if the current matrix is world, put it onto the stack
         if (m_currentMatrix == World)
             glPushMatrix();
 
         if (matrix == GUI)
         {
+            // the GUI matrix should always stay the same, so just load the default numbers
             glLoadMatrixf( m_matrixGUI );
             m_currentMatrix = GUI;
         }
         else if (matrix == Text)
         {
+            // the tex matrix should always stay the same, so just load the dafault numbers
             glLoadMatrixf( m_matrixText );
             m_currentMatrix = Text;
         }
@@ -478,7 +483,7 @@ void RenderSubSystem::DrawVisualTextureComps()
             glPushMatrix();
 
             float angle = compPhys->GetSmoothAngle();
-            Vector2D position = compPhys->GetSmoothPosition();
+            const Vector2D& position = compPhys->GetSmoothPosition();
 
             glTranslatef(position.x, position.y, 0.0f);
             glRotatef ( radToDeg(angle), 0.0, 0.0, 1.0f);
@@ -510,27 +515,26 @@ void RenderSubSystem::DrawVisualTextureComps()
 
 void RenderSubSystem::DrawVisualAnimationComps()
 {
-    for ( CompVisualAnimationMap::const_iterator it = m_visualAnimComps.begin(); it != m_visualAnimComps.end(); ++it )
+    for (CompVisualAnimationMap::const_iterator it = m_visualAnimComps.begin(); it != m_visualAnimComps.end(); ++it)
     {
         CompPhysics* compPhys = it->second->GetOwnerEntity()->GetComponent<CompPhysics>();
-        if ( compPhys != NULL )
+        if (compPhys != NULL)
         {
-            m_pTextureManager->SetTexture( it->second->GetCurrentTexture() );
+            m_pTextureManager->SetTexture(it->second->GetCurrentTexture());
 
             glPushMatrix();
 
             float angle = compPhys->GetSmoothAngle();
-            Vector2D translation = compPhys->GetSmoothPosition();
+            const Vector2D& position = compPhys->GetSmoothPosition();
 
             bool isFlipped = it->second->GetFlip();
             Vector2D center = *it->second->Center();
             if ( isFlipped )
                 center.x = -center.x;
-            center.Rotate(angle);
-            translation += center;
 
-            glTranslated(translation.x, translation.y, 0.0f);
-            glRotatef ( radToDeg(angle), 0.0, 0.0, 1.0f);
+            glTranslated(position.x, position.y, 0.0f);
+            glRotatef(radToDeg(angle), 0.0, 0.0, 1.0f);
+            glTranslated(-center.x, -center.y, 0.0f);
 
             {
                 // FLIP ONCE

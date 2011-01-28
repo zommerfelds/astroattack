@@ -189,6 +189,7 @@
 		</Component>
 		<Component id="CompVisualTexture">
 			<tex name="Rainbow Shards" />
+			<edge tex="EdgeGrass1" edges="3" />
 		</Component>
 	</Entity>
 	<Entity name="EdBlock00010">
@@ -224,6 +225,7 @@
 		</Component>
 		<Component id="CompVisualTexture">
 			<tex name="Rainbow Shards" />
+            <edge tex="EdgeGrass1" edges="1" />
 		</Component>
 	</Entity>
 	<Entity name="EdBlock00012">
@@ -243,6 +245,7 @@
 		</Component>
 		<Component id="CompVisualTexture">
 			<tex name="Rainbow Shards" />
+            <edge tex="EdgeGrass1" edges="3" />
 		</Component>
 	</Entity>
 	<Entity name="EdBlock00013">
@@ -262,6 +265,7 @@
 		</Component>
 		<Component id="CompVisualTexture">
 			<tex name="Rainbow Shards" />
+            <edge tex="EdgeGrass1" edges="3" />
 		</Component>
 	</Entity>
 	<Entity name="EdBlock00014">
@@ -280,6 +284,7 @@
 		</Component>
 		<Component id="CompVisualTexture">
 			<tex name="Rainbow Shards" />
+            <edge tex="EdgeGrass1" edges="3" />
 		</Component>
 	</Entity>
 	<Entity name="EdBlock00015">
@@ -299,6 +304,7 @@
 		</Component>
 		<Component id="CompVisualTexture">
 			<tex name="Rainbow Shards" />
+            <edge tex="EdgeGrass1" edges="3" />
 		</Component>
 	</Entity>
 	<Entity name="EdBlock00016">
@@ -319,6 +325,7 @@
 		</Component>
 		<Component id="CompVisualTexture">
 			<tex name="Rainbow Shards" />
+            <edge tex="EdgeGrass1" edges="0 3 4 5" />
 		</Component>
 	</Entity>
 	<Entity name="EdBlock00017">
@@ -338,6 +345,7 @@
 		</Component>
 		<Component id="CompVisualTexture">
 			<tex name="Rainbow Shards" />
+            <edge tex="EdgeGrass1" edges="4" />
 		</Component>
 	</Entity>
 	<Entity name="EdBlock00018">
@@ -357,6 +365,7 @@
 		</Component>
 		<Component id="CompVisualTexture">
 			<tex name="Rainbow Shards" />
+            <edge tex="EdgeGrass1" edges="0 3 4" />
 		</Component>
 	</Entity>
 	<Entity name="EdBlock00019">
@@ -1239,7 +1248,7 @@
 			</polygon>
         </Component>
         <Component id="CompPhysics" name="std">
-            <pos x="0.000000" y="0.000000" a="0.000000" />
+            <pos x="7.400000" y="-4.000000" a="0.000000" />
             <damping linear="0.000000" angular="0.000000" />
             <shape comp_name="shape1" density="0.000000" friction="0.300000" restitution="0.000000" isSensor="true"/>
 		</Component>
@@ -1253,9 +1262,9 @@
 			<Condition id="EntityTouchedThis">
 				<params entity="Player" />
 			</Condition>
-			<Effect id="EndGame">
-				<params msg="       Game Over" />
-			</Effect>
+            <Effect id="EndLevel">
+                <params msg="         Game Over" win="0" />
+            </Effect>
 		</Component>
 
 		<!--

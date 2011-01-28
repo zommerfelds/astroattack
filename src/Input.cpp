@@ -23,6 +23,7 @@ InputSubSystem::InputSubSystem() : m_pKeystates ( NULL ),
 {
     // Tasten zuweisen:
     // (siehe SDL_keysym.h für Tastencodes)
+    // Possible optimization: use array instead of map
     m_keyMap[Up] = SDLK_w;
     m_keyMap[Down] = SDLK_s;
     m_keyMap[Right] = SDLK_d;
@@ -95,9 +96,9 @@ void InputSubSystem::Update()
         if ( m_pWindowMousePos->y > 1.0f )
             m_pWindowMousePos->y = 1.0f;
     }
-    if ( ((m_mousestates & SDL_BUTTON ( SDL_BUTTON_RIGHT ))!=0)==false )
+    if ( (m_mousestates & SDL_BUTTON ( SDL_BUTTON_RIGHT ))==0 )
         m_RMouseConsumed = false;
-    if ( ((m_mousestates & SDL_BUTTON ( SDL_BUTTON_LEFT ))!=0)==false )
+    if ( (m_mousestates & SDL_BUTTON ( SDL_BUTTON_LEFT ))==0 )
         m_LMouseConsumed = false;
 }
 
@@ -120,8 +121,8 @@ bool InputSubSystem::KeyStateConsume( Key key )
         return false;
     if ( !m_pKeystates )
         return false;
-    m_pKeysConsumed.insert( key );
-    return ( m_pKeystates[ i->second ] == 1 );
+    bool inserted = m_pKeysConsumed.insert( key ).second;
+    return inserted && ( m_pKeystates[ i->second ] == 1 );
 }
 
 bool InputSubSystem::RMouseKeyState() const
@@ -133,6 +134,8 @@ bool InputSubSystem::RMouseKeyState() const
 
 bool InputSubSystem::RMouseKeyStateConsume()
 {
+    if ( m_RMouseConsumed )
+        return false;
     m_RMouseConsumed = true;
     return ( (m_mousestates & SDL_BUTTON ( SDL_BUTTON_RIGHT ))!=0 );
 }
@@ -146,6 +149,8 @@ bool InputSubSystem::LMouseKeyState() const
 
 bool InputSubSystem::LMouseKeyStateConsume()
 {
+    if ( m_LMouseConsumed )
+        return false;
     m_LMouseConsumed = true;
     return ( (m_mousestates & SDL_BUTTON ( SDL_BUTTON_LEFT ))!=0 );
 }

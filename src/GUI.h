@@ -64,7 +64,7 @@ public:
     virtual ~Widget() {};
 
     virtual void Draw( RenderSubSystem* /*pRenderer*/ ) {};
-    virtual void MouseStateChanged( MouseState /*newState*/ ) {}
+    virtual void MouseStateChanged( MouseState /*newState*/ ) = 0;
 
     void SetArea( Rect area ) { m_area = area; }
     const Rect& GetArea() const { return m_area; }
@@ -82,7 +82,7 @@ public:
     ~WidgetLabel();
 
     void Draw( RenderSubSystem* pRenderer );
-    //void MouseStateChanged( MouseState newState ) const {}
+    void MouseStateChanged( MouseState newState ) {}
 private:
     std::string m_text;
 };

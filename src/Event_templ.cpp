@@ -6,6 +6,8 @@
 |                          2011                             |
 \----------------------------------------------------------*/
 
+#include <boost/bind.hpp>
+
 // for 1 argument
 #define EVENT1 Event1<ArgType>
 

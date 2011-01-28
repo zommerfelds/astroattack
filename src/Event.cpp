@@ -9,16 +9,46 @@
 #include "GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
 #include "Event.h"
 
+EventConnection::EventConnection() : m_refCount ( new int(1) ) {}
+
+EventConnection::EventConnection(const EventConnection& evCon) : m_refCount (evCon.m_refCount)
+{
+    (*m_refCount)++;
+}
+
+EventConnection::~EventConnection()
+{
+    Release();
+}
+
+void EventConnection::Release()
+{
+    if (m_refCount == NULL)
+        return;
+
+    (*m_refCount)--;
+    if (*m_refCount == 0)
+    {
+        delete m_refCount;
+        m_refCount = NULL;
+    }
+}
+
 EventConnection& EventConnection::operator = (const EventConnection& con)
 {
-    m_sharedPtr = con.m_sharedPtr; // share the same smart pointer
+    Release();
+    m_refCount = con.m_refCount; // share the same smart pointer
+    (*m_refCount)++;
     return *this;  // by convention, always return *this
 }
 
 // IsValid: returns true if this connection has objects connected on both ends
 bool EventConnection::IsValid() const
 {
-    return m_sharedPtr.use_count()>1;
+    //return !m_sharedPtr.unique();
+    if (m_refCount == NULL || *m_refCount < 2)
+        return false;
+    return true;
 }
 
 EventConnection Event0::RegisterListener(Function func)

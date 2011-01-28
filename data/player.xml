@@ -3,12 +3,12 @@
     <Entity name = "Player">
         <Component id = "CompVisualAnimation" name = "jetpack">
             <anim name = "jetpack"/>
-            <center x = "-0.5" y = "0.03"/>
+            <center x = "0.5" y = "0.03"/>
             <dim hw = "0.3" hh = "1.0"/>
         </Component>
         <Component id = "CompVisualAnimation" name = "bodyAnim">
             <anim name = "astro"/>
-            <center x = "0.05" y = "0.03"/>
+            <center x = "-0.05" y = "0.03"/>
             <dim hw = "0.74" hh = "0.88"/>
         </Component>
         <!--Component id = "CompVisualTexture">

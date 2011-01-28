@@ -293,7 +293,7 @@ void GameApp::HandleSdlQuitEvents( SDL_Event& rSdlEvent, bool& rQuit )
 // Einmal pro frame aufrufen
 void GameApp::CalcFPS( Uint32 curTime )
 {
-    if ( (signed)m_fpsMeasureStart + 1000 < (signed long long)curTime )
+    if ( m_fpsMeasureStart + 1000 < curTime )
     {
         // m_framesCounter ist jetzt die Anzahl Frames in dieser Sekunde, also die FPS
 

@@ -120,7 +120,7 @@ void SlideShowState::Resume()      // State wiederaufnehmen
 void SlideShowState::Update()      // Spiel aktualisieren
 {
     ++m_textUpdateCounter;
-    if( m_textUpdateCounter > 1 )
+    if( m_textUpdateCounter > 1 ) // 1 is the speed (fast)
     {
         if ( m_slideShow.slides[m_currentSlide].text.size() > m_dispCharCount )
         {
@@ -279,7 +279,7 @@ void SlideShowState::Draw( float /*accumulator*/ )        // Spiel zeichnen
         pRenderer->DrawTexturedQuad( texCoord, vertexCoord, m_slideShow.slides[m_currentSlide].imageFileName.c_str(), true );
     }
     // Text zeichnen
-    pRenderer->DrawString( m_slideShow.slides[m_currentSlide].text.substr(0,m_dispCharCount), "FontW_b", 0.3f, 2.53f );
+    pRenderer->DrawString( m_slideShow.slides[m_currentSlide].text.substr(0,m_dispCharCount), "FontW_b", 0.3f, 2.55f );
     
     // Farbe über dem Text (nur Test)
     /*{

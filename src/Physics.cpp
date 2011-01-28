@@ -20,6 +20,7 @@
 #include "components/CompShape.h"
 
 #include <boost/bind.hpp>
+#include <boost/make_shared.hpp>
 
 //#include "main.h" // temp
 
