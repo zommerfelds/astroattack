@@ -34,6 +34,7 @@ SlideShowState::SlideShowState( SubSystems* pSubSystems, std::string slideXmlFil
 : GameState( pSubSystems ),
   m_slideXmlFile (slideXmlFile),
   m_currentSlide ( 0 ),
+  m_currentTextPage ( 0 ),
   m_overlayAlpha ( 0 ),
   m_fadeOut ( false ),
   m_imageCornerOffsetMasterX ( 0.0f ),
@@ -122,7 +123,7 @@ void SlideShowState::Update()      // Spiel aktualisieren
     ++m_textUpdateCounter;
     if( m_textUpdateCounter > 1 ) // 1 is the speed (fast)
     {
-        if ( m_slideShow.slides[m_currentSlide].text.size() > m_dispCharCount )
+        if ( m_slideShow.slides[m_currentSlide].textPages[m_currentTextPage].size() > m_dispCharCount )
         {
             GetSubSystems()->sound->PlaySound( "write" );
             ++m_dispCharCount;
@@ -134,14 +135,20 @@ void SlideShowState::Update()      // Spiel aktualisieren
     {
         if ( m_nextKeyDownOld == false && m_overlayAlpha == 0.0f )
         {
-            GetSubSystems()->sound->PlaySound( "sound" );
-            m_fadeOut = true;
-            m_overlayAlpha = OVERLAY_STEP;
-            m_nextKeyDownOld = true;
-            m_goBack = false;
-            //if ( m_currentSlide == 4 )
-            //    GetSubSystems()->sound->StopMusic( 700 );
-            return;
+            if (m_currentTextPage < m_slideShow.slides[m_currentSlide].textPages.size()-1)
+            {
+                m_currentTextPage++;
+                m_dispCharCount = 0;
+            }
+            else
+            {
+                GetSubSystems()->sound->PlaySound( "sound" );
+                m_fadeOut = true;
+                m_overlayAlpha = OVERLAY_STEP;
+                m_nextKeyDownOld = true;
+                m_goBack = false;
+                return;
+            }
         }
         m_nextKeyDownOld = true;
     }
@@ -154,12 +161,20 @@ void SlideShowState::Update()      // Spiel aktualisieren
     {
         if ( m_backKeyDownOld == false && m_overlayAlpha == 0.0f && m_currentSlide != 0 )
         {
-            GetSubSystems()->sound->PlaySound( "sound" );
-            m_fadeOut = true;
-            m_overlayAlpha = OVERLAY_STEP;
-            m_backKeyDownOld = true;
-            m_goBack = true;
-            return;
+            if (m_currentTextPage != 0)
+            {
+                m_currentTextPage--;
+                m_dispCharCount = 0;
+            }
+            else
+            {
+                GetSubSystems()->sound->PlaySound("sound");
+                m_fadeOut = true;
+                m_overlayAlpha = OVERLAY_STEP;
+                m_backKeyDownOld = true;
+                m_goBack = true;
+                return;
+            }
         }
         m_backKeyDownOld = true;
     }
@@ -200,10 +215,14 @@ void SlideShowState::Update()      // Spiel aktualisieren
             m_fadeOut = false;
             m_imageCornerOffsetMasterX = 0.0f;
             m_dispCharCount = 0;
-            if ( m_goBack )
+            if ( m_goBack ) {
                 --m_currentSlide; // vorheriges Bild
-            else
+                m_currentTextPage = m_slideShow.slides[m_currentSlide].textPages.size()-1;
+            }
+            else {
                 ++m_currentSlide; // nächstes Bild
+                m_currentTextPage = 0;
+            }
             /*if ( m_currentSlide == 5 )
             {
                 GetSubSystems()->sound->PlayMusic( "music2", true, 0 );
@@ -279,7 +298,7 @@ void SlideShowState::Draw( float /*accumulator*/ )        // Spiel zeichnen
         pRenderer->DrawTexturedQuad( texCoord, vertexCoord, m_slideShow.slides[m_currentSlide].imageFileName.c_str(), true );
     }
     // Text zeichnen
-    pRenderer->DrawString( m_slideShow.slides[m_currentSlide].text.substr(0,m_dispCharCount), "FontW_b", 0.3f, 2.55f );
+    pRenderer->DrawString( m_slideShow.slides[m_currentSlide].textPages[m_currentTextPage].substr(0,m_dispCharCount), "FontW_b", 0.3f, 2.55f );
     
     // Farbe über dem Text (nur Test)
     /*{

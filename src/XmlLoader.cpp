@@ -525,8 +525,9 @@ void XmlLoader::LoadSlideShow( const char* pFileName, SlideShow* pSlideShow )
     {
         Slide slide;
         slide.imageFileName = slideElement->Attribute( "image" );
+        std::string text;
         
-            TiXmlNode* child = slideElement->FirstChild();
+        TiXmlNode* child = slideElement->FirstChild();
         for ( ; child; child = child->NextSibling() )
         {
             int t = child->Type(); // ELEMENT=1 TEXT=3
@@ -539,14 +540,21 @@ void XmlLoader::LoadSlideShow( const char* pFileName, SlideShow* pSlideShow )
                 if ( value_temp != NULL )
                     value = value_temp;
                 if ( value == "n" )
-                    slide.text += "\n";
+                    text += "\n";
+                else if (value == "p" && !text.empty())
+                {
+                    slide.textPages.push_back(text);
+                    text.clear();
+                }
             }
             else if ( t == TiXmlNode::/*TINYXML_*/TEXT )
             {
                 TiXmlText* tx = child->ToText();
-                slide.text += tx->Value();
+                text += tx->Value();
             }
         }
+        if (!text.empty())
+            slide.textPages.push_back(text);
         pSlideShow->slides.push_back( slide );
     }
 

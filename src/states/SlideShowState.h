@@ -20,7 +20,7 @@
 // Ein einzelner "Dia" / Slide
 struct Slide
 {
-    std::string text;
+    std::vector<std::string> textPages;
     std::string imageFileName;
 };
 
@@ -58,6 +58,7 @@ private:
     // Slideshow Informationen
     std::string m_slideXmlFile;
     unsigned int m_currentSlide;
+    unsigned int m_currentTextPage;
     SlideShow m_slideShow;
     float m_overlayAlpha;
     bool m_fadeOut;

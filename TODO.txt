@@ -37,6 +37,7 @@
 
 * Low priority *
 
+- Handle UTF-8 symbols in the slide show state (a multibyte character is treated as single bytes)
 - Use boost::signals instead of Event.h
 - Don't use GL_RGBA if not needed (Texture.cpp)
 - Main menu performance is lower than game?
