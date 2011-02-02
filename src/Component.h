@@ -22,7 +22,7 @@ typedef std::string CompNameType;
 class Component {
 public:
 
-    Component() : m_pOwnerEntity(),m_name("std") {} // Konstruktor
+    Component() : m_pOwnerEntity (NULL), m_name ("std") {} // Konstruktor
     virtual ~Component() {} // Destruktor
 
     virtual const CompIdType& ComponentId() const = 0;   // Komponent ID -> Name des Komponententyps
@@ -31,6 +31,7 @@ public:
 
     void SetOwnerEntity( Entity* obj ) { m_pOwnerEntity = obj; } // Einheit, die die Komponente besitzt, festlegen
     Entity* GetOwnerEntity() { return m_pOwnerEntity; } // Einheit, die die Komponente besitzt, abfragen
+    const Entity* GetOwnerEntity() const { return m_pOwnerEntity; } // Einheit, die die Komponente besitzt, abfragen
 
     static GameEvents* gameEvents; // EventManager für alle Komponenten
 

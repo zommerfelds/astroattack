@@ -107,16 +107,16 @@ void XmlLoader::LoadXmlToWorld( const char* pFileName, GameWorld* pGameWorld, Su
                 float angularDamping = 0.0f, linearDamping = 0.0f;
                 bool fixedRotation = false;
                 bool isBullet = false;
-                float posX = 0.0f, posY = 0.0f;
+                //float posX = 0.0f, posY = 0.0f;
                 //bool saveContacts = false; // wenn true ist allowSleep automatisch false
                 bool dynamic = false;
                 Vector2D rotationPoint;
                 Vector2D gravitationPoint;
 
-                TiXmlElement* posElement = componentElement->FirstChildElement( "pos" );
+                /*TiXmlElement* posElement = componentElement->FirstChildElement( "pos" );
                 posElement->QueryFloatAttribute( "x", &posX );
                 posElement->QueryFloatAttribute( "y", &posY );
-                posElement->QueryFloatAttribute( "a", &angle );
+                posElement->QueryFloatAttribute( "a", &angle );*/
 
                 TiXmlElement* sleepElement = componentElement->FirstChildElement( "dontSleep" );
                 if ( sleepElement )
@@ -165,7 +165,7 @@ void XmlLoader::LoadXmlToWorld( const char* pFileName, GameWorld* pGameWorld, Su
                 body_def->fixedRotation = fixedRotation;
                 body_def->bullet = isBullet;
                 body_def->linearDamping = linearDamping;
-                body_def->position.Set( posX, posY );
+                //body_def->position.Set( posX, posY );
                 //if (dynamic)
                     //body_def->type = b2_dynamicBody;
                 shared_ptr<CompPhysics> compPhysics( make_shared<CompPhysics>( body_def/*, saveContacts*/ ) );
@@ -212,21 +212,24 @@ void XmlLoader::LoadXmlToWorld( const char* pFileName, GameWorld* pGameWorld, Su
 
                 component = compPlayerController;
             }
-            /*else if ( componentId == "CompPosition" )
+            else if ( componentId == "CompPosition" )
             {
                 float x = 0.0f;
                 float y = 0.0f;
-                TiXmlElement* posElement = componentElement->FirstChildElement( "pos" );
-                posElement->QueryFloatAttribute( "x", &x );
-                posElement->QueryFloatAttribute( "y", &y );
+                float a = 0.0f;
+                componentElement->QueryFloatAttribute( "x", &x );
+                componentElement->QueryFloatAttribute( "y", &y );
+                componentElement->QueryFloatAttribute( "a", &a );
 
-                shared_ptr<CompPosition> compPos( make_shared<CompPosition>() );
-                compPos->Position()->x = x;
-                compPos->Position()->y = y;
-                if ( componentName )
-                    compPos->SetName( componentName );
-                pEntity->SetComponent( compPos );
-            }*/
+                if (y<0)
+                    a = 1;
+
+                shared_ptr<CompPosition> compPos = make_shared<CompPosition>();
+                compPos->SetPosition( Vector2D(x, y) );
+                compPos->SetOrientation( a );
+
+                component = compPos;
+            }
             else if ( componentId == "CompVisualAnimation" )
             {
                 float hw = 1.0f, hh = 1.0f;
@@ -471,7 +474,7 @@ void XmlLoader::LoadXmlToWorld( const char* pFileName, GameWorld* pGameWorld, Su
 
             if ( componentName )
             	component->SetName( componentName );
-            pEntity->SetComponent( component );
+            pEntity->AddComponent( component );
 
             gAaLog.Write ( "[ Done ]\n" );
         }

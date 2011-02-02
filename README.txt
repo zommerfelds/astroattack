@@ -3,7 +3,7 @@
 
 Game by Christian Zommerfelds
 czommerfelds@yahoo.com
-Copyright (c) 2010
+Copyright (c) 2011
 
 Please send me an E-mail if you have any problems/suggestions.
 

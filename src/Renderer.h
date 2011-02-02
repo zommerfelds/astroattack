@@ -28,12 +28,12 @@ class CompShapeCircle;
 class Vector2D;
 
 #include "Font.h"
-#include <map>
+#include <set>
 #include <string>
 
-typedef std::multimap<const std::string, CompVisualTexture* > CompVisualTextureMap;
-typedef std::multimap<const std::string, CompVisualAnimation* > CompVisualAnimationMap;
-typedef std::multimap<const std::string, CompVisualMessage* > CompVisualMessageMap;
+typedef std::set<CompVisualTexture*> CompVisualTextureSet;
+typedef std::set<CompVisualAnimation*> CompVisualAnimationSet;
+typedef std::set<CompVisualMessage*> CompVisualMessageSet;
 
 // Diese Klasse ist verantwortilch für die Grafik im Spiel.
 // Alle Visuelen Komponenten werden hier gezeichnet.
@@ -113,9 +113,9 @@ private:
     boost::scoped_ptr<AnimationManager> m_pAnimationManager;
     boost::scoped_ptr<FontManager> m_pFontManager;
 
-    CompVisualTextureMap m_visualTextureComps;
-    CompVisualAnimationMap m_visualAnimComps;
-    CompVisualMessageMap m_visualMsgComps;
+    CompVisualTextureSet m_visualTextureComps;
+    CompVisualAnimationSet m_visualAnimComps;
+    CompVisualMessageSet m_visualMsgComps;
 
     void RegisterCompVisual( Entity* pEntity );
     void UnregisterCompVisual( Entity* pEntity );

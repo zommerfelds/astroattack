@@ -26,28 +26,24 @@ class CompPosition : public Component
 public:
     CompPosition();
     ~CompPosition();
+
+    // Base component methods
 	const CompIdType& FamilyID() const { return COMPONENT_ID; }
     const CompIdType& ComponentId() const { return COMPONENT_ID; }
 	static const CompIdType COMPONENT_ID;
 
-    // =========== Zugriff ==========
-    Vector2D* Position() const
-    {
-        return m_pPosition.get();    // Position
-    }
+    // =========== Getters ==========
+    const Vector2D& GetPosition() const; // get current drawing (smooth) position. If a CampPhysics exist, it gets the position from there.
+    const Vector2D& GetPosIgnoreCompPhys() const; // this is not meant to be extensively used. this bypasses the check for CompPhysics position.
+    float GetOrientation() const;
 
-    float Orientation() const
-    {
-        return m_orientation;    // Orientierung
-    }
-
-    // =========== Festlegen ===========
-    void SetOrientation ( float orientation )
-    {
-        m_orientation = orientation;
-    }
+    // =========== Setters ===========
+    void SetOrientation(float orientation);
+    void SetPosition(const Vector2D& pos);
 
 private:
+    void OnUpdate();
+
     boost::scoped_ptr<Vector2D> m_pPosition;
     float m_orientation;
 };

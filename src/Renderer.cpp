@@ -26,7 +26,7 @@
 
 #include "components/CompVisualTexture.h"
 #include "components/CompShape.h"
-#include "components/CompPhysics.h"
+#include "components/CompPosition.h"
 #include "components/CompVisualAnimation.h"
 #include "components/CompVisualMessage.h"
 
@@ -474,38 +474,39 @@ void RenderSubSystem::DrawString( const std::string &str, const FontIdType &font
 
 void RenderSubSystem::DrawVisualTextureComps()
 {
-    for ( CompVisualTextureMap::const_iterator it = m_visualTextureComps.begin(); it != m_visualTextureComps.end(); ++it )
+    for ( CompVisualTextureSet::iterator it = m_visualTextureComps.begin(); it != m_visualTextureComps.end(); ++it )
     {
-        CompPhysics* compPhys = it->second->GetOwnerEntity()->GetComponent<CompPhysics>();
-        std::vector<Component*> compShapes = it->second->GetOwnerEntity()->GetComponents("CompShape");
-        if ( compPhys != NULL)
+        CompVisualTexture* pTexComp = *it;
+        CompPosition* compPos = pTexComp->GetOwnerEntity()->GetComponent<CompPosition>();
+        std::vector<Component*> compShapes = pTexComp->GetOwnerEntity()->GetComponents("CompShape");
+        if ( compPos )
         {
             glPushMatrix();
 
-            float angle = compPhys->GetSmoothAngle();
-            const Vector2D& position = compPhys->GetSmoothPosition();
+            float angle = compPos->GetOrientation();
+            const Vector2D& position = compPos->GetPosition();
 
             glTranslatef(position.x, position.y, 0.0f);
             glRotatef ( radToDeg(angle), 0.0, 0.0, 1.0f);
 
             for ( size_t i=0; i<compShapes.size(); ++i )
             {
-                m_pTextureManager->SetTexture( it->second->GetTexture() );
-                const CompShape* shape = static_cast<CompShape*>(compShapes[i]);
-                switch( shape->GetType() )
+                m_pTextureManager->SetTexture( pTexComp->GetTexture() );
+                const CompShape* shape = static_cast<CompShape*> (compShapes[i]);
+                switch (shape->GetType())
                 {
-                    case CompShape::Polygon:
-                        {
-                            DrawTexturedPolygon( *static_cast<const CompShapePolygon*>(shape), *it->second );
-                            break;
-                        }
-                    case CompShape::Circle:
-                        {
-                            DrawTexturedCircle( *static_cast<const CompShapeCircle*>(shape), *it->second );
-                            break;
-                        }
-                    default:
-                        break;
+                case CompShape::Polygon:
+                {
+                    DrawTexturedPolygon(*static_cast<const CompShapePolygon*> (shape), *pTexComp);
+                    break;
+                }
+                case CompShape::Circle:
+                {
+                    DrawTexturedCircle(*static_cast<const CompShapeCircle*> (shape), *pTexComp);
+                    break;
+                }
+                default:
+                    break;
                 }
             }
             glPopMatrix();
@@ -515,20 +516,21 @@ void RenderSubSystem::DrawVisualTextureComps()
 
 void RenderSubSystem::DrawVisualAnimationComps()
 {
-    for (CompVisualAnimationMap::const_iterator it = m_visualAnimComps.begin(); it != m_visualAnimComps.end(); ++it)
+    for (CompVisualAnimationSet::iterator it = m_visualAnimComps.begin(); it != m_visualAnimComps.end(); ++it)
     {
-        CompPhysics* compPhys = it->second->GetOwnerEntity()->GetComponent<CompPhysics>();
-        if (compPhys != NULL)
+        CompVisualAnimation* pAnimComp = *it;
+        CompPosition* compPos = pAnimComp->GetOwnerEntity()->GetComponent<CompPosition>();
+        if (compPos)
         {
-            m_pTextureManager->SetTexture(it->second->GetCurrentTexture());
+            m_pTextureManager->SetTexture(pAnimComp->GetCurrentTexture());
 
             glPushMatrix();
 
-            float angle = compPhys->GetSmoothAngle();
-            const Vector2D& position = compPhys->GetSmoothPosition();
+            float angle = compPos->GetOrientation();
+            const Vector2D& position = compPos->GetPosition();
 
-            bool isFlipped = it->second->GetFlip();
-            Vector2D center = *it->second->Center();
+            bool isFlipped = pAnimComp->GetFlip();
+            Vector2D center = *pAnimComp->Center();
             if ( isFlipped )
                 center.x = -center.x;
 
@@ -539,7 +541,7 @@ void RenderSubSystem::DrawVisualAnimationComps()
             {
                 // FLIP ONCE
                 float hw, hh;
-                it->second->GetDimensions( &hw, &hh );                
+                pAnimComp->GetDimensions( &hw, &hh );
 
                 glBegin ( GL_QUADS );
                 // Oben links
@@ -580,64 +582,53 @@ void RenderSubSystem::DrawVisualMessageComps()
 {
     int y = 0;
     float lineHeight = 0.2f;
-    for ( CompVisualMessageMap::const_iterator it = m_visualMsgComps.begin(); it != m_visualMsgComps.end(); ++it )
+    for ( CompVisualMessageSet::iterator it = m_visualMsgComps.begin(); it != m_visualMsgComps.end(); ++it )
     {
-        DrawString( std::string("- ")+it->second->GetMsg(), "FontW_m", 0.4f, 0.6f + y*lineHeight );
+        CompVisualMessage* pMsgComp = *it;
+        DrawString( std::string("- ")+pMsgComp->GetMsg(), "FontW_m", 0.4f, 0.6f + y*lineHeight );
         ++y;
     }
 }
 
 void RenderSubSystem::RegisterCompVisual( Entity* pEntity )
 {
-    std::vector<Component*> comps = pEntity->GetComponents("CompVisualTexture");
-    for ( unsigned int i = 0; i < comps.size(); ++i )
+    std::vector<CompVisualTexture*> texComps = pEntity->GetComponents<CompVisualTexture>();
+    for ( unsigned int i = 0; i < texComps.size(); ++i )
     {
-        CompVisualTexture* comp = static_cast<CompVisualTexture*>( comps[i] );
-        if (comp != NULL) // Falls es eine "CompVisualTexture"-Komponente gibt
-            m_visualTextureComps.insert( std::make_pair( comp->GetOwnerEntity()->GetId(), comp ) );
+        m_visualTextureComps.insert( texComps[i] );
     }
 
-    comps = pEntity->GetComponents("CompVisualAnimation");
-    for ( unsigned int i = 0; i < comps.size(); ++i )
+    std::vector<CompVisualAnimation*> animComps = pEntity->GetComponents<CompVisualAnimation>();
+    for ( unsigned int i = 0; i < animComps.size(); ++i )
     {
-        CompVisualAnimation* comp = static_cast<CompVisualAnimation*>( comps[i] );
-        if (comp != NULL) // Falls es eine "CompVisualAnimation"-Komponente gibt
-            m_visualAnimComps.insert( std::make_pair( comp->GetOwnerEntity()->GetId(), comp ) );
+        m_visualAnimComps.insert( animComps[i] );
     }
 
-    comps = pEntity->GetComponents("CompVisualMessage");
-    for ( unsigned int i = 0; i < comps.size(); ++i )
+    std::vector<CompVisualMessage*> msgComps = pEntity->GetComponents<CompVisualMessage>();
+    for ( unsigned int i = 0; i < msgComps.size(); ++i )
     {
-        CompVisualMessage* comp = static_cast<CompVisualMessage*>( comps[i] );
-        if (comp != NULL) // Falls es eine "CompVisualMessage"-Komponente gibt
-            m_visualMsgComps.insert( std::make_pair( comp->GetOwnerEntity()->GetId(), comp ) );
+        m_visualMsgComps.insert( msgComps[i] );
     }
 }
 
 void RenderSubSystem::UnregisterCompVisual( Entity* pEntity )
 {
-    std::vector<Component*> comps = pEntity->GetComponents("CompVisualTexture");
-    for ( unsigned int i = 0; i < comps.size(); ++i )
+    std::vector<CompVisualTexture*> texComps = pEntity->GetComponents<CompVisualTexture> ();
+    for (unsigned int i = 0; i < texComps.size(); ++i)
     {
-        CompVisualTexture* comp = static_cast<CompVisualTexture*>( comps[i] );
-        if (comp != NULL) // Falls es eine "CompVisualTexture"-Komponente gibt
-            m_visualTextureComps.erase( comp->GetOwnerEntity()->GetId() );
+        m_visualTextureComps.erase( texComps[i] );
     }
 
-    comps = pEntity->GetComponents("CompVisualAnimation");
-    for ( unsigned int i = 0; i < comps.size(); ++i )
+    std::vector<CompVisualAnimation*> animComps = pEntity->GetComponents<CompVisualAnimation> ();
+    for (unsigned int i = 0; i < animComps.size(); ++i)
     {
-        CompVisualAnimation* comp = static_cast<CompVisualAnimation*>( comps[i] );
-        if (comp != NULL) // Falls es eine "CompVisualAnimation"-Komponente gibt
-            m_visualAnimComps.erase( comp->GetOwnerEntity()->GetId() );
+        m_visualAnimComps.erase( animComps[i] );
     }
 
-    comps = pEntity->GetComponents("CompVisualMessage");
-    for ( unsigned int i = 0; i < comps.size(); ++i )
+    std::vector<CompVisualMessage*> msgComps = pEntity->GetComponents<CompVisualMessage> ();
+    for (unsigned int i = 0; i < msgComps.size(); ++i)
     {
-        CompVisualMessage* comp = static_cast<CompVisualMessage*>( comps[i] );
-        if (comp != NULL) // Falls es eine "CompVisualMessage"-Komponente gibt
-            m_visualMsgComps.erase( comp->GetOwnerEntity()->GetId() );
+        m_visualMsgComps.erase( msgComps[i] );
     }
 }
 

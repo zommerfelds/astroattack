@@ -14,6 +14,8 @@
 #include "../GameStates.h"
 #include <string>
 
+const float cBackgroundColor[3] = { 0.3f, 0.1f, 0.2f };
+
 //--------------------------------------------//
 //---------- GameOverState Klasse ------------//
 //--------------------------------------------//

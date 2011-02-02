@@ -3,10 +3,9 @@
   <slides file="data/Intro/introShow.xml" name="Intro">Spielintro</slides>
   <level file="data/Levels/level1.xml" name="Level #1">Das erste Level</level>
   <level file="data/Levels/level2.xml" name="Level #2">Das zweite Level</level>
-  <level file="data/Levels/level3.xml" name="Level #3">Das zweite Level</level>
-  <level file="data/Levels/level4.xml" name="Level #4">Das zweite Level</level>
-  <level file="data/Levels/level_visita.xml" name="Visita">Das zweite Level</level>
-  <level file="data/Levels/level_grav.xml" name="Grav Test">Das zweite Level</level>
-  <level file="data/Levels/level_grav2.xml" name="Grav Test2">Das zweite Level</level>
-  <level file="data/Levels/adjacent_problem.xml" name="Adjacent Problem">Das zweite Level</level>
+  <level file="data/Levels/level3.xml" name="Level #3">Das dritte Level</level>
+  <level file="data/Levels/level_visita.xml" name="Visita">Bla bla</level>
+  <level file="data/Levels/level_grav.xml" name="Grav Test"/>
+  <level file="data/Levels/adjacent_problem.xml" name="Adjacent Problem">bla bla</level>
+  <level file="data/Levels/level_new.xml" name="Editor level">keine Ahnung</level>
 </root>

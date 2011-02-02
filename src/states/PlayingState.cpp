@@ -246,7 +246,7 @@ void PlayingState::Draw( float accumulator )        // Spiel zeichnen
 
     if ( m_alphaOverlay != 0.0f )
     {
-        pRenderer->DrawOverlay( 0.3f, 0.0f, 0.5f, m_alphaOverlay );
+        pRenderer->DrawOverlay( cBackgroundColor[0], cBackgroundColor[1], cBackgroundColor[2], m_alphaOverlay );
     }
 
     

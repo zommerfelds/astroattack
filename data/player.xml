@@ -37,13 +37,8 @@
             <circle x="0" y="-0.5" r="0.25" />
         </Component>
         <Component id = "CompPhysics">
-            <pos
-                  x = "0.0"
-                  y = "0.0"
-                  a = "0.0"/>
             <fixedRotation/>
             <bullet/>
-            <dynamic />
             <damping linear = "0.1"/>
             <rotationPoint x="0.0" y="-0.75"/>
             <gravitationPoint x="0.0" y="-0.65"/>
@@ -54,5 +49,6 @@
             <shape comp_name = "bottom" density = "40.0" friction = "0.1"/>
         </Component>
         <Component id = "CompPlayerController" />
+        <Component id="CompPosition" x="0.000000" y="0.000000" a="0.000000" />
     </Entity>
 </root>

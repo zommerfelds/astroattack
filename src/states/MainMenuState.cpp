@@ -345,13 +345,13 @@ void MainMenuState::Draw( float /*accumulator*/ )        // Spiel zeichnen
     {
         // Titel (AstroAttack) zeichnen
         float texCoord[8] = { 0.0f, 0.0f,
-                             0.0f, 1.0f,
-                             1.0f, 1.0f,
-                             1.0f, 0.0f };
+                              0.0f, 1.0f,
+                              1.0f, 1.0f,
+                              1.0f, 0.0f };
         float titleVertexCoord[8] = {0.0f};
         for ( int i = 0; i < 8; ++i )
                 titleVertexCoord[i] = cTitleVertexCoord[i] + m_titleVertexCoordOffset[i];
-        float intensity = (sin(m_titleIntensityAngle)/2.0f+0.5f) * 0.6f + 0.3f;
+        float intensity = (sin(m_titleIntensityAngle) / 2.0f + 0.5f) * 0.6f + 0.3f;
         pRenderer->DrawTexturedQuad( texCoord, titleVertexCoord, "title", false, intensity );
     }
 
@@ -363,15 +363,15 @@ void MainMenuState::Draw( float /*accumulator*/ )        // Spiel zeichnen
     // Cursor (Mauszeiger) zeichnen
     {
         float texCoord[8] = { 0.0f, 0.0f,
-                             0.0f, 1.0f,
-                             1.0f, 1.0f,
-                             1.0f, 0.0f };
+                              0.0f, 1.0f,
+                              1.0f, 1.0f,
+                              1.0f, 0.0f };
         float w = 0.04f;
         float h = 0.05f;
-        float vertexCoord[8] = { mousePos->x*4, mousePos->y*3,
-                                 mousePos->x*4, (mousePos->y+h)*3,
-                                 (mousePos->x+w)*4, (mousePos->y+h)*3,
-                                 (mousePos->x+w)*4, mousePos->y*3 };
+        float vertexCoord[8] = { mousePos->x      * 4,  mousePos->y      * 3,
+                                 mousePos->x      * 4, (mousePos->y + h) * 3,
+                                (mousePos->x + w) * 4, (mousePos->y + h) * 3,
+                                (mousePos->x + w) * 4,  mousePos->y      * 3 };
         pRenderer->DrawTexturedQuad( texCoord, vertexCoord, "_cursor" );
     }
 

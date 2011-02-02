@@ -48,17 +48,28 @@ public:
     }
 
     // Gibt einen Zeiger zur aufgeforderten Komponente. Fall es keinen Komponent des gefragten Typs gibt, gibt es NULL zurück.
-    template<typename CompType>
+    template <typename CompType>
     CompType* GetComponent();
+    template <typename CompType>
+    const CompType* GetComponent() const;
 
     // Get component from string
     // Only use this version if you can only get the component name at runtime (as a string)
     Component* GetComponent(const CompIdType& rCompId );
+    const Component* GetComponent(const CompIdType& rCompId ) const;
     
+    template <typename CompType>
+    std::vector<CompType*> GetComponents();
+    template <typename CompType>
+    std::vector<const CompType*> GetComponents() const;
+
     std::vector<Component*> GetComponents(const CompIdType& rCompId );
-    const ComponentMap* GetAllComponents();
-    void SetComponent(const boost::shared_ptr<Component>& pNewComp); // Setzt eine neue Komponente in die Einheit
+    std::vector<const Component*> GetComponents(const CompIdType& rCompId ) const;
+
     //ComponentMap* GetAllComponents() { return &m_components; }
+    const ComponentMap* GetAllComponents() const;
+
+    void AddComponent(const boost::shared_ptr<Component>& pNewComp); // Setzt eine neue Komponente in die Einheit
 
     void ClearComponents()
     {      
@@ -77,11 +88,35 @@ private:
 template <typename CompType>
 CompType* Entity::GetComponent()
 {
-   ComponentMap::const_iterator i = m_components.find( CompType::COMPONENT_ID );
-   if ( i == m_components.end() )
-       return NULL;
-   else
-       return static_cast<CompType*>(i->second.get());
+   return static_cast<CompType*>( GetComponent(CompType::COMPONENT_ID) );
+}
+
+template <typename CompType>
+const CompType* Entity::GetComponent() const
+{
+   return static_cast<const CompType*>( GetComponent(CompType::COMPONENT_ID) );
+}
+
+template <typename CompType>
+std::vector<CompType*> Entity::GetComponents()
+{
+    std::pair<ComponentMap::iterator, ComponentMap::iterator> equalRange = m_components.equal_range(CompType::COMPONENT_ID);
+    std::vector<CompType*> ret;
+
+    for (ComponentMap::iterator it = equalRange.first; it != equalRange.second; ++it )
+        ret.push_back( static_cast<CompType*>(it->second.get()) );
+    return ret;
+}
+
+template <typename CompType>
+std::vector<const CompType*> Entity::GetComponents() const
+{
+    std::pair<ComponentMap::const_iterator, ComponentMap::const_iterator> equalRange = m_components.equal_range(CompType::COMPONENT_ID);
+    std::vector<CompType*> ret;
+
+    for (ComponentMap::const_iterator it = equalRange.first; it != equalRange.second; ++it )
+        ret.push_back( static_cast<CompType*>(it->second.get()) );
+    return ret;
 }
 
 #endif

@@ -4,10 +4,9 @@
 
 * High priority *
 
-- Organize components
 - Refactor
 - Check static_cast<> and dynamic_cast<> (e.g. PhysicsSubSystem::RegisterGravFieldComp() )
-- Make whole camera functionality frame rate independant
+- Make whole camera functionality frame rate independent
 - Abstract Box2D (remove Box2D dependencies in non-physics parts)
 
 
@@ -66,6 +65,7 @@
 
 
 DONE:
+- Organize components
 - Edge effect (texture)
 - Text is too big
 - Time Accumulator besser anwenden

@@ -26,7 +26,7 @@ float radToDeg( float angleRad )
 
 Vector2D::Vector2D ( const b2Vec2& v ) : x ( v.x ), y ( v.y ) {}
 
-boost::shared_ptr<b2Vec2> Vector2D::To_b2Vec2()
+boost::shared_ptr<b2Vec2> Vector2D::To_b2Vec2() const
 {
     return boost::shared_ptr<b2Vec2>(boost::make_shared<b2Vec2>(x,y));
 }

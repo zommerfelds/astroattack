@@ -181,7 +181,7 @@ void EditorState::Update()      // Spiel aktualisieren
             shapeDef->friction = 0.3f;
             shapeDef->compName = "shape1";
             compPhysics->AddShapeDef( shapeDef );
-            pEntity->SetComponent( compPhysics );
+            pEntity->AddComponent( compPhysics );
 
             boost::shared_ptr<CompShapePolygon> compShape = boost::make_shared<CompShapePolygon>();
             compShape->SetName("shape1");
@@ -190,11 +190,11 @@ void EditorState::Update()      // Spiel aktualisieren
             	compShape->SetVertex(i, *m_pClickedPoints[i]);
             }
             //compShape->SetVertex(i, m_currentPoint);
-            pEntity->SetComponent( compShape );
+            pEntity->AddComponent( compShape );
 
             TextureIdType textureName = m_currentTexture;
             boost::shared_ptr<CompVisualTexture> compPolyTex = boost::make_shared<CompVisualTexture>(textureName);
-            pEntity->SetComponent( compPolyTex );
+            pEntity->AddComponent( compPolyTex );
 
             m_pGameWorld->AddEntity( pEntity );
 

@@ -59,10 +59,15 @@ void PhysicsSubSystem::RegisterPhysicsComp( Entity* pEntity )
     CompPhysics* comp_phys = pEntity->GetComponent<CompPhysics>();
     if ( comp_phys != NULL ) // Falls es eine "CompPhysics"-Komponente gibt
     {
+        // get position from CompPosition, if it exists
+        CompPosition* compPos = pEntity->GetComponent<CompPosition>();
+        if (compPos)
+            comp_phys->m_bodyDef->position = *compPos->GetPosIgnoreCompPhys().To_b2Vec2();
+
         comp_phys->m_body = m_world->CreateBody( comp_phys->m_bodyDef.get() );
         comp_phys->m_body->SetUserData( comp_phys );
 
-		std::vector<Component*> compShapes = pEntity->GetComponents("CompShape");
+		std::vector<CompShape*> compShapes = pEntity->GetComponents<CompShape>();
 
     	for (unsigned int i=0; i < comp_phys->m_shapes.size(); i++)
     	{
@@ -73,7 +78,7 @@ void PhysicsSubSystem::RegisterPhysicsComp( Entity* pEntity )
     		{
     			if (compShapes[i]->GetName() == comp_phys->m_shapes[i]->compName)
     			{
-    				pCompShape = static_cast<CompShape*>(compShapes[i]);
+    				pCompShape = compShapes[i];
     				break;
     			}
     		}

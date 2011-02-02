@@ -475,12 +475,12 @@ void CompPlayerController::OnUpdate()
     // Laufanimation steuern
     CompVisualAnimation* bodyAnim = NULL;
     CompVisualAnimation* jetpackAnim = NULL;
-    std::vector<Component*> player_anims = GetOwnerEntity()->GetComponents("CompVisualAnimation");
+    std::vector<CompVisualAnimation*> player_anims = GetOwnerEntity()->GetComponents<CompVisualAnimation>();
     for ( unsigned int i = 0; i < player_anims.size(); ++i )
         if ( player_anims[i]->GetName() == "bodyAnim" )
-            bodyAnim = static_cast<CompVisualAnimation*>(player_anims[i]);
+            bodyAnim = player_anims[i];
         else if ( player_anims[i]->GetName() == "jetpack" )
-            jetpackAnim = static_cast<CompVisualAnimation*>(player_anims[i]);
+            jetpackAnim = player_anims[i];
 
     if ( bodyAnim )
     {

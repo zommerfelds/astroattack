@@ -228,7 +228,7 @@ void GameCamera::Update ( float deltaTime ) // time_span in seconds
             {
                 // Blickpunkt der Kamera festsetzten (in der Mitte zwischen Spieler und Cursor)
 
-                Vector2D camera_focus ( player_phys->GetBody()->GetPosition() ); // Position des Spielers
+                Vector2D camera_focus ( player_phys->GetSmoothPosition() ); // Position des Spielers
 
                 Vector2D dist ( camera_focus.Distance ( *m_pCursorPosInworld ) ); // Vektor vom Spieler zum Cursor
                 dist *= 0.45f; // nicht ganz in der Mitte, sondern eher zum Spieler gerichtet
@@ -238,7 +238,7 @@ void GameCamera::Update ( float deltaTime ) // time_span in seconds
                 MoveRelative ( ( camera_focus - CAMERA_POS ) * deltaTime * FOLLOW_QUICKNESS, 0.0f );
                 UpdateCurPosInWorld();
 
-                std::vector<Component*> player_anims = player->GetComponents("CompVisualAnimation");
+                std::vector<CompVisualAnimation*> player_anims = player->GetComponents<CompVisualAnimation>();
                 // ACHTUNG
 				const CompGravField* grav = player_phys->GetGravField();
 				Vector2D upVector(0.0f,1.0f);
@@ -255,7 +255,7 @@ void GameCamera::Update ( float deltaTime ) // time_span in seconds
 
 					    for ( unsigned int i = 0; i < player_anims.size(); ++i )
 					    {
-						    CompVisualAnimation* anim = static_cast<CompVisualAnimation*>( player_anims[i] );
+						    CompVisualAnimation* anim = player_anims[i];
 						    anim->SetFlip( !right );
 					    }
 					}

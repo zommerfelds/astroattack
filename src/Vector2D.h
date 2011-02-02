@@ -44,7 +44,7 @@ public:
     float x, y;
 
     // Convert to a Box2D vector
-    boost::shared_ptr<b2Vec2> To_b2Vec2();
+    boost::shared_ptr<b2Vec2> To_b2Vec2() const;
 
     // Set new values for x and y
     inline void Set( float new_x, float new_y )

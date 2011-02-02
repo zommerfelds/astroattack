@@ -10,13 +10,13 @@
             </polygon>
         </Component>
         <Component id="CompPhysics" name="std">
-            <pos x="0.000000" y="0.000000" a="0.000000" />
             <damping linear="0.000000" angular="0.000000" />
             <shape comp_name="shape1" density="0.000000" friction="0.300000" restitution="0.000000" />
         </Component>
         <Component id="CompVisualTexture" name="std">
             <tex name="Craterscape" />
         </Component>
+        <Component id="CompPosition" x="0.000000" y="0.000000" a="0.000000" />
     </Entity>
     <Entity name="grav2">
         <Component id="CompShape" name="shape1">
@@ -28,7 +28,6 @@
             </polygon>
         </Component>
         <Component id="CompPhysics" name="std">
-            <pos x="0.000000" y="0.000000" a="0.000000" />
             <damping linear="0.000000" angular="0.000000" />
             <shape comp_name="shape1" density="0.000000" friction="0.300000" restitution="0.000000" isSensor="true"/>
         </Component>
@@ -38,6 +37,7 @@
         <Component id="CompGravField" name="std">
             <grav type="directional" gx="-20" gy="0"/>
         </Component>
+        <Component id="CompPosition" x="0.000000" y="0.000000" a="0.000000" />
     </Entity>
     <Entity name="grav3">
         <Component id="CompShape" name="shape1">
@@ -49,7 +49,6 @@
             </polygon>
         </Component>
         <Component id="CompPhysics" name="std">
-            <pos x="0.000000" y="0.000000" a="0.000000" />
             <damping linear="0.000000" angular="0.000000" />
             <shape comp_name="shape1" density="0.000000" friction="0.300000" restitution="0.000000" isSensor="true" />
         </Component>
@@ -59,6 +58,7 @@
         <Component id="CompGravField" name="std">
             <grav type="directional" gx="0" gy="20"/>
         </Component>
+        <Component id="CompPosition" x="0.000000" y="0.000000" a="0.000000" />
     </Entity>
     <Entity name="grav4">
         <Component id="CompShape" name="shape1">
@@ -70,7 +70,6 @@
             </polygon>
         </Component>
         <Component id="CompPhysics" name="std">
-            <pos x="0.000000" y="0.000000" a="0.000000" />
             <damping linear="0.000000" angular="0.000000" />
             <shape comp_name="shape1" density="0.000000" friction="0.300000" restitution="0.000000" isSensor="true" />
         </Component>
@@ -80,6 +79,7 @@
         <Component id="CompGravField" name="std">
             <grav type="directional" gx="20" gy="0"/>
         </Component>
+        <Component id="CompPosition" x="0.000000" y="0.000000" a="0.000000" />
     </Entity>
     <Entity name="grav1">
         <Component id="CompShape" name="shape1">
@@ -91,7 +91,6 @@
             </polygon>
         </Component>
         <Component id="CompPhysics" name="std">
-            <pos x="0.000000" y="0.000000" a="0.000000" />
             <damping linear="0.000000" angular="0.000000" />
             <shape comp_name="shape1" density="0.000000" friction="0.300000" restitution="0.000000" isSensor="true" />
         </Component>
@@ -101,13 +100,13 @@
         <Component id="CompGravField" name="std">
             <grav type="directional" gx="0" gy="-20"/>
         </Component>
+        <Component id="CompPosition" x="0.000000" y="0.000000" a="0.000000" />
     </Entity>
     <Entity name="roundPlanet">
         <Component id="CompShape" name="shape1">
             <circle x="-25.00000" y="0" r="3.00000" />
         </Component>
         <Component id="CompPhysics" name="std">
-            <pos x="0.000000" y="0.000000" a="0.000000" />
             <damping linear="0.000000" angular="0.000000" />
             <shape comp_name="shape1" density="0.000000" friction="0.300000" restitution="0.000000" />
         </Component>
@@ -115,13 +114,13 @@
             <tex name="Liquid Crystal 2" />
             <edge tex="EdgeMud1" edges="0" />
         </Component>
+        <Component id="CompPosition" x="0.000000" y="0.000000" a="0.000000" />
     </Entity>
     <Entity name="grav_circular">
         <Component id="CompShape" name="shape1">
             <circle x="-25.00000" y="0" r="10.00000" />
         </Component>
         <Component id="CompPhysics" name="std">
-            <pos x="0.000000" y="0.000000" a="0.000000" />
             <damping linear="0.000000" angular="0.000000" />
             <shape comp_name="shape1" density="0.000000" friction="0.300000" restitution="0.000000" isSensor="true"/>
         </Component>
@@ -131,5 +130,6 @@
         <Component id="CompGravField" name="std">
             <grav type="radial" cx="-25.00000" cy="0" s="40"/>
         </Component>
+        <Component id="CompPosition" x="0.000000" y="0.000000" a="0.000000" />
     </Entity>
 </level>

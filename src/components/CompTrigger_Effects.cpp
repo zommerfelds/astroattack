@@ -55,7 +55,7 @@ void EffectDispMessage::Fire()
     m_pMsgEntity = pEntity.get();
     boost::shared_ptr<CompVisualMessage> compMsg = boost::make_shared<CompVisualMessage>(m_message);
     compMsg->SetName( "autoname" );
-    pEntity->SetComponent( compMsg );
+    pEntity->AddComponent( compMsg );
 
     m_pGW->AddEntity( pEntity );
 }

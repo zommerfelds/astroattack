@@ -10,7 +10,6 @@
             </polygon>
         </Component>
         <Component id="CompPhysics">
-            <pos x="0.000000" y="0.000000" a="0.000000" />
             <damping linear="0.000000" angular="0.000000" />
             <dynamic />
             <shape comp_name="shape1" density="30.000000" friction="0.300000" restitution="0.000000" />
@@ -18,6 +17,7 @@
         <Component id="CompVisualTexture">
             <tex name="brick" />
         </Component>
+        <Component id="CompPosition" x="0.000000" y="0.000000" a="0.000000" />
     </Entity>
     <Entity name="Box2">
         <Component id="CompShape" name="shape1">
@@ -29,7 +29,6 @@
             </polygon>
         </Component>
         <Component id="CompPhysics">
-            <pos x="0.000000" y="0.000000" a="0.000000" />
             <damping linear="0.000000" angular="0.000000" />
             <dynamic />
             <shape comp_name="shape1" density="30.000000" friction="0.300000" restitution="0.000000" />
@@ -37,6 +36,7 @@
         <Component id="CompVisualTexture">
             <tex name="brick" />
         </Component>
+        <Component id="CompPosition" x="0.000000" y="0.000000" a="0.000000" />
     </Entity>
     <Entity name="Box3">
         <Component id="CompShape" name="shape1">
@@ -48,7 +48,6 @@
             </polygon>
         </Component>
         <Component id="CompPhysics">
-            <pos x="0.000000" y="0.000000" a="0.000000" />
             <damping linear="0.000000" angular="0.000000" />
             <dynamic />
             <shape comp_name="shape1" density="30.000000" friction="0.300000" restitution="0.000000" />
@@ -56,6 +55,7 @@
         <Component id="CompVisualTexture">
             <tex name="brick" />
         </Component>
+        <Component id="CompPosition" x="0.000000" y="0.000000" a="0.000000" />
     </Entity>
     <Entity name="Box4">
         <Component id="CompShape" name="shape1">
@@ -67,7 +67,6 @@
             </polygon>
         </Component>
         <Component id="CompPhysics">
-            <pos x="0.000000" y="0.000000" a="0.000000" />
             <damping linear="0.000000" angular="0.000000" />
             <dynamic />
             <shape comp_name="shape1" density="30.000000" friction="0.300000" restitution="0.000000" />
@@ -75,6 +74,7 @@
         <Component id="CompVisualTexture">
             <tex name="brick" />
         </Component>
+        <Component id="CompPosition" x="0.000000" y="0.000000" a="0.000000" />
     </Entity>
     <Entity name="EdBlock00000">
         <Component id="CompShape" name="shape1">
@@ -86,13 +86,13 @@
             </polygon>
         </Component>
         <Component id="CompPhysics">
-            <pos x="0.000000" y="0.000000" a="0.000000" />
             <damping linear="0.000000" angular="0.000000" />
             <shape comp_name="shape1" density="0.000000" friction="0.300000" restitution="0.000000" />
         </Component>
         <Component id="CompVisualTexture">
             <tex name="blocks" />
         </Component>
+        <Component id="CompPosition" x="0.000000" y="0.000000" a="0.000000" />
     </Entity>
     <Entity name="EdBlock00001">
         <Component id="CompShape" name="shape1">
@@ -104,13 +104,13 @@
             </polygon>
         </Component>
         <Component id="CompPhysics">
-            <pos x="0.000000" y="0.000000" a="0.000000" />
             <damping linear="0.000000" angular="0.000000" />
             <shape comp_name="shape1" density="0.000000" friction="0.300000" restitution="0.000000" />
         </Component>
         <Component id="CompVisualTexture">
             <tex name="blocks" />
         </Component>
+        <Component id="CompPosition" x="0.000000" y="0.000000" a="0.000000" />
     </Entity>
     <Entity name="EdBlock00002">
         <Component id="CompShape" name="shape1">
@@ -122,13 +122,13 @@
             </polygon>
         </Component>
         <Component id="CompPhysics">
-            <pos x="0.000000" y="0.000000" a="0.000000" />
             <damping linear="0.000000" angular="0.000000" />
             <shape comp_name="shape1" density="0.000000" friction="0.300000" restitution="0.000000" />
         </Component>
         <Component id="CompVisualTexture">
             <tex name="blocks" />
         </Component>
+        <Component id="CompPosition" x="0.000000" y="0.000000" a="0.000000" />
     </Entity>
     <Entity name="EdBlock00003">
         <Component id="CompShape" name="shape1">
@@ -140,13 +140,13 @@
             </polygon>
         </Component>
         <Component id="CompPhysics">
-            <pos x="0.000000" y="0.000000" a="0.000000" />
             <damping linear="0.000000" angular="0.000000" />
             <shape comp_name="shape1" density="0.000000" friction="0.300000" restitution="0.000000" />
         </Component>
         <Component id="CompVisualTexture">
             <tex name="blocks" />
         </Component>
+        <Component id="CompPosition" x="0.000000" y="0.000000" a="0.000000" />
     </Entity>
     <Entity name="EdBlock00004">
         <Component id="CompShape" name="shape1">
@@ -158,13 +158,13 @@
             </polygon>
         </Component>
         <Component id="CompPhysics">
-            <pos x="0.000000" y="0.000000" a="0.000000" />
             <damping linear="0.000000" angular="0.000000" />
             <shape comp_name="shape1" density="0.000000" friction="0.300000" restitution="0.000000" />
         </Component>
         <Component id="CompVisualTexture">
             <tex name="blocks" />
         </Component>
+        <Component id="CompPosition" x="0.000000" y="0.000000" a="0.000000" />
     </Entity>
     <Entity name="EdBlock00005">
         <Component id="CompShape" name="shape1">
@@ -176,13 +176,13 @@
             </polygon>
         </Component>
         <Component id="CompPhysics">
-            <pos x="0.000000" y="0.000000" a="0.000000" />
             <damping linear="0.000000" angular="0.000000" />
             <shape comp_name="shape1" density="0.000000" friction="0.300000" restitution="0.000000" />
         </Component>
         <Component id="CompVisualTexture">
             <tex name="blocks" />
         </Component>
+        <Component id="CompPosition" x="0.000000" y="0.000000" a="0.000000" />
     </Entity>
     <Entity name="EdBlock00006">
         <Component id="CompShape" name="shape1">
@@ -194,13 +194,13 @@
             </polygon>
         </Component>
         <Component id="CompPhysics">
-            <pos x="0.000000" y="0.000000" a="0.000000" />
             <damping linear="0.000000" angular="0.000000" />
             <shape comp_name="shape1" density="0.000000" friction="0.300000" restitution="0.000000" />
         </Component>
         <Component id="CompVisualTexture">
             <tex name="blocks" />
         </Component>
+        <Component id="CompPosition" x="0.000000" y="0.000000" a="0.000000" />
     </Entity>
     <Entity name="EdBlock00007">
         <Component id="CompShape" name="shape1">
@@ -212,13 +212,13 @@
             </polygon>
         </Component>
         <Component id="CompPhysics">
-            <pos x="0.000000" y="0.000000" a="0.000000" />
             <damping linear="0.000000" angular="0.000000" />
             <shape comp_name="shape1" density="0.000000" friction="0.300000" restitution="0.000000" />
         </Component>
         <Component id="CompVisualTexture">
             <tex name="blocks" />
         </Component>
+        <Component id="CompPosition" x="0.000000" y="0.000000" a="0.000000" />
     </Entity>
     <Entity name="EdBlock00008">
         <Component id="CompShape" name="shape1">
@@ -230,13 +230,13 @@
             </polygon>
         </Component>
         <Component id="CompPhysics">
-            <pos x="0.000000" y="0.000000" a="0.000000" />
             <damping linear="0.000000" angular="0.000000" />
             <shape comp_name="shape1" density="0.000000" friction="0.300000" restitution="0.000000" />
         </Component>
         <Component id="CompVisualTexture">
             <tex name="blocks" />
         </Component>
+        <Component id="CompPosition" x="0.000000" y="0.000000" a="0.000000" />
     </Entity>
     <Entity name="EdBlock00009">
         <Component id="CompShape" name="shape1">
@@ -248,13 +248,13 @@
             </polygon>
         </Component>
         <Component id="CompPhysics">
-            <pos x="0.000000" y="0.000000" a="0.000000" />
             <damping linear="0.000000" angular="0.000000" />
             <shape comp_name="shape1" density="0.000000" friction="0.300000" restitution="0.000000" />
         </Component>
         <Component id="CompVisualTexture">
             <tex name="blocks" />
         </Component>
+        <Component id="CompPosition" x="0.000000" y="0.000000" a="0.000000" />
     </Entity>
     <Entity name="EdBlock00010">
         <Component id="CompShape" name="shape1">
@@ -266,13 +266,13 @@
             </polygon>
         </Component>
         <Component id="CompPhysics">
-            <pos x="0.000000" y="0.000000" a="0.000000" />
             <damping linear="0.000000" angular="0.000000" />
             <shape comp_name="shape1" density="0.000000" friction="0.300000" restitution="0.000000" />
         </Component>
         <Component id="CompVisualTexture">
             <tex name="blocks" />
         </Component>
+        <Component id="CompPosition" x="0.000000" y="0.000000" a="0.000000" />
     </Entity>
     <Entity name="EdBlock00011">
         <Component id="CompShape" name="shape1">
@@ -284,13 +284,13 @@
             </polygon>
         </Component>
         <Component id="CompPhysics">
-            <pos x="0.000000" y="0.000000" a="0.000000" />
             <damping linear="0.000000" angular="0.000000" />
             <shape comp_name="shape1" density="0.000000" friction="0.300000" restitution="0.000000" />
         </Component>
         <Component id="CompVisualTexture">
             <tex name="blocks" />
         </Component>
+        <Component id="CompPosition" x="0.000000" y="0.000000" a="0.000000" />
     </Entity>
     <Entity name="EdBlock00012">
         <Component id="CompShape" name="shape1">
@@ -302,13 +302,13 @@
             </polygon>
         </Component>
         <Component id="CompPhysics">
-            <pos x="0.000000" y="0.000000" a="0.000000" />
             <damping linear="0.000000" angular="0.000000" />
             <shape comp_name="shape1" density="0.000000" friction="0.300000" restitution="0.000000" />
         </Component>
         <Component id="CompVisualTexture">
             <tex name="blocks" />
         </Component>
+        <Component id="CompPosition" x="0.000000" y="0.000000" a="0.000000" />
     </Entity>
     <Entity name="EdBlock00013">
         <Component id="CompShape" name="shape1">
@@ -320,13 +320,13 @@
             </polygon>
         </Component>
         <Component id="CompPhysics">
-            <pos x="0.000000" y="0.000000" a="0.000000" />
             <damping linear="0.000000" angular="0.000000" />
             <shape comp_name="shape1" density="0.000000" friction="0.300000" restitution="0.000000" />
         </Component>
         <Component id="CompVisualTexture">
             <tex name="blocks" />
         </Component>
+        <Component id="CompPosition" x="0.000000" y="0.000000" a="0.000000" />
     </Entity>
     <Entity name="EdBlock00014">
         <Component id="CompShape" name="shape1">
@@ -338,13 +338,13 @@
             </polygon>
         </Component>
         <Component id="CompPhysics">
-            <pos x="0.000000" y="0.000000" a="0.000000" />
             <damping linear="0.000000" angular="0.000000" />
             <shape comp_name="shape1" density="0.000000" friction="0.300000" restitution="0.000000" />
         </Component>
         <Component id="CompVisualTexture">
             <tex name="blocks" />
         </Component>
+        <Component id="CompPosition" x="0.000000" y="0.000000" a="0.000000" />
     </Entity>
     <Entity name="EdBlock00015">
         <Component id="CompShape" name="shape1">
@@ -356,13 +356,13 @@
             </polygon>
         </Component>
         <Component id="CompPhysics">
-            <pos x="0.000000" y="0.000000" a="0.000000" />
             <damping linear="0.000000" angular="0.000000" />
             <shape comp_name="shape1" density="0.000000" friction="0.300000" restitution="0.000000" />
         </Component>
         <Component id="CompVisualTexture">
             <tex name="blocks" />
         </Component>
+        <Component id="CompPosition" x="0.000000" y="0.000000" a="0.000000" />
     </Entity>
     <Entity name="EdBlock00016">
         <Component id="CompShape" name="shape1">
@@ -374,13 +374,13 @@
             </polygon>
         </Component>
         <Component id="CompPhysics">
-            <pos x="0.000000" y="0.000000" a="0.000000" />
             <damping linear="0.000000" angular="0.000000" />
             <shape comp_name="shape1" density="0.000000" friction="0.300000" restitution="0.000000" />
         </Component>
         <Component id="CompVisualTexture">
             <tex name="blocks" />
         </Component>
+        <Component id="CompPosition" x="0.000000" y="0.000000" a="0.000000" />
     </Entity>
     <Entity name="EdBlock00017">
         <Component id="CompShape" name="shape1">
@@ -392,13 +392,13 @@
             </polygon>
         </Component>
         <Component id="CompPhysics">
-            <pos x="0.000000" y="0.000000" a="0.000000" />
             <damping linear="0.000000" angular="0.000000" />
             <shape comp_name="shape1" density="0.000000" friction="0.300000" restitution="0.000000" />
         </Component>
         <Component id="CompVisualTexture">
             <tex name="blocks" />
         </Component>
+        <Component id="CompPosition" x="0.000000" y="0.000000" a="0.000000" />
     </Entity>
     <Entity name="EdBlock00018">
         <Component id="CompShape" name="shape1">
@@ -409,13 +409,13 @@
             </polygon>
         </Component>
         <Component id="CompPhysics">
-            <pos x="0.000000" y="0.000000" a="0.000000" />
             <damping linear="0.000000" angular="0.000000" />
             <shape comp_name="shape1" density="0.000000" friction="0.300000" restitution="0.000000" />
         </Component>
         <Component id="CompVisualTexture">
             <tex name="blocks" />
         </Component>
+        <Component id="CompPosition" x="0.000000" y="0.000000" a="0.000000" />
     </Entity>
     <Entity name="EdBlock00019">
         <Component id="CompShape" name="shape1">
@@ -427,13 +427,13 @@
             </polygon>
         </Component>
         <Component id="CompPhysics">
-            <pos x="0.000000" y="0.000000" a="0.000000" />
             <damping linear="0.000000" angular="0.000000" />
             <shape comp_name="shape1" density="0.000000" friction="0.300000" restitution="0.000000" />
         </Component>
         <Component id="CompVisualTexture">
             <tex name="blocks" />
         </Component>
+        <Component id="CompPosition" x="0.000000" y="0.000000" a="0.000000" />
     </Entity>
     <Entity name="Zone1">
         <Component id="CompShape" name="shape1">
@@ -445,7 +445,6 @@
             </polygon>
         </Component>
         <Component id="CompPhysics">
-            <pos x="0.000000" y="0.000000" a="0.000000" />
             <damping linear="0.000000" angular="0.000000" />
             <shape comp_name="shape1" density="0.000000" friction="0.300000" restitution="0.000000" isSensor="true" />
         </Component>
@@ -463,8 +462,9 @@
                 <params entity="Box4" />
             </Condition>
             <Effect id="EndLevel">
-                <params msg="         The End!" win="0" />
+                <params msg="The End!" win="0" />
             </Effect>
         </Component>
+        <Component id="CompPosition" x="0.000000" y="0.000000" a="0.000000" />
     </Entity>
 </level>

@@ -21,24 +21,38 @@ Component* Entity::GetComponent(const CompIdType& rCompId )
         return i->second.get();
 }
 
+const Component* Entity::GetComponent(const CompIdType& rCompId ) const
+{
+    ComponentMap::const_iterator i = m_components.find( rCompId );
+    if ( i == m_components.end() )
+        return NULL;
+    else
+        return i->second.get();
+}
+
 std::vector<Component*> Entity::GetComponents(const CompIdType& rCompId )
 {
-    unsigned int count = m_components.count( rCompId );
-    if ( count == 0 )
-        return std::vector<Component*>();
-    std::vector<Component*> ret (count);
+    std::pair<ComponentMap::iterator, ComponentMap::iterator> equalRange = m_components.equal_range(rCompId);
+    std::vector<Component*> ret;
 
-    ComponentMap::iterator it = m_components.lower_bound(rCompId);
-
-    for (unsigned int i = 0; i < count; ++i, ++it )
-    {
-        ret[i] = it->second.get();
-    }
+    for (ComponentMap::iterator it = equalRange.first; it != equalRange.second; ++it )
+        ret.push_back(it->second.get());
     return ret;
 }
 
+std::vector<const Component*> Entity::GetComponents(const CompIdType& rCompId ) const
+{
+    std::pair<ComponentMap::const_iterator, ComponentMap::const_iterator> equalRange = m_components.equal_range(rCompId);
+    std::vector<const Component*> ret;
+
+    for (ComponentMap::const_iterator it = equalRange.first; it != equalRange.second; ++it )
+        ret.push_back(it->second.get());
+    return ret;
+}
+
+
  // Setzt eine neue Komponente in die Einheit
-void Entity::SetComponent(const boost::shared_ptr<Component>& pNewComp)
+void Entity::AddComponent(const boost::shared_ptr<Component>& pNewComp)
 {
     CompIdType compId = pNewComp->ComponentId();
     m_components.insert( std::make_pair(compId, pNewComp) );
@@ -55,7 +69,7 @@ void Entity::WriteEntityInfoToLogger( Logger& log )
     log.Write( "\n" );
 }
 
-const ComponentMap* Entity::GetAllComponents()
+const ComponentMap* Entity::GetAllComponents() const
 {
     return &m_components;
 }
