@@ -478,7 +478,7 @@ void RenderSubSystem::DrawVisualTextureComps()
     {
         CompVisualTexture* pTexComp = *it;
         CompPosition* compPos = pTexComp->GetOwnerEntity()->GetComponent<CompPosition>();
-        std::vector<Component*> compShapes = pTexComp->GetOwnerEntity()->GetComponents("CompShape");
+        std::vector<CompShape*> compShapes = pTexComp->GetOwnerEntity()->GetComponents<CompShape>();
         if ( compPos )
         {
             glPushMatrix();
@@ -492,17 +492,16 @@ void RenderSubSystem::DrawVisualTextureComps()
             for ( size_t i=0; i<compShapes.size(); ++i )
             {
                 m_pTextureManager->SetTexture( pTexComp->GetTexture() );
-                const CompShape* shape = static_cast<CompShape*> (compShapes[i]);
-                switch (shape->GetType())
+                switch (compShapes[i]->GetType())
                 {
                 case CompShape::Polygon:
                 {
-                    DrawTexturedPolygon(*static_cast<const CompShapePolygon*> (shape), *pTexComp);
+                    DrawTexturedPolygon(*static_cast<const CompShapePolygon*>(compShapes[i]), *pTexComp);
                     break;
                 }
                 case CompShape::Circle:
                 {
-                    DrawTexturedCircle(*static_cast<const CompShapeCircle*> (shape), *pTexComp);
+                    DrawTexturedCircle(*static_cast<const CompShapeCircle*>(compShapes[i]), *pTexComp);
                     break;
                 }
                 default:
@@ -593,19 +592,19 @@ void RenderSubSystem::DrawVisualMessageComps()
 void RenderSubSystem::RegisterCompVisual( Entity* pEntity )
 {
     std::vector<CompVisualTexture*> texComps = pEntity->GetComponents<CompVisualTexture>();
-    for ( unsigned int i = 0; i < texComps.size(); ++i )
+    for ( size_t i = 0; i < texComps.size(); ++i )
     {
         m_visualTextureComps.insert( texComps[i] );
     }
 
     std::vector<CompVisualAnimation*> animComps = pEntity->GetComponents<CompVisualAnimation>();
-    for ( unsigned int i = 0; i < animComps.size(); ++i )
+    for ( size_t i = 0; i < animComps.size(); ++i )
     {
         m_visualAnimComps.insert( animComps[i] );
     }
 
     std::vector<CompVisualMessage*> msgComps = pEntity->GetComponents<CompVisualMessage>();
-    for ( unsigned int i = 0; i < msgComps.size(); ++i )
+    for ( size_t i = 0; i < msgComps.size(); ++i )
     {
         m_visualMsgComps.insert( msgComps[i] );
     }
@@ -614,19 +613,19 @@ void RenderSubSystem::RegisterCompVisual( Entity* pEntity )
 void RenderSubSystem::UnregisterCompVisual( Entity* pEntity )
 {
     std::vector<CompVisualTexture*> texComps = pEntity->GetComponents<CompVisualTexture> ();
-    for (unsigned int i = 0; i < texComps.size(); ++i)
+    for (size_t i = 0; i < texComps.size(); ++i)
     {
         m_visualTextureComps.erase( texComps[i] );
     }
 
     std::vector<CompVisualAnimation*> animComps = pEntity->GetComponents<CompVisualAnimation> ();
-    for (unsigned int i = 0; i < animComps.size(); ++i)
+    for (size_t i = 0; i < animComps.size(); ++i)
     {
         m_visualAnimComps.erase( animComps[i] );
     }
 
     std::vector<CompVisualMessage*> msgComps = pEntity->GetComponents<CompVisualMessage> ();
-    for (unsigned int i = 0; i < msgComps.size(); ++i)
+    for (size_t i = 0; i < msgComps.size(); ++i)
     {
         m_visualMsgComps.erase( msgComps[i] );
     }

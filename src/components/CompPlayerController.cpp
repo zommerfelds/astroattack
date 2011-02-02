@@ -119,7 +119,7 @@ void CompPlayerController::OnUpdate()
 
 			float min_angle = 2.0f*cPi;       // kleinster gefundener Winkel
 
-            for (unsigned int i=0; i<contacts.size(); i++)
+            for (size_t i=0; i<contacts.size(); i++)
 			{
 				float angle; // Winkeln zwischen maximum und momentane Wegrichtung (Radian)
 
@@ -166,7 +166,7 @@ void CompPlayerController::OnUpdate()
 
 			float min_angle = 2*cPi;
 
-			for (unsigned int i=0; i<contacts.size(); i++)
+			for (size_t i=0; i<contacts.size(); i++)
 			{
 				float angle;
 
@@ -474,7 +474,7 @@ void CompPlayerController::OnUpdate()
     CompVisualAnimation* bodyAnim = NULL;
     CompVisualAnimation* jetpackAnim = NULL;
     std::vector<CompVisualAnimation*> player_anims = GetOwnerEntity()->GetComponents<CompVisualAnimation>();
-    for ( unsigned int i = 0; i < player_anims.size(); ++i )
+    for ( size_t i = 0; i < player_anims.size(); ++i )
         if ( player_anims[i]->GetName() == "bodyAnim" )
             bodyAnim = player_anims[i];
         else if ( player_anims[i]->GetName() == "jetpack" )

@@ -5,7 +5,6 @@
 * High priority *
 
 - Refactor
-- Check static_cast<> and dynamic_cast<> (e.g. PhysicsSubSystem::RegisterGravFieldComp() )
 - Make whole camera functionality frame rate independent
 
 
@@ -14,14 +13,12 @@
 - configure script is not usable right away
 - No OpenGL call out of Renderer.cpp (e.g. glColor4f in EditorState.cpp)
 - Migrate to pugixml or rapidxml
-- Use size_t instead of unsigned int (string::npos)
 - Use physical state interpolation instead of extrapolation
 - Strange physical behavior under "arrow" of level 2
 - Test OpenGL error checking (glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR) did not generate error)
 - Bug in Logger: Loading Texture "(null)"... Done!
 - Change isSensor to sensor and check XML node names (maybe capital beginning?)
 - Kontakt Events nicht für jeden Box2D Kontakt erzeugen, sonders Box2D Kontakte zuerst verarbeiten und zusammenfügen.
-- Event Manager verbessern (keine void*)
 - GUI System
 - Konkave Polygone im Editor
 - Fehlerchecking und Beschreibung beim Level Laden

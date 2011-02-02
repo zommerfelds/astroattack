@@ -35,14 +35,14 @@ public:
 	void SetGravType( GravType t ) { m_gravType = t; }
 	void SetGravDir( const Vector2D& dir );
 	void SetGravCenter( const Vector2D& center, float strenght );
-    void SetPriority( unsigned int priority );
+    void SetPrioritya( int priority );
 
     // Getters
 	GravType GetGravType() const { return m_gravType; }
 	const Vector2D& GetGravDir() const { return *m_pGravitationDir; }
 	const Vector2D& GetGravCenter() const { return *m_pGravitationCenter; }
 	float GetStrenght() const { return m_strenght; }
-	unsigned int GetPriority() const { return m_priority; }
+	int GetPriority() const { return m_priority; }
 
 	// Get the acceleration of a body with center of mass "centerOfMass"
 	Vector2D GetAcceleration(const Vector2D& centerOfMass) const;
@@ -53,7 +53,7 @@ private:
 	boost::scoped_ptr<Vector2D> m_pGravitationDir;
 	boost::scoped_ptr<Vector2D> m_pGravitationCenter;
 	float m_strenght; // only with Radial
-    unsigned int m_priority; // Gravitationsfeld-priorität: wenn sich 2 felder überlappen, gilt der mit der grössten priorität (0-100 is gültig)
+    int m_priority; // Gravitationsfeld-priorität: wenn sich 2 felder überlappen, gilt der mit der grössten priorität (0-100 is gültig)
 
 };
 //--------------------------------------------//

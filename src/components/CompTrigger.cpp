@@ -28,7 +28,7 @@ void CompTrigger::OnUpdate()
     {
         bool conditionsAreTrue = true;
 
-        for ( unsigned int i = 0; i < m_conditions.size(); ++i )
+        for ( size_t i = 0; i < m_conditions.size(); ++i )
         {
             if ( !m_conditions[i]->ConditionIsTrue() )
             {
@@ -39,7 +39,7 @@ void CompTrigger::OnUpdate()
 
         if (conditionsAreTrue)
         {
-            for ( unsigned int i = 0; i < m_effects.size(); ++i )
+            for ( size_t i = 0; i < m_effects.size(); ++i )
             {
                 m_effects[i]->Fire();
             }
@@ -48,7 +48,7 @@ void CompTrigger::OnUpdate()
     }
     else
     {
-        for ( unsigned int i = 0; i < m_effects.size(); ++i )
+        for ( size_t i = 0; i < m_effects.size(); ++i )
         {
             m_effects[i]->Update();
         }

@@ -952,7 +952,7 @@ void XmlLoader::SaveWorldToXml( const char* pFileName, GameWorld* pGameWorld )
                 CompTrigger* compTrig = static_cast<CompTrigger*>(c_it->second.get());
 
                 // Alle Kontidionen
-                for ( unsigned int i = 0; i < compTrig->GetConditions().size(); ++i )
+                for ( size_t i = 0; i < compTrig->GetConditions().size(); ++i )
                 {
                     Condition* pCond = compTrig->GetConditions()[i].get();
                     TiXmlElement* condEl = new TiXmlElement( "Condition" );
@@ -1000,7 +1000,7 @@ void XmlLoader::SaveWorldToXml( const char* pFileName, GameWorld* pGameWorld )
                 }
 
                 // Alle Effekt
-                for ( unsigned int i = 0; i < compTrig->GetEffects().size(); ++i )
+                for ( size_t i = 0; i < compTrig->GetEffects().size(); ++i )
                 {
                     Effect* pEffect = compTrig->GetEffects()[i].get();
                     TiXmlElement* effctEl = new TiXmlElement( "Effect" );

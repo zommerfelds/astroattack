@@ -33,9 +33,9 @@ void CompGravField::SetGravCenter(const Vector2D& center, float strenght)
     m_strenght = strenght;
 }
 
-void CompGravField::SetPriority( unsigned int priority )
+void CompGravField::SetPrioritya( int priority )
 {
-    if ( priority > 1000 )
+    if ( std::abs(priority) > 100 )
         return; // ACHTUNG: sende warnung
     m_priority = priority;
 }

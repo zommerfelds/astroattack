@@ -84,7 +84,7 @@ boost::shared_ptr<b2Shape> CompShapePolygon::toB2Shape()
 {
     boost::shared_ptr<b2PolygonShape> poly_shape = boost::make_shared<b2PolygonShape>();
     b2Vec2 vertices[b2_maxPolygonVertices];
-    for (unsigned int i=0; i<m_vertices.size() && i<b2_maxPolygonVertices; i++)
+    for (size_t i=0; i<m_vertices.size() && i<b2_maxPolygonVertices; i++)
     {
     	vertices[i].Set(m_vertices[i]->x, m_vertices[i]->y);
     }

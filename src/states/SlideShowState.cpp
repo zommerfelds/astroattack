@@ -75,7 +75,7 @@ void SlideShowState::Init()        // State starten
     info.textureWrapModeX = TEX_CLAMP;
     info.textureWrapModeY = TEX_CLAMP;
     info.scale = 1.0;
-    for ( unsigned int i = 0; i < m_slideShow.slides.size(); ++i )
+    for ( size_t i = 0; i < m_slideShow.slides.size(); ++i )
         GetSubSystems()->renderer->GetTextureManager()->LoadTexture( m_slideShow.slides[i].imageFileName.c_str(), m_slideShow.slides[i].imageFileName,info,gAaConfig.GetInt("TexQuality") );
     
     // GUI modus
@@ -103,7 +103,7 @@ void SlideShowState::Cleanup()     // State abbrechen
     GetSubSystems()->sound->FreeMusic( "slideShowMusic" );
 
     // Bilder wieder freisetzen
-    for ( unsigned int i = 0; i < m_slideShow.slides.size(); ++i )
+    for ( size_t i = 0; i < m_slideShow.slides.size(); ++i )
     {
         GetSubSystems()->renderer->GetTextureManager()->FreeTexture( m_slideShow.slides[i].imageFileName );
     }

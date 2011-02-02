@@ -250,7 +250,7 @@ void GameCamera::Update ( float deltaTime ) // time_span in seconds
                             m_playerOldHeading = -1;
 						m_framesTillAnimSwitchHeadingIsPossible = cFramesTillAnimSwitchHeadingIsPossible;
 
-					    for ( unsigned int i = 0; i < player_anims.size(); ++i )
+					    for ( size_t i = 0; i < player_anims.size(); ++i )
 					    {
 						    CompVisualAnimation* anim = player_anims[i];
 						    anim->SetFlip( !right );

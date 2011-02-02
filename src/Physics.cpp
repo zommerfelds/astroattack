@@ -55,6 +55,7 @@ PhysicsSubSystem::~PhysicsSubSystem()
 {
 }
 
+// helper function
 boost::shared_ptr<b2BodyDef> convertToB2BodyDef(const BodyDef& bodyDef)
 {
     boost::shared_ptr<b2BodyDef> pB2BodyDef = boost::make_shared<b2BodyDef>();
@@ -96,12 +97,12 @@ void PhysicsSubSystem::RegisterPhysicsComp(Entity* pEntity)
 
 		std::vector<CompShape*> compShapes = pEntity->GetComponents<CompShape>();
 
-    	for (unsigned int i=0; i < comp_phys->m_shapeInfos.size(); i++)
+    	for (size_t i=0; i < comp_phys->m_shapeInfos.size(); i++)
     	{
     		boost::shared_ptr<b2FixtureDef> fixtureDef = boost::make_shared<b2FixtureDef>();
 
     		CompShape* pCompShape = NULL;
-    		for (unsigned int a=0; a < compShapes.size(); a++) // TODO: could use get component by name instead
+    		for (size_t a=0; a < compShapes.size(); a++) // TODO: could use get component by name instead
     		{
     			if (compShapes[i]->GetName() == comp_phys->m_shapeInfos[i]->compName)
     			{
@@ -138,7 +139,7 @@ void PhysicsSubSystem::UnregisterPhysicsComp( Entity* pEntity )
             m_world->DestroyBody( comp_phys->m_body );
             comp_phys->m_body = NULL;
         }
-        for ( unsigned int i = 0; i < m_physicsComps.size(); ++i )
+        for ( size_t i = 0; i < m_physicsComps.size(); ++i )
         {
             if ( m_physicsComps[i] == comp_phys )
             {
@@ -169,11 +170,11 @@ void PhysicsSubSystem::Update()
     m_world->Step(m_timeStep, m_velocityIterations, m_positionIterations);
     //----------------------------//
 
-    for ( unsigned int i = 0; i < m_physicsComps.size(); ++i )
+    for ( size_t i = 0; i < m_physicsComps.size(); ++i )
 	{
 		b2Body* pBody = m_physicsComps[i]->m_body;
 
-        unsigned int highestPriority = 0;
+        int highestPriority = 0;
         CompGravField* gravWithHighestPriority = NULL;
         b2ContactEdge* contact = pBody->GetContactList();
         for (;contact;contact=contact->next)
@@ -190,7 +191,7 @@ void PhysicsSubSystem::Update()
             vec.Rotate( pBody->GetAngle() );
             if ( compContact->m_body->GetFixtureList()->TestPoint( pBody->GetPosition() + *vec.To_b2Vec2() ) ) // TODO: handle multiple shapes
             {
-                unsigned int pri = grav->GetPriority();
+                int pri = grav->GetPriority();
                 if ( pri > highestPriority )
                 {
                     highestPriority = pri;
@@ -248,9 +249,9 @@ void PhysicsSubSystem::Update()
 			m_physicsComps[i]->m_framesTillSwitchGravFieldIsPossible--; */
 	}
 
-	/*for ( unsigned int i = 0; i < m_gravFields.size(); ++i )
+	/*for ( size_t i = 0; i < m_gravFields.size(); ++i )
 	{
-        CompPhysics* comp = static_cast<CompPhysics*>( m_gravFields[i]->GetOwnerEntity()->GetFirstComponent("CompPhysics") );
+        CompPhysics* comp = m_gravFields[i]->GetOwnerEntity()->GetFirstComponent("CompPhysics");
         if ( comp == NULL ) // TODO: warning
             continue;
         b2ContactEdge* contact = comp->GetBody()->GetContactList();
@@ -269,7 +270,7 @@ void PhysicsSubSystem::Update()
 
 void PhysicsSubSystem::CalculateSmoothPositions(float accumulator)
 {
-    for ( unsigned int i = 0; i < m_physicsComps.size(); ++i )
+    for ( size_t i = 0; i < m_physicsComps.size(); ++i )
     {
         b2Body* pBody = m_physicsComps[i]->m_body;
 
@@ -330,7 +331,7 @@ void PhysicsSubSystem::ContactListener::CheckContactPoint(const b2ContactPoint* 
             cp.pos.y = pPoint->position.y;
 
             bool dontSave = false;
-            for ( unsigned int i = 0; i < comp->m_contacts.size(); ++i )
+            for ( size_t i = 0; i < comp->m_contacts.size(); ++i )
             {
                 if ( comp->m_contacts[i].own_shape == cp.own_shape && comp->m_contacts[i].foreign_shape == cp.foreign_shape   )
                 {
@@ -365,7 +366,7 @@ void PhysicsSubSystem::UnregisterGravFieldComp( Entity* pEntity )
     CompGravField* comp_grav = pEntity->GetComponent<CompGravField>();
     if ( comp_grav != NULL ) // Falls es eine "CompGravField"-Komponente gibt
     {
-        for ( unsigned int i = 0; i < m_gravFields.size(); ++i )
+        for ( size_t i = 0; i < m_gravFields.size(); ++i )
         {
             if ( m_gravFields[i] == comp_grav )
             {
