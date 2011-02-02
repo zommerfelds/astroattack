@@ -7,7 +7,6 @@
 - Refactor
 - Check static_cast<> and dynamic_cast<> (e.g. PhysicsSubSystem::RegisterGravFieldComp() )
 - Make whole camera functionality frame rate independent
-- Abstract Box2D (remove Box2D dependencies in non-physics parts)
 
 
 * Medium priority *
@@ -65,6 +64,7 @@
 
 
 DONE:
+- Abstract Box2D (remove Box2D dependencies in non-physics parts)
 - Organize components
 - Edge effect (texture)
 - Text is too big

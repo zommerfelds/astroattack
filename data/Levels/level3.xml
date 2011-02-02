@@ -30,7 +30,7 @@
         <Component id="CompPhysics" name="std">
             <dynamic />
             <damping linear="0.000000" angular="0.000000" />
-            <shape comp_name="shape1" density="10.000000" friction="0.300000" restitution="0.000000" />
+            <shape comp_name="shape1" density="40.000000" friction="0.300000" restitution="0.000000" />
         </Component>
         <Component id="CompVisualTexture" name="std">
             <tex name="blocks" />
@@ -49,7 +49,7 @@
         <Component id="CompPhysics" name="std">
             <dynamic />
             <damping linear="0.000000" angular="0.000000" />
-            <shape comp_name="shape1" density="10.000000" friction="0.300000" restitution="0.000000" />
+            <shape comp_name="shape1" density="40.000000" friction="0.300000" restitution="0.000000" />
         </Component>
         <Component id="CompVisualTexture" name="std">
             <tex name="blocks" />
@@ -68,7 +68,7 @@
         <Component id="CompPhysics" name="std">
             <dynamic />
             <damping linear="0.000000" angular="0.000000" />
-            <shape comp_name="shape1" density="10.000000" friction="0.300000" restitution="0.000000" />
+            <shape comp_name="shape1" density="40.000000" friction="0.300000" restitution="0.000000" />
         </Component>
         <Component id="CompVisualTexture" name="std">
             <tex name="blocks" />
@@ -87,7 +87,7 @@
         <Component id="CompPhysics" name="std">
             <dynamic />
             <damping linear="0.000000" angular="0.000000" />
-            <shape comp_name="shape1" density="10.000000" friction="0.300000" restitution="0.000000" />
+            <shape comp_name="shape1" density="40.000000" friction="0.300000" restitution="0.000000" />
         </Component>
         <Component id="CompVisualTexture" name="std">
             <tex name="blocks" />
@@ -106,7 +106,7 @@
         <Component id="CompPhysics" name="std">
             <dynamic />
             <damping linear="0.000000" angular="0.000000" />
-            <shape comp_name="shape1" density="10.000000" friction="0.300000" restitution="0.000000" />
+            <shape comp_name="shape1" density="40.000000" friction="0.300000" restitution="0.000000" />
         </Component>
         <Component id="CompVisualTexture" name="std">
             <tex name="blocks" />
@@ -125,7 +125,7 @@
         <Component id="CompPhysics" name="std">
             <dynamic />
             <damping linear="0.000000" angular="0.000000" />
-            <shape comp_name="shape1" density="10.000000" friction="0.300000" restitution="0.000000" />
+            <shape comp_name="shape1" density="40.000000" friction="0.300000" restitution="0.000000" />
         </Component>
         <Component id="CompVisualTexture" name="std">
             <tex name="blocks" />
@@ -144,7 +144,7 @@
         <Component id="CompPhysics" name="std">
             <dynamic />
             <damping linear="0.000000" angular="0.000000" />
-            <shape comp_name="shape1" density="10.000000" friction="0.300000" restitution="0.000000" />
+            <shape comp_name="shape1" density="40.000000" friction="0.300000" restitution="0.000000" />
         </Component>
         <Component id="CompVisualTexture" name="std">
             <tex name="blocks" />
@@ -163,7 +163,7 @@
         <Component id="CompPhysics" name="std">
             <dynamic />
             <damping linear="0.000000" angular="0.000000" />
-            <shape comp_name="shape1" density="10.000000" friction="0.300000" restitution="0.000000" />
+            <shape comp_name="shape1" density="40.000000" friction="0.300000" restitution="0.000000" />
         </Component>
         <Component id="CompVisualTexture" name="std">
             <tex name="blocks" />
@@ -182,7 +182,7 @@
         <Component id="CompPhysics" name="std">
             <dynamic />
             <damping linear="0.000000" angular="0.000000" />
-            <shape comp_name="shape1" density="10.000000" friction="0.300000" restitution="0.000000" />
+            <shape comp_name="shape1" density="40.000000" friction="0.300000" restitution="0.000000" />
         </Component>
         <Component id="CompVisualTexture" name="std">
             <tex name="blocks" />
@@ -793,7 +793,7 @@
         <Component id="CompPhysics" name="std">
             <dynamic />
             <damping linear="0.000000" angular="0.000000" />
-            <shape comp_name="shape1" density="10.000000" friction="0.300000" restitution="0.000000" />
+            <shape comp_name="shape1" density="40.000000" friction="0.300000" restitution="0.000000" />
         </Component>
         <Component id="CompVisualTexture" name="std">
             <tex name="Liquid Crystal 2" />
@@ -807,7 +807,7 @@
         <Component id="CompPhysics" name="std">
             <dynamic />
             <damping linear="0.000000" angular="0.000000" />
-            <shape comp_name="shape1" density="10.000000" friction="0.300000" restitution="0.700000" />
+            <shape comp_name="shape1" density="40.000000" friction="0.300000" restitution="0.500000" />
         </Component>
         <Component id="CompVisualTexture" name="std">
             <tex name="Solar Plate" />
@@ -821,7 +821,7 @@
         <Component id="CompPhysics" name="std">
             <dynamic />
             <damping linear="0.000000" angular="0.000000" />
-            <shape comp_name="shape1" density="10.000000" friction="0.300000" restitution="0.700000" />
+            <shape comp_name="shape1" density="40.000000" friction="0.300000" restitution="0.500000" />
         </Component>
         <Component id="CompVisualTexture" name="std">
             <tex name="Solar Plate" />
@@ -835,7 +835,7 @@
         <Component id="CompPhysics" name="std">
             <dynamic />
             <damping linear="0.000000" angular="0.000000" />
-            <shape comp_name="shape1" density="10.000000" friction="0.300000" restitution="0.700000" />
+            <shape comp_name="shape1" density="40.000000" friction="0.300000" restitution="0.500000" />
         </Component>
         <Component id="CompVisualTexture" name="std">
             <tex name="Solar Plate" />
@@ -849,7 +849,7 @@
         <Component id="CompPhysics" name="std">
             <dynamic />
             <damping linear="0.000000" angular="0.000000" />
-            <shape comp_name="shape1" density="10.000000" friction="0.300000" restitution="0.700000" />
+            <shape comp_name="shape1" density="40.000000" friction="0.300000" restitution="0.500000" />
         </Component>
         <Component id="CompVisualTexture" name="std">
             <tex name="Solar Plate" />
@@ -863,7 +863,7 @@
         <Component id="CompPhysics" name="std">
             <dynamic />
             <damping linear="0.000000" angular="0.000000" />
-            <shape comp_name="shape1" density="10.000000" friction="0.300000" restitution="0.700000" />
+            <shape comp_name="shape1" density="40.000000" friction="0.300000" restitution="0.500000" />
         </Component>
         <Component id="CompVisualTexture" name="std">
             <tex name="Solar Plate" />
@@ -877,7 +877,7 @@
         <Component id="CompPhysics" name="std">
             <dynamic />
             <damping linear="0.000000" angular="0.000000" />
-            <shape comp_name="shape1" density="10.000000" friction="0.300000" restitution="0.700000" />
+            <shape comp_name="shape1" density="40.000000" friction="0.300000" restitution="0.500000" />
         </Component>
         <Component id="CompVisualTexture" name="std">
             <tex name="Solar Plate" />
@@ -891,7 +891,7 @@
         <Component id="CompPhysics" name="std">
             <dynamic />
             <damping linear="0.000000" angular="0.000000" />
-            <shape comp_name="shape1" density="10.000000" friction="0.300000" restitution="0.700000" />
+            <shape comp_name="shape1" density="40.000000" friction="0.300000" restitution="0.500000" />
         </Component>
         <Component id="CompVisualTexture" name="std">
             <tex name="Solar Plate" />
@@ -905,7 +905,7 @@
         <Component id="CompPhysics" name="std">
             <dynamic />
             <damping linear="0.000000" angular="0.000000" />
-            <shape comp_name="shape1" density="10.000000" friction="0.300000" restitution="0.700000" />
+            <shape comp_name="shape1" density="40.000000" friction="0.300000" restitution="0.500000" />
         </Component>
         <Component id="CompVisualTexture" name="std">
             <tex name="Solar Plate" />

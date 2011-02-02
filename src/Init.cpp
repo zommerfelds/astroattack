@@ -18,8 +18,6 @@
 
 #include "GameApp.h"
 
-#include <Box2D/Box2D.h>
-
 // SDL und Fenster initialisieren
 bool GameApp::InitSDL()
 {

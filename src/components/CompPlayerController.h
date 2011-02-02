@@ -21,6 +21,7 @@
 #include <map>
 
 class b2Shape;
+class CompPhysics;
 
 class InputSubSystem; // benötigt Eingabesystem für die Tasten zu lesen
 

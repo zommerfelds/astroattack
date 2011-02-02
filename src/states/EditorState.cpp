@@ -22,8 +22,7 @@
 #include "../components/CompVisualTexture.h"
 #include "../components/CompPhysics.h"
 #include "../components/CompShape.h"
-
-#include <Box2D/Box2D.h>
+#include "../components/CompPosition.h"
 
 #include <cmath>
 #include <sstream>
@@ -176,8 +175,8 @@ void EditorState::Update()      // Spiel aktualisieren
             }
             boost::shared_ptr<Entity> pEntity = boost::make_shared<Entity>(entityName);
 
-            boost::shared_ptr<CompPhysics> compPhysics = boost::make_shared<CompPhysics>(new b2BodyDef/*, false*/ );
-            boost::shared_ptr<CompPhysics::ShapeDef> shapeDef = boost::make_shared<CompPhysics::ShapeDef>();
+            boost::shared_ptr<CompPhysics> compPhysics = boost::make_shared<CompPhysics>();
+            boost::shared_ptr<ShapeDef> shapeDef = boost::make_shared<ShapeDef>();
             shapeDef->friction = 0.3f;
             shapeDef->compName = "shape1";
             compPhysics->AddShapeDef( shapeDef );
@@ -189,8 +188,10 @@ void EditorState::Update()      // Spiel aktualisieren
             {
             	compShape->SetVertex(i, *m_pClickedPoints[i]);
             }
-            //compShape->SetVertex(i, m_currentPoint);
             pEntity->AddComponent( compShape );
+
+            boost::shared_ptr<CompPosition> compPos = boost::make_shared<CompPosition>();
+            pEntity->AddComponent( compPos );
 
             TextureIdType textureName = m_currentTexture;
             boost::shared_ptr<CompVisualTexture> compPolyTex = boost::make_shared<CompVisualTexture>(textureName);

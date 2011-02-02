@@ -10,6 +10,9 @@
 #include "CompTrigger_Conditions.h"
 #include "CompPhysics.h"
 
+//#include <boost/bind.hpp>
+#include "../Entity.h"
+
 ConditionCompareVariable::ConditionCompareVariable( std::map<const std::string, int>::iterator itVariable, CompareOperator comp, int numToCompareWith )
 : m_itVariable ( itVariable ),
   m_compareType ( comp ),
@@ -38,11 +41,6 @@ bool ConditionCompareVariable::ConditionIsTrue()
     }
 }
 
-#include <boost/bind.hpp>
-#include <Box2D/Box2D.h>
-#include "../Entity.h"
-#include "../Component.h"
-
 ConditionEntityTouchedThis::ConditionEntityTouchedThis( std::string entityName )
 : m_entityName ( entityName )/*, m_touched ( false )*/
 {
@@ -52,6 +50,7 @@ ConditionEntityTouchedThis::ConditionEntityTouchedThis( std::string entityName )
 bool ConditionEntityTouchedThis::ConditionIsTrue()
 {
     //return m_touched;
+    // TODO: use events instead of polling every time
 
     // TODO: all physics components
     CompPhysics* thisCompPhysics = m_pCompTrigger->GetOwnerEntity()->GetComponent<CompPhysics>();

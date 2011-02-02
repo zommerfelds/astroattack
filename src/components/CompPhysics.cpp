@@ -17,17 +17,17 @@
 const CompIdType CompPhysics::COMPONENT_ID = "CompPhysics";
 
 // Konstruktor
-CompPhysics::CompPhysics( b2BodyDef* pBodyDef ) : m_body ( NULL ),
-                                                  m_bodyDef( pBodyDef ),
-                                                  m_localRotationPoint (),
-                                                  m_localGravitationPoint (),
-                                                  m_smoothPosition (),
-                                                  m_smoothAngle (0.0f),
-                                                  m_gravField ( NULL ),
-                                                  m_remainingUpdatesTillGravFieldChangeIsPossible ( 0 )
-                                                  //m_oldGravField ( NULL ),
-                                                  //m_gravFieldIsChanging ( false ),
-                                                  //m_updatesSinceLastGravFieldChange ( 0 )
+CompPhysics::CompPhysics( const BodyDef& rBodyDef ) : m_body ( NULL ),
+                                                      m_bodyDef( rBodyDef ),
+                                                      m_localRotationPoint (),
+                                                      m_localGravitationPoint (),
+                                                      m_smoothPosition (),
+                                                      m_smoothAngle (0.0f),
+                                                      m_gravField ( NULL ),
+                                                      m_remainingUpdatesTillGravFieldChangeIsPossible ( 0 )
+                                                      //m_oldGravField ( NULL ),
+                                                      //m_gravFieldIsChanging ( false ),
+                                                      //m_updatesSinceLastGravFieldChange ( 0 )
 {
 }
 
@@ -35,71 +35,77 @@ CompPhysics::~CompPhysics()
 {
 }
 
-void CompPhysics::AddFixtureDef( const boost::shared_ptr<b2FixtureDef>& pFixtureDef, FixtureIdType name )
-{
-    // shape zur Liste hinzufügen
-    m_fixtureDefs.push_back( std::make_pair(name,pFixtureDef) );
-}
-
 void CompPhysics::AddShapeDef( const boost::shared_ptr<ShapeDef>& pShapeDef )
 {
-    m_shapes.push_back( pShapeDef );
+    m_shapeInfos.push_back( pShapeDef );
 }
 
-const b2Body* CompPhysics::GetBody() const
+bool CompPhysics::SetShapeFriction(const CompNameType& shapeName, float friction)
 {
-    return m_body;
-}
-
-b2Body* CompPhysics::GetBody()
-{
-    return m_body;
-}
-
-b2Fixture* CompPhysics::GetFixture() const
-{
-    return m_body->GetFixtureList();
-}
-
-b2Fixture* CompPhysics::GetFixture( FixtureIdType name ) const
-{
-    FixtureMap::const_iterator it = m_fixtureList.find( name );
-    if ( it != m_fixtureList.end() )
-        return it->second.pFixture;
-    else
-        return NULL;
-}
-
-bool CompPhysics::IsAllowedToSleep() const
-{
-    if (m_bodyDef)
-        return m_bodyDef->allowSleep;
+    FixtureMap::const_iterator it = m_fixtureMap.find( shapeName );
+    if ( it != m_fixtureMap.end() )
+        it->second->SetFriction(friction);
     else
         return false;
+    return true;
+}
+
+float CompPhysics::GetMass() const
+{
+    return m_body->GetMass();
+}
+
+float CompPhysics::GetAngle() const
+{
+    return m_body->GetAngle();
 }
 
 float CompPhysics::GetLinearDamping() const
 {
-    if (m_bodyDef)
-        return m_bodyDef->linearDamping;
-    else
-        return 0.0f;
+    if (m_body)
+        return m_body->GetLinearDamping();
+    return m_bodyDef.linearDamping;
 }
 
 float CompPhysics::GetAngularDamping() const
 {
-    if (m_bodyDef)
-        return m_bodyDef->angularDamping;
-    else
-        return 0.0f;
+    if (m_body)
+        return m_body->GetAngularDamping();
+    return m_bodyDef.angularDamping;
 }
 
 bool CompPhysics::IsFixedRotation() const
 {
-    if (m_bodyDef)
-        return m_bodyDef->fixedRotation;
-    else
-        return false;
+    if (m_body)
+        return m_body->IsFixedRotation();
+    return m_bodyDef.fixedRotation;
+}
+
+bool CompPhysics::IsBullet() const
+{
+    if (m_body)
+        return m_body->IsBullet();
+    return m_bodyDef.bullet;
+}
+
+Vector2D CompPhysics::GetLinearVelocity() const
+{
+    return Vector2D( m_body->GetLinearVelocity() );
+}
+
+void CompPhysics::SetLinearVelocity(const Vector2D& vel)
+{
+    m_body->SetLinearVelocity( *vel.To_b2Vec2() );
+}
+
+void CompPhysics::ApplyLinearImpulse(const Vector2D& impulse, const Vector2D& point)
+{
+    m_body->ApplyLinearImpulse(*impulse.To_b2Vec2(), *point.To_b2Vec2());
+}
+
+void CompPhysics::ApplyForce(const Vector2D& impulse, const Vector2D& point)
+{
+    m_body->ApplyForce(*impulse.To_b2Vec2(), *point.To_b2Vec2());
 }
 
 void CompPhysics::Rotate( float deltaAngle, const Vector2D& localPoint )
@@ -135,6 +141,11 @@ ContactVector CompPhysics::GetContacts(bool getSensors) const
         vecTouchInfo.push_back(touchInfo);
     }
     return vecTouchInfo;
+}
+
+Vector2D CompPhysics::GetCenterOfMassPosition() const
+{
+    return Vector2D( m_body->GetWorldCenter() );
 }
 
 /*bool CompPhysics::GetSaveContacts() const

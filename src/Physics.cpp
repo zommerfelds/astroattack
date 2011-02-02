@@ -21,6 +21,7 @@
 
 #include <boost/bind.hpp>
 #include <boost/make_shared.hpp>
+#include <Box2D/Box2D.h>
 
 //#include "main.h" // temp
 
@@ -33,8 +34,8 @@ const unsigned int cUpdatesTillGravFieldChangeIsPossible = 10;
 PhysicsSubSystem::PhysicsSubSystem( GameEvents* pGameEvents)
 : m_pGravitationalAcc ( new Vector2D ), m_eventConnection1 (), m_eventConnection2 (),
   m_eventConnection3 (), m_eventConnection4 (), m_pGameEvents ( pGameEvents ), m_world (),
-  m_timeStep ( PHYS_DELTA_TIME ), m_velocityIterations( PHYS_ITERATIONS ), m_positionIterations( PHYS_ITERATIONS ),
-  m_contactListener( new ContactListener( m_pGameEvents ) )
+  m_timeStep ( PHYS_DELTA_TIME ), m_velocityIterations( PHYS_ITERATIONS ), m_positionIterations( PHYS_ITERATIONS )/*,
+  m_contactListener( new ContactListener( m_pGameEvents ) )*/
 {
     // Gravitationsvektor
     //b2Vec2 gravity(0.0f, -25.0f);
@@ -47,14 +48,40 @@ PhysicsSubSystem::PhysicsSubSystem( GameEvents* pGameEvents)
     m_world.reset( new b2World(gravity, doSleep) );
 
     // ContactListener
-    m_world->SetContactListener( m_contactListener.get() );
+    //m_world->SetContactListener( m_contactListener.get() );
 }
 
 PhysicsSubSystem::~PhysicsSubSystem()
 {
 }
 
-void PhysicsSubSystem::RegisterPhysicsComp( Entity* pEntity )
+boost::shared_ptr<b2BodyDef> convertToB2BodyDef(const BodyDef& bodyDef)
+{
+    boost::shared_ptr<b2BodyDef> pB2BodyDef = boost::make_shared<b2BodyDef>();
+    pB2BodyDef->angle = bodyDef.angle;
+    pB2BodyDef->angularDamping = bodyDef.angularDamping;
+    pB2BodyDef->angularVelocity = bodyDef.angularVelocity;
+    pB2BodyDef->bullet = bodyDef.bullet;
+    pB2BodyDef->fixedRotation = bodyDef.fixedRotation;
+    pB2BodyDef->linearDamping = bodyDef.linearDamping;
+    pB2BodyDef->linearVelocity = *bodyDef.linearVelocity.To_b2Vec2();
+    pB2BodyDef->position = *bodyDef.position.To_b2Vec2();
+    switch (bodyDef.type)
+    {
+    case BodyDef::staticBody:
+        pB2BodyDef->type = b2_staticBody;
+        break;
+    case BodyDef::dynamicBody:
+        pB2BodyDef->type = b2_dynamicBody;
+        break;
+    case BodyDef::kinematicBody:
+        pB2BodyDef->type = b2_kinematicBody;
+        break;
+    }
+    return pB2BodyDef;
+}
+
+void PhysicsSubSystem::RegisterPhysicsComp(Entity* pEntity)
 {
     CompPhysics* comp_phys = pEntity->GetComponent<CompPhysics>();
     if ( comp_phys != NULL ) // Falls es eine "CompPhysics"-Komponente gibt
@@ -62,21 +89,21 @@ void PhysicsSubSystem::RegisterPhysicsComp( Entity* pEntity )
         // get position from CompPosition, if it exists
         CompPosition* compPos = pEntity->GetComponent<CompPosition>();
         if (compPos)
-            comp_phys->m_bodyDef->position = *compPos->GetPosIgnoreCompPhys().To_b2Vec2();
+            comp_phys->m_bodyDef.position = compPos->GetPosIgnoreCompPhys();
 
-        comp_phys->m_body = m_world->CreateBody( comp_phys->m_bodyDef.get() );
+        comp_phys->m_body = m_world->CreateBody( convertToB2BodyDef(comp_phys->m_bodyDef).get() );
         comp_phys->m_body->SetUserData( comp_phys );
 
 		std::vector<CompShape*> compShapes = pEntity->GetComponents<CompShape>();
 
-    	for (unsigned int i=0; i < comp_phys->m_shapes.size(); i++)
+    	for (unsigned int i=0; i < comp_phys->m_shapeInfos.size(); i++)
     	{
     		boost::shared_ptr<b2FixtureDef> fixtureDef = boost::make_shared<b2FixtureDef>();
 
     		CompShape* pCompShape = NULL;
-    		for (unsigned int a=0; a < compShapes.size(); a++) // TODO: improve this!
+    		for (unsigned int a=0; a < compShapes.size(); a++) // TODO: could use get component by name instead
     		{
-    			if (compShapes[i]->GetName() == comp_phys->m_shapes[i]->compName)
+    			if (compShapes[i]->GetName() == comp_phys->m_shapeInfos[i]->compName)
     			{
     				pCompShape = compShapes[i];
     				break;
@@ -85,35 +112,19 @@ void PhysicsSubSystem::RegisterPhysicsComp( Entity* pEntity )
     		if (pCompShape == NULL)
     			continue; // error
 
-            fixtureDef->shape = pCompShape->toB2Shape();
-            fixtureDef->density = comp_phys->m_shapes[i]->density;
-            fixtureDef->friction = comp_phys->m_shapes[i]->friction;
-            fixtureDef->restitution = comp_phys->m_shapes[i]->restitution;
-            fixtureDef->isSensor = comp_phys->m_shapes[i]->isSensor;
-    		comp_phys->AddFixtureDef(fixtureDef, comp_phys->m_shapes[i]->compName); // TODO
-    	}
-
-        for ( unsigned int i = 0; i < comp_phys->m_fixtureDefs.size(); ++i )
-        {
-            std::pair< FixtureMap::iterator,bool> result (
-                comp_phys->m_fixtureList.insert( std::make_pair(
-                         comp_phys->m_fixtureDefs[i].first,
-                         FixtureInfo( NULL, comp_phys->m_fixtureDefs[i].second->density )
-                ) ) );
-            if ( result.second )
-            {
-                comp_phys->m_fixtureDefs[i].second->filter.maskBits = 1;
-                result.first->second.pFixture = comp_phys->m_body->CreateFixture( comp_phys->m_fixtureDefs[i].second.get() );
-                result.first->second.pFixture->SetUserData( comp_phys );
-            }
-            // TODO: else
+    		boost::shared_ptr<b2Shape> pB2Shape = pCompShape->toB2Shape(); // this object has to live so long till Box2D has made a copy of it in createFixture
+            fixtureDef->shape = pB2Shape.get();
+            fixtureDef->density = comp_phys->m_shapeInfos[i]->density;
+            fixtureDef->friction = comp_phys->m_shapeInfos[i]->friction;
+            fixtureDef->restitution = comp_phys->m_shapeInfos[i]->restitution;
+            fixtureDef->isSensor = comp_phys->m_shapeInfos[i]->isSensor;
+    		fixtureDef->filter.maskBits = 1;
+            b2Fixture* pFixture = comp_phys->m_body->CreateFixture( fixtureDef.get() );
+            pFixture->SetUserData( comp_phys );
+            comp_phys->m_fixtureMap.insert( std::make_pair(pCompShape->GetName(), pFixture) );
         }
 
         m_physicsComps.push_back( comp_phys );
-
-        // Definitionen löschen (sie werden nur für das Initialisieren gebraucht):
-        comp_phys->m_bodyDef.reset();
-        comp_phys->m_fixtureDefs.clear();
     }
 }
 
@@ -160,7 +171,7 @@ void PhysicsSubSystem::Update()
 
     for ( unsigned int i = 0; i < m_physicsComps.size(); ++i )
 	{
-		b2Body* pBody = m_physicsComps[i]->GetBody();
+		b2Body* pBody = m_physicsComps[i]->m_body;
 
         unsigned int highestPriority = 0;
         CompGravField* gravWithHighestPriority = NULL;
@@ -177,7 +188,7 @@ void PhysicsSubSystem::Update()
             //if ( compContact->GetFixture()->TestPoint( pBody->GetWorldCenter() ) ) // TODO: handle multiple shapes
             Vector2D vec (0.0f,-0.65f);
             vec.Rotate( pBody->GetAngle() );
-            if ( compContact->GetFixture()->TestPoint( pBody->GetPosition() + *vec.To_b2Vec2() ) ) // TODO: handle multiple shapes
+            if ( compContact->m_body->GetFixtureList()->TestPoint( pBody->GetPosition() + *vec.To_b2Vec2() ) ) // TODO: handle multiple shapes
             {
                 unsigned int pri = grav->GetPriority();
                 if ( pri > highestPriority )
@@ -260,7 +271,7 @@ void PhysicsSubSystem::CalculateSmoothPositions(float accumulator)
 {
     for ( unsigned int i = 0; i < m_physicsComps.size(); ++i )
     {
-        b2Body* pBody = m_physicsComps[i]->GetBody();
+        b2Body* pBody = m_physicsComps[i]->m_body;
 
         float extra_angle = pBody->GetAngularVelocity() * accumulator;
         float angle = pBody->GetAngle();

@@ -13,14 +13,12 @@
 #include "../GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
 
 #include "../Component.h"
-#include "../GameEvents.h"
 #include <set>
 #include <boost/scoped_ptr.hpp>
 
-class b2Body;
-class Vector2D;
-
 enum GravType { Directional, Radial };
+
+class Vector2D;
 
 //--------------------------------------------//
 //--------- CompGravField Klasse -------------//
@@ -28,9 +26,8 @@ enum GravType { Directional, Radial };
 class CompGravField : public Component
 {
 public:
-
     CompGravField();
-    ~CompGravField();
+
     const CompIdType& ComponentId() const { return COMPONENT_ID; }
     static const CompIdType COMPONENT_ID; // eindeutige ID für diese Komponentenart (gleich wie Klassennamen, siehe CompGravField.cpp)
 
@@ -49,21 +46,8 @@ public:
 
 	// Get the acceleration of a body with center of mass "centerOfMass"
 	Vector2D GetAcceleration(const Vector2D& centerOfMass) const;
-	//void ApplyForces() const;
-
-	//std::set<b2Body*>& GetBodiesInField() { return m_bodiesInField; }
-	//void ClearBodiesInField();
 
 private:
-	//RegisterObj m_registerObj1;
-	//RegisterObj m_registerObj2;
-
-	//void Contact( const Event* contactEvent );
-	//void DeleteContact( const Event* contactEvent );
-    //void OnGameUpdate( const Event* contactEvent );
-
-	// TODO: Save CompPhysics instead of b2Body
-	//std::set<b2Body*> m_bodiesInField;
 
 	GravType m_gravType;
 	boost::scoped_ptr<Vector2D> m_pGravitationDir;
@@ -71,7 +55,6 @@ private:
 	float m_strenght; // only with Radial
     unsigned int m_priority; // Gravitationsfeld-priorität: wenn sich 2 felder überlappen, gilt der mit der grössten priorität (0-100 is gültig)
 
-    //friend class PhysicsSubSystem; // Das Physik-System darf auf alles hier zugreifen!
 };
 //--------------------------------------------//
 //------- Ende CompGravField Klasse --------//

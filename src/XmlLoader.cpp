@@ -30,8 +30,6 @@
 
 #include "states/SlideShowState.h"
 
-// TODO: remove Box2D dependancies
-#include <Box2D/Box2D.h>
 #include <sstream>
 //#include <boost/scoped_ptr.hpp>
 #include <boost/bind.hpp>
@@ -158,17 +156,16 @@ void XmlLoader::LoadXmlToWorld( const char* pFileName, GameWorld* pGameWorld, Su
 
                 /*if ( saveContacts )
                     allowSleep = false;*/
-                b2BodyDef* body_def = new b2BodyDef;
-                body_def->allowSleep = allowSleep;
-                body_def->angle = angle;
-                body_def->angularDamping = angularDamping;
-                body_def->fixedRotation = fixedRotation;
-                body_def->bullet = isBullet;
-                body_def->linearDamping = linearDamping;
+                BodyDef body_def;
+                body_def.angle = angle;
+                body_def.angularDamping = angularDamping;
+                body_def.fixedRotation = fixedRotation;
+                body_def.bullet = isBullet;
+                body_def.linearDamping = linearDamping;
                 //body_def->position.Set( posX, posY );
                 //if (dynamic)
                     //body_def->type = b2_dynamicBody;
-                shared_ptr<CompPhysics> compPhysics( make_shared<CompPhysics>( body_def/*, saveContacts*/ ) );
+                shared_ptr<CompPhysics> compPhysics = make_shared<CompPhysics>();
                 compPhysics->SetLocalRotationPoint( rotationPoint );
                 compPhysics->SetLocalGravitationPoint( gravitationPoint );
 
@@ -190,9 +187,8 @@ void XmlLoader::LoadXmlToWorld( const char* pFileName, GameWorld* pGameWorld, Su
                     shapeElement->QueryFloatAttribute("friction", &friction);
                     shapeElement->QueryFloatAttribute("restitution", &restitution);
 
-
                     if (density != 0.0f)
-                        body_def->type = b2_dynamicBody;
+                        body_def.type = BodyDef::dynamicBody;
 
                     //body_def->
 
@@ -201,9 +197,10 @@ void XmlLoader::LoadXmlToWorld( const char* pFileName, GameWorld* pGameWorld, Su
 						isSensor = true;
 					}
 
-					compPhysics->AddShapeDef( boost::make_shared<CompPhysics::ShapeDef>(shapeName, density, friction, restitution, isSensor) );
+					compPhysics->AddShapeDef( boost::make_shared<ShapeDef>(shapeName, density, friction, restitution, isSensor) );
 				}
 
+				compPhysics->SetBodyDef(body_def);
                 component = compPhysics;
             }
             else if ( componentId == "CompPlayerController" )
@@ -794,23 +791,20 @@ void XmlLoader::SaveWorldToXml( const char* pFileName, GameWorld* pGameWorld )
             {
                 CompPhysics* compPhys = static_cast<CompPhysics*>(c_it->second.get());
 
-                //TiXmlElement* compElement = new TiXmlElement( "Component" );
-                //compElement->SetAttribute( "id", compPhys->ComponentId().c_str() );
-                //entityElement->LinkEndChild( compElement );
-
-                {
-                    TiXmlElement* posElement = new TiXmlElement( "pos" );
+                /*{
+                    T   iXmlElement* posElement = new TiXmlElement( "pos" );
                     posElement->SetDoubleAttribute( "x", compPhys->GetBody()->GetPosition().x );
                     posElement->SetDoubleAttribute( "y", compPhys->GetBody()->GetPosition().y );
                     posElement->SetDoubleAttribute( "a", compPhys->GetBody()->GetAngle() );
                     compElement->LinkEndChild( posElement );
-                }
+                }*/
 
-                if ( compPhys->IsAllowedToSleep() )
+                /* no longer suported
+                 * if ( compPhys->IsAllowedToSleep() )
                 {
                     TiXmlElement* sleepElement = new TiXmlElement( "dontSleep" );
                     compElement->LinkEndChild( sleepElement );
-                }
+                }*/
 
                 {
                     TiXmlElement* dampingElement = new TiXmlElement( "damping" );
@@ -825,35 +819,25 @@ void XmlLoader::SaveWorldToXml( const char* pFileName, GameWorld* pGameWorld )
                     compElement->LinkEndChild( frElement );
                 }
 
-                if ( compPhys->GetBody()->IsBullet() )
+                if ( compPhys->IsBullet() )
                 {
                     TiXmlElement* bulletElement = new TiXmlElement( "isBullet" );
                     compElement->LinkEndChild( bulletElement );
                 }
 
-                /*if ( compPhys->GetSaveContacts() )
-                {
-                    TiXmlElement* scElement = new TiXmlElement( "saveContacts" );
-                    compElement->LinkEndChild( scElement );
-                }*/
-
-                for ( FixtureMap::const_iterator it = compPhys->GetFixtureList()->begin(); it != compPhys->GetFixtureList()->end(); ++it )
-                //for ( b2Shape* s = compPhys->GetShape(); s; s = s->GetNext() )
+                for ( ShapeInfoVec::const_iterator it = compPhys->GetShapeInfos().begin(); it != compPhys->GetShapeInfos().end(); ++it )
                 {
                     TiXmlElement* shapeElement = new TiXmlElement( "shape" );
-                    shapeElement->SetAttribute( "comp_name", it->first.c_str() ); // Namen der Form
+                    shapeElement->SetAttribute( "comp_name", (*it)->compName ); // Namen der Form
                     compElement->LinkEndChild( shapeElement );
 
                     {
-                        // TODO: find density
-                        shapeElement->SetDoubleAttribute( "density", it->second.density );
-                        shapeElement->SetDoubleAttribute( "friction", it->second.pFixture->GetFriction() );
-                        shapeElement->SetDoubleAttribute( "restitution", it->second.pFixture->GetRestitution() );
+                        shapeElement->SetDoubleAttribute( "density", (*it)->density );
+                        shapeElement->SetDoubleAttribute( "friction", (*it)->friction );
+                        shapeElement->SetDoubleAttribute( "restitution", (*it)->restitution );
 
-                        if ( it->second.pFixture->IsSensor() )
-                        {
+                        if ( (*it)->isSensor )
                         	shapeElement->SetAttribute("isSensor", "true");
-                        }
                     }
                 }
             }
@@ -896,10 +880,6 @@ void XmlLoader::SaveWorldToXml( const char* pFileName, GameWorld* pGameWorld )
             {
                 CompVisualTexture* compTex = static_cast<CompVisualTexture*>(c_it->second.get());
 
-                /*TiXmlElement* compElement = new TiXmlElement( "Component" );
-                compElement->SetAttribute( "id", compTex->ComponentId().c_str() );
-                entityElement->LinkEndChild( compElement );*/
-
                 {
                     TiXmlElement* texElement = new TiXmlElement( "tex" );
                     texElement->SetAttribute( "name", compTex->GetTexture().c_str() );
@@ -910,24 +890,29 @@ void XmlLoader::SaveWorldToXml( const char* pFileName, GameWorld* pGameWorld )
             {
                 CompVisualMessage* compMsg = static_cast<CompVisualMessage*>(c_it->second.get());
 
-                /*TiXmlElement* compElement = new TiXmlElement( "Component" );
-                compElement->SetAttribute( "id", compMsg->ComponentId().c_str() );
-                entityElement->LinkEndChild( compElement );*/
-
                 {
                     TiXmlElement* textElement = new TiXmlElement( "msg" );
                     textElement->SetAttribute( "text", compMsg->GetMsg().c_str() );
                     compElement->LinkEndChild( textElement );
                 }
             }
+            else if ( c_it->second->ComponentId() == "CompPosition" )
+            {
+                CompPosition* compPos = static_cast<CompPosition*>(c_it->second.get());
+
+                std::stringstream ss;
+                ss << compPos->GetPosition().x;
+                compElement->SetAttribute( "x", ss.str().c_str() );
+                ss.str("");ss.clear();
+                ss << compPos->GetPosition().y;
+                compElement->SetAttribute( "y", ss.str().c_str() );
+                ss.str("");ss.clear();
+                ss << compPos->GetOrientation();
+                compElement->SetAttribute( "a", ss.str().c_str() );
+            }
             else if ( c_it->second->ComponentId() == "CompVisualAnimation" )
             {
                 CompVisualAnimation* compAnim = static_cast<CompVisualAnimation*>(c_it->second.get());
-
-                /*TiXmlElement* compElement = new TiXmlElement( "Component" );
-                compElement->SetAttribute( "id", compAnim->ComponentId().c_str() );
-                compElement->SetAttribute( "name", compAnim->GetName().c_str() );
-                entityElement->LinkEndChild( compElement );*/
 
                 {
                     TiXmlElement* animElement = new TiXmlElement( "anim" );

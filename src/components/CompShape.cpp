@@ -80,19 +80,14 @@ boost::shared_ptr<CompShapePolygon> CompShapePolygon::LoadFromXml(
 	return pPoly;
 }
 
-// TEMP
-//#include "../Entity.h"
-
-b2Shape* CompShapePolygon::toB2Shape()
+boost::shared_ptr<b2Shape> CompShapePolygon::toB2Shape()
 {
-	b2PolygonShape* poly_shape = new b2PolygonShape;
+    boost::shared_ptr<b2PolygonShape> poly_shape = boost::make_shared<b2PolygonShape>();
     b2Vec2 vertices[b2_maxPolygonVertices];
     for (unsigned int i=0; i<m_vertices.size() && i<b2_maxPolygonVertices; i++)
     {
     	vertices[i].Set(m_vertices[i]->x, m_vertices[i]->y);
     }
-    //std::string str = GetOwnerEntity()->GetId();
-    //int s = m_vertices.size();
     poly_shape->Set(vertices, m_vertices.size());
     return poly_shape;
 }
@@ -139,9 +134,9 @@ boost::shared_ptr<CompShapeCircle> CompShapeCircle::LoadFromXml(
 	return boost::make_shared<CompShapeCircle>(center, radius);
 }
 
-b2Shape* CompShapeCircle::toB2Shape()
+boost::shared_ptr<b2Shape> CompShapeCircle::toB2Shape()
 {
-    b2CircleShape* circle_shape = new b2CircleShape;
+    boost::shared_ptr<b2CircleShape> circle_shape = boost::make_shared<b2CircleShape>();
     circle_shape->m_radius = m_radius;
     circle_shape->m_p = *m_center->To_b2Vec2();
     return circle_shape;

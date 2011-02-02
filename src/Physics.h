@@ -15,8 +15,13 @@
 #include <vector>
 #include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>
+
+// TODO: use pimpl to hide the next two includes
+#include "Event.h"
+#if 0
 #include <Box2D/Box2D.h>
-#include "Event.h" // TODO: use pimpl to hide this
+#endif
+
 extern const float PHYS_DELTA_TIME;
 
 struct GameEvents;
@@ -68,6 +73,8 @@ private:
     int m_velocityIterations;
     int m_positionIterations;
 
+    // TODO: reimplement this
+#if 0
     class ContactListener : public b2ContactListener
     {
     public:
@@ -81,6 +88,7 @@ private:
     };
 
     boost::scoped_ptr<ContactListener> m_contactListener;
+#endif
 };
 
 #endif

@@ -29,15 +29,6 @@ struct b2BodyDef;
 struct b2FixtureDef;
 
 class CompGravField;
-
-// TODO: is this realy needed?
-struct FixtureInfo
-{
-    FixtureInfo(b2Fixture* f,float d) : pFixture (f), density (d) {}
-    b2Fixture* pFixture;
-    float density;
-};
-
 class CompPhysics;
 
 struct ContactInfo
@@ -48,9 +39,75 @@ struct ContactInfo
 	Vector2D normal; // contact normal (pointing away from body)
 };
 
-typedef std::string FixtureIdType;
-typedef std::map< FixtureIdType, FixtureInfo > FixtureMap;
+struct BodyDef
+{
+    BodyDef() :
+        angle ( 0.0f ),
+        angularVelocity ( 0.0f ),
+        linearDamping ( 0.0f ),
+        angularDamping ( 0.0f ),
+        fixedRotation ( false ),
+        bullet ( false ),
+        type ( staticBody )
+    {}
+
+    // NOTE: the comments in this struct are taken directry from Box2D b2BodyDef structure
+
+    // The world position of the body. Avoid creating bodies at the origin
+    // since this can lead to many overlapping shapes.
+    Vector2D position;
+
+    // The world angle of the body in radians.
+    float angle;
+
+    // The linear velocity of the body's origin in world coordinates.
+    Vector2D linearVelocity;
+
+    /// The angular velocity of the body.
+    float angularVelocity;
+
+    // Linear damping is use to reduce the linear velocity. The damping parameter
+    // can be larger than 1.0f but the damping effect becomes sensitive to the
+    // time step when the damping parameter is large.
+    float linearDamping;
+
+    // Angular damping is use to reduce the angular velocity. The damping parameter
+    // can be larger than 1.0f but the damping effect becomes sensitive to the
+    // time step when the damping parameter is large.
+    float angularDamping;
+
+    // Should this body be prevented from rotating? Useful for characters.
+    bool fixedRotation;
+
+    // Is this a fast moving body that should be prevented from tunneling through
+    // other moving bodies? Note that all bodies are prevented from tunneling through
+    // kinematic and static bodies. This setting is only considered on dynamic bodies.
+    // Warning: You should use this flag sparingly since it increases processing time.
+    bool bullet;
+
+    enum BodyType {
+        staticBody,
+        kinematicBody,
+        dynamicBody
+    };
+
+    BodyType type;
+};
+
+struct ShapeDef {
+    ShapeDef() : density (0.0f), friction (0.0f), restitution (0.0f), isSensor (false) {}
+    ShapeDef(CompNameType n, float d, float f, float r, bool s) : compName (n), density (d), friction (f), restitution (r), isSensor (s) {}
+
+    CompNameType compName; // the name of the CompShape component
+    float density;
+    float friction;
+    float restitution;
+    bool isSensor;
+};
+
 typedef std::vector<boost::shared_ptr<ContactInfo> > ContactVector;
+typedef std::vector< boost::shared_ptr<ShapeDef> > ShapeInfoVec;
+typedef std::map<CompNameType, b2Fixture*> FixtureMap;
 
 //--------------------------------------------//
 //----------- CompPhysics Klasse -------------//
@@ -58,40 +115,24 @@ typedef std::vector<boost::shared_ptr<ContactInfo> > ContactVector;
 class CompPhysics : public Component
 {
 public:
-
-    CompPhysics(b2BodyDef* pBodyDef);
+    CompPhysics(const BodyDef& rBodyDef = BodyDef());
     ~CompPhysics();
     const CompIdType& ComponentId() const { return COMPONENT_ID; }
 
-    // Eine zusätzliche geometrische Form für den Körper definieren
-    // Nur am Anfang benützen, bevor die Einheit (Entity) zur Welt hinzugefügt wurde!
-    void AddFixtureDef( const boost::shared_ptr<b2FixtureDef>& pFixtureDef, FixtureIdType name );
-
-    struct ShapeDef {
-        	ShapeDef() : density (0.0f), friction (0.0f), restitution (0.0f), isSensor (false) {}
-        	ShapeDef(CompNameType n, float d, float f, float r, bool s) : compName (n), density (d), friction (f), restitution (r), isSensor (s) {}
-
-        	CompNameType compName; // the name of the CompShape component
-        	float density;
-        	float friction;
-        	float restitution;
-        	bool isSensor;
-    };
+    void SetBodyDef(const BodyDef& rBodyDef) { m_bodyDef = rBodyDef; }
 
     // Add a shape to the object. Only do this before attaching the Entity to the world.
-    void AddShapeDef( const boost::shared_ptr<CompPhysics::ShapeDef>& pShapeDef );
+    void AddShapeDef( const boost::shared_ptr<ShapeDef>& pShapeDef );
 
-    // Box2D Body zurückgeben
-    const b2Body* GetBody() const;
-    b2Body* GetBody();
-    // Box2D Shape zurückgeben
-    b2Fixture* GetFixture() const;
-    b2Fixture* GetFixture( FixtureIdType name ) const; // Fixture mit bestimter Namen zurückgeben
-    const FixtureMap* GetFixtureList() const { return &m_fixtureList; }
-    //float GetDensity() { return m_density; }
+    bool SetShapeFriction(const CompNameType& shapeName, float friction);
+    const ShapeInfoVec& GetShapeInfos() const { return m_shapeInfos; }
+
+    float GetMass() const;
+    float GetAngle() const;
 
     ContactVector GetContacts(bool getSensors=false) const;
 
+    Vector2D GetCenterOfMassPosition() const;
     const Vector2D& GetSmoothPosition() const { return m_smoothPosition; }
     float GetSmoothAngle() const { return m_smoothAngle; }
 
@@ -100,19 +141,23 @@ public:
     const Vector2D& GetLocalGravitationPoint() const { return m_localGravitationPoint; }
     void SetLocalGravitationPoint(const Vector2D& gravPoint) { m_localGravitationPoint = gravPoint; }
 
+    Vector2D GetLinearVelocity() const;
+    void SetLinearVelocity(const Vector2D& vel);
+
+    void ApplyLinearImpulse(const Vector2D& impulse, const Vector2D& point);
+    void ApplyForce(const Vector2D& impulse, const Vector2D& point);
+
     bool IsAllowedToSleep() const;
     float GetLinearDamping() const;
     float GetAngularDamping() const;
     bool IsFixedRotation() const;
+    bool IsBullet() const;
     /*bool GetSaveContacts() const;*/
 
     void Rotate( float deltaAngle, const Vector2D& localPoint ); // Rotate the body by daltaAngle counterclockwise around a local point
 
 	// Grav
-    const CompGravField* GetGravField() const { return m_gravField; }
-	//void SetGravField(const CompGravField* pGravField);
-    // pGravField will be set to a pointer to the GravField, pUpdatesSinceLastGravFieldChange and pGravFieldIsChanging will be filled with data
-	//void GetGravFieldInfo(const CompGravField* pGravField, int* pUpdatesSinceLastGravFieldChange, bool* pGravFieldIsChanging) const;
+    const CompGravField* GetActiveGravField() const { return m_gravField; }
 
 	static const CompIdType COMPONENT_ID; // eindeutige ID für diese Komponentenart (gleich wie Klassennamen, siehe CompPhysics.cpp)
 
@@ -120,19 +165,15 @@ private:
 
     // Box2D Informationen
     b2Body* m_body;
-    boost::scoped_ptr<b2BodyDef> m_bodyDef;
-    std::vector< std::pair< FixtureIdType, boost::shared_ptr<b2FixtureDef> > > m_fixtureDefs;
-    FixtureMap m_fixtureList;
-
+    BodyDef m_bodyDef;
     Vector2D m_localRotationPoint;
     Vector2D m_localGravitationPoint;
 
     Vector2D m_smoothPosition;
     float m_smoothAngle;
 
-    //float m_density;
-
-    std::vector< boost::shared_ptr<ShapeDef> > m_shapes;
+    ShapeInfoVec m_shapeInfos;
+    FixtureMap m_fixtureMap;
 
 	const CompGravField* m_gravField;
     unsigned int m_remainingUpdatesTillGravFieldChangeIsPossible;

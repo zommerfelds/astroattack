@@ -55,6 +55,6 @@ Useful commands for developpment
 Building with warnings activated:
 ./configure CXXFLAGS="-Wall"
 
-Building with warnings activated and using colorgcc for color output
-./configure CXX="colorgcc -lstdc++" CXXFLAGS="-Wall"
+Building with warnings and debug symbols activated and using colorgcc for color output
+./configure CXX="colorgcc -lstdc++" CXXFLAGS="-Wall -g"
 

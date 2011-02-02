@@ -26,9 +26,6 @@
 #include <math.h>
 #include <boost/make_shared.hpp>
 
-// TODO: remove Box2D dependencies
-#include <Box2D/Box2D.h>
-
 #define CAMERA_POS (*m_pTranslation * -1)
 
 const float cMinScale = 0.7f;
@@ -240,11 +237,11 @@ void GameCamera::Update ( float deltaTime ) // time_span in seconds
 
                 std::vector<CompVisualAnimation*> player_anims = player->GetComponents<CompVisualAnimation>();
                 // ACHTUNG
-				const CompGravField* grav = player_phys->GetGravField();
+				const CompGravField* grav = player_phys->GetActiveGravField();
 				Vector2D upVector(0.0f,1.0f);
 				if ( grav!=NULL )
-					upVector = grav->GetAcceleration( Vector2D(player_phys->GetBody()->GetWorldCenter()) ).GetUnitVector()*-1;
-				bool right = upVector.IsRight( *m_pCursorPosInworld - Vector2D(player_phys->GetBody()->GetWorldCenter()) );
+					upVector = grav->GetAcceleration( player_phys->GetCenterOfMassPosition() ).GetUnitVector()*-1;
+				bool right = upVector.IsRight( *m_pCursorPosInworld - player_phys->GetCenterOfMassPosition() );
 				if ( m_playerOldHeading == 0 || right != (m_playerOldHeading==1) ) {
 					if ( m_framesTillAnimSwitchHeadingIsPossible == 0 ) {
 						if (right)

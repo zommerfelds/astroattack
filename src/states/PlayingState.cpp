@@ -201,7 +201,7 @@ void PlayingState::Draw( float accumulator )        // Spiel zeichnen
         CompPhysics* player_phys = static_cast<CompPhysics*>(player->GetComponent("CompPhysics"));
         if ( player_phys )
         {
-            const CompGravField* grav = player_phys->GetGravField();
+            const CompGravField* grav = player_phys->GetActiveGravField();
             if ( grav )
             {
                 Vector2D vec = grav->GetAcceleration( player_phys->GetBody()->GetWorldCenter() );

@@ -34,7 +34,7 @@ public:
     static boost::shared_ptr<CompShape> LoadFromXml(const TiXmlElement& compElem);
     virtual void StoreToXml(TiXmlElement& compElem) = 0;
 
-    virtual b2Shape* toB2Shape() = 0;
+    virtual boost::shared_ptr<b2Shape> toB2Shape() = 0;
 
     enum Type { Polygon, Circle };
     virtual Type GetType() const = 0;
@@ -55,7 +55,7 @@ public:
     static boost::shared_ptr<CompShapePolygon> LoadFromXml(const TiXmlElement& polyElem);
     void StoreToXml(TiXmlElement& compElem) {};
 
-    b2Shape* toB2Shape(); // up to the caller to delete the shape
+    boost::shared_ptr<b2Shape> toB2Shape(); // up to the caller to delete the shape
 
     void SetVertex(size_t i, const Vector2D& v);
 
@@ -85,7 +85,7 @@ public:
     static boost::shared_ptr<CompShapeCircle> LoadFromXml(const TiXmlElement& circleElem);
     void StoreToXml(TiXmlElement& compElem) {};
 
-    b2Shape* toB2Shape();
+    boost::shared_ptr<b2Shape> toB2Shape();
 
     float GetRadius() const { return m_radius; }
     const Vector2D& GetCenter() const { return *m_center; }

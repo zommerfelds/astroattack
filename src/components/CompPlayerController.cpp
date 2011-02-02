@@ -3,14 +3,15 @@
 |                ------------------------                   |
 |               Quelldatei von Astro Attack                 |
 |                  Christian Zommerfelds                    |
-|                          2009                             |
+|                          2011                             |
 \----------------------------------------------------------*/
 // CompPlayerController.h für mehr Informationen
 
 #include "../GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
 
-#include "../Physics.h"
 #include "CompPlayerController.h"
+
+#include "../Physics.h"
 #include "CompVisualAnimation.h"
 #include "CompGravField.h"
 #include "CompPhysics.h"
@@ -19,9 +20,6 @@
 #include "../Vector2D.h"
 
 #include <boost/bind.hpp>
-
-// TODO: remove Box2D dependencies
-#include <Box2D/Box2D.h>
 
 // eindeutige ID
 const CompIdType CompPlayerController::COMPONENT_ID = "CompPlayerController";
@@ -104,10 +102,10 @@ void CompPlayerController::OnUpdate()
     const float cMaxWalkAngle = 0.6f;
 
     // ACHTUNG
-	const CompGravField* grav = playerCompPhysics->GetGravField();
+	const CompGravField* grav = playerCompPhysics->GetActiveGravField();
 	Vector2D upVector(0.0f,1.0f);
 	if ( grav!=NULL )
-		upVector = grav->GetAcceleration( Vector2D(playerCompPhysics->GetBody()->GetWorldCenter()) ).GetUnitVector()*-1;
+		upVector = grav->GetAcceleration( playerCompPhysics->GetCenterOfMassPosition() ).GetUnitVector()*-1;
 
 	float upAngleAbs = upVector.GetAngle();
 
@@ -202,7 +200,7 @@ void CompPlayerController::OnUpdate()
         canWalkL = true;
 
     // Wie viel vom Impuls soll zurückgegeben werden (Reactio)?
-    const float cReactionJump = 1.0f;
+    const float cReactionJump = 0.6f;
     const float cReactionWalk = 0.7f;
     // Maximaler Winkel, wo Spieler gerade nach oben Springen kann (zwischen Y-Achse und Wandrichtung)
     const float cJumpAngle = (cPi*0.25f);
@@ -214,43 +212,43 @@ void CompPlayerController::OnUpdate()
         if ( !m_spaceKeyDownLastUpdate && isTouchingSth )
         {
             jumped = true;
-            b2Vec2 impulse( 0.0f, 0.0f ); // Impuls
+            Vector2D impulse( 0.0f, 0.0f ); // Impuls
 
             // Je nachdem ob der Spieler am Boden ist oder an der Wand anders abstossen
             if ( (minAngleL < cPi - cJumpAngle*2) || (minAngleR < cPi - cJumpAngle*2) ) // Normal Springen
             {
-                impulse = *(upVector*500).To_b2Vec2();
+                impulse = upVector*500;
             }
             else if ( m_pInputSubSystem->KeyState ( Right ) && minAngleR > cPi*2 - cJumpAngle*2 ) // Von Wand rechts abstossen
             {
-                impulse = *(upVector*600).Rotated(cPi*0.2f).To_b2Vec2();
+                impulse = (upVector*600).Rotated(cPi*0.2f);
 
-                Vector2D vel ( playerCompPhysics->GetBody()->GetLinearVelocity() );
+                Vector2D vel = playerCompPhysics->GetLinearVelocity();
                 vel = upVector * (vel*upVector);
-                playerCompPhysics->GetBody()->SetLinearVelocity( *vel.To_b2Vec2() );
+                playerCompPhysics->SetLinearVelocity( vel );
 
                 //m_bodyAngleAbs = maxAngleRel;
             }
             else if ( m_pInputSubSystem->KeyState ( Left ) && minAngleL > cPi*2 - cJumpAngle*2 ) // Von Wand links abstossen
             {
-                impulse = *(upVector*600).Rotated(-cPi*0.2f).To_b2Vec2();
+                impulse = (upVector*600).Rotated(-cPi*0.2f);
 
-                Vector2D vel ( playerCompPhysics->GetBody()->GetLinearVelocity() );
+                Vector2D vel = playerCompPhysics->GetLinearVelocity();
                 vel = upVector * (vel*upVector);
-                playerCompPhysics->GetBody()->SetLinearVelocity( *vel.To_b2Vec2() );
+                playerCompPhysics->SetLinearVelocity( vel );
 
                 //m_bodyAngleAbs = -maxAngleRel;
             }
             
             // Impuls auf Spielerfigur wirken lassen
-            playerCompPhysics->GetBody()->ApplyLinearImpulse( impulse , playerCompPhysics->GetBody()->GetWorldCenter() );
+            playerCompPhysics->ApplyLinearImpulse( impulse , playerCompPhysics->GetCenterOfMassPosition() );
             
             // Gegenimpulse auf andere Objekte (physikalisch korrektere Simulation)
             float amountPerBody = 1.0f/contacts.size();
             for (unsigned int i=0; i<contacts.size(); i++)
             {
                 // Gegenimpuls auf Grundobjekt wirken lassen
-                contacts[i]->comp->GetBody()->ApplyForce( -b2Vec2(impulse.x*cReactionJump*amountPerBody,impulse.y*cReactionJump*amountPerBody), *contacts[i]->point.To_b2Vec2() ); // TODO: get middle between 2 points
+                contacts[i]->comp->ApplyLinearImpulse( -impulse*cReactionJump*amountPerBody, contacts[i]->point ); // TODO: get middle between 2 points
             }
             m_spaceKeyDownLastUpdate = true;
         }
@@ -278,10 +276,10 @@ void CompPlayerController::OnUpdate()
             m_itJetPackVar->second = 0;
             m_rechargeTime = 0;
         }
-        if ( playerCompPhysics->GetBody()->GetLinearVelocity().y < maxVelYJetpack )
+        if ( playerCompPhysics->GetLinearVelocity().y < maxVelYJetpack )
 		{
 			Vector2D force (upVector * jetpack_force_magnitude);
-            playerCompPhysics->GetBody()->ApplyForce( b2Vec2(force.x,force.y) , playerCompPhysics->GetBody()->GetWorldCenter() );
+            playerCompPhysics->ApplyForce( force, playerCompPhysics->GetCenterOfMassPosition() );
 		}
 	}
 
@@ -306,16 +304,16 @@ void CompPlayerController::OnUpdate()
             force += force.GetUnitVector()*angle*steepness_compensation;
 
             // Impuls auf Spielerfigur wirken lassen
-            if ( playerCompPhysics->GetBody()->GetLinearVelocity().x < maxVelXWalk )
+            if ( playerCompPhysics->GetLinearVelocity().x < maxVelXWalk )
             {
-                playerCompPhysics->GetBody()->ApplyForce( b2Vec2(force.x,force.y) , playerCompPhysics->GetBody()->GetWorldCenter() );
+                playerCompPhysics->ApplyForce( force, playerCompPhysics->GetCenterOfMassPosition() );
 		        
                 // Gegenimpuls auf Grundobjekt wirken lassen
                 float factor = 1.0f;
-                float mass = contacts[iContactRight]->comp->GetBody()->GetMass();
+                float mass = contacts[iContactRight]->comp->GetMass();
                 if ( mass < smallMass )
                     factor = mass/smallMass;
-                contacts[iContactRight]->comp->GetBody()->ApplyForce( -b2Vec2(force.x*cReactionWalk*factor,force.y*cReactionWalk*factor), *contacts[iContactRight]->point.To_b2Vec2() ); // TODO: get middle between 2 points
+                contacts[iContactRight]->comp->ApplyForce( -force*cReactionWalk*factor, contacts[iContactRight]->point ); // TODO: get middle between 2 points
             }
             hasMovedOnGround = true;
         }
@@ -333,15 +331,15 @@ void CompPlayerController::OnUpdate()
             force += force.GetUnitVector()*angle*steepness_compensation;
 
             // Impuls auf Spielerfigur wirken lassen
-            if ( playerCompPhysics->GetBody()->GetLinearVelocity().x > -maxVelXWalk )
+            if ( playerCompPhysics->GetLinearVelocity().x > -maxVelXWalk )
             {
-                playerCompPhysics->GetBody()->ApplyForce( b2Vec2(force.x,force.y) , playerCompPhysics->GetBody()->GetWorldCenter() );
+                playerCompPhysics->ApplyForce( force, playerCompPhysics->GetCenterOfMassPosition() );
 
                 float factor = 1.0f;
-                float mass = contacts[iContactLeft]->comp->GetBody()->GetMass();
+                float mass = contacts[iContactLeft]->comp->GetMass();
                 if ( mass < smallMass )
                     factor = mass/smallMass;
-                contacts[iContactLeft]->comp->GetBody()->ApplyForce( -b2Vec2(force.x*cReactionWalk*factor,force.y*cReactionWalk*factor), *contacts[iContactLeft]->point.To_b2Vec2() ); // TODO: get middle between 2 points
+                contacts[iContactLeft]->comp->ApplyForce( -force*cReactionWalk*factor, contacts[iContactLeft]->point ); // TODO: get middle between 2 points
             }
             hasMovedOnGround = true;
         }
@@ -368,11 +366,11 @@ void CompPlayerController::OnUpdate()
             }
             // TODO: think about that
             //if ( (!isTouchingSth || usedJetpack) && playerCompPhysics->GetBody()->GetLinearVelocity().x < maxVelXFly )
-            if ( playerCompPhysics->GetBody()->GetLinearVelocity().x < maxVelXFly )
+            if ( playerCompPhysics->GetLinearVelocity().x < maxVelXFly )
 			{
 				Vector2D force (upVector * (usedJetpack?fly_jet_force_magnitude:fly_force_magnitude));
 				force.Rotate(-cPi*0.5f);
-                playerCompPhysics->GetBody()->ApplyForce( b2Vec2(force.x,force.y) , playerCompPhysics->GetBody()->GetWorldCenter() );
+                playerCompPhysics->ApplyForce( force, playerCompPhysics->GetCenterOfMassPosition() );
 			}
         }
         
@@ -386,11 +384,11 @@ void CompPlayerController::OnUpdate()
             }
             // TODO: same here
             //if ( (!isTouchingSth || usedJetpack) && playerCompPhysics->GetBody()->GetLinearVelocity().x > -maxVelXFly )
-            if ( playerCompPhysics->GetBody()->GetLinearVelocity().x > -maxVelXFly )
+            if ( playerCompPhysics->GetLinearVelocity().x > -maxVelXFly )
             {
 				Vector2D force (upVector * (usedJetpack?fly_jet_force_magnitude:fly_force_magnitude));
 				force.Rotate(cPi*0.5f);
-				playerCompPhysics->GetBody()->ApplyForce( b2Vec2(force.x,force.y) , playerCompPhysics->GetBody()->GetWorldCenter() );
+				playerCompPhysics->ApplyForce( force, playerCompPhysics->GetCenterOfMassPosition() );
 			}
         }
     }
@@ -459,7 +457,7 @@ void CompPlayerController::OnUpdate()
 	else if (m_bodyAngleAbs<-cPi)
 		m_bodyAngleAbs+=2*cPi;
     
-    playerCompPhysics->Rotate( m_bodyAngleAbs-cPi*0.5f-playerCompPhysics->GetBody()->GetAngle(), playerCompPhysics->GetLocalRotationPoint() );
+    playerCompPhysics->Rotate( m_bodyAngleAbs-cPi*0.5f-playerCompPhysics->GetAngle(), playerCompPhysics->GetLocalRotationPoint() );
     
     if ( !isTouchingSth )
         SetLowFriction( playerCompPhysics ); // wenn der Spieler in der Luft ist, soll die Reibung der "Schuhe" schon verkleinert werden
@@ -554,7 +552,7 @@ void CompPlayerController::SetLowFriction( CompPhysics* playerCompPhysics )
         return;
     m_currentFrictionIsLow = true;
 
-    playerCompPhysics->GetFixture("bottom")->SetFriction(0.3f);
+    playerCompPhysics->SetShapeFriction("bottom", 0.3f);
 }
 
 void CompPlayerController::SetHighFriction( CompPhysics* playerCompPhysics )
@@ -563,22 +561,5 @@ void CompPlayerController::SetHighFriction( CompPhysics* playerCompPhysics )
         return;
     m_currentFrictionIsLow = false;
 
-    playerCompPhysics->GetFixture("bottom")->SetFriction(4.0f);
-    //playerCompPhysics->GetFixture("mid2")->SetFriction(4.0f);
-
-    /*b2Filter filter;
-
-    filter.categoryBits = 1;
-    filter.groupIndex = 1;
-    filter.maskBits = 0;
-    playerCompPhysics->GetFixture("bottom")->SetFilterData( filter );
-
-    filter.maskBits = 1;
-    playerCompPhysics->GetFixture("bottom2")->SetFilterData( filter );*/
-    
-    // ACHTUNG!
-    //m_refilterFunc( playerCompPhysics->GetShape("bottom") );
-    //m_refilterFunc( playerCompPhysics->GetShape("bottom2") );
+    playerCompPhysics->SetShapeFriction("bottom", 4.0f);
 }
-
-// Astro Attack - Christian Zommerfelds - 2009
