@@ -80,14 +80,14 @@ void EditorState::Init()        // State starten
     m_pGameCamera->SetFollowPlayer ( false );
 
     XmlLoader loader;
-    loader.LoadXmlToWorld( gAaConfig.GetString("EditorLevel").c_str() /*"data/Levels/level.xml"*/, m_pGameWorld.get(), GetSubSystems() );
+    loader.LoadXmlToWorld( gAaConfig.GetString("EditorLevel").c_str(), m_pGameWorld.get(), GetSubSystems() );
 }
 
 void EditorState::Cleanup()     // State abbrechen
 {
     // Grafiken aus XML-Datei laden
     XmlLoader xml;
-    xml.SaveWorldToXml( gAaConfig.GetString("EditorLevel").c_str() /*"data/Levels/level.xml"*/, m_pGameWorld.get() );
+    xml.SaveWorldToXml( gAaConfig.GetString("EditorLevel").c_str(), m_pGameWorld.get() );
 
     m_pGameWorld.reset();
     m_pGameCamera.reset();
@@ -199,8 +199,6 @@ void EditorState::Update()      // Spiel aktualisieren
 
             m_pGameWorld->AddEntity( pEntity );
 
-
-
             m_currentPoint = 0;
         }
         m_createEntityKeyDownOld = true;
@@ -290,15 +288,6 @@ void EditorState::Draw( float accumulator )        // Spiel zeichnen
         pRenderer->DrawVector( *m_pClickedPoints[0] - *m_pClickedPoints[m_currentPoint-1], *m_pClickedPoints[m_currentPoint-1] );
     }
     
-    /*{
-        const b2AABB* bound = GetSubSystems()->physics->GetWorldBound();
-        float vertexCoord[8] = { bound->lowerBound.x, bound->lowerBound.y,
-                                 bound->lowerBound.x, bound->upperBound.y,
-                                 bound->upperBound.x, bound->upperBound.y,
-                                 bound->upperBound.x, bound->lowerBound.y };
-        pRenderer->DrawColorQuad( vertexCoord, 0.0f, 0.0f, 0.0f, 0.0f, true );
-    }*/
-    
     // GUI modus (Grafische Benutzeroberfläche)
     pRenderer->SetMatrix(RenderSubSystem::GUI);
     // Texte zeichnen
@@ -308,20 +297,25 @@ void EditorState::Draw( float accumulator )        // Spiel zeichnen
 
     if ( m_helpTextOn )
     {
-        pRenderer->DrawString( "Linksklick:   Eckpunkt erzeugen", "FontW_s", 2.6f, 0.02f );
-        pRenderer->DrawString( "Enter:   Aus Eckpunkte ein Polygon erzeugen", "FontW_s", 2.6f, 0.12f );
-        pRenderer->DrawString( "Backspace:   Letzter Eckpunkt löschen", "FontW_s", 2.6f, 0.22f );
-        pRenderer->DrawString( "Delete:   Alle aktuelle Eckpunkte löschen", "FontW_s", 2.6f, 0.32f );
-        pRenderer->DrawString( "Page Up/Down:   Textur wählen", "FontW_s", 2.6f, 0.42f );
-        pRenderer->DrawString( "H:   Hilfe ausblenden", "FontW_s", 2.6f, 0.52f );
-
-        pRenderer->DrawString( "* Wichtig *", "FontW_s", 2.6f, 0.72f );
-        pRenderer->DrawString( "Nur konvexe Polygone!", "FontW_s", 2.6f, 0.82f );
-        pRenderer->DrawString( "Eckpunkte im Gegenuhrzeigersinn erstellen!", "FontW_s", 2.6f, 0.92f );
+        pRenderer->DrawString( "Left click:\n"
+                               "Enter:\n"
+                               "Backspace:\n"
+                               "Delete:\n"
+                               "Page Up/Down:\n"
+                               "H:", "FontW_s", 3.3, 0.02f, AlignRight );
+        pRenderer->DrawString( "new vertex\n"
+                               "apply block\n"
+                               "delete last vertex\n"
+                               "delete all vetices\n"
+                               "change texture\n"
+                               "hide this help text", "FontW_s", 3.4f, 0.02f, AlignLeft );
+        pRenderer->DrawString( "* Important *\n"
+                               "Only draw convex polygons!\n"
+                               "Only draw in counter-clockwise order!\n", "FontW_s", 3.4f, 0.7f, AlignCenter );
     }
     else
     {
-        pRenderer->DrawString( "H für Hilfe", "FontW_s", 3.5f, 0.02f );
+        pRenderer->DrawString( "H for help", "FontW_s", 3.5f, 0.02f );
     }
 
     // Fadenkreuz zeichnen

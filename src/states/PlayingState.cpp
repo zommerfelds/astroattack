@@ -101,6 +101,9 @@ void PlayingState::Init()        // State starten
 
 void PlayingState::Cleanup()     // State abbrechen
 {
+    // loading screen
+    GetSubSystems()->renderer->DisplayTextScreen("p l e a s e    w a i t");
+
     GetSubSystems()->sound->StopMusic( 500 );
     GetSubSystems()->sound->FreeMusic( "music" );
 

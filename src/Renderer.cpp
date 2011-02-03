@@ -107,7 +107,7 @@ void RenderSubSystem::InitOpenGL ( int width, int height )
     glEnable( GL_LINE_SMOOTH );                                   // Kanten-Antialiasing bei Linien
     glEnable( GL_POINT_SMOOTH );                                  // Kanten-Antialiasing bei Punkten
     glLineWidth( 2.0f );                                          // Liniendicke
-    glPointSize( 6.0f );                                          // Punktgrösse
+    glPointSize( 2.0f );                                          // Punktgrösse
     //glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE ); // Farben sollen Texturen nicht überdecken
 
     // TEMP
@@ -214,6 +214,10 @@ void RenderSubSystem::DrawTexturedQuad( float texCoord[8], float vertexCoord[8],
         for ( int i = 0; i < 4; ++i)
             glVertex2f ( vertexCoord[2*i], vertexCoord[2*i+1] );
         glEnd();
+        /*glBegin( GL_POINTS );
+        for ( int i = 0; i < 4; ++i)
+            glVertex2f ( vertexCoord[2*i], vertexCoord[2*i+1] );
+        glEnd();*/
     }
 }
 
@@ -295,6 +299,10 @@ void RenderSubSystem::DrawTexturedPolygon ( const CompShapePolygon& rPoly, const
         for ( size_t iCountVertices = 0; iCountVertices < rPoly.GetVertexCount(); ++iCountVertices )
             glVertex2f ( rPoly.GetVertex( iCountVertices )->x, rPoly.GetVertex( iCountVertices )->y );
         glEnd();
+        /*glBegin( GL_POINTS );
+        for ( size_t iCountVertices = 0; iCountVertices < rPoly.GetVertexCount(); ++iCountVertices )
+            glVertex2f ( rPoly.GetVertex( iCountVertices )->x, rPoly.GetVertex( iCountVertices )->y );
+        glEnd();*/
     }
 }
 
@@ -629,6 +637,15 @@ void RenderSubSystem::UnregisterCompVisual( Entity* pEntity )
     {
         m_visualMsgComps.erase( msgComps[i] );
     }
+}
+
+void RenderSubSystem::DisplayTextScreen( const std::string& text )
+{
+    SetMatrix(GUI);
+    ClearScreen();
+    DrawOverlay( 0.0f, 0.0f, 0.0f, 1.0f );
+    DrawString( text, "FontW_m", 2.0f, 1.5f, AlignCenter, AlignCenter );
+    FlipBuffer();
 }
 
 void RenderSubSystem::DisplayLoadingScreen()

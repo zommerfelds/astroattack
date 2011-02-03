@@ -62,7 +62,8 @@ SlideShowState::~SlideShowState()
 void SlideShowState::Init()        // State starten
 {
     gAaLog.Write ( "Loading slide show..." );
-    GetSubSystems()->renderer->DisplayLoadingScreen();
+    //GetSubSystems()->renderer->DisplayLoadingScreen();
+    //GetSubSystems()->renderer->DisplayTextScreen("p l e a s e    w a i t");
     gAaLog.IncreaseIndentationLevel();
 
     // "Dia-Show" laden

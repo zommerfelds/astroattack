@@ -1,0 +1,145 @@
+<?xml version="1.0" ?>
+<level name="My level">
+    <Entity name="EdBlock00000">
+        <Component id="CompPhysics" name="std">
+            <damping linear="0.000000" angular="0.000000" />
+            <shape comp_name="shape1" density="0.000000" friction="0.300000" restitution="0.000000" />
+        </Component>
+        <Component id="CompPosition" name="std" x="0" y="0" a="0" />
+        <Component id="CompShape" name="shape1">
+            <polygon>
+                <vertex x="2.500000" y="-2.000000" />
+                <vertex x="2.000000" y="-3.000000" />
+                <vertex x="3.500000" y="-3.000000" />
+                <vertex x="3.000000" y="-2.000000" />
+            </polygon>
+        </Component>
+        <Component id="CompVisualTexture" name="std">
+            <tex name="Ancient Stone Slabs" />
+        </Component>
+    </Entity>
+    <Entity name="EdBlock00001">
+        <Component id="CompPhysics" name="std">
+            <damping linear="0.000000" angular="0.000000" />
+            <shape comp_name="shape1" density="0.000000" friction="0.300000" restitution="0.000000" />
+        </Component>
+        <Component id="CompPosition" name="std" x="0" y="0" a="0" />
+        <Component id="CompShape" name="shape1">
+            <polygon>
+                <vertex x="-5.000000" y="-5.000000" />
+                <vertex x="-5.000000" y="-10.500000" />
+                <vertex x="-4.500000" y="-10.500000" />
+                <vertex x="-4.500000" y="-5.000000" />
+            </polygon>
+        </Component>
+        <Component id="CompVisualTexture" name="std">
+            <tex name="Plaster Blocks" />
+        </Component>
+    </Entity>
+    <Entity name="EdBlock00002">
+        <Component id="CompPhysics" name="std">
+            <damping linear="0.000000" angular="0.000000" />
+            <shape comp_name="shape1" density="0.000000" friction="0.300000" restitution="0.000000" />
+        </Component>
+        <Component id="CompPosition" name="std" x="0" y="0" a="0" />
+        <Component id="CompShape" name="shape1">
+            <polygon>
+                <vertex x="4.500000" y="-5.000000" />
+                <vertex x="4.500000" y="-10.500000" />
+                <vertex x="5.000000" y="-10.500000" />
+                <vertex x="5.000000" y="-5.000000" />
+            </polygon>
+        </Component>
+        <Component id="CompVisualTexture" name="std">
+            <tex name="Plaster Blocks" />
+        </Component>
+    </Entity>
+    <Entity name="EdBlock00003">
+        <Component id="CompPhysics" name="std">
+            <damping linear="0.000000" angular="0.000000" />
+            <shape comp_name="shape1" density="0.000000" friction="0.300000" restitution="0.000000" />
+        </Component>
+        <Component id="CompPosition" name="std" x="0" y="0" a="0" />
+        <Component id="CompShape" name="shape1">
+            <polygon>
+                <vertex x="-4.500000" y="-5.500000" />
+                <vertex x="4.000000" y="-10.500000" />
+                <vertex x="4.500000" y="-10.500000" />
+                <vertex x="4.500000" y="-10.000000" />
+                <vertex x="-4.000000" y="-5.000000" />
+            </polygon>
+        </Component>
+        <Component id="CompVisualTexture" name="std">
+            <tex name="Plaster Blocks" />
+        </Component>
+    </Entity>
+    <Entity name="EdBlock00004">
+        <Component id="CompPhysics" name="std">
+            <damping linear="0.000000" angular="0.000000" />
+            <shape comp_name="shape1" density="0.000000" friction="0.300000" restitution="0.000000" />
+        </Component>
+        <Component id="CompPosition" name="std" x="0" y="0" a="0" />
+        <Component id="CompShape" name="shape1">
+            <polygon>
+                <vertex x="-4.500000" y="-5.000000" />
+                <vertex x="-4.500000" y="-5.500000" />
+                <vertex x="-4.000000" y="-5.000000" />
+            </polygon>
+        </Component>
+        <Component id="CompVisualTexture" name="std">
+            <tex name="Plaster Blocks" />
+        </Component>
+    </Entity>
+    <Entity name="EdBlock00005">
+        <Component id="CompPhysics" name="std">
+            <damping linear="0.000000" angular="0.000000" />
+            <shape comp_name="shape1" density="0.000000" friction="0.300000" restitution="0.000000" />
+        </Component>
+        <Component id="CompPosition" name="std" x="0" y="0" a="0" />
+        <Component id="CompShape" name="shape1">
+            <polygon>
+                <vertex x="4.500000" y="-5.000000" />
+                <vertex x="4.000000" y="-5.000000" />
+                <vertex x="-4.500000" y="-10.000000" />
+                <vertex x="-4.500000" y="-10.500000" />
+                <vertex x="-4.000000" y="-10.500000" />
+                <vertex x="4.500000" y="-5.500000" />
+            </polygon>
+        </Component>
+        <Component id="CompVisualTexture" name="std">
+            <tex name="Plaster Blocks" />
+        </Component>
+    </Entity>
+    <Entity name="ground">
+        <Component id="CompPhysics" name="std">
+            <damping linear="0.000000" angular="0.000000" />
+            <shape comp_name="shape1" density="0.000000" friction="0.300000" restitution="0.000000" />
+        </Component>
+        <Component id="CompPosition" name="std" x="0" y="-1" a="0" />
+        <Component id="CompShape" name="shape1">
+            <polygon>
+                <vertex x="-6.500000" y="-2.000000" />
+                <vertex x="-6.500000" y="-4.000000" />
+                <vertex x="6.500000" y="-4.000000" />
+                <vertex x="6.500000" y="-2.000000" />
+            </polygon>
+        </Component>
+        <Component id="CompVisualTexture" name="std">
+            <tex name="Plaster Blocks" />
+        </Component>
+    </Entity>
+    <Entity name="poste">
+        <Component id="CompPosition" name="std" x="0" y="0" a="0" />
+        <Component id="CompShape" name="shape1">
+            <polygon>
+                <vertex x="2.500000" y="2.500000" />
+                <vertex x="2.500000" y="-2.000000" />
+                <vertex x="3.000000" y="-2.000000" />
+                <vertex x="3.000000" y="2.500000" />
+            </polygon>
+        </Component>
+        <Component id="CompVisualTexture" name="std">
+            <tex name="Solar Plate" />
+        </Component>
+    </Entity>
+</level>

@@ -27,7 +27,6 @@
 - "Conditional jump or move depends on uninitialised value(s)" in SDL_PollEvent
 - Improve program shutdown (show message)
 - Use pimpl pattern
-- Hide Box2D details from outside the PhysicsSubSystem
 
 
 * Low priority *

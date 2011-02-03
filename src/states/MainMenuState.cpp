@@ -83,7 +83,7 @@ void MainMenuState::Init()        // State starten
 	using boost::make_shared;
 
     gAaLog.Write ( "Loading menu... " );
-    GetSubSystems()->renderer->DisplayLoadingScreen();
+    //GetSubSystems()->renderer->DisplayLoadingScreen();
     
     // Grafiken aus XML-Datei laden
     XmlLoader xml;
@@ -105,32 +105,32 @@ void MainMenuState::Init()        // State starten
     GetSubSystems()->gui->ShowGroup( menuNames[m_subMenu] );
 
     // *** Hauptbildschirm ***
-    GetSubSystems()->gui->InsertWidget( menuNames[Main], shared_ptr<Widget>(make_shared<WidgetLabel>( 0.1f, 0.9f, "Willkommen zu AstroAttack! [v" GAME_VERSION "]", GetSubSystems()->renderer->GetFontManager() )) );
+    GetSubSystems()->gui->InsertWidget( menuNames[Main], shared_ptr<Widget>(make_shared<WidgetLabel>( 0.1f, 0.9f, "Welcome to AstroAttack! [v" GAME_VERSION "]", GetSubSystems()->renderer->GetFontManager() )) );
 
 
     float x = 0.35f;
     float y = 0.36f;
     float w=0.18f,h=0.05f;
 
-    GetSubSystems()->gui->InsertWidget( menuNames[Main], shared_ptr<Widget>(make_shared<WidgetButton>( Rect(x,x+w,y,y+h), "Spiel starten", boost::bind( &MainMenuState::CallbackButPlay, this ), boost::bind( &MainMenuState::CallbackSound, this ) )) );
+    GetSubSystems()->gui->InsertWidget( menuNames[Main], shared_ptr<Widget>(make_shared<WidgetButton>( Rect(x,x+w,y,y+h), "Play", boost::bind( &MainMenuState::CallbackButPlay, this ), boost::bind( &MainMenuState::CallbackSound, this ) )) );
     y += 0.07f;
     GetSubSystems()->gui->InsertWidget( menuNames[Main], shared_ptr<Widget>(make_shared<WidgetButton>( Rect(x,x+w,y,y+h), "Editor", boost::bind( &MainMenuState::CallbackButEditor, this ), boost::bind( &MainMenuState::CallbackSound, this ) )) );
     y += 0.07f;
-    GetSubSystems()->gui->InsertWidget( menuNames[Main], shared_ptr<Widget>(make_shared<WidgetButton>( Rect(x,x+w,y,y+h), "Über", boost::bind( &MainMenuState::CallbackButCredits, this ), boost::bind( &MainMenuState::CallbackSound, this ) )) );
+    GetSubSystems()->gui->InsertWidget( menuNames[Main], shared_ptr<Widget>(make_shared<WidgetButton>( Rect(x,x+w,y,y+h), "About", boost::bind( &MainMenuState::CallbackButCredits, this ), boost::bind( &MainMenuState::CallbackSound, this ) )) );
     y += 0.07f;
-    GetSubSystems()->gui->InsertWidget( menuNames[Main], shared_ptr<Widget>(make_shared<WidgetButton>( Rect(x,x+w,y,y+h), "Optionen", boost::bind( &MainMenuState::CallbackButOptions, this ), boost::bind( &MainMenuState::CallbackSound, this ) )) );
+    GetSubSystems()->gui->InsertWidget( menuNames[Main], shared_ptr<Widget>(make_shared<WidgetButton>( Rect(x,x+w,y,y+h), "Options", boost::bind( &MainMenuState::CallbackButOptions, this ), boost::bind( &MainMenuState::CallbackSound, this ) )) );
     y += 0.07f;
-    GetSubSystems()->gui->InsertWidget( menuNames[Main], shared_ptr<Widget>(make_shared<WidgetButton>( Rect(x,x+w,y,y+h), "Beenden", boost::bind( &MainMenuState::CallbackButExit, this ), boost::bind( &MainMenuState::CallbackSound, this ) )) );
+    GetSubSystems()->gui->InsertWidget( menuNames[Main], shared_ptr<Widget>(make_shared<WidgetButton>( Rect(x,x+w,y,y+h), "Quit", boost::bind( &MainMenuState::CallbackButExit, this ), boost::bind( &MainMenuState::CallbackSound, this ) )) );
 
     // *** Zurückknöpfe für Untermenüs ***
     const float back_x=0.03f;
     const float back_y=0.92f;
-    GetSubSystems()->gui->InsertWidget( menuNames[1], shared_ptr<Widget>(make_shared<WidgetButton>( Rect(back_x,back_x+w,back_y,back_y+h), "Zurück", boost::bind( &MainMenuState::CallbackButBack, this ), boost::bind( &MainMenuState::CallbackSound, this ) )) );
-    GetSubSystems()->gui->InsertWidget( menuNames[2], shared_ptr<Widget>(make_shared<WidgetButton>( Rect(back_x,back_x+w,back_y,back_y+h), "Zurück", boost::bind( &MainMenuState::CallbackButBack, this ), boost::bind( &MainMenuState::CallbackSound, this ) )) );
-    //GetSubSystems()->gui->InsertWidget( menuNames[3], boost::shared_ptr<Widget>(new WidgetButton( Rect(back_x,back_x+w,back_y,back_y+h), "Zurück", boost::bind( &MainMenuState::CallbackButBack, this ), boost::bind( &MainMenuState::CallbackSound, this ) )) );
+    GetSubSystems()->gui->InsertWidget( menuNames[1], shared_ptr<Widget>(make_shared<WidgetButton>( Rect(back_x,back_x+w,back_y,back_y+h), "Back", boost::bind( &MainMenuState::CallbackButBack, this ), boost::bind( &MainMenuState::CallbackSound, this ) )) );
+    GetSubSystems()->gui->InsertWidget( menuNames[2], shared_ptr<Widget>(make_shared<WidgetButton>( Rect(back_x,back_x+w,back_y,back_y+h), "Back", boost::bind( &MainMenuState::CallbackButBack, this ), boost::bind( &MainMenuState::CallbackSound, this ) )) );
+    //GetSubSystems()->gui->InsertWidget( menuNames[3], boost::shared_ptr<Widget>(new WidgetButton( Rect(back_x,back_x+w,back_y,back_y+h), "Back", boost::bind( &MainMenuState::CallbackButBack, this ), boost::bind( &MainMenuState::CallbackSound, this ) )) );
 
     // *** Spielen Menü ***
-    GetSubSystems()->gui->InsertWidget( menuNames[Play], shared_ptr<Widget>(make_shared<WidgetLabel>(  0.14f, 0.21f, "Wähle ein Level:", GetSubSystems()->renderer->GetFontManager() )) );
+    GetSubSystems()->gui->InsertWidget( menuNames[Play], shared_ptr<Widget>(make_shared<WidgetLabel>(  0.14f, 0.21f, "Pick a level:", GetSubSystems()->renderer->GetFontManager() )) );
 
     // Leveln
     TiXmlDocument doc(cLevelSequenceFileName);
@@ -171,10 +171,10 @@ void MainMenuState::Init()        // State starten
                               "== AstroAttack " GAME_VERSION " ==", GetSubSystems()->renderer->GetFontManager() )) );
     y+=0.05f;
     GetSubSystems()->gui->InsertWidget( menuNames[Credits], shared_ptr<Widget>(make_shared<WidgetLabel>( x, y,
-                              "von Christian Zommerfelds", GetSubSystems()->renderer->GetFontManager() )) );
+                              "by Christian Zommerfelds", GetSubSystems()->renderer->GetFontManager() )) );
     y+=0.09f;
     GetSubSystems()->gui->InsertWidget( menuNames[Credits], shared_ptr<Widget>(make_shared<WidgetLabel>( x, y,
-                              "* Musik *", GetSubSystems()->renderer->GetFontManager() )) );
+                              "* Music *", GetSubSystems()->renderer->GetFontManager() )) );
     y+=0.04f;
     GetSubSystems()->gui->InsertWidget( menuNames[Credits], shared_ptr<Widget>(make_shared<WidgetLabel>( x, y,
                               " - Dj Mitch (SRT-M1tch) -> Menu", GetSubSystems()->renderer->GetFontManager() )) );
@@ -192,23 +192,23 @@ void MainMenuState::Init()        // State starten
                               " - soundsnap.com", GetSubSystems()->renderer->GetFontManager() )) );
     y+=0.09f;
     GetSubSystems()->gui->InsertWidget( menuNames[Credits], shared_ptr<Widget>(make_shared<WidgetLabel>( x, y,
-                              "* Bibliotheken *", GetSubSystems()->renderer->GetFontManager() )) );
+                              "* Libraries *", GetSubSystems()->renderer->GetFontManager() )) );
     y+=0.04f;
     GetSubSystems()->gui->InsertWidget( menuNames[Credits], shared_ptr<Widget>(make_shared<WidgetLabel>( x, y,
                               " - OpenGL, SDL, DevIL, GLFT, SDL_mixer, Box2D, TinyXML, UTF8-CPP", GetSubSystems()->renderer->GetFontManager() )) );
     y+=0.09f;
     GetSubSystems()->gui->InsertWidget( menuNames[Credits], shared_ptr<Widget>(make_shared<WidgetLabel>( x, y,
-                              "Danke fürs Spielen!", GetSubSystems()->renderer->GetFontManager() )) );
+                              "Thanks for playing!", GetSubSystems()->renderer->GetFontManager() )) );
 
     // *** Optionen ***
-    GetSubSystems()->gui->InsertWidget( menuNames[Options], shared_ptr<Widget>(make_shared<WidgetLabel>(  0.3f, 0.1f, "Auflösung:", GetSubSystems()->renderer->GetFontManager() )) );
-    GetSubSystems()->gui->InsertWidget( menuNames[Options], shared_ptr<Widget>(make_shared<WidgetLabel>(  0.1f, 0.8f, "Erweiterte Optionen können in der Datei \"config.xml\" geändert werden.", GetSubSystems()->renderer->GetFontManager() )) );
+    GetSubSystems()->gui->InsertWidget( menuNames[Options], shared_ptr<Widget>(make_shared<WidgetLabel>(  0.3f, 0.1f, "Screen resolution:", GetSubSystems()->renderer->GetFontManager() )) );
+    GetSubSystems()->gui->InsertWidget( menuNames[Options], shared_ptr<Widget>(make_shared<WidgetLabel>(  0.1f, 0.8f, "Please change \"config.xml\" for more options.", GetSubSystems()->renderer->GetFontManager() )) );
     
     x=0.3f;
     y=0.92f;
-    GetSubSystems()->gui->InsertWidget( menuNames[Options], shared_ptr<Widget>(make_shared<WidgetButton>( Rect(x,x+w,y,y+h), "Abbrechen", boost::bind( &MainMenuState::CallbackButDiscardConfig, this ), boost::bind( &MainMenuState::CallbackSound, this ) )) );
+    GetSubSystems()->gui->InsertWidget( menuNames[Options], shared_ptr<Widget>(make_shared<WidgetButton>( Rect(x,x+w,y,y+h), "Cancel", boost::bind( &MainMenuState::CallbackButDiscardConfig, this ), boost::bind( &MainMenuState::CallbackSound, this ) )) );
     x=0.5f;
-    GetSubSystems()->gui->InsertWidget( menuNames[Options], shared_ptr<Widget>(make_shared<WidgetButton>( Rect(x,x+w,y,y+h), "Annehmen", boost::bind( &MainMenuState::CallbackButApplyConfig, this ), boost::bind( &MainMenuState::CallbackSound, this ) )) );
+    GetSubSystems()->gui->InsertWidget( menuNames[Options], shared_ptr<Widget>(make_shared<WidgetButton>( Rect(x,x+w,y,y+h), "Apply", boost::bind( &MainMenuState::CallbackButApplyConfig, this ), boost::bind( &MainMenuState::CallbackSound, this ) )) );
     
     // Auflösungen
     x=0.03f;
@@ -225,6 +225,9 @@ void MainMenuState::Init()        // State starten
 
 void MainMenuState::Cleanup()     // State abbrechen
 {
+    // loading screen
+    GetSubSystems()->renderer->DisplayTextScreen("p l e a s e    w a i t");
+
     if ( m_appliedConfig == false )
         gAaConfig.DiscardConfig();
     GetSubSystems()->sound->StopMusic( 300 );

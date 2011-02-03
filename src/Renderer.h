@@ -95,6 +95,7 @@ public:
     // ****************************************//
 
     void DisplayLoadingScreen();
+    void DisplayTextScreen( const std::string& text );
 
     const TextureManager* GetTextureManager() const { return m_pTextureManager.get(); }
     const AnimationManager* GetAnimationManager() const { return m_pAnimationManager.get(); }
