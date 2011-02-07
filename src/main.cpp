@@ -13,18 +13,20 @@
 #include "GameApp.h"
 #include "Exception.h" // Ausnahmen im Program
 
+#include <vector>
+#include <string>
+
 Logger gAaLog( LOG_FILE_NAME ); // Haupt-Log-Datei erstellen, wo wichtige Ereignisse aufgeschrieben werden.
 bool gRestart = false;
 
-void ParseArguments( int argc, char* args[] ); // Programmargumente verarbeiten
-
 // Programmstart!
-int main ( int argc, char* args[] )
+int main ( int argc, char* argv[] )
 {
     //_CrtSetDbgFlag(_CrtSetDbgFlag(0)|_CRTDBG_CHECK_ALWAYS_DF);
     //_crtBreakAlloc = 0x0108D008;
     //_ASSERTE( _CrtCheckMemory( ) );
-    ParseArguments( argc, args );
+
+    std::vector<std::string> args (argv+1, argv+argc);
 
     if ( gAaLog.IsOpen()==false ) // Fehler beim Öffnen?
 	{
@@ -38,14 +40,12 @@ int main ( int argc, char* args[] )
 
         try
         {
-            GameApp AaApp;         // AstroAttack Anwendung
-            AaApp.Init(argc,args); // Programm initialisieren
-            AaApp.Run();           // Hauptschleife starten
-            AaApp.DeInit();        // Programm deinitialisieren
+            GameApp aaApp(args);   // create application object
+            aaApp.Run();           // run the game!
         }
         catch ( Exception &e ) // falls es einen Fehler gab (Ausnahmebehandlung)
         {
-            DispError( e.getMsg() ); // Diesen anzeigen
+            DispError( e.GetMsg() ); // Diesen anzeigen
         }
         catch ( std::bad_alloc& ) // Falls nicht genügend Speicherplatz für alle Objekte gefunden wurde wird diese Ausnahme aufgerufen
         {
@@ -74,40 +74,6 @@ int main ( int argc, char* args[] )
     }
 
     return 0; // Programm beenden!
-}
-
-// Programmargumente verarbeiten
-void ParseArguments( int argc, char* args[] )
-{
-    // TODO: add option to load directly in a level
-    if (argc > 1)
-    {
-        bool quit = false;
-        std::string strArg = args[1];
-        std::string titleStr = "";
-        std::string outputStr = "";
-        if ( strArg=="-v" || strArg=="--version" )
-        {
-            outputStr = GAME_NAME " " GAME_VERSION "\n";
-            titleStr = "Version";
-            quit = true;
-        }
-        else if ( strArg=="-h" || strArg=="--help" )
-        {
-            outputStr = "Usage: " GAME_NAME " [options]\n"
-                        "-v, --version = show version\n"
-                        "-h, --help = show help\n"
-                        "See readme.txt for more info.\n";
-            titleStr = "Help";
-            quit = true;
-        }
-        /*else
-            OsMsgBox( "Usage: " GAME_NAME " [option]\n -v, -version = show version\n-h, -hlep = show help\n", "Unknown argument" );*/
-        if ( outputStr != "" )
-            OsMsgBox( outputStr.c_str(), titleStr.c_str() );
-        if ( quit )
-            exit(0);
-    }
 }
 
 // Astro Attack - Christian Zommerfelds - 2009

@@ -28,21 +28,16 @@ class Exception
 public:
     Exception ( const std::string &iMsg ) // std::string als Parameter
     {
-        setMsg ( iMsg );
+        SetMsg ( iMsg );
     }
 
-    Exception ( const char *pc )
-    {
-        setMsg ( std::string ( pc ) ); // normale char* Zeichenkette als Parameter
-    }
-
-    const std::string &getMsg() const // Abfrage nach dem Errorstring
+    const std::string& GetMsg() const // Abfrage nach dem Errorstring
     {
         return m_msg;
     }
 
 private:
-    void setMsg ( std::string message )
+    void SetMsg ( std::string message )
     {
         m_msg = message;
     }

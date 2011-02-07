@@ -66,6 +66,8 @@ private:
     std::string m_gameOverMessage;
 
     std::string m_levelFileName;
+
+    bool m_showLoadingScreenAtCleanUp;
 };
 //--------------------------------------------//
 //-------- Ende PlayingState Klasse ----------//

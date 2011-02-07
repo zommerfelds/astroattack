@@ -52,7 +52,8 @@ PlayingState::PlayingState( SubSystems* pSubSystems, std::string levelFileName )
   m_pGameCamera ( new GameCamera( GetSubSystems()->input.get(), GetSubSystems()->renderer.get(), m_pGameWorld.get() ) ),
   m_eventConnection1 (), m_eventConnection2 (),
   m_curentDeleteSet (1), m_wantToEndGame( false ), m_alphaOverlay( 0.0 ),
-  m_levelFileName ( levelFileName )
+  m_levelFileName ( levelFileName ),
+  m_showLoadingScreenAtCleanUp ( true )
 {
     // TEMP!
     levelName = levelFileName;
@@ -102,7 +103,8 @@ void PlayingState::Init()        // State starten
 void PlayingState::Cleanup()     // State abbrechen
 {
     // loading screen
-    GetSubSystems()->renderer->DisplayTextScreen("p l e a s e    w a i t");
+    if ( m_showLoadingScreenAtCleanUp )
+        GetSubSystems()->renderer->DisplayTextScreen("p l e a s e    w a i t");
 
     GetSubSystems()->sound->StopMusic( 500 );
     GetSubSystems()->sound->FreeMusic( "music" );
@@ -280,6 +282,7 @@ void PlayingState::OnEntityDeleted( Entity* pEntity )
 
 void PlayingState::OnLevelEnd(bool /*win*/, std::string msg)
 {
+    m_showLoadingScreenAtCleanUp = false;
     m_wantToEndGame = true;
     m_gameOverMessage = msg;
 }

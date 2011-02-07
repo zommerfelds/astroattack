@@ -31,21 +31,27 @@
 #include <boost/bind.hpp>
 #include <boost/make_shared.hpp>
 #include <string>
+#include <iostream>
 
 const char* cMainLogFileName = "data/config.xml";
 
 Configuration gAaConfig; // Spieleinstellungen.
 
 // Konstruktor
-GameApp::GameApp() : m_isInit ( false ),
+GameApp::GameApp(const std::vector<std::string>& args) :
         m_pSubSystems ( new SubSystems ),
         m_quit ( false ),
         m_eventConnection (),
         m_fpsMeasureStart ( 0 ),
-        m_framesCounter ( 0 )
+        m_framesCounter ( 0 ),
+        m_startGame ( true ),
+        m_fullScreen ( false ),
+        m_overRideFullScreen ( false )
 {
     Component::gameEvents = m_pSubSystems->events.get();
     m_eventConnection = m_pSubSystems->events->quitGame.RegisterListener( boost::bind( &GameApp::OnQuit, this ) );
+
+    ParseArguments(args);
 }
 SubSystems::SubSystems()
       : stateManager ( new StateManager ),
@@ -75,20 +81,16 @@ SubSystems::~SubSystems()
 // Destruktor
 GameApp::~GameApp()
 {
-    if ( m_isInit )
-        DeInit();
 }
 
 // Alle Objekte von GameApp initialisieren
-void GameApp::Init( int argc, char* args[] )
+void GameApp::Init()
 {
-    gAaLog.Write ( "* Started initialization *\n\n" );  // In Log-Datei schreiben
+    gAaLog.Write( "* Started initialization *\n\n" );  // In Log-Datei schreiben
     gAaLog.IncreaseIndentationLevel();                  // Text ab jetzt einrücken
 
     // Einstellung lesen
     gAaConfig.Load(cMainLogFileName);
-
-    ParseArguments( argc, args );
 
     //========================= SDL ============================//
     if ( !InitSDL() ) // SDL initialisieren
@@ -116,13 +118,12 @@ void GameApp::Init( int argc, char* args[] )
     gAaLog.DecreaseIndentationLevel(); // Nicht mehr einrücken
     gAaLog.Write ( "\n* Finished initialization *\n" );
 
-    boost::shared_ptr<MainMenuState> menuState ( boost::make_shared<MainMenuState>( m_pSubSystems.get() ) );
-    m_pSubSystems->stateManager->ChangeState( menuState );
-    //boost::shared_ptr<PlayingState> playState ( new PlayingState( m_pSubSystems.get() ) );
-    //m_pSubSystems->stateManager->ChangeState( playState );
-
-    // Ja, initialisation war erfolgreich!
-    m_isInit = true;
+    boost::shared_ptr<GameState> gameState;
+    if (m_levelToLoad.empty())
+        gameState = boost::make_shared<MainMenuState>( m_pSubSystems.get() );
+    else
+        gameState = boost::make_shared<PlayingState>( m_pSubSystems.get(), m_levelToLoad );
+    m_pSubSystems->stateManager->ChangeState( gameState );
 }
 
 // Alles deinitialisieren
@@ -148,15 +149,16 @@ void GameApp::DeInit()
 
     gAaLog.DecreaseIndentationLevel();
     gAaLog.Write ( "\n* Finished deinitialization *\n" );   // In Log-Datei schreiben
-    m_isInit = false;
 }
 
 // Nach der Initialisation Spiel m_fpsMeasureStarten (d.h. Hauptschleife m_fpsMeasureStarten)
 void GameApp::Run()
 {
-    if ( m_isInit == false )
-        throw Exception ( gAaLog.Write ( "Error in GameApp::Run(): Game is not initialized!" ) );
+    if (!m_startGame)
+        return;
+    Init();
     MainLoop();
+    DeInit();
 }
 
 // Kleine vereinfachungen der Hauptfunktionen
@@ -306,13 +308,51 @@ void GameApp::CalcFPS( Uint32 curTime )
 }
 
 // Programmargumente verarbeiten
-void GameApp::ParseArguments( int argc, char* args[] )
+void GameApp::ParseArguments( const std::vector<std::string>& args )
 {
-    if (argc > 1)
+    std::string outputStr;
+
+    for(size_t i=0; i<args.size(); ++i)
     {
-        std::string strArg = args[1];
-        if ( strArg=="-fs" )
-            gAaConfig.SetInt( "FullScreen", 1 );
+        if ( args[i]=="-f" || args[i]=="--full-screen" )
+        {
+            m_fullScreen = true;
+            m_overRideFullScreen = true;
+        }
+        else if ( args[i]=="-w" || args[i]=="--windowed" )
+        {
+            m_fullScreen = false;
+            m_overRideFullScreen = true;
+        }
+        else if ( (args[i]=="-l" || args[i]=="--level") && i+1<args.size())
+        {
+            m_levelToLoad = args[++i];
+        }
+        else if ( args[i]=="-v" || args[i]=="--version" )
+        {
+            outputStr = GAME_NAME " " GAME_VERSION "\n";
+            m_startGame = false;
+            break;
+        }
+        else
+        {
+            if ( !(args[i]=="-h" || args[i]=="--help") )
+                outputStr = "Argument not recognized: " + args[i] + "\n";
+            outputStr += "Usage: " GAME_NAME " [options]\n"
+                        " -v, --version          :  show version\n"
+                        " -h, --help             :  show help\n"
+                        " -l, --level LEVELFILE  :  directly load a level file at startup\n"
+                        " -f, --full-screen      :  start in full screen mode\n"
+                        "See README.txt for more info.\n";
+            m_startGame = false;
+            break;
+        }
+    }
+
+    if ( outputStr != "" )
+    {
+        std::cout << outputStr;
+        std::cout.flush();
     }
 }
 

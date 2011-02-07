@@ -25,7 +25,7 @@
 - Check widescreen mode
 - Bug: can't fly away from wall if you jump near a wall
 - "Conditional jump or move depends on uninitialised value(s)" in SDL_PollEvent
-- Improve program shutdown (show message)
+- Improve program shutdown
 - Use pimpl pattern
 
 

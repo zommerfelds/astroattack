@@ -4,7 +4,7 @@
 |               Quelldatei von Astro Attack                 |
 |                  Christian Zommerfelds                    |
 |                          2009                             |
-\----------------------------------------------------------*/
+\-------------------------------------------------------true---*/
 
 #include "GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
 
@@ -68,12 +68,18 @@ bool GameApp::InitVideo()
     
     // Videomodus einrichten. Überprüfen ob es Fehler gab.
     Uint32 flags = SDL_OPENGL;
-    if ( gAaConfig.GetInt("FullScreen") )
-        flags |= SDL_FULLSCREEN;
-    if ( SDL_SetVideoMode ( gAaConfig.GetInt("ScreenWidth"), gAaConfig.GetInt("ScreenHeight"), gAaConfig.GetInt("ScreenBpp"), flags ) == NULL )
+    if ( m_overRideFullScreen )
     {
-        return false;
+        if ( m_fullScreen )
+            flags |= SDL_FULLSCREEN;
     }
+    else if ( gAaConfig.GetInt("FullScreen") )
+        flags |= SDL_FULLSCREEN;
+
+    // set up screen
+    if ( !SDL_SetVideoMode ( gAaConfig.GetInt("ScreenWidth"), gAaConfig.GetInt("ScreenHeight"), gAaConfig.GetInt("ScreenBpp"), flags ) )
+        return false;
+
     gAaLog.Write ( "[ Done ]\n\n" );
 
     gAaLog.IncreaseIndentationLevel();

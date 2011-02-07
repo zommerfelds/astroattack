@@ -15,6 +15,9 @@
 #include <SDL/SDL.h>
 #include "GameEvents.h"
 
+#include <vector>
+#include <string>
+
 //struct GameEvents;
 class InputSubSystem;
 class PhysicsSubSystem;
@@ -34,15 +37,14 @@ struct SubSystems;
 class GameApp
 {
 public:
-    GameApp();
+    GameApp(const std::vector<std::string>& args);
     ~GameApp();
 
-    void Init( int argc, char* args[] );    // Astro Attack initialisieren
-    void DeInit();  // Speicher wieder freigeben
     void Run();     // Spiel starten (nach der Initialisierung ), d.h. Hauptschleife starten
 
 private:
-    bool m_isInit; // is das spiel initialisiert?
+    void Init();    // Astro Attack initialisieren
+    void DeInit();  // Speicher wieder freigeben
 
     void MainLoop(); // Hauptschleife
 
@@ -60,12 +62,17 @@ private:
     Uint32 m_fpsMeasureStart;
     Uint32 m_framesCounter;
 
+    std::string m_levelToLoad; // empty if shoud go to main menu
+    bool m_startGame; // true if the game should be started (or false if only a message should be printed i.e. '--version')
+
+    bool m_fullScreen;         // if the game should be started in full screen mode
+    bool m_overRideFullScreen; // if the variable above should override the full screen option in the configuration file
+
     // Initialisationsfunktionen in Init.cpp
     bool InitSDL();
     bool InitVideo();
-    //void DisplayLoadingScreen();
 
-    void ParseArguments( int argc, char* args[] ); // Programmargumente verarbeiten
+    void ParseArguments( const std::vector<std::string>& args ); // Programmargumente verarbeiten
 };
 
 // Alle wichtigen Untersysteme des Spieles
