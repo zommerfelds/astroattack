@@ -17,10 +17,8 @@
 #include "../Component.h"
 #include "../GameEvents.h"
 
-#include <boost/function.hpp>
 #include <map>
 
-class b2Shape;
 class CompPhysics;
 
 class InputSubSystem; // benötigt Eingabesystem für die Tasten zu lesen
@@ -31,10 +29,13 @@ class InputSubSystem; // benötigt Eingabesystem für die Tasten zu lesen
 class CompPlayerController : public Component
 {
 public:
-    CompPlayerController( const InputSubSystem*, std::map<const std::string, int>::iterator itJetPackVar, boost::function1<void,b2Shape*> refiltelFunc );
+    CompPlayerController( const InputSubSystem*, std::map<const std::string, int>::iterator itJetPackVar );
     ~CompPlayerController();
     const CompIdType& ComponentId() const { return COMPONENT_ID; }
     static const CompIdType COMPONENT_ID;
+
+    static boost::shared_ptr<CompPlayerController> LoadFromXml(const pugi::xml_node& compElem, const InputSubSystem*, std::map<const std::string, int>::iterator itJetPackVar);
+    virtual void WriteToXml(pugi::xml_node& compElem) const {}; // this component has no XML data
 
 private:
     const InputSubSystem* m_pInputSubSystem;
@@ -48,7 +49,6 @@ private:
 
     EventConnection m_eventConnection;
     std::map<const std::string, int>::iterator m_itJetPackVar;
-    boost::function1<void,b2Shape*> m_refilterFunc;
 
     // Player controller fields
     bool m_spaceKeyDownLastUpdate;     // ob die Leerschlagtaste letztes Frame gerade gedrückt wurde

@@ -19,9 +19,9 @@
 #include "../Component.h"
 #include "../Texture.h"
 
-#include "CompShape.h"
+#include <map>
 
-class TiXmlElement;
+namespace pugi { class xml_node; }
 
 //--------------------------------------------//
 //-------- CompVisualTexture Klasse ----------//
@@ -38,14 +38,15 @@ public:
     void SetTexture( TextureIdType texId ) { m_textureId = texId; }
     // Aktive Textur
     TextureIdType GetTexture() const { return m_textureId; }
-    TextureIdType GetEdgeTexture(unsigned int edgeNum) const;
+    size_t GetNumTexturedEdges() const { return m_edgeTexId.size(); }
+    TextureIdType GetEdgeTexture(size_t edgeNum) const;
 
-    static boost::shared_ptr<CompVisualTexture> LoadFromXml(const TiXmlElement& compElem);
-    void StoreToXml(TiXmlElement& compElem);
+    static boost::shared_ptr<CompVisualTexture> LoadFromXml(const pugi::xml_node& compElem);
+    void WriteToXml(pugi::xml_node& compNode) const;
 
 private:
     TextureIdType m_textureId;
-    TextureIdType m_edgeTexId[CompShapePolygon::cMaxVertices];
+    std::map<size_t, TextureIdType> m_edgeTexId;
 };
 //--------------------------------------------//
 //------ Ende CompVisualTexture Klasse -------//

@@ -346,11 +346,6 @@ void PhysicsSubSystem::ContactListener::CheckContactPoint(const b2ContactPoint* 
     }
 }
 */
-void PhysicsSubSystem::Refilter( b2Shape* /*pShape*/ )
-{
-    // ACHTUNG!
-    //m_world->Refilter( pShape );
-}
 
 void PhysicsSubSystem::RegisterGravFieldComp( Entity* pEntity )
 {

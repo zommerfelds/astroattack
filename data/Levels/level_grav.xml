@@ -1,135 +1,120 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<level name="My level">
-    <Entity name="EdBlock00000">
-        <Component id="CompShape" name="shape1">
-            <polygon>
-                <vertex x="-4.500000" y="-1.000000" />
-                <vertex x="-4.500000" y="-3.500000" />
-                <vertex x="5.500000" y="-3.500000" />
-                <vertex x="5.500000" y="-1.000000" />
-            </polygon>
-        </Component>
-        <Component id="CompPhysics" name="std">
-            <damping linear="0.000000" angular="0.000000" />
-            <shape comp_name="shape1" density="0.000000" friction="0.300000" restitution="0.000000" />
-        </Component>
-        <Component id="CompVisualTexture" name="std">
-            <tex name="Craterscape" />
-        </Component>
-        <Component id="CompPosition" x="0.000000" y="0.000000" a="0.000000" />
-    </Entity>
-    <Entity name="grav2">
-        <Component id="CompShape" name="shape1">
-            <polygon>
-                <vertex x="5.500000" y="-1.000000" />
-                <vertex x="5.500000" y="-3.500000" />
-                <vertex x="8.500000" y="-8.500000" />
-                <vertex x="9.000000" y="2.500000" />
-            </polygon>
-        </Component>
-        <Component id="CompPhysics" name="std">
-            <damping linear="0.000000" angular="0.000000" />
-            <shape comp_name="shape1" density="0.000000" friction="0.300000" restitution="0.000000" isSensor="true"/>
-        </Component>
-        <!--Component id="CompVisualTexture" name="std">
-            <tex name="Ancient Stone Slabs" />
-        </Component-->
-        <Component id="CompGravField" name="std">
-            <grav type="directional" gx="-20" gy="0"/>
-        </Component>
-        <Component id="CompPosition" x="0.000000" y="0.000000" a="0.000000" />
-    </Entity>
-    <Entity name="grav3">
-        <Component id="CompShape" name="shape1">
-            <polygon>
-                <vertex x="-4.500000" y="-3.500000" />
-                <vertex x="-9.000000" y="-7.000000" />
-                <vertex x="8.500000" y="-8.500000" />
-                <vertex x="5.500000" y="-3.500000" />
-            </polygon>
-        </Component>
-        <Component id="CompPhysics" name="std">
-            <damping linear="0.000000" angular="0.000000" />
-            <shape comp_name="shape1" density="0.000000" friction="0.300000" restitution="0.000000" isSensor="true" />
-        </Component>
-        <!--Component id="CompVisualTexture" name="std">
-            <tex name="Ancient Stone Slabs" />
-        </Component-->
-        <Component id="CompGravField" name="std">
-            <grav type="directional" gx="0" gy="20"/>
-        </Component>
-        <Component id="CompPosition" x="0.000000" y="0.000000" a="0.000000" />
-    </Entity>
-    <Entity name="grav4">
-        <Component id="CompShape" name="shape1">
-            <polygon>
-                <vertex x="-8.000000" y="2.500000" />
-                <vertex x="-9.000000" y="-7.000000" />
-                <vertex x="-4.500000" y="-3.500000" />
-                <vertex x="-4.500000" y="-1.000000" />
-            </polygon>
-        </Component>
-        <Component id="CompPhysics" name="std">
-            <damping linear="0.000000" angular="0.000000" />
-            <shape comp_name="shape1" density="0.000000" friction="0.300000" restitution="0.000000" isSensor="true" />
-        </Component>
-        <!--Component id="CompVisualTexture" name="std">
-            <tex name="Ancient Stone Slabs" />
-        </Component-->
-        <Component id="CompGravField" name="std">
-            <grav type="directional" gx="20" gy="0"/>
-        </Component>
-        <Component id="CompPosition" x="0.000000" y="0.000000" a="0.000000" />
-    </Entity>
-    <Entity name="grav1">
-        <Component id="CompShape" name="shape1">
-            <polygon>
-                <vertex x="-8.000000" y="2.500000" />
-                <vertex x="-4.500000" y="-1.000000" />
-                <vertex x="5.500000" y="-1.000000" />
-                <vertex x="9.000000" y="2.500000" />
-            </polygon>
-        </Component>
-        <Component id="CompPhysics" name="std">
-            <damping linear="0.000000" angular="0.000000" />
-            <shape comp_name="shape1" density="0.000000" friction="0.300000" restitution="0.000000" isSensor="true" />
-        </Component>
-        <!--Component id="CompVisualTexture" name="std">
-            <tex name="Ancient Stone Slabs" />
-        </Component-->
-        <Component id="CompGravField" name="std">
-            <grav type="directional" gx="0" gy="-20"/>
-        </Component>
-        <Component id="CompPosition" x="0.000000" y="0.000000" a="0.000000" />
-    </Entity>
-    <Entity name="roundPlanet">
-        <Component id="CompShape" name="shape1">
-            <circle x="-25.00000" y="0" r="3.00000" />
-        </Component>
-        <Component id="CompPhysics" name="std">
-            <damping linear="0.000000" angular="0.000000" />
-            <shape comp_name="shape1" density="0.000000" friction="0.300000" restitution="0.000000" />
-        </Component>
-        <Component id="CompVisualTexture" name="std">
-            <tex name="Liquid Crystal 2" />
-            <edge tex="EdgeMud1" edges="0" />
-        </Component>
-        <Component id="CompPosition" x="0.000000" y="0.000000" a="0.000000" />
-    </Entity>
-    <Entity name="grav_circular">
-        <Component id="CompShape" name="shape1">
-            <circle x="-25.00000" y="0" r="10.00000" />
-        </Component>
-        <Component id="CompPhysics" name="std">
-            <damping linear="0.000000" angular="0.000000" />
-            <shape comp_name="shape1" density="0.000000" friction="0.300000" restitution="0.000000" isSensor="true"/>
-        </Component>
-        <!--Component id="CompVisualTexture" name="std">
-            <tex name="Ancient Stone Slabs" />
-        </Component-->
-        <Component id="CompGravField" name="std">
-            <grav type="radial" cx="-25.00000" cy="0" s="40"/>
-        </Component>
-        <Component id="CompPosition" x="0.000000" y="0.000000" a="0.000000" />
-    </Entity>
+<?xml version="1.0"?>
+<level>
+	<Entity name="EdBlock00000">
+		<Component id="CompPhysics" name="std">
+			<damping linear="0" angular="0" />
+			<shape comp_name="shape1" density="0" friction="0.3" restitution="0" />
+		</Component>
+		<Component id="CompPosition" name="std" x="0" y="0" a="0" />
+		<Component id="CompShape" name="shape1">
+			<polygon>
+				<vertex x="-4.5" y="-1" />
+				<vertex x="-4.5" y="-3.5" />
+				<vertex x="5.5" y="-3.5" />
+				<vertex x="5.5" y="-1" />
+			</polygon>
+		</Component>
+		<Component id="CompVisualTexture" name="std">
+			<tex name="Craterscape" />
+		</Component>
+	</Entity>
+	<Entity name="grav1">
+		<Component id="CompGravField" name="std">
+			<grav type="directional" gx="0" gy="-20" />
+		</Component>
+		<Component id="CompPhysics" name="std">
+			<damping linear="0" angular="0" />
+			<shape comp_name="shape1" density="0" friction="0.3" restitution="0" isSensor="true" />
+		</Component>
+		<Component id="CompPosition" name="std" x="0" y="0" a="0" />
+		<Component id="CompShape" name="shape1">
+			<polygon>
+				<vertex x="-8" y="2.5" />
+				<vertex x="-4.5" y="-1" />
+				<vertex x="5.5" y="-1" />
+				<vertex x="9" y="2.5" />
+			</polygon>
+		</Component>
+	</Entity>
+	<Entity name="grav2">
+		<Component id="CompGravField" name="std">
+			<grav type="directional" gx="-20" gy="0" />
+		</Component>
+		<Component id="CompPhysics" name="std">
+			<damping linear="0" angular="0" />
+			<shape comp_name="shape1" density="0" friction="0.3" restitution="0" isSensor="true" />
+		</Component>
+		<Component id="CompPosition" name="std" x="0" y="0" a="0" />
+		<Component id="CompShape" name="shape1">
+			<polygon>
+				<vertex x="5.5" y="-1" />
+				<vertex x="5.5" y="-3.5" />
+				<vertex x="8.5" y="-8.5" />
+				<vertex x="9" y="2.5" />
+			</polygon>
+		</Component>
+	</Entity>
+	<Entity name="grav3">
+		<Component id="CompGravField" name="std">
+			<grav type="directional" gx="0" gy="20" />
+		</Component>
+		<Component id="CompPhysics" name="std">
+			<damping linear="0" angular="0" />
+			<shape comp_name="shape1" density="0" friction="0.3" restitution="0" isSensor="true" />
+		</Component>
+		<Component id="CompPosition" name="std" x="0" y="0" a="0" />
+		<Component id="CompShape" name="shape1">
+			<polygon>
+				<vertex x="-4.5" y="-3.5" />
+				<vertex x="-9" y="-7" />
+				<vertex x="8.5" y="-8.5" />
+				<vertex x="5.5" y="-3.5" />
+			</polygon>
+		</Component>
+	</Entity>
+	<Entity name="grav4">
+		<Component id="CompGravField" name="std">
+			<grav type="directional" gx="20" gy="0" />
+		</Component>
+		<Component id="CompPhysics" name="std">
+			<damping linear="0" angular="0" />
+			<shape comp_name="shape1" density="0" friction="0.3" restitution="0" isSensor="true" />
+		</Component>
+		<Component id="CompPosition" name="std" x="0" y="0" a="0" />
+		<Component id="CompShape" name="shape1">
+			<polygon>
+				<vertex x="-8" y="2.5" />
+				<vertex x="-9" y="-7" />
+				<vertex x="-4.5" y="-3.5" />
+				<vertex x="-4.5" y="-1" />
+			</polygon>
+		</Component>
+	</Entity>
+	<Entity name="grav_circular">
+		<Component id="CompGravField" name="std">
+			<grav type="radial" cx="-25" cy="0" s="40" />
+		</Component>
+		<Component id="CompPhysics" name="std">
+			<damping linear="0" angular="0" />
+			<shape comp_name="shape1" density="0" friction="0.3" restitution="0" isSensor="true" />
+		</Component>
+		<Component id="CompPosition" name="std" x="0" y="0" a="0" />
+		<Component id="CompShape" name="shape1">
+			<circle x="-25" y="0" r="10" />
+		</Component>
+	</Entity>
+	<Entity name="roundPlanet">
+		<Component id="CompPhysics" name="std">
+			<damping linear="0" angular="0" />
+			<shape comp_name="shape1" density="0" friction="0.3" restitution="0" />
+		</Component>
+		<Component id="CompPosition" name="std" x="0" y="0" a="0" />
+		<Component id="CompShape" name="shape1">
+			<circle x="-25" y="0" r="3" />
+		</Component>
+		<Component id="CompVisualTexture" name="std">
+			<tex name="Liquid Crystal 2" />
+			<edge tex="EdgeMud1" edges="0 " />
+		</Component>
+	</Entity>
 </level>

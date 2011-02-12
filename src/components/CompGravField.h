@@ -15,10 +15,12 @@
 #include "../Component.h"
 #include <set>
 #include <boost/scoped_ptr.hpp>
+#include <boost/shared_ptr.hpp>
 
 enum GravType { Directional, Radial };
 
 class Vector2D;
+namespace pugi { class xml_node; }
 
 //--------------------------------------------//
 //--------- CompGravField Klasse -------------//
@@ -35,7 +37,7 @@ public:
 	void SetGravType( GravType t ) { m_gravType = t; }
 	void SetGravDir( const Vector2D& dir );
 	void SetGravCenter( const Vector2D& center, float strenght );
-    void SetPrioritya( int priority );
+    void SetPriority( int priority );
 
     // Getters
 	GravType GetGravType() const { return m_gravType; }
@@ -46,6 +48,9 @@ public:
 
 	// Get the acceleration of a body with center of mass "centerOfMass"
 	Vector2D GetAcceleration(const Vector2D& centerOfMass) const;
+
+    static boost::shared_ptr<CompGravField> LoadFromXml(const pugi::xml_node& compElem);
+    void WriteToXml(pugi::xml_node& compNode) const;
 
 private:
 

@@ -3244,30 +3244,6 @@ ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
 
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking TinyXML" >&5
-$as_echo_n "checking TinyXML... " >&6; }
-LDFLAGS="$LDFLAGS -ltinyxml"
-
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-#include <tinyxml.h>
-int
-main ()
-{
-TiXmlDocument dummy
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_cxx_try_link "$LINENO"; then :
-  HAVE_TINYXML=1
-else
-  as_fn_error $? "TinyXML was not found with -ltinyxml." "$LINENO" 5
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: -ltinyxml" >&5
-$as_echo "-ltinyxml" >&6; }
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for library containing SDL_Init" >&5
 $as_echo_n "checking for library containing SDL_Init... " >&6; }
@@ -4134,11 +4110,27 @@ else
 fi
 
 
+ac_fn_cxx_check_header_mongrel "$LINENO" "boost/make_shared.hpp" "ac_cv_header_boost_make_shared_hpp" "$ac_includes_default"
+if test "x$ac_cv_header_boost_make_shared_hpp" = x""yes; then :
+
+else
+  as_fn_error $? "\"boost/make_shared.hpp required!\"" "$LINENO" 5
+fi
+
+
 ac_fn_cxx_check_header_mongrel "$LINENO" "boost/scoped_ptr.hpp" "ac_cv_header_boost_scoped_ptr_hpp" "$ac_includes_default"
 if test "x$ac_cv_header_boost_scoped_ptr_hpp" = x""yes; then :
 
 else
   as_fn_error $? "\"boost/scoped_ptr.hpp required!\"" "$LINENO" 5
+fi
+
+
+ac_fn_cxx_check_header_mongrel "$LINENO" "boost/foreach.hpp" "ac_cv_header_boost_foreach_hpp" "$ac_includes_default"
+if test "x$ac_cv_header_boost_foreach_hpp" = x""yes; then :
+
+else
+  as_fn_error $? "\"boost/foreach.hpp required!\"" "$LINENO" 5
 fi
 
 

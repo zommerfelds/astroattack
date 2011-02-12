@@ -22,6 +22,8 @@
 
 class Condition;
 class Effect;
+class GameWorld;
+namespace pugi { class xml_node; }
 
 typedef std::string ConditionIdType;
 typedef std::string EffectIdType;
@@ -44,6 +46,8 @@ public:
     const std::vector< boost::shared_ptr<Condition> >& GetConditions() const { return m_conditions; }
     const std::vector< boost::shared_ptr<Effect> >& GetEffects() const { return m_effects; }
 
+    static boost::shared_ptr<CompTrigger> LoadFromXml(const pugi::xml_node& compElem, GameWorld& gameWorld);
+    void WriteToXml(pugi::xml_node& compNode) const;
 
 private:
     std::vector< boost::shared_ptr<Condition> > m_conditions;

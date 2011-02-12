@@ -15,10 +15,12 @@
 #include "../GameStates.h"
 
 #include <boost/shared_ptr.hpp>
+#include <boost/scoped_ptr.hpp>
 #include <vector>
 #include <string>
 
 struct Button;
+struct ResourceIds;
 
 enum SubMenu 
 {
@@ -81,6 +83,8 @@ private:
     bool m_goToSlideShow;           // ob eine Bildershow gestartet werden soll
     std::string m_fileNameToOpen;   // wie heisst die Datei, die geöffnet werden soll (level oder slide show)
     bool m_appliedConfig;           // ob Spieler die Einstellungen angenommen hat ()
+
+    boost::scoped_ptr<ResourceIds> m_menuResources;
 };
 //--------------------------------------------//
 //------- Ende MainMenuState Klasse ----------//

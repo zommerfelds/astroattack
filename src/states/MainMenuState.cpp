@@ -20,7 +20,9 @@
 #include "../Input.h"
 #include "../Vector2D.h"
 #include "../Texture.h"
-#include <tinyxml.h>
+#include "contrib/pugixml/pugixml.hpp"
+#include <boost/foreach.hpp>
+#include "contrib/pugixml/foreach.hpp"
 #include "../XmlLoader.h"
 #include <cmath>
 #include <boost/bind.hpp>
@@ -60,7 +62,8 @@ MainMenuState::MainMenuState( SubSystems* pSubSystems, SubMenu startingSubMenu )
   m_goToEditor ( false ),
   m_goToPlay ( false ),
   m_goToSlideShow ( false ),
-  m_appliedConfig ( false )
+  m_appliedConfig ( false ),
+  m_menuResources ( new ResourceIds )
 {
     for (int i=0; i<4; i++)
     {
@@ -87,7 +90,7 @@ void MainMenuState::Init()        // State starten
     
     // Grafiken aus XML-Datei laden
     XmlLoader xml;
-    xml.LoadGraphics( cMenuGraphicsFileName, GetSubSystems()->renderer->GetTextureManager(), NULL, NULL );
+    *m_menuResources = xml.LoadGraphics( cMenuGraphicsFileName, GetSubSystems()->renderer->GetTextureManager(), NULL, NULL );
 
     GetSubSystems()->sound->LoadMusic( "data/Music/ParagonX9___Chaoz_C.ogg", "menuMusic" );
     GetSubSystems()->sound->LoadSound( "data/Sounds/Single click stab with delay_Nightingale Music Productions_12046.wav", "mouseclick" );
@@ -132,34 +135,24 @@ void MainMenuState::Init()        // State starten
     // *** Spielen Menü ***
     GetSubSystems()->gui->InsertWidget( menuNames[Play], shared_ptr<Widget>(make_shared<WidgetLabel>(  0.14f, 0.21f, "Pick a level:", GetSubSystems()->renderer->GetFontManager() )) );
 
-    // Leveln
-    TiXmlDocument doc(cLevelSequenceFileName);
-    if (!doc.LoadFile()) return;
-    TiXmlHandle hRoot(0);
+    pugi::xml_document doc;
+    pugi::xml_parse_result result = doc.load_file(cLevelSequenceFileName);
+    if (!result)
     {
-        TiXmlElement* pElem = doc.FirstChildElement();
-        if (!pElem) return;
-        hRoot=TiXmlHandle(pElem);
+        gAaLog.Write( "[ Error parsing file '%s' at offset %d!\nError description: %s ]\n\n", cLevelSequenceFileName, result.offset, result.description() );
+        return;
     }
+
     x=0.35f;
     y=0.2f;
-    for ( TiXmlElement* element = hRoot.FirstChildElement().ToElement(); element; element = element->NextSiblingElement() )
+    BOOST_FOREACH(pugi::xml_node node, doc.first_child())
     {
-        const char* caption_temp = element->Attribute( "name" );
-        std::string caption;
-        if ( caption_temp != NULL )
-            caption = caption_temp;
-        const char* value_temp = element->Value();
-        std::string value;
-        if ( value_temp != NULL )
-            value = value_temp;
-        const char* file_temp = element->Attribute( "file" );
-        std::string file;
-        if ( file_temp != NULL )
-            file = file_temp;
+        std::string caption = node.attribute("name").value();
+        std::string value = node.name();
+        std::string file = node.attribute("file").value();
         if ( value == "level" )
             GetSubSystems()->gui->InsertWidget( menuNames[Play], shared_ptr<Widget>(make_shared<WidgetButton>( Rect(x,x+w,y,y+h), caption, boost::bind( &MainMenuState::CallbackOpenLevel, this, file ), boost::bind( &MainMenuState::CallbackSound, this ) )) );
-        else // slide show
+        else if ( value == "slides" )
             GetSubSystems()->gui->InsertWidget( menuNames[Play], shared_ptr<Widget>(make_shared<WidgetButton>( Rect(x,x+w,y,y+h), caption, boost::bind( &MainMenuState::CallbackOpenSlideShow, this, file ), boost::bind( &MainMenuState::CallbackSound, this ) )) );
         y += 0.07f;
     }
@@ -236,7 +229,7 @@ void MainMenuState::Cleanup()     // State abbrechen
 
     // Grafiken wieder freisetzen
     XmlLoader xml;
-    xml.UnLoadGraphics( cMenuGraphicsFileName, GetSubSystems()->renderer->GetTextureManager(), NULL, NULL );
+    xml.UnLoadGraphics( *m_menuResources, GetSubSystems()->renderer->GetTextureManager(), NULL, NULL );
 
     GetSubSystems()->gui->Clear();
 

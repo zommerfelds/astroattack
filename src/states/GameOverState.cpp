@@ -19,9 +19,10 @@
 // eindeutige ID
 const StateIdType GameOverState::stateId = "GameOverState";
 
-GameOverState::GameOverState( SubSystems* pSubSystems, std::string stringToShow )
+GameOverState::GameOverState( SubSystems* pSubSystems, std::string stringToShow, std::string levelFileName )
 : GameState( pSubSystems ),
-  m_stringToShow ( stringToShow )
+  m_stringToShow ( stringToShow ),
+  m_levelFileName ( levelFileName )
 {
 }
 
@@ -51,7 +52,7 @@ void GameOverState::Update()      // Spiel aktualisieren
 {
     if ( GetSubSystems()->input->KeyState( Enter ) )
     {
-        boost::shared_ptr<PlayingState> playState = boost::make_shared<PlayingState>(GetSubSystems(), levelName.c_str()); // Zum Spiel-Stadium wechseln
+        boost::shared_ptr<PlayingState> playState = boost::make_shared<PlayingState>(GetSubSystems(), m_levelFileName); // Zum Spiel-Stadium wechseln
         GetSubSystems()->stateManager->ChangeState( playState );
         return;
     }

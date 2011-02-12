@@ -15,6 +15,9 @@
 #include <boost/bind.hpp>
 #include "../Vector2D.h"
 #include <sstream>
+#include <boost/make_shared.hpp>
+
+#include "contrib/pugixml/pugixml.hpp"
 
 // einduetige ID
 const CompIdType CompVisualAnimation::COMPONENT_ID = "CompVisualAnimation";
@@ -123,6 +126,51 @@ void CompVisualAnimation::OnUpdate()
             if ( animStateInfoIter->second->stops.count( m_currentFrame ) )
                 m_running = false;
         }
+    }
+}
+
+boost::shared_ptr<CompVisualAnimation> CompVisualAnimation::LoadFromXml(const pugi::xml_node& compElem, const AnimationManager* pAnimMngr)
+{
+    std::string animName = compElem.child("anim").attribute("name").value();
+
+    pugi::xml_node dimElem = compElem.child("dim");
+    float hw = dimElem.attribute("hw").as_float();
+    if (hw == 0.0f)
+        hw = 1.0f;
+    float hh = dimElem.attribute("hh").as_float();
+    if (hh == 0.0f)
+        hh = 1.0f;
+
+    pugi::xml_node centerElem = compElem.child("center");
+    float centerX = centerElem.attribute("x").as_float();
+    float centerY = centerElem.attribute("y").as_float();
+
+    bool start = !compElem.child("start").empty();
+
+    boost::shared_ptr<CompVisualAnimation> compAnim = boost::make_shared<CompVisualAnimation>(pAnimMngr->GetAnimInfo(animName));
+    compAnim->Center()->Set(centerX, centerY);
+    compAnim->SetDimensions(hw, hh);
+    if (start)
+        compAnim->Start();
+    return compAnim;
+}
+
+void CompVisualAnimation::WriteToXml(pugi::xml_node& compNode) const
+{
+    pugi::xml_node animNode = compNode.append_child("anim");
+    animNode.append_attribute("name").set_value(GetAnimInfo()->name.c_str());
+
+    pugi::xml_node centerNode = compNode.append_child("anim");
+    animNode.append_attribute("x").set_value(m_center->x);
+    animNode.append_attribute("y").set_value(m_center->y);
+
+    pugi::xml_node dimNode = compNode.append_child("dim");
+    dimNode.append_attribute("hw").set_value(m_halfWidth);
+    dimNode.append_attribute("hh").set_value(m_halfHeight);
+
+    if ( IsRunning() )
+    {
+        compNode.append_child("start");
     }
 }
 

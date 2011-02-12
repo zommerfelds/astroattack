@@ -13,29 +13,28 @@
 
 #include <Box2D/Box2D.h> // need this for converting to Box2D shapes
 
-#include <tinyxml.h>
+#include "contrib/pugixml/pugixml.hpp"
 #include <boost/make_shared.hpp>
 
 // eindeutige ID
 const CompIdType CompShape::COMPONENT_ID = "CompShape";
 
-boost::shared_ptr<CompShape> CompShape::LoadFromXml(
-		const TiXmlElement& compElem)
+boost::shared_ptr<CompShape> CompShape::LoadFromXml(const pugi::xml_node& compNode)
 {
-	const TiXmlElement* polygonElement = compElem.FirstChildElement("polygon");
+    pugi::xml_node polygonElement = compNode.child("polygon");
 
 	// Shape is a polygon
-	if (polygonElement != NULL)
+	if (polygonElement)
 	{
-		return CompShapePolygon::LoadFromXml(*polygonElement);
+		return CompShapePolygon::LoadFromXml(polygonElement);
 	}
 
-	const TiXmlElement* circleElement = compElem.FirstChildElement("circle");
+	pugi::xml_node circleElement = compNode.child("circle");
 
 	// Shape is a circle
-	if (circleElement != NULL)
+	if (circleElement)
 	{
-		return CompShapeCircle::LoadFromXml(*circleElement);
+		return CompShapeCircle::LoadFromXml(circleElement);
 	}
 
 	// TODO: error
@@ -43,41 +42,33 @@ boost::shared_ptr<CompShape> CompShape::LoadFromXml(
 	return boost::shared_ptr<CompShape>();
 }
 
-void CompShape::StoreToXml(TiXmlElement& compElem)
-{
-}
-
 boost::shared_ptr<CompShapePolygon> CompShapePolygon::LoadFromXml(
-		const TiXmlElement& compPolygon)
+		const pugi::xml_node& polyElem)
 {
 	boost::shared_ptr<CompShapePolygon> pPoly = boost::make_shared<CompShapePolygon>();
 
-	const TiXmlElement* vertexElement = compPolygon.FirstChildElement("vertex");
-	for (size_t i=0; vertexElement && i<cMaxVertices; vertexElement = vertexElement->NextSiblingElement("vertex"))
+	pugi::xml_node vertexElement = polyElem.child("vertex");
+	for (size_t i=0; vertexElement && i<cMaxVertices; vertexElement = vertexElement.next_sibling("vertex"))
 	{
-		float x = 0.0f, y = 0.0f;
-		vertexElement->QueryFloatAttribute("x", &x);
-		vertexElement->QueryFloatAttribute("y", &y);
+		float x = vertexElement.attribute("x").as_float();
+        float y = vertexElement.attribute("y").as_float();
 		pPoly->m_vertices.push_back( boost::make_shared<Vector2D>(x, y) );
 	}
 
-	/*TiXmlElement* boxElement = compPolygon->FirstChildElement( "box" );
-    if ( boxElement )
-    {
-        float hw = 1.0f, hh = 1.0f;
-        Vector2D center;
-        float angle = 0.0f;
-        boxElement->QueryFloatAttribute("hw", &hw);
-        boxElement->QueryFloatAttribute("hh", &hh);
-        boxElement->QueryFloatAttribute("x", &center.x);
-        boxElement->QueryFloatAttribute("y", &center.y);
-        boxElement->QueryFloatAttribute("a", &angle);
-        poly_shape->SetAsBox(hw,hh,center,angle);
-        vertexCount = 4;
-    }*/
-
 	// TODO: check for errors
 	return pPoly;
+}
+
+void CompShapePolygon::WriteToXml(pugi::xml_node& compNode) const
+{
+    pugi::xml_node polyNode = compNode.append_child("polygon");
+
+    for ( size_t i = 0; i < GetVertexCount(); ++i )
+    {
+        pugi::xml_node vertexNode = polyNode.append_child("vertex");
+        vertexNode.append_attribute("x").set_value(m_vertices[i]->x);
+        vertexNode.append_attribute("y").set_value(m_vertices[i]->y);
+    }
 }
 
 boost::shared_ptr<b2Shape> CompShapePolygon::toB2Shape()
@@ -123,15 +114,24 @@ CompShapeCircle::CompShapeCircle(const Vector2D& center, float radius) :
 {}
 
 boost::shared_ptr<CompShapeCircle> CompShapeCircle::LoadFromXml(
-		const TiXmlElement& compCircle)
+		const pugi::xml_node& circleElem)
 {
 	Vector2D center;
-	float radius = 1.0f;
-	compCircle.QueryFloatAttribute("x", &center.x);
-	compCircle.QueryFloatAttribute("y", &center.y);
-	compCircle.QueryFloatAttribute("r", &radius);
+	center.x = circleElem.attribute("x").as_float();
+    center.y = circleElem.attribute("y").as_float();
+	float radius = circleElem.attribute("r").as_float();
+	if (radius == 0.0f)
+	    radius = 1.0f;
 
 	return boost::make_shared<CompShapeCircle>(center, radius);
+}
+
+void CompShapeCircle::WriteToXml(pugi::xml_node& compNode) const
+{
+    pugi::xml_node circleNode = compNode.append_child("circle");
+    circleNode.append_attribute("x").set_value(m_center->x);
+    circleNode.append_attribute("y").set_value(m_center->y);
+    circleNode.append_attribute("r").set_value(m_radius);
 }
 
 boost::shared_ptr<b2Shape> CompShapeCircle::toB2Shape()

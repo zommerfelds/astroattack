@@ -21,6 +21,7 @@
 #include <boost/scoped_ptr.hpp>
 
 class Vector2D;
+namespace pugi { class xml_node; }
 
 //--------------------------------------------//
 //------ CompVisualAnimation Klasse ----------//
@@ -49,7 +50,7 @@ public:
     void End() { m_running = false; }                          // Sofort enden
     void Finish() { m_wantToFinish = true; }                   // Enden wenn ein Stopppunkt erreicht wurde
     void SetDirection(int dir) { if (dir>0) m_direction=1; else m_direction= -1; } // 1 ist vorwärz und 0 ist rückwärz
-    int IsRunning() { return m_running; }                      // ob die Animation gerade läuft
+    int IsRunning() const { return m_running; }                // ob die Animation gerade läuft
 
     // Animationsstand (z.B. Rennen, Springen, Reden )
     void SetState( StateIdType new_state );
@@ -60,6 +61,10 @@ public:
     // Ausrichtung ( wenn flip=true wird die Animation eifach horizontal gespiegelt )
     void SetFlip( bool flip ) { m_flip = flip; }
     bool GetFlip() { return m_flip; }
+
+    static boost::shared_ptr<CompVisualAnimation> LoadFromXml(const pugi::xml_node& compElem, const AnimationManager* pAnimMngr);
+    void WriteToXml(pugi::xml_node& compNode) const;
+
 private:
 
     // Animation Aktualisieren

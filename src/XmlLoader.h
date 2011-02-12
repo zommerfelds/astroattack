@@ -19,13 +19,23 @@ class TextureManager;
 class AnimationManager;
 class FontManager;
 
+#include <set>
+#include <string>
+
+struct ResourceIds
+{
+    std::set<std::string> textures;
+    std::set<std::string> animations;
+    std::set<std::string> fonts;
+};
+
 class XmlLoader
 {
 public:
     void LoadXmlToWorld( const char* pFileName, GameWorld* pGameWorld, SubSystems* pSubSystems );
     void LoadSlideShow( const char* pFileName, SlideShow* pSlideShow );
-    void LoadGraphics( const char* pFileName, TextureManager* pTextureManager, AnimationManager* pAnimationManager, FontManager* pFontManager );
-    void UnLoadGraphics( const char* pFileName, TextureManager* pTextureManager, AnimationManager* pAnimationManager, FontManager* pFontManager );
+    ResourceIds LoadGraphics( const char* pFileName, TextureManager* pTextureManager, AnimationManager* pAnimationManager, FontManager* pFontManager );
+    void UnLoadGraphics( const ResourceIds& resourcesToUnload, TextureManager* pTextureManager, AnimationManager* pAnimationManager, FontManager* pFontManager );
 
     void SaveWorldToXml( const char* pFileName, GameWorld* pGameWorld );
 private:

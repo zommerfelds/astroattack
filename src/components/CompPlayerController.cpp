@@ -20,6 +20,7 @@
 #include "../Vector2D.h"
 
 #include <boost/bind.hpp>
+#include <boost/make_shared.hpp>
 
 // eindeutige ID
 const CompIdType CompPlayerController::COMPONENT_ID = "CompPlayerController";
@@ -28,12 +29,11 @@ const CompIdType CompPlayerController::COMPONENT_ID = "CompPlayerController";
 const int cMaxRecharge = 15;                    // wie wie muss der Spieler warten bis der Racketenrucksack startet?
 
 // Konstruktor der Komponente
-CompPlayerController::CompPlayerController( const InputSubSystem* pInputSubSystem, std::map<const std::string, int>::iterator itJetPackVar, boost::function1<void,b2Shape*> refiltelFunc ) :
+CompPlayerController::CompPlayerController( const InputSubSystem* pInputSubSystem, std::map<const std::string, int>::iterator itJetPackVar ) :
          m_pInputSubSystem ( pInputSubSystem ),
          m_currentFrictionIsLow ( false ),
          m_eventConnection (),
          m_itJetPackVar ( itJetPackVar ),
-         m_refilterFunc ( refiltelFunc ),
          m_spaceKeyDownLastUpdate ( false ),
          m_playerCouldWalkLastUpdate ( false ),
          m_rechargeTime ( cMaxRecharge ),
@@ -562,4 +562,9 @@ void CompPlayerController::SetHighFriction( CompPhysics* playerCompPhysics )
     m_currentFrictionIsLow = false;
 
     playerCompPhysics->SetShapeFriction("bottom", 4.0f);
+}
+
+boost::shared_ptr<CompPlayerController> CompPlayerController::LoadFromXml(const pugi::xml_node& compElem, const InputSubSystem* inputSys, std::map<const std::string, int>::iterator itJetPackVar)
+{
+   return boost::make_shared<CompPlayerController>( inputSys, itJetPackVar );
 }

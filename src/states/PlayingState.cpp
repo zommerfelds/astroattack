@@ -30,13 +30,10 @@
 
 #include <sstream>
 
-
-// TEMP !
-//#include "../Vector2D.h"
+// TEMP ! TODO
 #include <SDL/SDL_opengl.h>
 #include "../components/CompGravField.h"
 #include "../components/CompPhysics.h"
-std::string levelName = "";
 
 // Nur um Warnungen zu vermeiden (dass x nicht benutzt wird)
 #define NOT_USED(x) x
@@ -54,10 +51,7 @@ PlayingState::PlayingState( SubSystems* pSubSystems, std::string levelFileName )
   m_curentDeleteSet (1), m_wantToEndGame( false ), m_alphaOverlay( 0.0 ),
   m_levelFileName ( levelFileName ),
   m_showLoadingScreenAtCleanUp ( true )
-{
-    // TEMP!
-    levelName = levelFileName;
-}
+{}
 
 PlayingState::~PlayingState()
 {
@@ -133,7 +127,7 @@ void PlayingState::Update()      // Spiel aktualisieren
     {
         if ( m_alphaOverlay > 1.0f )
         {
-            boost::shared_ptr<GameOverState> gameOverStateState ( boost::make_shared<GameOverState>( GetSubSystems(), m_gameOverMessage ) );
+            boost::shared_ptr<GameOverState> gameOverStateState ( boost::make_shared<GameOverState>( GetSubSystems(), m_gameOverMessage, m_levelFileName ) );
             GetSubSystems()->stateManager->ChangeState( gameOverStateState );
             return;
         }

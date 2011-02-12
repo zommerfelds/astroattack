@@ -12,6 +12,7 @@
 #include "CompPhysics.h"
 #include <Box2D/Box2D.h>       // extere Physikbibliothek
 #include <boost/make_shared.hpp>
+#include "contrib/pugixml/pugixml.hpp"
 
 // eindeutige ID
 const CompIdType CompPhysics::COMPONENT_ID = "CompPhysics";
@@ -25,9 +26,6 @@ CompPhysics::CompPhysics( const BodyDef& rBodyDef ) : m_body ( NULL ),
                                                       m_smoothAngle (0.0f),
                                                       m_gravField ( NULL ),
                                                       m_remainingUpdatesTillGravFieldChangeIsPossible ( 0 )
-                                                      //m_oldGravField ( NULL ),
-                                                      //m_gravFieldIsChanging ( false ),
-                                                      //m_updatesSinceLastGravFieldChange ( 0 )
 {
 }
 
@@ -148,24 +146,85 @@ Vector2D CompPhysics::GetCenterOfMassPosition() const
     return Vector2D( m_body->GetWorldCenter() );
 }
 
-/*bool CompPhysics::GetSaveContacts() const
+boost::shared_ptr<CompPhysics> CompPhysics::LoadFromXml(const pugi::xml_node& compElem)
 {
-    return m_saveContacts;
-}*/
+    pugi::xml_node dampElem = compElem.child("damping");
+    float linearDamping = dampElem.attribute("linear").as_float();
+    float angularDamping = dampElem.attribute("angular").as_float();
 
-/*void CompPhysics::GetGravFieldInfo(const CompGravField* pGravField, int* pUpdatesSinceLastGravFieldChange, bool* pGravFieldIsChanging) const
-{
-    pGravField = m_gravField;
-    pUpdatesSinceLastGravFieldChange = m_updatesSinceLastGravFieldChange;
-    pGravFieldIsChanging = gravFieldIsChanging;
+    bool fixedRotation = !compElem.child("fixedRotation").empty();
+
+    bool isBullet = !compElem.child("bullet").empty();
+
+    pugi::xml_node rotPtElem = compElem.child("rotationPoint");
+    Vector2D rotationPoint;
+    rotationPoint.x = rotPtElem.attribute("x").as_float();
+    rotationPoint.y = rotPtElem.attribute("y").as_float();
+
+    pugi::xml_node gravPtElem = compElem.child("gravitationPoint");
+    Vector2D gravitationPoint;
+    gravitationPoint.x = gravPtElem.attribute("x").as_float();
+    gravitationPoint.y = gravPtElem.attribute("y").as_float();
+
+    BodyDef body_def;
+    body_def.angularDamping = angularDamping;
+    body_def.fixedRotation = fixedRotation;
+    body_def.bullet = isBullet;
+    body_def.linearDamping = linearDamping;
+
+    boost::shared_ptr<CompPhysics> compPhysics = boost::make_shared<CompPhysics> ();
+    compPhysics->SetLocalRotationPoint(rotationPoint);
+    compPhysics->SetLocalGravitationPoint(gravitationPoint);
+
+    for (pugi::xml_node shapeElem = compElem.child("shape"); shapeElem; shapeElem = shapeElem.next_sibling("shape"))
+    {
+        std::string shapeName = shapeElem.attribute("comp_name").value();
+
+        float density = shapeElem.attribute("density").as_float();
+        float friction = shapeElem.attribute("friction").as_float();
+        float restitution = shapeElem.attribute("restitution").as_float();
+
+        bool isSensor = shapeElem.attribute("isSensor").as_bool();
+
+        if (density != 0.0f)
+            body_def.type = BodyDef::dynamicBody;
+
+        compPhysics->AddShapeDef(boost::make_shared<ShapeDef>(shapeName, density, friction, restitution, isSensor));
+    }
+
+    compPhysics->SetBodyDef(body_def);
+    return compPhysics;
 }
 
-void SetGravField(const CompGravField* pGravField)
+void CompPhysics::WriteToXml(pugi::xml_node& compNode) const
 {
-    if ( m_gravField != NULL )
-		m_oldGravField = m_gravField;
-	m_gravField = gravField;
-	m_framesTillSwitchGravFieldIsPossible = cUpdatesTillGravFieldChangeIsPossible;
-}*/
+    // damping element
+    pugi::xml_node dampNode = compNode.append_child("damping");
+    dampNode.append_attribute("linear").set_value(GetLinearDamping());
+    dampNode.append_attribute("angular").set_value(GetAngularDamping());
+
+    if (IsFixedRotation())
+    {
+        compNode.append_child("fixedRotation");
+    }
+
+    if (IsBullet())
+    {
+        compNode.append_child("isBullet");
+    }
+
+    for (ShapeInfoVec::const_iterator it = GetShapeInfos().begin(); it != GetShapeInfos().end(); ++it)
+    {
+        pugi::xml_node shapeNode = compNode.append_child("shape");
+        shapeNode.append_attribute("comp_name").set_value((*it)->compName.c_str());
+
+        shapeNode.append_attribute("density").set_value((*it)->density);
+        shapeNode.append_attribute("friction").set_value((*it)->friction);
+        shapeNode.append_attribute("restitution").set_value((*it)->restitution);
+
+        if ((*it)->isSensor)
+            shapeNode.append_attribute("isSensor").set_value("true");
+    }
+}
 
 // Astro Attack - Christian Zommerfelds - 2009

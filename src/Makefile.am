@@ -14,4 +14,5 @@ AstroAttack_SOURCES = Camera.cpp Component.cpp Configuration.cpp \
 	components/CompVisualMessage.cpp components/CompVisualTexture.cpp \
 	states/EditorState.cpp \
 	states/GameOverState.cpp states/MainMenuState.cpp \
-	states/PlayingState.cpp states/SlideShowState.cpp
+	states/PlayingState.cpp states/SlideShowState.cpp \
+	contrib/pugixml/pugixml.cpp

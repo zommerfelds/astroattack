@@ -14,6 +14,8 @@
 
 #include "../Component.h"
 #include <string>
+#include <boost/shared_ptr.hpp>
+namespace pugi { class xml_node; }
 
 //--------------------------------------------//
 //-------- CompVisualMessage Klasse ----------//
@@ -26,7 +28,10 @@ public:
     const CompIdType& ComponentId() const { return COMPONENT_ID; }
 	static const CompIdType COMPONENT_ID; // eindeutige ID für diese Komponentenart (gleich wie Klassennamen, siehe CompCollectable.cpp)
 
-    std::string GetMsg() { return m_text; }
+    const std::string& GetMsg() const { return m_text; }
+
+    static boost::shared_ptr<CompVisualMessage> LoadFromXml(const pugi::xml_node& compElem);
+    void WriteToXml(pugi::xml_node& compNode) const;
 
 private:
     std::string m_text;

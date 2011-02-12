@@ -15,8 +15,10 @@
 
 #include "../Component.h"
 #include <boost/scoped_ptr.hpp>
+#include <boost/shared_ptr.hpp>
 
 class Vector2D;
+namespace pugi { class xml_node; }
 
 //--------------------------------------------//
 //----------- CompPosition Klasse ------------//
@@ -40,6 +42,9 @@ public:
     // =========== Setters ===========
     void SetOrientation(float orientation);
     void SetPosition(const Vector2D& pos);
+
+    static boost::shared_ptr<CompPosition> LoadFromXml(const pugi::xml_node& compElem);
+    void WriteToXml(pugi::xml_node& compNode) const;
 
 private:
     void OnUpdate();

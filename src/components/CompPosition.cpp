@@ -13,6 +13,9 @@
 #include "CompPhysics.h"
 #include "Entity.h"
 #include "../Vector2D.h"
+#include <boost/make_shared.hpp>
+
+#include "contrib/pugixml/pugixml.hpp"
 
 // eindeutige ID
 const CompIdType CompPosition::COMPONENT_ID = "CompPosition";
@@ -58,6 +61,28 @@ void CompPosition::SetOrientation(float orientation)
 {
     // TODO: set Box2D angle
     m_orientation = orientation;
+
+}
+boost::shared_ptr<CompPosition> CompPosition::LoadFromXml(const pugi::xml_node& compElem)
+{
+    float x = compElem.attribute("x").as_float();
+    float y = compElem.attribute("y").as_float();
+    float a = compElem.attribute("a").as_float();
+
+    if (y < 0)
+        a = 1;
+
+    boost::shared_ptr<CompPosition> compPos = boost::make_shared<CompPosition> ();
+    compPos->SetPosition(Vector2D(x, y));
+    compPos->SetOrientation(a);
+    return compPos;
+}
+
+void CompPosition::WriteToXml(pugi::xml_node& compNode) const
+{
+    compNode.append_attribute("x").set_value(GetPosition().x);
+    compNode.append_attribute("y").set_value(GetPosition().y);
+    compNode.append_attribute("a").set_value(GetOrientation());
 }
 
 // Astro Attack - Christian Zommerfelds - 2009

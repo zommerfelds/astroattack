@@ -2,15 +2,15 @@
 <root>
       <music file="data/Music/130463___.mp3.OGG"/><!--ParagonX9___Chaoz_C.ogg"/-->
       <timer delayms="5000"/>
-      <slide image="data/Intro/1 Planet.png">Auf einem winzigen Planeten irgendwo im riesigen Universum lebt<n/>eine kleine Zivilisation von Menschen.</slide>
-      <slide image="data/Intro/2 Kristall.png">Das Zentrum dieses Planeten ist reich an Xymin-Kristall,<n/>eine seltene Kristallsorte, die sehr wertvoll in dieser Galaxie ist.</slide>
-      <slide image="data/Intro/3 Monument.png">Mit dem Kristall bauten die Bewohner ein grosses Monument,<n/>das sehr viel Energie ausstrahlt.</slide>
+      <slide image="data/Intro/1 Planet.png">Auf einem winzigen Planeten irgendwo im riesigen Universum lebt&#xA;eine kleine Zivilisation von Menschen.</slide>
+      <slide image="data/Intro/2 Kristall.png">Das Zentrum dieses Planeten ist reich an Xymin-Kristall,&#xA;eine seltene Kristallsorte, die sehr wertvoll in dieser Galaxie ist.</slide>
+      <slide image="data/Intro/3 Monument.png">Mit dem Kristall bauten die Bewohner ein grosses Monument,&#xA;das sehr viel Energie ausstrahlt.</slide>
       <slide image="data/Intro/4 Dr Alpha.png">Doktor Alpha ist ein galaxieweit bekannter Verbrecher</slide>
-      <slide image="data/Intro/5 Dr Alpha Traum.png">Er wollte schon immer das Monument rauben...<n/>Mit dem hätte er genug Energie um die ganze Galaxie zu erobern.</slide>
-      <slide image="data/Intro/6 Dr Alpha Attack.png">Eines Tages kommt Doktor Alpha mit seinem Riesenstaubsauger mit<n/>Superkraft.<p/>Er saugt nicht nur das Xymin-Kristall-Monument, sondern<n/>auch alle Einwohner des kleinen Planeten...</slide>
-      <slide image="data/Intro/7 Jack and Prof.png">Nur 2 Personen schafften es, nicht gesaugt zu werden:<n/>Jack und Professor Z.</slide>
-      <slide image="data/Intro/8 Dr Alpha fliegt.png">Dr. Alpha fliegt schwer beladen los -<n/>mit dem Monument und alle Einwohner im Sack.</slide>
-      <slide image="data/Intro/9 Jack and Prof folgen.png">5, 4, 3, 2,...  Jack und Professor Z starten ihre Rakete und folgen<n/>Dr. Alpha.</slide>
+      <slide image="data/Intro/5 Dr Alpha Traum.png">Er wollte schon immer das Monument rauben...&#xA;Mit dem hätte er genug Energie um die ganze Galaxie zu erobern.</slide>
+      <slide image="data/Intro/6 Dr Alpha Attack.png">Eines Tages kommt Doktor Alpha mit seinem Riesenstaubsauger mit&#xA;Superkraft.<p/>Er saugt nicht nur das Xymin-Kristall-Monument, sondern&#xA;auch alle Einwohner des kleinen Planeten...</slide>
+      <slide image="data/Intro/7 Jack and Prof.png">Nur 2 Personen schafften es, nicht gesaugt zu werden:&#xA;Jack und Professor Z.</slide>
+      <slide image="data/Intro/8 Dr Alpha fliegt.png">Dr. Alpha fliegt schwer beladen los -&#xA;mit dem Monument und alle Einwohner im Sack.</slide>
+      <slide image="data/Intro/9 Jack and Prof folgen.png">5, 4, 3, 2,...  Jack und Professor Z starten ihre Rakete und folgen&#xA;Dr. Alpha.</slide>
       <!--slide image="data/intro/6 Dr Alpha Attack.png">Bei dieser Verfolgungsjagd gelangen alle in der nähe eines<n/>Schwarzen Lochs....</slide>
       <slide image="data/intro/6 Dr Alpha Attack.png">Dr. Alpha hat nicht genug Kraft, um mit der ganzen Ladung<n/>davon zu kommen. Er öffnet sein Container und lässt alle Menschen fallen.</slide>
       <slide image="data/intro/6 Dr Alpha Attack.png">Er entkommt.</slide>

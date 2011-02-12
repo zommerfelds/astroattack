@@ -47,8 +47,6 @@ public:
     void Init();
     void Update();
 
-    void Refilter( b2Shape* pShape ); // Recalculate collision filtering of pShape
-
     void CalculateSmoothPositions(float accumulator);
 
 private:

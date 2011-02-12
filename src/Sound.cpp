@@ -93,8 +93,7 @@ void SoundSubSystem::LoadSound( const char *name, SoundIdType id )
         gAaLog.Write ( "Warning loading sound: Sound with ID \"%s\" exists already! (new sound was not loaded)\n", id.c_str() );
         return;
     }
-    Mix_Chunk *sample;
-    sample=Mix_LoadWAV( name );
+    Mix_Chunk *sample = Mix_LoadWAV( name );
     if( !sample )
     {
         gAaLog.Write ( "Error loading sound: %s\n", Mix_GetError() );

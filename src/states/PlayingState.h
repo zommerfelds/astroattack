@@ -24,9 +24,6 @@ class GameCamera;
 class Entity;
 class EventConnection;
 
-// TEMP!
-extern std::string levelName;
-
 //--------------------------------------------//
 //----------- PlayingState Klasse ------------//
 //--------------------------------------------//

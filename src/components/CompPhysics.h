@@ -22,6 +22,8 @@
 #include <vector>
 #include <map>
 
+namespace pugi { class xml_node; }
+
 // Klassen und Strukturen von Box2D
 class b2Body;
 class b2Fixture;
@@ -158,6 +160,9 @@ public:
 
 	// Grav
     const CompGravField* GetActiveGravField() const { return m_gravField; }
+
+    static boost::shared_ptr<CompPhysics> LoadFromXml(const pugi::xml_node& compElem);
+    void WriteToXml(pugi::xml_node& compElem) const;
 
 	static const CompIdType COMPONENT_ID; // eindeutige ID für diese Komponentenart (gleich wie Klassennamen, siehe CompPhysics.cpp)
 

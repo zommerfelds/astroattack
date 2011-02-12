@@ -16,6 +16,7 @@
 
 struct GameEvents;
 class Entity;
+namespace pugi { class xml_node; }
 typedef std::string CompIdType;
 typedef std::string CompNameType;
 
@@ -32,6 +33,9 @@ public:
     void SetOwnerEntity( Entity* obj ) { m_pOwnerEntity = obj; } // Einheit, die die Komponente besitzt, festlegen
     Entity* GetOwnerEntity() { return m_pOwnerEntity; } // Einheit, die die Komponente besitzt, abfragen
     const Entity* GetOwnerEntity() const { return m_pOwnerEntity; } // Einheit, die die Komponente besitzt, abfragen
+
+    //static boost::shared_ptr<ComponentType> LoadFromXml(const pugi::xml_node& compElem); // every component must to implement this
+    virtual void WriteToXml(pugi::xml_node& compElem) const = 0;
 
     static GameEvents* gameEvents; // EventManager für alle Komponenten
 

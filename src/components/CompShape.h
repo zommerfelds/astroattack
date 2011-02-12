@@ -18,7 +18,7 @@
 #include <vector>
 
 class Vector2D;
-class TiXmlElement;
+namespace pugi { class xml_node; }
 class b2Shape;
 
 //--------------------------------------------//
@@ -31,8 +31,7 @@ public:
 
     const CompIdType& ComponentId() const { return COMPONENT_ID; }
 
-    static boost::shared_ptr<CompShape> LoadFromXml(const TiXmlElement& compElem);
-    virtual void StoreToXml(TiXmlElement& compElem) = 0;
+    static boost::shared_ptr<CompShape> LoadFromXml(const pugi::xml_node& compElem);
 
     virtual boost::shared_ptr<b2Shape> toB2Shape() = 0;
 
@@ -52,8 +51,8 @@ class CompShapePolygon : public CompShape
 {
 public:
 
-    static boost::shared_ptr<CompShapePolygon> LoadFromXml(const TiXmlElement& polyElem);
-    void StoreToXml(TiXmlElement& compElem) {};
+    static boost::shared_ptr<CompShapePolygon> LoadFromXml(const pugi::xml_node& polyElem);
+    void WriteToXml(pugi::xml_node& compElem) const;
 
     boost::shared_ptr<b2Shape> toB2Shape(); // up to the caller to delete the shape
 
@@ -82,8 +81,8 @@ public:
 	CompShapeCircle();
 	CompShapeCircle(const Vector2D& center, float radius);
 
-    static boost::shared_ptr<CompShapeCircle> LoadFromXml(const TiXmlElement& circleElem);
-    void StoreToXml(TiXmlElement& compElem) {};
+    static boost::shared_ptr<CompShapeCircle> LoadFromXml(const pugi::xml_node& circleElem);
+    void WriteToXml(pugi::xml_node& compElem) const;
 
     boost::shared_ptr<b2Shape> toB2Shape();
 
