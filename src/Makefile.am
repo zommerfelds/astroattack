@@ -16,3 +16,5 @@ AstroAttack_SOURCES = Camera.cpp Component.cpp Configuration.cpp \
 	states/GameOverState.cpp states/MainMenuState.cpp \
 	states/PlayingState.cpp states/SlideShowState.cpp \
 	contrib/pugixml/pugixml.cpp
+	
+AstroAttack_CPPFLAGS = -I /usr/include/SDL

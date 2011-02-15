@@ -3,4 +3,5 @@
 aclocal \
 && autoheader \
 && automake --add-missing --foreign \
-&& autoconf
+&& autoconf \
+&& echo You can run ./configure now.
