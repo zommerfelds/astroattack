@@ -564,7 +564,7 @@ void CompPlayerController::SetHighFriction( CompPhysics* playerCompPhysics )
     playerCompPhysics->SetShapeFriction("bottom", 4.0f);
 }
 
-boost::shared_ptr<CompPlayerController> CompPlayerController::LoadFromXml(const pugi::xml_node& compElem, const InputSubSystem* inputSys, std::map<const std::string, int>::iterator itJetPackVar)
+boost::shared_ptr<CompPlayerController> CompPlayerController::LoadFromXml(const pugi::xml_node&, const InputSubSystem* inputSys, std::map<const std::string, int>::iterator itJetPackVar)
 {
    return boost::make_shared<CompPlayerController>( inputSys, itJetPackVar );
 }

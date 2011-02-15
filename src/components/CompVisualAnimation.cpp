@@ -17,7 +17,7 @@
 #include <sstream>
 #include <boost/make_shared.hpp>
 
-#include "contrib/pugixml/pugixml.hpp"
+#include "../contrib/pugixml/pugixml.hpp"
 
 // einduetige ID
 const CompIdType CompVisualAnimation::COMPONENT_ID = "CompVisualAnimation";

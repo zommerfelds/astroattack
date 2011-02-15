@@ -23,7 +23,7 @@
 #include <boost/make_shared.hpp>
 
 // temp!
-#include <SDL/SDL_opengl.h> // OpenlGL via SDL inkludieren
+#include "SDL_opengl.h" // OpenlGL via SDL inkludieren
 
 // eindeutige ID
 const StateIdType SlideShowState::stateId = "SlideShowState";

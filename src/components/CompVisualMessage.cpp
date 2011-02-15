@@ -10,7 +10,7 @@
 
 #include "CompVisualMessage.h"
 
-#include "contrib/pugixml/pugixml.hpp"
+#include "../contrib/pugixml/pugixml.hpp"
 #include <boost/make_shared.hpp>
 
 // eindeutige ID

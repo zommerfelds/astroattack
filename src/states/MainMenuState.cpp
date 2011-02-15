@@ -20,9 +20,9 @@
 #include "../Input.h"
 #include "../Vector2D.h"
 #include "../Texture.h"
-#include "contrib/pugixml/pugixml.hpp"
+#include "../contrib/pugixml/pugixml.hpp"
 #include <boost/foreach.hpp>
-#include "contrib/pugixml/foreach.hpp"
+#include "../contrib/pugixml/foreach.hpp"
 #include "../XmlLoader.h"
 #include <cmath>
 #include <boost/bind.hpp>
@@ -151,9 +151,9 @@ void MainMenuState::Init()        // State starten
         std::string value = node.name();
         std::string file = node.attribute("file").value();
         if ( value == "level" )
-            GetSubSystems()->gui->InsertWidget( menuNames[Play], shared_ptr<Widget>(make_shared<WidgetButton>( Rect(x,x+w,y,y+h), caption, boost::bind( &MainMenuState::CallbackOpenLevel, this, file ), boost::bind( &MainMenuState::CallbackSound, this ) )) );
+            GetSubSystems()->gui->InsertWidget( menuNames[Play], shared_ptr<Widget>(boost::make_shared<WidgetButton>( Rect(x,x+w,y,y+h), caption, boost::bind( &MainMenuState::CallbackOpenLevel, this, file ), boost::bind( &MainMenuState::CallbackSound, this ) )) );
         else if ( value == "slides" )
-            GetSubSystems()->gui->InsertWidget( menuNames[Play], shared_ptr<Widget>(make_shared<WidgetButton>( Rect(x,x+w,y,y+h), caption, boost::bind( &MainMenuState::CallbackOpenSlideShow, this, file ), boost::bind( &MainMenuState::CallbackSound, this ) )) );
+            GetSubSystems()->gui->InsertWidget( menuNames[Play], shared_ptr<Widget>(boost::make_shared<WidgetButton>( Rect(x,x+w,y,y+h), caption, boost::bind( &MainMenuState::CallbackOpenSlideShow, this, file ), boost::bind( &MainMenuState::CallbackSound, this ) )) );
         y += 0.07f;
     }
 

@@ -35,7 +35,7 @@ public:
     static const CompIdType COMPONENT_ID;
 
     static boost::shared_ptr<CompPlayerController> LoadFromXml(const pugi::xml_node& compElem, const InputSubSystem*, std::map<const std::string, int>::iterator itJetPackVar);
-    virtual void WriteToXml(pugi::xml_node& compElem) const {}; // this component has no XML data
+    virtual void WriteToXml(pugi::xml_node&) const {}; // this component has no XML data
 
 private:
     const InputSubSystem* m_pInputSubSystem;

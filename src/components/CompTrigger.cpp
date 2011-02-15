@@ -10,11 +10,11 @@
 #include "CompTrigger.h"
 #include <boost/bind.hpp>
 #include <boost/make_shared.hpp>
-#include "contrib/pugixml/pugixml.hpp"
-#include "components/CompTrigger_Effects.h"
-#include "components/CompTrigger_Conditions.h"
+#include "../contrib/pugixml/pugixml.hpp"
+#include "CompTrigger_Effects.h"
+#include "CompTrigger_Conditions.h"
 #include "../World.h"
-#include "main.h"
+#include "../main.h"
 
 // eindeutige ID
 const CompIdType CompTrigger::COMPONENT_ID = "CompTrigger";

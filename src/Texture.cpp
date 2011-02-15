@@ -15,7 +15,7 @@
 #include <fstream>
 #include <sstream>
 #include <cmath>
-#include <SDL/SDL_opengl.h> // OpenlGL via SDL inkludieren
+#include "SDL_opengl.h" // OpenlGL via SDL inkludieren
 #include <boost/make_shared.hpp>
 
 // Konstruktor

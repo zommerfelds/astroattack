@@ -32,7 +32,7 @@
 const StateIdType EditorState::stateId = "EditorState";
 
 // temp!
-#include <SDL/SDL_opengl.h>
+#include "SDL_opengl.h"
 #include "../Texture.h"
 
 EditorState::EditorState( SubSystems* pSubSystems )
@@ -302,7 +302,7 @@ void EditorState::Draw( float accumulator )        // Spiel zeichnen
                                "Backspace:\n"
                                "Delete:\n"
                                "Page Up/Down:\n"
-                               "H:", "FontW_s", 3.3, 0.02f, AlignRight );
+                               "H:", "FontW_s", 3.3f, 0.02f, AlignRight );
         pRenderer->DrawString( "new vertex\n"
                                "apply block\n"
                                "delete last vertex\n"

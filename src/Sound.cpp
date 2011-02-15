@@ -9,7 +9,7 @@
 
 #include "GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
 #include "Sound.h"
-#include <SDL/SDL_mixer.h>
+#include "SDL_mixer.h"
 #include "main.h" // wichtige Definitionen und Dateien einbinden
 #include "Exception.h" // Ausnahmen im Program (werden in main.cpp eingefangen)
 #include <boost/bind.hpp>

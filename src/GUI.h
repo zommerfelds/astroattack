@@ -82,7 +82,7 @@ public:
     ~WidgetLabel();
 
     void Draw( RenderSubSystem* pRenderer );
-    void MouseStateChanged( MouseState newState ) {}
+    void MouseStateChanged( MouseState ) {}
 private:
     std::string m_text;
 };

@@ -11,8 +11,8 @@
 #include "CompVisualTexture.h"
 
 #include <boost/foreach.hpp>
-#include "contrib/pugixml/pugixml.hpp"
-#include "contrib/pugixml/foreach.hpp"
+#include "../contrib/pugixml/pugixml.hpp"
+#include "../contrib/pugixml/foreach.hpp"
 
 #include <boost/make_shared.hpp>
 #include "CompShape.h"

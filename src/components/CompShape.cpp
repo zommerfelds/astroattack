@@ -13,7 +13,7 @@
 
 #include <Box2D/Box2D.h> // need this for converting to Box2D shapes
 
-#include "contrib/pugixml/pugixml.hpp"
+#include "../contrib/pugixml/pugixml.hpp"
 #include <boost/make_shared.hpp>
 
 // eindeutige ID

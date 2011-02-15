@@ -21,7 +21,7 @@
 #include "../GameEvents.h"
 #include "../XmlLoader.h"
 #include "../Sound.h"
-#include <SDL/SDL.h>
+#include "SDL.h"
 
 #include "../main.h"
 
@@ -31,7 +31,7 @@
 #include <sstream>
 
 // TEMP ! TODO
-#include <SDL/SDL_opengl.h>
+#include "SDL_opengl.h"
 #include "../components/CompGravField.h"
 #include "../components/CompPhysics.h"
 

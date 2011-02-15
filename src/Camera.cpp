@@ -9,7 +9,7 @@
 #include "GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
 
 // OpenGL via SDL inkludieren (Plattform-übergreifende Definitionen)
-#include <SDL/SDL_opengl.h>
+#include "SDL_opengl.h"
 #include "Camera.h"
 #include "Input.h"
 #include "World.h"

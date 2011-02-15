@@ -9,9 +9,9 @@
 #include "GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
 
 // Simple DirectMedia Layer (freie Plattform-übergreifende Multimedia-Programmierschnittstelle)
-#include <SDL/SDL.h>
+#include "SDL.h"
 // OpenGL via SDL inkludieren (Plattform-übergreifende Definitionen)
-#include <SDL/SDL_opengl.h>
+#include "SDL_opengl.h"
 
 #include "Renderer.h"
 #include "Texture.h"

@@ -12,7 +12,7 @@
 #include "GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
 #include <boost/scoped_ptr.hpp>
 // Simple DirectMedia Layer (freie Plattform-übergreifende Multimedia-Programmierschnittstelle)
-#include <SDL/SDL.h>
+#include "SDL.h"
 #include "GameEvents.h"
 
 #include <vector>

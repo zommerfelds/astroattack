@@ -1,0 +1,210 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{3227BFE5-C873-41E6-A040-35E59D02460E}</ProjectGuid>
+    <RootNamespace>AstroAttack</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)\..\build\win32\$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)\..\build\win32\$(Configuration)\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)\..\build\win32\$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)\..\build\win32\$(Configuration)\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</GenerateManifest>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</GenerateManifest>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;USE_SAFE_CRT_FUNCTIONS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <PrecompiledHeaderFile>
+      </PrecompiledHeaderFile>
+      <WarningLevel>Level4</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>SDLmain.lib;SDL.lib;opengl32.lib;DevIL.lib;ILU.lib;glu32.lib;Box2D_d.lib;msvcrtd.lib;SDL_mixer.lib;ftgl.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+      <IgnoreSpecificDefaultLibraries>libc.lib; libcmt.lib; msvcrt.lib; libcd.lib; libcmtd.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention>
+      </DataExecutionPrevention>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <Optimization>Full</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;USE_SAFE_CRT_FUNCTIONS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level4</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>SDLmain.lib;SDL.lib;opengl32.lib;DevIL.lib;ILU.lib;glu32.lib;Box2D.lib;SDL_ttf.lib;SDL_mixer.lib;ftgl.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+      <IgnoreSpecificDefaultLibraries>libc.lib; libcmt.lib; libcd.lib; libcmtd.lib; msvcrtd.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention>
+      </DataExecutionPrevention>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\src\Camera.h" />
+    <ClInclude Include="..\src\Component.h" />
+    <ClInclude Include="..\src\components\CompShape.h" />
+    <ClInclude Include="..\src\Configuration.h" />
+    <ClInclude Include="..\src\contrib\pugixml\foreach.hpp" />
+    <ClInclude Include="..\src\contrib\pugixml\pugiconfig.hpp" />
+    <ClInclude Include="..\src\contrib\pugixml\pugixml.hpp" />
+    <ClInclude Include="..\src\Entity.h" />
+    <ClInclude Include="..\src\Event.h" />
+    <ClInclude Include="..\src\Font.h" />
+    <ClInclude Include="..\src\GameApp.h" />
+    <ClInclude Include="..\src\GameEvents.h" />
+    <ClInclude Include="..\src\GameStates.h" />
+    <ClInclude Include="..\src\GUI.h" />
+    <ClInclude Include="..\src\Input.h" />
+    <ClInclude Include="..\src\main.h" />
+    <ClInclude Include="..\src\Physics.h" />
+    <ClInclude Include="..\src\Renderer.h" />
+    <ClInclude Include="..\src\Sound.h" />
+    <ClInclude Include="..\src\Texture.h" />
+    <ClInclude Include="..\src\World.h" />
+    <ClInclude Include="..\src\XmlLoader.h" />
+    <ClInclude Include="..\src\components\CompGravField.h" />
+    <ClInclude Include="..\src\components\CompPhysics.h" />
+    <ClInclude Include="..\src\components\CompPlayerController.h" />
+    <ClInclude Include="..\src\components\CompPosition.h" />
+    <ClInclude Include="..\src\components\CompTrigger.h" />
+    <ClInclude Include="..\src\components\CompTrigger_Conditions.h" />
+    <ClInclude Include="..\src\components\CompTrigger_Effects.h" />
+    <ClInclude Include="..\src\components\CompVisualAnimation.h" />
+    <ClInclude Include="..\src\components\CompVisualMessage.h" />
+    <ClInclude Include="..\src\components\CompVisualTexture.h" />
+    <ClInclude Include="..\src\states\EditorState.h" />
+    <ClInclude Include="..\src\states\GameOverState.h" />
+    <ClInclude Include="..\src\states\MainMenuState.h" />
+    <ClInclude Include="..\src\states\PlayingState.h" />
+    <ClInclude Include="..\src\states\SlideShowState.h" />
+    <ClInclude Include="..\src\Exception.h" />
+    <ClInclude Include="..\src\GNU_config.h" />
+    <ClInclude Include="..\src\Logger.h" />
+    <ClInclude Include="..\src\Vector2D.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\Camera.cpp" />
+    <ClCompile Include="..\src\Component.cpp" />
+    <ClCompile Include="..\src\components\CompShape.cpp" />
+    <ClCompile Include="..\src\Configuration.cpp" />
+    <ClCompile Include="..\src\contrib\pugixml\pugixml.cpp" />
+    <ClCompile Include="..\src\Entity.cpp" />
+    <ClCompile Include="..\src\Event.cpp" />
+    <ClCompile Include="..\src\Font.cpp" />
+    <ClCompile Include="..\src\GameApp.cpp" />
+    <ClCompile Include="..\src\GameStates.cpp" />
+    <ClCompile Include="..\src\GUI.cpp" />
+    <ClCompile Include="..\src\Init.cpp" />
+    <ClCompile Include="..\src\Input.cpp" />
+    <ClCompile Include="..\src\main.cpp" />
+    <ClCompile Include="..\src\Physics.cpp" />
+    <ClCompile Include="..\src\Renderer.cpp" />
+    <ClCompile Include="..\src\Sound.cpp" />
+    <ClCompile Include="..\src\Texture.cpp" />
+    <ClCompile Include="..\src\World.cpp" />
+    <ClCompile Include="..\src\XmlLoader.cpp" />
+    <ClCompile Include="..\src\components\CompGravField.cpp" />
+    <ClCompile Include="..\src\components\CompPhysics.cpp" />
+    <ClCompile Include="..\src\components\CompPlayerController.cpp" />
+    <ClCompile Include="..\src\components\CompPosition.cpp" />
+    <ClCompile Include="..\src\components\CompTrigger.cpp" />
+    <ClCompile Include="..\src\components\CompTrigger_Conditions.cpp" />
+    <ClCompile Include="..\src\components\CompTrigger_Effects.cpp" />
+    <ClCompile Include="..\src\components\CompVisualAnimation.cpp" />
+    <ClCompile Include="..\src\components\CompVisualMessage.cpp" />
+    <ClCompile Include="..\src\components\CompVisualTexture.cpp" />
+    <ClCompile Include="..\src\states\EditorState.cpp" />
+    <ClCompile Include="..\src\states\GameOverState.cpp" />
+    <ClCompile Include="..\src\states\MainMenuState.cpp" />
+    <ClCompile Include="..\src\states\PlayingState.cpp" />
+    <ClCompile Include="..\src\states\SlideShowState.cpp" />
+    <ClCompile Include="..\src\Logger.cpp" />
+    <ClCompile Include="..\src\OsMsgBox.cpp" />
+    <ClCompile Include="..\src\Vector2D.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\bin\AstroAttack.log" />
+    <None Include="..\data\config.xml" />
+    <None Include="..\src\Events.txt" />
+    <None Include="..\data\graphics.xml" />
+    <None Include="..\data\graphicsMenu.xml" />
+    <None Include="..\data\levelSequence.xml" />
+    <None Include="..\data\player.xml" />
+    <None Include="..\data\templates.xml" />
+    <None Include="..\src\Makefile.am" />
+    <None Include="..\src\Makefile.in" />
+    <None Include="..\TODO.txt" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

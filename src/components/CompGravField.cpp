@@ -12,7 +12,7 @@
 #include "../Vector2D.h"
 #include <boost/make_shared.hpp>
 
-#include "contrib/pugixml/pugixml.hpp"
+#include "../contrib/pugixml/pugixml.hpp"
 
 // eindeutige ID
 const CompIdType CompGravField::COMPONENT_ID = "CompGravField";

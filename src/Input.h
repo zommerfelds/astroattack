@@ -14,7 +14,7 @@
 
 #include <map>
 #include <set>
-#include <SDL/SDL.h>
+#include "SDL.h"
 #include <boost/scoped_ptr.hpp>
 
 enum Key

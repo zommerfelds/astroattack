@@ -11,9 +11,9 @@
 #include "Font.h"
 
 // Simple DirectMedia Layer (freie Plattform-Übergreifende Multimedia-Programmierschnittstelle)
-#include <SDL/SDL.h>
+#include "SDL.h"
 // OpenGL via SDL inkludieren (Plattform-Übergreifende Definitionen)
-#include <SDL/SDL_opengl.h>
+#include "SDL_opengl.h"
 
 //#include "contrib/utfcpp/utf8.h"
 #include <FTGL/ftgl.h>
@@ -167,7 +167,7 @@ void FontManager::GetDetailedDimensions(const std::string &text, FTFont& font, f
     if (totalWidth)
         *totalWidth = max_width;
 
-    float line_spacing = font.LineHeight()*0.8;
+    float line_spacing = font.LineHeight()*0.8f;
     if (lineSpacing)
         *lineSpacing = line_spacing;
     if (totalHeight) {

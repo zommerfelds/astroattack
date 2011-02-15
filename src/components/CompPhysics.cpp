@@ -12,7 +12,7 @@
 #include "CompPhysics.h"
 #include <Box2D/Box2D.h>       // extere Physikbibliothek
 #include <boost/make_shared.hpp>
-#include "contrib/pugixml/pugixml.hpp"
+#include "../contrib/pugixml/pugixml.hpp"
 
 // eindeutige ID
 const CompIdType CompPhysics::COMPONENT_ID = "CompPhysics";

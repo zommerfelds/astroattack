@@ -11,11 +11,11 @@
 
 #include "CompPosition.h"
 #include "CompPhysics.h"
-#include "Entity.h"
+#include "../Entity.h"
 #include "../Vector2D.h"
 #include <boost/make_shared.hpp>
 
-#include "contrib/pugixml/pugixml.hpp"
+#include "../contrib/pugixml/pugixml.hpp"
 
 // eindeutige ID
 const CompIdType CompPosition::COMPONENT_ID = "CompPosition";
