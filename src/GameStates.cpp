@@ -1,20 +1,16 @@
-/*----------------------------------------------------------\
-|                     GameStates.cpp                        |
-|                     --------------                        |
-|               Quelldatei von Astro Attack                 |
-|                  Christian Zommerfelds                    |
-|                          2009                             |
-\----------------------------------------------------------*/
+/*
+ * GameStates.cpp
+ * This file is part of Astro Attack
+ * Copyright 2011 Christian Zommerfelds
+ */
 
 #include "GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
 #include "GameStates.h"
 #include "main.h"
 #include "GameApp.h"
 
-GameState::GameState( SubSystems* pSubSystems )
-{
-    m_pSubSystems = pSubSystems;
-}
+GameState::GameState( SubSystems& subSystems ) : m_subSystems ( subSystems )
+{}
 
 StateManager::StateManager()
 {
@@ -45,7 +41,7 @@ void StateManager::ChangeState( const boost::shared_ptr<GameState>& pState )
 	// Neuer State speichern und initialisieren
 	m_states.push_back( pState );
 	m_states.back()->Init();
-    m_states.back()->GetSubSystems()->isLoading = true;
+    m_states.back()->GetSubSystems().isLoading = true;
 }
 
 void StateManager::PushState( const boost::shared_ptr<GameState>& pState )
@@ -61,7 +57,7 @@ void StateManager::PushState( const boost::shared_ptr<GameState>& pState )
 	// Neuer State speichern und initialisieren
 	m_states.push_back( pState );
 	m_states.back()->Init();
-    m_states.back()->GetSubSystems()->isLoading = true;
+    m_states.back()->GetSubSystems().isLoading = true;
 }
 
 void StateManager::PopState()
@@ -71,7 +67,7 @@ void StateManager::PopState()
     {
         gAaLog.Write ( "\n=== Popping State \"%s\" ===\n\n", m_states.back()->StateID().c_str() );
 		m_states.back()->Cleanup();
-        m_states.back()->GetSubSystems()->isLoading = true;
+        m_states.back()->GetSubSystems().isLoading = true;
 		m_states.pop_back();
 	}
 
@@ -82,5 +78,3 @@ void StateManager::PopState()
 		m_states.back()->Resume();
 	}
 }
-
-// Astro Attack - Christian Zommerfelds - 2009

@@ -1,10 +1,8 @@
-/*----------------------------------------------------------\
-|                     Configuration.h                       |
-|                     ---------------                       |
-|               Quelldatei von Astro Attack                 |
-|                  Christian Zommerfelds                    |
-|                          2009                             |
-\----------------------------------------------------------*/
+/*
+ * Configuration.h
+ * This file is part of Astro Attack
+ * Copyright 2011 Christian Zommerfelds
+ */
 
 #ifndef CONFIGURATION_H
 #define CONFIGURATION_H
@@ -78,5 +76,3 @@ private:
 };
 
 #endif
-
-// Astro Attack - Christian Zommerfelds - 2009

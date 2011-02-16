@@ -1,10 +1,9 @@
-/*----------------------------------------------------------\
-|                    CompGravField.h                        |
-|                    ---------------                        |
-|               Quelldatei von Astro Attack                 |
-|                  Christian Zommerfelds                    |
-|                          2009                             |
-\----------------------------------------------------------*/
+/*
+ * CompGravField.h
+ * This file is part of Astro Attack
+ * Copyright 2011 Christian Zommerfelds
+ */
+ 
 // Komponente für Gravitationsfelder
 
 #ifndef COMPGRAVFIELD_H
@@ -29,6 +28,7 @@ class CompGravField : public Component
 {
 public:
     CompGravField();
+    ~CompGravField(); // need to implement destructor manually because of scoped_ptr (incomplete type)
 
     const CompIdType& ComponentId() const { return COMPONENT_ID; }
     static const CompIdType COMPONENT_ID; // eindeutige ID für diese Komponentenart (gleich wie Klassennamen, siehe CompGravField.cpp)
@@ -66,5 +66,3 @@ private:
 //--------------------------------------------//
 
 #endif
-
-// Astro Attack - Christian Zommerfelds - 2009

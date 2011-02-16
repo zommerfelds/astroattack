@@ -1,10 +1,8 @@
-/*----------------------------------------------------------\
-|                      GNU_config.h                         |
-|                      ------------                         |
-|               Quelldatei von Astro Attack                 |
-|                  Christian Zommerfelds                    |
-|                          2009                             |
-\----------------------------------------------------------*/
+/*
+ * GNU_config.h
+ * This file is part of Astro Attack
+ * Copyright 2011 Christian Zommerfelds
+ */
 
 // Für Betriebssysteme, die mit GNU Build System arbeiten (GNU/Linux)
 // Muss in jeder Quelldatei eingebunden werden! ( #include "GNU_config.h" )
@@ -22,5 +20,3 @@
 //using namespace std;
 
 #endif
-
-// Astro Attack - Christian Zommerfelds - 2009

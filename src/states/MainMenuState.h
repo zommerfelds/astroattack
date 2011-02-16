@@ -1,10 +1,9 @@
-/*----------------------------------------------------------\
-|                     MainMenuState.h                       |
-|                     ---------------                       |
-|               Quelldatei von Astro Attack                 |
-|                  Christian Zommerfelds                    |
-|                          2009                             |
-\----------------------------------------------------------*/
+/*
+ * MainMenuState.h
+ * This file is part of Astro Attack
+ * Copyright 2011 Christian Zommerfelds
+ */
+
 // Das MainMenuState ist aktiv wenn der Spieler sich beim Hauptmenü befindet.
 // Hier werden alle nötigen Aktionen im Menü durchgeführt.
 
@@ -36,8 +35,8 @@ enum SubMenu
 class MainMenuState : public GameState
 {
 public:
-    MainMenuState( SubSystems* pSubSystems, SubMenu startingSubMenu = Main );
-    ~MainMenuState();
+    MainMenuState( SubSystems& subSystems, SubMenu startingSubMenu = Main );
+    ~MainMenuState(); // need to implement destructor manually because of scoped_ptr (incomplete type)
 
     const StateIdType& StateID() const { return stateId; }
 
@@ -68,12 +67,7 @@ private:
     void CallbackButDiscardConfig();
 
     // Bannerinformationen
-    float m_titleVertexOffsetXTarget[4];
-    float m_titleVertexOffsetYTarget[4];
-    float m_titleVertexOffsetXDir[4];
-    float m_titleVertexOffsetYDir[4];
-    float m_titleVertexCoordOffset[8];
-    float m_titleIntensityAngle;
+    float m_titleIntensityPhase;
 
     SubMenu m_subMenu;
 
@@ -91,5 +85,3 @@ private:
 //--------------------------------------------//
 
 #endif
-
-// Astro Attack - Christian Zommerfelds - 2009

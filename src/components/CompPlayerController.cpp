@@ -1,10 +1,9 @@
-/*----------------------------------------------------------\
-|                CompPlayerController.cpp                   |
-|                ------------------------                   |
-|               Quelldatei von Astro Attack                 |
-|                  Christian Zommerfelds                    |
-|                          2011                             |
-\----------------------------------------------------------*/
+/*
+ * CompPlayerController.cpp
+ * This file is part of Astro Attack
+ * Copyright 2011 Christian Zommerfelds
+ */
+
 // CompPlayerController.h für mehr Informationen
 
 #include "../GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
@@ -30,23 +29,18 @@ const int cMaxRecharge = 15;                    // wie wie muss der Spieler wart
 
 // Konstruktor der Komponente
 CompPlayerController::CompPlayerController( const InputSubSystem* pInputSubSystem, std::map<const std::string, int>::iterator itJetPackVar ) :
-         m_pInputSubSystem ( pInputSubSystem ),
-         m_currentFrictionIsLow ( false ),
-         m_eventConnection (),
-         m_itJetPackVar ( itJetPackVar ),
-         m_spaceKeyDownLastUpdate ( false ),
-         m_playerCouldWalkLastUpdate ( false ),
-         m_rechargeTime ( cMaxRecharge ),
-         m_bodyAngleAbs ( cPi*0.5f ),
-         m_walkingTime ( 0 )
+     m_pInputSubSystem ( pInputSubSystem ),
+     m_currentFrictionIsLow ( false ),
+     m_eventConnection (),
+     m_itJetPackVar ( itJetPackVar ),
+     m_spaceKeyDownLastUpdate ( false ),
+     m_playerCouldWalkLastUpdate ( false ),
+     m_rechargeTime ( cMaxRecharge ),
+     m_bodyAngleAbs ( cPi*0.5f ),
+     m_walkingTime ( 0 )
 {
     // Update-Methode registrieren, damit sie in jede Aktualisierung (GameUpdate) aufgerufen wird:
     m_eventConnection = gameEvents->gameUpdate.RegisterListener( boost::bind( &CompPlayerController::OnUpdate, this ) );
-}
-
-// Destruktor
-CompPlayerController::~CompPlayerController()
-{
 }
 
 // Funktion die Tastendrücke in Physikalische Reaktionen umwandelt.

@@ -1,10 +1,8 @@
-/*----------------------------------------------------------\
-|                  CompVisualTexture.cpp                    |
-|                   -------------------                     |
-|               Quelldatei von Astro Attack                 |
-|                  Christian Zommerfelds                    |
-|                          2009                             |
-\----------------------------------------------------------*/
+/*
+ * CompVisualTexture.cpp
+ * This file is part of Astro Attack
+ * Copyright 2011 Christian Zommerfelds
+ */
 
 #include "../GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
 
@@ -23,12 +21,7 @@
 const CompIdType CompVisualTexture::COMPONENT_ID = "CompVisualTexture";
 
 CompVisualTexture::CompVisualTexture( TextureIdType texId ): m_textureId(texId)
-{
-}
-
-CompVisualTexture::~CompVisualTexture()
-{
-}
+{}
 
 boost::shared_ptr<CompVisualTexture> CompVisualTexture::LoadFromXml(const pugi::xml_node& compElem)
 {
@@ -94,5 +87,3 @@ TextureIdType CompVisualTexture::GetEdgeTexture(size_t edgeNum) const
         return "";
     return it->second;
 }
-
-// Astro Attack - Christian Zommerfelds - 2009

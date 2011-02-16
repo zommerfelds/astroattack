@@ -1,10 +1,8 @@
-/*----------------------------------------------------------\
-|                         Event.h                           |
-|                         -------                           |
-|               Quelldatei von Astro Attack                 |
-|                  Christian Zommerfelds                    |
-|                          2010                             |
-\----------------------------------------------------------*/
+/*
+ * Event.h
+ * This file is part of Astro Attack
+ * Copyright 2011 Christian Zommerfelds
+ */
 
 #ifndef EVENT_H
 #define EVENT_H
@@ -95,5 +93,3 @@ private:
 #include "Event_templ.cpp"
 
 #endif /* EVENT_H */
-
-// Astro Attack - Christian Zommerfelds - 2011

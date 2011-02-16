@@ -1,10 +1,9 @@
-/*----------------------------------------------------------\
-|                      CompShape.cpp                        |
-|                      -------------                        |
-|                   Part of AstroAttack                     |
-|                  Christian Zommerfelds                    |
-|                          2010                             |
-\----------------------------------------------------------*/
+/*
+ * CompShape.cpp
+ * This file is part of Astro Attack
+ * Copyright 2011 Christian Zommerfelds
+ */
+
 // CompPosition.h für mehr Informationen
 
 #include "../GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
@@ -42,6 +41,8 @@ boost::shared_ptr<CompShape> CompShape::LoadFromXml(const pugi::xml_node& compNo
 	return boost::shared_ptr<CompShape>();
 }
 
+CompShapePolygon::~CompShapePolygon() {}
+
 boost::shared_ptr<CompShapePolygon> CompShapePolygon::LoadFromXml(
 		const pugi::xml_node& polyElem)
 {
@@ -71,7 +72,7 @@ void CompShapePolygon::WriteToXml(pugi::xml_node& compNode) const
     }
 }
 
-boost::shared_ptr<b2Shape> CompShapePolygon::toB2Shape()
+boost::shared_ptr<b2Shape> CompShapePolygon::toB2Shape() const
 {
     boost::shared_ptr<b2PolygonShape> poly_shape = boost::make_shared<b2PolygonShape>();
     b2Vec2 vertices[b2_maxPolygonVertices];
@@ -113,6 +114,8 @@ CompShapeCircle::CompShapeCircle(const Vector2D& center, float radius) :
 		m_radius (radius)
 {}
 
+CompShapeCircle::~CompShapeCircle() {}
+
 boost::shared_ptr<CompShapeCircle> CompShapeCircle::LoadFromXml(
 		const pugi::xml_node& circleElem)
 {
@@ -134,12 +137,10 @@ void CompShapeCircle::WriteToXml(pugi::xml_node& compNode) const
     circleNode.append_attribute("r").set_value(m_radius);
 }
 
-boost::shared_ptr<b2Shape> CompShapeCircle::toB2Shape()
+boost::shared_ptr<b2Shape> CompShapeCircle::toB2Shape() const
 {
     boost::shared_ptr<b2CircleShape> circle_shape = boost::make_shared<b2CircleShape>();
     circle_shape->m_radius = m_radius;
     circle_shape->m_p = *m_center->To_b2Vec2();
     return circle_shape;
 }
-
-// Astro Attack - Christian Zommerfelds - 2010

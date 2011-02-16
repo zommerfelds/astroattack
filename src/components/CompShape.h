@@ -1,10 +1,9 @@
-/*----------------------------------------------------------\
-|                       CompShape.h                         |
-|                       -----------                         |
-|                   Part of AstroAttack                     |
-|                  Christian Zommerfelds                    |
-|                          2010                             |
-\----------------------------------------------------------*/
+/*
+ * CompShape.h
+ * This file is part of Astro Attack
+ * Copyright 2011 Christian Zommerfelds
+ */
+
 
 #ifndef COMPSHAPE_H
 #define COMPSHAPE_H
@@ -27,13 +26,13 @@ class b2Shape;
 class CompShape : public Component
 {
 public:
-	~CompShape() {}
+	virtual ~CompShape() {}
 
     const CompIdType& ComponentId() const { return COMPONENT_ID; }
 
     static boost::shared_ptr<CompShape> LoadFromXml(const pugi::xml_node& compElem);
 
-    virtual boost::shared_ptr<b2Shape> toB2Shape() = 0;
+    virtual boost::shared_ptr<b2Shape> toB2Shape() const = 0;
 
     enum Type { Polygon, Circle };
     virtual Type GetType() const = 0;
@@ -50,11 +49,12 @@ public:
 class CompShapePolygon : public CompShape
 {
 public:
+    ~CompShapePolygon(); // need to implement destructor manually because of scoped_ptr (incomplete type)
 
     static boost::shared_ptr<CompShapePolygon> LoadFromXml(const pugi::xml_node& polyElem);
     void WriteToXml(pugi::xml_node& compElem) const;
 
-    boost::shared_ptr<b2Shape> toB2Shape(); // up to the caller to delete the shape
+    boost::shared_ptr<b2Shape> toB2Shape() const; // up to the caller to delete the shape
 
     void SetVertex(size_t i, const Vector2D& v);
 
@@ -80,11 +80,12 @@ class CompShapeCircle : public CompShape
 public:
 	CompShapeCircle();
 	CompShapeCircle(const Vector2D& center, float radius);
+	~CompShapeCircle(); // need to implement destructor manually because of scoped_ptr (incomplete type)
 
     static boost::shared_ptr<CompShapeCircle> LoadFromXml(const pugi::xml_node& circleElem);
     void WriteToXml(pugi::xml_node& compElem) const;
 
-    boost::shared_ptr<b2Shape> toB2Shape();
+    boost::shared_ptr<b2Shape> toB2Shape() const;
 
     float GetRadius() const { return m_radius; }
     const Vector2D& GetCenter() const { return *m_center; }
@@ -100,5 +101,3 @@ private:
 //--------------------------------------------//
 
 #endif
-
-// Astro Attack - Christian Zommerfelds - 2010

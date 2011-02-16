@@ -1,10 +1,9 @@
-/*----------------------------------------------------------\
-|                         World.h                           |
-|                         -------                           |
-|               Quelldatei von Astro Attack                 |
-|                  Christian Zommerfelds                    |
-|                          2009                             |
-\----------------------------------------------------------*/
+/*
+ * World.h
+ * This file is part of Astro Attack
+ * Copyright 2011 Christian Zommerfelds
+ */
+
 // Spielwelt
 // Speichert alle Entities (und somit auch alle Komponente)
 
@@ -41,13 +40,13 @@ public:
     ~GameWorld();
 
     void AddEntity( const boost::shared_ptr<Entity>& pEntity );
-    void RemoveEntity( EntityIdType id );
-    boost::shared_ptr<Entity> GetEntity( EntityIdType id ) const;
+    void RemoveEntity( const EntityIdType& id );
+    boost::shared_ptr<Entity> GetEntity( const EntityIdType& id ) const;
     const EntityMap* GetAllEntities() const;
 
     int GetVariable( const WorldVariableType& varName );
     WorldVariblesMap::iterator GetItToVariable( const WorldVariableType& varName );
-    void SetVariable( const WorldVariableType varName, int value );
+    void SetVariable( const WorldVariableType& varName, int value );
 
     void WriteWorldToLogger( Logger& log );
 
@@ -59,5 +58,3 @@ private:
 };
 
 #endif
-
-// Astro Attack - Christian Zommerfelds - 2009

@@ -1,10 +1,8 @@
-/*----------------------------------------------------------\
-|                    CompTrigger.cpp                        |
-|                    ---------------                        |
-|               Quelldatei von Astro Attack                 |
-|                  Christian Zommerfelds                    |
-|                          2009                             |
-\----------------------------------------------------------*/
+/*
+ * CompTrigger.cpp
+ * This file is part of Astro Attack
+ * Copyright 2011 Christian Zommerfelds
+ */
 
 #include "../GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
 #include "CompTrigger.h"
@@ -22,10 +20,6 @@ const CompIdType CompTrigger::COMPONENT_ID = "CompTrigger";
 CompTrigger::CompTrigger() : m_fired ( false )
 {
     m_eventConnection = gameEvents->gameUpdate.RegisterListener( boost::bind( &CompTrigger::OnUpdate, this ) );
-}
-
-CompTrigger::~CompTrigger()
-{
 }
 
 void CompTrigger::OnUpdate()
@@ -272,5 +266,3 @@ void CompTrigger::WriteToXml(pugi::xml_node& compNode) const
         }
     }
 }
-
-// Astro Attack - Christian Zommerfelds - 2009

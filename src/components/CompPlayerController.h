@@ -1,10 +1,9 @@
-/*----------------------------------------------------------\
-|                 CompPlayerController.h                    |
-|                 ----------------------                    |
-|               Quelldatei von Astro Attack                 |
-|                  Christian Zommerfelds                    |
-|                          2009                             |
-\----------------------------------------------------------*/
+/*
+ * CompPlayerController.h
+ * This file is part of Astro Attack
+ * Copyright 2011 Christian Zommerfelds
+ */
+
 // CompPlayerController ist die Komponente, die den Spieler steuert.
 // Nur die Spielereinheit hat diese Komponente.
 // Sie wandelt Tastendrücke in physikalische Kräfte um, steuert Animationen, usw.
@@ -30,7 +29,7 @@ class CompPlayerController : public Component
 {
 public:
     CompPlayerController( const InputSubSystem*, std::map<const std::string, int>::iterator itJetPackVar );
-    ~CompPlayerController();
+
     const CompIdType& ComponentId() const { return COMPONENT_ID; }
     static const CompIdType COMPONENT_ID;
 
@@ -66,5 +65,3 @@ private:
 //--------------------------------------------//
 
 #endif
-
-// Astro Attack - Christian Zommerfelds - 2009

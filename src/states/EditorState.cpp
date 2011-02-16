@@ -1,10 +1,8 @@
-/*----------------------------------------------------------\
-|                    EditorState.cpp                        |
-|                    ---------------                        |
-|               Quelldatei von Astro Attack                 |
-|                  Christian Zommerfelds                    |
-|                          2009                             |
-\----------------------------------------------------------*/
+/*
+ * EditorState.cpp
+ * This file is part of Astro Attack
+ * Copyright 2011 Christian Zommerfelds
+ */
 
 #include "../GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
 #include "EditorState.h"
@@ -31,14 +29,12 @@
 
 const StateIdType EditorState::stateId = "EditorState";
 
-// temp!
-#include "SDL_opengl.h"
 #include "../Texture.h"
 
-EditorState::EditorState( SubSystems* pSubSystems )
-: GameState( pSubSystems ),
-  m_pGameWorld ( new GameWorld( GetSubSystems()->events.get() ) ),
-  m_pGameCamera ( new GameCamera( GetSubSystems()->input.get(), GetSubSystems()->renderer.get(), m_pGameWorld.get() ) ),
+EditorState::EditorState( SubSystems& subSystems )
+: GameState( subSystems ),
+  m_pGameWorld ( new GameWorld( GetSubSystems().events.get() ) ),
+  m_pGameCamera ( new GameCamera( GetSubSystems().input.get(), GetSubSystems().renderer.get(), m_pGameWorld.get() ) ),
   m_currentPoint ( 0 ),
   m_currentTexture (),
   m_currentTextureNum ( 0 ),
@@ -55,7 +51,7 @@ EditorState::EditorState( SubSystems* pSubSystems )
         m_pClickedPoints[i].reset( new Vector2D );
     }
 
-    std::vector<std::string> texList ( GetSubSystems()->renderer->GetTextureManager()->GetTextureList() );
+    std::vector<std::string> texList = GetSubSystems().renderer->GetTextureManager().GetTextureList();
     unsigned int i = 0;
     for ( ; i < texList.size(); ++i )
     {                
@@ -70,9 +66,7 @@ EditorState::EditorState( SubSystems* pSubSystems )
         gAaLog.Write ( "Warning: No textures found for editor!\n" );
 }
 
-EditorState::~EditorState()
-{
-}
+EditorState::~EditorState() {}
 
 void EditorState::Init()        // State starten
 {
@@ -103,7 +97,7 @@ void EditorState::Resume()      // State wiederaufnehmen
 
 void EditorState::Frame( float deltaTime )       // Pro Frame
 {
-    GetSubSystems()->input->Update();   // neue Eingaben lesen
+    GetSubSystems().input->Update();   // neue Eingaben lesen
     m_pGameCamera->Update( deltaTime ); // Kamera updaten
 }
 
@@ -128,11 +122,11 @@ void SnapToGrid( Vector2D* worldCoordinates )
 
 void EditorState::Update()      // Spiel aktualisieren
 {
-    if ( GetSubSystems()->input->LMouseKeyState() )
+    if ( GetSubSystems().input->LMouseKeyState() )
     {
         if ( m_mouseButDownOld == false && m_currentPoint < 8 )
         {
-            *m_pClickedPoints[m_currentPoint] = m_pGameCamera->ScreenToWorld( *GetSubSystems()->input->MousePos() );
+            *m_pClickedPoints[m_currentPoint] = m_pGameCamera->ScreenToWorld( *GetSubSystems().input->MousePos() );
             SnapToGrid( m_pClickedPoints[m_currentPoint].get() );
             ++m_currentPoint;
         }
@@ -141,12 +135,12 @@ void EditorState::Update()      // Spiel aktualisieren
     else
         m_mouseButDownOld = false;
 
-    if ( GetSubSystems()->input->KeyState( EditorCancelBlock ) )
+    if ( GetSubSystems().input->KeyState( EditorCancelBlock ) )
     {
         m_currentPoint = 0;
     }
 
-    if ( GetSubSystems()->input->KeyState( EditorCancelVertex ) )
+    if ( GetSubSystems().input->KeyState( EditorCancelVertex ) )
     {
         if ( m_cancelVertexKeyDownOld == false && m_currentPoint > 0 )
             --m_currentPoint;
@@ -155,7 +149,7 @@ void EditorState::Update()      // Spiel aktualisieren
     else
         m_cancelVertexKeyDownOld = false;
 
-    if ( GetSubSystems()->input->KeyState( EditorCreateEntity ) )
+    if ( GetSubSystems().input->KeyState( EditorCreateEntity ) )
     {
         if ( m_createEntityKeyDownOld == false && m_currentPoint > 2 )
         {
@@ -206,12 +200,12 @@ void EditorState::Update()      // Spiel aktualisieren
     else
         m_createEntityKeyDownOld = false;
 
-    if ( GetSubSystems()->input->KeyState( EditorNextTexture ) )
+    if ( GetSubSystems().input->KeyState( EditorNextTexture ) )
     {
         if ( !m_nextTextureKeyDownOld )
         {
             unsigned int old_currentTextureNum = m_currentTextureNum;
-            std::vector<std::string> texList ( GetSubSystems()->renderer->GetTextureManager()->GetTextureList() );
+            std::vector<std::string> texList ( GetSubSystems().renderer->GetTextureManager().GetTextureList() );
             do
             {
                 ++m_currentTextureNum;
@@ -227,11 +221,11 @@ void EditorState::Update()      // Spiel aktualisieren
     else
         m_nextTextureKeyDownOld = false;
 
-    if ( GetSubSystems()->input->KeyState( EditorPrevTexture ) )
+    if ( GetSubSystems().input->KeyState( EditorPrevTexture ) )
     {
         if ( !m_prevTextureKeyDownOld )
         {
-            std::vector<std::string> texList ( GetSubSystems()->renderer->GetTextureManager()->GetTextureList() );
+            std::vector<std::string> texList = GetSubSystems().renderer->GetTextureManager().GetTextureList();
             unsigned int old_currentTextureNum = m_currentTextureNum;
             do
             {                
@@ -249,7 +243,7 @@ void EditorState::Update()      // Spiel aktualisieren
     else
         m_prevTextureKeyDownOld = false;
 
-    if ( GetSubSystems()->input->KeyState( EditorToggleHelp ) )
+    if ( GetSubSystems().input->KeyState( EditorToggleHelp ) )
     {
         if ( m_helpKeyDownOld == false )
             m_helpTextOn = !m_helpTextOn;
@@ -261,67 +255,64 @@ void EditorState::Update()      // Spiel aktualisieren
 
 void EditorState::Draw( float accumulator )        // Spiel zeichnen
 {
-    GetSubSystems()->physics->CalculateSmoothPositions(accumulator);
+    GetSubSystems().physics->CalculateSmoothPositions(accumulator);
 
-    RenderSubSystem* pRenderer = GetSubSystems()->renderer.get();
+    RenderSubSystem& renderer = *GetSubSystems().renderer;
 
     // Bildschirm leeren
-    pRenderer->ClearScreen();
+    renderer.ClearScreen();
     // Weltmodus
-    pRenderer->SetMatrix(RenderSubSystem::World);
+    renderer.SetMatrix(RenderSubSystem::World);
     m_pGameCamera->Look();
 
-    glColor4f ( 1.0f, 1.0f, 1.0f, 1.0f );
     // Texturen zeichnen
-    pRenderer->DrawVisualTextureComps();
+    renderer.DrawVisualTextureComps();
     // Animationen zeichnen
-    pRenderer->DrawVisualAnimationComps();
+    renderer.DrawVisualAnimationComps();
 
-    pRenderer->GetTextureManager()->Clear();
+    renderer.GetTextureManager().Clear();
 
-    glColor4f ( 1.0f, 1.0f, 1.0f, 0.5f );
     for ( int i = 0; i < m_currentPoint-1; ++i )
-        pRenderer->DrawVector( *m_pClickedPoints[i+1] - *m_pClickedPoints[i], *m_pClickedPoints[i] );
+        renderer.DrawVector( *m_pClickedPoints[i+1] - *m_pClickedPoints[i], *m_pClickedPoints[i] );
     if ( m_currentPoint > 1 )
     {
-        glColor4f ( 1.0f, 1.0f, 1.0f, 0.25f );
-        pRenderer->DrawVector( *m_pClickedPoints[0] - *m_pClickedPoints[m_currentPoint-1], *m_pClickedPoints[m_currentPoint-1] );
+        renderer.DrawVector( *m_pClickedPoints[0] - *m_pClickedPoints[m_currentPoint-1], *m_pClickedPoints[m_currentPoint-1] );
     }
     
     // GUI modus (Grafische Benutzeroberfläche)
-    pRenderer->SetMatrix(RenderSubSystem::GUI);
+    renderer.SetMatrix(RenderSubSystem::GUI);
     // Texte zeichnen
-    pRenderer->DrawVisualMessageComps();
+    renderer.DrawVisualMessageComps();
     
-    pRenderer->DrawString( "Editor", "FontW_b", 0.02f, 0.02f );
+    renderer.DrawString( "Editor", "FontW_b", 0.02f, 0.02f );
 
     if ( m_helpTextOn )
     {
-        pRenderer->DrawString( "Left click:\n"
+        renderer.DrawString( "Left click:\n"
                                "Enter:\n"
                                "Backspace:\n"
                                "Delete:\n"
                                "Page Up/Down:\n"
                                "H:", "FontW_s", 3.3f, 0.02f, AlignRight );
-        pRenderer->DrawString( "new vertex\n"
+        renderer.DrawString( "new vertex\n"
                                "apply block\n"
                                "delete last vertex\n"
                                "delete all vetices\n"
                                "change texture\n"
                                "hide this help text", "FontW_s", 3.4f, 0.02f, AlignLeft );
-        pRenderer->DrawString( "* Important *\n"
+        renderer.DrawString( "* Important *\n"
                                "Only draw convex polygons!\n"
                                "Only draw in counter-clockwise order!\n", "FontW_s", 3.4f, 0.7f, AlignCenter );
     }
     else
     {
-        pRenderer->DrawString( "H for help", "FontW_s", 3.5f, 0.02f );
+        renderer.DrawString( "H for help", "FontW_s", 3.5f, 0.02f );
     }
 
     // Fadenkreuz zeichnen
-    Vector2D mousePos ( *GetSubSystems()->input->MousePos() );
+    Vector2D mousePos ( *GetSubSystems().input->MousePos() );
 
-    pRenderer->GetTextureManager()->Clear();
+    renderer.GetTextureManager().Clear();
 
     // Aktuelle Textur anzeigen
     {
@@ -333,8 +324,8 @@ void EditorState::Draw( float accumulator )        // Spiel zeichnen
                                  0.1f, 2.9f,
                                  0.5f, 2.9f,
                                  0.5f, 2.5f };
-        pRenderer->DrawTexturedQuad( texCoord, vertexCoord, m_currentTexture, true );
-        pRenderer->DrawString( m_currentTexture, "FontW_s", 0.09f, 2.91f );
+        renderer.DrawTexturedQuad( texCoord, vertexCoord, m_currentTexture, true );
+        renderer.DrawString( m_currentTexture, "FontW_s", 0.09f, 2.91f );
     }
 
     mousePos = m_pGameCamera->ScreenToWorld(mousePos);
@@ -343,10 +334,8 @@ void EditorState::Draw( float accumulator )        // Spiel zeichnen
     mousePos.x = mousePos.x * 4.0f;
     mousePos.y = mousePos.y * 3.0f;
 
-    pRenderer->DrawEditorCursor( mousePos );
+    renderer.DrawEditorCursor( mousePos );
 
     // Erzeugtes Bild zeigen
-    pRenderer->FlipBuffer(); // (vom Backbuffer zum Frontbuffer wechseln)
+    renderer.FlipBuffer(); // (vom Backbuffer zum Frontbuffer wechseln)
 }
-
-// Astro Attack - Christian Zommerfelds - 2009

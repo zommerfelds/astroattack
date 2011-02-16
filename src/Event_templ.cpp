@@ -1,10 +1,8 @@
-/*----------------------------------------------------------\
-|                     Event_templ.cpp                       |
-|                     ---------------                       |
-|               Quelldatei von Astro Attack                 |
-|                  Christian Zommerfelds                    |
-|                          2011                             |
-\----------------------------------------------------------*/
+/*
+ * Event_templ.cpp
+ * This file is part of Astro Attack
+ * Copyright 2011 Christian Zommerfelds
+ */
 
 #include <boost/bind.hpp>
 
@@ -67,5 +65,3 @@ void EVENT2::UnregisterListener(typename FunctionList::iterator pos)
 {
     m_listenerFuncs.erase(pos);
 }
-
-// Astro Attack - Christian Zommerfelds - 2011

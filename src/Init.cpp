@@ -1,10 +1,8 @@
-/*----------------------------------------------------------\
-|                        Init.cpp                           |
-|                        --------                           |
-|               Quelldatei von Astro Attack                 |
-|                  Christian Zommerfelds                    |
-|                          2009                             |
-\-------------------------------------------------------true---*/
+/*
+ * Init.cpp
+ * This file is part of Astro Attack
+ * Copyright 2011 Christian Zommerfelds
+ */
 
 #include "GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
 
@@ -111,5 +109,3 @@ bool GameApp::InitVideo()
 
     return true;
 }
-
-// Astro Attack - Christian Zommerfelds - 2009

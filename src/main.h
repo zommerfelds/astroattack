@@ -1,10 +1,9 @@
-/*----------------------------------------------------------\
-|                         main.h                            |
-|                         ------                            |
-|               Quelldatei von Astro Attack                 |
-|                  Christian Zommerfelds                    |
-|                          2009                             |
-\----------------------------------------------------------*/
+/*
+ * main.h
+ * This file is part of Astro Attack
+ * Copyright 2011 Christian Zommerfelds
+ */
+
 // -> Haupt-Header <-
 // Wer etwas in die Hauptlogdatei schreiben möchte oder
 // auf Programmeinstellungen zugreifen möchte
@@ -42,5 +41,3 @@ extern Configuration gAaConfig; // Spieleinstellungen.
 extern bool gRestart; // Ob AstroAttack neu gestartet werden soll, nochdem es beendet wurde
 
 #endif
-
-// Astro Attack - Christian Zommerfelds - 2009

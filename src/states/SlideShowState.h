@@ -1,10 +1,9 @@
-/*----------------------------------------------------------\
-|                    SlideShowState.h                       |
-|                    ----------------                       |
-|               Quelldatei von Astro Attack                 |
-|                  Christian Zommerfelds                    |
-|                          2009                             |
-\----------------------------------------------------------*/
+/*
+ * SlideShowState.h
+ * This file is part of Astro Attack
+ * Copyright 2011 Christian Zommerfelds
+ */
+
 // SlideShowState ist für eine Bildshow zuständig (wie z.B. die Intro geschichte)
 // Es werden Bilder und dazugehörenden Text angezeigt.
 
@@ -38,8 +37,7 @@ struct SlideShow
 class SlideShowState : public GameState
 {
 public:
-    SlideShowState( SubSystems* pSubSystems, std::string slideXmlFile );
-    ~SlideShowState();
+    SlideShowState( SubSystems& subSystems, std::string slideXmlFile );
 
     const StateIdType& StateID() const { return stateId; }
 
@@ -86,5 +84,3 @@ private:
 //--------------------------------------------//
 
 #endif
-
-// Astro Attack - Christian Zommerfelds - 2009

@@ -1,10 +1,9 @@
-/*----------------------------------------------------------\
-|                    CompPosition.cpp                       |
-|                    ----------------                       |
-|               Quelldatei von Astro Attack                 |
-|                  Christian Zommerfelds                    |
-|                          2009                             |
-\----------------------------------------------------------*/
+/*
+ * CompPosition.cpp
+ * This file is part of Astro Attack
+ * Copyright 2011 Christian Zommerfelds
+ */
+
 // CompPosition.h für mehr Informationen
 
 #include "../GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
@@ -26,9 +25,7 @@ CompPosition::CompPosition() : m_pPosition ( new Vector2D ), m_orientation ( 0.0
 {
 }
 
-CompPosition::~CompPosition()
-{
-}
+CompPosition::~CompPosition() {}
 
 void CompPosition::SetPosition(const Vector2D& pos)
 {
@@ -84,5 +81,3 @@ void CompPosition::WriteToXml(pugi::xml_node& compNode) const
     compNode.append_attribute("y").set_value(GetPosition().y);
     compNode.append_attribute("a").set_value(GetOrientation());
 }
-
-// Astro Attack - Christian Zommerfelds - 2009

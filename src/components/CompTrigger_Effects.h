@@ -1,10 +1,9 @@
-/*----------------------------------------------------------\
-|                  CompTrigger_Effects.h                   |
-|                  ---------------------                    |
-|               Quelldatei von Astro Attack                 |
-|                  Christian Zommerfelds                    |
-|                          2009                             |
-\----------------------------------------------------------*/
+/*
+ * CompTrigger_Effects.h
+ * This file is part of Astro Attack
+ * Copyright 2011 Christian Zommerfelds
+ */
+
 // Enzelne Effekte für CompTrigger Komponente
 
 #include "../GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
@@ -13,6 +12,7 @@
 #include <map>
 class GameWorld;
 
+// ========= KillEntity ===========
 class EffectKillEntity : public Effect
 {
 public:
@@ -26,6 +26,7 @@ private:
     GameWorld* m_pGW;
 };
 
+// ========= DispMessage ===========
 class EffectDispMessage : public Effect
 {
 public:
@@ -46,6 +47,7 @@ private:
     int m_totalTimeMs;
 };
 
+// ========= EndLevel ===========
 class EffectEndLevel : public Effect
 {
 public:
@@ -60,6 +62,7 @@ private:
     bool m_win;
 };
 
+// ========= ChangeVariable ===========
 enum ChangeType
 {
     Set,
@@ -84,17 +87,3 @@ private:
     ChangeType m_changeType;
     int m_num;
 };
-
-/*class EffectLoseLevel : public Effect
-{
-public:
-    EffectLoseLevel( std::string message ) : m_message( message ) {}
-    EffectIdType ID() const { return "LoseLevel"; }
-    void Fire();
-    bool Update() { return false; }
-    std::string GetMessage() const { return m_message; }
-private:
-    std::string m_message;
-};*/
-
-// Astro Attack - Christian Zommerfelds - 2009

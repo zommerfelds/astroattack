@@ -1,10 +1,8 @@
-/*----------------------------------------------------------\
-|                       Vector.cpp                          |
-|                       ----------                          |
-|               Quelldatei von Astro Attack                 |
-|                  Christian Zommerfelds                    |
-|                          2009                             |
-\----------------------------------------------------------*/
+/*
+ * Vector2D.cpp
+ * This file is part of Astro Attack
+ * Copyright 2011 Christian Zommerfelds
+ */
 
 #include "GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
 
@@ -74,5 +72,3 @@ Vector2D Vector2D::Rotated( float angle ) const
     return Vector2D( x * cos ( angle ) - y * sin ( angle ),
                      x * sin ( angle ) + y * cos ( angle ) );
 }
-
-// Astro Attack - Christian Zommerfelds - 2009

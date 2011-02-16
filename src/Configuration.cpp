@@ -1,10 +1,8 @@
-/*----------------------------------------------------------\
-|                    Configuration.cpp                      |
-|                    -----------------                      |
-|               Quelldatei von Astro Attack                 |
-|                  Christian Zommerfelds                    |
-|                          2009                             |
-\----------------------------------------------------------*/
+/*
+ * Configuration.cpp
+ * This file is part of Astro Attack
+ * Copyright 2011 Christian Zommerfelds
+ */
 
 #include "GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
 
@@ -160,5 +158,3 @@ void Configuration::SetString(const std::string& id, std::string val )
     entry.type = 2;
     entry.valString = val;
 }
-
-// Astro Attack - Christian Zommerfelds - 2009

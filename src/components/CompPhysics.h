@@ -1,10 +1,9 @@
-/*----------------------------------------------------------\
-|                     CompPhysics.h                         |
-|                     -------------                         |
-|               Quelldatei von Astro Attack                 |
-|                  Christian Zommerfelds                    |
-|                          2009                             |
-\----------------------------------------------------------*/
+/*
+ * CompPhysics.h
+ * This file is part of Astro Attack
+ * Copyright 2011 Christian Zommerfelds
+ */
+
 // Ein CompPhysics ist eine Komponent für physikalische Eigenschaften.
 // Falls ein Objekt einen Körper haben soll, der Kollidieren kann,
 // sollte man ein CompPhysics erstellen.
@@ -53,7 +52,7 @@ struct BodyDef
         type ( staticBody )
     {}
 
-    // NOTE: the comments in this struct are taken directry from Box2D b2BodyDef structure
+    // NOTE: the comments in this struct are taken directly from Box2D b2BodyDef structure
 
     // The world position of the body. Avoid creating bodies at the origin
     // since this can lead to many overlapping shapes.
@@ -109,7 +108,6 @@ struct ShapeDef {
 
 typedef std::vector<boost::shared_ptr<ContactInfo> > ContactVector;
 typedef std::vector< boost::shared_ptr<ShapeDef> > ShapeInfoVec;
-typedef std::map<CompNameType, b2Fixture*> FixtureMap;
 
 //--------------------------------------------//
 //----------- CompPhysics Klasse -------------//
@@ -118,7 +116,7 @@ class CompPhysics : public Component
 {
 public:
     CompPhysics(const BodyDef& rBodyDef = BodyDef());
-    ~CompPhysics();
+
     const CompIdType& ComponentId() const { return COMPONENT_ID; }
 
     void SetBodyDef(const BodyDef& rBodyDef) { m_bodyDef = rBodyDef; }
@@ -130,12 +128,14 @@ public:
     const ShapeInfoVec& GetShapeInfos() const { return m_shapeInfos; }
 
     float GetMass() const;
-    float GetAngle() const;
 
     ContactVector GetContacts(bool getSensors=false) const;
 
     Vector2D GetCenterOfMassPosition() const;
-    const Vector2D& GetSmoothPosition() const { return m_smoothPosition; }
+    Vector2D GetSmoothCenterOfMassPosition() const;
+    const Vector2D GetPosition() const;
+    const Vector2D& GetSmoothPosition() const;
+    float GetAngle() const;
     float GetSmoothAngle() const { return m_smoothAngle; }
 
     const Vector2D& GetLocalRotationPoint() const { return m_localRotationPoint; }
@@ -178,6 +178,7 @@ private:
     float m_smoothAngle;
 
     ShapeInfoVec m_shapeInfos;
+    typedef std::map<CompNameType, b2Fixture*> FixtureMap;
     FixtureMap m_fixtureMap;
 
 	const CompGravField* m_gravField;
@@ -190,5 +191,3 @@ private:
 //--------------------------------------------//
 
 #endif
-
-// Astro Attack - Christian Zommerfelds - 2009

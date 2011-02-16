@@ -1,10 +1,9 @@
-/*----------------------------------------------------------\
-|                     CompTrigger.h                         |
-|                     -------------                         |
-|               Quelldatei von Astro Attack                 |
-|                  Christian Zommerfelds                    |
-|                          2009                             |
-\----------------------------------------------------------*/
+/*
+ * CompTrigger.h
+ * This file is part of Astro Attack
+ * Copyright 2011 Christian Zommerfelds
+ */
+
 // Auslöser-Komponente
 // Ein Auslöser hat eine oder meherer Bedingungen. Wenn diese erfüllt sind,
 // werden eins oder mehrere Effekte aufgeführt.
@@ -34,9 +33,8 @@ typedef std::string EffectIdType;
 class CompTrigger : public Component
 {
 public:
-
     CompTrigger();
-    ~CompTrigger();
+
     const CompIdType& ComponentId() const { return COMPONENT_ID; }
 	static const CompIdType COMPONENT_ID; // eindeutige ID für diese Komponentenart (gleich wie Klassennamen, siehe CompCollectable.cpp)
 
@@ -92,5 +90,3 @@ public:
 };
 
 #endif
-
-// Astro Attack - Christian Zommerfelds - 2009

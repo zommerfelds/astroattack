@@ -1,10 +1,8 @@
-/*----------------------------------------------------------\
-|                     XmlLoader.cpp                         |
-|                     -------------                         |
-|               Quelldatei von Astro Attack                 |
-|                  Christian Zommerfelds                    |
-|                          2009                             |
-\----------------------------------------------------------*/
+/*
+ * XmlLoader.cpp
+ * This file is part of Astro Attack
+ * Copyright 2011 Christian Zommerfelds
+ */
 
 #include "XmlLoader.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
 #include "World.h"
@@ -43,7 +41,7 @@
 // TODO: a lot of work to do here (error checking etc..)
 
 // Load Level from XML
-void XmlLoader::LoadXmlToWorld( const char* pFileName, GameWorld* pGameWorld, SubSystems* pSubSystems )
+void XmlLoader::LoadXmlToWorld( const char* pFileName, GameWorld* pGameWorld, SubSystems& subSystems )
 {
 	using boost::shared_ptr;
 	using boost::make_shared;
@@ -86,7 +84,7 @@ void XmlLoader::LoadXmlToWorld( const char* pFileName, GameWorld* pGameWorld, Su
             }
             else if ( compId == "CompPlayerController" )
             {
-                component = CompPlayerController::LoadFromXml( compElem, pSubSystems->input.get(), pGameWorld->GetItToVariable( "JetpackEnergy" ) );
+                component = CompPlayerController::LoadFromXml( compElem, subSystems.input.get(), pGameWorld->GetItToVariable( "JetpackEnergy" ) );
             }
             else if ( compId == "CompPosition" )
             {
@@ -94,7 +92,7 @@ void XmlLoader::LoadXmlToWorld( const char* pFileName, GameWorld* pGameWorld, Su
             }
             else if ( compId == "CompVisualAnimation" )
             {
-                component = CompVisualAnimation::LoadFromXml( compElem, pSubSystems->renderer->GetAnimationManager() );
+                component = CompVisualAnimation::LoadFromXml( compElem, subSystems.renderer->GetAnimationManager() );
             }
             else if ( compId == "CompVisualTexture" )
             {
@@ -350,8 +348,8 @@ void XmlLoader::SaveWorldToXml( const char* pFileName, GameWorld* pGameWorld )
         pugi::xml_node entityNode = levelNode.append_child("Entity");
         entityNode.append_attribute("name").set_value(e_it->second->GetId().c_str());
 
-        const ComponentMap* comps = e_it->second->GetAllComponents();
-        for ( ComponentMap::const_iterator c_it = comps->begin(); c_it != comps->end(); ++c_it )
+        const ComponentMap& comps = e_it->second->GetAllComponents();
+        for ( ComponentMap::const_iterator c_it = comps.begin(); c_it != comps.end(); ++c_it )
         {
             pugi::xml_node compNode = entityNode.append_child("Component");
             compNode.append_attribute("id").set_value(c_it->second->ComponentId().c_str());
@@ -366,5 +364,3 @@ void XmlLoader::SaveWorldToXml( const char* pFileName, GameWorld* pGameWorld )
     gAaLog.DecreaseIndentationLevel();
     gAaLog.Write ( "[ Done saving XML file \"%s\" ]\n\n", pFileName );
 }
-
-// Astro Attack - Christian Zommerfelds - 2009

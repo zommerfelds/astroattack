@@ -1,10 +1,8 @@
-/*----------------------------------------------------------\
-|                          GUI.h                            |
-|                          -----                            |
-|               Quelldatei von Astro Attack                 |
-|                  Christian Zommerfelds                    |
-|                          2009                             |
-\----------------------------------------------------------*/
+/*
+ * GUI.h
+ * This file is part of Astro Attack
+ * Copyright 2011 Christian Zommerfelds
+ */
 
 #ifndef GUI_H
 #define GUI_H
@@ -28,13 +26,11 @@ class WidgetButton;
 class FontManager;
 
 typedef std::string GroupId;
-typedef std::map< GroupId, std::vector< boost::shared_ptr<Widget> > > WidgetMap;
 
 class GuiSubSystem
 {
 public:
     GuiSubSystem( RenderSubSystem* pRenderer, InputSubSystem* pInput );
-    ~GuiSubSystem();
 
     void Update();
     void Draw();
@@ -49,6 +45,7 @@ private:
     InputSubSystem* m_pInput;
     void ClearContainers() { m_widgets.clear(); m_groupsToHide.clear(); m_clear = false; }
 
+    typedef std::map< GroupId, std::vector< boost::shared_ptr<Widget> > > WidgetMap;
     WidgetMap m_widgets;
     std::set<GroupId> m_groupsToHide;
     bool m_clear; // falls alle Widgets gelöscht werden sollen im nächsten Update()
@@ -78,7 +75,7 @@ private:
 class WidgetLabel : public Widget
 {
 public:
-    WidgetLabel( float x, float y, std::string text, const FontManager* fontMngr );
+    WidgetLabel( float x, float y, std::string text, const FontManager& fontMngr );
     ~WidgetLabel();
 
     void Draw( RenderSubSystem* pRenderer );
@@ -106,5 +103,3 @@ private:
 };
 
 #endif
-
-// Astro Attack - Christian Zommerfelds - 2009

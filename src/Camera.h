@@ -1,10 +1,9 @@
-/*----------------------------------------------------------\
-|                        Camera.h                           |
-|                        --------                           |
-|               Quelldatei von Astro Attack                 |
-|                  Christian Zommerfelds                    |
-|                          2009                             |
-\----------------------------------------------------------*/
+/*
+ * Camera.h
+ * This file is part of Astro Attack
+ * Copyright 2011 Christian Zommerfelds
+ */
+ 
 // Steuert und rechnet Kameraverschiebungen
 
 #ifndef CAMERA_H
@@ -43,7 +42,7 @@ class GameCamera
 {
 public:
     GameCamera( const InputSubSystem* pInputSubSystem, RenderSubSystem* pRenderSubSystem, const GameWorld* pWorld );
-    ~GameCamera();
+    ~GameCamera(); // need to implement destructor manually because of scoped_ptr (incomplete type)
 
     // Initialisierung
     void Init();
@@ -119,5 +118,3 @@ private:
 };
 
 #endif
-
-// Astro Attack - Christian Zommerfelds - 2009

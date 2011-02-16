@@ -1,10 +1,9 @@
-/*----------------------------------------------------------\
-|                        Sound.cpp                          |
-|                        ---------                          |
-|               Quelldatei von Astro Attack                 |
-|                  Christian Zommerfelds                    |
-|                          2009                             |
-\----------------------------------------------------------*/
+/*
+ * Sound.cpp
+ * This file is part of Astro Attack
+ * Copyright 2011 Christian Zommerfelds
+ */
+
 // Sound Funktionen
 
 #include "GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
@@ -203,5 +202,3 @@ void SoundSubSystem::MusicFinished()
     m_currentPlayingMusic = NULL;
     //if ( m_deletePlayingMusicAtEnd )
 }
-
-// Astro Attack - Christian Zommerfelds - 2009

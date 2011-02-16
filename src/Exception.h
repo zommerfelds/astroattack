@@ -1,10 +1,8 @@
-/*----------------------------------------------------------\
-|                       Exception.h                         |
-|                       -----------                         |
-|               Quelldatei von Astro Attack                 |
-|                  Christian Zommerfelds                    |
-|                          2009                             |
-\----------------------------------------------------------*/
+/*
+ * Exception.h
+ * This file is part of Astro Attack
+ * Copyright 2011 Christian Zommerfelds
+ */
 
 #ifndef EXCEPTION_H
 #define EXCEPTION_H
@@ -54,5 +52,3 @@ void OsMsgBox ( const std::string& message, const std::string& title ); // in Os
 void DispError( const std::string& msg ); // in OsMsgBox.cpp
 
 #endif
-
-// Astro Attack - Christian Zommerfelds - 2009

@@ -1,10 +1,9 @@
-/*----------------------------------------------------------\
-|                      XmlLoader.h                          |
-|                      -----------                          |
-|               Quelldatei von Astro Attack                 |
-|                  Christian Zommerfelds                    |
-|                          2009                             |
-\----------------------------------------------------------*/
+/*
+ * XmlLoader.h
+ * This file is part of Astro Attack
+ * Copyright 2011 Christian Zommerfelds
+ */
+
 // Lesen von XML-Dateien und übersetzung in Entities
 
 #ifndef XMLLOADER_H
@@ -32,7 +31,7 @@ struct ResourceIds
 class XmlLoader
 {
 public:
-    void LoadXmlToWorld( const char* pFileName, GameWorld* pGameWorld, SubSystems* pSubSystems );
+    void LoadXmlToWorld( const char* pFileName, GameWorld* pGameWorld, SubSystems& subSystems );
     void LoadSlideShow( const char* pFileName, SlideShow* pSlideShow );
     ResourceIds LoadGraphics( const char* pFileName, TextureManager* pTextureManager, AnimationManager* pAnimationManager, FontManager* pFontManager );
     void UnLoadGraphics( const ResourceIds& resourcesToUnload, TextureManager* pTextureManager, AnimationManager* pAnimationManager, FontManager* pFontManager );
@@ -42,5 +41,3 @@ private:
 };
 
 #endif
-
-// Astro Attack - Christian Zommerfelds - 2009

@@ -1,10 +1,9 @@
-/*----------------------------------------------------------\
-|                        Renderer.h                         |
-|                        ----------                         |
-|               Quelldatei von Astro Attack                 |
-|                  Christian Zommerfelds                    |
-|                          2009                             |
-\----------------------------------------------------------*/
+/*
+ * Renderer.h
+ * This file is part of Astro Attack
+ * Copyright 2011 Christian Zommerfelds
+ */
+
 // Rendering Funktionen
 
 #ifndef RENDERER_H
@@ -31,16 +30,12 @@ class Vector2D;
 #include <set>
 #include <string>
 
-typedef std::set<CompVisualTexture*> CompVisualTextureSet;
-typedef std::set<CompVisualAnimation*> CompVisualAnimationSet;
-typedef std::set<CompVisualMessage*> CompVisualMessageSet;
-
 // Diese Klasse ist verantwortilch für die Grafik im Spiel.
 // Alle Visuelen Komponenten werden hier gezeichnet.
 class RenderSubSystem
 {
 public:
-    RenderSubSystem( /*const GameWorld* pWorld, const GameCamera* pCamera,*/ GameEvents* pGameEvents );
+    RenderSubSystem( GameEvents* pGameEvents );
     ~RenderSubSystem();
 
     void Init( int width, int height );
@@ -97,12 +92,12 @@ public:
     void DisplayLoadingScreen();
     void DisplayTextScreen( const std::string& text );
 
-    const TextureManager* GetTextureManager() const { return m_pTextureManager.get(); }
-    const AnimationManager* GetAnimationManager() const { return m_pAnimationManager.get(); }
-    const FontManager* GetFontManager() const { return m_pFontManager.get(); }
-    TextureManager* GetTextureManager() { return m_pTextureManager.get(); }
-    AnimationManager* GetAnimationManager() { return m_pAnimationManager.get(); }
-    FontManager* GetFontManager() { return m_pFontManager.get(); }
+    const TextureManager& GetTextureManager() const { return *m_pTextureManager; }
+    const AnimationManager& GetAnimationManager() const { return *m_pAnimationManager; }
+    const FontManager& GetFontManager() const { return *m_pFontManager; }
+    TextureManager& GetTextureManager() { return *m_pTextureManager; }
+    AnimationManager& GetAnimationManager() { return *m_pAnimationManager; }
+    FontManager& GetFontManager() { return *m_pFontManager; }
 
 private:
     void InitOpenGL( int width, int height ); // OpenGL initialisieren
@@ -114,12 +109,16 @@ private:
     boost::scoped_ptr<AnimationManager> m_pAnimationManager;
     boost::scoped_ptr<FontManager> m_pFontManager;
 
+    typedef std::set<CompVisualTexture*> CompVisualTextureSet;
+    typedef std::set<CompVisualAnimation*> CompVisualAnimationSet;
+    typedef std::set<CompVisualMessage*> CompVisualMessageSet;
+
     CompVisualTextureSet m_visualTextureComps;
     CompVisualAnimationSet m_visualAnimComps;
     CompVisualMessageSet m_visualMsgComps;
 
-    void RegisterCompVisual( Entity* pEntity );
-    void UnregisterCompVisual( Entity* pEntity );
+    void RegisterCompVisual( Entity& entity );
+    void UnregisterCompVisual( Entity& entity );
 
     MatrixId m_currentMatrix;
     float m_matrixGUI[16];
@@ -127,5 +126,3 @@ private:
 };
 
 #endif
-
-// Astro Attack - Christian Zommerfelds - 2009

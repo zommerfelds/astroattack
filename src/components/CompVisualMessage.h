@@ -1,10 +1,9 @@
-/*----------------------------------------------------------\
-|                  CompVisualMessage.h                      |
-|                  -------------------                      |
-|               Quelldatei von Astro Attack                 |
-|                  Christian Zommerfelds                    |
-|                          2009                             |
-\----------------------------------------------------------*/
+/*
+ * CompVisualMessage.h
+ * This file is part of Astro Attack
+ * Copyright 2011 Christian Zommerfelds
+ */
+
 // Zeigt eine Nachricht auf dem Bildschirm
 
 #ifndef COMPVISUALMESSAGE_H
@@ -24,7 +23,7 @@ class CompVisualMessage : public Component
 {
 public:
     CompVisualMessage( std::string text );
-    ~CompVisualMessage();
+
     const CompIdType& ComponentId() const { return COMPONENT_ID; }
 	static const CompIdType COMPONENT_ID; // eindeutige ID für diese Komponentenart (gleich wie Klassennamen, siehe CompCollectable.cpp)
 
@@ -41,5 +40,3 @@ private:
 //--------------------------------------------//
 
 #endif
-
-// Astro Attack - Christian Zommerfelds - 2009

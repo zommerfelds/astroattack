@@ -1,10 +1,9 @@
-/*----------------------------------------------------------\
-|                        GameApp.h                          |
-|                        ---------                          |
-|               Quelldatei von Astro Attack                 |
-|                  Christian Zommerfelds                    |
-|                          2009                             |
-\----------------------------------------------------------*/
+/*
+ * Input.h
+ * This file is part of Astro Attack
+ * Copyright 2011 Christian Zommerfelds
+ */
+
 // Einlesung der Eingaben mithilfe von SDL
 
 #ifndef INPUT_H
@@ -80,7 +79,7 @@ class InputSubSystem
 {
 public:
     InputSubSystem();
-    ~InputSubSystem();
+    ~InputSubSystem(); // need to implement destructor manually because of scoped_ptr (incomplete type)
 
 public:
     void Update(); // aktualisieren
@@ -92,6 +91,7 @@ public:
     bool LMouseKeyState( ) const;       // status des linken Mausknopfes
     bool LMouseKeyStateConsume();       // gleich wie oben, aber der Status der Taste zurückgesetzt (nicht mehr gedrückt)
     const Vector2D* MousePos() const;   // Mausposition erhalten (0/0 ist oben links, 1/1 ist unten rechts)
+    void PutMouseOnCenter();
     MouseState GetMouseStateInArea( const Rect& rButtonRect ) const;    // Wird die gegebene Fläche gedrückt?
     MouseState GetMouseStateInAreaConsume( const Rect& rButtonRect );   // gleich wie oben, aber der Status der Taste zurückgesetzt (nicht mehr gedrückt)
 
@@ -106,5 +106,3 @@ private:
 };
 
 #endif
-
-// Astro Attack - Christian Zommerfelds - 2009

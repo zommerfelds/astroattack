@@ -1,10 +1,8 @@
-/*----------------------------------------------------------\
-|                       Renderer.cpp                        |
-|                       ------------                        |
-|               Quelldatei von Astro Attack                 |
-|                  Christian Zommerfelds                    |
-|                          2009                             |
-\----------------------------------------------------------*/
+/*
+ * Renderer.cpp
+ * This file is part of Astro Attack
+ * Copyright 2011 Christian Zommerfelds
+ */
 
 #include "GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
 
@@ -33,6 +31,7 @@
 #include "GameEvents.h" // Steuert die Spielerreignisse
 
 #include <boost/bind.hpp>
+#include <boost/foreach.hpp>
 
 const char* cGraphisFileName = "data/graphics.xml";
 
@@ -107,11 +106,9 @@ void RenderSubSystem::InitOpenGL ( int width, int height )
     glEnable( GL_LINE_SMOOTH );                                   // Kanten-Antialiasing bei Linien
     glEnable( GL_POINT_SMOOTH );                                  // Kanten-Antialiasing bei Punkten
     glLineWidth( 2.0f );                                          // Liniendicke
-    glPointSize( 2.0f );                                          // Punktgrösse
+    glPointSize( 10.0f );                                          // Punktgrösse
     //glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE ); // Farben sollen Texturen nicht überdecken
 
-    // TEMP
-    //glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
 
     glMatrixMode ( GL_PROJECTION );
 
@@ -191,7 +188,6 @@ void RenderSubSystem::SetMatrix(MatrixId matrix)
 void RenderSubSystem::DrawTexturedQuad( float texCoord[8], float vertexCoord[8], std::string texId, bool border, float alpha )
 {
     m_pTextureManager->SetTexture( texId );
-    //glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
     glColor4f( 1.0f, 1.0f, 1.0f, alpha );
     glBegin ( GL_QUADS );
         // Oben links
@@ -204,10 +200,8 @@ void RenderSubSystem::DrawTexturedQuad( float texCoord[8], float vertexCoord[8],
         glTexCoord2f(texCoord[6], texCoord[7]);
         glVertex2f(vertexCoord[6], vertexCoord[7]);
     glEnd();
-    //glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE );
     if ( border )
     {
-        glColor3ub ( 220, 220, 220 );
         m_pTextureManager->Clear();
         glColor3ub ( 220, 220, 220 );
         glBegin ( GL_LINE_LOOP );
@@ -219,6 +213,7 @@ void RenderSubSystem::DrawTexturedQuad( float texCoord[8], float vertexCoord[8],
             glVertex2f ( vertexCoord[2*i], vertexCoord[2*i+1] );
         glEnd();*/
     }
+    glColor4f( 255, 255, 255, 255 );
 }
 
 void RenderSubSystem::DrawColorQuad( float vertexCoord[8], float r, float g, float b, float a, bool border )
@@ -242,6 +237,7 @@ void RenderSubSystem::DrawColorQuad( float vertexCoord[8], float r, float g, flo
             glVertex2f ( vertexCoord[2*i], vertexCoord[2*i+1] );
         glEnd();
     }
+    glColor4f( 255, 255, 255, 255 );
 }
 
 void RenderSubSystem::DrawOverlay( float r, float g, float b, float a )
@@ -261,17 +257,12 @@ void RenderSubSystem::DrawOverlay( float r, float g, float b, float a )
         // Oben rechts
         glVertex2f(4, 0);
     glEnd();
+    glColor4f( 255, 255, 255, 255 );
 }
 
 void RenderSubSystem::DrawTexturedPolygon ( const CompShapePolygon& rPoly, const CompVisualTexture& rTex, bool border )
 {
-    //m_pTextureManager->Clear();
-    //glColor4ub ( 180, 0, 0, 150 );
-
-    /*glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
-    glColor4ub ( 255, 255, 255, 100 );
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);*/
-
+    m_pTextureManager->SetTexture( rTex.GetTexture() );
     glBegin ( GL_POLYGON );
     for ( size_t iCountVertices = 0; iCountVertices < rPoly.GetVertexCount(); ++iCountVertices )
     {
@@ -283,7 +274,6 @@ void RenderSubSystem::DrawTexturedPolygon ( const CompShapePolygon& rPoly, const
     for ( size_t iCountVertices = 0; iCountVertices < rPoly.GetVertexCount(); ++iCountVertices )
     {
     	std::string tex = rTex.GetEdgeTexture(iCountVertices);
-        //tex = "EdgeGrass1";
     	if (tex == "")
     		continue;
 
@@ -304,13 +294,13 @@ void RenderSubSystem::DrawTexturedPolygon ( const CompShapePolygon& rPoly, const
             glVertex2f ( rPoly.GetVertex( iCountVertices )->x, rPoly.GetVertex( iCountVertices )->y );
         glEnd();*/
     }
+
+    glColor4f( 255, 255, 255, 255 );
 }
 
 void RenderSubSystem::DrawTexturedCircle ( const CompShapeCircle& rCircle, const CompVisualTexture& rTex, bool border )
 {
-    //m_pTextureManager->Clear();
-    //glColor4ub ( 180, 0, 0, 150 );
-
+    m_pTextureManager->SetTexture( rTex.GetTexture() );
     GLUquadricObj *pQuacric = gluNewQuadric();
     gluQuadricTexture(pQuacric, true);
     gluQuadricDrawStyle(pQuacric, GLU_FILL);
@@ -346,6 +336,8 @@ void RenderSubSystem::DrawTexturedCircle ( const CompShapeCircle& rCircle, const
 
     glPopMatrix();
     gluDeleteQuadric(pQuacric);
+
+    glColor4f( 255, 255, 255, 255 );
 }
 
 void RenderSubSystem::DrawEdge(const Vector2D& vertexA, const Vector2D& vertexB, std::string& tex, float offset, float preCalcEdgeLenght)
@@ -398,6 +390,8 @@ void RenderSubSystem::DrawVector ( const Vector2D& rVector, const Vector2D& rPos
     glVertex2f ( rVector.x + rPos.x, rVector.y + rPos.y );
     glVertex2f ( rVector.x + rPos.x + vector_tip.x, rVector.y + rPos.y + vector_tip.y );
     glEnd();
+
+    glColor4f( 255, 255, 255, 255 );
 }
 
 // Zeichnet einen punkt an einer bestimmten Postion
@@ -420,6 +414,8 @@ void RenderSubSystem::DrawPoint ( const Vector2D& rPos )
     glVertex2f ( rPos.x + 0.02f, rPos.y + 0.02f );
 
     glEnd();*/
+
+    glColor4f( 255, 255, 255, 255 );
 }
 
 // Zeichnet den Fadenkreuz
@@ -455,6 +451,8 @@ void RenderSubSystem::DrawCrosshairs ( const Vector2D& rCrosshairsPos )
     glVertex2f ( rCrosshairsPos.x + 0.3f, rCrosshairsPos.y + 0.03f );
 
     glEnd();
+
+    glColor4f( 255, 255, 255, 255 );
 }
 
 // Zeichnet den Fadenkreuz
@@ -470,6 +468,7 @@ void RenderSubSystem::DrawEditorCursor ( const Vector2D& rPos )
         glVertex2f(rPos.x, 0.0f);
         glVertex2f(rPos.x, 3.0f);
     glEnd();
+    glColor4f( 255, 255, 255, 255 );
 }
 
 void RenderSubSystem::DrawString( const std::string &str, const FontIdType &fontId, float x, float y, Align horizAlign, Align vertAlign, float red, float green, float blue, float alpha )
@@ -482,9 +481,8 @@ void RenderSubSystem::DrawString( const std::string &str, const FontIdType &font
 
 void RenderSubSystem::DrawVisualTextureComps()
 {
-    for ( CompVisualTextureSet::iterator it = m_visualTextureComps.begin(); it != m_visualTextureComps.end(); ++it )
+    BOOST_FOREACH(CompVisualTexture* pTexComp, m_visualTextureComps)
     {
-        CompVisualTexture* pTexComp = *it;
         CompPosition* compPos = pTexComp->GetOwnerEntity()->GetComponent<CompPosition>();
         std::vector<CompShape*> compShapes = pTexComp->GetOwnerEntity()->GetComponents<CompShape>();
         if ( compPos )
@@ -499,7 +497,6 @@ void RenderSubSystem::DrawVisualTextureComps()
 
             for ( size_t i=0; i<compShapes.size(); ++i )
             {
-                m_pTextureManager->SetTexture( pTexComp->GetTexture() );
                 switch (compShapes[i]->GetType())
                 {
                 case CompShape::Polygon:
@@ -523,9 +520,8 @@ void RenderSubSystem::DrawVisualTextureComps()
 
 void RenderSubSystem::DrawVisualAnimationComps()
 {
-    for (CompVisualAnimationSet::iterator it = m_visualAnimComps.begin(); it != m_visualAnimComps.end(); ++it)
+    BOOST_FOREACH(CompVisualAnimation* pAnimComp, m_visualAnimComps)
     {
-        CompVisualAnimation* pAnimComp = *it;
         CompPosition* compPos = pAnimComp->GetOwnerEntity()->GetComponent<CompPosition>();
         if (compPos)
         {
@@ -589,54 +585,35 @@ void RenderSubSystem::DrawVisualMessageComps()
 {
     int y = 0;
     float lineHeight = 0.2f;
-    for ( CompVisualMessageSet::iterator it = m_visualMsgComps.begin(); it != m_visualMsgComps.end(); ++it )
+    BOOST_FOREACH(CompVisualMessage* pMsgComp, m_visualMsgComps)
     {
-        CompVisualMessage* pMsgComp = *it;
         DrawString( std::string("- ")+pMsgComp->GetMsg(), "FontW_m", 0.4f, 0.6f + y*lineHeight );
         ++y;
     }
 }
 
-void RenderSubSystem::RegisterCompVisual( Entity* pEntity )
+void RenderSubSystem::RegisterCompVisual( Entity& entity )
 {
-    std::vector<CompVisualTexture*> texComps = pEntity->GetComponents<CompVisualTexture>();
-    for ( size_t i = 0; i < texComps.size(); ++i )
-    {
-        m_visualTextureComps.insert( texComps[i] );
-    }
+    BOOST_FOREACH(CompVisualTexture* pTexComp, entity.GetComponents<CompVisualTexture>())
+        m_visualTextureComps.insert( pTexComp );
 
-    std::vector<CompVisualAnimation*> animComps = pEntity->GetComponents<CompVisualAnimation>();
-    for ( size_t i = 0; i < animComps.size(); ++i )
-    {
-        m_visualAnimComps.insert( animComps[i] );
-    }
+    BOOST_FOREACH(CompVisualAnimation* pAnimComp, entity.GetComponents<CompVisualAnimation>())
+        m_visualAnimComps.insert( pAnimComp );
 
-    std::vector<CompVisualMessage*> msgComps = pEntity->GetComponents<CompVisualMessage>();
-    for ( size_t i = 0; i < msgComps.size(); ++i )
-    {
-        m_visualMsgComps.insert( msgComps[i] );
-    }
+    BOOST_FOREACH(CompVisualMessage* pMsgComp, entity.GetComponents<CompVisualMessage>())
+        m_visualMsgComps.insert( pMsgComp );
 }
 
-void RenderSubSystem::UnregisterCompVisual( Entity* pEntity )
+void RenderSubSystem::UnregisterCompVisual( Entity& entity )
 {
-    std::vector<CompVisualTexture*> texComps = pEntity->GetComponents<CompVisualTexture> ();
-    for (size_t i = 0; i < texComps.size(); ++i)
-    {
-        m_visualTextureComps.erase( texComps[i] );
-    }
+    BOOST_FOREACH(CompVisualTexture* pTexComp, entity.GetComponents<CompVisualTexture>())
+        m_visualTextureComps.erase( pTexComp );
 
-    std::vector<CompVisualAnimation*> animComps = pEntity->GetComponents<CompVisualAnimation> ();
-    for (size_t i = 0; i < animComps.size(); ++i)
-    {
-        m_visualAnimComps.erase( animComps[i] );
-    }
+    BOOST_FOREACH(CompVisualAnimation* pAnimComp, entity.GetComponents<CompVisualAnimation>())
+        m_visualAnimComps.erase( pAnimComp );
 
-    std::vector<CompVisualMessage*> msgComps = pEntity->GetComponents<CompVisualMessage> ();
-    for (size_t i = 0; i < msgComps.size(); ++i)
-    {
-        m_visualMsgComps.erase( msgComps[i] );
-    }
+    BOOST_FOREACH(CompVisualMessage* pMsgComp, entity.GetComponents<CompVisualMessage>())
+        m_visualMsgComps.erase( pMsgComp );
 }
 
 void RenderSubSystem::DisplayTextScreen( const std::string& text )
@@ -719,5 +696,3 @@ void RenderSubSystem::DisplayLoadingScreen()
 
     m_pTextureManager->FreeTexture("loading");
 }
-
-// Astro Attack - Christian Zommerfelds - 2009

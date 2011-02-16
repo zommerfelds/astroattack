@@ -1,10 +1,9 @@
-/*----------------------------------------------------------\
-|                        Vector.h                           |
-|                        --------                           |
-|               Quelldatei von Astro Attack                 |
-|                  Christian Zommerfelds                    |
-|                          2009                             |
-\----------------------------------------------------------*/
+/*
+ * Vector2D.h
+ * This file is part of Astro Attack
+ * Copyright 2011 Christian Zommerfelds
+ */
+
 // 2D Vektor
 
 #ifndef VECTOR2D_H
@@ -37,8 +36,6 @@ public:
     Vector2D( const Vector2D& v ) : x ( v.x ), y ( v.y ) {}
     // Construct from a Box2D vector
     Vector2D( const b2Vec2& v );
-    // Destructor
-    ~Vector2D() {}
 
     // The vector coordinates
     float x, y;
@@ -195,5 +192,3 @@ public:
 };
 
 #endif
-
-// Astro Attack - Christian Zommerfelds - 2009

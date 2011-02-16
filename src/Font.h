@@ -1,10 +1,9 @@
-/*----------------------------------------------------------\
-|                         Font.h                            |
-|                         ------                            |
-|               Quelldatei von Astro Attack                 |
-|                  Christian Zommerfelds                    |
-|                          2009                             |
-\----------------------------------------------------------*/
+/*
+ * Font.h
+ * This file is part of Astro Attack
+ * Copyright 2011 Christian Zommerfelds
+ */
+
 // Verwaltung von Schriften
 
 #ifndef FONT_H
@@ -44,8 +43,6 @@ class FontManager
 public:
     typedef std::map< FontIdType,boost::shared_ptr<FTFont> > FontMap;
 
-    FontManager();
-    ~FontManager();
     void LoadFont( const char* fileName, int size, FontIdType id );
     void FreeFont( FontIdType id );
 
@@ -63,5 +60,3 @@ private:
 };
 
 #endif
-
-// Astro Attack - Christian Zommerfelds - 2009

@@ -1,10 +1,9 @@
-/*----------------------------------------------------------\
-|                        main.cpp                           |
-|                        --------                           |
-|               Quelldatei von Astro Attack                 |
-|                  Christian Zommerfelds                    |
-|                          2009                             |
-\----------------------------------------------------------*/
+/*
+ * main.cpp
+ * This file is part of Astro Attack
+ * Copyright 2011 Christian Zommerfelds
+ */
+
 // -> Hauptablauf <-
 // Hier startet und beendet die Anwendung!
 
@@ -17,7 +16,7 @@
 #include <string>
 
 Logger gAaLog( LOG_FILE_NAME ); // Haupt-Log-Datei erstellen, wo wichtige Ereignisse aufgeschrieben werden.
-bool gRestart = false;
+bool gRestart = false; // TODO: dont use globals
 
 // Programmstart!
 int main ( int argc, char* argv[] )
@@ -75,5 +74,3 @@ int main ( int argc, char* argv[] )
 
     return 0; // Programm beenden!
 }
-
-// Astro Attack - Christian Zommerfelds - 2009

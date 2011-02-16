@@ -1,10 +1,9 @@
-/*----------------------------------------------------------\
-|                    CompPhysics.cpp                        |
-|                    ---------------                        |
-|               Quelldatei von Astro Attack                 |
-|                  Christian Zommerfelds                    |
-|                          2009                             |
-\----------------------------------------------------------*/
+/*
+ * CompPhysics.cpp
+ * This file is part of Astro Attack
+ * Copyright 2011 Christian Zommerfelds
+ */
+
 // CompPhysics.h für mehr Informationen
 
 #include "../GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
@@ -18,20 +17,16 @@
 const CompIdType CompPhysics::COMPONENT_ID = "CompPhysics";
 
 // Konstruktor
-CompPhysics::CompPhysics( const BodyDef& rBodyDef ) : m_body ( NULL ),
-                                                      m_bodyDef( rBodyDef ),
-                                                      m_localRotationPoint (),
-                                                      m_localGravitationPoint (),
-                                                      m_smoothPosition (),
-                                                      m_smoothAngle (0.0f),
-                                                      m_gravField ( NULL ),
-                                                      m_remainingUpdatesTillGravFieldChangeIsPossible ( 0 )
-{
-}
-
-CompPhysics::~CompPhysics()
-{
-}
+CompPhysics::CompPhysics(const BodyDef& rBodyDef) :
+    m_body (NULL),
+    m_bodyDef (rBodyDef),
+    m_localRotationPoint (),
+    m_localGravitationPoint (),
+    m_smoothPosition (),
+    m_smoothAngle (0.0f),
+    m_gravField (NULL),
+    m_remainingUpdatesTillGravFieldChangeIsPossible (0)
+{}
 
 void CompPhysics::AddShapeDef( const boost::shared_ptr<ShapeDef>& pShapeDef )
 {
@@ -116,6 +111,17 @@ void CompPhysics::Rotate( float deltaAngle, const Vector2D& localPoint )
     m_body->SetTransform( *(worldRotationCenter+worldRotationCenterToBodyCenter).To_b2Vec2(), current_angle+deltaAngle );
 }
 
+
+const Vector2D CompPhysics::GetPosition() const
+{
+    return m_body->GetPosition();
+}
+
+const Vector2D& CompPhysics::GetSmoothPosition() const
+{
+    return m_smoothPosition;
+}
+
 ContactVector CompPhysics::GetContacts(bool getSensors) const
 {
     std::vector<boost::shared_ptr<ContactInfo> > vecTouchInfo;
@@ -139,6 +145,11 @@ ContactVector CompPhysics::GetContacts(bool getSensors) const
         vecTouchInfo.push_back(touchInfo);
     }
     return vecTouchInfo;
+}
+
+Vector2D CompPhysics::GetSmoothCenterOfMassPosition() const
+{
+    return m_smoothPosition + m_body->GetLocalCenter();
 }
 
 Vector2D CompPhysics::GetCenterOfMassPosition() const
@@ -226,5 +237,3 @@ void CompPhysics::WriteToXml(pugi::xml_node& compNode) const
             shapeNode.append_attribute("isSensor").set_value("true");
     }
 }
-
-// Astro Attack - Christian Zommerfelds - 2009

@@ -1,10 +1,8 @@
-/*----------------------------------------------------------\
-|                       Entity.cpp                          |
-|                       ----------                          |
-|               Quelldatei von Astro Attack                 |
-|                  Christian Zommerfelds                    |
-|                          2009                             |
-\----------------------------------------------------------*/
+/*
+ * Entity.cpp
+ * This file is part of Astro Attack
+ * Copyright 2011 Christian Zommerfelds
+ */
 
 #include "GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
 
@@ -69,9 +67,7 @@ void Entity::WriteEntityInfoToLogger( Logger& log )
     log.Write( "\n" );
 }
 
-const ComponentMap* Entity::GetAllComponents() const
+const ComponentMap& Entity::GetAllComponents() const
 {
-    return &m_components;
+    return m_components;
 }
-
-// Astro Attack - Christian Zommerfelds - 2009

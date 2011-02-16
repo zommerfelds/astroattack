@@ -1,10 +1,8 @@
-/*----------------------------------------------------------\
-|                       Camera.cpp                          |
-|                       ----------                          |
-|               Quelldatei von Astro Attack                 |
-|                  Christian Zommerfelds                    |
-|                          2009                             |
-\----------------------------------------------------------*/
+/*
+ * Camera.cpp
+ * This file is part of Astro Attack
+ * Copyright 2011 Christian Zommerfelds
+ */
 
 #include "GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
 
@@ -31,12 +29,15 @@
 const float cMinScale = 0.7f;
 const float cMaxScale = 10.0f;
 
-float mod360(float x) // Modulo 360 -> immer positiv
+namespace
 {
-    float result = fmod(x,360);
-    if ( result < 0 )
-        result += 360;
-    return result;
+    float mod360(float x) // Modulo 360 -> immer positiv
+    {
+        float result = fmod(x,360);
+        if ( result < 0 )
+            result += 360;
+        return result;
+    }
 }
 
 // 8:5
@@ -74,13 +75,9 @@ GameCamera::GameCamera( const InputSubSystem* pInputSubSystem, RenderSubSystem* 
     m_endingAngle ( 0.0f ),
     m_rotateTimeElapsed ( 0.0f ),
     m_rotateTotalTimeToArrive ( 0.0f )
-{
-}
+{}
 
-#include "main.h"
-GameCamera::~GameCamera()
-{
-}
+GameCamera::~GameCamera() {}
 
 // Initialisierung der 2D Kamera (ganz am Anfang aufrufen)
 void GameCamera::Init ()
@@ -469,5 +466,3 @@ Vector2D GameCamera::WorldToScreen( const Vector2D& worldPos )
 
     return screenPos;
 }
-
-// Astro Attack - Christian Zommerfelds - 2009

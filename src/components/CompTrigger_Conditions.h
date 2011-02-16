@@ -1,10 +1,9 @@
-/*----------------------------------------------------------\
-|                 CompTrigger_Conditions.h                  |
-|                 ------------------------                  |
-|               Quelldatei von Astro Attack                 |
-|                  Christian Zommerfelds                    |
-|                          2009                             |
-\----------------------------------------------------------*/
+/*
+ * CompTrigger_Conditions.h
+ * This file is part of Astro Attack
+ * Copyright 2011 Christian Zommerfelds
+ */
+
 // Enzelne Bedingungen für CompTrigger Komponente
 
 #include "../GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
@@ -13,6 +12,7 @@
 #include <map>
 #include <string>
 
+// ========== CompareVariable =========
 enum CompareOperator
 {
     GreaterThan,
@@ -32,14 +32,15 @@ public:
     CompareOperator GetCompareType() const { return m_compareType; }
     int GetNum() const { return m_numToCompareWith; }
     std::string GetVariable() const { return m_itVariable->first; }
-private:
     
+private:
     std::map<const std::string, int>::iterator m_itVariable;
 
     CompareOperator m_compareType;
     int m_numToCompareWith;
 };
 
+// ========== EntityTouchedThis =========
 class ConditionEntityTouchedThis : public Condition
 {
 public:
@@ -47,12 +48,7 @@ public:
     bool ConditionIsTrue();
     ConditionIdType ID() const { return "EntityTouchedThis"; }
     std::string GetEntityName() const { return m_entityName; }
+
 private:
-    //void Collision( const Event* contactEvent );
-
     std::string m_entityName;
-    //RegisterObj m_registerObj;
-    //bool m_touched;
 };
-
-// Astro Attack - Christian Zommerfelds - 2009

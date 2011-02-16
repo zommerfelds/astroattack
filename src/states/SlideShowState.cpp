@@ -1,16 +1,14 @@
-/*----------------------------------------------------------\
-|                   SlideShowState.cpp                      |
-|                   ------------------                      |
-|               Quelldatei von Astro Attack                 |
-|                  Christian Zommerfelds                    |
-|                          2009                             |
-\----------------------------------------------------------*/
+/*
+ * SlideShowState.cpp
+ * This file is part of Astro Attack
+ * Copyright 2011 Christian Zommerfelds
+ */
+
 // SlideShowState.h für mehr Informationen
 
 #include "../GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
 #include "SlideShowState.h"
 #include "MainMenuState.h"
-//#include "PlayingState.h"
 #include "../Renderer.h"
 #include "../main.h"
 #include "../GameApp.h"
@@ -22,16 +20,13 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/make_shared.hpp>
 
-// temp!
-#include "SDL_opengl.h" // OpenlGL via SDL inkludieren
-
 // eindeutige ID
 const StateIdType SlideShowState::stateId = "SlideShowState";
 
 // Konstruktor
 // slideXmlFile ist der Name der Bildshow-Datei
-SlideShowState::SlideShowState( SubSystems* pSubSystems, std::string slideXmlFile )
-: GameState( pSubSystems ),
+SlideShowState::SlideShowState( SubSystems& subSystems, std::string slideXmlFile )
+: GameState( subSystems ),
   m_slideXmlFile (slideXmlFile),
   m_currentSlide ( 0 ),
   m_currentTextPage ( 0 ),
@@ -55,15 +50,11 @@ SlideShowState::SlideShowState( SubSystems* pSubSystems, std::string slideXmlFil
     }
 }
 
-SlideShowState::~SlideShowState()
-{
-}
-
 void SlideShowState::Init()        // State starten
 {
     gAaLog.Write ( "Loading slide show..." );
-    //GetSubSystems()->renderer->DisplayLoadingScreen();
-    //GetSubSystems()->renderer->DisplayTextScreen("p l e a s e    w a i t");
+    //GetSubSystems().renderer->DisplayLoadingScreen();
+    //GetSubSystems().renderer->DisplayTextScreen("p l e a s e    w a i t");
     gAaLog.IncreaseIndentationLevel();
 
     // "Dia-Show" laden
@@ -77,19 +68,19 @@ void SlideShowState::Init()        // State starten
     info.textureWrapModeY = TEX_CLAMP;
     info.scale = 1.0;
     for ( size_t i = 0; i < m_slideShow.slides.size(); ++i )
-        GetSubSystems()->renderer->GetTextureManager()->LoadTexture( m_slideShow.slides[i].imageFileName.c_str(), m_slideShow.slides[i].imageFileName,info,gAaConfig.GetInt("TexQuality") );
+        GetSubSystems().renderer->GetTextureManager().LoadTexture( m_slideShow.slides[i].imageFileName.c_str(), m_slideShow.slides[i].imageFileName,info,gAaConfig.GetInt("TexQuality") );
     
     // GUI modus
-    GetSubSystems()->renderer->SetMatrix(RenderSubSystem::GUI);
+    GetSubSystems().renderer->SetMatrix(RenderSubSystem::GUI);
 
     // TEST
-    GetSubSystems()->sound->LoadSound( "data/Sounds/scifi01.wav", "sound" );
-    GetSubSystems()->sound->LoadSound( "data/Sounds/keyboard bang.wav", "write" );
-    //GetSubSystems()->sound->LoadMusic( "data/Music/music.ogg", "music" );
-    //GetSubSystems()->sound->LoadMusic( "data/Music/music2.ogg", "music2" );
-    GetSubSystems()->sound->LoadMusic( m_slideShow.musicFileName.c_str(), "slideShowMusic" );
+    GetSubSystems().sound->LoadSound( "data/Sounds/scifi01.wav", "sound" );
+    GetSubSystems().sound->LoadSound( "data/Sounds/keyboard bang.wav", "write" );
+    //GetSubSystems().sound->LoadMusic( "data/Music/music.ogg", "music" );
+    //GetSubSystems().sound->LoadMusic( "data/Music/music2.ogg", "music2" );
+    GetSubSystems().sound->LoadMusic( m_slideShow.musicFileName.c_str(), "slideShowMusic" );
 
-    GetSubSystems()->sound->PlayMusic( "slideShowMusic", true, 0 );
+    GetSubSystems().sound->PlayMusic( "slideShowMusic", true, 0 );
 
     gAaLog.DecreaseIndentationLevel();
     gAaLog.Write ( "[ Done ]\n" );
@@ -98,15 +89,15 @@ void SlideShowState::Init()        // State starten
 void SlideShowState::Cleanup()     // State abbrechen
 {
     // wird gebremst...
-    GetSubSystems()->sound->StopMusic( 500 );
-    GetSubSystems()->sound->FreeSound( "sound" );
-    GetSubSystems()->sound->FreeSound( "write" );
-    GetSubSystems()->sound->FreeMusic( "slideShowMusic" );
+    GetSubSystems().sound->StopMusic( 500 );
+    GetSubSystems().sound->FreeSound( "sound" );
+    GetSubSystems().sound->FreeSound( "write" );
+    GetSubSystems().sound->FreeMusic( "slideShowMusic" );
 
     // Bilder wieder freisetzen
     for ( size_t i = 0; i < m_slideShow.slides.size(); ++i )
     {
-        GetSubSystems()->renderer->GetTextureManager()->FreeTexture( m_slideShow.slides[i].imageFileName );
+        GetSubSystems().renderer->GetTextureManager().FreeTexture( m_slideShow.slides[i].imageFileName );
     }
 }
 
@@ -126,13 +117,13 @@ void SlideShowState::Update()      // Spiel aktualisieren
     {
         if ( m_slideShow.slides[m_currentSlide].textPages[m_currentTextPage].size() > m_dispCharCount )
         {
-            GetSubSystems()->sound->PlaySound( "write" );
+            GetSubSystems().sound->PlaySound( "write" );
             ++m_dispCharCount;
         }
         m_textUpdateCounter = 0;
     }
 
-    if ( GetSubSystems()->input->KeyState( SlideShowNext ) )
+    if ( GetSubSystems().input->KeyState( SlideShowNext ) )
     {
         if ( m_nextKeyDownOld == false && m_overlayAlpha == 0.0f )
         {
@@ -143,7 +134,7 @@ void SlideShowState::Update()      // Spiel aktualisieren
             }
             else
             {
-                GetSubSystems()->sound->PlaySound( "sound" );
+                GetSubSystems().sound->PlaySound( "sound" );
                 m_fadeOut = true;
                 m_overlayAlpha = OVERLAY_STEP;
                 m_nextKeyDownOld = true;
@@ -158,7 +149,7 @@ void SlideShowState::Update()      // Spiel aktualisieren
         m_nextKeyDownOld = false;
     }
 
-    if ( GetSubSystems()->input->KeyState( SlideShowBack ) )
+    if ( GetSubSystems().input->KeyState( SlideShowBack ) )
     {
         if ( m_backKeyDownOld == false && m_overlayAlpha == 0.0f && m_currentSlide != 0 )
         {
@@ -169,7 +160,7 @@ void SlideShowState::Update()      // Spiel aktualisieren
             }
             else
             {
-                GetSubSystems()->sound->PlaySound("sound");
+                GetSubSystems().sound->PlaySound("sound");
                 m_fadeOut = true;
                 m_overlayAlpha = OVERLAY_STEP;
                 m_backKeyDownOld = true;
@@ -184,12 +175,12 @@ void SlideShowState::Update()      // Spiel aktualisieren
         m_backKeyDownOld = false;
     }
 
-    if ( GetSubSystems()->input->KeyState( SlideShowSkip ) )
+    if ( GetSubSystems().input->KeyState( SlideShowSkip ) )
     {
         //boost::shared_ptr<PlayingState> playState ( new PlayingState( GetSubSystems() ) ); // Zum Spiel-Stadium wechseln
-        //GetSubSystems()->stateManager->ChangeState( playState ); // State wird gewechselt (und diese wird gelöscht)
-        boost::shared_ptr<MainMenuState> menuState ( boost::make_shared<MainMenuState>( GetSubSystems(), Play ) );
-        GetSubSystems()->stateManager->ChangeState( menuState ); // State wird gewechselt (und diese wird gelöscht)
+        //GetSubSystems().stateManager->ChangeState( playState ); // State wird gewechselt (und diese wird gelöscht)
+        boost::shared_ptr<MainMenuState> menuState ( new MainMenuState(GetSubSystems(), Play ) );
+        GetSubSystems().stateManager->ChangeState( menuState ); // State wird gewechselt (und diese wird gelöscht)
         return; // Sofort raus, da dieser State nicht mehr existiert!
     }
 
@@ -226,14 +217,14 @@ void SlideShowState::Update()      // Spiel aktualisieren
             }
             /*if ( m_currentSlide == 5 )
             {
-                GetSubSystems()->sound->PlayMusic( "music2", true, 0 );
+                GetSubSystems().sound->PlayMusic( "music2", true, 0 );
             }*/
             if ( m_slideShow.slides.size() <= m_currentSlide ) // wenn alle Bilder vorbei sind
             {
                 //boost::shared_ptr<PlayingState> playState ( new PlayingState( GetSubSystems() ) ); // Zum Spiel-Stadium wechseln
-                //GetSubSystems()->stateManager->ChangeState( playState ); // State wird gewechselt (und diese wird gelöscht)
-                boost::shared_ptr<MainMenuState> menuState ( boost::make_shared<MainMenuState>( GetSubSystems(), Play ) );
-                GetSubSystems()->stateManager->ChangeState( menuState ); // State wird gewechselt (und diese wird gelöscht)
+                //GetSubSystems().stateManager->ChangeState( playState ); // State wird gewechselt (und diese wird gelöscht)
+                boost::shared_ptr<MainMenuState> menuState ( new MainMenuState( GetSubSystems(), Play ) );
+                GetSubSystems().stateManager->ChangeState( menuState ); // State wird gewechselt (und diese wird gelöscht)
                 return; // Sofort raus, da dieser State nicht mehr existiert!
             }
         }
@@ -276,12 +267,12 @@ void SlideShowState::Update()      // Spiel aktualisieren
 
 void SlideShowState::Frame( float /*deltaTime*/ )
 {
-    GetSubSystems()->input->Update(); // neue Eingaben lesen
+    GetSubSystems().input->Update(); // neue Eingaben lesen
 }
 
 void SlideShowState::Draw( float /*accumulator*/ )        // Spiel zeichnen
 {
-    RenderSubSystem* pRenderer = GetSubSystems()->renderer.get();
+    RenderSubSystem* pRenderer = GetSubSystems().renderer.get();
 
     // Bildschirm leeren
     pRenderer->ClearScreen();
@@ -320,7 +311,7 @@ void SlideShowState::Draw( float /*accumulator*/ )        // Spiel zeichnen
 
     // Maus zeichnen
     /*{
-        const Vector2D* mousePos = GetSubSystems()->input->MousePos();
+        const Vector2D* mousePos = GetSubSystems().input->MousePos();
         float texCoord[8] = { 0.0f, 0.0f,
                              0.0f, 1.0f,
                              1.0f, 1.0f,
@@ -335,5 +326,3 @@ void SlideShowState::Draw( float /*accumulator*/ )        // Spiel zeichnen
     // Alles was gezeichnet wurde anzeigen
     pRenderer->FlipBuffer(); // (vom Backbuffer zum Frontbuffer wechseln)
 }
-
-// Astro Attack - Christian Zommerfelds - 2009

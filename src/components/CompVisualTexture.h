@@ -1,10 +1,9 @@
-/*----------------------------------------------------------\
-|                   CompVisualTexture.h                     |
-|                   -------------------                     |
-|               Quelldatei von Astro Attack                 |
-|                  Christian Zommerfelds                    |
-|                          2009                             |
-\----------------------------------------------------------*/
+/*
+ * CompVisualTexture.h
+ * This file is part of Astro Attack
+ * Copyright 2011 Christian Zommerfelds
+ */
+
 // CompVisualTexture ist eine Komponente,
 // die einen Körper (CompPhysics) texturiert.
 // Das beinhaltet nur die Daten für das Texturieren.
@@ -30,7 +29,7 @@ class CompVisualTexture : public Component
 {
 public:
     CompVisualTexture( TextureIdType texId );
-    ~CompVisualTexture();
+
 	const CompIdType& ComponentId() const { return COMPONENT_ID; }
 	static const CompIdType COMPONENT_ID;
 
@@ -53,5 +52,3 @@ private:
 //--------------------------------------------//
 
 #endif
-
-// Astro Attack - Christian Zommerfelds - 2009

@@ -1,10 +1,8 @@
-/*----------------------------------------------------------\
-|                        World.cpp                          |
-|                        ---------                          |
-|               Quelldatei von Astro Attack                 |
-|                  Christian Zommerfelds                    |
-|                          2009                             |
-\----------------------------------------------------------*/
+/*
+ * World.cpp
+ * This file is part of Astro Attack
+ * Copyright 2011 Christian Zommerfelds
+ */
 
 #include "GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
 
@@ -21,6 +19,7 @@ GameWorld::GameWorld( GameEvents* pEventManager )
 #include "Logger.h"
 GameWorld::~GameWorld()
 {
+    // NOTE: maybe we shouldn't create events here, since the world is being destroyed anyway...
     EntityMap::iterator next = m_entities.begin();
     EntityMap::iterator it = next;
     for ( ; it != m_entities.end(); it=next )
@@ -36,10 +35,10 @@ void GameWorld::AddEntity( const boost::shared_ptr<Entity>& pEntity )
     EntityIdType id = pEntity->GetId();
     m_entities[id] = pEntity; // if there is an entity with the same ID before, it will get deleted
 
-    m_pGameEvents->newEntity.Fire( pEntity.get() );
+    m_pGameEvents->newEntity.Fire( *pEntity );
 }
 
-boost::shared_ptr<Entity> GameWorld::GetEntity( EntityIdType id ) const
+boost::shared_ptr<Entity> GameWorld::GetEntity( const EntityIdType& id ) const
 {
     EntityMap::const_iterator i = m_entities.find( id );
     if ( i == m_entities.end() )
@@ -48,9 +47,9 @@ boost::shared_ptr<Entity> GameWorld::GetEntity( EntityIdType id ) const
         return i->second;
 }
 
-void GameWorld::RemoveEntity( EntityIdType id )
+void GameWorld::RemoveEntity( const EntityIdType& id )
 {
-    m_pGameEvents->deleteEntity.Fire( m_entities[id].get() );
+    m_pGameEvents->deleteEntity.Fire( *m_entities[id] );
     m_entities.erase( id );
 }
 
@@ -71,7 +70,7 @@ int GameWorld::GetVariable( const WorldVariableType& varName )
         return i->second;
 }
 
-void GameWorld::SetVariable( const WorldVariableType varName, int value )
+void GameWorld::SetVariable( const WorldVariableType& varName, int value )
 {
     m_variables[varName] = value;
 }
@@ -92,5 +91,3 @@ const EntityMap* GameWorld::GetAllEntities() const
 {
     return &m_entities;
 }
-
-// Astro Attack - Christian Zommerfelds - 2009

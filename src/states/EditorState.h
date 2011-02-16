@@ -1,10 +1,9 @@
-/*----------------------------------------------------------\
-|                     EditorState.h                         |
-|                     -------------                         |
-|               Quelldatei von Astro Attack                 |
-|                  Christian Zommerfelds                    |
-|                          2009                             |
-\----------------------------------------------------------*/
+/*
+ * EditorState.h
+ * This file is part of Astro Attack
+ * Copyright 2011 Christian Zommerfelds
+ */
+
 // Level-Editor
 
 #ifndef EDITORSTATE_H
@@ -26,8 +25,8 @@ class Vector2D;
 class EditorState : public GameState
 {
 public:
-    EditorState( SubSystems* pSubSystems );
-    ~EditorState();
+    EditorState( SubSystems& subSystems );
+    ~EditorState(); // need to specify implement manually because of scoped_ptr (incomplete type)
 
     const StateIdType& StateID() const { return stateId; }
 
@@ -64,5 +63,3 @@ private:
 //--------------------------------------------//
 
 #endif
-
-// Astro Attack - Christian Zommerfelds - 2009

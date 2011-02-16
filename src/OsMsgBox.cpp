@@ -1,10 +1,9 @@
-/*----------------------------------------------------------\
-|                       OsMsgBox.cpp                        |
-|                       ------------                        |
-|               Quelldatei von Astro Attack                 |
-|                  Christian Zommerfelds                    |
-|                          2009                             |
-\----------------------------------------------------------*/
+/*
+ * OsMsgBox.cpp
+ * This file is part of Astro Attack
+ * Copyright 2011 Christian Zommerfelds
+ */
+
 // Dialog-Box für win32, macosx und gewöhnliche command line
 
 #include "GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
@@ -63,5 +62,3 @@ void DispError( const std::string& msg )
     // Zeige den Fehlertext mit OsMsgBox() an
     OsMsgBox ( msg, "Fatal Error" ); // Fehlermeldung ausgeben (siehe OsMsgBox.cpp)
 }
-
-// Astro Attack - Christian Zommerfelds - 2009

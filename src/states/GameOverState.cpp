@@ -1,10 +1,9 @@
-/*----------------------------------------------------------\
-|                    GameOverState.cpp                      |
-|                    -----------------                      |
-|               Quelldatei von Astro Attack                 |
-|                  Christian Zommerfelds                    |
-|                          2009                             |
-\----------------------------------------------------------*/
+/*
+ * GameOverState.cpp
+ * This file is part of Astro Attack
+ * Copyright 2011 Christian Zommerfelds
+ */
+
 // GameOverState.h für mehr Informationen
 
 #include "../GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
@@ -19,21 +18,17 @@
 // eindeutige ID
 const StateIdType GameOverState::stateId = "GameOverState";
 
-GameOverState::GameOverState( SubSystems* pSubSystems, std::string stringToShow, std::string levelFileName )
-: GameState( pSubSystems ),
+GameOverState::GameOverState( SubSystems& subSystems, std::string stringToShow, std::string levelFileName )
+: GameState( subSystems ),
   m_stringToShow ( stringToShow ),
   m_levelFileName ( levelFileName )
-{
-}
-
-GameOverState::~GameOverState()
 {
 }
 
 void GameOverState::Init()        // State starten
 {
     // GUI modus (Graphical User Interface)
-    GetSubSystems()->renderer->SetMatrix(RenderSubSystem::GUI);
+    GetSubSystems().renderer->SetMatrix(RenderSubSystem::GUI);
 }
 
 void GameOverState::Cleanup()     // State abbrechen
@@ -50,22 +45,22 @@ void GameOverState::Resume()      // State wiederaufnehmen
 
 void GameOverState::Update()      // Spiel aktualisieren
 {
-    if ( GetSubSystems()->input->KeyState( Enter ) )
+    if ( GetSubSystems().input->KeyState( Enter ) )
     {
-        boost::shared_ptr<PlayingState> playState = boost::make_shared<PlayingState>(GetSubSystems(), m_levelFileName); // Zum Spiel-Stadium wechseln
-        GetSubSystems()->stateManager->ChangeState( playState );
+        boost::shared_ptr<PlayingState> playState (new PlayingState(GetSubSystems(), m_levelFileName)); // Zum Spiel-Stadium wechseln
+        GetSubSystems().stateManager->ChangeState( playState );
         return;
     }
 }
 
 void GameOverState::Frame( float /*deltaTime*/ )
 {
-    GetSubSystems()->input->Update(); // neue Eingaben lesen
+    GetSubSystems().input->Update(); // neue Eingaben lesen
 }
 
 void GameOverState::Draw( float /*accumulator*/ )        // Spiel zeichnen
 {
-    RenderSubSystem* pRenderer = GetSubSystems()->renderer.get();
+    RenderSubSystem* pRenderer = GetSubSystems().renderer.get();
 
     // Bildschirm leeren
     pRenderer->ClearScreen();
@@ -77,5 +72,3 @@ void GameOverState::Draw( float /*accumulator*/ )        // Spiel zeichnen
 
     pRenderer->FlipBuffer(); // vom Backbuffer zum Frontbuffer wechseln (neues Bild zeigen)
 }
-
-// Astro Attack - Christian Zommerfelds - 2009

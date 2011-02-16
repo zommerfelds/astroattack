@@ -12,9 +12,6 @@
 
 - improve logger
 - asynchonous fading out music (separate thread)
-- configure script is not usable right away
-- No OpenGL call out of Renderer.cpp (e.g. glColor4f in EditorState.cpp)
-- Migrate to pugixml or rapidxml
 - Use physical state interpolation instead of extrapolation
 - Strange physical behavior under "arrow" of level 2
 - Test OpenGL error checking (glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR) did not generate error)
@@ -61,6 +58,7 @@
 
 
 DONE:
+- Migrate to pugixml or rapidxml
 - Align text
 - Command line arguments
 - Abstract Box2D (remove Box2D dependencies in non-physics parts)

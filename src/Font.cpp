@@ -1,10 +1,8 @@
-/*----------------------------------------------------------\
-|                        Font.cpp                           |
-|                        --------                           |
-|               Quelldatei von Astro Attack                 |
-|                  Christian Zommerfelds                    |
-|                          2009                             |
-\----------------------------------------------------------*/
+/*
+ * Font.cpp
+ * This file is part of Astro Attack
+ * Copyright 2011 Christian Zommerfelds
+ */
 
 #include "GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
 
@@ -23,23 +21,18 @@
 
 #include "main.h"
 
-FontManager::FontManager()
+namespace
 {
-}
+    int PowerOf2(int num)
+    {
+      int value = 1;
 
-FontManager::~FontManager()
-{
-}
-
-int PowerOf2(int num)
-{
-  int value = 1;
-
-  while (value < num)
-  {
-    value <<= 1;
-  }
-  return value;
+      while (value < num)
+      {
+        value <<= 1;
+      }
+      return value;
+    }
 }
 
 // .ttf Datei in in OpenGL Texturen laden laden
@@ -122,6 +115,7 @@ void FontManager::DrawString(const std::string &str, const FontIdType &fontId, f
         font->Render(lineIt->c_str(),-1,FTPoint(lineX, lineY));
         lineY -= lineSpacing;
     }
+    glColor4f( 255, 255, 255, 255 );
 }
 
 void FontManager::GetDimensions(const std::string &text, const FontIdType &fontId, float& w, float& h) const
@@ -174,5 +168,3 @@ void FontManager::GetDetailedDimensions(const std::string &text, FTFont& font, f
         *totalHeight = ((line_count-1) * line_spacing) + font.Ascender() - font.Descender();
     }
 }
-
-// Astro Attack - Christian Zommerfelds - 2009

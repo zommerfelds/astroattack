@@ -1,10 +1,8 @@
-/*----------------------------------------------------------\
-|                   CompGravField.cpp                       |
-|                   -----------------                       |
-|               Quelldatei von Astro Attack                 |
-|                  Christian Zommerfelds                    |
-|                          2009                             |
-\----------------------------------------------------------*/
+/*
+ * CompGravField.cpp
+ * This file is part of Astro Attack
+ * Copyright 2011 Christian Zommerfelds
+ */
 
 #include "../GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
 
@@ -24,6 +22,8 @@ m_pGravitationCenter ( new Vector2D ), m_priority( 50 )
     m_pGravitationDir->Set( 0.0, 1.0 );
     m_pGravitationCenter->Set( 0.0, 1.0 );
 }
+
+CompGravField::~CompGravField() {}
 
 void CompGravField::SetGravDir(const Vector2D& dir)
 {
@@ -109,5 +109,3 @@ void CompGravField::WriteToXml(pugi::xml_node& compNode) const
     }
     }
 }
-
-// Astro Attack - Christian Zommerfelds - 2009

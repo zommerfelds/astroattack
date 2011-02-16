@@ -1,10 +1,8 @@
-/*----------------------------------------------------------\
-|                       Texture.cpp                         |
-|                       -----------                         |
-|               Quelldatei von Astro Attack                 |
-|                  Christian Zommerfelds                    |
-|                          2009                             |
-\----------------------------------------------------------*/
+/*
+ * Texture.cpp
+ * This file is part of Astro Attack
+ * Copyright 2011 Christian Zommerfelds
+ */
 
 #include "GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
 #include "Texture.h"
@@ -251,7 +249,7 @@ void AnimationManager::LoadAnimation( const char* name, AnimationIdType id,const
         throw Exception ( gAaLog.Write ( "Animation file \"%s\" could not be opened.\n", name ) );
     }
 
-    boost::shared_ptr<AnimInfo> pAnimInfo ( boost::make_shared<AnimInfo>() );
+    boost::shared_ptr<AnimInfo> pAnimInfo = boost::make_shared<AnimInfo>();
 
     try
     {
@@ -339,5 +337,3 @@ void AnimationManager::FreeAnimation( AnimationIdType id )
         m_pTM->FreeTexture( animInfo->name + digits_str.str() );
     }
 }
-
-// Astro Attack - Christian Zommerfelds - 2009

@@ -1,10 +1,9 @@
-/*----------------------------------------------------------\
-|                        Physics.h                          |
-|                        ---------                          |
-|               Quelldatei von Astro Attack                 |
-|                  Christian Zommerfelds                    |
-|                          2009                             |
-\----------------------------------------------------------*/
+/*
+ * Physics.h
+ * This file is part of Astro Attack
+ * Copyright 2011 Christian Zommerfelds
+ */
+
 // Steuerung der Physik
 
 #ifndef PHYSICS_H
@@ -29,20 +28,14 @@ class Entity;
 class EventConnection;
 class CompPhysics;
 class CompGravField;
-class Vector2D;
-class RegisterObj;
 class b2World;
-class ContactListener;
-class b2Shape;
+class Vector2D;
 
-/*
-    Bei Update() wird die ganze Physik simuliert.
-*/
 class PhysicsSubSystem
 {
 public:
     PhysicsSubSystem( GameEvents* pGameEvents);
-    ~PhysicsSubSystem();
+    ~PhysicsSubSystem(); // need to implement destructor manually because of scoped_ptr (incomplete type)
 
     void Init();
     void Update();
@@ -61,34 +54,15 @@ private:
     EventConnection m_eventConnection4;
     GameEvents* m_pGameEvents;
 
-    void RegisterPhysicsComp( Entity* pEntity );
-    void UnregisterPhysicsComp( Entity* pEntity );
-	void RegisterGravFieldComp( Entity* pEntity );
-    void UnregisterGravFieldComp( Entity* pEntity );
+    void RegisterPhysicsComp( Entity& entity );
+    void UnregisterPhysicsComp( Entity& entity );
+	void RegisterGravFieldComp( Entity& entity );
+    void UnregisterGravFieldComp( Entity& entity );
 
     boost::scoped_ptr<b2World> m_world;
     float m_timeStep;
     int m_velocityIterations;
     int m_positionIterations;
-
-    // TODO: reimplement this
-#if 0
-    class ContactListener : public b2ContactListener
-    {
-    public:
-        ContactListener( GameEvents* pEM ) : m_pEventManager(pEM) {}
-	    /*void Add(const b2ContactPoint* point);
-        void Persist(const b2ContactPoint* point);
-	    void Remove(const b2ContactPoint* point);*/
-    private:
-        /*void CheckContactPoint(const b2ContactPoint* point);*/
-        GameEvents* m_pEventManager;
-    };
-
-    boost::scoped_ptr<ContactListener> m_contactListener;
-#endif
 };
 
 #endif
-
-// Astro Attack - Christian Zommerfelds - 2009

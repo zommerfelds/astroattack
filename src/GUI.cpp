@@ -1,10 +1,8 @@
-/*----------------------------------------------------------\
-|                         GUI.cpp                           |
-|                         -------                           |
-|               Quelldatei von Astro Attack                 |
-|                  Christian Zommerfelds                    |
-|                          2009                             |
-\----------------------------------------------------------*/
+/*
+ * GUI.cpp
+ * This file is part of Astro Attack
+ * Copyright 2011 Christian Zommerfelds
+ */
 
 #include "GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
 
@@ -12,12 +10,7 @@
 #include "Renderer.h"
 
 GuiSubSystem::GuiSubSystem( RenderSubSystem* pRenderer, InputSubSystem* pInput ) : m_pRenderer (pRenderer), m_pInput (pInput), m_clear(false), m_isUpdating ( false )
-{
-}
-
-GuiSubSystem::~GuiSubSystem()
-{
-}
+{}
 
 void GuiSubSystem::Update()
 {
@@ -67,10 +60,10 @@ void GuiSubSystem::DeleteGroup( GroupId groupId )
 /////////// Widgets /////////////
 
 //** Label
-WidgetLabel::WidgetLabel( float x, float y, std::string text, const FontManager* fontMngr ) : m_text ( text )
+WidgetLabel::WidgetLabel( float x, float y, std::string text, const FontManager& fontMngr ) : m_text ( text )
 {
     float w = 0.0f, h = 0.0f;
-    fontMngr->GetDimensions(text, "FontW_m", w, h);
+    fontMngr.GetDimensions(text, "FontW_m", w, h);
     SetArea( Rect( x, x+w/4.0f, y, y+h/3.0f ) );
 }
 
@@ -116,5 +109,3 @@ void WidgetButton::Draw( RenderSubSystem* pRenderer )
     pRenderer->DrawColorQuad( vertexCoord, 0.1f, 0.9f, 0.3f, (GetMouseState()==MouseOver||GetMouseState()==PressedL)?0.3f:0.0f, true );*/
     pRenderer->DrawString( m_caption, "FontW_m", (GetArea().x1+GetArea().x2)*2.0f /* /2*4 */, (GetArea().y1+GetArea().y2)*1.5f /* /2*3 */, AlignCenter, AlignCenter, 1.0f, 1.0f, 1.0f, (GetMouseState()==MouseOver||GetMouseState()==PressedL)?1.0f:0.5f );
 }
-
-// Astro Attack - Christian Zommerfelds - 2009

@@ -1,10 +1,9 @@
-/*----------------------------------------------------------\
-|                       Component.h                         |
-|                       -----------                         |
-|               Quelldatei von Astro Attack                 |
-|                  Christian Zommerfelds                    |
-|                          2009                             |
-\----------------------------------------------------------*/
+/*
+ * Component.h
+ * This file is part of Astro Attack
+ * Copyright 2011 Christian Zommerfelds
+ */
+
 // Basisklasse für eine Komponente
 
 #ifndef COMPONENT_H
@@ -45,5 +44,3 @@ private:
 };
 
 #endif
-
-// Astro Attack - Christian Zommerfelds - 2009

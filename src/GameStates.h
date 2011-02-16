@@ -1,10 +1,9 @@
-/*----------------------------------------------------------\
-|                      GameStates.h                         |
-|                      ------------                         |
-|               Quelldatei von Astro Attack                 |
-|                  Christian Zommerfelds                    |
-|                          2009                             |
-\----------------------------------------------------------*/
+/*
+ * GameStates.h
+ * This file is part of Astro Attack
+ * Copyright 2011 Christian Zommerfelds
+ */
+
 // Basisklass für Game States
 
 #ifndef GAMESTATES_H
@@ -22,7 +21,7 @@ typedef std::string StateIdType;
 class GameState
 {
 public:
-    GameState( SubSystems* pSubSystems );
+    GameState( SubSystems& subSystems );
 
     virtual const StateIdType& StateID() const = 0; // Komponente ID -> Name der Komponente
 
@@ -38,10 +37,9 @@ public:
 
     virtual ~GameState() {};                    // Destruktor
 
-    SubSystems* GetSubSystems() { return m_pSubSystems; }
+    SubSystems& GetSubSystems() { return m_subSystems; }
 private:
-    GameState() {}
-    SubSystems* m_pSubSystems;
+    SubSystems& m_subSystems;
 };
 
 class StateManager
@@ -61,5 +59,3 @@ private:
 };
 
 #endif
-
-// Astro Attack - Christian Zommerfelds - 2009

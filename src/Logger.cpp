@@ -1,10 +1,8 @@
-/*----------------------------------------------------------\
-|                         Log.cpp                           |
-|                         -------                           |
-|               Quelldatei von Astro Attack                 |
-|                  Christian Zommerfelds                    |
-|                          2009                             |
-\----------------------------------------------------------*/
+/*
+ * Logger.cpp
+ * This file is part of Astro Attack
+ * Copyright 2011 Christian Zommerfelds
+ */
 
 #include "GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
 
@@ -24,16 +22,6 @@ Logger::Logger( const char *pFileName )
   m_lastCharWasNewline ( false )
 {
     OpenFile( pFileName );
-}
-
-// Destruktor
-Logger::~Logger()
-{
-	if ( m_isOpen )
-    {
-		CloseFile();
-        m_isOpen = false;
-    }
 }
 
 // Text in Log-Datei schreiben (beleibig viele Parameter nach dem format Parameter, wie printf())
@@ -115,7 +103,7 @@ void Logger::CloseFile()
 {
     m_LogStreamOut.close();
     m_LogStreamOut.clear();
-    m_isOpen = true;
+    m_isOpen = false;
 }
 
 //------ Hilfsfunktionen ------//
@@ -134,5 +122,3 @@ void Logger::WriteInfoEnd()
     Write ( "End: " );
     WriteCurrentTime();
 }
-
-// Astro Attack - Christian Zommerfelds - 2009

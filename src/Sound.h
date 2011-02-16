@@ -1,10 +1,9 @@
-/*----------------------------------------------------------\
-|                         Sound.h                           |
-|                         -------                           |
-|               Quelldatei von Astro Attack                 |
-|                  Christian Zommerfelds                    |
-|                          2009                             |
-\----------------------------------------------------------*/
+/*
+ * Sound.h
+ * This file is part of Astro Attack
+ * Copyright 2011 Christian Zommerfelds
+ */
+
 // Sound Funktionen
 
 #ifndef SOUND_H
@@ -58,5 +57,3 @@ private:
 };
 
 #endif
-
-// Astro Attack - Christian Zommerfelds - 2009

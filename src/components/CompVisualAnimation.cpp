@@ -1,10 +1,9 @@
-/*----------------------------------------------------------\
-|                 CompVisualAnimation.cpp                   |
-|                 -----------------------                   |
-|               Quelldatei von Astro Attack                 |
-|                  Christian Zommerfelds                    |
-|                          2009                             |
-\----------------------------------------------------------*/
+/*
+ * CompVisualAnimation.cpp
+ * This file is part of Astro Attack
+ * Copyright 2011 Christian Zommerfelds
+ */
+
 // CompVisualAnimation.h für mehr Informationen
 
 #include "../GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
@@ -45,9 +44,7 @@ CompVisualAnimation::CompVisualAnimation( const AnimInfo* pAnimInfo )
     m_eventConnection = gameEvents->gameUpdate.RegisterListener( boost::bind( &CompVisualAnimation::OnUpdate, this ) );
 }
 
-CompVisualAnimation::~CompVisualAnimation()
-{
-}
+CompVisualAnimation::~CompVisualAnimation() {}
 
 TextureIdType CompVisualAnimation::GetCurrentTexture() const
 {
@@ -95,7 +92,6 @@ void CompVisualAnimation::Continue()
     m_wantToFinish = false;
 }
 
-// ------- Aktualisieren! --------
 void CompVisualAnimation::OnUpdate()
 {
     if ( m_animInfo==NULL )
@@ -129,7 +125,7 @@ void CompVisualAnimation::OnUpdate()
     }
 }
 
-boost::shared_ptr<CompVisualAnimation> CompVisualAnimation::LoadFromXml(const pugi::xml_node& compElem, const AnimationManager* pAnimMngr)
+boost::shared_ptr<CompVisualAnimation> CompVisualAnimation::LoadFromXml(const pugi::xml_node& compElem, const AnimationManager& animMngr)
 {
     std::string animName = compElem.child("anim").attribute("name").value();
 
@@ -147,7 +143,7 @@ boost::shared_ptr<CompVisualAnimation> CompVisualAnimation::LoadFromXml(const pu
 
     bool start = !compElem.child("start").empty();
 
-    boost::shared_ptr<CompVisualAnimation> compAnim = boost::make_shared<CompVisualAnimation>(pAnimMngr->GetAnimInfo(animName));
+    boost::shared_ptr<CompVisualAnimation> compAnim = boost::make_shared<CompVisualAnimation>(animMngr.GetAnimInfo(animName));
     compAnim->Center()->Set(centerX, centerY);
     compAnim->SetDimensions(hw, hh);
     if (start)
@@ -173,5 +169,3 @@ void CompVisualAnimation::WriteToXml(pugi::xml_node& compNode) const
         compNode.append_child("start");
     }
 }
-
-// Astro Attack - Christian Zommerfelds - 2009

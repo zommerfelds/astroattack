@@ -1,10 +1,9 @@
-/*----------------------------------------------------------\
-|                       GameEvents.h                        |
-|                       ------------                        |
-|               Quelldatei von Astro Attack                 |
-|                  Christian Zommerfelds                    |
-|                          2010                             |
-\----------------------------------------------------------*/
+/*
+ * GameEvents.h
+ * This file is part of Astro Attack
+ * Copyright 2011 Christian Zommerfelds
+ */
+
 // Für die Kommunikation zwischen Komponente und Systeme
 
 #ifndef GAMEEVENTS_H
@@ -25,17 +24,17 @@ struct GameEvents {
     // -- newEntity --
     // A new entity is being created
     // Args: pointer to the entity being created
-    Event1<Entity*> newEntity;
+    Event1<Entity&> newEntity;
 
     // -- watToDeleteEntity --
     // Somebody wants to delete an entity
     // Args: pointer to the entity that should be deleted
-    Event1<Entity*> wantToDeleteEntity;
+    Event1<Entity&> wantToDeleteEntity;
 
     // -- deleteEntity --
     // An entity is being deleted
     // Args: pointer to the entity being deleted
-    Event1<Entity*> deleteEntity;
+    Event1<Entity&> deleteEntity;
 
     // -- gameUpdate --
     // The next internal game iteration is being run (not frames)
@@ -44,9 +43,7 @@ struct GameEvents {
     // -- levelEnd --
     // The player finished the current level
     // Args: bool: has the player won?, string: level end message       // Level wird beended
-    Event2<bool,std::string> levelEnd;
+    Event2<bool, const std::string&> levelEnd;
 };
 
 #endif
-
-// Astro Attack - Christian Zommerfelds - 2010

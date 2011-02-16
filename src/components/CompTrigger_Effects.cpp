@@ -1,30 +1,29 @@
-/*----------------------------------------------------------\
-|                 CompTrigger_Effects.cpp                   |
-|                 -----------------------                   |
-|               Quelldatei von Astro Attack                 |
-|                  Christian Zommerfelds                    |
-|                          2009                             |
-\----------------------------------------------------------*/
+/*
+ * CompTrigger_Effects.cpp
+ * This file is part of Astro Attack
+ * Copyright 2011 Christian Zommerfelds
+ */
 
 #include "../GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
 #include "CompTrigger_Effects.h"
 #include "../World.h"
 #include <boost/make_shared.hpp>
-
-EffectKillEntity::EffectKillEntity( std::string entityToKill, GameWorld* pGW )
-: m_entityToKill ( entityToKill ), m_pGW ( pGW )
-{
-}
-
-void EffectKillEntity::Fire()
-{
-    m_pCompTrigger->gameEvents->wantToDeleteEntity.Fire( m_pGW->GetEntity(m_entityToKill).get() );
-    return;
-}
-
 #include "../Physics.h"
 #include "CompVisualMessage.h"
 #include <sstream>
+
+// ========= KillEntity ===========
+EffectKillEntity::EffectKillEntity( std::string entityToKill, GameWorld* pGW )
+: m_entityToKill ( entityToKill ), m_pGW ( pGW )
+{}
+
+void EffectKillEntity::Fire()
+{
+    m_pCompTrigger->gameEvents->wantToDeleteEntity.Fire( *m_pGW->GetEntity(m_entityToKill) );
+    return;
+}
+
+// ========= DispMessage ===========
 EffectDispMessage::EffectDispMessage( std::string message, int timeMs, GameWorld* pGW )
 : m_message (message),
   m_remainingUpdates ( (int)((float)timeMs*0.001f/PHYS_DELTA_TIME) ),
@@ -32,8 +31,7 @@ EffectDispMessage::EffectDispMessage( std::string message, int timeMs, GameWorld
   m_pGW ( pGW ),
   m_pMsgEntity (NULL),
   m_totalTimeMs ( timeMs )
-{
-}
+{}
 
 
 void EffectDispMessage::Fire()
@@ -65,7 +63,7 @@ bool EffectDispMessage::Update()
     --m_remainingUpdates;
     if ( m_remainingUpdates == 0 && m_pMsgEntity != NULL )
     {
-        m_pCompTrigger->gameEvents->wantToDeleteEntity.Fire(m_pMsgEntity);
+        m_pCompTrigger->gameEvents->wantToDeleteEntity.Fire(*m_pMsgEntity);
         return true;
     }
     else if ( m_remainingUpdates < 0 )
@@ -79,22 +77,16 @@ bool EffectDispMessage::Update()
 EffectDispMessage::~EffectDispMessage()
 {
     if ( m_pMsgEntity && m_fired && m_remainingUpdates > 0 && m_pGW->GetEntity(m_msgEntityName) )
-        m_pCompTrigger->gameEvents->wantToDeleteEntity.Fire(m_pMsgEntity);
+        m_pCompTrigger->gameEvents->wantToDeleteEntity.Fire(*m_pMsgEntity);
 }
 
+// ========= EndLevel ===========
 void EffectEndLevel::Fire()
 {
-    if ( m_win )
-        m_pCompTrigger->gameEvents->levelEnd.Fire(true, m_message);
-    else
-        m_pCompTrigger->gameEvents->levelEnd.Fire(false, m_message);
+    m_pCompTrigger->gameEvents->levelEnd.Fire(m_win, m_message);
 }
 
-/*void EffectLoseLevel::Fire()
-{
-    m_pCompTrigger->eventManager->InvokeEvent( Event(LevelEnd_Lose, (void*)m_message.c_str()) );
-}*/
-
+// ========= ChangeVariable ===========
 EffectChangeVariable::EffectChangeVariable(std::map<const std::string,int>::iterator itVariable, ChangeType changeType, int num )
 : m_itVariable ( itVariable ),
   m_changeType ( changeType ),
@@ -122,5 +114,3 @@ void EffectChangeVariable::Fire()
         break;;
     }
 }
-
-// Astro Attack - Christian Zommerfelds - 2009

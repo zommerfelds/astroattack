@@ -1,10 +1,9 @@
-/*----------------------------------------------------------\
-|                     GameOverState.h                       |
-|                     ---------------                       |
-|               Quelldatei von Astro Attack                 |
-|                  Christian Zommerfelds                    |
-|                          2009                             |
-\----------------------------------------------------------*/
+/*
+ * GameOverState.h
+ * This file is part of Astro Attack
+ * Copyright 2011 Christian Zommerfelds
+ */
+
 // Wenn Spiel vorbei ist.
 
 #ifndef MAINMENUSTATE_H
@@ -22,8 +21,7 @@ const float cBackgroundColor[3] = { 0.3f, 0.1f, 0.2f };
 class GameOverState : public GameState
 {
 public:
-    GameOverState( SubSystems* pSubSystems, std::string stringToShow, std::string levelFileName );
-    ~GameOverState();
+    GameOverState( SubSystems& subSystems, std::string stringToShow, std::string levelFileName );
 
     const StateIdType& StateID() const { return stateId; }
 
@@ -47,5 +45,3 @@ private:
 //--------------------------------------------//
 
 #endif
-
-// Astro Attack - Christian Zommerfelds - 2009

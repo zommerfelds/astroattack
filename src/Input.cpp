@@ -1,10 +1,8 @@
-/*----------------------------------------------------------\
-|                        Input.cpp                          |
-|                        ---------                          |
-|               Quelldatei von Astro Attack                 |
-|                  Christian Zommerfelds                    |
-|                          2009                             |
-\----------------------------------------------------------*/
+/*
+ * Input.cpp
+ * This file is part of Astro Attack
+ * Copyright 2011 Christian Zommerfelds
+ */
 
 #include "GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
 
@@ -54,9 +52,7 @@ InputSubSystem::InputSubSystem() : m_pKeystates ( NULL ),
     m_keyMap[SlideShowSkip] = SDLK_DELETE;
 }
 
-InputSubSystem::~InputSubSystem()
-{
-}
+InputSubSystem::~InputSubSystem() {}
 
 // Eingabestatus speichern (Maus und Tastatur)
 void InputSubSystem::Update()
@@ -79,7 +75,6 @@ void InputSubSystem::Update()
         m_mousestates = SDL_GetMouseState ( &mousePosX, &mousePosY );
         m_pWindowMousePos->x = mousePosX / ( float ) gAaConfig.GetInt("ScreenWidth");
         m_pWindowMousePos->y = mousePosY / ( float ) gAaConfig.GetInt("ScreenHeight");
-        //std::cout << "Mousestate: " << (int)m_mousestates << " " << (LMouseKeyState()?"Left ":"NotLeft ") << (RMouseKeyState()?"Right\n":"NotRight\n");
     }
     else
     {
@@ -160,6 +155,11 @@ const Vector2D* InputSubSystem::MousePos() const
     return m_pWindowMousePos.get();
 }
 
+void InputSubSystem::PutMouseOnCenter()
+{
+    SDL_WarpMouse((Uint16)(gAaConfig.GetInt("ScreenWidth")/2), (Uint16)(gAaConfig.GetInt("ScreenHeight")/2));
+}
+
 MouseState InputSubSystem::GetMouseStateInArea( const Rect& rButtonRect ) const
 {
     if ( rButtonRect.x1 > m_pWindowMousePos->x || rButtonRect.x2 < m_pWindowMousePos->x ||
@@ -191,5 +191,3 @@ MouseState InputSubSystem::GetMouseStateInAreaConsume( const Rect& rButtonRect )
     else
         return MouseOver;
 }
-
-// Astro Attack - Christian Zommerfelds - 2009

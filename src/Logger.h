@@ -1,10 +1,9 @@
-/*----------------------------------------------------------\
-|                          Log.h                            |
-|                          -----                            |
-|               Quelldatei von Astro Attack                 |
-|                  Christian Zommerfelds                    |
-|                          2009                             |
-\----------------------------------------------------------*/
+/*
+ * Logger.h
+ * This file is part of Astro Attack
+ * Copyright 2011 Christian Zommerfelds
+ */
+
 // Für Informationen in einer Log-Datei zu speichern
 
 #ifndef LOGGER_H
@@ -23,7 +22,7 @@ class Logger
 {
 public:
     Logger( const char *pFileName ); // Konstruktor mit Parameter
-    ~Logger();
+
     bool OpenFile( const char *pFileName ); // Neue Datei öffnen
 	void CloseFile(); // Datei schliessen
     bool IsOpen() { return m_isOpen; } // Is eine Datei offen?
@@ -49,5 +48,3 @@ private:
 };
 
 #endif
-
-// Astro Attack - Christian Zommerfelds - 2009

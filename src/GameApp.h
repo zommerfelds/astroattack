@@ -1,10 +1,8 @@
-/*----------------------------------------------------------\
-|                        GameApp.h                          |
-|                        ---------                          |
-|               Quelldatei von Astro Attack                 |
-|                  Christian Zommerfelds                    |
-|                          2009                             |
-\----------------------------------------------------------*/
+/*
+ * GameApp.h
+ * This file is part of Astro Attack
+ * Copyright 2011 Christian Zommerfelds
+ */
 
 #ifndef GAMEAPP_H
 #define GAMEAPP_H
@@ -38,7 +36,7 @@ class GameApp
 {
 public:
     GameApp(const std::vector<std::string>& args);
-    ~GameApp();
+    ~GameApp(); // need to implement destructor manually because of scoped_ptr (incomplete type)
 
     void Run();     // Spiel starten (nach der Initialisierung ), d.h. Hauptschleife starten
 
@@ -76,6 +74,7 @@ private:
 };
 
 // Alle wichtigen Untersysteme des Spieles
+// TODO: use PIMPL and objects on the stack (no scoped_ptr)
 struct SubSystems
 {
     SubSystems();
@@ -92,5 +91,3 @@ struct SubSystems
 };
 
 #endif
-
-// Astro Attack - Christian Zommerfelds - 2009

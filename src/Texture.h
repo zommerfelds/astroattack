@@ -1,10 +1,9 @@
-/*----------------------------------------------------------\
-|                        Texture.h                          |
-|                        ---------                          |
-|               Quelldatei von Astro Attack                 |
-|                  Christian Zommerfelds                    |
-|                          2009                             |
-\----------------------------------------------------------*/
+/*
+ * Texture.h
+ * This file is part of Astro Attack
+ * Copyright 2011 Christian Zommerfelds
+ */
+
 // Verwaltung von Texturen und Animationen
 
 #ifndef TEXTURE_H
@@ -31,7 +30,6 @@ typedef std::string AnimationIdType;
 
 struct LoadTextureInfo;
 struct TexInfo;
-typedef std::map<TextureIdType, TexInfo> TextureMap;
 
 //---------------------------------------//
 // Klasse für das Verwalten von Texturen //
@@ -41,21 +39,20 @@ class TextureManager
 public:
     TextureManager();
     ~TextureManager();
-    void LoadTexture( const std::string& name,TextureIdType id,const LoadTextureInfo& loadTexInfo, int quality, int* pW=NULL, int* pH=NULL );
+    void LoadTexture( const std::string& name, TextureIdType id, const LoadTextureInfo& loadTexInfo, int quality, int* pW=NULL, int* pH=NULL );
     void FreeTexture( const TextureIdType& id );
     void SetTexture( const TextureIdType& id );
     std::vector<TextureIdType> GetTextureList() const;
     void Clear();
 private:
+    typedef std::map<TextureIdType, TexInfo> TextureMap;
     TextureMap m_textures;      // Textur-Addressen für OpenGL
 };
 
 typedef std::string StateIdType;
 struct StateInfo;
 struct AnimInfo;
-
 typedef std::map< StateIdType, boost::shared_ptr<StateInfo> > StateInfoMap;
-typedef std::map<AnimationIdType, boost::shared_ptr<AnimInfo> > AnimInfoMap;
 
 //------------------------------------------//
 // Klasse für das Verwalten von Animationen //
@@ -70,6 +67,7 @@ public:
     const AnimInfo* GetAnimInfo( AnimationIdType animId ) const;
 
 private:
+    typedef std::map<AnimationIdType, boost::shared_ptr<AnimInfo> > AnimInfoMap;
     AnimInfoMap m_animInfoMap;      // Texturen
     TextureManager* m_pTM;
 };
@@ -110,5 +108,3 @@ struct AnimInfo
 };
 
 #endif
-
-// Astro Attack - Christian Zommerfelds - 2009

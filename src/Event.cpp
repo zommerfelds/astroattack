@@ -1,10 +1,8 @@
-/*----------------------------------------------------------\
-|                        Event.cpp                          |
-|                        ---------                          |
-|               Quelldatei von Astro Attack                 |
-|                  Christian Zommerfelds                    |
-|                          2011                             |
-\----------------------------------------------------------*/
+/*
+ * Event.cpp
+ * This file is part of Astro Attack
+ * Copyright 2011 Christian Zommerfelds
+ */
 
 #include "GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
 #include "Event.h"
@@ -80,5 +78,3 @@ void Event0::UnregisterListener(FunctionList::iterator pos)
 {
     m_listenerFuncs.erase(pos);
 }
-
-// Astro Attack - Christian Zommerfelds - 2011

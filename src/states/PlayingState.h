@@ -1,10 +1,9 @@
-/*----------------------------------------------------------\
-|                     PlayingState.h                        |
-|                     --------------                        |
-|               Quelldatei von Astro Attack                 |
-|                  Christian Zommerfelds                    |
-|                          2009                             |
-\----------------------------------------------------------*/
+/*
+ * PlayingState.h
+ * This file is part of Astro Attack
+ * Copyright 2011 Christian Zommerfelds
+ */
+
 // PlayingState ist das häufigste State.
 // Wenn der Spieler am Spielen ist, ist PlayingState aktiv.
 // Alle nötigen Aktionen werden hier durchgeführt.
@@ -30,8 +29,8 @@ class EventConnection;
 class PlayingState : public GameState
 {
 public:
-    PlayingState( SubSystems* pSubSystems, std::string levelFileName );
-    ~PlayingState();
+    PlayingState( SubSystems& subSystems, std::string levelFileName );
+    ~PlayingState(); // need to implement destructor manually because of scoped_ptr (incomplete type)
 
     const StateIdType& StateID() const { return stateId; }
 
@@ -52,8 +51,8 @@ private:
 
     EventConnection m_eventConnection1;
     EventConnection m_eventConnection2;
-    void OnEntityDeleted( Entity* pEntity );
-    void OnLevelEnd(bool win, std::string msg);
+    void OnEntityDeleted( Entity& entity );
+    void OnLevelEnd(bool win, const std::string& msg);
     std::set< std::string > m_entitiesToDelete1;
     std::set< std::string > m_entitiesToDelete2;
     int m_curentDeleteSet;
@@ -71,5 +70,3 @@ private:
 //--------------------------------------------//
 
 #endif
-
-// Astro Attack - Christian Zommerfelds - 2009

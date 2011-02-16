@@ -1,10 +1,8 @@
-/*----------------------------------------------------------\
-|                       GameApp.cpp                         |
-|                       -----------                         |
-|               Quelldatei von Astro Attack                 |
-|                  Christian Zommerfelds                    |
-|                          2009                             |
-\----------------------------------------------------------*/
+/*
+ * GameApp.cpp
+ * This file is part of Astro Attack
+ * Copyright 2011 Christian Zommerfelds
+ */
 
 #include "GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
 
@@ -21,8 +19,6 @@
 #include "GameStates.h"
 #include "states/MainMenuState.h"
 #include "Component.h"
-
-// TEMP
 #include "states/PlayingState.h"
 
 #include "Exception.h" // Ausnahmen im Program (werden in main.cpp eingefangen)
@@ -79,9 +75,7 @@ SubSystems::~SubSystems()
 }
 
 // Destruktor
-GameApp::~GameApp()
-{
-}
+GameApp::~GameApp() {}
 
 // Alle Objekte von GameApp initialisieren
 void GameApp::Init()
@@ -120,9 +114,9 @@ void GameApp::Init()
 
     boost::shared_ptr<GameState> gameState;
     if (m_levelToLoad.empty())
-        gameState = boost::make_shared<MainMenuState>( m_pSubSystems.get() );
+        gameState = boost::shared_ptr<MainMenuState>( new MainMenuState(*m_pSubSystems) );
     else
-        gameState = boost::make_shared<PlayingState>( m_pSubSystems.get(), m_levelToLoad );
+        gameState = boost::shared_ptr<PlayingState>( new PlayingState(*m_pSubSystems, m_levelToLoad) );
     m_pSubSystems->stateManager->ChangeState( gameState );
 }
 
@@ -259,7 +253,7 @@ void GameApp::HandleSdlQuitEvents( SDL_Event& rSdlEvent, bool& rQuit )
                 }
                 else
                 {
-                    boost::shared_ptr<MainMenuState> menuState ( boost::make_shared<MainMenuState>( m_pSubSystems.get() ) );
+                    boost::shared_ptr<MainMenuState> menuState = boost::shared_ptr<MainMenuState>( new MainMenuState(*m_pSubSystems) );
                     m_pSubSystems->stateManager->ChangeState( menuState );
                 }
                 break;
@@ -355,5 +349,3 @@ void GameApp::ParseArguments( const std::vector<std::string>& args )
         std::cout.flush();
     }
 }
-
-// Astro Attack - Christian Zommerfelds - 2009

@@ -1,10 +1,8 @@
-/*----------------------------------------------------------\
-|                        Entity.h                           |
-|                        --------                           |
-|               Quelldatei von Astro Attack                 |
-|                  Christian Zommerfelds                    |
-|                          2009                             |
-\----------------------------------------------------------*/
+/*
+ * Entity.h
+ * This file is part of Astro Attack
+ * Copyright 2011 Christian Zommerfelds
+ */
 
 #ifndef ENTITY_H
 #define ENTITY_H
@@ -29,52 +27,38 @@ class Entity
 private:
     Entity() {}
 public:
-    Entity( const EntityIdType& rId )
-    {
-        SetId(rId);
-    }
-    ~Entity()
-    {
-        ClearComponents();
-    }
+    Entity( const EntityIdType& rId ) { SetId(rId); }
 
-    const EntityIdType& GetId() const
-    {
-        return m_Id;
-    }
-    void SetId( const EntityIdType& rId )
-    {
-        m_Id = rId;
-    }
+    const EntityIdType& GetId() const { return m_Id; }
+    void SetId( const EntityIdType& rId ) { m_Id = rId; }
 
-    // Gibt einen Zeiger zur aufgeforderten Komponente. Fall es keinen Komponent des gefragten Typs gibt, gibt es NULL zurück.
-    template <typename CompType>
-    CompType* GetComponent();
-    template <typename CompType>
-    const CompType* GetComponent() const;
-
-    // Get component from string
-    // Only use this version if you can only get the component name at runtime (as a string)
-    Component* GetComponent(const CompIdType& rCompId );
+    // === GetComponent ===
+    // There are 2 version of this method:
+    // One that returns the component as its specific type using templates
+    //   e.g. CompX x = GetComponent<CompX>();
+    // And one that returns the component as a base Component type
+    //   e.g. Component x = GetComponent("CompX");
+    // Prefer using the first one (no need to cast)
+    // Only use the second version if you can only get the component ID at runtime (as a string)
+    template <typename CompType>       CompType* GetComponent();
+    template <typename CompType> const CompType* GetComponent() const;
+          Component* GetComponent(const CompIdType& rCompId );
     const Component* GetComponent(const CompIdType& rCompId ) const;
     
-    template <typename CompType>
-    std::vector<CompType*> GetComponents();
-    template <typename CompType>
-    std::vector<const CompType*> GetComponents() const;
-
-    std::vector<Component*> GetComponents(const CompIdType& rCompId );
+    // === GetComponents ===
+    // As GetComponent, this method has 2 versions (see above)
+    // Returns a vector of all matching components
+    template <typename CompType> std::vector<      CompType*> GetComponents();
+    template <typename CompType> std::vector<const CompType*> GetComponents() const;
+    std::vector<      Component*> GetComponents(const CompIdType& rCompId );
     std::vector<const Component*> GetComponents(const CompIdType& rCompId ) const;
 
     //ComponentMap* GetAllComponents() { return &m_components; }
-    const ComponentMap* GetAllComponents() const;
+    const ComponentMap& GetAllComponents() const;
 
     void AddComponent(const boost::shared_ptr<Component>& pNewComp); // Setzt eine neue Komponente in die Einheit
 
-    void ClearComponents()
-    {      
-        m_components.clear();
-    }
+    void ClearComponents() { m_components.clear(); }
 
     void WriteEntityInfoToLogger( Logger& log );
 
@@ -84,7 +68,7 @@ private:
     ComponentMap m_components;  // map of all components
 };
 
-// needs to be implemented here
+// needs to be implemented here because of templates
 template <typename CompType>
 CompType* Entity::GetComponent()
 {
@@ -112,7 +96,7 @@ template <typename CompType>
 std::vector<const CompType*> Entity::GetComponents() const
 {
     std::pair<ComponentMap::const_iterator, ComponentMap::const_iterator> equalRange = m_components.equal_range(CompType::COMPONENT_ID);
-    std::vector<CompType*> ret;
+    std::vector<const CompType*> ret;
 
     for (ComponentMap::const_iterator it = equalRange.first; it != equalRange.second; ++it )
         ret.push_back( static_cast<CompType*>(it->second.get()) );
@@ -120,5 +104,3 @@ std::vector<const CompType*> Entity::GetComponents() const
 }
 
 #endif
-
-// Astro Attack - Christian Zommerfelds - 2009

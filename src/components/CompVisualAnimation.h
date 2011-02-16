@@ -1,10 +1,9 @@
-/*----------------------------------------------------------\
-|                  CompVisualAnimation.h                    |
-|                  ---------------------                    |
-|               Quelldatei von Astro Attack                 |
-|                  Christian Zommerfelds                    |
-|                          2009                             |
-\----------------------------------------------------------*/
+/*
+ * CompVisualAnimation.h
+ * This file is part of Astro Attack
+ * Copyright 2011 Christian Zommerfelds
+ */
+
 // CompVisualAnimation ist eine Komponente für Animationen.
 // Jede Einheit (Entity), die eine Animation hat, hat eine CompVisualAnimation.
 // Das Speicher allerdings nur die Informationen der Animation,
@@ -30,8 +29,9 @@ class CompVisualAnimation : public Component
 {
 public:
     CompVisualAnimation( const AnimInfo* pAnimInfo );
-    ~CompVisualAnimation();
-	const CompIdType& ComponentId() const { return COMPONENT_ID; }
+    ~CompVisualAnimation(); // need to implement destructor manually because of scoped_ptr (incomplete type)
+
+    const CompIdType& ComponentId() const { return COMPONENT_ID; }
 	static const CompIdType COMPONENT_ID;
 
     // Welche Textur muss rerade gezeichnet werden? (Eine Animation besteht aus mehreren Texturen)
@@ -62,7 +62,7 @@ public:
     void SetFlip( bool flip ) { m_flip = flip; }
     bool GetFlip() { return m_flip; }
 
-    static boost::shared_ptr<CompVisualAnimation> LoadFromXml(const pugi::xml_node& compElem, const AnimationManager* pAnimMngr);
+    static boost::shared_ptr<CompVisualAnimation> LoadFromXml(const pugi::xml_node& compElem, const AnimationManager& animMngr);
     void WriteToXml(pugi::xml_node& compNode) const;
 
 private:
@@ -92,5 +92,3 @@ private:
 //--------------------------------------------//
 
 #endif
-
-// Astro Attack - Christian Zommerfelds - 2009

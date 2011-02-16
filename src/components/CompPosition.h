@@ -1,10 +1,9 @@
-/*----------------------------------------------------------\
-|                     CompPosition.h                        |
-|                     --------------                        |
-|               Quelldatei von Astro Attack                 |
-|                  Christian Zommerfelds                    |
-|                          2009                             |
-\----------------------------------------------------------*/
+/*
+ * CompPosition.h
+ * This file is part of Astro Attack
+ * Copyright 2011 Christian Zommerfelds
+ */
+
 // Spiechert eine Position und Winkel eines Objekts
 // WIRD GERADE NICHT VERWENDET, DA BOX2D DIESE FUNKTION ÜBERNIMMT
 
@@ -27,7 +26,7 @@ class CompPosition : public Component
 {
 public:
     CompPosition();
-    ~CompPosition();
+    ~CompPosition(); // need to implement destructor manually because of scoped_ptr (incomplete type)
 
     // Base component methods
 	const CompIdType& FamilyID() const { return COMPONENT_ID; }
@@ -57,5 +56,3 @@ private:
 //--------------------------------------------//
 
 #endif
-
-// Astro Attack - Christian Zommerfelds - 2009
