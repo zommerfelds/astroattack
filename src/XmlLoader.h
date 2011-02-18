@@ -31,12 +31,12 @@ struct ResourceIds
 class XmlLoader
 {
 public:
-    void LoadXmlToWorld( const char* pFileName, GameWorld* pGameWorld, SubSystems& subSystems );
+    void LoadXmlToWorld( const char* pFileName, GameWorld& gameWorld, SubSystems& subSystems );
     void LoadSlideShow( const char* pFileName, SlideShow* pSlideShow );
     ResourceIds LoadGraphics( const char* pFileName, TextureManager* pTextureManager, AnimationManager* pAnimationManager, FontManager* pFontManager );
     void UnLoadGraphics( const ResourceIds& resourcesToUnload, TextureManager* pTextureManager, AnimationManager* pAnimationManager, FontManager* pFontManager );
 
-    void SaveWorldToXml( const char* pFileName, GameWorld* pGameWorld );
+    void SaveWorldToXml( const char* pFileName, const GameWorld& gameWorld );
 private:
 };
 

@@ -11,8 +11,6 @@
 
 #include "Input.h"
 #include "Physics.h"
-#include "World.h"
-#include "Camera.h"
 #include "Sound.h"
 #include "Renderer.h"
 #include "GUI.h"

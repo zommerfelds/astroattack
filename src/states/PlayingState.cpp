@@ -10,7 +10,7 @@
 #include "PlayingState.h"
 #include "GameOverState.h"
 #include "../World.h"
-#include "../Camera.h"
+#include "../CameraController.h"
 #include "../GameApp.h"
 #include "../Renderer.h"
 #include "../Physics.h"
@@ -20,6 +20,7 @@
 #include "../GameEvents.h"
 #include "../XmlLoader.h"
 #include "../Sound.h"
+#include "../Vector2D.h"
 
 #include "../main.h"
 
@@ -43,8 +44,8 @@ const StateIdType PlayingState::stateId = "PlayingState";
 
 PlayingState::PlayingState( SubSystems& subSystems, std::string levelFileName )
 : GameState( subSystems ),
-  m_pGameWorld ( new GameWorld( GetSubSystems().events.get() ) ),
-  m_pGameCamera ( new GameCamera( GetSubSystems().input.get(), GetSubSystems().renderer.get(), m_pGameWorld.get() ) ),
+  m_pGameWorld ( new GameWorld( *GetSubSystems().events ) ),
+  m_pGameCamera ( new CameraController( *GetSubSystems().input, *GetSubSystems().renderer, *m_pGameWorld ) ),
   m_eventConnection1 (), m_eventConnection2 (),
   m_curentDeleteSet (1), m_wantToEndGame( false ), m_alphaOverlay( 0.0 ),
   m_levelFileName ( levelFileName ),
@@ -71,8 +72,8 @@ void PlayingState::Init()        // State starten
 
     // Welt von XML-Datei laden
     XmlLoader loader;
-    loader.LoadXmlToWorld( "data/player.xml", m_pGameWorld.get(), GetSubSystems() );
-    loader.LoadXmlToWorld( m_levelFileName.c_str(), m_pGameWorld.get(), GetSubSystems() );
+    loader.LoadXmlToWorld( "data/player.xml", *m_pGameWorld, GetSubSystems() );
+    loader.LoadXmlToWorld( m_levelFileName.c_str(), *m_pGameWorld, GetSubSystems() );
 
     GetSubSystems().sound->LoadMusic( "data/Music/Aerospace.ogg", "music" );
     GetSubSystems().sound->PlayMusic( "music", true, 0 );
@@ -209,7 +210,7 @@ void PlayingState::Draw( float accumulator )        // Spiel zeichnen
 #endif
     
     // Fadenkreuz zeichnen
-    pRenderer->DrawCrosshairs ( *m_pGameCamera->GetCursorPosInWorld() );
+    pRenderer->DrawCrosshairs ( m_pGameCamera->ScreenToWorld(GetSubSystems().input->GetMousePos()) );
     // GUI modus (Grafische Benutzeroberfläche)
     pRenderer->SetMatrix(RenderSubSystem::GUI);
 

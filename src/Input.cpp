@@ -150,9 +150,9 @@ bool InputSubSystem::LMouseKeyStateConsume()
     return ( (m_mousestates & SDL_BUTTON ( SDL_BUTTON_LEFT ))!=0 );
 }
 
-const Vector2D* InputSubSystem::MousePos() const
+const Vector2D& InputSubSystem::GetMousePos() const
 {
-    return m_pWindowMousePos.get();
+    return *m_pWindowMousePos;
 }
 
 void InputSubSystem::PutMouseOnCenter()

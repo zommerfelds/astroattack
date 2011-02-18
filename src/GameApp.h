@@ -16,11 +16,8 @@
 #include <vector>
 #include <string>
 
-//struct GameEvents;
 class InputSubSystem;
 class PhysicsSubSystem;
-class GameWorld;
-class GameCamera;
 class RenderSubSystem;
 class StateManager;
 class SoundSubSystem;

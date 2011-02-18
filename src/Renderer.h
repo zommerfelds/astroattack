@@ -13,9 +13,7 @@
 #include <boost/scoped_ptr.hpp>
 #include "Event.h" // TODO: use pimpl to hide this
 
-class GameCamera;
 class Entity;
-class GameWorld;
 struct GameEvents;
 class CompVisualTexture;
 class CompVisualAnimation;
@@ -79,6 +77,10 @@ public:
     void DrawPoint( const Vector2D& rPos );
     // Zeichnet den Fadenkreuz
     void DrawCrosshairs( const Vector2D& rCrosshairsPos );
+
+    // Camera control
+    void SetViewPosition( const Vector2D& pos, float zoom, float angle);
+    void SetViewSize( float width, float height );
 
     // -------- nur für MatrixGUI Modus --------   
 

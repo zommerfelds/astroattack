@@ -10,7 +10,7 @@
 #include "../GameApp.h"
 #include "../Vector2D.h"
 #include "../World.h"
-#include "../Camera.h"
+#include "../CameraController.h"
 #include "../Renderer.h"
 #include "../Input.h"
 #include "../main.h"
@@ -33,8 +33,8 @@ const StateIdType EditorState::stateId = "EditorState";
 
 EditorState::EditorState( SubSystems& subSystems )
 : GameState( subSystems ),
-  m_pGameWorld ( new GameWorld( GetSubSystems().events.get() ) ),
-  m_pGameCamera ( new GameCamera( GetSubSystems().input.get(), GetSubSystems().renderer.get(), m_pGameWorld.get() ) ),
+  m_pGameWorld ( new GameWorld( *GetSubSystems().events ) ),
+  m_pGameCamera ( new CameraController( *GetSubSystems().input, *GetSubSystems().renderer, *m_pGameWorld ) ),
   m_currentPoint ( 0 ),
   m_currentTexture (),
   m_currentTextureNum ( 0 ),
@@ -74,14 +74,14 @@ void EditorState::Init()        // State starten
     m_pGameCamera->SetFollowPlayer ( false );
 
     XmlLoader loader;
-    loader.LoadXmlToWorld( gAaConfig.GetString("EditorLevel").c_str(), m_pGameWorld.get(), GetSubSystems() );
+    loader.LoadXmlToWorld( gAaConfig.GetString("EditorLevel").c_str(), *m_pGameWorld, GetSubSystems() );
 }
 
 void EditorState::Cleanup()     // State abbrechen
 {
     // Grafiken aus XML-Datei laden
     XmlLoader xml;
-    xml.SaveWorldToXml( gAaConfig.GetString("EditorLevel").c_str(), m_pGameWorld.get() );
+    xml.SaveWorldToXml( gAaConfig.GetString("EditorLevel").c_str(), *m_pGameWorld );
 
     m_pGameWorld.reset();
     m_pGameCamera.reset();
@@ -101,23 +101,28 @@ void EditorState::Frame( float deltaTime )       // Pro Frame
     m_pGameCamera->Update( deltaTime ); // Kamera updaten
 }
 
-void SnapToGrid( Vector2D* worldCoordinates )
+namespace
+{
+
+void SnapToGrid( Vector2D& worldCoordinates )
 {
     const float cellWidth = 0.5f;
 
-    float cellsX = worldCoordinates->x/cellWidth;
+    float cellsX = worldCoordinates.x/cellWidth;
     if ( cellsX > 0 )
         cellsX += 0.5;
     else
         cellsX -= 0.5;
-    worldCoordinates->x = ((int)(cellsX))*cellWidth;
+    worldCoordinates.x = ((int)(cellsX))*cellWidth;
 
-    float cellsY = worldCoordinates->y/cellWidth;
+    float cellsY = worldCoordinates.y/cellWidth;
     if ( cellsY > 0 )
         cellsY += 0.5;
     else
         cellsY -= 0.5;
-    worldCoordinates->y = ((int)(cellsY))*cellWidth;
+    worldCoordinates.y = ((int)(cellsY))*cellWidth;
+}
+
 }
 
 void EditorState::Update()      // Spiel aktualisieren
@@ -126,8 +131,8 @@ void EditorState::Update()      // Spiel aktualisieren
     {
         if ( m_mouseButDownOld == false && m_currentPoint < 8 )
         {
-            *m_pClickedPoints[m_currentPoint] = m_pGameCamera->ScreenToWorld( *GetSubSystems().input->MousePos() );
-            SnapToGrid( m_pClickedPoints[m_currentPoint].get() );
+            *m_pClickedPoints[m_currentPoint] = m_pGameCamera->ScreenToWorld( GetSubSystems().input->GetMousePos() );
+            SnapToGrid( *m_pClickedPoints[m_currentPoint] );
             ++m_currentPoint;
         }
         m_mouseButDownOld = true;
@@ -289,20 +294,23 @@ void EditorState::Draw( float accumulator )        // Spiel zeichnen
     if ( m_helpTextOn )
     {
         renderer.DrawString( "Left click:\n"
-                               "Enter:\n"
-                               "Backspace:\n"
-                               "Delete:\n"
-                               "Page Up/Down:\n"
-                               "H:", "FontW_s", 3.3f, 0.02f, AlignRight );
+                             "Enter:\n"
+                             "Backspace:\n"
+                             "Delete:\n"
+                             "Page Up/Down:\n"
+                             "Arrow keys:\n"
+                             "H:",
+                             "FontW_s", 3.3f, 0.02f, AlignRight );
         renderer.DrawString( "new vertex\n"
-                               "apply block\n"
-                               "delete last vertex\n"
-                               "delete all vetices\n"
-                               "change texture\n"
-                               "hide this help text", "FontW_s", 3.4f, 0.02f, AlignLeft );
+                             "apply block\n"
+                             "delete last vertex\n"
+                             "delete all vetices\n"
+                             "change texture\n"
+                             "move camera\n"
+                             "hide this help text", "FontW_s", 3.4f, 0.02f, AlignLeft );
         renderer.DrawString( "* Important *\n"
-                               "Only draw convex polygons!\n"
-                               "Only draw in counter-clockwise order!\n", "FontW_s", 3.4f, 0.7f, AlignCenter );
+                             "Only draw convex polygons!\n"
+                             "Only draw in counter-clockwise order!\n", "FontW_s", 3.4f, 0.7f, AlignCenter );
     }
     else
     {
@@ -310,7 +318,7 @@ void EditorState::Draw( float accumulator )        // Spiel zeichnen
     }
 
     // Fadenkreuz zeichnen
-    Vector2D mousePos ( *GetSubSystems().input->MousePos() );
+    Vector2D mousePos = GetSubSystems().input->GetMousePos();
 
     renderer.GetTextureManager().Clear();
 
@@ -329,12 +337,12 @@ void EditorState::Draw( float accumulator )        // Spiel zeichnen
     }
 
     mousePos = m_pGameCamera->ScreenToWorld(mousePos);
-    SnapToGrid( &mousePos );
-    mousePos = m_pGameCamera->WorldToScreen( mousePos );
+    SnapToGrid( mousePos );
+    mousePos = m_pGameCamera->WorldToScreen(mousePos);
     mousePos.x = mousePos.x * 4.0f;
     mousePos.y = mousePos.y * 3.0f;
 
-    renderer.DrawEditorCursor( mousePos );
+    renderer.DrawEditorCursor(mousePos);
 
     // Erzeugtes Bild zeigen
     renderer.FlipBuffer(); // (vom Backbuffer zum Frontbuffer wechseln)

@@ -696,3 +696,23 @@ void RenderSubSystem::DisplayLoadingScreen()
 
     m_pTextureManager->FreeTexture("loading");
 }
+
+void RenderSubSystem::SetViewPosition( const Vector2D& pos, float zoom, float angle)
+{
+    glLoadIdentity();
+
+    glRotatef( angle, 0.0, 0.0, -1.0f);
+    glScalef( zoom, zoom, 1 ); // x und y zoomen
+    glTranslatef( pos.x * -1, pos.y * -1, 0.0f);
+}
+
+void RenderSubSystem::SetViewSize( float width, float height )
+{
+    SetMatrix(RenderSubSystem::World);
+    glMatrixMode ( GL_PROJECTION );
+    glLoadIdentity(); //Reset projection matrix
+
+    // orthogonalen 2D-Rendermodus
+    gluOrtho2D( -width/2, width/2, -height/2, height/2 ); // (z ist nicht wichtig)
+    glMatrixMode ( GL_MODELVIEW );
+}

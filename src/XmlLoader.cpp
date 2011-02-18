@@ -41,7 +41,7 @@
 // TODO: a lot of work to do here (error checking etc..)
 
 // Load Level from XML
-void XmlLoader::LoadXmlToWorld( const char* pFileName, GameWorld* pGameWorld, SubSystems& subSystems )
+void XmlLoader::LoadXmlToWorld( const char* pFileName, GameWorld& gameWorld, SubSystems& subSystems )
 {
 	using boost::shared_ptr;
 	using boost::make_shared;
@@ -84,7 +84,7 @@ void XmlLoader::LoadXmlToWorld( const char* pFileName, GameWorld* pGameWorld, Su
             }
             else if ( compId == "CompPlayerController" )
             {
-                component = CompPlayerController::LoadFromXml( compElem, subSystems.input.get(), pGameWorld->GetItToVariable( "JetpackEnergy" ) );
+                component = CompPlayerController::LoadFromXml( compElem, subSystems.input.get(), gameWorld.GetItToVariable( "JetpackEnergy" ) );
             }
             else if ( compId == "CompPosition" )
             {
@@ -108,7 +108,7 @@ void XmlLoader::LoadXmlToWorld( const char* pFileName, GameWorld* pGameWorld, Su
             }
             else if ( compId == "CompTrigger" )
             {
-                component = CompTrigger::LoadFromXml( compElem, *pGameWorld );
+                component = CompTrigger::LoadFromXml( compElem, gameWorld );
             }
             else
             {
@@ -129,7 +129,7 @@ void XmlLoader::LoadXmlToWorld( const char* pFileName, GameWorld* pGameWorld, Su
             gAaLog.Write ( "[ Done ]\n" );
         }
 
-        pGameWorld->AddEntity( pEntity );
+        gameWorld.AddEntity( pEntity );
         gAaLog.DecreaseIndentationLevel();
     }
 
@@ -332,7 +332,7 @@ void XmlLoader::UnLoadGraphics( const ResourceIds& resourcesToUnload, TextureMan
     gAaLog.Write ( "[ Done ]\n\n" );
 }
 
-void XmlLoader::SaveWorldToXml( const char* pFileName, GameWorld* pGameWorld )
+void XmlLoader::SaveWorldToXml( const char* pFileName, const GameWorld& gameWorld )
 {
     gAaLog.Write ( "Saving XML file \"%s\"...\n", pFileName );
     gAaLog.IncreaseIndentationLevel();
@@ -342,20 +342,20 @@ void XmlLoader::SaveWorldToXml( const char* pFileName, GameWorld* pGameWorld )
     pugi::xml_node levelNode = doc.append_child();
     levelNode.set_name("level");
 	
-    const EntityMap* entities = pGameWorld->GetAllEntities();
-    for ( EntityMap::const_iterator e_it = entities->begin(); e_it != entities->end(); ++e_it )
+    const EntityMap& entities = gameWorld.GetAllEntities();
+    BOOST_FOREACH(const EntityMap::value_type& entPair, entities)
     {
         pugi::xml_node entityNode = levelNode.append_child("Entity");
-        entityNode.append_attribute("name").set_value(e_it->second->GetId().c_str());
+        entityNode.append_attribute("name").set_value(entPair.second->GetId().c_str());
 
-        const ComponentMap& comps = e_it->second->GetAllComponents();
-        for ( ComponentMap::const_iterator c_it = comps.begin(); c_it != comps.end(); ++c_it )
+        const ComponentMap& comps = entPair.second->GetAllComponents();
+        BOOST_FOREACH(const ComponentMap::value_type& compPair, comps)
         {
             pugi::xml_node compNode = entityNode.append_child("Component");
-            compNode.append_attribute("id").set_value(c_it->second->ComponentId().c_str());
-            compNode.append_attribute("name").set_value(c_it->second->GetName().c_str());
+            compNode.append_attribute("id").set_value(compPair.second->ComponentId().c_str());
+            compNode.append_attribute("name").set_value(compPair.second->GetName().c_str());
 
-            c_it->second->WriteToXml(compNode);
+            compPair.second->WriteToXml(compNode);
         }
     }
 

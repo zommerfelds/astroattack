@@ -90,7 +90,7 @@ public:
     bool RMouseKeyStateConsume();       // gleich wie oben, aber der Status der Taste zurückgesetzt (nicht mehr gedrückt)
     bool LMouseKeyState( ) const;       // status des linken Mausknopfes
     bool LMouseKeyStateConsume();       // gleich wie oben, aber der Status der Taste zurückgesetzt (nicht mehr gedrückt)
-    const Vector2D* MousePos() const;   // Mausposition erhalten (0/0 ist oben links, 1/1 ist unten rechts)
+    const Vector2D& GetMousePos() const;   // Mausposition erhalten (0/0 ist oben links, 1/1 ist unten rechts)
     void PutMouseOnCenter();
     MouseState GetMouseStateInArea( const Rect& rButtonRect ) const;    // Wird die gegebene Fläche gedrückt?
     MouseState GetMouseStateInAreaConsume( const Rect& rButtonRect );   // gleich wie oben, aber der Status der Taste zurückgesetzt (nicht mehr gedrückt)

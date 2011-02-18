@@ -48,9 +48,9 @@
  \_________________________________________________________________________________________________________________________________________________/
  
  
-Game by Christian Zommerfelds
-czommerfelds@yahoo.com
-Copyright (c) 2011
+   Game by Christian Zommerfelds
+   czommerfelds@yahoo.com
+   Copyright (c) 2011
 
 Please send me an E-mail if you have any problems/suggestions.
 
@@ -94,12 +94,12 @@ To play the game:
 ./src/AstroAttack
 
 
-Useful commands for developpment
+Useful commands for development
 --------------------------------
 
 Building with warnings activated:
-./configure CXXFLAGS="-Wall"
+../configure CXXFLAGS="-Wall"
 
 Building with warnings and debug symbols activated and using colorgcc for color output
-./configure CXX="colorgcc -lstdc++" CXXFLAGS="-Wall -g"
+../configure CXX="colorgcc -lstdc++" CXXFLAGS="-Wall -g"
 

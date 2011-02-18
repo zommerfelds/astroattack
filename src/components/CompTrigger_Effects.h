@@ -16,21 +16,21 @@ class GameWorld;
 class EffectKillEntity : public Effect
 {
 public:
-    EffectKillEntity( std::string entityToKill, GameWorld* pGW );
+    EffectKillEntity( std::string entityToKill, const GameWorld& world );
     EffectIdType ID() const { return "KillEntity"; }
     void Fire();
     bool Update() { return false; }
     std::string GetEntityName() const { return m_entityToKill; }
 private:
     std::string m_entityToKill;
-    GameWorld* m_pGW;
+    const GameWorld& m_world;
 };
 
 // ========= DispMessage ===========
 class EffectDispMessage : public Effect
 {
 public:
-    EffectDispMessage( std::string message, int timeMs, GameWorld* pGW );
+    EffectDispMessage( std::string message, int timeMs, GameWorld& world );
     EffectIdType ID() const { return "DispMessage"; }
     ~EffectDispMessage();
     void Fire();
@@ -42,7 +42,7 @@ private:
     int m_remainingUpdates;
     bool m_fired;
     std::string m_msgEntityName;
-    GameWorld* m_pGW;
+    GameWorld& m_world;
     Entity* m_pMsgEntity;
     int m_totalTimeMs;
 };
@@ -74,7 +74,7 @@ enum ChangeType
 class EffectChangeVariable : public Effect
 {
 public:
-    EffectChangeVariable( std::map<const std::string, int>::iterator itVariable, ChangeType changeType, int num );
+    EffectChangeVariable( std::map<const std::string, int>::iterator itVariable, const ChangeType& changeType, int num );
     EffectIdType ID() const { return "ChangeVariable"; }
     void Fire();
     bool Update() { return true; }

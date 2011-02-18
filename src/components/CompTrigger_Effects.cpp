@@ -13,22 +13,22 @@
 #include <sstream>
 
 // ========= KillEntity ===========
-EffectKillEntity::EffectKillEntity( std::string entityToKill, GameWorld* pGW )
-: m_entityToKill ( entityToKill ), m_pGW ( pGW )
+EffectKillEntity::EffectKillEntity( std::string entityToKill, const GameWorld& world )
+: m_entityToKill ( entityToKill ), m_world ( world )
 {}
 
 void EffectKillEntity::Fire()
 {
-    m_pCompTrigger->gameEvents->wantToDeleteEntity.Fire( *m_pGW->GetEntity(m_entityToKill) );
+    m_pCompTrigger->gameEvents->wantToDeleteEntity.Fire( *m_world.GetEntity(m_entityToKill) );
     return;
 }
 
 // ========= DispMessage ===========
-EffectDispMessage::EffectDispMessage( std::string message, int timeMs, GameWorld* pGW )
+EffectDispMessage::EffectDispMessage( std::string message, int timeMs, GameWorld& world )
 : m_message (message),
   m_remainingUpdates ( (int)((float)timeMs*0.001f/PHYS_DELTA_TIME) ),
   m_fired (false),
-  m_pGW ( pGW ),
+  m_world ( world ),
   m_pMsgEntity (NULL),
   m_totalTimeMs ( timeMs )
 {}
@@ -42,7 +42,7 @@ void EffectDispMessage::Fire()
     {
         std::stringstream ss;
         ss << "_Message" << i;
-        if ( !m_pGW->GetEntity( ss.str() ) )
+        if ( !m_world.GetEntity( ss.str() ) )
         {
             entityName = ss.str();
             break;
@@ -55,7 +55,7 @@ void EffectDispMessage::Fire()
     compMsg->SetName( "autoname" );
     pEntity->AddComponent( compMsg );
 
-    m_pGW->AddEntity( pEntity );
+    m_world.AddEntity( pEntity );
 }
 
 bool EffectDispMessage::Update()
@@ -76,7 +76,7 @@ bool EffectDispMessage::Update()
 
 EffectDispMessage::~EffectDispMessage()
 {
-    if ( m_pMsgEntity && m_fired && m_remainingUpdates > 0 && m_pGW->GetEntity(m_msgEntityName) )
+    if ( m_pMsgEntity && m_fired && m_remainingUpdates > 0 && m_world.GetEntity(m_msgEntityName) )
         m_pCompTrigger->gameEvents->wantToDeleteEntity.Fire(*m_pMsgEntity);
 }
 
@@ -87,7 +87,7 @@ void EffectEndLevel::Fire()
 }
 
 // ========= ChangeVariable ===========
-EffectChangeVariable::EffectChangeVariable(std::map<const std::string,int>::iterator itVariable, ChangeType changeType, int num )
+EffectChangeVariable::EffectChangeVariable(std::map<const std::string,int>::iterator itVariable, const ChangeType& changeType, int num )
 : m_itVariable ( itVariable ),
   m_changeType ( changeType ),
   m_num ( num )

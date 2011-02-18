@@ -5,11 +5,14 @@
 * High priority *
 
 - Refactor
-- Make whole camera functionality frame rate independent
 
 
 * Medium priority *
 
+- time accumulator... (very unstable when put delay on main loop)
+- abstract SDL
+- FPS display
+- Init.cpp
 - improve logger
 - asynchonous fading out music (separate thread)
 - Use physical state interpolation instead of extrapolation
@@ -23,13 +26,13 @@
 - Fehlerchecking und Beschreibung beim Level Laden
 - Check widescreen mode
 - Bug: can't fly away from wall if you jump near a wall
-- "Conditional jump or move depends on uninitialised value(s)" in SDL_PollEvent
 - Improve program shutdown
 - Use pimpl pattern
 
 
 * Low priority *
 
+- Make whole camera functionality frame rate independent
 - Handle UTF-8 symbols in the slide show state (a multibyte character is treated as single bytes)
 - Use boost::signals instead of Event.h
 - Don't use GL_RGBA if not needed (Texture.cpp)

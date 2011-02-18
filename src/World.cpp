@@ -10,13 +10,10 @@
 #include "GameEvents.h" // Steuert die Spielerreignisse
 
 // Konstruktor
-GameWorld::GameWorld( GameEvents* pEventManager )
-: m_pGameEvents ( pEventManager )
-{
-}
+GameWorld::GameWorld( GameEvents& events )
+: m_gameEvents ( events )
+{}
 
-#include "main.h"
-#include "Logger.h"
 GameWorld::~GameWorld()
 {
     // NOTE: maybe we shouldn't create events here, since the world is being destroyed anyway...
@@ -35,21 +32,21 @@ void GameWorld::AddEntity( const boost::shared_ptr<Entity>& pEntity )
     EntityIdType id = pEntity->GetId();
     m_entities[id] = pEntity; // if there is an entity with the same ID before, it will get deleted
 
-    m_pGameEvents->newEntity.Fire( *pEntity );
+    m_gameEvents.newEntity.Fire( *pEntity );
 }
 
-boost::shared_ptr<Entity> GameWorld::GetEntity( const EntityIdType& id ) const
+Entity* GameWorld::GetEntity( const EntityIdType& id ) const
 {
     EntityMap::const_iterator i = m_entities.find( id );
     if ( i == m_entities.end() )
-        return boost::shared_ptr<Entity>();
+        return NULL;
     else
-        return i->second;
+        return i->second.get();
 }
 
 void GameWorld::RemoveEntity( const EntityIdType& id )
 {
-    m_pGameEvents->deleteEntity.Fire( *m_entities[id] );
+    m_gameEvents.deleteEntity.Fire( *m_entities[id] );
     m_entities.erase( id );
 }
 
@@ -77,17 +74,11 @@ void GameWorld::SetVariable( const WorldVariableType& varName, int value )
 
 WorldVariblesMap::iterator GameWorld::GetItToVariable( const WorldVariableType& varName )
 {
-    // es wird nur ein neues Elemen hinzugefügt, falls noch keines existiert
+    // es wird ein neues Elemen hinzugefügt, falls noch keines existiert
     return m_variables.insert( std::make_pair( varName, 0 ) ).first;
-
-    /*WorldVariblesMap::iterator it = m_variables.find( varName );
-    if ( it == m_variables.end() )
-        m_variables.insert( std::make_pair( varName, 0 ) ).first;
-    else
-        return m_variables.find( varName );*/
 }
 
-const EntityMap* GameWorld::GetAllEntities() const
+const EntityMap& GameWorld::GetAllEntities() const
 {
-    return &m_entities;
+    return m_entities;
 }

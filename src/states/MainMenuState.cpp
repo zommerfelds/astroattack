@@ -274,7 +274,7 @@ void MainMenuState::Frame( float /*deltaTime*/ )
 void MainMenuState::Draw( float /*accumulator*/ )        // Spiel zeichnen
 {
     RenderSubSystem* pRenderer = GetSubSystems().renderer.get();
-    const Vector2D* mousePos = GetSubSystems().input->MousePos();
+    const Vector2D& mousePos = GetSubSystems().input->GetMousePos();
 
     // Bildschirm leeren
     pRenderer->ClearScreen();
@@ -326,10 +326,10 @@ void MainMenuState::Draw( float /*accumulator*/ )        // Spiel zeichnen
                               1.0f, 0.0f };
         float w = 0.04f;
         float h = 0.05f;
-        float vertexCoord[8] = { mousePos->x      * 4,  mousePos->y      * 3,
-                                 mousePos->x      * 4, (mousePos->y + h) * 3,
-                                (mousePos->x + w) * 4, (mousePos->y + h) * 3,
-                                (mousePos->x + w) * 4,  mousePos->y      * 3 };
+        float vertexCoord[8] = { mousePos.x      * 4,  mousePos.y      * 3,
+                                 mousePos.x      * 4, (mousePos.y + h) * 3,
+                                (mousePos.x + w) * 4, (mousePos.y + h) * 3,
+                                (mousePos.x + w) * 4,  mousePos.y      * 3 };
         pRenderer->DrawTexturedQuad( texCoord, vertexCoord, "_cursor" );
     }
 

@@ -127,7 +127,7 @@ boost::shared_ptr<CompTrigger> CompTrigger::LoadFromXml(const pugi::xml_node& co
         {
             const char* entity = paramsElem.attribute("entity").value();
 
-            compTrig->AddEffect(boost::make_shared<EffectKillEntity>(entity, &gameWorld));
+            compTrig->AddEffect(boost::make_shared<EffectKillEntity>(entity, gameWorld));
         }
         else if (effectId == "DispMessage")
         {
@@ -135,7 +135,7 @@ boost::shared_ptr<CompTrigger> CompTrigger::LoadFromXml(const pugi::xml_node& co
             int time = paramsElem.attribute("timems").as_int();
             if (time == 0)
                 time = 3000;
-            compTrig->AddEffect(boost::make_shared<EffectDispMessage>(msg, time, &gameWorld));
+            compTrig->AddEffect(boost::shared_ptr<EffectDispMessage>(new EffectDispMessage(msg, time, gameWorld)));
         }
         else if (effectId == "EndLevel")
         {

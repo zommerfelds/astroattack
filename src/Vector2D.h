@@ -173,12 +173,6 @@ public:
     // Gibt einen Vektor zurück, der um Winkel angle (in Bogenmass) im Gegenuhrzeigersinn gedreht ist
     Vector2D Rotated( float angle ) const;
 
-    // Gibt einen Vektor zurück von dem Punkt mit diesem Positionsvektor (this) bis zu dem Punkt mit Positionsvektor V
-    inline Vector2D Distance( const Vector2D &V ) const
-    {
-        return ( V - ( *this ) );
-    }
-
     // Gibt die Richtung des Vektors als Einheitsvektor zurück
     inline Vector2D GetUnitVector() const
     {

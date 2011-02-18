@@ -16,7 +16,7 @@
 #include <string>
 
 class GameWorld;
-class GameCamera;
+class CameraController;
 class Vector2D;
 
 //--------------------------------------------//
@@ -43,7 +43,7 @@ private:
     static const StateIdType stateId;
 
     boost::scoped_ptr<GameWorld> m_pGameWorld;          // Spielwelt
-    boost::scoped_ptr<GameCamera> m_pGameCamera;        // Kamera
+    boost::scoped_ptr<CameraController> m_pGameCamera;        // Kamera
 
     boost::scoped_ptr<Vector2D> m_pClickedPoints[8];
     int m_currentPoint;

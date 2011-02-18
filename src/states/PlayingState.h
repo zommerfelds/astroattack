@@ -19,7 +19,7 @@
 #include <string>
 
 class GameWorld;
-class GameCamera;
+class CameraController;
 class Entity;
 class EventConnection;
 
@@ -47,7 +47,7 @@ private:
     static const StateIdType stateId;
     
     boost::scoped_ptr<GameWorld> m_pGameWorld;          // Spielwelt
-    boost::scoped_ptr<GameCamera> m_pGameCamera;        // Kamera
+    boost::scoped_ptr<CameraController> m_pGameCamera;        // Kamera
 
     EventConnection m_eventConnection1;
     EventConnection m_eventConnection2;

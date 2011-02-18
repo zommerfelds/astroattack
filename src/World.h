@@ -22,7 +22,6 @@ class Logger;
 
 #include "Entity.h"
 
-#include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>
 
 typedef std::string WorldVariableType;
@@ -36,13 +35,13 @@ typedef std::map<const WorldVariableType, int> WorldVariblesMap;
 class GameWorld
 {
 public:
-    GameWorld( GameEvents* pEventManager );
+    GameWorld( GameEvents& events );
     ~GameWorld();
 
     void AddEntity( const boost::shared_ptr<Entity>& pEntity );
     void RemoveEntity( const EntityIdType& id );
-    boost::shared_ptr<Entity> GetEntity( const EntityIdType& id ) const;
-    const EntityMap* GetAllEntities() const;
+    Entity* GetEntity( const EntityIdType& id ) const;
+    const EntityMap& GetAllEntities() const;
 
     int GetVariable( const WorldVariableType& varName );
     WorldVariblesMap::iterator GetItToVariable( const WorldVariableType& varName );
@@ -51,7 +50,7 @@ public:
     void WriteWorldToLogger( Logger& log );
 
 private:
-    GameEvents* m_pGameEvents;
+    GameEvents& m_gameEvents;
 
     EntityMap m_entities;
     WorldVariblesMap m_variables;
