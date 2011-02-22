@@ -163,7 +163,7 @@ void PlayingState::Draw( float accumulator )        // Spiel zeichnen
     RenderSubSystem* pRenderer = GetSubSystems().renderer.get();
 
     // Bildschirm leeren
-    pRenderer->ClearScreen();
+    //pRenderer->ClearScreen();
     // GUI modus (Grafische Benutzeroberfläche)
     pRenderer->SetMatrix(RenderSubSystem::GUI);
     // Hintergrundbild zeichnen
@@ -217,7 +217,6 @@ void PlayingState::Draw( float accumulator )        // Spiel zeichnen
     // Texte zeichnen
     pRenderer->DrawVisualMessageComps();
 
-
     // Jetpack %-display
     {
         float x = 0.45f, y = 0.14;
@@ -261,13 +260,8 @@ void PlayingState::Draw( float accumulator )        // Spiel zeichnen
         pRenderer->DrawOverlay( cBackgroundColor[0], cBackgroundColor[1], cBackgroundColor[2], m_alphaOverlay );
     }
 
-    
     // Erzeugtes Bild zeigen
-    pRenderer->FlipBuffer(); // (vom Backbuffer zum Frontbuffer wechseln)
-
-    pRenderer->SetMatrix(RenderSubSystem::World);
-    pRenderer->SetMatrix(RenderSubSystem::GUI);
-    
+    //pRenderer->FlipBuffer(); // (vom Backbuffer zum Frontbuffer wechseln)
 }
 
 void PlayingState::OnEntityDeleted( Entity& entity )

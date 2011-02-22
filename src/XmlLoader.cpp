@@ -345,13 +345,13 @@ void XmlLoader::SaveWorldToXml( const char* pFileName, const GameWorld& gameWorl
     const EntityMap& entities = gameWorld.GetAllEntities();
     BOOST_FOREACH(const EntityMap::value_type& entPair, entities)
     {
-        pugi::xml_node entityNode = levelNode.append_child("Entity");
+        pugi::xml_node entityNode = levelNode.append_child("entity");
         entityNode.append_attribute("name").set_value(entPair.second->GetId().c_str());
 
         const ComponentMap& comps = entPair.second->GetAllComponents();
         BOOST_FOREACH(const ComponentMap::value_type& compPair, comps)
         {
-            pugi::xml_node compNode = entityNode.append_child("Component");
+            pugi::xml_node compNode = entityNode.append_child("component");
             compNode.append_attribute("id").set_value(compPair.second->ComponentId().c_str());
             compNode.append_attribute("name").set_value(compPair.second->GetName().c_str());
 

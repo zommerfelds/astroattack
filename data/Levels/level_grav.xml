@@ -1,120 +1,120 @@
 <?xml version="1.0"?>
 <level>
-	<Entity name="EdBlock00000">
-		<Component id="CompPhysics" name="std">
+	<entity name="EdBlock00000">
+		<component id="CompPhysics" name="std">
 			<damping linear="0" angular="0" />
 			<shape comp_name="shape1" density="0" friction="0.3" restitution="0" />
-		</Component>
-		<Component id="CompPosition" name="std" x="0" y="0" a="0" />
-		<Component id="CompShape" name="shape1">
+		</component>
+		<component id="CompPosition" name="std" x="0" y="0" a="0" />
+		<component id="CompShape" name="shape1">
 			<polygon>
 				<vertex x="-4.5" y="-1" />
 				<vertex x="-4.5" y="-3.5" />
 				<vertex x="5.5" y="-3.5" />
 				<vertex x="5.5" y="-1" />
 			</polygon>
-		</Component>
-		<Component id="CompVisualTexture" name="std">
+		</component>
+		<component id="CompVisualTexture" name="std">
 			<tex name="Craterscape" />
-		</Component>
-	</Entity>
-	<Entity name="grav1">
-		<Component id="CompGravField" name="std">
+		</component>
+	</entity>
+	<entity name="grav1">
+		<component id="CompGravField" name="std">
 			<grav type="directional" gx="0" gy="-20" />
-		</Component>
-		<Component id="CompPhysics" name="std">
+		</component>
+		<component id="CompPhysics" name="std">
 			<damping linear="0" angular="0" />
 			<shape comp_name="shape1" density="0" friction="0.3" restitution="0" isSensor="true" />
-		</Component>
-		<Component id="CompPosition" name="std" x="0" y="0" a="0" />
-		<Component id="CompShape" name="shape1">
+		</component>
+		<component id="CompPosition" name="std" x="0" y="0" a="0" />
+		<component id="CompShape" name="shape1">
 			<polygon>
 				<vertex x="-8" y="2.5" />
 				<vertex x="-4.5" y="-1" />
 				<vertex x="5.5" y="-1" />
 				<vertex x="9" y="2.5" />
 			</polygon>
-		</Component>
-	</Entity>
-	<Entity name="grav2">
-		<Component id="CompGravField" name="std">
+		</component>
+	</entity>
+	<entity name="grav2">
+		<component id="CompGravField" name="std">
 			<grav type="directional" gx="-20" gy="0" />
-		</Component>
-		<Component id="CompPhysics" name="std">
+		</component>
+		<component id="CompPhysics" name="std">
 			<damping linear="0" angular="0" />
 			<shape comp_name="shape1" density="0" friction="0.3" restitution="0" isSensor="true" />
-		</Component>
-		<Component id="CompPosition" name="std" x="0" y="0" a="0" />
-		<Component id="CompShape" name="shape1">
+		</component>
+		<component id="CompPosition" name="std" x="0" y="0" a="0" />
+		<component id="CompShape" name="shape1">
 			<polygon>
 				<vertex x="5.5" y="-1" />
 				<vertex x="5.5" y="-3.5" />
 				<vertex x="8.5" y="-8.5" />
 				<vertex x="9" y="2.5" />
 			</polygon>
-		</Component>
-	</Entity>
-	<Entity name="grav3">
-		<Component id="CompGravField" name="std">
+		</component>
+	</entity>
+	<entity name="grav3">
+		<component id="CompGravField" name="std">
 			<grav type="directional" gx="0" gy="20" />
-		</Component>
-		<Component id="CompPhysics" name="std">
+		</component>
+		<component id="CompPhysics" name="std">
 			<damping linear="0" angular="0" />
 			<shape comp_name="shape1" density="0" friction="0.3" restitution="0" isSensor="true" />
-		</Component>
-		<Component id="CompPosition" name="std" x="0" y="0" a="0" />
-		<Component id="CompShape" name="shape1">
+		</component>
+		<component id="CompPosition" name="std" x="0" y="0" a="0" />
+		<component id="CompShape" name="shape1">
 			<polygon>
 				<vertex x="-4.5" y="-3.5" />
 				<vertex x="-9" y="-7" />
 				<vertex x="8.5" y="-8.5" />
 				<vertex x="5.5" y="-3.5" />
 			</polygon>
-		</Component>
-	</Entity>
-	<Entity name="grav4">
-		<Component id="CompGravField" name="std">
+		</component>
+	</entity>
+	<entity name="grav4">
+		<component id="CompGravField" name="std">
 			<grav type="directional" gx="20" gy="0" />
-		</Component>
-		<Component id="CompPhysics" name="std">
+		</component>
+		<component id="CompPhysics" name="std">
 			<damping linear="0" angular="0" />
 			<shape comp_name="shape1" density="0" friction="0.3" restitution="0" isSensor="true" />
-		</Component>
-		<Component id="CompPosition" name="std" x="0" y="0" a="0" />
-		<Component id="CompShape" name="shape1">
+		</component>
+		<component id="CompPosition" name="std" x="0" y="0" a="0" />
+		<component id="CompShape" name="shape1">
 			<polygon>
 				<vertex x="-8" y="2.5" />
 				<vertex x="-9" y="-7" />
 				<vertex x="-4.5" y="-3.5" />
 				<vertex x="-4.5" y="-1" />
 			</polygon>
-		</Component>
-	</Entity>
-	<Entity name="grav_circular">
-		<Component id="CompGravField" name="std">
+		</component>
+	</entity>
+	<entity name="grav_circular">
+		<component id="CompGravField" name="std">
 			<grav type="radial" cx="-25" cy="0" s="40" />
-		</Component>
-		<Component id="CompPhysics" name="std">
+		</component>
+		<component id="CompPhysics" name="std">
 			<damping linear="0" angular="0" />
 			<shape comp_name="shape1" density="0" friction="0.3" restitution="0" isSensor="true" />
-		</Component>
-		<Component id="CompPosition" name="std" x="0" y="0" a="0" />
-		<Component id="CompShape" name="shape1">
+		</component>
+		<component id="CompPosition" name="std" x="0" y="0" a="0" />
+		<component id="CompShape" name="shape1">
 			<circle x="-25" y="0" r="10" />
-		</Component>
-	</Entity>
-	<Entity name="roundPlanet">
-		<Component id="CompPhysics" name="std">
+		</component>
+	</entity>
+	<entity name="roundPlanet">
+		<component id="CompPhysics" name="std">
 			<damping linear="0" angular="0" />
 			<shape comp_name="shape1" density="0" friction="0.3" restitution="0" />
-		</Component>
-		<Component id="CompPosition" name="std" x="0" y="0" a="0" />
-		<Component id="CompShape" name="shape1">
+		</component>
+		<component id="CompPosition" name="std" x="0" y="0" a="0" />
+		<component id="CompShape" name="shape1">
 			<circle x="-25" y="0" r="3" />
-		</Component>
-		<Component id="CompVisualTexture" name="std">
+		</component>
+		<component id="CompVisualTexture" name="std">
 			<tex name="Liquid Crystal 2" />
 			<edge tex="EdgeMud1" edges="0 " />
-		</Component>
-	</Entity>
+		</component>
+	</entity>
 </level>

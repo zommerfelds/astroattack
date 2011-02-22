@@ -71,7 +71,7 @@ boost::shared_ptr<CompTrigger> CompTrigger::LoadFromXml(const pugi::xml_node& co
 {
     boost::shared_ptr<CompTrigger> compTrig = boost::make_shared<CompTrigger>();
 
-    for (pugi::xml_node condElem = compElem.child("Condition"); condElem; condElem = condElem.next_sibling("Condition"))
+    for (pugi::xml_node condElem = compElem.child("condition"); condElem; condElem = condElem.next_sibling("condition"))
     {
         std::string condId = condElem.attribute("id").value();
         if (condId.empty())
@@ -118,7 +118,7 @@ boost::shared_ptr<CompTrigger> CompTrigger::LoadFromXml(const pugi::xml_node& co
             gAaLog.Write("WARNING: No condition found with id \"%s\"!", condId.c_str());
     }
 
-    for (pugi::xml_node effectElem = compElem.child("Effect"); effectElem; effectElem = effectElem.next_sibling("Effect"))
+    for (pugi::xml_node effectElem = compElem.child("effect"); effectElem; effectElem = effectElem.next_sibling("effect"))
     {
         std::string effectId = effectElem.attribute("id").value();
 

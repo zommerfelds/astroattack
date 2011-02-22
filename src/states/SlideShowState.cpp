@@ -274,9 +274,6 @@ void SlideShowState::Draw( float /*accumulator*/ )        // Spiel zeichnen
 {
     RenderSubSystem* pRenderer = GetSubSystems().renderer.get();
 
-    // Bildschirm leeren
-    pRenderer->ClearScreen();
-
     // Bild zeichnen
     {
         float texCoord[8] = { 0.0f, 0.0f,
@@ -322,7 +319,4 @@ void SlideShowState::Draw( float /*accumulator*/ )        // Spiel zeichnen
                                  (mousePos->x+0.025f)*4, mousePos->y*3 };
         pRenderer->DrawTexturedQuad( texCoord, vertexCoord, "_cursor" );
     }*/
-
-    // Alles was gezeichnet wurde anzeigen
-    pRenderer->FlipBuffer(); // (vom Backbuffer zum Frontbuffer wechseln)
 }

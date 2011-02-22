@@ -8,9 +8,7 @@
 
 #include "Font.h"
 
-// Simple DirectMedia Layer (freie Plattform-Übergreifende Multimedia-Programmierschnittstelle)
-#include "SDL.h"
-// OpenGL via SDL inkludieren (Plattform-Übergreifende Definitionen)
+// cross platform OpenGL include (provided by SDL)
 #include "SDL_opengl.h"
 
 //#include "contrib/utfcpp/utf8.h"

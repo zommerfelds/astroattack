@@ -46,10 +46,11 @@ public:
 
     // Um heran- oder herauszuzoomen
     void Zoom( float zoom ); // zoom ist der Zoomfaktor ( < 1 bedeutet herauszoomen; > 1 bedeutet herazoomen )
+    void SetZoom( float zoom ); // zoom ist der Zoomfaktor ( < 1 bedeutet herauszoomen; > 1 bedeutet herazoomen )
     bool SetFollowPlayer( bool follow ); // soll die Kamera den Spieles folgen oder nicht?
 
-    void RotateAbsolute( float angleDeg, float timeToArrive ); // Den Winkel der Kamera setzen. "angleDeg" als neuer Winkel nehmen.
-    void RotateRelative( float angleDeg, float timeToArrive ); // Den Winkel der Kamera verändern. Um "angleDeg" drehen. (+:Gegenuhrzegersinn, -:Uhrzeigersinn)
+    void RotateAbsolute( float angle, float timeToArrive ); // Den Winkel der Kamera setzen. angle als neuer Winkel nehmen.
+    void RotateRelative( float angle, float timeToArrive ); // Den Winkel der Kamera verändern. Um angle drehen. (+:Gegenuhrzegersinn, -:Uhrzeigersinn)
 
     Vector2D ScreenToWorld( const Vector2D& screenPos );
     Vector2D WorldToScreen( const Vector2D& worldPos );
@@ -68,8 +69,9 @@ public:
 
 private:
     boost::scoped_ptr<Vector2D> m_pPosition;
-    float m_scaleValue;
-    float m_rotationAngleDeg;
+    float m_zoom;
+    float m_rotation;
+    float m_rotationVel;
 
     float m_viewWidth;
     float m_viewHeight;

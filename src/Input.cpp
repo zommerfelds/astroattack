@@ -36,6 +36,11 @@ InputSubSystem::InputSubSystem() : m_pKeystates ( NULL ),
     m_keyMap[CameraRotateCw] = SDLK_KP_MULTIPLY;
     m_keyMap[CameraRotateCcw] = SDLK_KP_DIVIDE;
     m_keyMap[CameraResetAngle] = SDLK_KP_ENTER;
+    /*m_keyMap[CameraZoomIn] = SDLK_1;
+    m_keyMap[CameraZoomOut] = SDLK_2;
+    m_keyMap[CameraRotateCw] = SDLK_4;
+    m_keyMap[CameraRotateCcw] = SDLK_3;
+    m_keyMap[CameraResetAngle] = SDLK_5;*/
     m_keyMap[Enter] = SDLK_RETURN;
     m_keyMap[Esc] = SDLK_ESCAPE;
     m_keyMap[F4] = SDLK_F4;

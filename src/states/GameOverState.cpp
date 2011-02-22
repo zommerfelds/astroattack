@@ -62,13 +62,8 @@ void GameOverState::Draw( float /*accumulator*/ )        // Spiel zeichnen
 {
     RenderSubSystem* pRenderer = GetSubSystems().renderer.get();
 
-    // Bildschirm leeren
-    pRenderer->ClearScreen();
-
     pRenderer->DrawOverlay( cBackgroundColor[0], cBackgroundColor[1], cBackgroundColor[2], 1.0f );
     pRenderer->DrawString( m_stringToShow.c_str(), "FontW_b", 2.0f, 1.5f, AlignCenter, AlignCenter );
 
     pRenderer->DrawString( "ENTER: erneut starten   ESC: abbrechen", "FontW_m", 2.0f, 3.0f, AlignCenter, AlignBottom );
-
-    pRenderer->FlipBuffer(); // vom Backbuffer zum Frontbuffer wechseln (neues Bild zeigen)
 }

@@ -264,8 +264,6 @@ void EditorState::Draw( float accumulator )        // Spiel zeichnen
 
     RenderSubSystem& renderer = *GetSubSystems().renderer;
 
-    // Bildschirm leeren
-    renderer.ClearScreen();
     // Weltmodus
     renderer.SetMatrix(RenderSubSystem::World);
     m_pGameCamera->Look();
@@ -300,21 +298,21 @@ void EditorState::Draw( float accumulator )        // Spiel zeichnen
                              "Page Up/Down:\n"
                              "Arrow keys:\n"
                              "H:",
-                             "FontW_s", 3.3f, 0.02f, AlignRight );
+                             "FontW_s", 3.2f, 0.02f, AlignRight );
         renderer.DrawString( "new vertex\n"
                              "apply block\n"
                              "delete last vertex\n"
                              "delete all vetices\n"
                              "change texture\n"
                              "move camera\n"
-                             "hide this help text", "FontW_s", 3.4f, 0.02f, AlignLeft );
+                             "hide this help text", "FontW_s", 3.3f, 0.02f, AlignLeft );
         renderer.DrawString( "* Important *\n"
                              "Only draw convex polygons!\n"
-                             "Only draw in counter-clockwise order!\n", "FontW_s", 3.4f, 0.7f, AlignCenter );
+                             "Only draw in counter-clockwise order!\n", "FontW_s", 3.3f, 0.7f, AlignCenter );
     }
     else
     {
-        renderer.DrawString( "H for help", "FontW_s", 3.5f, 0.02f );
+        renderer.DrawString( "H for help", "FontW_s", 3.2f, 0.02f );
     }
 
     // Fadenkreuz zeichnen
@@ -343,7 +341,4 @@ void EditorState::Draw( float accumulator )        // Spiel zeichnen
     mousePos.y = mousePos.y * 3.0f;
 
     renderer.DrawEditorCursor(mousePos);
-
-    // Erzeugtes Bild zeigen
-    renderer.FlipBuffer(); // (vom Backbuffer zum Frontbuffer wechseln)
 }

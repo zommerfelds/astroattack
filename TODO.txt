@@ -10,31 +10,24 @@
 * Medium priority *
 
 - time accumulator... (very unstable when put delay on main loop)
-- abstract SDL
-- FPS display
-- Init.cpp
 - improve logger
 - asynchonous fading out music (separate thread)
 - Use physical state interpolation instead of extrapolation
 - Strange physical behavior under "arrow" of level 2
 - Test OpenGL error checking (glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR) did not generate error)
 - Bug in Logger: Loading Texture "(null)"... Done!
-- Change isSensor to sensor and check XML node names (maybe capital beginning?)
 - Kontakt Events nicht für jeden Box2D Kontakt erzeugen, sonders Box2D Kontakte zuerst verarbeiten und zusammenfügen.
 - GUI System
 - Konkave Polygone im Editor
 - Fehlerchecking und Beschreibung beim Level Laden
 - Check widescreen mode
-- Bug: can't fly away from wall if you jump near a wall
-- Improve program shutdown
 - Use pimpl pattern
+- Handle UTF-8 symbols in the slide show state (a multi-byte character is treated as single bytes)
 
 
 * Low priority *
 
-- Make whole camera functionality frame rate independent
-- Handle UTF-8 symbols in the slide show state (a multibyte character is treated as single bytes)
-- Use boost::signals instead of Event.h
+- Use boost::signals instead of Event.h (really?)
 - Don't use GL_RGBA if not needed (Texture.cpp)
 - Main menu performance is lower than game?
 - Options screen
@@ -61,7 +54,11 @@
 
 
 DONE:
-- Migrate to pugixml or rapidxml
+- Make camera functionality frame rate independent
+- Bug: can't fly away from wall if you jump near a wall
+- XML node names (maybe capital beginning?)
+- FPS display
+- Migrate to pugixml
 - Align text
 - Command line arguments
 - Abstract Box2D (remove Box2D dependencies in non-physics parts)

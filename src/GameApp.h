@@ -9,12 +9,11 @@
 
 #include "GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
 #include <boost/scoped_ptr.hpp>
-// Simple DirectMedia Layer (freie Plattform-übergreifende Multimedia-Programmierschnittstelle)
-#include "SDL.h"
-#include "GameEvents.h"
 
 #include <vector>
 #include <string>
+
+#include "Event.h"
 
 class InputSubSystem;
 class PhysicsSubSystem;
@@ -22,8 +21,9 @@ class RenderSubSystem;
 class StateManager;
 class SoundSubSystem;
 class GuiSubSystem;
-
+struct GameEvents;
 struct SubSystems;
+union SDL_Event;
 
 /*
     Das ist die Hauptklasse des Spiels.
@@ -52,10 +52,11 @@ private:
 
     void UpdateGame();
     void HandleSdlQuitEvents( SDL_Event& rSdlEvent, bool& rQuit );
-    void CalcFPS( Uint32 curTime );
+    void CalcFPS( unsigned int curTime );
 
-    Uint32 m_fpsMeasureStart;
-    Uint32 m_framesCounter;
+    unsigned int m_fpsMeasureStart;
+    unsigned int m_framesCounter;
+    unsigned int m_fps;
 
     std::string m_levelToLoad; // empty if shoud go to main menu
     bool m_startGame; // true if the game should be started (or false if only a message should be printed i.e. '--version')

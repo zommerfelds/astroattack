@@ -79,7 +79,7 @@ public:
     void DrawCrosshairs( const Vector2D& rCrosshairsPos );
 
     // Camera control
-    void SetViewPosition( const Vector2D& pos, float zoom, float angle);
+    void SetViewPosition( const Vector2D& pos, float scale, float angle);
     void SetViewSize( float width, float height );
 
     // -------- nur für MatrixGUI Modus --------   
@@ -90,6 +90,8 @@ public:
     void DrawOverlay( float r, float g, float b, float a );
 
     // ****************************************//
+
+    void DrawFPS(int fps);
 
     void DisplayLoadingScreen();
     void DisplayTextScreen( const std::string& text );

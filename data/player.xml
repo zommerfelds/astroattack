@@ -1,42 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <root>
-    <Entity name = "Player">
-        <Component id = "CompVisualAnimation" name = "jetpack">
+    <entity name = "Player">
+        <component id = "CompVisualAnimation" name = "jetpack">
             <anim name = "jetpack"/>
             <center x = "0.5" y = "0.03"/>
             <dim hw = "0.3" hh = "1.0"/>
-        </Component>
-        <Component id = "CompVisualAnimation" name = "bodyAnim">
+        </component>
+        <component id = "CompVisualAnimation" name = "bodyAnim">
             <anim name = "astro"/>
             <center x = "-0.05" y = "0.03"/>
             <dim hw = "0.74" hh = "0.88"/>
-        </Component>
-        <!--Component id = "CompVisualTexture">
+        </component>
+        <!--component id = "CompVisualTexture">
                 <tex name = "brick"/>
-        </Component-->
-        <Component id="CompShape" name="middle">
+        </component-->
+        <component id="CompShape" name="middle">
             <polygon>
                 <vertex x="-0.44" y="-0.35" />
                 <vertex x="0.44" y="-0.35" />
                 <vertex x="0.44" y="0.35" />
                 <vertex x="-0.44" y="0.35" />
             </polygon>
-        </Component>
-        <Component id="CompShape" name="top">
+        </component>
+        <component id="CompShape" name="top">
             <circle x="0" y="0.35" r="0.45" />
-        </Component>
-        <Component id="CompShape" name="mid2">
+        </component>
+        <component id="CompShape" name="mid2">
             <polygon>
                 <vertex x="-0.18" y="-0.66" />
                 <vertex x="0.18" y="-0.66" />
                 <vertex x="0.440" y="-0.35" />
                 <vertex x="-0.440" y="-0.35" />
             </polygon>
-        </Component>
-        <Component id="CompShape" name="bottom">
+        </component>
+        <component id="CompShape" name="bottom">
             <circle x="0" y="-0.5" r="0.25" />
-        </Component>
-        <Component id = "CompPhysics">
+        </component>
+        <component id = "CompPhysics">
             <fixedRotation/>
             <bullet/>
             <damping linear = "0.1"/>
@@ -47,8 +47,8 @@
             <shape comp_name = "top" density = "1.0" friction = "0.2"/>
             <shape comp_name = "mid2" density = "40.0" friction = "0.1"/>
             <shape comp_name = "bottom" density = "40.0" friction = "0.1"/>
-        </Component>
-        <Component id = "CompPlayerController" />
-        <Component id="CompPosition" x="0.000000" y="0.000000" a="0.000000" />
-    </Entity>
+        </component>
+        <component id = "CompPlayerController" />
+        <component id="CompPosition" x="0.000000" y="0.000000" a="0.000000" />
+    </entity>
 </root>

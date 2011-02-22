@@ -21,21 +21,11 @@
 #include "components/CompGravField.h"
 
 #include <cmath>
+#include <algorithm>
 #include <boost/make_shared.hpp>
 
-const float cMinScale = 0.7f;
-const float cMaxScale = 10.0f;
-
-namespace
-{
-    float mod360(float x) // Modulo 360 -> immer positiv
-    {
-        float result = fmod(x,360);
-        if ( result < 0 )
-            result += 360;
-        return result;
-    }
-}
+const float cMinZoom = 1.0f;
+const float cMaxZoom = 9.0f;
 
 // 16:10
 const float STDViewWidth_8_5 = 26.4f; // horizontal lenght (units) of the view
@@ -51,8 +41,8 @@ const float cTimeTillAnimSwitchHeadingIsPossible = 0.2f;
 // Konstruktor
 CameraController::CameraController( const InputSubSystem& inputSubSystem, RenderSubSystem& renderSubSystem, const GameWorld& world )
   : m_pPosition ( new Vector2D ),
-    m_scaleValue ( 1.0f ),
-    m_rotationAngleDeg ( 0.0f ),
+    m_zoom ( 1.0f ),
+    m_rotation ( 0.0f ),
     m_viewWidth ( gAaConfig.GetInt("WideScreen")?STDViewWidth_8_5:STDViewWidth_4_3 ),
     m_viewHeight ( gAaConfig.GetInt("WideScreen")?STDViewHeight_8_5:STDViewHeight_4_3 ),
     m_inputSubSystem ( inputSubSystem ),
@@ -75,33 +65,37 @@ CameraController::CameraController( const InputSubSystem& inputSubSystem, Render
 
 CameraController::~CameraController() {}
 
+namespace
+{
+    float mod2pi(float x)
+    {
+        float result = fmod(x, 2*cPi);
+        if ( result < 0 )
+            result += 2*cPi;
+        return result;
+    }
+}
+
 // Initialisierung der 2D Kamera (ganz am Anfang aufrufen)
 void CameraController::Init ()
 {
     m_renderSubSystem.SetViewSize( m_viewWidth, m_viewHeight );
-    /*m_renderSubSystem.SetMatrix(RenderSubSystem::World);
-    glMatrixMode ( GL_PROJECTION );
-    glLoadIdentity(); //Reset projection matrix
 
-    // orthogonalen 2D-Rendermodus
-    gluOrtho2D( -m_viewWidth/2, m_viewWidth/2, -m_viewHeight/2, m_viewHeight/2 ); // (z ist nicht wichtig)
-    glMatrixMode ( GL_MODELVIEW );*/
-
-    m_isFollowingPlayer = false;
-    //Zoom( 1.25f );
-    Zoom( 1.5f );
+    SetZoom( 1.5f );
 }
 
 // Kamarabewegung aktualisieren und auf Eingabe, die die Kamera beeinflusst, reagieren
 void CameraController::Update ( float deltaTime ) // time_span in seconds
 {
     // Zoom
-    const float Zoom_Amount = 3.0;
+    const float cZoomFactor = 4.0f;
     // Wenn Spieler + oder - gedrückt hat
-    if ( m_inputSubSystem.KeyState ( CameraZoomIn ) )
-        Zoom ( 1.0f + Zoom_Amount * deltaTime );
+    if ( m_inputSubSystem.KeyState ( CameraZoomIn ) ) // not frame rate independent!
+        Zoom( pow(1/cZoomFactor, deltaTime) );
+        //SetZoom(m_scaleValue - cZoomFactor * deltaTime);
     else if ( m_inputSubSystem.KeyState ( CameraZoomOut ) )
-        Zoom ( 1.0f - Zoom_Amount * deltaTime );
+        Zoom( pow(cZoomFactor, deltaTime) );
+        //SetZoom(m_scaleValue + cZoomFactor * deltaTime);
 
     // Falls die Kamera mitten in einer Bewegung ist, muss sie etwas gegen den Zielort verschoben werden
     if ( m_isMovingSmoothly )
@@ -213,16 +207,45 @@ void CameraController::Update ( float deltaTime ) // time_span in seconds
 
             if ( m_isFollowingPlayer )
             {
-                // Blickpunkt der Kamera festsetzten (in der Mitte zwischen Spieler und Cursor)
-
-                const float cFollowQuicknessFactor = 15.0f;
-                const float cRangeOfSightFactor = 6.0f;
+                // calculate cursor position relative to the middle of the screen
                 Vector2D cursorPos = m_inputSubSystem.GetMousePos();
                 cursorPos.x = cursorPos.x - 0.5f;
                 cursorPos.y = (cursorPos.y - 0.5f) * -1;
-                Vector2D targetPos = playerPos + cursorPos * cRangeOfSightFactor;
-                Vector2D velocity = (targetPos - *m_pPosition) * cFollowQuicknessFactor;
-                *m_pPosition += velocity * deltaTime;
+                cursorPos.Rotate(m_rotation);
+
+                // calculate new camera position
+                // the position depends on the player position and on the mouse cursor position
+                const float cPosFollowQuicknessFactor = 15.0f; // how fast the camera moves to the new position
+                const float cRangeOfSightFactor = 6.0f; // how far the mouse can move the camera away from the player
+
+                Vector2D posTargetDiff = playerPos + cursorPos * cRangeOfSightFactor - *m_pPosition;
+                Vector2D posVelocity = posTargetDiff * cPosFollowQuicknessFactor;
+                *m_pPosition += posVelocity * deltaTime;
+
+                // calculate new camera zoom
+                // the zoom depends on the mouse cursor position and on the players velocity
+                const float cZoomFollowQuicknessFactor = 1.5f;
+                const float cMaxFollowZoom = 2.5f;
+                const float cMinFollowZoom = 1.34f;
+                const float cGradientStart = 0.1f;
+                const float cGradientEnd = 1.0f;
+                const float cPlayerMaxVel = 5.0f;
+
+                float zoomGradient = (cMaxFollowZoom - cMinFollowZoom) / (cGradientEnd - cGradientStart);
+                float velFraction = playerPhys->GetLinearVelocity().Length() / cPlayerMaxVel;
+                if (velFraction > 1.0f || playerPhys->GetContacts().empty())
+                    velFraction = 1.0f;
+                float zoomParameter = cursorPos.Length() + velFraction * 0.5f;
+                float zoomTarget = 0.0f;
+                if (zoomParameter < cGradientStart)
+                    zoomTarget = cMaxFollowZoom;
+                else if (zoomParameter > cGradientEnd)
+                    zoomTarget = cMinFollowZoom;//cMaxFollowZoom - (cGradientEnd - cGradientStart) * cZoomGradient;
+                else
+                    zoomTarget = cMaxFollowZoom - (zoomParameter - cGradientStart) * zoomGradient;
+
+                float zoomVelocity = (zoomTarget - m_zoom) * cZoomFollowQuicknessFactor;
+                SetZoom(m_zoom + zoomVelocity * deltaTime);
             }
             // flip player's heading according to cursor
             {
@@ -253,56 +276,44 @@ void CameraController::Update ( float deltaTime ) // time_span in seconds
     if (!m_isFollowingPlayer)
     {
         // Wenn die Kamera den Spieler nicht folgt, kann man sie mit den Pfeiltasten bewegen.
-        const float scroll_Amount = 40.0f/m_scaleValue; // Verschiebungsgrösse
-        Vector2D temp_vector;
+        const float cScrollVelMag = 40.0f / m_zoom; // Verschiebungsgrösse
+        Vector2D scrollVelocity;
         if ( m_inputSubSystem.KeyState ( CameraUp ) )
-        {
-            temp_vector = Vector2D( 0,scroll_Amount );
-            temp_vector.Rotate( degToRad(m_rotationAngleDeg) );
-            MoveRelative ( temp_vector * deltaTime, 0.0f );
-        }
+            scrollVelocity.Set(0, cScrollVelMag);
         else if ( m_inputSubSystem.KeyState ( CameraDown ) )
-        {
-            temp_vector = Vector2D( 0,-scroll_Amount );
-            temp_vector.Rotate( degToRad(m_rotationAngleDeg) );
-            MoveRelative ( temp_vector * deltaTime, 0.0f);
-        }
+            scrollVelocity.Set(0, -cScrollVelMag);
+
         if ( m_inputSubSystem.KeyState ( CameraLeft ) )
-        {
-            temp_vector = Vector2D( -scroll_Amount,0 );
-            temp_vector.Rotate( degToRad(m_rotationAngleDeg) );
-            MoveRelative ( temp_vector * deltaTime, 0.0f);
-        }
+            scrollVelocity.Set(-cScrollVelMag, 0);
         else if ( m_inputSubSystem.KeyState ( CameraRight ) )
-        {
-            temp_vector = Vector2D( scroll_Amount,0 );
-            temp_vector.Rotate( degToRad(m_rotationAngleDeg) );
-            MoveRelative ( temp_vector * deltaTime, 0.0f);
-        }
+            scrollVelocity.Set(cScrollVelMag, 0);
+
+        MoveRelative( scrollVelocity.Rotated(m_rotation) * deltaTime, 0.0f );
 
         if ( m_inputSubSystem.RMouseKeyState() )
         {
-            MoveAbsolute ( ScreenToWorld(m_inputSubSystem.GetMousePos()), 1.0f);
+            MoveAbsolute( ScreenToWorld(m_inputSubSystem.GetMousePos()), 1.0f);
         }
     }
 
-    const float rotate_Amount = 130.0; // Drehstärke
+    const float cRotVelocity = 2.0f;
     if ( m_inputSubSystem.KeyState ( CameraRotateCw ) )
-        RotateRelative( -rotate_Amount * deltaTime, 0.0f);
+    RotateRelative( -cRotVelocity * deltaTime, 0.0f);
     else if ( m_inputSubSystem.KeyState ( CameraRotateCcw ) )
-        RotateRelative( rotate_Amount * deltaTime, 0.0f);
+        RotateRelative( cRotVelocity * deltaTime, 0.0f);
+
     if ( m_inputSubSystem.KeyState ( CameraResetAngle ) )
     {
-        float time = GetCameraAngle();
-        float x = fabs(time-360);
-        if ( time > x )
-            time = x;
-        time *= 0.01f;
+        const float cRotResetVelocity = 2.0f;
+        float angle = GetCameraAngle();
+        float angle2Pi = fabs(angle - 2*cPi);
+        float time = std::min(angle, angle2Pi);
+        time /= cRotResetVelocity;
         RotateAbsolute( 0.0f, time );
     }
 }
 
-void CameraController::MoveRelative ( const Vector2D& rMove, float timeToArrive )
+void CameraController::MoveRelative( const Vector2D& rMove, float timeToArrive )
 {
     if ( timeToArrive > 0.0f)
     {
@@ -314,12 +325,11 @@ void CameraController::MoveRelative ( const Vector2D& rMove, float timeToArrive 
     }
     else
 	{
-		//UpdateCurPosInWorld();
         *m_pPosition += rMove;
 	}
 }
 
-void CameraController::MoveAbsolute ( const Vector2D& rPos, float timeToArrive )
+void CameraController::MoveAbsolute( const Vector2D& rPos, float timeToArrive )
 {
     if ( timeToArrive > 0.0f)
     {
@@ -331,25 +341,63 @@ void CameraController::MoveAbsolute ( const Vector2D& rPos, float timeToArrive )
     }
     else
 	{
-		//UpdateCurPosInWorld();
         *m_pPosition = rPos;
 	}
 }
 
-void CameraController::Zoom ( float zoom )
+void CameraController::RotateAbsolute( float angle, float timeToArrive )
 {
-    m_scaleValue *= zoom;
-    if ( m_scaleValue > cMaxScale )
-        m_scaleValue = cMaxScale;
-    else if ( m_scaleValue < cMinScale )
-        m_scaleValue = cMinScale;
-    m_viewWidth = (gAaConfig.GetInt("WideScreen")?STDViewWidth_8_5:STDViewWidth_4_3) * 1.0f/m_scaleValue;
-    m_viewHeight = (gAaConfig.GetInt("WideScreen")?STDViewHeight_8_5:STDViewHeight_4_3) * 1.0f/m_scaleValue;
+    if ( timeToArrive > 0.0f)
+    {
+        m_isRotatingSmoothly = true;
+        m_startingAngle = mod2pi(m_rotation);
+        m_endingAngle = angle;
+        if ( fabs(m_startingAngle - m_endingAngle) > fabs(m_startingAngle-2*cPi - m_endingAngle) )
+            m_startingAngle -= 2*cPi;
+        m_rotateTotalTimeToArrive = timeToArrive;
+        m_rotateTimeElapsed = 0.0;
+    }
+    else
+    {
+        m_rotation = mod2pi(angle);
+    }
+}
+
+void CameraController::RotateRelative( float angle, float timeToArrive )
+{
+    if ( timeToArrive > 0.0f)
+    {
+        m_isRotatingSmoothly = true;
+        m_startingAngle = mod2pi(m_rotation);
+        m_endingAngle = m_startingAngle + angle;
+        m_rotateTotalTimeToArrive = timeToArrive;
+        m_rotateTimeElapsed = 0.0;
+    }
+    else
+    {
+        m_rotation = mod2pi(m_rotation + angle);
+    }
+}
+
+void CameraController::Zoom( float zoom )
+{
+    SetZoom(m_zoom * zoom);
+}
+
+void CameraController::SetZoom( float zoom )
+{
+    m_zoom = zoom;
+    if ( m_zoom > cMaxZoom )
+        m_zoom = cMaxZoom;
+    else if ( m_zoom < cMinZoom )
+        m_zoom = cMinZoom;
+    m_viewWidth = (gAaConfig.GetInt("WideScreen")?STDViewWidth_8_5:STDViewWidth_4_3) * 1.0f/m_zoom;
+    m_viewHeight = (gAaConfig.GetInt("WideScreen")?STDViewHeight_8_5:STDViewHeight_4_3) * 1.0f/m_zoom;
 }
 
 void CameraController::Look() const
 {
-    m_renderSubSystem.SetViewPosition(*m_pPosition, m_scaleValue, m_rotationAngleDeg);
+    m_renderSubSystem.SetViewPosition(*m_pPosition, m_zoom, m_rotation);
 }
 
 const Vector2D& CameraController::GetCameraPos() const
@@ -357,58 +405,23 @@ const Vector2D& CameraController::GetCameraPos() const
     return *m_pPosition;
 }
 
-float CameraController::GetCameraAngle () const
+float CameraController::GetCameraAngle() const
 {
-    return mod360( m_rotationAngleDeg );
+    return mod2pi(m_rotation);
 }
 
-bool CameraController::SetFollowPlayer ( bool follow )
+bool CameraController::SetFollowPlayer( bool follow )
 {
     bool oldIsFollowingPlayer = m_isFollowingPlayer;
     m_isFollowingPlayer = follow;
     return oldIsFollowingPlayer; // alte Einstellung zurückgeben
 }
 
-void CameraController::RotateAbsolute ( float angleDeg, float timeToArrive )
-{
-    if ( timeToArrive > 0.0f)
-    {
-        m_isRotatingSmoothly = true;
-        m_startingAngle = mod360(m_rotationAngleDeg);
-        m_endingAngle = angleDeg;
-        if ( fabs(m_startingAngle - m_endingAngle) > fabs(m_startingAngle-360 - m_endingAngle) )
-            m_startingAngle -= 360;
-        m_rotateTotalTimeToArrive = timeToArrive;
-        m_rotateTimeElapsed = 0.0;
-    }
-    else
-	{
-		m_rotationAngleDeg = mod360(angleDeg);
-	}
-}
-
-void CameraController::RotateRelative ( float angleDeg, float timeToArrive )
-{
-    if ( timeToArrive > 0.0f)
-    {
-        m_isRotatingSmoothly = true;
-        m_startingAngle = mod360(m_rotationAngleDeg);
-        m_endingAngle = m_startingAngle + angleDeg;
-        m_rotateTotalTimeToArrive = timeToArrive;
-        m_rotateTimeElapsed = 0.0;
-    }
-    else
-	{
-		m_rotationAngleDeg += mod360(angleDeg);
-        m_rotationAngleDeg = mod360(m_rotationAngleDeg);
-	}
-}
-
 Vector2D CameraController::ScreenToWorld( const Vector2D& screenPos )
 {
     Vector2D middle_of_screen_to_screenPos( ( screenPos.x - 0.5f ) * m_viewWidth,
                                            -( screenPos.y - 0.5f ) * m_viewHeight );
-    middle_of_screen_to_screenPos.Rotate( degToRad(m_rotationAngleDeg) );
+    middle_of_screen_to_screenPos.Rotate( m_rotation );
 
     return *m_pPosition + middle_of_screen_to_screenPos;
 }
@@ -417,7 +430,7 @@ Vector2D CameraController::WorldToScreen( const Vector2D& worldPos )
 {
     Vector2D screenPos ( (worldPos.x - m_pPosition->x),
                          (worldPos.y - m_pPosition->y) );
-    screenPos.Rotate( -degToRad(m_rotationAngleDeg) );
+    screenPos.Rotate( -m_rotation );
 
     screenPos.x /= m_viewWidth;
     screenPos.y /= -m_viewHeight;

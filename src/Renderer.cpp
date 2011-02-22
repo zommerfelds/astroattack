@@ -6,9 +6,8 @@
 
 #include "GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
 
-// Simple DirectMedia Layer (freie Plattform-übergreifende Multimedia-Programmierschnittstelle)
 #include "SDL.h"
-// OpenGL via SDL inkludieren (Plattform-übergreifende Definitionen)
+// cross platform OpenGL include (provided by SDL)
 #include "SDL_opengl.h"
 
 #include "Renderer.h"
@@ -16,6 +15,7 @@
 #include "Entity.h"
 #include <fstream>
 #include <cmath>
+#include <sstream>
 #include "main.h"
 #include "XmlLoader.h"
 
@@ -493,7 +493,7 @@ void RenderSubSystem::DrawVisualTextureComps()
             const Vector2D& position = compPos->GetPosition();
 
             glTranslatef(position.x, position.y, 0.0f);
-            glRotatef ( radToDeg(angle), 0.0, 0.0, 1.0f);
+            glRotatef( radToDeg(angle), 0.0, 0.0, 1.0f);
 
             for ( size_t i=0; i<compShapes.size(); ++i )
             {
@@ -592,6 +592,14 @@ void RenderSubSystem::DrawVisualMessageComps()
     }
 }
 
+void RenderSubSystem::DrawFPS(int fps)
+{
+    std::ostringstream oss;
+    oss << fps;
+    DrawString( "FPS", "FontW_s", 3.8f, 0.03f, AlignRight, AlignTop );
+    DrawString( oss.str(), "FontW_s", 3.95f, 0.03f, AlignRight, AlignTop );
+}
+
 void RenderSubSystem::RegisterCompVisual( Entity& entity )
 {
     BOOST_FOREACH(CompVisualTexture* pTexComp, entity.GetComponents<CompVisualTexture>())
@@ -619,10 +627,8 @@ void RenderSubSystem::UnregisterCompVisual( Entity& entity )
 void RenderSubSystem::DisplayTextScreen( const std::string& text )
 {
     SetMatrix(GUI);
-    ClearScreen();
     DrawOverlay( 0.0f, 0.0f, 0.0f, 1.0f );
     DrawString( text, "FontW_m", 2.0f, 1.5f, AlignCenter, AlignCenter );
-    FlipBuffer();
 }
 
 void RenderSubSystem::DisplayLoadingScreen()
@@ -697,12 +703,12 @@ void RenderSubSystem::DisplayLoadingScreen()
     m_pTextureManager->FreeTexture("loading");
 }
 
-void RenderSubSystem::SetViewPosition( const Vector2D& pos, float zoom, float angle)
+void RenderSubSystem::SetViewPosition( const Vector2D& pos, float scale, float angle)
 {
     glLoadIdentity();
 
-    glRotatef( angle, 0.0, 0.0, -1.0f);
-    glScalef( zoom, zoom, 1 ); // x und y zoomen
+    glRotatef( radToDeg(angle), 0.0, 0.0, -1.0f);
+    glScalef( scale, scale, 1 ); // x und y zoomen
     glTranslatef( pos.x * -1, pos.y * -1, 0.0f);
 }
 

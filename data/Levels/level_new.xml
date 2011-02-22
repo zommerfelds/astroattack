@@ -1,66 +1,66 @@
 <?xml version="1.0"?>
 <level>
-	<Entity name="EdBlock00000">
-		<Component id="CompPhysics" name="std">
+	<entity name="EdBlock00000">
+		<component id="CompPhysics" name="std">
 			<damping linear="0" angular="0" />
 			<shape comp_name="shape1" density="0" friction="0.3" restitution="0" />
-		</Component>
-		<Component id="CompPosition" name="std" x="0" y="0" a="0" />
-		<Component id="CompShape" name="shape1">
+		</component>
+		<component id="CompPosition" name="std" x="0" y="0" a="0" />
+		<component id="CompShape" name="shape1">
 			<polygon>
 				<vertex x="2.5" y="-2" />
 				<vertex x="2" y="-3" />
 				<vertex x="3.5" y="-3" />
 				<vertex x="3" y="-2" />
 			</polygon>
-		</Component>
-		<Component id="CompVisualTexture" name="std">
+		</component>
+		<component id="CompVisualTexture" name="std">
 			<tex name="Ancient Stone Slabs" />
-		</Component>
-	</Entity>
-	<Entity name="EdBlock00001">
-		<Component id="CompPhysics" name="std">
+		</component>
+	</entity>
+	<entity name="EdBlock00001">
+		<component id="CompPhysics" name="std">
 			<damping linear="0" angular="0" />
 			<shape comp_name="shape1" density="0" friction="0.3" restitution="0" />
-		</Component>
-		<Component id="CompPosition" name="std" x="0" y="0" a="0" />
-		<Component id="CompShape" name="shape1">
+		</component>
+		<component id="CompPosition" name="std" x="0" y="0" a="0" />
+		<component id="CompShape" name="shape1">
 			<polygon>
 				<vertex x="-5" y="-5" />
 				<vertex x="-5" y="-10.5" />
 				<vertex x="-4.5" y="-10.5" />
 				<vertex x="-4.5" y="-5" />
 			</polygon>
-		</Component>
-		<Component id="CompVisualTexture" name="std">
+		</component>
+		<component id="CompVisualTexture" name="std">
 			<tex name="Plaster Blocks" />
-		</Component>
-	</Entity>
-	<Entity name="EdBlock00002">
-		<Component id="CompPhysics" name="std">
+		</component>
+	</entity>
+	<entity name="EdBlock00002">
+		<component id="CompPhysics" name="std">
 			<damping linear="0" angular="0" />
 			<shape comp_name="shape1" density="0" friction="0.3" restitution="0" />
-		</Component>
-		<Component id="CompPosition" name="std" x="0" y="0" a="0" />
-		<Component id="CompShape" name="shape1">
+		</component>
+		<component id="CompPosition" name="std" x="0" y="0" a="0" />
+		<component id="CompShape" name="shape1">
 			<polygon>
 				<vertex x="4.5" y="-5" />
 				<vertex x="4.5" y="-10.5" />
 				<vertex x="5" y="-10.5" />
 				<vertex x="5" y="-5" />
 			</polygon>
-		</Component>
-		<Component id="CompVisualTexture" name="std">
+		</component>
+		<component id="CompVisualTexture" name="std">
 			<tex name="Plaster Blocks" />
-		</Component>
-	</Entity>
-	<Entity name="EdBlock00003">
-		<Component id="CompPhysics" name="std">
+		</component>
+	</entity>
+	<entity name="EdBlock00003">
+		<component id="CompPhysics" name="std">
 			<damping linear="0" angular="0" />
 			<shape comp_name="shape1" density="0" friction="0.3" restitution="0" />
-		</Component>
-		<Component id="CompPosition" name="std" x="0" y="0" a="0" />
-		<Component id="CompShape" name="shape1">
+		</component>
+		<component id="CompPosition" name="std" x="0" y="0" a="0" />
+		<component id="CompShape" name="shape1">
 			<polygon>
 				<vertex x="-4.5" y="-5.5" />
 				<vertex x="4" y="-10.5" />
@@ -68,35 +68,35 @@
 				<vertex x="4.5" y="-10" />
 				<vertex x="-4" y="-5" />
 			</polygon>
-		</Component>
-		<Component id="CompVisualTexture" name="std">
+		</component>
+		<component id="CompVisualTexture" name="std">
 			<tex name="Plaster Blocks" />
-		</Component>
-	</Entity>
-	<Entity name="EdBlock00004">
-		<Component id="CompPhysics" name="std">
+		</component>
+	</entity>
+	<entity name="EdBlock00004">
+		<component id="CompPhysics" name="std">
 			<damping linear="0" angular="0" />
 			<shape comp_name="shape1" density="0" friction="0.3" restitution="0" />
-		</Component>
-		<Component id="CompPosition" name="std" x="0" y="0" a="0" />
-		<Component id="CompShape" name="shape1">
+		</component>
+		<component id="CompPosition" name="std" x="0" y="0" a="0" />
+		<component id="CompShape" name="shape1">
 			<polygon>
 				<vertex x="-4.5" y="-5" />
 				<vertex x="-4.5" y="-5.5" />
 				<vertex x="-4" y="-5" />
 			</polygon>
-		</Component>
-		<Component id="CompVisualTexture" name="std">
+		</component>
+		<component id="CompVisualTexture" name="std">
 			<tex name="Plaster Blocks" />
-		</Component>
-	</Entity>
-	<Entity name="EdBlock00005">
-		<Component id="CompPhysics" name="std">
+		</component>
+	</entity>
+	<entity name="EdBlock00005">
+		<component id="CompPhysics" name="std">
 			<damping linear="0" angular="0" />
 			<shape comp_name="shape1" density="0" friction="0.3" restitution="0" />
-		</Component>
-		<Component id="CompPosition" name="std" x="0" y="0" a="0" />
-		<Component id="CompShape" name="shape1">
+		</component>
+		<component id="CompPosition" name="std" x="0" y="0" a="0" />
+		<component id="CompShape" name="shape1">
 			<polygon>
 				<vertex x="4.5" y="-5" />
 				<vertex x="4" y="-5" />
@@ -105,59 +105,350 @@
 				<vertex x="-4" y="-10.5" />
 				<vertex x="4.5" y="-5.5" />
 			</polygon>
-		</Component>
-		<Component id="CompVisualTexture" name="std">
+		</component>
+		<component id="CompVisualTexture" name="std">
 			<tex name="Plaster Blocks" />
-		</Component>
-	</Entity>
-	<Entity name="EdBlock00006">
-		<Component id="CompPhysics" name="std">
+		</component>
+	</entity>
+	<entity name="EdBlock00006">
+		<component id="CompPhysics" name="std">
 			<damping linear="0" angular="0" />
 			<shape comp_name="shape1" density="0" friction="0.3" restitution="0" />
-		</Component>
-		<Component id="CompPosition" name="std" x="0" y="0" a="0" />
-		<Component id="CompShape" name="shape1">
+		</component>
+		<component id="CompPosition" name="std" x="0" y="0" a="0" />
+		<component id="CompShape" name="shape1">
 			<polygon>
 				<vertex x="-5" y="-1" />
 				<vertex x="-5" y="-3" />
 				<vertex x="-4" y="-3" />
 				<vertex x="-4" y="-1" />
 			</polygon>
-		</Component>
-		<Component id="CompVisualTexture" name="std">
+		</component>
+		<component id="CompVisualTexture" name="std">
 			<tex name="Ancient Stone Slabs" />
-		</Component>
-	</Entity>
-	<Entity name="ground">
-		<Component id="CompPhysics" name="std">
+		</component>
+	</entity>
+	<entity name="EdBlock00007">
+		<component id="CompPhysics" name="std">
 			<damping linear="0" angular="0" />
 			<shape comp_name="shape1" density="0" friction="0.3" restitution="0" />
-		</Component>
-		<Component id="CompPosition" name="std" x="0" y="-1" a="0" />
-		<Component id="CompShape" name="shape1">
+		</component>
+		<component id="CompPosition" name="std" x="0" y="0" a="0" />
+		<component id="CompShape" name="shape1">
+			<polygon>
+				<vertex x="-6.5" y="-10.5" />
+				<vertex x="-7" y="-14" />
+				<vertex x="2.5" y="-15.5" />
+				<vertex x="6.5" y="-12.5" />
+				<vertex x="5" y="-10.5" />
+			</polygon>
+		</component>
+		<component id="CompVisualTexture" name="std">
+			<tex name="Hunting Grounds" />
+		</component>
+	</entity>
+	<entity name="EdBlock00008">
+		<component id="CompPhysics" name="std">
+			<damping linear="0" angular="0" />
+			<shape comp_name="shape1" density="0" friction="0.3" restitution="0" />
+		</component>
+		<component id="CompPosition" name="std" x="0" y="0" a="0" />
+		<component id="CompShape" name="shape1">
+			<polygon>
+				<vertex x="6.5" y="-12.5" />
+				<vertex x="6" y="-10" />
+				<vertex x="5" y="-10.5" />
+			</polygon>
+		</component>
+		<component id="CompVisualTexture" name="std">
+			<tex name="Hunting Grounds" />
+		</component>
+	</entity>
+	<entity name="EdBlock00009">
+		<component id="CompPhysics" name="std">
+			<damping linear="0" angular="0" />
+			<shape comp_name="shape1" density="0" friction="0.3" restitution="0" />
+		</component>
+		<component id="CompPosition" name="std" x="0" y="0" a="0" />
+		<component id="CompShape" name="shape1">
+			<polygon>
+				<vertex x="2" y="-10.5" />
+				<vertex x="-1" y="-10" />
+				<vertex x="-3" y="-10.5" />
+			</polygon>
+		</component>
+		<component id="CompVisualTexture" name="std">
+			<tex name="Hunting Grounds" />
+		</component>
+	</entity>
+	<entity name="EdBlock00010">
+		<component id="CompPhysics" name="std">
+			<damping linear="0" angular="0" />
+			<shape comp_name="shape1" density="0" friction="0.3" restitution="0" />
+		</component>
+		<component id="CompPosition" name="std" x="0" y="0" a="0" />
+		<component id="CompShape" name="shape1">
+			<polygon>
+				<vertex x="-5" y="-10.5" />
+				<vertex x="-6" y="-9.5" />
+				<vertex x="-6.5" y="-10.5" />
+			</polygon>
+		</component>
+		<component id="CompVisualTexture" name="std">
+			<tex name="Hunting Grounds" />
+		</component>
+	</entity>
+	<entity name="EdBlock00011">
+		<component id="CompPhysics" name="std">
+			<damping linear="0" angular="0" />
+			<shape comp_name="shape1" density="0" friction="0.3" restitution="0" />
+		</component>
+		<component id="CompPosition" name="std" x="0" y="0" a="0" />
+		<component id="CompShape" name="shape1">
+			<polygon>
+				<vertex x="6.5" y="-12.5" />
+				<vertex x="12" y="-15" />
+				<vertex x="18" y="-8.5" />
+				<vertex x="12" y="-8" />
+			</polygon>
+		</component>
+		<component id="CompVisualTexture" name="std">
+			<tex name="Hunting Grounds" />
+		</component>
+	</entity>
+	<entity name="EdBlock00012">
+		<component id="CompPhysics" name="std">
+			<damping linear="0" angular="0" />
+			<shape comp_name="shape1" density="0" friction="0.3" restitution="0" />
+		</component>
+		<component id="CompPosition" name="std" x="0" y="0" a="0" />
+		<component id="CompShape" name="shape1">
+			<polygon>
+				<vertex x="6.5" y="-12.5" />
+				<vertex x="2.5" y="-15.5" />
+				<vertex x="2.5" y="-26" />
+				<vertex x="12" y="-26" />
+				<vertex x="12" y="-15" />
+			</polygon>
+		</component>
+		<component id="CompVisualTexture" name="std">
+			<tex name="Hunting Grounds" />
+		</component>
+	</entity>
+	<entity name="EdBlock00013">
+		<component id="CompPhysics" name="std">
+			<damping linear="0" angular="0" />
+			<shape comp_name="shape1" density="0" friction="0.3" restitution="0" />
+		</component>
+		<component id="CompPosition" name="std" x="0" y="0" a="0" />
+		<component id="CompShape" name="shape1">
+			<polygon>
+				<vertex x="-7" y="-14" />
+				<vertex x="-7" y="-26" />
+				<vertex x="2.5" y="-26" />
+				<vertex x="2.5" y="-15.5" />
+			</polygon>
+		</component>
+		<component id="CompVisualTexture" name="std">
+			<tex name="Hunting Grounds" />
+		</component>
+	</entity>
+	<entity name="EdBlock00014">
+		<component id="CompPhysics" name="std">
+			<damping linear="0" angular="0" />
+			<shape comp_name="shape1" density="0" friction="0.3" restitution="0" />
+		</component>
+		<component id="CompPosition" name="std" x="0" y="0" a="0" />
+		<component id="CompShape" name="shape1">
+			<polygon>
+				<vertex x="-7" y="-14.5" />
+				<vertex x="-11" y="-18.5" />
+				<vertex x="-11" y="-26" />
+				<vertex x="-7" y="-26" />
+			</polygon>
+		</component>
+		<component id="CompVisualTexture" name="std">
+			<tex name="Hunting Grounds" />
+		</component>
+	</entity>
+	<entity name="EdBlock00015">
+		<component id="CompPhysics" name="std">
+			<damping linear="0" angular="0" />
+			<shape comp_name="shape1" density="0" friction="0.3" restitution="0" />
+		</component>
+		<component id="CompPosition" name="std" x="0" y="0" a="0" />
+		<component id="CompShape" name="shape1">
+			<polygon>
+				<vertex x="-11" y="-18.5" />
+				<vertex x="-13" y="-22.5" />
+				<vertex x="-13.5" y="-25.5" />
+				<vertex x="-13.5" y="-26" />
+				<vertex x="-11" y="-26" />
+			</polygon>
+		</component>
+		<component id="CompVisualTexture" name="std">
+			<tex name="Hunting Grounds" />
+		</component>
+	</entity>
+	<entity name="EdBlock00016">
+		<component id="CompPhysics" name="std">
+			<damping linear="0" angular="0" />
+			<shape comp_name="shape1" density="0" friction="0.3" restitution="0" />
+		</component>
+		<component id="CompPosition" name="std" x="0" y="0" a="0" />
+		<component id="CompShape" name="shape1">
+			<polygon>
+				<vertex x="12" y="-8" />
+				<vertex x="18" y="-8.5" />
+				<vertex x="17.5" y="-7" />
+				<vertex x="16.5" y="-7" />
+			</polygon>
+		</component>
+		<component id="CompVisualTexture" name="std">
+			<tex name="Hunting Grounds" />
+		</component>
+	</entity>
+	<entity name="EdBlock00017">
+		<component id="CompPhysics" name="std">
+			<damping linear="0" angular="0" />
+			<shape comp_name="shape1" density="0" friction="0.3" restitution="0" />
+		</component>
+		<component id="CompPosition" name="std" x="0" y="0" a="0" />
+		<component id="CompShape" name="shape1">
+			<polygon>
+				<vertex x="16.5" y="-7" />
+				<vertex x="14.5" y="-6" />
+				<vertex x="12" y="-8" />
+			</polygon>
+		</component>
+		<component id="CompVisualTexture" name="std">
+			<tex name="Hunting Grounds" />
+		</component>
+	</entity>
+	<entity name="EdBlock00018">
+		<component id="CompPhysics" name="std">
+			<damping linear="0" angular="0" />
+			<shape comp_name="shape1" density="0" friction="0.3" restitution="0" />
+		</component>
+		<component id="CompPosition" name="std" x="0" y="0" a="0" />
+		<component id="CompShape" name="shape1">
+			<polygon>
+				<vertex x="12" y="-8" />
+				<vertex x="14.5" y="-6" />
+				<vertex x="13" y="-6.5" />
+			</polygon>
+		</component>
+		<component id="CompVisualTexture" name="std">
+			<tex name="Hunting Grounds" />
+		</component>
+	</entity>
+	<entity name="EdBlock00019">
+		<component id="CompPhysics" name="std">
+			<damping linear="0" angular="0" />
+			<shape comp_name="shape1" density="0" friction="0.3" restitution="0" />
+		</component>
+		<component id="CompPosition" name="std" x="0" y="0" a="0" />
+		<component id="CompShape" name="shape1">
+			<polygon>
+				<vertex x="12" y="-15" />
+				<vertex x="12" y="-26" />
+				<vertex x="22.5" y="-26" />
+				<vertex x="22.5" y="-10" />
+				<vertex x="18" y="-8.5" />
+			</polygon>
+		</component>
+		<component id="CompVisualTexture" name="std">
+			<tex name="Hunting Grounds" />
+		</component>
+	</entity>
+	<entity name="EdBlock00020">
+		<component id="CompPhysics" name="std">
+			<damping linear="0" angular="0" />
+			<shape comp_name="shape1" density="0" friction="0.3" restitution="0" />
+		</component>
+		<component id="CompPosition" name="std" x="0" y="0" a="0" />
+		<component id="CompShape" name="shape1">
+			<polygon>
+				<vertex x="22.5" y="-12" />
+				<vertex x="22.5" y="-26" />
+				<vertex x="31" y="-26" />
+				<vertex x="31" y="-12" />
+				<vertex x="28.5" y="-10.5" />
+				<vertex x="25.5" y="-11" />
+			</polygon>
+		</component>
+		<component id="CompVisualTexture" name="std">
+			<tex name="Hunting Grounds" />
+		</component>
+	</entity>
+	<entity name="EdBlock00021">
+		<component id="CompPhysics" name="std">
+			<damping linear="0" angular="0" />
+			<shape comp_name="shape1" density="0" friction="0.3" restitution="0" />
+		</component>
+		<component id="CompPosition" name="std" x="0" y="0" a="0" />
+		<component id="CompShape" name="shape1">
+			<polygon>
+				<vertex x="31" y="-12" />
+				<vertex x="31" y="-26" />
+				<vertex x="37.5" y="-26" />
+				<vertex x="37.5" y="-14.5" />
+				<vertex x="34.5" y="-12" />
+			</polygon>
+		</component>
+		<component id="CompVisualTexture" name="std">
+			<tex name="Hunting Grounds" />
+		</component>
+	</entity>
+	<entity name="EdBlock00022">
+		<component id="CompPhysics" name="std">
+			<damping linear="0" angular="0" />
+			<shape comp_name="shape1" density="0" friction="0.3" restitution="0" />
+		</component>
+		<component id="CompPosition" name="std" x="0" y="0" a="0" />
+		<component id="CompShape" name="shape1">
+			<polygon>
+				<vertex x="-16.5" y="-23.5" />
+				<vertex x="-16.5" y="-26" />
+				<vertex x="-13.5" y="-26" />
+				<vertex x="-13.5" y="-25.5" />
+				<vertex x="-15" y="-24" />
+			</polygon>
+		</component>
+		<component id="CompVisualTexture" name="std">
+			<tex name="Hunting Grounds" />
+		</component>
+	</entity>
+	<entity name="ground">
+		<component id="CompPhysics" name="std">
+			<damping linear="0" angular="0" />
+			<shape comp_name="shape1" density="0" friction="0.3" restitution="0" />
+		</component>
+		<component id="CompPosition" name="std" x="0" y="-1" a="0" />
+		<component id="CompShape" name="shape1">
 			<polygon>
 				<vertex x="-6.5" y="-2" />
 				<vertex x="-6.5" y="-4" />
 				<vertex x="6.5" y="-4" />
 				<vertex x="6.5" y="-2" />
 			</polygon>
-		</Component>
-		<Component id="CompVisualTexture" name="std">
+		</component>
+		<component id="CompVisualTexture" name="std">
 			<tex name="Plaster Blocks" />
-		</Component>
-	</Entity>
-	<Entity name="poste">
-		<Component id="CompPosition" name="std" x="0" y="0" a="0" />
-		<Component id="CompShape" name="shape1">
+		</component>
+	</entity>
+	<entity name="poste">
+		<component id="CompPosition" name="std" x="0" y="0" a="0" />
+		<component id="CompShape" name="shape1">
 			<polygon>
 				<vertex x="2.5" y="2.5" />
 				<vertex x="2.5" y="-2" />
 				<vertex x="3" y="-2" />
 				<vertex x="3" y="2.5" />
 			</polygon>
-		</Component>
-		<Component id="CompVisualTexture" name="std">
+		</component>
+		<component id="CompVisualTexture" name="std">
 			<tex name="Solar Plate" />
-		</Component>
-	</Entity>
+		</component>
+	</entity>
 </level>

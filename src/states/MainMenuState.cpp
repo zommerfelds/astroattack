@@ -276,9 +276,6 @@ void MainMenuState::Draw( float /*accumulator*/ )        // Spiel zeichnen
     RenderSubSystem* pRenderer = GetSubSystems().renderer.get();
     const Vector2D& mousePos = GetSubSystems().input->GetMousePos();
 
-    // Bildschirm leeren
-    pRenderer->ClearScreen();
-
     // Menühintergrund zeichnen
     {
         float texCoord[8] = { 0.0f, 0.0f,
@@ -332,8 +329,6 @@ void MainMenuState::Draw( float /*accumulator*/ )        // Spiel zeichnen
                                 (mousePos.x + w) * 4,  mousePos.y      * 3 };
         pRenderer->DrawTexturedQuad( texCoord, vertexCoord, "_cursor" );
     }
-
-    pRenderer->FlipBuffer(); // vom Backbuffer zum Frontbuffer wechseln (neues Bild zeigen)
 }
 
 void MainMenuState::CallbackButPlay()

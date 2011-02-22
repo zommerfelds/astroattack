@@ -18,7 +18,7 @@
 #include "states/MainMenuState.h"
 #include "Component.h"
 #include "states/PlayingState.h"
-
+#include "Texture.h"
 #include "Exception.h" // Ausnahmen im Program (werden in main.cpp eingefangen)
 
 #include <boost/shared_ptr.hpp>
@@ -26,6 +26,10 @@
 #include <boost/make_shared.hpp>
 #include <string>
 #include <iostream>
+
+#include "SDL.h"
+// cross platform OpenGL include (provided by SDL)
+#include "SDL_opengl.h"
 
 const char* cMainLogFileName = "data/config.xml";
 
@@ -38,6 +42,7 @@ GameApp::GameApp(const std::vector<std::string>& args) :
         m_eventConnection (),
         m_fpsMeasureStart ( 0 ),
         m_framesCounter ( 0 ),
+        m_fps ( 0 ),
         m_startGame ( true ),
         m_fullScreen ( false ),
         m_overRideFullScreen ( false )
@@ -116,6 +121,100 @@ void GameApp::Init()
     else
         gameState = boost::shared_ptr<PlayingState>( new PlayingState(*m_pSubSystems, m_levelToLoad) );
     m_pSubSystems->stateManager->ChangeState( gameState );
+}
+
+// SDL und Fenster initialisieren
+bool GameApp::InitSDL()
+{
+    gAaLog.Write ( "Initializing SDL... " );
+
+    if ( SDL_Init ( SDL_INIT_VIDEO | SDL_INIT_AUDIO ) == -1 )       // SDL initialisieren
+        return false;
+
+    SDL_WM_SetCaption ( GAME_NAME, NULL ); // Fensterbeschriftung
+    SDL_ShowCursor ( SDL_DISABLE ); // Standart SDL Mauszeiger ausblenden
+
+    // Events, die ignoriert werden können
+    SDL_EventState(SDL_MOUSEMOTION, SDL_IGNORE);
+    SDL_EventState(SDL_JOYAXISMOTION, SDL_IGNORE);
+    SDL_EventState(SDL_JOYBALLMOTION, SDL_IGNORE);
+    SDL_EventState(SDL_JOYHATMOTION, SDL_IGNORE);
+    SDL_EventState(SDL_JOYBUTTONDOWN, SDL_IGNORE);
+    SDL_EventState(SDL_JOYBUTTONUP, SDL_IGNORE);
+    SDL_EventState(SDL_VIDEORESIZE, SDL_IGNORE);
+    SDL_EventState(SDL_MOUSEBUTTONDOWN, SDL_IGNORE);
+    SDL_EventState(SDL_MOUSEBUTTONUP, SDL_IGNORE);
+
+    gAaLog.Write ( "[ Done ]\n" );
+
+    return true;
+}
+
+// Anzeige initialisieren
+bool GameApp::InitVideo()
+{
+    gAaLog.Write ( "Setting up video... " );
+
+    // Einige OpenGL Flags festlegen, bevor wir SDL_SetVideoMode() aufrufen
+    SDL_GL_SetAttribute ( SDL_GL_RED_SIZE, gAaConfig.GetInt("ScreenBpp")/4 );    // Grösse der Rotkomponente im Framebuffer, in Bits
+    SDL_GL_SetAttribute ( SDL_GL_GREEN_SIZE, gAaConfig.GetInt("ScreenBpp")/4 );  // Grösse der Greenkomponente im Framebuffer, in Bits
+    SDL_GL_SetAttribute ( SDL_GL_BLUE_SIZE, gAaConfig.GetInt("ScreenBpp")/4 );   // Grösse der Blaukomponente im Framebuffer, in Bits
+    SDL_GL_SetAttribute ( SDL_GL_ALPHA_SIZE, gAaConfig.GetInt("ScreenBpp")/4 );  // Grösse der Alphakomponente im Framebuffer, in Bits
+    SDL_GL_SetAttribute ( SDL_GL_DOUBLEBUFFER, 1 );                              // Double Buffering aktivieren
+    int AA = gAaConfig.GetInt("AntiAliasing");
+    if (AA!=0)
+    {
+        SDL_GL_SetAttribute ( SDL_GL_MULTISAMPLEBUFFERS, 1 );               // Full Screen Anti-Aliasing aktivieren und
+        SDL_GL_SetAttribute ( SDL_GL_MULTISAMPLESAMPLES, AA );              // auf AA mal stellen (Bsp. 4x)
+    }
+    else
+        SDL_GL_SetAttribute ( SDL_GL_MULTISAMPLEBUFFERS, 0 );
+    SDL_GL_SetAttribute( SDL_GL_SWAP_CONTROL, gAaConfig.GetInt("V-Sync") );
+
+    // Videomodus einrichten. Überprüfen ob es Fehler gab.
+    Uint32 flags = SDL_OPENGL;
+    if ( m_overRideFullScreen )
+    {
+        if ( m_fullScreen )
+            flags |= SDL_FULLSCREEN;
+    }
+    else if ( gAaConfig.GetInt("FullScreen") )
+        flags |= SDL_FULLSCREEN;
+
+    // set up screen
+    if ( !SDL_SetVideoMode ( gAaConfig.GetInt("ScreenWidth"), gAaConfig.GetInt("ScreenHeight"), gAaConfig.GetInt("ScreenBpp"), flags ) )
+        return false;
+
+    gAaLog.Write ( "[ Done ]\n\n" );
+
+    gAaLog.IncreaseIndentationLevel();
+    gAaLog.Write ( "Graphic card: %s (%s)\n", glGetString ( GL_RENDERER ), glGetString ( GL_VENDOR ) );
+    gAaLog.Write ( "OpenGL version: %s\n", glGetString ( GL_VERSION ) );
+
+    const SDL_VideoInfo* vidInfo = SDL_GetVideoInfo();
+
+    int value = 0;
+    SDL_GL_GetAttribute ( SDL_GL_BUFFER_SIZE, &value );
+    gAaConfig.SetInt( "ScreenBpp", value );
+    gAaLog.Write ( "Resolution: %dx%d\n", vidInfo->current_w, vidInfo->current_h );
+    gAaLog.Write ( "Widescreen: %s\n", (gAaConfig.GetInt("WideScreen")?"on":"off") );
+    gAaLog.Write ( "Bits per pixel: %d\n", value );
+    SDL_GL_GetAttribute ( SDL_GL_DOUBLEBUFFER, &value );
+    gAaLog.Write ( "Double buffer: %s\n", (value?"on":"off") );
+    value = 1;
+    SDL_GL_GetAttribute ( SDL_GL_MULTISAMPLESAMPLES, &value );
+    gAaConfig.SetInt("AntiAliasing",value);
+    if (value==1)
+        gAaLog.Write ( "Anti-aliasing: off\n" );
+    else
+        gAaLog.Write ( "Anti-aliasing: %dx\n", value );
+    SDL_GL_GetAttribute ( SDL_GL_SWAP_CONTROL, &value );
+    gAaConfig.SetInt("V-Sync",value);
+    value = 1;
+    gAaLog.Write ( "V-Sync: %s\n\n", (value?"on":"off") );
+    gAaLog.DecreaseIndentationLevel();
+
+    return true;
 }
 
 // Alles deinitialisieren
@@ -216,7 +315,10 @@ void GameApp::MainLoop()
             accumulator_secs -= PHYS_DELTA_TIME/*+0.3f*/;
         }
 
+        m_pSubSystems->renderer->ClearScreen();
         DRAW( accumulator_secs/*/(PHYS_DELTA_TIME+0.3f)*PHYS_DELTA_TIME*/ ); // Spiel zeichnen
+        m_pSubSystems->renderer->DrawFPS(m_fps);
+        m_pSubSystems->renderer->FlipBuffer();
     }
 
     ////////////////////////////////////////////////////////
@@ -285,14 +387,13 @@ void GameApp::HandleSdlQuitEvents( SDL_Event& rSdlEvent, bool& rQuit )
 
 // Framerate aktualisieren (Frames pro Sekunde)
 // Einmal pro frame aufrufen
-void GameApp::CalcFPS( Uint32 curTime )
+void GameApp::CalcFPS( unsigned int curTime )
 {
     if ( m_fpsMeasureStart + 1000 < curTime )
     {
         // m_framesCounter ist jetzt die Anzahl Frames in dieser Sekunde, also die FPS
-
-        gAaLog.Write ( "FPS: %i\n", m_framesCounter );
-        //cerr << "FPS: " << m_framesCounter << endl;
+        m_fps = m_framesCounter;
+        gAaLog.Write ( "FPS: %i\n", m_fps );
         m_framesCounter = 0;
         m_fpsMeasureStart = SDL_GetTicks();
     }
