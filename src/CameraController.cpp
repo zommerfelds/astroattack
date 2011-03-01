@@ -10,7 +10,6 @@
 #include "CameraController.h"
 #include "Input.h"
 #include "World.h"
-#include "Vector2D.h"
 #include "Entity.h"
 #include "Renderer.h"
 #include "main.h"
@@ -40,7 +39,7 @@ const float cTimeTillAnimSwitchHeadingIsPossible = 0.2f;
 
 // Konstruktor
 CameraController::CameraController( const InputSubSystem& inputSubSystem, RenderSubSystem& renderSubSystem, const GameWorld& world )
-  : m_pPosition ( new Vector2D ),
+  : m_position (),
     m_zoom ( 1.0f ),
     m_rotation ( 0.0f ),
     m_viewWidth ( gAaConfig.GetInt("WideScreen")?STDViewWidth_8_5:STDViewWidth_4_3 ),
@@ -52,8 +51,8 @@ CameraController::CameraController( const InputSubSystem& inputSubSystem, Render
     m_timeSinceLastSwitchHeading ( 0 ),
     m_playerHeading ( 0 ),
     m_isMovingSmoothly ( false ),
-    m_pCameraDeparture ( new Vector2D ),
-    m_pCameraDestination ( new Vector2D ),
+    m_cameraDeparture (),
+    m_cameraDestination (),
     m_moveTimeElapsed ( 0.0f ),
     m_moveTotalTimeToArrive ( 0.0f ),
     m_isRotatingSmoothly ( false ),
@@ -62,8 +61,6 @@ CameraController::CameraController( const InputSubSystem& inputSubSystem, Render
     m_rotateTimeElapsed ( 0.0f ),
     m_rotateTotalTimeToArrive ( 0.0f )
 {}
-
-CameraController::~CameraController() {}
 
 namespace
 {
@@ -162,7 +159,7 @@ void CameraController::Update ( float deltaTime ) // time_span in seconds
 
         // Neue Position der Kamera berechnen
         // Geradengleichung: r = a + t*b      | a = Start, b = Zielrichtung, t = Skalar
-        Vector2D new_pos = *m_pCameraDeparture + ( *m_pCameraDestination-*m_pCameraDeparture ) *t;
+        Vector2D new_pos = m_cameraDeparture + ( m_cameraDestination-m_cameraDeparture ) *t;
 
         MoveAbsolute( new_pos, 0.0f ); // Kameraposition ein wenig gegen richtung Ziel verschieben
     }
@@ -218,9 +215,9 @@ void CameraController::Update ( float deltaTime ) // time_span in seconds
                 const float cPosFollowQuicknessFactor = 15.0f; // how fast the camera moves to the new position
                 const float cRangeOfSightFactor = 6.0f; // how far the mouse can move the camera away from the player
 
-                Vector2D posTargetDiff = playerPos + cursorPos * cRangeOfSightFactor - *m_pPosition;
+                Vector2D posTargetDiff = playerPos + cursorPos * cRangeOfSightFactor - m_position;
                 Vector2D posVelocity = posTargetDiff * cPosFollowQuicknessFactor;
-                *m_pPosition += posVelocity * deltaTime;
+                m_position += posVelocity * deltaTime;
 
                 // calculate new camera zoom
                 // the zoom depends on the mouse cursor position and on the players velocity
@@ -318,14 +315,14 @@ void CameraController::MoveRelative( const Vector2D& rMove, float timeToArrive )
     if ( timeToArrive > 0.0f)
     {
         m_isMovingSmoothly = true;
-        *m_pCameraDeparture = *m_pPosition;
-        *m_pCameraDestination = rMove + *m_pCameraDeparture;
+        m_cameraDeparture = m_position;
+        m_cameraDestination = rMove + m_cameraDeparture;
         m_moveTotalTimeToArrive = timeToArrive;
         m_moveTimeElapsed = 0.0;
     }
     else
 	{
-        *m_pPosition += rMove;
+        m_position += rMove;
 	}
 }
 
@@ -334,14 +331,14 @@ void CameraController::MoveAbsolute( const Vector2D& rPos, float timeToArrive )
     if ( timeToArrive > 0.0f)
     {
         m_isMovingSmoothly = true;
-        *m_pCameraDeparture = *m_pPosition;
-        *m_pCameraDestination = rPos;
+        m_cameraDeparture = m_position;
+        m_cameraDestination = rPos;
         m_moveTotalTimeToArrive = timeToArrive;
         m_moveTimeElapsed = 0.0;
     }
     else
 	{
-        *m_pPosition = rPos;
+        m_position = rPos;
 	}
 }
 
@@ -397,12 +394,12 @@ void CameraController::SetZoom( float zoom )
 
 void CameraController::Look() const
 {
-    m_renderSubSystem.SetViewPosition(*m_pPosition, m_zoom, m_rotation);
+    m_renderSubSystem.SetViewPosition(m_position, m_zoom, m_rotation);
 }
 
 const Vector2D& CameraController::GetCameraPos() const
 {
-    return *m_pPosition;
+    return m_position;
 }
 
 float CameraController::GetCameraAngle() const
@@ -423,13 +420,13 @@ Vector2D CameraController::ScreenToWorld( const Vector2D& screenPos )
                                            -( screenPos.y - 0.5f ) * m_viewHeight );
     middle_of_screen_to_screenPos.Rotate( m_rotation );
 
-    return *m_pPosition + middle_of_screen_to_screenPos;
+    return m_position + middle_of_screen_to_screenPos;
 }
 
 Vector2D CameraController::WorldToScreen( const Vector2D& worldPos )
 {
-    Vector2D screenPos ( (worldPos.x - m_pPosition->x),
-                         (worldPos.y - m_pPosition->y) );
+    Vector2D screenPos ( (worldPos.x - m_position.x),
+                         (worldPos.y - m_position.y) );
     screenPos.Rotate( -m_rotation );
 
     screenPos.x /= m_viewWidth;

@@ -9,6 +9,7 @@
 
 * Medium priority *
 
+- Test Init() => DeInit() => Init() on GameApp and SubSystems
 - time accumulator... (very unstable when put delay on main loop)
 - improve logger
 - asynchonous fading out music (separate thread)
@@ -21,7 +22,6 @@
 - Konkave Polygone im Editor
 - Fehlerchecking und Beschreibung beim Level Laden
 - Check widescreen mode
-- Use pimpl pattern
 - Handle UTF-8 symbols in the slide show state (a multi-byte character is treated as single bytes)
 
 

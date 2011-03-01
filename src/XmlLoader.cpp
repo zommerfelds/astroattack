@@ -31,7 +31,6 @@
 #include "states/SlideShowState.h"
 
 #include <sstream>
-//#include <boost/scoped_ptr.hpp>
 #include <boost/bind.hpp>
 #include <boost/make_shared.hpp>
 
@@ -84,7 +83,7 @@ void XmlLoader::LoadXmlToWorld( const char* pFileName, GameWorld& gameWorld, Sub
             }
             else if ( compId == "CompPlayerController" )
             {
-                component = CompPlayerController::LoadFromXml( compElem, subSystems.input.get(), gameWorld.GetItToVariable( "JetpackEnergy" ) );
+                component = CompPlayerController::LoadFromXml( compElem, subSystems.input, gameWorld.GetItToVariable( "JetpackEnergy" ) );
             }
             else if ( compId == "CompPosition" )
             {
@@ -92,7 +91,7 @@ void XmlLoader::LoadXmlToWorld( const char* pFileName, GameWorld& gameWorld, Sub
             }
             else if ( compId == "CompVisualAnimation" )
             {
-                component = CompVisualAnimation::LoadFromXml( compElem, subSystems.renderer->GetAnimationManager() );
+                component = CompVisualAnimation::LoadFromXml( compElem, subSystems.renderer.GetAnimationManager() );
             }
             else if ( compId == "CompVisualTexture" )
             {

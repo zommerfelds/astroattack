@@ -17,9 +17,8 @@
 #include "../Component.h"
 #include "../Texture.h"
 #include "../GameEvents.h"
-#include <boost/scoped_ptr.hpp>
 
-class Vector2D;
+#include "../Vector2D.h"
 namespace pugi { class xml_node; }
 
 //--------------------------------------------//
@@ -29,7 +28,6 @@ class CompVisualAnimation : public Component
 {
 public:
     CompVisualAnimation( const AnimInfo* pAnimInfo );
-    ~CompVisualAnimation(); // need to implement destructor manually because of scoped_ptr (incomplete type)
 
     const CompIdType& ComponentId() const { return COMPONENT_ID; }
 	static const CompIdType COMPONENT_ID;
@@ -38,7 +36,7 @@ public:
     TextureIdType GetCurrentTexture() const;
 
     // Die Mitte der Animation (relativ zur Position der Einheit)
-    Vector2D* Center() { return m_center.get(); }
+    const Vector2D& Center() { return m_center; }
 
     // Dimensionen (Grösse)
     void SetDimensions( float hw, float hh ) { m_halfWidth = hw; m_halfHeight = hh; }
@@ -73,7 +71,7 @@ private:
     EventConnection m_eventConnection;
 
     // für Anzeige
-    boost::scoped_ptr<Vector2D> m_center;
+    Vector2D m_center;
     float m_halfWidth;
     float m_halfHeight;
 

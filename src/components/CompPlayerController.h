@@ -22,22 +22,19 @@ class CompPhysics;
 
 class InputSubSystem; // benötigt Eingabesystem für die Tasten zu lesen
 
-//--------------------------------------------//
-//------ CompPlayerController Klasse ---------//
-//--------------------------------------------//
 class CompPlayerController : public Component
 {
 public:
-    CompPlayerController( const InputSubSystem*, std::map<const std::string, int>::iterator itJetPackVar );
+    CompPlayerController( const InputSubSystem&, std::map<const std::string, int>::iterator itJetPackVar );
 
     const CompIdType& ComponentId() const { return COMPONENT_ID; }
     static const CompIdType COMPONENT_ID;
 
-    static boost::shared_ptr<CompPlayerController> LoadFromXml(const pugi::xml_node& compElem, const InputSubSystem*, std::map<const std::string, int>::iterator itJetPackVar);
+    static boost::shared_ptr<CompPlayerController> LoadFromXml(const pugi::xml_node& compElem, const InputSubSystem&, std::map<const std::string, int>::iterator itJetPackVar);
     virtual void WriteToXml(pugi::xml_node&) const {}; // this component has no XML data
 
 private:
-    const InputSubSystem* m_pInputSubSystem;
+    const InputSubSystem& m_inputSubSystem;
 
     // Hier werden alle nötigen aktionen Durgeführt pro Aktualisierung
     void OnUpdate();
@@ -56,12 +53,6 @@ private:
     float m_bodyAngleAbs;            // Neigungswinkel Absolut (0:Kopf nach links,cPi/2:Kopf nach oben,-cPi/2:Kopf nach unten)
                                 // TODO: use rel angle and delete this variable
     int m_walkingTime; // number of updates the player is walking (pressing walk key on ground)
-
-
-
 };
-//--------------------------------------------//
-//---- Ende CompPlayerController Klasse ------//
-//--------------------------------------------//
 
 #endif

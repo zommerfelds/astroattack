@@ -13,10 +13,9 @@
 #include "../GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
 
 #include "../Component.h"
-#include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>
 
-class Vector2D;
+#include "../Vector2D.h"
 namespace pugi { class xml_node; }
 
 //--------------------------------------------//
@@ -26,7 +25,6 @@ class CompPosition : public Component
 {
 public:
     CompPosition();
-    ~CompPosition(); // need to implement destructor manually because of scoped_ptr (incomplete type)
 
     // Base component methods
 	const CompIdType& FamilyID() const { return COMPONENT_ID; }
@@ -48,7 +46,7 @@ public:
 private:
     void OnUpdate();
 
-    boost::scoped_ptr<Vector2D> m_pPosition;
+    Vector2D m_position;
     float m_orientation;
 };
 //--------------------------------------------//

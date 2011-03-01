@@ -8,9 +8,6 @@
 #include "EditorState.h"
 
 #include "../GameApp.h"
-#include "../Vector2D.h"
-#include "../World.h"
-#include "../CameraController.h"
 #include "../Renderer.h"
 #include "../Input.h"
 #include "../main.h"
@@ -33,8 +30,8 @@ const StateIdType EditorState::stateId = "EditorState";
 
 EditorState::EditorState( SubSystems& subSystems )
 : GameState( subSystems ),
-  m_pGameWorld ( new GameWorld( *GetSubSystems().events ) ),
-  m_pGameCamera ( new CameraController( *GetSubSystems().input, *GetSubSystems().renderer, *m_pGameWorld ) ),
+  m_gameWorld ( GetSubSystems().events ),
+  m_cameraController ( GetSubSystems().input, GetSubSystems().renderer, m_gameWorld ),
   m_currentPoint ( 0 ),
   m_currentTexture (),
   m_currentTextureNum ( 0 ),
@@ -46,12 +43,7 @@ EditorState::EditorState( SubSystems& subSystems )
   m_prevTextureKeyDownOld ( false ),
   m_helpKeyDownOld ( false )
 {
-    for ( int i = 0; i < 8; ++i )
-    {
-        m_pClickedPoints[i].reset( new Vector2D );
-    }
-
-    std::vector<std::string> texList = GetSubSystems().renderer->GetTextureManager().GetTextureList();
+    std::vector<std::string> texList = GetSubSystems().renderer.GetTextureManager().GetTextureList();
     unsigned int i = 0;
     for ( ; i < texList.size(); ++i )
     {                
@@ -66,25 +58,20 @@ EditorState::EditorState( SubSystems& subSystems )
         gAaLog.Write ( "Warning: No textures found for editor!\n" );
 }
 
-EditorState::~EditorState() {}
-
 void EditorState::Init()        // State starten
 {
-    m_pGameCamera->Init();
-    m_pGameCamera->SetFollowPlayer ( false );
+    m_cameraController.Init();
+    m_cameraController.SetFollowPlayer ( false );
 
     XmlLoader loader;
-    loader.LoadXmlToWorld( gAaConfig.GetString("EditorLevel").c_str(), *m_pGameWorld, GetSubSystems() );
+    loader.LoadXmlToWorld( gAaConfig.GetString("EditorLevel").c_str(), m_gameWorld, GetSubSystems() );
 }
 
 void EditorState::Cleanup()     // State abbrechen
 {
     // Grafiken aus XML-Datei laden
     XmlLoader xml;
-    xml.SaveWorldToXml( gAaConfig.GetString("EditorLevel").c_str(), *m_pGameWorld );
-
-    m_pGameWorld.reset();
-    m_pGameCamera.reset();
+    xml.SaveWorldToXml( gAaConfig.GetString("EditorLevel").c_str(), m_gameWorld );
 }
 
 void EditorState::Pause()       // State anhalten
@@ -97,8 +84,8 @@ void EditorState::Resume()      // State wiederaufnehmen
 
 void EditorState::Frame( float deltaTime )       // Pro Frame
 {
-    GetSubSystems().input->Update();   // neue Eingaben lesen
-    m_pGameCamera->Update( deltaTime ); // Kamera updaten
+    GetSubSystems().input.Update();   // neue Eingaben lesen
+    m_cameraController.Update( deltaTime ); // Kamera updaten
 }
 
 namespace
@@ -127,12 +114,12 @@ void SnapToGrid( Vector2D& worldCoordinates )
 
 void EditorState::Update()      // Spiel aktualisieren
 {
-    if ( GetSubSystems().input->LMouseKeyState() )
+    if ( GetSubSystems().input.LMouseKeyState() )
     {
         if ( m_mouseButDownOld == false && m_currentPoint < 8 )
         {
-            *m_pClickedPoints[m_currentPoint] = m_pGameCamera->ScreenToWorld( GetSubSystems().input->GetMousePos() );
-            SnapToGrid( *m_pClickedPoints[m_currentPoint] );
+            m_clickedPoints[m_currentPoint] = m_cameraController.ScreenToWorld( GetSubSystems().input.GetMousePos() );
+            SnapToGrid( m_clickedPoints[m_currentPoint] );
             ++m_currentPoint;
         }
         m_mouseButDownOld = true;
@@ -140,12 +127,12 @@ void EditorState::Update()      // Spiel aktualisieren
     else
         m_mouseButDownOld = false;
 
-    if ( GetSubSystems().input->KeyState( EditorCancelBlock ) )
+    if ( GetSubSystems().input.KeyState( EditorCancelBlock ) )
     {
         m_currentPoint = 0;
     }
 
-    if ( GetSubSystems().input->KeyState( EditorCancelVertex ) )
+    if ( GetSubSystems().input.KeyState( EditorCancelVertex ) )
     {
         if ( m_cancelVertexKeyDownOld == false && m_currentPoint > 0 )
             --m_currentPoint;
@@ -154,7 +141,7 @@ void EditorState::Update()      // Spiel aktualisieren
     else
         m_cancelVertexKeyDownOld = false;
 
-    if ( GetSubSystems().input->KeyState( EditorCreateEntity ) )
+    if ( GetSubSystems().input.KeyState( EditorCreateEntity ) )
     {
         if ( m_createEntityKeyDownOld == false && m_currentPoint > 2 )
         {
@@ -166,7 +153,7 @@ void EditorState::Update()      // Spiel aktualisieren
                 ss.fill('0');
                 ss.width(5);
                 ss << i;
-                if ( !m_pGameWorld->GetEntity( ss.str() ) )
+                if ( !m_gameWorld.GetEntity( ss.str() ) )
                 {
                     entityName = ss.str();
                     break;
@@ -185,7 +172,7 @@ void EditorState::Update()      // Spiel aktualisieren
             compShape->SetName("shape1");
             for ( int i = 0; i < m_currentPoint; ++i )
             {
-            	compShape->SetVertex(i, *m_pClickedPoints[i]);
+            	compShape->SetVertex(i, m_clickedPoints[i]);
             }
             pEntity->AddComponent( compShape );
 
@@ -196,7 +183,7 @@ void EditorState::Update()      // Spiel aktualisieren
             boost::shared_ptr<CompVisualTexture> compPolyTex = boost::make_shared<CompVisualTexture>(textureName);
             pEntity->AddComponent( compPolyTex );
 
-            m_pGameWorld->AddEntity( pEntity );
+            m_gameWorld.AddEntity( pEntity );
 
             m_currentPoint = 0;
         }
@@ -205,12 +192,12 @@ void EditorState::Update()      // Spiel aktualisieren
     else
         m_createEntityKeyDownOld = false;
 
-    if ( GetSubSystems().input->KeyState( EditorNextTexture ) )
+    if ( GetSubSystems().input.KeyState( EditorNextTexture ) )
     {
         if ( !m_nextTextureKeyDownOld )
         {
             unsigned int old_currentTextureNum = m_currentTextureNum;
-            std::vector<std::string> texList ( GetSubSystems().renderer->GetTextureManager().GetTextureList() );
+            std::vector<std::string> texList ( GetSubSystems().renderer.GetTextureManager().GetTextureList() );
             do
             {
                 ++m_currentTextureNum;
@@ -226,11 +213,11 @@ void EditorState::Update()      // Spiel aktualisieren
     else
         m_nextTextureKeyDownOld = false;
 
-    if ( GetSubSystems().input->KeyState( EditorPrevTexture ) )
+    if ( GetSubSystems().input.KeyState( EditorPrevTexture ) )
     {
         if ( !m_prevTextureKeyDownOld )
         {
-            std::vector<std::string> texList = GetSubSystems().renderer->GetTextureManager().GetTextureList();
+            std::vector<std::string> texList = GetSubSystems().renderer.GetTextureManager().GetTextureList();
             unsigned int old_currentTextureNum = m_currentTextureNum;
             do
             {                
@@ -248,7 +235,7 @@ void EditorState::Update()      // Spiel aktualisieren
     else
         m_prevTextureKeyDownOld = false;
 
-    if ( GetSubSystems().input->KeyState( EditorToggleHelp ) )
+    if ( GetSubSystems().input.KeyState( EditorToggleHelp ) )
     {
         if ( m_helpKeyDownOld == false )
             m_helpTextOn = !m_helpTextOn;
@@ -260,13 +247,13 @@ void EditorState::Update()      // Spiel aktualisieren
 
 void EditorState::Draw( float accumulator )        // Spiel zeichnen
 {
-    GetSubSystems().physics->CalculateSmoothPositions(accumulator);
+    GetSubSystems().physics.CalculateSmoothPositions(accumulator);
 
-    RenderSubSystem& renderer = *GetSubSystems().renderer;
+    RenderSubSystem& renderer = GetSubSystems().renderer;
 
     // Weltmodus
     renderer.SetMatrix(RenderSubSystem::World);
-    m_pGameCamera->Look();
+    m_cameraController.Look();
 
     // Texturen zeichnen
     renderer.DrawVisualTextureComps();
@@ -276,10 +263,10 @@ void EditorState::Draw( float accumulator )        // Spiel zeichnen
     renderer.GetTextureManager().Clear();
 
     for ( int i = 0; i < m_currentPoint-1; ++i )
-        renderer.DrawVector( *m_pClickedPoints[i+1] - *m_pClickedPoints[i], *m_pClickedPoints[i] );
+        renderer.DrawVector( m_clickedPoints[i+1] - m_clickedPoints[i], m_clickedPoints[i] );
     if ( m_currentPoint > 1 )
     {
-        renderer.DrawVector( *m_pClickedPoints[0] - *m_pClickedPoints[m_currentPoint-1], *m_pClickedPoints[m_currentPoint-1] );
+        renderer.DrawVector( m_clickedPoints[0] - m_clickedPoints[m_currentPoint-1], m_clickedPoints[m_currentPoint-1] );
     }
     
     // GUI modus (Grafische Benutzeroberfläche)
@@ -316,7 +303,7 @@ void EditorState::Draw( float accumulator )        // Spiel zeichnen
     }
 
     // Fadenkreuz zeichnen
-    Vector2D mousePos = GetSubSystems().input->GetMousePos();
+    Vector2D mousePos = GetSubSystems().input.GetMousePos();
 
     renderer.GetTextureManager().Clear();
 
@@ -334,9 +321,9 @@ void EditorState::Draw( float accumulator )        // Spiel zeichnen
         renderer.DrawString( m_currentTexture, "FontW_s", 0.09f, 2.91f );
     }
 
-    mousePos = m_pGameCamera->ScreenToWorld(mousePos);
+    mousePos = m_cameraController.ScreenToWorld(mousePos);
     SnapToGrid( mousePos );
-    mousePos = m_pGameCamera->WorldToScreen(mousePos);
+    mousePos = m_cameraController.WorldToScreen(mousePos);
     mousePos.x = mousePos.x * 4.0f;
     mousePos.y = mousePos.y * 3.0f;
 

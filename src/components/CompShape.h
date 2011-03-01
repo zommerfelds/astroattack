@@ -13,10 +13,9 @@
 #include "../Component.h"
 
 #include <boost/shared_ptr.hpp>
-#include <boost/scoped_ptr.hpp>
 #include <vector>
 
-class Vector2D;
+#include "../Vector2D.h"
 namespace pugi { class xml_node; }
 class b2Shape;
 
@@ -49,8 +48,6 @@ public:
 class CompShapePolygon : public CompShape
 {
 public:
-    ~CompShapePolygon(); // need to implement destructor manually because of scoped_ptr (incomplete type)
-
     static boost::shared_ptr<CompShapePolygon> LoadFromXml(const pugi::xml_node& polyElem);
     void WriteToXml(pugi::xml_node& compElem) const;
 
@@ -66,7 +63,7 @@ public:
     static const unsigned int cMaxVertices = 8;
 
 private:
-    std::vector<boost::shared_ptr<Vector2D> > m_vertices;
+    std::vector<Vector2D> m_vertices;
 };
 //--------------------------------------------//
 //----- End of CompShapePolygon class   ------//
@@ -80,7 +77,6 @@ class CompShapeCircle : public CompShape
 public:
 	CompShapeCircle();
 	CompShapeCircle(const Vector2D& center, float radius);
-	~CompShapeCircle(); // need to implement destructor manually because of scoped_ptr (incomplete type)
 
     static boost::shared_ptr<CompShapeCircle> LoadFromXml(const pugi::xml_node& circleElem);
     void WriteToXml(pugi::xml_node& compElem) const;
@@ -88,12 +84,12 @@ public:
     boost::shared_ptr<b2Shape> toB2Shape() const;
 
     float GetRadius() const { return m_radius; }
-    const Vector2D& GetCenter() const { return *m_center; }
+    const Vector2D& GetCenter() const { return m_center; }
 
     Type GetType() const { return Circle; }
 
 private:
-    boost::scoped_ptr<Vector2D> m_center;
+    Vector2D m_center;
     float m_radius;
 };
 //--------------------------------------------//

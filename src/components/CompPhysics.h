@@ -16,7 +16,6 @@
 
 #include "../Component.h"
 #include "../Vector2D.h"
-#include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>
 #include <vector>
 #include <map>
@@ -26,8 +25,6 @@ namespace pugi { class xml_node; }
 // Klassen und Strukturen von Box2D
 class b2Body;
 class b2Fixture;
-struct b2BodyDef;
-struct b2FixtureDef;
 
 class CompGravField;
 class CompPhysics;

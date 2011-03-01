@@ -229,8 +229,8 @@ void TextureManager::Clear()
     glDisable(GL_TEXTURE_2D);
 }
 
-AnimationManager::AnimationManager( TextureManager* pTM )
-: m_pTM( pTM )
+AnimationManager::AnimationManager( TextureManager& tm )
+: m_texManager( tm )
 {
 }
 
@@ -279,7 +279,7 @@ void AnimationManager::LoadAnimation( const char* name, AnimationIdType id,const
             digits_str << i;
             std::string file_to_load = path + prefix + digits_str.str() + suffix;
             TextureIdType tex_id = std::string("_")+id+digits_str.str();
-            m_pTM->LoadTexture(file_to_load,tex_id,texInfo,quality);
+            m_texManager.LoadTexture(file_to_load,tex_id,texInfo,quality);
         }
         pAnimInfo->totalFrames = num_frames;
         pAnimInfo->numDigits = num_digits;
@@ -335,6 +335,6 @@ void AnimationManager::FreeAnimation( AnimationIdType id )
         digits_str.fill('0');
         digits_str.width(animInfo->numDigits);
         digits_str << i;
-        m_pTM->FreeTexture( animInfo->name + digits_str.str() );
+        m_texManager.FreeTexture( animInfo->name + digits_str.str() );
     }
 }

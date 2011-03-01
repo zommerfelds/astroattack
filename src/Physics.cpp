@@ -29,34 +29,24 @@ const int PHYS_ITERATIONS = 10;
 // Number of game updates a CompPhysics has to wait till it can change to an other GravField
 const unsigned int cUpdatesTillGravFieldChangeIsPossible = 10;
 
-PhysicsSubSystem::PhysicsSubSystem( GameEvents* pGameEvents)
-: m_pGravitationalAcc ( new Vector2D ), m_eventConnection1 (), m_eventConnection2 (),
-  m_eventConnection3 (), m_eventConnection4 (), m_pGameEvents ( pGameEvents ), m_world (),
-  m_timeStep ( PHYS_DELTA_TIME ), m_velocityIterations( PHYS_ITERATIONS ), m_positionIterations( PHYS_ITERATIONS )
+PhysicsSubSystem::PhysicsSubSystem( GameEvents& gameEvents)
+: m_pGravitationalAcc (), m_eventConnection1 (), m_eventConnection2 (),
+  m_eventConnection3 (), m_eventConnection4 (), m_gameEvents ( gameEvents ),
+  m_world (b2Vec2(0.0f, 0.0f), true), m_timeStep ( PHYS_DELTA_TIME ),
+  m_velocityIterations( PHYS_ITERATIONS ), m_positionIterations( PHYS_ITERATIONS )
 {
-    // Gravitationsvektor
-    //b2Vec2 gravity(0.0f, -25.0f);
-	b2Vec2 gravity(0.0f, 0.0f);
-
-    // Dürfen Körpern "schlafen"? (in ein Ruhezustand gesetzt werden, wo nicht mehr gerechnet wird)
-    bool doSleep = true;
-
-    // Weltobjekt initialisieren, das die physikalische Simulation speichert und urchführt
-    m_world.reset( new b2World(gravity, doSleep) );
 }
-
-PhysicsSubSystem::~PhysicsSubSystem() {}
 
 // PhysicsSubSystem initialisieren
 void PhysicsSubSystem::Init()
 {
-    m_eventConnection1 = m_pGameEvents->newEntity.RegisterListener( boost::bind( &PhysicsSubSystem::RegisterPhysicsComp, this, _1 ) );
-    m_eventConnection2 = m_pGameEvents->deleteEntity.RegisterListener( boost::bind( &PhysicsSubSystem::UnregisterPhysicsComp, this, _1 ) );
-    m_eventConnection3 = m_pGameEvents->newEntity.RegisterListener( boost::bind( &PhysicsSubSystem::RegisterGravFieldComp, this, _1 ) );
-    m_eventConnection4 = m_pGameEvents->deleteEntity.RegisterListener( boost::bind( &PhysicsSubSystem::UnregisterGravFieldComp, this, _1 ) );
+    m_eventConnection1 = m_gameEvents.newEntity.RegisterListener( boost::bind( &PhysicsSubSystem::RegisterPhysicsComp, this, _1 ) );
+    m_eventConnection2 = m_gameEvents.deleteEntity.RegisterListener( boost::bind( &PhysicsSubSystem::UnregisterPhysicsComp, this, _1 ) );
+    m_eventConnection3 = m_gameEvents.newEntity.RegisterListener( boost::bind( &PhysicsSubSystem::RegisterGravFieldComp, this, _1 ) );
+    m_eventConnection4 = m_gameEvents.deleteEntity.RegisterListener( boost::bind( &PhysicsSubSystem::UnregisterGravFieldComp, this, _1 ) );
 
-    m_pGravitationalAcc->x = 0.0f;
-    m_pGravitationalAcc->y = -25.0f;
+    m_pGravitationalAcc.x = 0.0f;
+    m_pGravitationalAcc.y = -25.0f;
 }
 
 // helper function
@@ -96,7 +86,7 @@ void PhysicsSubSystem::RegisterPhysicsComp(Entity& entity)
         if (compPos)
             comp_phys->m_bodyDef.position = compPos->GetPosIgnoreCompPhys();
 
-        comp_phys->m_body = m_world->CreateBody( convertToB2BodyDef(comp_phys->m_bodyDef).get() );
+        comp_phys->m_body = m_world.CreateBody( convertToB2BodyDef(comp_phys->m_bodyDef).get() );
         comp_phys->m_body->SetUserData( comp_phys );
 
 		std::vector<CompShape*> compShapes = entity.GetComponents<CompShape>();
@@ -140,7 +130,7 @@ void PhysicsSubSystem::UnregisterPhysicsComp( Entity& entity )
     {
         if ( comp_phys->m_body )
         {
-            m_world->DestroyBody( comp_phys->m_body );
+            m_world.DestroyBody( comp_phys->m_body );
             comp_phys->m_body = NULL;
         }
         for ( size_t i = 0; i < m_physicsComps.size(); ++i )
@@ -158,7 +148,7 @@ void PhysicsSubSystem::UnregisterPhysicsComp( Entity& entity )
 void PhysicsSubSystem::Update()
 {
     //----Box2D Aktualisieren!----//
-    m_world->Step(m_timeStep, m_velocityIterations, m_positionIterations);
+    m_world.Step(m_timeStep, m_velocityIterations, m_positionIterations);
     //----------------------------//
 
     for ( size_t i = 0; i < m_physicsComps.size(); ++i )
@@ -203,7 +193,7 @@ void PhysicsSubSystem::Update()
 
         boost::shared_ptr<b2Vec2> acc;
         if (m_physicsComps[i]->m_gravField == NULL)
-            acc = m_pGravitationalAcc->To_b2Vec2();
+            acc = m_pGravitationalAcc.To_b2Vec2();
         else
             acc = m_physicsComps[i]->m_gravField->GetAcceleration(pBody->GetWorldCenter()).To_b2Vec2();
         b2Vec2 force ( pBody->GetMass() * *acc );

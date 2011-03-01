@@ -60,7 +60,7 @@ typedef std::map< StateIdType, boost::shared_ptr<StateInfo> > StateInfoMap;
 class AnimationManager
 {
 public:
-    AnimationManager( TextureManager* pTM );
+    AnimationManager( TextureManager& );
     ~AnimationManager() {}
     void LoadAnimation( const char* name,AnimationIdType id,const LoadTextureInfo& texInfo, int quality );
     void FreeAnimation( AnimationIdType id );
@@ -69,7 +69,7 @@ public:
 private:
     typedef std::map<AnimationIdType, boost::shared_ptr<AnimInfo> > AnimInfoMap;
     AnimInfoMap m_animInfoMap;      // Texturen
-    TextureManager* m_pTM;
+    TextureManager& m_texManager;
 };
 
 // --- STRUKTUREN ---

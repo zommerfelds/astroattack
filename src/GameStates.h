@@ -51,6 +51,7 @@ public:
     void ChangeState( const boost::shared_ptr<GameState>& pState );
 	void PushState( const boost::shared_ptr<GameState>& pState );
 	void PopState();
+	void Clear();
 
     GameState* GetCurrentState() { return m_states.back().get(); }
 private:

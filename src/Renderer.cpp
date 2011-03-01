@@ -11,7 +11,6 @@
 #include "SDL_opengl.h"
 
 #include "Renderer.h"
-#include "Texture.h"
 #include "Entity.h"
 #include <fstream>
 #include <cmath>
@@ -37,10 +36,10 @@ const char* cGraphisFileName = "data/graphics.xml";
 
 const unsigned int cCircleSlices = 20; // number of slices for drawing a circle
 
-RenderSubSystem::RenderSubSystem( /*const GameWorld* pWorld, const GameCamera* pCamera,*/ GameEvents* pGameEvents )
-: m_eventConnection1 (), m_eventConnection2(), m_pGameEvents ( pGameEvents ),
-  m_pTextureManager ( new TextureManager ), m_pAnimationManager ( new AnimationManager(m_pTextureManager.get()) ),
-  m_pFontManager ( new FontManager ), m_currentMatrix (World)
+RenderSubSystem::RenderSubSystem( GameEvents& gameEvents )
+: m_isInit (false), m_eventConnection1 (), m_eventConnection2(), m_gameEvents ( gameEvents ),
+  m_textureManager (), m_animationManager ( m_textureManager ),
+  m_fontManager (), m_currentMatrix (World)
 {
     m_matrixText[0] = 1; m_matrixText[4] = 0; m_matrixText[8] = 0; m_matrixText[12] = 0;
     m_matrixText[1] = 0; m_matrixText[5] = 1; m_matrixText[9] = 0; m_matrixText[13] = 0;
@@ -53,17 +52,8 @@ RenderSubSystem::RenderSubSystem( /*const GameWorld* pWorld, const GameCamera* p
     m_matrixGUI[3] = 0; m_matrixGUI[7] = 0; m_matrixGUI[11] = 0; m_matrixGUI[15] = 1;
 }
 
-RenderSubSystem::~RenderSubSystem()
-{
-    if (m_currentMatrix != World) {
-        glMatrixMode( GL_PROJECTION );
-        glPopMatrix();
-        glMatrixMode ( GL_MODELVIEW );
-    }
-}
-
 // RenderSubSystem initialisieren
-void RenderSubSystem::Init ( int width, int height )
+void RenderSubSystem::Init( int width, int height )
 {
     InitOpenGL ( width, height );
 
@@ -76,14 +66,29 @@ void RenderSubSystem::Init ( int width, int height )
         gAaLog.Write ( " OpenGL Error: %s ", errString );
     }
 
-    m_eventConnection1 = m_pGameEvents->newEntity.RegisterListener( boost::bind( &RenderSubSystem::RegisterCompVisual, this, _1 ) );
-    m_eventConnection2 = m_pGameEvents->deleteEntity.RegisterListener(  boost::bind( &RenderSubSystem::UnregisterCompVisual, this, _1 ) );
+    m_eventConnection1 = m_gameEvents.newEntity.RegisterListener( boost::bind( &RenderSubSystem::RegisterCompVisual, this, _1 ) );
+    m_eventConnection2 = m_gameEvents.deleteEntity.RegisterListener(  boost::bind( &RenderSubSystem::UnregisterCompVisual, this, _1 ) );
+
+    m_isInit = true;
+}
+
+void RenderSubSystem::DeInit()
+{
+    if (m_isInit)
+    {
+        if (m_currentMatrix != World) {
+            glMatrixMode( GL_PROJECTION );
+            glPopMatrix();
+            glMatrixMode ( GL_MODELVIEW );
+        }
+        m_isInit = false;
+    }
 }
 
 bool RenderSubSystem::LoadData()
 {
     XmlLoader xml;
-    xml.LoadGraphics( cGraphisFileName, m_pTextureManager.get(), m_pAnimationManager.get(), m_pFontManager.get() );
+    xml.LoadGraphics( cGraphisFileName, &m_textureManager, &m_animationManager, &m_fontManager );
 
     return true;
 }
@@ -187,7 +192,7 @@ void RenderSubSystem::SetMatrix(MatrixId matrix)
 
 void RenderSubSystem::DrawTexturedQuad( float texCoord[8], float vertexCoord[8], std::string texId, bool border, float alpha )
 {
-    m_pTextureManager->SetTexture( texId );
+    m_textureManager.SetTexture( texId );
     glColor4f( 1.0f, 1.0f, 1.0f, alpha );
     glBegin ( GL_QUADS );
         // Oben links
@@ -202,7 +207,7 @@ void RenderSubSystem::DrawTexturedQuad( float texCoord[8], float vertexCoord[8],
     glEnd();
     if ( border )
     {
-        m_pTextureManager->Clear();
+        m_textureManager.Clear();
         glColor3ub ( 220, 220, 220 );
         glBegin ( GL_LINE_LOOP );
         for ( int i = 0; i < 4; ++i)
@@ -218,7 +223,7 @@ void RenderSubSystem::DrawTexturedQuad( float texCoord[8], float vertexCoord[8],
 
 void RenderSubSystem::DrawColorQuad( float vertexCoord[8], float r, float g, float b, float a, bool border )
 {
-    m_pTextureManager->Clear();
+    m_textureManager.Clear();
     if ( a > 0.01f ) // Falls eine Füllung vorhanden ist
     {
         glColor4f ( r, g, b, a );
@@ -242,7 +247,7 @@ void RenderSubSystem::DrawColorQuad( float vertexCoord[8], float r, float g, flo
 
 void RenderSubSystem::DrawOverlay( float r, float g, float b, float a )
 {
-    m_pTextureManager->Clear();
+    m_textureManager.Clear();
     glColor4f ( r, g, b, a );
     glBegin ( GL_QUADS );
         // Oben links
@@ -262,7 +267,7 @@ void RenderSubSystem::DrawOverlay( float r, float g, float b, float a )
 
 void RenderSubSystem::DrawTexturedPolygon ( const CompShapePolygon& rPoly, const CompVisualTexture& rTex, bool border )
 {
-    m_pTextureManager->SetTexture( rTex.GetTexture() );
+    m_textureManager.SetTexture( rTex.GetTexture() );
     glBegin ( GL_POLYGON );
     for ( size_t iCountVertices = 0; iCountVertices < rPoly.GetVertexCount(); ++iCountVertices )
     {
@@ -283,7 +288,7 @@ void RenderSubSystem::DrawTexturedPolygon ( const CompShapePolygon& rPoly, const
 
     if ( border )
     {
-        m_pTextureManager->Clear();
+        m_textureManager.Clear();
         glColor3ub ( 220, 220, 220 );
         glBegin ( GL_LINE_LOOP );
         for ( size_t iCountVertices = 0; iCountVertices < rPoly.GetVertexCount(); ++iCountVertices )
@@ -300,7 +305,7 @@ void RenderSubSystem::DrawTexturedPolygon ( const CompShapePolygon& rPoly, const
 
 void RenderSubSystem::DrawTexturedCircle ( const CompShapeCircle& rCircle, const CompVisualTexture& rTex, bool border )
 {
-    m_pTextureManager->SetTexture( rTex.GetTexture() );
+    m_textureManager.SetTexture( rTex.GetTexture() );
     GLUquadricObj *pQuacric = gluNewQuadric();
     gluQuadricTexture(pQuacric, true);
     gluQuadricDrawStyle(pQuacric, GLU_FILL);
@@ -328,7 +333,7 @@ void RenderSubSystem::DrawTexturedCircle ( const CompShapeCircle& rCircle, const
 
     if ( border )
     {
-        m_pTextureManager->Clear();
+        m_textureManager.Clear();
         glColor3ub ( 220, 220, 220 );
         gluQuadricDrawStyle(pQuacric, GLU_SILHOUETTE);
         gluDisk(pQuacric, 0.0f, rCircle.GetRadius(), cCircleSlices,  1);
@@ -367,7 +372,7 @@ void RenderSubSystem::DrawEdge(const Vector2D& vertexA, const Vector2D& vertexB,
 // Zeichnet einen Vector2D (Pfeil) in einer bestimmten Postion
 void RenderSubSystem::DrawVector ( const Vector2D& rVector, const Vector2D& rPos )
 {
-    m_pTextureManager->Clear();
+    m_textureManager.Clear();
     glColor4ub ( 0, 0, 255, 150 );
 
     // Pfeikörper zeichnen
@@ -397,7 +402,7 @@ void RenderSubSystem::DrawVector ( const Vector2D& rVector, const Vector2D& rPos
 // Zeichnet einen punkt an einer bestimmten Postion
 void RenderSubSystem::DrawPoint ( const Vector2D& rPos )
 {
-    m_pTextureManager->Clear();
+    m_textureManager.Clear();
     glColor4ub ( 255, 0, 0, 150 );
 
     glBegin ( GL_POINTS );
@@ -421,7 +426,7 @@ void RenderSubSystem::DrawPoint ( const Vector2D& rPos )
 // Zeichnet den Fadenkreuz
 void RenderSubSystem::DrawCrosshairs ( const Vector2D& rCrosshairsPos )
 {
-    m_pTextureManager->Clear();
+    m_textureManager.Clear();
     glColor4ub ( 0, 255, 0, 150 );
 
     glBegin ( GL_QUADS );
@@ -458,7 +463,7 @@ void RenderSubSystem::DrawCrosshairs ( const Vector2D& rCrosshairsPos )
 // Zeichnet den Fadenkreuz
 void RenderSubSystem::DrawEditorCursor ( const Vector2D& rPos )
 {
-    m_pTextureManager->Clear();
+    m_textureManager.Clear();
 
     glColor4f ( 0.5f, 1.0f, 1.0f, 0.6f );
     glBegin ( GL_LINES );
@@ -475,7 +480,7 @@ void RenderSubSystem::DrawString( const std::string &str, const FontIdType &font
 {
     MatrixId stored_matrix = m_currentMatrix;
     SetMatrix(Text);
-    m_pFontManager->DrawString(str, fontId, x, y, horizAlign, vertAlign, red, green, blue, alpha);
+    m_fontManager.DrawString(str, fontId, x, y, horizAlign, vertAlign, red, green, blue, alpha);
     SetMatrix(stored_matrix);
 }
 
@@ -525,7 +530,7 @@ void RenderSubSystem::DrawVisualAnimationComps()
         CompPosition* compPos = pAnimComp->GetOwnerEntity()->GetComponent<CompPosition>();
         if (compPos)
         {
-            m_pTextureManager->SetTexture(pAnimComp->GetCurrentTexture());
+            m_textureManager.SetTexture(pAnimComp->GetCurrentTexture());
 
             glPushMatrix();
 
@@ -533,7 +538,7 @@ void RenderSubSystem::DrawVisualAnimationComps()
             const Vector2D& position = compPos->GetPosition();
 
             bool isFlipped = pAnimComp->GetFlip();
-            Vector2D center = *pAnimComp->Center();
+            Vector2D center = pAnimComp->Center();
             if ( isFlipped )
                 center.x = -center.x;
 
@@ -650,8 +655,8 @@ void RenderSubSystem::DisplayLoadingScreen()
     info.textureWrapModeY = GL_CLAMP;
     info.scale = 1.0;
     int picw=0,pich=0;
-    m_pTextureManager->LoadTexture("data/Loading.png","loading",info,gAaConfig.GetInt("TexQuality"),&picw,&pich);
-    m_pTextureManager->SetTexture( "loading" );
+    m_textureManager.LoadTexture("data/Loading.png","loading",info,gAaConfig.GetInt("TexQuality"),&picw,&pich);
+    m_textureManager.SetTexture( "loading" );
     
     //gAaLog.Write( "Pic: w=%i, h=%i\n", picw, pich );
     //gAaLog.Write( "Res: w=%f, h=%f\n", w, h );
@@ -700,7 +705,7 @@ void RenderSubSystem::DisplayLoadingScreen()
 
     SDL_GL_SwapBuffers();
 
-    m_pTextureManager->FreeTexture("loading");
+    m_textureManager.FreeTexture("loading");
 }
 
 void RenderSubSystem::SetViewPosition( const Vector2D& pos, float scale, float angle)

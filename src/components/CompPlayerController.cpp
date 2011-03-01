@@ -28,8 +28,8 @@ const CompIdType CompPlayerController::COMPONENT_ID = "CompPlayerController";
 const int cMaxRecharge = 15;                    // wie wie muss der Spieler warten bis der Racketenrucksack startet?
 
 // Konstruktor der Komponente
-CompPlayerController::CompPlayerController( const InputSubSystem* pInputSubSystem, std::map<const std::string, int>::iterator itJetPackVar ) :
-     m_pInputSubSystem ( pInputSubSystem ),
+CompPlayerController::CompPlayerController( const InputSubSystem& inputSubSystem, std::map<const std::string, int>::iterator itJetPackVar ) :
+     m_inputSubSystem ( inputSubSystem ),
      m_currentFrictionIsLow ( false ),
      m_eventConnection (),
      m_itJetPackVar ( itJetPackVar ),
@@ -200,7 +200,7 @@ void CompPlayerController::OnUpdate()
     const float cJumpAngle = (cPi*0.25f);
 
     // Springen
-    if ( m_pInputSubSystem->KeyState ( Jump ) )
+    if ( m_inputSubSystem.KeyState ( Jump ) )
     {
         // Taste muss erst gerade gedrück werden und nicht schon gedrück sein (und Spielerfigur muss ein Block berühren)
         if ( !m_spaceKeyDownLastUpdate && isTouchingSth )
@@ -213,7 +213,7 @@ void CompPlayerController::OnUpdate()
             {
                 impulse = upVector*500;
             }
-            else if ( m_pInputSubSystem->KeyState ( Right ) && minAngleR > cPi*2 - cJumpAngle*2 ) // Von Wand rechts abstossen
+            else if ( m_inputSubSystem.KeyState ( Right ) && minAngleR > cPi*2 - cJumpAngle*2 ) // Von Wand rechts abstossen
             {
                 impulse = (upVector*600).Rotated(cPi*0.2f);
 
@@ -223,7 +223,7 @@ void CompPlayerController::OnUpdate()
 
                 //m_bodyAngleAbs = maxAngleRel;
             }
-            else if ( m_pInputSubSystem->KeyState ( Left ) && minAngleL > cPi*2 - cJumpAngle*2 ) // Von Wand links abstossen
+            else if ( m_inputSubSystem.KeyState ( Left ) && minAngleL > cPi*2 - cJumpAngle*2 ) // Von Wand links abstossen
             {
                 impulse = (upVector*600).Rotated(-cPi*0.2f);
 
@@ -259,7 +259,7 @@ void CompPlayerController::OnUpdate()
                                           // und desto langsamer abhänge hinunterlaufen
 
 	// Jetpack nach oben
-    if ( m_pInputSubSystem->KeyState ( Up ) && m_itJetPackVar->second > 0 && (m_rechargeTime==cMaxRecharge || !isTouchingSth ) )
+    if ( m_inputSubSystem.KeyState ( Up ) && m_itJetPackVar->second > 0 && (m_rechargeTime==cMaxRecharge || !isTouchingSth ) )
     {
         const float maxVelYJetpack = 12.0f;
         jumped = true;
@@ -277,7 +277,7 @@ void CompPlayerController::OnUpdate()
 		}
 	}
 
-    if ( m_pInputSubSystem->KeyState ( Right ) || m_pInputSubSystem->KeyState ( Left ) )
+    if ( m_inputSubSystem.KeyState ( Right ) || m_inputSubSystem.KeyState ( Left ) )
             wantToMoveSidewards = true;
 
     // Falls der Spieler am Boden ist
@@ -286,7 +286,7 @@ void CompPlayerController::OnUpdate()
         const float maxVelXWalk = 13.5f;
         const float smallMass = 10.0f;
         // Laufen nach rechts
-        if ( canWalkR && m_pInputSubSystem->KeyState ( Right ) )
+        if ( canWalkR && m_inputSubSystem.KeyState ( Right ) )
         {
             Vector2D force( normalSteepestRight );
             force.Rotate( cPi * 0.5f );      // Nicht mehr die Normale sondern die Wegrichtung (90°)
@@ -313,7 +313,7 @@ void CompPlayerController::OnUpdate()
         }
     
         // Laufen nach links
-        if ( canWalkL && m_pInputSubSystem->KeyState ( Left ) )
+        if ( canWalkL && m_inputSubSystem.KeyState ( Left ) )
         {
             Vector2D force( normalSteepestLeft );
             force.Rotate( -cPi * 0.5f );     // Nicht mehr die Normale sondern die Wegrichtung (90°)
@@ -351,7 +351,7 @@ void CompPlayerController::OnUpdate()
     {
         const float maxVelXFly = 13.5f;
         // Jetpack nach rechts
-        if ( m_pInputSubSystem->KeyState ( Right ) )
+        if ( m_inputSubSystem.KeyState ( Right ) )
         {
             if ( usedJetpack && !isTouchingSth )
             {
@@ -369,7 +369,7 @@ void CompPlayerController::OnUpdate()
         }
         
         // Jetpack nach links
-        else if ( m_pInputSubSystem->KeyState ( Left ) )
+        else if ( m_inputSubSystem.KeyState ( Left ) )
         {
             if ( usedJetpack && !isTouchingSth )
             {
@@ -558,7 +558,7 @@ void CompPlayerController::SetHighFriction( CompPhysics* playerCompPhysics )
     playerCompPhysics->SetShapeFriction("bottom", 4.0f);
 }
 
-boost::shared_ptr<CompPlayerController> CompPlayerController::LoadFromXml(const pugi::xml_node&, const InputSubSystem* inputSys, std::map<const std::string, int>::iterator itJetPackVar)
+boost::shared_ptr<CompPlayerController> CompPlayerController::LoadFromXml(const pugi::xml_node&, const InputSubSystem& inputSys, std::map<const std::string, int>::iterator itJetPackVar)
 {
    return boost::make_shared<CompPlayerController>( inputSys, itJetPackVar );
 }

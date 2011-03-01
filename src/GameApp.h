@@ -8,22 +8,39 @@
 #define GAMEAPP_H
 
 #include "GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
-#include <boost/scoped_ptr.hpp>
 
 #include <vector>
 #include <string>
 
 #include "Event.h"
 
-class InputSubSystem;
-class PhysicsSubSystem;
-class RenderSubSystem;
-class StateManager;
-class SoundSubSystem;
-class GuiSubSystem;
-struct GameEvents;
-struct SubSystems;
+#include "Input.h"
+#include "Physics.h"
+#include "Renderer.h"
+#include "GameStates.h"
+#include "Sound.h"
+#include "Gui.h"
+#include "GameEvents.h"
 union SDL_Event;
+
+
+// Alle wichtigen Untersysteme des Spieles
+struct SubSystems
+{
+    SubSystems();
+    ~SubSystems();
+    bool Init();
+    void DeInit();
+    StateManager stateManager;   // States
+    GameEvents events;           // Spielereignisse
+    InputSubSystem input;        // Eingabe
+    PhysicsSubSystem physics;    // Physik
+    RenderSubSystem renderer;    // Ausgabe
+    SoundSubSystem sound;        // Sound
+    GuiSubSystem gui;            // Grafische Benutzeroberfläche
+    bool isLoading; // wenn true: Zeitakkumulator wird neu gestartet, sobald die Hauptschleife einmal durch ist
+                    // das verhindert, dass die Zeit währed Ladezeiten gezählt wird (und am Ende des Landens mehrere Updates nachgeholt werden)
+};
 
 /*
     Das ist die Hauptklasse des Spiels.
@@ -33,7 +50,7 @@ class GameApp
 {
 public:
     GameApp(const std::vector<std::string>& args);
-    ~GameApp(); // need to implement destructor manually because of scoped_ptr (incomplete type)
+    ~GameApp();
 
     void Run();     // Spiel starten (nach der Initialisierung ), d.h. Hauptschleife starten
 
@@ -43,7 +60,9 @@ private:
 
     void MainLoop(); // Hauptschleife
 
-    boost::scoped_ptr<SubSystems> m_pSubSystems; // Untersysteme
+    bool m_isInit;
+
+    SubSystems m_subSystems; // Untersysteme
 
     bool m_quit; // Ob Programm beenden werden soll
     void OnQuit() { m_quit = true; } // Spiel beenden (Wird von einem Event aufgerufen)
@@ -51,7 +70,7 @@ private:
     EventConnection m_eventConnection; // TODO: scoped_ptr
 
     void UpdateGame();
-    void HandleSdlQuitEvents( SDL_Event& rSdlEvent, bool& rQuit );
+    void HandleSdlQuitEvents( SDL_Event&, bool& quit );
     void CalcFPS( unsigned int curTime );
 
     unsigned int m_fpsMeasureStart;
@@ -71,21 +90,5 @@ private:
     void ParseArguments( const std::vector<std::string>& args ); // Programmargumente verarbeiten
 };
 
-// Alle wichtigen Untersysteme des Spieles
-// TODO: use PIMPL and objects on the stack (no scoped_ptr)
-struct SubSystems
-{
-    SubSystems();
-    ~SubSystems();
-    boost::scoped_ptr<StateManager> stateManager;   // States
-    boost::scoped_ptr<GameEvents> events;           // Spielereignisse
-    boost::scoped_ptr<InputSubSystem> input;        // Eingabe
-    boost::scoped_ptr<PhysicsSubSystem> physics;    // Physik
-    boost::scoped_ptr<RenderSubSystem> renderer;    // Ausgabe
-    boost::scoped_ptr<SoundSubSystem> sound;        // Sound
-    boost::scoped_ptr<GuiSubSystem> gui;            // Grafische Benutzeroberfläche
-    bool isLoading; // wenn true: Zeitakkumulator wird neu gestartet, sobald die Hauptschleife einmal durch ist
-                    // das verhindert, dass die Zeit währed Ladezeiten gezählt wird (und am Ende des Landens mehrere Updates nachgeholt werden)
-};
 
 #endif

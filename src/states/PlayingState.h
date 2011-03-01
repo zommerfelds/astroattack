@@ -14,12 +14,11 @@
 #include "../GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
 #include "../GameStates.h"
 #include "../GameEvents.h"
-#include <boost/scoped_ptr.hpp>
 #include <set>
 #include <string>
 
-class GameWorld;
-class CameraController;
+#include "../World.h"
+#include "../CameraController.h"
 class Entity;
 class EventConnection;
 
@@ -30,7 +29,6 @@ class PlayingState : public GameState
 {
 public:
     PlayingState( SubSystems& subSystems, std::string levelFileName );
-    ~PlayingState(); // need to implement destructor manually because of scoped_ptr (incomplete type)
 
     const StateIdType& StateID() const { return stateId; }
 
@@ -46,8 +44,8 @@ public:
 private:
     static const StateIdType stateId;
     
-    boost::scoped_ptr<GameWorld> m_pGameWorld;          // Spielwelt
-    boost::scoped_ptr<CameraController> m_pGameCamera;        // Kamera
+    GameWorld m_gameWorld;          // Spielwelt
+    CameraController m_cameraController;        // Kamera
 
     EventConnection m_eventConnection1;
     EventConnection m_eventConnection2;

@@ -13,8 +13,8 @@
 
 #include <map>
 #include <set>
+#include "Vector2D.h"
 #include "SDL.h"
-#include <boost/scoped_ptr.hpp>
 
 enum Key
 {
@@ -48,8 +48,6 @@ enum Key
     SlideShowSkip
 };
 
-class Vector2D;
-
 enum MouseState
 {
     MouseOver,
@@ -79,7 +77,6 @@ class InputSubSystem
 {
 public:
     InputSubSystem();
-    ~InputSubSystem(); // need to implement destructor manually because of scoped_ptr (incomplete type)
 
 public:
     void Update(); // aktualisieren
@@ -101,8 +98,8 @@ private:
     Uint8 m_mousestates;
     bool m_RMouseConsumed;
     bool m_LMouseConsumed;
-    boost::scoped_ptr<Vector2D> m_pWindowMousePos;
-    std::map<Key,SDLKey> m_keyMap;
+    Vector2D m_windowMousePos;
+    std::map<Key, SDLKey> m_keyMap;
 };
 
 #endif

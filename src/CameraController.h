@@ -11,12 +11,12 @@
 
 #include "GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
 #include <boost/shared_ptr.hpp>
-#include <boost/scoped_ptr.hpp>
 
 class InputSubSystem;
 class RenderSubSystem;
 class GameWorld;
-class Vector2D;
+
+#include "Vector2D.h"
 
 //----------//
 //  Camera  //
@@ -31,7 +31,6 @@ class CameraController
 {
 public:
     CameraController( const InputSubSystem& inputSubSystem, RenderSubSystem& renderSubSystem, const GameWorld& world );
-    ~CameraController(); // need to implement destructor manually because of scoped_ptr (incomplete type)
 
     // Initialisierung
     void Init();
@@ -68,7 +67,7 @@ public:
     }
 
 private:
-    boost::scoped_ptr<Vector2D> m_pPosition;
+    Vector2D m_position;
     float m_zoom;
     float m_rotation;
     float m_rotationVel;
@@ -86,8 +85,8 @@ private:
 
     // Kameratranslation
     bool m_isMovingSmoothly;
-    boost::scoped_ptr<Vector2D> m_pCameraDeparture;
-    boost::scoped_ptr<Vector2D> m_pCameraDestination;
+    Vector2D m_cameraDeparture;
+    Vector2D m_cameraDestination;
     float m_moveTimeElapsed;
     float m_moveTotalTimeToArrive;
 

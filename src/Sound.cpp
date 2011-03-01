@@ -33,18 +33,7 @@ SoundSubSystem::SoundSubSystem() : m_isInit ( false ), m_deletePlayingMusicAtEnd
 
 SoundSubSystem::~SoundSubSystem()
 {
-    Mix_HookMusicFinished( NULL );
-    Mix_HaltChannel(-1);
-    for ( SoundMap::iterator it = m_sounds.begin(); it != m_sounds.end(); ++it )
-    {
-        Mix_FreeChunk( it->second );
-    }
-    for ( MusicMap::iterator it = m_music.begin(); it != m_music.end(); ++it )
-    {
-        Mix_FreeMusic( it->second );
-    }
-    if ( m_isInit )
-        Mix_CloseAudio();
+    DeInit();
 }
 
 bool SoundSubSystem::Init()
@@ -73,6 +62,26 @@ bool SoundSubSystem::Init()
 
     m_isInit = true;
     return true;
+}
+
+void SoundSubSystem::DeInit()
+{
+    if (m_isInit)
+    {
+        Mix_HookMusicFinished( NULL );
+        Mix_HaltChannel(-1);
+        for ( SoundMap::iterator it = m_sounds.begin(); it != m_sounds.end(); ++it )
+        {
+            Mix_FreeChunk( it->second );
+        }
+        for ( MusicMap::iterator it = m_music.begin(); it != m_music.end(); ++it )
+        {
+            Mix_FreeMusic( it->second );
+        }
+        Mix_CloseAudio();
+
+        m_isInit = false;
+    }
 }
 
 void SoundSubSystem::MusicFinishedCallback()

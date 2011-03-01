@@ -1,15 +1,15 @@
 /*
- * GUI.cpp
+ * Gui.cpp
  * This file is part of Astro Attack
  * Copyright 2011 Christian Zommerfelds
  */
 
 #include "GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
 
-#include "GUI.h"
+#include "Gui.h"
 #include "Renderer.h"
 
-GuiSubSystem::GuiSubSystem( RenderSubSystem* pRenderer, InputSubSystem* pInput ) : m_pRenderer (pRenderer), m_pInput (pInput), m_clear(false), m_isUpdating ( false )
+GuiSubSystem::GuiSubSystem( RenderSubSystem& renderer, InputSubSystem& input ) : m_renderer (renderer), m_input (input), m_clear(false), m_isUpdating ( false )
 {}
 
 void GuiSubSystem::Update()
@@ -20,7 +20,7 @@ void GuiSubSystem::Update()
         if ( m_groupsToHide.count( it->first ) == 0 )
             for ( std::vector< boost::shared_ptr<Widget> >::iterator it2 = it->second.begin(); it2 != it->second.end(); ++it2 )
             {
-                MouseState newMouseState = m_pInput->GetMouseStateInAreaConsume( (*it2)->m_area );
+                MouseState newMouseState = m_input.GetMouseStateInAreaConsume( (*it2)->m_area );
                 if ( (*it2)->m_mouseState != newMouseState )
                     (*it2)->MouseStateChanged(newMouseState);
                 (*it2)->m_mouseState = newMouseState;
@@ -38,7 +38,7 @@ void GuiSubSystem::Draw()
         if ( m_groupsToHide.count( it->first ) == 0 )
             for ( std::vector< boost::shared_ptr<Widget> >::iterator it2 = it->second.begin(); it2 != it->second.end(); ++it2 )
             {
-                (*it2)->Draw( m_pRenderer );
+                (*it2)->Draw( &m_renderer );
             }
     }
 }

@@ -18,13 +18,7 @@ StateManager::StateManager()
 
 StateManager::~StateManager()
 {
-    // Alle States aufräumen
-	while ( !m_states.empty() )
-    {
-        gAaLog.Write ( "\n=== Cleaning up State \"%s\" ===\n\n", m_states.back()->StateID().c_str() );
-		m_states.back()->Cleanup();
-		m_states.pop_back();
-	}
+    Clear();
 }
 
 void StateManager::ChangeState( const boost::shared_ptr<GameState>& pState )
@@ -77,4 +71,15 @@ void StateManager::PopState()
         gAaLog.Write ( "\n=== Resuming State \"%s\" ===\n\n", m_states.back()->StateID().c_str() );
 		m_states.back()->Resume();
 	}
+}
+
+void StateManager::Clear()
+{
+    // Alle States aufräumen
+    while ( !m_states.empty() )
+    {
+        gAaLog.Write ( "\n=== Cleaning up State \"%s\" ===\n\n", m_states.back()->StateID().c_str() );
+        m_states.back()->Cleanup();
+        m_states.pop_back();
+    }
 }

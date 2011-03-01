@@ -8,7 +8,6 @@
 
 #include "../GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
 #include "CompShape.h"
-#include "../Vector2D.h"
 
 #include <Box2D/Box2D.h> // need this for converting to Box2D shapes
 
@@ -41,8 +40,6 @@ boost::shared_ptr<CompShape> CompShape::LoadFromXml(const pugi::xml_node& compNo
 	return boost::shared_ptr<CompShape>();
 }
 
-CompShapePolygon::~CompShapePolygon() {}
-
 boost::shared_ptr<CompShapePolygon> CompShapePolygon::LoadFromXml(
 		const pugi::xml_node& polyElem)
 {
@@ -53,7 +50,7 @@ boost::shared_ptr<CompShapePolygon> CompShapePolygon::LoadFromXml(
 	{
 		float x = vertexElement.attribute("x").as_float();
         float y = vertexElement.attribute("y").as_float();
-		pPoly->m_vertices.push_back( boost::make_shared<Vector2D>(x, y) );
+		pPoly->m_vertices.push_back( Vector2D(x, y) );
 	}
 
 	// TODO: check for errors
@@ -67,8 +64,8 @@ void CompShapePolygon::WriteToXml(pugi::xml_node& compNode) const
     for ( size_t i = 0; i < GetVertexCount(); ++i )
     {
         pugi::xml_node vertexNode = polyNode.append_child("vertex");
-        vertexNode.append_attribute("x").set_value(m_vertices[i]->x);
-        vertexNode.append_attribute("y").set_value(m_vertices[i]->y);
+        vertexNode.append_attribute("x").set_value(m_vertices[i].x);
+        vertexNode.append_attribute("y").set_value(m_vertices[i].y);
     }
 }
 
@@ -78,7 +75,7 @@ boost::shared_ptr<b2Shape> CompShapePolygon::toB2Shape() const
     b2Vec2 vertices[b2_maxPolygonVertices];
     for (size_t i=0; i<m_vertices.size() && i<b2_maxPolygonVertices; i++)
     {
-    	vertices[i].Set(m_vertices[i]->x, m_vertices[i]->y);
+    	vertices[i].Set(m_vertices[i].x, m_vertices[i].y);
     }
     poly_shape->Set(vertices, m_vertices.size());
     return poly_shape;
@@ -88,11 +85,11 @@ void CompShapePolygon::SetVertex(size_t i, const Vector2D& v)
 {
 	if (i==GetVertexCount())
 	{
-		m_vertices.push_back(boost::make_shared<Vector2D>(v));
+		m_vertices.push_back(v);
 	}
 	else if (i<GetVertexCount())
 	{
-		*m_vertices[i]=v;
+		m_vertices[i]=v;
 	}
 	// out of range
 }
@@ -101,20 +98,17 @@ const Vector2D* CompShapePolygon::GetVertex(size_t i) const
 {
 	if (i>=GetVertexCount())
 		return NULL;
-	return m_vertices[i].get();
+	return &m_vertices[i];
 }
 
 CompShapeCircle::CompShapeCircle() :
-		m_center ( new Vector2D ),
 		m_radius (1.0f)
 {}
 
 CompShapeCircle::CompShapeCircle(const Vector2D& center, float radius) :
-		m_center ( new Vector2D(center) ),
+		m_center ( center ),
 		m_radius (radius)
 {}
-
-CompShapeCircle::~CompShapeCircle() {}
 
 boost::shared_ptr<CompShapeCircle> CompShapeCircle::LoadFromXml(
 		const pugi::xml_node& circleElem)
@@ -132,8 +126,8 @@ boost::shared_ptr<CompShapeCircle> CompShapeCircle::LoadFromXml(
 void CompShapeCircle::WriteToXml(pugi::xml_node& compNode) const
 {
     pugi::xml_node circleNode = compNode.append_child("circle");
-    circleNode.append_attribute("x").set_value(m_center->x);
-    circleNode.append_attribute("y").set_value(m_center->y);
+    circleNode.append_attribute("x").set_value(m_center.x);
+    circleNode.append_attribute("y").set_value(m_center.y);
     circleNode.append_attribute("r").set_value(m_radius);
 }
 
@@ -141,6 +135,6 @@ boost::shared_ptr<b2Shape> CompShapeCircle::toB2Shape() const
 {
     boost::shared_ptr<b2CircleShape> circle_shape = boost::make_shared<b2CircleShape>();
     circle_shape->m_radius = m_radius;
-    circle_shape->m_p = *m_center->To_b2Vec2();
+    circle_shape->m_p = *m_center.To_b2Vec2();
     return circle_shape;
 }

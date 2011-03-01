@@ -14,12 +14,11 @@
 #include "../GameStates.h"
 
 #include <boost/shared_ptr.hpp>
-#include <boost/scoped_ptr.hpp>
 #include <vector>
 #include <string>
 
 struct Button;
-struct ResourceIds;
+#include "XmlLoader.h"
 
 enum SubMenu 
 {
@@ -36,7 +35,6 @@ class MainMenuState : public GameState
 {
 public:
     MainMenuState( SubSystems& subSystems, SubMenu startingSubMenu = Main );
-    ~MainMenuState(); // need to implement destructor manually because of scoped_ptr (incomplete type)
 
     const StateIdType& StateID() const { return stateId; }
 
@@ -78,7 +76,7 @@ private:
     std::string m_fileNameToOpen;   // wie heisst die Datei, die geöffnet werden soll (level oder slide show)
     bool m_appliedConfig;           // ob Spieler die Einstellungen angenommen hat ()
 
-    boost::scoped_ptr<ResourceIds> m_menuResources;
+    ResourceIds m_menuResources;
 };
 //--------------------------------------------//
 //------- Ende MainMenuState Klasse ----------//

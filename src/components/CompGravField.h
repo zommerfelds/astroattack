@@ -13,12 +13,10 @@
 
 #include "../Component.h"
 #include <set>
-#include <boost/scoped_ptr.hpp>
-#include <boost/shared_ptr.hpp>
 
 enum GravType { Directional, Radial };
 
-class Vector2D;
+#include "Vector2D.h"
 namespace pugi { class xml_node; }
 
 //--------------------------------------------//
@@ -28,7 +26,6 @@ class CompGravField : public Component
 {
 public:
     CompGravField();
-    ~CompGravField(); // need to implement destructor manually because of scoped_ptr (incomplete type)
 
     const CompIdType& ComponentId() const { return COMPONENT_ID; }
     static const CompIdType COMPONENT_ID; // eindeutige ID für diese Komponentenart (gleich wie Klassennamen, siehe CompGravField.cpp)
@@ -41,8 +38,8 @@ public:
 
     // Getters
 	GravType GetGravType() const { return m_gravType; }
-	const Vector2D& GetGravDir() const { return *m_pGravitationDir; }
-	const Vector2D& GetGravCenter() const { return *m_pGravitationCenter; }
+	const Vector2D& GetGravDir() const { return m_gravitationDir; }
+	const Vector2D& GetGravCenter() const { return m_gravitationCenter; }
 	float GetStrenght() const { return m_strenght; }
 	int GetPriority() const { return m_priority; }
 
@@ -55,8 +52,8 @@ public:
 private:
 
 	GravType m_gravType;
-	boost::scoped_ptr<Vector2D> m_pGravitationDir;
-	boost::scoped_ptr<Vector2D> m_pGravitationCenter;
+	Vector2D m_gravitationDir;
+	Vector2D m_gravitationCenter;
 	float m_strenght; // only with Radial
     int m_priority; // Gravitationsfeld-priorität: wenn sich 2 felder überlappen, gilt der mit der grössten priorität (0-100 is gültig)
 

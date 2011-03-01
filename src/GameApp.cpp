@@ -13,7 +13,7 @@
 #include "Physics.h"
 #include "Sound.h"
 #include "Renderer.h"
-#include "GUI.h"
+#include "Gui.h"
 #include "GameStates.h"
 #include "states/MainMenuState.h"
 #include "Component.h"
@@ -37,7 +37,8 @@ Configuration gAaConfig; // Spieleinstellungen.
 
 // Konstruktor
 GameApp::GameApp(const std::vector<std::string>& args) :
-        m_pSubSystems ( new SubSystems ),
+        m_isInit (false),
+        m_subSystems (),
         m_quit ( false ),
         m_eventConnection (),
         m_fpsMeasureStart ( 0 ),
@@ -47,38 +48,48 @@ GameApp::GameApp(const std::vector<std::string>& args) :
         m_fullScreen ( false ),
         m_overRideFullScreen ( false )
 {
-    Component::gameEvents = m_pSubSystems->events.get();
-    m_eventConnection = m_pSubSystems->events->quitGame.RegisterListener( boost::bind( &GameApp::OnQuit, this ) );
+    Component::gameEvents = &m_subSystems.events;
+    m_eventConnection = m_subSystems.events.quitGame.RegisterListener( boost::bind( &GameApp::OnQuit, this ) );
 
     ParseArguments(args);
 }
 SubSystems::SubSystems()
-      : stateManager ( new StateManager ),
-        events ( new GameEvents ),
-        input ( new InputSubSystem ),
-        physics( new PhysicsSubSystem( events.get() ) ),
-        renderer ( new RenderSubSystem( events.get() ) ),
-        sound ( new SoundSubSystem() ),
-        gui ( new GuiSubSystem( renderer.get(), input.get() ) ),
+      : stateManager (),
+        events (),
+        input (),
+        physics( events ),
+        renderer ( events ),
+        sound (),
+        gui ( renderer, input ),
         isLoading ( false )
 {
 }
 
 SubSystems::~SubSystems()
 {
-    stateManager.reset();   // Spielstatus
-    input.reset();          // Eingabe
-    physics.reset();        // Physik
-    renderer.reset();       // Ausgabe
-    sound.reset();          // Sound
-    gui.reset();            // Grafische Benutzeroberfläche
+}
 
-    // must be deleted at last because other systems may use this system when destructing
-    events.reset();         // Spielereignisse
+// TODO: handle bad inits
+bool SubSystems::Init()
+{
+    renderer.Init( gAaConfig.GetInt("ScreenWidth"), gAaConfig.GetInt("ScreenHeight") );
+    physics.Init();
+    sound.Init();
+    return true;
+}
+
+void SubSystems::DeInit()
+{
+    stateManager.Clear();
+    sound.DeInit();
+    renderer.DeInit();
 }
 
 // Destruktor
-GameApp::~GameApp() {}
+GameApp::~GameApp()
+{
+    DeInit();
+}
 
 // Alle Objekte von GameApp initialisieren
 void GameApp::Init()
@@ -101,38 +112,38 @@ void GameApp::Init()
 
     //===================== Untersysteme =======================//
     gAaLog.Write ( "Initializing sub systems... " );
-    m_pSubSystems->renderer->Init( gAaConfig.GetInt("ScreenWidth"), gAaConfig.GetInt("ScreenHeight") );
-    m_pSubSystems->physics->Init();
-    m_pSubSystems->sound->Init(); // Sound
+    m_subSystems.Init();
     gAaLog.Write ( "[ Done ]\n" );
 
     // "Loading..." -> Ladungsanzeige zeichnen
-    m_pSubSystems->renderer->DisplayLoadingScreen();
+    m_subSystems.renderer.DisplayLoadingScreen();
 
     // Texturen laden
-    m_pSubSystems->renderer->LoadData();
+    m_subSystems.renderer.LoadData();
 
     gAaLog.DecreaseIndentationLevel(); // Nicht mehr einrücken
     gAaLog.Write ( "\n* Finished initialization *\n" );
 
     boost::shared_ptr<GameState> gameState;
     if (m_levelToLoad.empty())
-        gameState = boost::shared_ptr<MainMenuState>( new MainMenuState(*m_pSubSystems) );
+        gameState = boost::shared_ptr<MainMenuState>( new MainMenuState(m_subSystems) );
     else
-        gameState = boost::shared_ptr<PlayingState>( new PlayingState(*m_pSubSystems, m_levelToLoad) );
-    m_pSubSystems->stateManager->ChangeState( gameState );
+        gameState = boost::shared_ptr<PlayingState>( new PlayingState(m_subSystems, m_levelToLoad) );
+    m_subSystems.stateManager.ChangeState( gameState );
+
+    m_isInit = true;
 }
 
 // SDL und Fenster initialisieren
 bool GameApp::InitSDL()
 {
-    gAaLog.Write ( "Initializing SDL... " );
+    gAaLog.Write( "Initializing SDL... " );
 
-    if ( SDL_Init ( SDL_INIT_VIDEO | SDL_INIT_AUDIO ) == -1 )       // SDL initialisieren
+    if ( SDL_Init( SDL_INIT_VIDEO | SDL_INIT_AUDIO ) == -1 )       // SDL initialisieren
         return false;
 
-    SDL_WM_SetCaption ( GAME_NAME, NULL ); // Fensterbeschriftung
-    SDL_ShowCursor ( SDL_DISABLE ); // Standart SDL Mauszeiger ausblenden
+    SDL_WM_SetCaption( GAME_NAME, NULL ); // Fensterbeschriftung
+    SDL_ShowCursor( SDL_DISABLE ); // Standart SDL Mauszeiger ausblenden
 
     // Events, die ignoriert werden können
     SDL_EventState(SDL_MOUSEMOTION, SDL_IGNORE);
@@ -220,26 +231,29 @@ bool GameApp::InitVideo()
 // Alles deinitialisieren
 void GameApp::DeInit()
 {
-    gAaLog.Write ( "* Started deinitialization *\n\n" );      // In Log-Datei schreiben
-    gAaLog.IncreaseIndentationLevel();
+    if (m_isInit)
+    {
+        gAaLog.Write ( "* Started deinitialization *\n\n" );      // In Log-Datei schreiben
+        gAaLog.IncreaseIndentationLevel();
 
-    gAaLog.Write ( "Cleaning up SubSystems..." );
-    Component::gameEvents = NULL; // set the component's GameEvents pointer to zero,
-                                  // so the components know its no longer valid
-    // Die Objekten löschen sich eigentlich von selbst. Es wird jedoch gewünscht dass sie jetzt gelöscht werden:
-    m_pSubSystems.reset();
-    gAaLog.Write ( "[ Done ]\n" );
+        gAaLog.Write ( "Cleaning up SubSystems..." );
+        Component::gameEvents = NULL; // set the component's GameEvents pointer to zero,
+                                      // so the components know its no longer valid
+        m_subSystems.DeInit();
+        gAaLog.Write ( "[ Done ]\n" );
 
-    // SDL beenden
-    gAaLog.Write ( "Shuting down SDL..." );
-    SDL_Quit();
-    gAaLog.Write ( "[ Done ]\n" );
+        // SDL beenden
+        gAaLog.Write ( "Shuting down SDL..." );
+        SDL_Quit();
+        gAaLog.Write ( "[ Done ]\n" );
 
-    gAaConfig.ApplyConfig();
-    gAaConfig.Save(cMainLogFileName);
+        gAaConfig.ApplyConfig();
+        gAaConfig.Save(cMainLogFileName);
 
-    gAaLog.DecreaseIndentationLevel();
-    gAaLog.Write ( "\n* Finished deinitialization *\n" );   // In Log-Datei schreiben
+        gAaLog.DecreaseIndentationLevel();
+        gAaLog.Write ( "\n* Finished deinitialization *\n" );   // In Log-Datei schreiben
+        m_isInit = false;
+    }
 }
 
 // Nach der Initialisation Spiel m_fpsMeasureStarten (d.h. Hauptschleife m_fpsMeasureStarten)
@@ -253,9 +267,9 @@ void GameApp::Run()
 }
 
 // Kleine vereinfachungen der Hauptfunktionen
-#define FRAME(dt)   m_pSubSystems->stateManager->GetCurrentState()->Frame( dt )    // Pro Frame aufgerufen (PC-Abhängig)
-#define UPDATE()    m_pSubSystems->stateManager->GetCurrentState()->Update()       // Pro Update aufgerufen (60Hz)
-#define DRAW(a)     m_pSubSystems->stateManager->GetCurrentState()->Draw( a )      // Pro Frame am Ende aufgerufen zum zeichnen
+#define FRAME(dt)   m_subSystems.stateManager.GetCurrentState()->Frame( dt )    // Pro Frame aufgerufen (PC-Abhängig)
+#define UPDATE()    m_subSystems.stateManager.GetCurrentState()->Update()       // Pro Update aufgerufen (60Hz)
+#define DRAW(a)     m_subSystems.stateManager.GetCurrentState()->Draw( a )      // Pro Frame am Ende aufgerufen zum zeichnen
 
 // Hauptschleife des Spieles
 void GameApp::MainLoop()
@@ -303,10 +317,10 @@ void GameApp::MainLoop()
         //gAaLog.Write ( "State: %i\n", (int)SDL_GetAppState() );
         // TEST THIS !!!!!!! (getstate)
         // The update loop stops, but the frame loop does not stop (camera)
-        if ( m_pSubSystems->isLoading || delta_time_secs>0.5f || ((SDL_GetAppState()&SDL_APPINPUTFOCUS)==0) ) // falls etwas gerade am laden war, wird der Akkumultor zurückgesetzt,
+        if ( m_subSystems.isLoading || delta_time_secs>0.5f || ((SDL_GetAppState()&SDL_APPINPUTFOCUS)==0) ) // falls etwas gerade am laden war, wird der Akkumultor zurückgesetzt,
         {                                                       // damit delta_time_secs nicht ultra gross wird und eine grosse Anzahl von Uptates verlangt wird
             accumulator_secs = 0;
-            m_pSubSystems->isLoading = false;
+            m_subSystems.isLoading = false;
         }
         
         while ( accumulator_secs >= PHYS_DELTA_TIME/*+0.3f*/ )
@@ -315,10 +329,10 @@ void GameApp::MainLoop()
             accumulator_secs -= PHYS_DELTA_TIME/*+0.3f*/;
         }
 
-        m_pSubSystems->renderer->ClearScreen();
+        m_subSystems.renderer.ClearScreen();
         DRAW( accumulator_secs/*/(PHYS_DELTA_TIME+0.3f)*PHYS_DELTA_TIME*/ ); // Spiel zeichnen
-        m_pSubSystems->renderer->DrawFPS(m_fps);
-        m_pSubSystems->renderer->FlipBuffer();
+        m_subSystems.renderer.DrawFPS(m_fps);
+        m_subSystems.renderer.FlipBuffer();
     }
 
     ////////////////////////////////////////////////////////
@@ -328,40 +342,37 @@ void GameApp::MainLoop()
     ////////////////////////////////////////////////////////
 
     gAaLog.DecreaseIndentationLevel();
-
-    // Alle offenen States ausschalten, bevor alle SubSysteme gelöscht werden.
-    m_pSubSystems->stateManager.reset();
 }
 
 // SDL Fensterereignisse behandeln (ob man das Fenster schliessen will)
-void GameApp::HandleSdlQuitEvents( SDL_Event& rSdlEvent, bool& rQuit )
+void GameApp::HandleSdlQuitEvents( SDL_Event& sdlEvent, bool& quit )
 {
-    while ( SDL_PollEvent( &rSdlEvent ) )
+    while ( SDL_PollEvent( &sdlEvent ) )
     {
-        switch ( rSdlEvent.type )
+        switch ( sdlEvent.type )
         {
             // Wenn eine Taste gedrück wurde
         case SDL_KEYDOWN:
         {
-            switch ( rSdlEvent.key.keysym.sym )
+            switch ( sdlEvent.key.keysym.sym )
             {
             case SDLK_ESCAPE: // ESC gedrückt, quit -> true
-                if ( m_pSubSystems->stateManager->GetCurrentState()->StateID() == "MainMenuState" )
+                if ( m_subSystems.stateManager.GetCurrentState()->StateID() == "MainMenuState" )
                 {
                     gAaLog.Write ( "User requested to quit, quitting...\n" );
-                    rQuit = true;
+                    quit = true;
                 }
                 else
                 {
-                    boost::shared_ptr<MainMenuState> menuState = boost::shared_ptr<MainMenuState>( new MainMenuState(*m_pSubSystems) );
-                    m_pSubSystems->stateManager->ChangeState( menuState );
+                    boost::shared_ptr<MainMenuState> menuState = boost::shared_ptr<MainMenuState>( new MainMenuState(m_subSystems) );
+                    m_subSystems.stateManager.ChangeState( menuState );
                 }
                 break;
             case SDLK_F4:
-                if ( rSdlEvent.key.keysym.mod & KMOD_LALT ) // ALT-F4
+                if ( sdlEvent.key.keysym.mod & KMOD_LALT ) // ALT-F4
                 {
                     gAaLog.Write ( "User requested to quit, quitting...\n" );
-                    rQuit = true;
+                    quit = true;
                 }
                 break;
 
@@ -375,7 +386,7 @@ void GameApp::HandleSdlQuitEvents( SDL_Event& rSdlEvent, bool& rQuit )
         case SDL_QUIT:
         {
             gAaLog.Write ( "User requested to quit, quitting...\n" );
-            rQuit = true;
+            quit = true;
         }
         break;
 

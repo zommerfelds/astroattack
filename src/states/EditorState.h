@@ -12,12 +12,11 @@
 #include "../GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
 #include "../GameStates.h"
 
-#include <boost/scoped_ptr.hpp>
 #include <string>
 
-class GameWorld;
-class CameraController;
-class Vector2D;
+#include "../World.h"
+#include "../CameraController.h"
+#include "../Vector2D.h"
 
 //--------------------------------------------//
 //------------ EditorState Klasse ------------//
@@ -26,7 +25,6 @@ class EditorState : public GameState
 {
 public:
     EditorState( SubSystems& subSystems );
-    ~EditorState(); // need to specify implement manually because of scoped_ptr (incomplete type)
 
     const StateIdType& StateID() const { return stateId; }
 
@@ -42,10 +40,10 @@ public:
 private:
     static const StateIdType stateId;
 
-    boost::scoped_ptr<GameWorld> m_pGameWorld;          // Spielwelt
-    boost::scoped_ptr<CameraController> m_pGameCamera;        // Kamera
+    GameWorld m_gameWorld;          // Spielwelt
+    CameraController m_cameraController;        // Kamera
 
-    boost::scoped_ptr<Vector2D> m_pClickedPoints[8];
+    Vector2D m_clickedPoints[8];
     int m_currentPoint;
     std::string m_currentTexture;
     unsigned int m_currentTextureNum;

@@ -7,7 +7,6 @@
 #include "../GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
 
 #include "CompGravField.h"
-#include "../Vector2D.h"
 #include <boost/make_shared.hpp>
 
 #include "../contrib/pugixml/pugixml.hpp"
@@ -16,23 +15,20 @@
 const CompIdType CompGravField::COMPONENT_ID = "CompGravField";
 
 // Konstruktor
-CompGravField::CompGravField() : m_gravType ( Directional ), m_pGravitationDir ( new Vector2D ),
-m_pGravitationCenter ( new Vector2D ), m_priority( 50 )
+CompGravField::CompGravField() : m_gravType ( Directional ), m_priority( 50 )
 {
-    m_pGravitationDir->Set( 0.0, 1.0 );
-    m_pGravitationCenter->Set( 0.0, 1.0 );
+    m_gravitationDir.Set( 0.0, 1.0 );
+    m_gravitationCenter.Set( 0.0, 1.0 );
 }
-
-CompGravField::~CompGravField() {}
 
 void CompGravField::SetGravDir(const Vector2D& dir)
 {
-    *m_pGravitationDir = dir;
+    m_gravitationDir = dir;
 }
 
 void CompGravField::SetGravCenter(const Vector2D& center, float strenght)
 {
-    *m_pGravitationCenter = center;
+    m_gravitationCenter = center;
     m_strenght = strenght;
 }
 

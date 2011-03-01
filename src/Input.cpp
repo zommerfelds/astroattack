@@ -8,7 +8,6 @@
 
 #include "main.h" // wichtige Definitionen und Dateien einbinden
 
-#include "Vector2D.h"
 #include "Input.h"
 
 const float cMouseSensivityFactor = 0.001f;
@@ -17,7 +16,7 @@ InputSubSystem::InputSubSystem() : m_pKeystates ( NULL ),
                                    m_mousestates ( 0 ),
                                    m_RMouseConsumed ( false ),
                                    m_LMouseConsumed ( false ),
-                                   m_pWindowMousePos ( new Vector2D(0.5f,0.5f) )
+                                   m_windowMousePos ( 0.5f, 0.5f )
 {
     // Tasten zuweisen:
     // (siehe SDL_keysym.h für Tastencodes)
@@ -57,8 +56,6 @@ InputSubSystem::InputSubSystem() : m_pKeystates ( NULL ),
     m_keyMap[SlideShowSkip] = SDLK_DELETE;
 }
 
-InputSubSystem::~InputSubSystem() {}
-
 // Eingabestatus speichern (Maus und Tastatur)
 void InputSubSystem::Update()
 {
@@ -78,23 +75,23 @@ void InputSubSystem::Update()
         int mousePosX;
         int mousePosY;
         m_mousestates = SDL_GetMouseState ( &mousePosX, &mousePosY );
-        m_pWindowMousePos->x = mousePosX / ( float ) gAaConfig.GetInt("ScreenWidth");
-        m_pWindowMousePos->y = mousePosY / ( float ) gAaConfig.GetInt("ScreenHeight");
+        m_windowMousePos.x = mousePosX / ( float ) gAaConfig.GetInt("ScreenWidth");
+        m_windowMousePos.y = mousePosY / ( float ) gAaConfig.GetInt("ScreenHeight");
     }
     else
     {
         int relMouseX = 0, relMouseY = 0;
         m_mousestates = SDL_GetRelativeMouseState( &relMouseX, &relMouseY );
-        m_pWindowMousePos->x += relMouseX * cMouseSensivityFactor * gAaConfig.GetFloat("MouseSensitivity");
-        m_pWindowMousePos->y += relMouseY * cMouseSensivityFactor * gAaConfig.GetFloat("MouseSensitivity");
-        if ( m_pWindowMousePos->x < 0.0f )
-            m_pWindowMousePos->x = 0.0f;
-        if ( m_pWindowMousePos->x > 1.0f )
-            m_pWindowMousePos->x = 1.0f;
-        if ( m_pWindowMousePos->y < 0.0f )
-            m_pWindowMousePos->y = 0.0f;
-        if ( m_pWindowMousePos->y > 1.0f )
-            m_pWindowMousePos->y = 1.0f;
+        m_windowMousePos.x += relMouseX * cMouseSensivityFactor * gAaConfig.GetFloat("MouseSensitivity");
+        m_windowMousePos.y += relMouseY * cMouseSensivityFactor * gAaConfig.GetFloat("MouseSensitivity");
+        if ( m_windowMousePos.x < 0.0f )
+            m_windowMousePos.x = 0.0f;
+        if ( m_windowMousePos.x > 1.0f )
+            m_windowMousePos.x = 1.0f;
+        if ( m_windowMousePos.y < 0.0f )
+            m_windowMousePos.y = 0.0f;
+        if ( m_windowMousePos.y > 1.0f )
+            m_windowMousePos.y = 1.0f;
     }
     if ( (m_mousestates & SDL_BUTTON ( SDL_BUTTON_RIGHT ))==0 )
         m_RMouseConsumed = false;
@@ -157,7 +154,7 @@ bool InputSubSystem::LMouseKeyStateConsume()
 
 const Vector2D& InputSubSystem::GetMousePos() const
 {
-    return *m_pWindowMousePos;
+    return m_windowMousePos;
 }
 
 void InputSubSystem::PutMouseOnCenter()
@@ -167,8 +164,8 @@ void InputSubSystem::PutMouseOnCenter()
 
 MouseState InputSubSystem::GetMouseStateInArea( const Rect& rButtonRect ) const
 {
-    if ( rButtonRect.x1 > m_pWindowMousePos->x || rButtonRect.x2 < m_pWindowMousePos->x ||
-         rButtonRect.y1 > m_pWindowMousePos->y || rButtonRect.y2 < m_pWindowMousePos->y )
+    if ( rButtonRect.x1 > m_windowMousePos.x || rButtonRect.x2 < m_windowMousePos.x ||
+         rButtonRect.y1 > m_windowMousePos.y || rButtonRect.y2 < m_windowMousePos.y )
         return Away;
     else if ( LMouseKeyState() )
         return PressedL;
@@ -180,8 +177,8 @@ MouseState InputSubSystem::GetMouseStateInArea( const Rect& rButtonRect ) const
 
 MouseState InputSubSystem::GetMouseStateInAreaConsume( const Rect& rButtonRect )
 {
-    if ( rButtonRect.x1 > m_pWindowMousePos->x || rButtonRect.x2 < m_pWindowMousePos->x ||
-         rButtonRect.y1 > m_pWindowMousePos->y || rButtonRect.y2 < m_pWindowMousePos->y )
+    if ( rButtonRect.x1 > m_windowMousePos.x || rButtonRect.x2 < m_windowMousePos.x ||
+         rButtonRect.y1 > m_windowMousePos.y || rButtonRect.y2 < m_windowMousePos.y )
         return Away;
     else if ( LMouseKeyState() )
     {

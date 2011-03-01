@@ -1,5 +1,5 @@
 /*
- * GUI.h
+ * Gui.h
  * This file is part of Astro Attack
  * Copyright 2011 Christian Zommerfelds
  */
@@ -16,7 +16,6 @@
 #include <boost/shared_ptr.hpp>
 
 class RenderSubSystem;
-//class InputSubSystem;
 
 #include "Input.h"
 
@@ -30,7 +29,7 @@ typedef std::string GroupId;
 class GuiSubSystem
 {
 public:
-    GuiSubSystem( RenderSubSystem* pRenderer, InputSubSystem* pInput );
+    GuiSubSystem( RenderSubSystem& renderer, InputSubSystem& input );
 
     void Update();
     void Draw();
@@ -41,8 +40,8 @@ public:
     void ShowGroup( GroupId groupId ) { m_groupsToHide.erase( groupId ); }
     void Clear() { if (m_isUpdating) m_clear = true; else ClearContainers(); }
 private:
-    RenderSubSystem* m_pRenderer;
-    InputSubSystem* m_pInput;
+    RenderSubSystem& m_renderer;
+    InputSubSystem& m_input;
     void ClearContainers() { m_widgets.clear(); m_groupsToHide.clear(); m_clear = false; }
 
     typedef std::map< GroupId, std::vector< boost::shared_ptr<Widget> > > WidgetMap;

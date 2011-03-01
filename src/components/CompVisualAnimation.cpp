@@ -12,7 +12,6 @@
 #include "../GameEvents.h"
 #include "../main.h"
 #include <boost/bind.hpp>
-#include "../Vector2D.h"
 #include <sstream>
 #include <boost/make_shared.hpp>
 
@@ -23,7 +22,7 @@ const CompIdType CompVisualAnimation::COMPONENT_ID = "CompVisualAnimation";
 
 CompVisualAnimation::CompVisualAnimation( const AnimInfo* pAnimInfo )
 : m_eventConnection(),
-  m_center( new Vector2D ),
+  m_center(),
   m_halfWidth ( 0.0f ),
   m_halfHeight ( 0.0f ),
   m_currentFrame ( 0 ),
@@ -43,8 +42,6 @@ CompVisualAnimation::CompVisualAnimation( const AnimInfo* pAnimInfo )
     // Update() registrieren. Das hat die Folge, dass Update() pro Aktualisierung (GameUpdate) aufgerufen wird.
     m_eventConnection = gameEvents->gameUpdate.RegisterListener( boost::bind( &CompVisualAnimation::OnUpdate, this ) );
 }
-
-CompVisualAnimation::~CompVisualAnimation() {}
 
 TextureIdType CompVisualAnimation::GetCurrentTexture() const
 {
@@ -144,7 +141,7 @@ boost::shared_ptr<CompVisualAnimation> CompVisualAnimation::LoadFromXml(const pu
     bool start = !compElem.child("start").empty();
 
     boost::shared_ptr<CompVisualAnimation> compAnim = boost::make_shared<CompVisualAnimation>(animMngr.GetAnimInfo(animName));
-    compAnim->Center()->Set(centerX, centerY);
+    compAnim->m_center.Set(centerX, centerY);
     compAnim->SetDimensions(hw, hh);
     if (start)
         compAnim->Start();
@@ -157,8 +154,8 @@ void CompVisualAnimation::WriteToXml(pugi::xml_node& compNode) const
     animNode.append_attribute("name").set_value(GetAnimInfo()->name.c_str());
 
     pugi::xml_node centerNode = compNode.append_child("anim");
-    animNode.append_attribute("x").set_value(m_center->x);
-    animNode.append_attribute("y").set_value(m_center->y);
+    animNode.append_attribute("x").set_value(m_center.x);
+    animNode.append_attribute("y").set_value(m_center.y);
 
     pugi::xml_node dimNode = compNode.append_child("dim");
     dimNode.append_attribute("hw").set_value(m_halfWidth);

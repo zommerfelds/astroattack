@@ -11,7 +11,6 @@
 #include "CompPosition.h"
 #include "CompPhysics.h"
 #include "../Entity.h"
-#include "../Vector2D.h"
 #include <boost/make_shared.hpp>
 
 #include "../contrib/pugixml/pugixml.hpp"
@@ -21,16 +20,12 @@ const CompIdType CompPosition::COMPONENT_ID = "CompPosition";
 
 // TODO: use weak_ptr for CompPhysics pointer (store for multiple uses)
 
-CompPosition::CompPosition() : m_pPosition ( new Vector2D ), m_orientation ( 0.0f )
-{
-}
-
-CompPosition::~CompPosition() {}
+CompPosition::CompPosition() : m_position (), m_orientation ( 0.0f ) {}
 
 void CompPosition::SetPosition(const Vector2D& pos)
 {
     // TODO: set Box2D pos
-    *m_pPosition = pos;
+    m_position = pos;
 }
 
 const Vector2D& CompPosition::GetPosition() const
@@ -38,12 +33,12 @@ const Vector2D& CompPosition::GetPosition() const
     const CompPhysics* compPhys = GetOwnerEntity()->GetComponent<CompPhysics>(); // important TODO: this can segfault
     if (compPhys)
         return compPhys->GetSmoothPosition();
-    return *m_pPosition;
+    return m_position;
 }
 
 const Vector2D& CompPosition::GetPosIgnoreCompPhys() const
 {
-    return *m_pPosition;
+    return m_position;
 }
 
 float CompPosition::GetOrientation() const

@@ -43,6 +43,7 @@ private:
 };
 
 //-------------------------------- Funktionen --------------------------------//
+// TODO: restructure place
 
 // Plattform-übergreifende Dialog-Box Funktion
 // Nur benutzen in schweren Fällen wann die GUI noch nicht bereit ist.

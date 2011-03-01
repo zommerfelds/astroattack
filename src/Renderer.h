@@ -10,7 +10,6 @@
 #define RENDERER_H
 
 #include "GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
-#include <boost/scoped_ptr.hpp>
 #include "Event.h" // TODO: use pimpl to hide this
 
 class Entity;
@@ -18,13 +17,12 @@ struct GameEvents;
 class CompVisualTexture;
 class CompVisualAnimation;
 class CompVisualMessage;
-class TextureManager;
-class AnimationManager;
 class CompShapePolygon;
 class CompShapeCircle;
 class Vector2D;
 
 #include "Font.h"
+#include "Texture.h"
 #include <set>
 #include <string>
 
@@ -33,10 +31,10 @@ class Vector2D;
 class RenderSubSystem
 {
 public:
-    RenderSubSystem( GameEvents* pGameEvents );
-    ~RenderSubSystem();
+    RenderSubSystem( GameEvents& gameEvents );
 
     void Init( int width, int height );
+    void DeInit();
     bool LoadData();
 
     void ClearScreen();
@@ -96,22 +94,24 @@ public:
     void DisplayLoadingScreen();
     void DisplayTextScreen( const std::string& text );
 
-    const TextureManager& GetTextureManager() const { return *m_pTextureManager; }
-    const AnimationManager& GetAnimationManager() const { return *m_pAnimationManager; }
-    const FontManager& GetFontManager() const { return *m_pFontManager; }
-    TextureManager& GetTextureManager() { return *m_pTextureManager; }
-    AnimationManager& GetAnimationManager() { return *m_pAnimationManager; }
-    FontManager& GetFontManager() { return *m_pFontManager; }
+    const TextureManager& GetTextureManager() const { return m_textureManager; }
+    const AnimationManager& GetAnimationManager() const { return m_animationManager; }
+    const FontManager& GetFontManager() const { return m_fontManager; }
+    TextureManager& GetTextureManager() { return m_textureManager; }
+    AnimationManager& GetAnimationManager() { return m_animationManager; }
+    FontManager& GetFontManager() { return m_fontManager; }
 
 private:
     void InitOpenGL( int width, int height ); // OpenGL initialisieren
 
+    bool m_isInit;
+
     EventConnection m_eventConnection1;
     EventConnection m_eventConnection2;
-    GameEvents* m_pGameEvents;
-    boost::scoped_ptr<TextureManager> m_pTextureManager;
-    boost::scoped_ptr<AnimationManager> m_pAnimationManager;
-    boost::scoped_ptr<FontManager> m_pFontManager;
+    GameEvents& m_gameEvents;
+    TextureManager m_textureManager;
+    AnimationManager m_animationManager;
+    FontManager m_fontManager;
 
     typedef std::set<CompVisualTexture*> CompVisualTextureSet;
     typedef std::set<CompVisualAnimation*> CompVisualAnimationSet;

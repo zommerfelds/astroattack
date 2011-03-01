@@ -29,6 +29,7 @@ public:
     ~SoundSubSystem();
 
     bool Init();
+    void DeInit();
 
     void LoadSound( const char* name, SoundIdType id );
     void FreeSound( const SoundIdType& id );

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <root>
-      <music file="data/Music/130463___.mp3.OGG"/><!--ParagonX9___Chaoz_C.ogg"/-->
+      <music file="data/Music/130463___.mp3.ogg"/><!--ParagonX9___Chaoz_C.ogg"/-->
       <timer delayms="5000"/>
       <slide image="data/Intro/1 Planet.png">Auf einem winzigen Planeten irgendwo im riesigen Universum lebt&#xA;eine kleine Zivilisation von Menschen.</slide>
       <slide image="data/Intro/2 Kristall.png">Das Zentrum dieses Planeten ist reich an Xymin-Kristall,&#xA;eine seltene Kristallsorte, die sehr wertvoll in dieser Galaxie ist.</slide>
