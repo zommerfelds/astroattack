@@ -17,7 +17,7 @@
 #include "contrib/pugixml/foreach.hpp"
 
 // Standarteinstellungen laden
-void Configuration::LoadDefault()
+void Configuration::loadDefault()
 {
     // Standarteinstellungen
     /*const int defScreenWidth = 1024;
@@ -40,13 +40,13 @@ void Configuration::LoadDefault()
 }
 
 // Konfiguration aus Datei laden
-bool Configuration::Load( const char *pFileName )
+bool Configuration::load( const char *pFileName )
 {
     pugi::xml_document doc;
     pugi::xml_parse_result result = doc.load_file(pFileName);
     if (!result)
     {
-        gAaLog.Write( "[ Error parsing file '%s' at offset %d!\nError description: %s ]\n\n", pFileName, result.offset, result.description() );
+        gAaLog.write( "[ Error parsing file '%s' at offset %d!\nError description: %s ]\n\n", pFileName, result.offset, result.description() );
         return false;
     }
 
@@ -77,7 +77,7 @@ bool Configuration::Load( const char *pFileName )
 }
 
 // Konfiguration in Datei speichern
-bool Configuration::Save( const char *pFileName ) const
+bool Configuration::save( const char *pFileName ) const
 {
     pugi::xml_document doc;
 
@@ -111,7 +111,7 @@ bool Configuration::Save( const char *pFileName ) const
     return doc.save_file(pFileName);
 }
 
-int Configuration::GetInt(const std::string& id) const
+int Configuration::getInt(const std::string& id) const
 {
     std::map< std::string, ConfigEntry >::const_iterator it = m_appliedConfigEntries.find( id );
     if ( it == m_appliedConfigEntries.end() )
@@ -120,7 +120,7 @@ int Configuration::GetInt(const std::string& id) const
         return it->second.valInt;
 }
 
-float Configuration::GetFloat(const std::string& id) const
+float Configuration::getFloat(const std::string& id) const
 {
     std::map< std::string, ConfigEntry >::const_iterator it = m_appliedConfigEntries.find( id );
     if ( it == m_appliedConfigEntries.end() )
@@ -129,7 +129,7 @@ float Configuration::GetFloat(const std::string& id) const
         return it->second.valFloat;
 }
 
-std::string Configuration::GetString(const std::string& id) const
+std::string Configuration::getString(const std::string& id) const
 {
     std::map< std::string, ConfigEntry >::const_iterator it = m_appliedConfigEntries.find( id );
     if ( it == m_appliedConfigEntries.end() )
@@ -138,21 +138,21 @@ std::string Configuration::GetString(const std::string& id) const
         return it->second.valString;
 }
 
-void Configuration::SetInt(const std::string& id, int val )
+void Configuration::setInt(const std::string& id, int val )
 {
     ConfigEntry& entry = m_unappliedConfigEntries[id];
     entry.type = 0;
     entry.valInt = val;
 }
 
-void Configuration::SetFloat(const std::string& id, float val )
+void Configuration::setFloat(const std::string& id, float val )
 {
     ConfigEntry& entry = m_unappliedConfigEntries[id];
     entry.type = 1;
     entry.valFloat = val;
 }
 
-void Configuration::SetString(const std::string& id, std::string val )
+void Configuration::setString(const std::string& id, std::string val )
 {
     ConfigEntry& entry = m_unappliedConfigEntries[id];
     entry.type = 2;

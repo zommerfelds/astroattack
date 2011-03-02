@@ -27,27 +27,27 @@ class CompGravField : public Component
 public:
     CompGravField();
 
-    const CompIdType& ComponentId() const { return COMPONENT_ID; }
+    const CompIdType& getComponentId() const { return COMPONENT_ID; }
     static const CompIdType COMPONENT_ID; // eindeutige ID für diese Komponentenart (gleich wie Klassennamen, siehe CompGravField.cpp)
 
     // Setters
-	void SetGravType( GravType t ) { m_gravType = t; }
-	void SetGravDir( const Vector2D& dir );
-	void SetGravCenter( const Vector2D& center, float strenght );
-    void SetPriority( int priority );
+	void setGravType( GravType t ) { m_gravType = t; }
+	void setGravDir( const Vector2D& dir );
+	void setGravCenter( const Vector2D& center, float strenght );
+    void setPriority( int priority );
 
     // Getters
-	GravType GetGravType() const { return m_gravType; }
-	const Vector2D& GetGravDir() const { return m_gravitationDir; }
-	const Vector2D& GetGravCenter() const { return m_gravitationCenter; }
-	float GetStrenght() const { return m_strenght; }
-	int GetPriority() const { return m_priority; }
+	GravType getGravType() const { return m_gravType; }
+	const Vector2D& getGravDir() const { return m_gravitationDir; }
+	const Vector2D& getGravCenter() const { return m_gravitationCenter; }
+	float getStrenght() const { return m_strenght; }
+	int getPriority() const { return m_priority; }
 
 	// Get the acceleration of a body with center of mass "centerOfMass"
-	Vector2D GetAcceleration(const Vector2D& centerOfMass) const;
+	Vector2D getAcceleration(const Vector2D& centerOfMass) const;
 
-    static boost::shared_ptr<CompGravField> LoadFromXml(const pugi::xml_node& compElem);
-    void WriteToXml(pugi::xml_node& compNode) const;
+    static boost::shared_ptr<CompGravField> loadFromXml(const pugi::xml_node& compElem);
+    void writeToXml(pugi::xml_node& compNode) const;
 
 private:
 
@@ -58,8 +58,5 @@ private:
     int m_priority; // Gravitationsfeld-priorität: wenn sich 2 felder überlappen, gilt der mit der grössten priorität (0-100 is gültig)
 
 };
-//--------------------------------------------//
-//------- Ende CompGravField Klasse --------//
-//--------------------------------------------//
 
 #endif

@@ -29,8 +29,8 @@ struct SubSystems
 {
     SubSystems();
     ~SubSystems();
-    bool Init();
-    void DeInit();
+    bool init();
+    void deInit();
     StateManager stateManager;   // States
     GameEvents events;           // Spielereignisse
     InputSubSystem input;        // Eingabe
@@ -52,26 +52,26 @@ public:
     GameApp(const std::vector<std::string>& args);
     ~GameApp();
 
-    void Run();     // Spiel starten (nach der Initialisierung ), d.h. Hauptschleife starten
+    void run();     // Spiel starten (nach der Initialisierung ), d.h. Hauptschleife starten
 
 private:
-    void Init();    // Astro Attack initialisieren
-    void DeInit();  // Speicher wieder freigeben
+    void init();    // Astro Attack initialisieren
+    void deInit();  // Speicher wieder freigeben
 
-    void MainLoop(); // Hauptschleife
+    void mainLoop(); // Hauptschleife
 
     bool m_isInit;
 
     SubSystems m_subSystems; // Untersysteme
 
     bool m_quit; // Ob Programm beenden werden soll
-    void OnQuit() { m_quit = true; } // Spiel beenden (Wird von einem Event aufgerufen)
+    void onQuit() { m_quit = true; } // Spiel beenden (Wird von einem Event aufgerufen)
 
     EventConnection m_eventConnection; // TODO: scoped_ptr
 
-    void UpdateGame();
-    void HandleSdlQuitEvents( SDL_Event&, bool& quit );
-    void CalcFPS( unsigned int curTime );
+    void updateGame();
+    void handleSdlQuitEvents( SDL_Event&, bool& quit );
+    void calcFPS( unsigned int curTime );
 
     unsigned int m_fpsMeasureStart;
     unsigned int m_framesCounter;
@@ -84,10 +84,10 @@ private:
     bool m_overRideFullScreen; // if the variable above should override the full screen option in the configuration file
 
     // Initialisationsfunktionen in Init.cpp
-    bool InitSDL();
-    bool InitVideo();
+    bool initSDL();
+    bool initVideo();
 
-    void ParseArguments( const std::vector<std::string>& args ); // Programmargumente verarbeiten
+    void parseArguments( const std::vector<std::string>& args ); // Programmargumente verarbeiten
 };
 
 

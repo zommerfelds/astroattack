@@ -42,97 +42,96 @@ const StateIdType PlayingState::stateId = "PlayingState";
 
 PlayingState::PlayingState( SubSystems& subSystems, std::string levelFileName )
 : GameState( subSystems ),
-  m_gameWorld ( GetSubSystems().events ),
-  m_cameraController ( GetSubSystems().input, GetSubSystems().renderer, m_gameWorld ),
+  m_gameWorld ( getSubSystems().events ),
+  m_cameraController ( getSubSystems().input, getSubSystems().renderer, m_gameWorld ),
   m_eventConnection1 (), m_eventConnection2 (),
   m_curentDeleteSet (1), m_wantToEndGame( false ), m_alphaOverlay( 0.0 ),
   m_levelFileName ( levelFileName ),
   m_showLoadingScreenAtCleanUp ( true )
 {}
 
-void PlayingState::Init()        // State starten
+void PlayingState::init()        // State starten
 {
     //GetSubSystems().renderer.DisplayLoadingScreen();
     
-	GetSubSystems().input.PutMouseOnCenter();
+	getSubSystems().input.putMouseOnCenter();
 
-    m_cameraController.Init();
-    m_cameraController.SetFollowPlayer( true );
+    m_cameraController.init();
+    m_cameraController.setFollowPlayer( true );
 
-    gAaLog.Write ( "Loading world...\n\n" );
-    gAaLog.IncreaseIndentationLevel();
+    gAaLog.write ( "Loading world...\n\n" );
+    gAaLog.increaseIndentationLevel();
 
-    m_gameWorld.SetVariable( "Collected", 0 );
-    m_gameWorld.SetVariable( "JetpackEnergy", 1000 );
-    m_gameWorld.SetVariable( "Health", 1000 );
+    m_gameWorld.setVariable( "Collected", 0 );
+    m_gameWorld.setVariable( "JetpackEnergy", 1000 );
+    m_gameWorld.setVariable( "Health", 1000 );
 
     // Welt von XML-Datei laden
-    XmlLoader loader;
-    loader.LoadXmlToWorld( "data/player.xml", m_gameWorld, GetSubSystems() );
-    loader.LoadXmlToWorld( m_levelFileName.c_str(), m_gameWorld, GetSubSystems() );
+    XmlLoader::loadXmlToWorld( "data/player.xml", m_gameWorld, getSubSystems() );
+    XmlLoader::loadXmlToWorld( m_levelFileName.c_str(), m_gameWorld, getSubSystems() );
 
-    GetSubSystems().sound.LoadMusic( "data/Music/Aerospace.ogg", "music" );
-    GetSubSystems().sound.PlayMusic( "music", true, 0 );
+    getSubSystems().sound.loadMusic( "data/Music/Aerospace.ogg", "music" );
+    getSubSystems().sound.playMusic( "music", true, 0 );
 
-    gAaLog.DecreaseIndentationLevel();
-    gAaLog.Write ( "[ Done loading world ]\n\n" );
+    gAaLog.decreaseIndentationLevel();
+    gAaLog.write ( "[ Done loading world ]\n\n" );
 
     // Alle Entities und Komponenten in Text Datei anzeigen
     Logger log ( cWordLogFileName );
-    log.Write( "World Entities:\n\n" );
-    m_gameWorld.WriteWorldToLogger( log );
-    log.CloseFile();
+    log.write( "World Entities:\n\n" );
+    m_gameWorld.writeWorldToLogger( log );
+    log.closeFile();
 
-    m_eventConnection1 = GetSubSystems().events.wantToDeleteEntity.RegisterListener( boost::bind( &PlayingState::OnEntityDeleted, this, _1 ) );
-    m_eventConnection2 = GetSubSystems().events.levelEnd.RegisterListener( boost::bind( &PlayingState::OnLevelEnd, this, _1, _2 ) );
+    m_eventConnection1 = getSubSystems().events.wantToDeleteEntity.registerListener( boost::bind( &PlayingState::onEntityDeleted, this, _1 ) );
+    m_eventConnection2 = getSubSystems().events.levelEnd.registerListener( boost::bind( &PlayingState::onLevelEnd, this, _1, _2 ) );
 }
 
-void PlayingState::Cleanup()     // State abbrechen
+void PlayingState::cleanup()     // State abbrechen
 {
     // loading screen
     if ( m_showLoadingScreenAtCleanUp )
-        GetSubSystems().renderer.DisplayTextScreen("p l e a s e    w a i t");
+        getSubSystems().renderer.displayTextScreen("p l e a s e    w a i t");
 
-    GetSubSystems().sound.StopMusic( 500 );
-    GetSubSystems().sound.FreeMusic( "music" );
+    getSubSystems().sound.stopMusic( 500 );
+    getSubSystems().sound.freeMusic( "music" );
 }
 
-void PlayingState::Pause()       // State anhalten
+void PlayingState::pause()       // State anhalten
 {
 }
 
-void PlayingState::Resume()      // State wiederaufnehmen
+void PlayingState::resume()      // State wiederaufnehmen
 {
 }
 
-void PlayingState::Frame( float deltaTime )
+void PlayingState::frame( float deltaTime )
 {
-    GetSubSystems().input.Update();   // neue Eingaben lesen
-    m_cameraController.Update( deltaTime ); // Kamera updaten
+    getSubSystems().input.update();   // neue Eingaben lesen
+    m_cameraController.update( deltaTime ); // Kamera updaten
 }
 
-void PlayingState::Update()      // Spiel aktualisieren
+void PlayingState::update()      // Spiel aktualisieren
 {
     if ( m_wantToEndGame )
     {
         if ( m_alphaOverlay > 1.0f )
         {
-            boost::shared_ptr<GameOverState> gameOverStateState( new GameOverState(GetSubSystems(), m_gameOverMessage, m_levelFileName) );
-            GetSubSystems().stateManager.ChangeState( gameOverStateState );
+            boost::shared_ptr<GameOverState> gameOverStateState( new GameOverState(getSubSystems(), m_gameOverMessage, m_levelFileName) );
+            getSubSystems().stateManager.changeState( gameOverStateState );
             return;
         }
         m_alphaOverlay += 0.10f;
     }
 
-    GetSubSystems().physics.Update();                       // Physik aktualisieren
-    GetSubSystems().events.gameUpdate.Fire();
+    getSubSystems().physics.update();                       // Physik aktualisieren
+    getSubSystems().events.gameUpdate.fire();
 
     if ( m_curentDeleteSet == 1 )
     {
         m_curentDeleteSet = 2;
 
         BOOST_FOREACH(const EntityIdType& id, m_entitiesToDelete1)
-            m_gameWorld.RemoveEntity(id);
+            m_gameWorld.removeEntity(id);
 
         m_entitiesToDelete1.clear();
     }
@@ -141,24 +140,24 @@ void PlayingState::Update()      // Spiel aktualisieren
         m_curentDeleteSet = 1;
 
         BOOST_FOREACH(const EntityIdType& id, m_entitiesToDelete2)
-            m_gameWorld.RemoveEntity(id);
+            m_gameWorld.removeEntity(id);
 
         m_entitiesToDelete2.clear();
     }
 }
 
-void PlayingState::Draw( float accumulator )        // Spiel zeichnen
+void PlayingState::draw( float accumulator )        // Spiel zeichnen
 {
 	// maybe put this in PhysicsSubSystem::Update
 	// (then the physics subsystem would need an accumulator for itself)
-    GetSubSystems().physics.CalculateSmoothPositions(accumulator);
+    getSubSystems().physics.calculateSmoothPositions(accumulator);
 
-    RenderSubSystem& renderer = GetSubSystems().renderer;
+    RenderSubSystem& renderer = getSubSystems().renderer;
 
     // Bildschirm leeren
     //renderer.ClearScreen();
     // GUI modus (Grafische Benutzeroberfläche)
-    renderer.SetMatrix(RenderSubSystem::GUI);
+    renderer.setMatrix(RenderSubSystem::GUI);
     // Hintergrundbild zeichnen
     {
         float texCoord[8] = { 0.0f, 0.0f,
@@ -169,103 +168,103 @@ void PlayingState::Draw( float accumulator )        // Spiel zeichnen
                                  0.0f, 3.0f,
                                  4.0f, 3.0f,
                                  4.0f, 0.0f };
-        renderer.DrawTexturedQuad( texCoord, vertexCoord, "_starfield" );
+        renderer.drawTexturedQuad( texCoord, vertexCoord, "_starfield" );
     }
     // Weltmodus
-    renderer.SetMatrix(RenderSubSystem::World);
-    m_cameraController.Look();
+    renderer.setMatrix(RenderSubSystem::World);
+    m_cameraController.look();
     // Animationen zeichnen
-    renderer.DrawVisualAnimationComps();
+    renderer.drawVisualAnimationComps();
     // Texturen zeichnen
-    renderer.DrawVisualTextureComps();
+    renderer.drawVisualTextureComps();
 
     // Draw debug info
 #ifdef DRAW_DEBUG
-    Entity* player = m_gameWorld.GetEntity("Player").get();
+    Entity* player = m_gameWorld.getEntity("Player").get();
     if ( player )
     {
-        CompPhysics* player_phys = player->GetComponent<CompPhysics>();
+        CompPhysics* player_phys = player->getComponent<CompPhysics>();
         if ( player_phys )
         {
-            const CompGravField* grav = player_phys->GetActiveGravField();
-            Vector2D gravPoint = player_phys->GetLocalGravitationPoint().Rotated( player_phys->GetSmoothAngle() ) + player_phys->GetPosition();
-            Vector2D smoothGravPoint = player_phys->GetLocalGravitationPoint().Rotated( player_phys->GetSmoothAngle() ) + player_phys->GetSmoothPosition();
-            Vector2D smoothRotPoint = player_phys->GetLocalRotationPoint().Rotated( player_phys->GetSmoothAngle() ) + player_phys->GetSmoothPosition();
+            const CompGravField* grav = player_phys->getActiveGravField();
+            Vector2D gravPoint = player_phys->getLocalGravitationPoint().rotated( player_phys->getSmoothAngle() ) + player_phys->getPosition();
+            Vector2D smoothGravPoint = player_phys->getLocalGravitationPoint().rotated( player_phys->getSmoothAngle() ) + player_phys->getSmoothPosition();
+            Vector2D smoothRotPoint = player_phys->getLocalRotationPoint().rotated( player_phys->getSmoothAngle() ) + player_phys->getSmoothPosition();
             if ( grav )
             {
-                Vector2D vec = grav->GetAcceleration( gravPoint );
-                renderer.DrawVector( vec*0.1f, smoothGravPoint );
+                Vector2D vec = grav->getAcceleration( gravPoint );
+                renderer.drawVector( vec*0.1f, smoothGravPoint );
             }
-            renderer.DrawPoint( smoothGravPoint );
-            renderer.DrawPoint( smoothRotPoint );
+            renderer.drawPoint( smoothGravPoint );
+            renderer.drawPoint( smoothRotPoint );
         }
     }
 #endif
     
     // Fadenkreuz zeichnen
-    renderer.DrawCrosshairs ( m_cameraController.ScreenToWorld(GetSubSystems().input.GetMousePos()) );
+    renderer.drawCrosshairs ( m_cameraController.screenToWorld(getSubSystems().input.getMousePos()) );
     // GUI modus (Grafische Benutzeroberfläche)
-    renderer.SetMatrix(RenderSubSystem::GUI);
+    renderer.setMatrix(RenderSubSystem::GUI);
 
     // Texte zeichnen
-    renderer.DrawVisualMessageComps();
+    renderer.drawVisualMessageComps();
 
     // Jetpack %-display
     {
         float x = 0.45f, y = 0.14;
         float r = 0.2f, g = 0.9f, b = 0.3f;
-        float jetpackEnergy = m_gameWorld.GetVariable("JetpackEnergy")/1000.0f;
+        float jetpackEnergy = m_gameWorld.getVariable("JetpackEnergy")/1000.0f;
         float vertexCoord[8] = { x+0.05f, y-0.06f,
                                  x+0.05f, y+0.06f,
                                  x+0.05f + jetpackEnergy, y+0.06f,
                                  x+0.05f + jetpackEnergy, y-0.06f };
-        renderer.DrawColorQuad( vertexCoord, r, g, b, 0.6f, true );
+        renderer.drawColorQuad( vertexCoord, r, g, b, 0.6f, true );
 
         std::stringstream ss;
         ss.precision( 1 );
         ss.setf(std::ios::fixed, std::ios::floatfield);
         ss << jetpackEnergy*100 << "%";
-        renderer.DrawString( "Jetpack", "FontW_m", x, y, AlignRight, AlignCenter, 1.0f, 1.0f, 1.0f, 1.0f );
-        renderer.DrawString( ss.str().c_str(), "FontW_m", x+0.1f, y, AlignLeft, AlignCenter, 1.0f, 1.0f, 1.0f, 1.0f );
+        renderer.drawString( "Jetpack", "FontW_m", x, y, AlignRight, AlignCenter, 1.0f, 1.0f, 1.0f, 1.0f );
+        renderer.drawString( ss.str().c_str(), "FontW_m", x+0.1f, y, AlignLeft, AlignCenter, 1.0f, 1.0f, 1.0f, 1.0f );
     }
 
     // Health %-display
     {
         float x = 0.45f, y = 0.35;
         float r = 0.8f, g = 0.2f, b = 0.3f;
-        float health = m_gameWorld.GetVariable("Health")/1000.0f;
+        float health = m_gameWorld.getVariable("Health")/1000.0f;
         float vertexCoord[8] = { x+0.05f, y-0.06f,
                                  x+0.05f, y+0.06f,
                                  x+0.05f + health, y+0.06f,
                                  x+0.05f + health, y-0.06f };
-        renderer.DrawColorQuad( vertexCoord, r, g, b, 0.6f, true );
+        renderer.drawColorQuad( vertexCoord, r, g, b, 0.6f, true );
 
         std::stringstream ss;
         ss.precision( 1 );
         ss.setf(std::ios::fixed, std::ios::floatfield);
         ss << health*100 << "%";
-        renderer.DrawString( "Health", "FontW_m", x, y, AlignRight, AlignCenter, 1.0f, 1.0f, 1.0f, 1.0f );
-        renderer.DrawString( ss.str().c_str(), "FontW_m", x+0.1f, y, AlignLeft, AlignCenter, 1.0f, 1.0f, 1.0f, 1.0f );
+        renderer.drawString( "Health", "FontW_m", x, y, AlignRight, AlignCenter, 1.0f, 1.0f, 1.0f, 1.0f );
+        renderer.drawString( ss.str().c_str(), "FontW_m", x+0.1f, y, AlignLeft, AlignCenter, 1.0f, 1.0f, 1.0f, 1.0f );
     }
 
     if ( m_alphaOverlay != 0.0f )
     {
-        renderer.DrawOverlay( cBackgroundColor[0], cBackgroundColor[1], cBackgroundColor[2], m_alphaOverlay );
+        renderer.drawOverlay( cBackgroundColor[0], cBackgroundColor[1], cBackgroundColor[2], m_alphaOverlay );
     }
 
     // Erzeugtes Bild zeigen
     //renderer.FlipBuffer(); // (vom Backbuffer zum Frontbuffer wechseln)
 }
 
-void PlayingState::OnEntityDeleted( Entity& entity )
+void PlayingState::onEntityDeleted( Entity& entity )
 {
     if ( m_curentDeleteSet == 1 )
-        m_entitiesToDelete1.insert( entity.GetId() );
+        m_entitiesToDelete1.insert( entity.getId() );
     else
-        m_entitiesToDelete2.insert( entity.GetId() );
+        m_entitiesToDelete2.insert( entity.getId() );
 }
 
-void PlayingState::OnLevelEnd(bool /*win*/, const std::string& msg)
+void PlayingState::onLevelEnd(bool /*win*/, const std::string& msg)
 {
     m_showLoadingScreenAtCleanUp = false;
     m_wantToEndGame = true;

@@ -37,28 +37,28 @@ struct ConfigEntry
 class Configuration
 {
 public:
-    Configuration() { LoadDefault(); }
+    Configuration() { loadDefault(); }
 
-    bool Load( const char *pFileName ); // Konfiguration aus Datei laden
-    bool Save( const char *pFileName ) const; // Konfiguration in Datei speichern
+    bool load( const char *pFileName ); // Konfiguration aus Datei laden
+    bool save( const char *pFileName ) const; // Konfiguration in Datei speichern
 
-    void LoadDefault(); // Standartkonfiguration laden
+    void loadDefault(); // Standartkonfiguration laden
 
-    int GetInt(const std::string& id) const;
-    float GetFloat(const std::string& id) const;
-    std::string GetString(const std::string& id) const;
+    int getInt(const std::string& id) const;
+    float getFloat(const std::string& id) const;
+    std::string getString(const std::string& id) const;
 
-    void SetInt(const std::string& id, int val );
-    void SetFloat(const std::string& id, float val );
-    void SetString(const std::string& id, std::string val );
+    void setInt(const std::string& id, int val );
+    void setFloat(const std::string& id, float val );
+    void setString(const std::string& id, std::string val );
 
-    void ApplyConfig() { m_appliedConfigEntries = m_unappliedConfigEntries; }
-    void DiscardConfig() { m_unappliedConfigEntries = m_appliedConfigEntries; }
+    void applyConfig() { m_appliedConfigEntries = m_unappliedConfigEntries; }
+    void discardConfig() { m_unappliedConfigEntries = m_appliedConfigEntries; }
 
-    //int Get(ConfigIndex index) const;
-    //void Set(ConfigIndex index, int value);
-    //void GetScreenConfig(int* pWidth, int* pWeight, int* pBpp, bool* pFullScreen);
-    //void SetScreenConfig(const int* pWidth, const int* pWeight, const int* pBpp, const bool* pFullScreen);
+    //int get(ConfigIndex index) const;
+    //void set(ConfigIndex index, int value);
+    //void getScreenConfig(int* pWidth, int* pWeight, int* pBpp, bool* pFullScreen);
+    //void setScreenConfig(const int* pWidth, const int* pWeight, const int* pBpp, const bool* pFullScreen);
     
 private:
     /*

@@ -30,17 +30,17 @@ class PlayingState : public GameState
 public:
     PlayingState( SubSystems& subSystems, std::string levelFileName );
 
-    const StateIdType& StateID() const { return stateId; }
+    const StateIdType& getId() const { return stateId; }
 
-	void Init();        // State starten
-	void Cleanup();     // State abbrechen
+	void init();        // State starten
+	void cleanup();     // State abbrechen
 
-	void Pause();       // State anhalten
-	void Resume();      // State wiederaufnehmen
-    void Frame( float deltaTime );
+	void pause();       // State anhalten
+	void resume();      // State wiederaufnehmen
+    void frame( float deltaTime );
 
-	void Update();      // Spiel aktualisieren
-	void Draw( float accumulator );        // Spiel zeichnen
+	void update();      // Spiel aktualisieren
+	void draw( float accumulator );        // Spiel zeichnen
 private:
     static const StateIdType stateId;
     
@@ -49,8 +49,8 @@ private:
 
     EventConnection m_eventConnection1;
     EventConnection m_eventConnection2;
-    void OnEntityDeleted( Entity& entity );
-    void OnLevelEnd(bool win, const std::string& msg);
+    void onEntityDeleted( Entity& entity );
+    void onLevelEnd(bool win, const std::string& msg);
     std::set< std::string > m_entitiesToDelete1;
     std::set< std::string > m_entitiesToDelete2;
     int m_curentDeleteSet;
@@ -63,8 +63,5 @@ private:
 
     bool m_showLoadingScreenAtCleanUp;
 };
-//--------------------------------------------//
-//-------- Ende PlayingState Klasse ----------//
-//--------------------------------------------//
 
 #endif

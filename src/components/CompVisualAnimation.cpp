@@ -37,13 +37,13 @@ CompVisualAnimation::CompVisualAnimation( const AnimInfo* pAnimInfo )
     if ( pAnimInfo != NULL )
         m_curState = pAnimInfo->states.begin()->first;
     else
-        gAaLog.Write ( "*** WARNING ***: pointer passed to CompVisualAnimation is NULL! (Animation does not exist?) " );
+        gAaLog.write ( "*** WARNING ***: pointer passed to CompVisualAnimation is NULL! (Animation does not exist?) " );
 
     // Update() registrieren. Das hat die Folge, dass Update() pro Aktualisierung (GameUpdate) aufgerufen wird.
-    m_eventConnection = gameEvents->gameUpdate.RegisterListener( boost::bind( &CompVisualAnimation::OnUpdate, this ) );
+    m_eventConnection = gameEvents->gameUpdate.registerListener( boost::bind( &CompVisualAnimation::onUpdate, this ) );
 }
 
-TextureIdType CompVisualAnimation::GetCurrentTexture() const
+TextureIdType CompVisualAnimation::getCurrentTexture() const
 {
     if ( m_animInfo!=NULL )
     {
@@ -58,7 +58,7 @@ TextureIdType CompVisualAnimation::GetCurrentTexture() const
         return "";
 }
 
-void CompVisualAnimation::SetState( StateIdType new_state )
+void CompVisualAnimation::setState( StateIdType new_state )
 {
     if ( m_curState == new_state )
         return;
@@ -71,7 +71,7 @@ void CompVisualAnimation::SetState( StateIdType new_state )
     }
 }
 
-void CompVisualAnimation::Start()
+void CompVisualAnimation::start()
 {
     m_running = true;
     m_wantToFinish = false;
@@ -83,13 +83,13 @@ void CompVisualAnimation::Start()
     }
 }
 
-void CompVisualAnimation::Continue()
+void CompVisualAnimation::carryOn()
 {
     m_running = true;
     m_wantToFinish = false;
 }
 
-void CompVisualAnimation::OnUpdate()
+void CompVisualAnimation::onUpdate()
 {
     if ( m_animInfo==NULL )
         return;
@@ -122,7 +122,7 @@ void CompVisualAnimation::OnUpdate()
     }
 }
 
-boost::shared_ptr<CompVisualAnimation> CompVisualAnimation::LoadFromXml(const pugi::xml_node& compElem, const AnimationManager& animMngr)
+boost::shared_ptr<CompVisualAnimation> CompVisualAnimation::loadFromXml(const pugi::xml_node& compElem, const AnimationManager& animMngr)
 {
     std::string animName = compElem.child("anim").attribute("name").value();
 
@@ -140,18 +140,18 @@ boost::shared_ptr<CompVisualAnimation> CompVisualAnimation::LoadFromXml(const pu
 
     bool start = !compElem.child("start").empty();
 
-    boost::shared_ptr<CompVisualAnimation> compAnim = boost::make_shared<CompVisualAnimation>(animMngr.GetAnimInfo(animName));
-    compAnim->m_center.Set(centerX, centerY);
-    compAnim->SetDimensions(hw, hh);
+    boost::shared_ptr<CompVisualAnimation> compAnim = boost::make_shared<CompVisualAnimation>(animMngr.getAnimInfo(animName));
+    compAnim->m_center.set(centerX, centerY);
+    compAnim->setDimensions(hw, hh);
     if (start)
-        compAnim->Start();
+        compAnim->start();
     return compAnim;
 }
 
-void CompVisualAnimation::WriteToXml(pugi::xml_node& compNode) const
+void CompVisualAnimation::writeToXml(pugi::xml_node& compNode) const
 {
     pugi::xml_node animNode = compNode.append_child("anim");
-    animNode.append_attribute("name").set_value(GetAnimInfo()->name.c_str());
+    animNode.append_attribute("name").set_value(getAnimInfo()->name.c_str());
 
     pugi::xml_node centerNode = compNode.append_child("anim");
     animNode.append_attribute("x").set_value(m_center.x);
@@ -161,7 +161,7 @@ void CompVisualAnimation::WriteToXml(pugi::xml_node& compNode) const
     dimNode.append_attribute("hw").set_value(m_halfWidth);
     dimNode.append_attribute("hh").set_value(m_halfHeight);
 
-    if ( IsRunning() )
+    if ( isRunning() )
     {
         compNode.append_child("start");
     }

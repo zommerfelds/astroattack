@@ -25,16 +25,16 @@ public:
     Component() : m_pOwnerEntity (NULL), m_name ("std") {} // Konstruktor
     virtual ~Component() {} // Destruktor
 
-    virtual const CompIdType& ComponentId() const = 0;   // Komponent ID -> Name des Komponententyps
-    const CompNameType& GetName() const { return m_name; } // Eigener Namen (optional)
-    void SetName( std::string name ) { m_name = name; }
+    virtual const CompIdType& getComponentId() const = 0;   // Komponent ID -> Name des Komponententyps
+    const CompNameType& getName() const { return m_name; } // Eigener Namen (optional)
+    void setName( std::string name ) { m_name = name; }
 
-    void SetOwnerEntity( Entity* obj ) { m_pOwnerEntity = obj; } // Einheit, die die Komponente besitzt, festlegen
-    Entity* GetOwnerEntity() { return m_pOwnerEntity; } // Einheit, die die Komponente besitzt, abfragen
-    const Entity* GetOwnerEntity() const { return m_pOwnerEntity; } // Einheit, die die Komponente besitzt, abfragen
+    void setOwnerEntity( Entity* obj ) { m_pOwnerEntity = obj; } // Einheit, die die Komponente besitzt, festlegen
+    Entity* getOwnerEntity() { return m_pOwnerEntity; } // Einheit, die die Komponente besitzt, abfragen
+    const Entity* getOwnerEntity() const { return m_pOwnerEntity; } // Einheit, die die Komponente besitzt, abfragen
 
-    //static boost::shared_ptr<ComponentType> LoadFromXml(const pugi::xml_node& compElem); // every component must to implement this
-    virtual void WriteToXml(pugi::xml_node& compElem) const = 0;
+    //static boost::shared_ptr<ComponentType> loadFromXml(const pugi::xml_node& compElem); // every component must to implement this
+    virtual void writeToXml(pugi::xml_node& compElem) const = 0;
 
     static GameEvents* gameEvents; // EventManager für alle Komponenten
 

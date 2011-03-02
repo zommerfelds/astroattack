@@ -31,18 +31,18 @@ class GuiSubSystem
 public:
     GuiSubSystem( RenderSubSystem& renderer, InputSubSystem& input );
 
-    void Update();
-    void Draw();
+    void update();
+    void draw();
 
-    void InsertWidget( GroupId groupId, const boost::shared_ptr<Widget>& pWidget );
-    void DeleteGroup( GroupId groupId );
-    void HideGroup( GroupId groupId ) { m_groupsToHide.insert( groupId ); }
-    void ShowGroup( GroupId groupId ) { m_groupsToHide.erase( groupId ); }
-    void Clear() { if (m_isUpdating) m_clear = true; else ClearContainers(); }
+    void insertWidget( GroupId groupId, const boost::shared_ptr<Widget>& pWidget );
+    void deleteGroup( GroupId groupId );
+    void hideGroup( GroupId groupId ) { m_groupsToHide.insert( groupId ); }
+    void showGroup( GroupId groupId ) { m_groupsToHide.erase( groupId ); }
+    void clear() { if (m_isUpdating) m_clear = true; else clearContainers(); }
 private:
     RenderSubSystem& m_renderer;
     InputSubSystem& m_input;
-    void ClearContainers() { m_widgets.clear(); m_groupsToHide.clear(); m_clear = false; }
+    void clearContainers() { m_widgets.clear(); m_groupsToHide.clear(); m_clear = false; }
 
     typedef std::map< GroupId, std::vector< boost::shared_ptr<Widget> > > WidgetMap;
     WidgetMap m_widgets;
@@ -59,12 +59,12 @@ public:
 
     virtual ~Widget() {};
 
-    virtual void Draw( RenderSubSystem* /*pRenderer*/ ) {};
-    virtual void MouseStateChanged( MouseState /*newState*/ ) = 0;
+    virtual void draw( RenderSubSystem* ) {};
+    virtual void onMouseStateChanged( MouseState ) {};
 
-    void SetArea( Rect area ) { m_area = area; }
-    const Rect& GetArea() const { return m_area; }
-    const MouseState GetMouseState() const { return m_mouseState; }
+    void setArea( Rect area ) { m_area = area; }
+    const Rect& getArea() const { return m_area; }
+    const MouseState getMouseState() const { return m_mouseState; }
 private:
     friend class GuiSubSystem;
     Rect m_area;
@@ -77,8 +77,8 @@ public:
     WidgetLabel( float x, float y, std::string text, const FontManager& fontMngr );
     ~WidgetLabel();
 
-    void Draw( RenderSubSystem* pRenderer );
-    void MouseStateChanged( MouseState ) {}
+    void draw( RenderSubSystem* pRenderer );
+    void onMouseStateChanged( MouseState ) {}
 private:
     std::string m_text;
 };
@@ -92,8 +92,8 @@ public:
     WidgetButton( Rect area, std::string caption, ButCallbackFunc clickedCallbackFunc, ButCallbackFunc mouseOverCallbackFunc );
     ~WidgetButton();
 
-    void Draw( RenderSubSystem* pRenderer );
-    void MouseStateChanged( MouseState newState );
+    void draw( RenderSubSystem* pRenderer );
+    void onMouseStateChanged( MouseState newState );
 private:
     std::string m_caption;
     ButCallbackFunc m_butCallbackFunc;

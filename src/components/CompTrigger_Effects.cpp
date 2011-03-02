@@ -17,9 +17,9 @@ EffectKillEntity::EffectKillEntity( std::string entityToKill, const GameWorld& w
 : m_entityToKill ( entityToKill ), m_world ( world )
 {}
 
-void EffectKillEntity::Fire()
+void EffectKillEntity::fire()
 {
-    m_pCompTrigger->gameEvents->wantToDeleteEntity.Fire( *m_world.GetEntity(m_entityToKill) );
+    m_pCompTrigger->gameEvents->wantToDeleteEntity.fire( *m_world.getEntity(m_entityToKill) );
     return;
 }
 
@@ -34,7 +34,7 @@ EffectDispMessage::EffectDispMessage( std::string message, int timeMs, GameWorld
 {}
 
 
-void EffectDispMessage::Fire()
+void EffectDispMessage::fire()
 {
     m_fired = true;
     std::string entityName;
@@ -42,7 +42,7 @@ void EffectDispMessage::Fire()
     {
         std::stringstream ss;
         ss << "_Message" << i;
-        if ( !m_world.GetEntity( ss.str() ) )
+        if ( !m_world.getEntity( ss.str() ) )
         {
             entityName = ss.str();
             break;
@@ -52,18 +52,18 @@ void EffectDispMessage::Fire()
     boost::shared_ptr<Entity> pEntity = boost::make_shared<Entity>(entityName);
     m_pMsgEntity = pEntity.get();
     boost::shared_ptr<CompVisualMessage> compMsg = boost::make_shared<CompVisualMessage>(m_message);
-    compMsg->SetName( "autoname" );
-    pEntity->AddComponent( compMsg );
+    compMsg->setName( "autoname" );
+    pEntity->addComponent( compMsg );
 
-    m_world.AddEntity( pEntity );
+    m_world.addEntity( pEntity );
 }
 
-bool EffectDispMessage::Update()
+bool EffectDispMessage::update()
 {
     --m_remainingUpdates;
     if ( m_remainingUpdates == 0 && m_pMsgEntity != NULL )
     {
-        m_pCompTrigger->gameEvents->wantToDeleteEntity.Fire(*m_pMsgEntity);
+        m_pCompTrigger->gameEvents->wantToDeleteEntity.fire(*m_pMsgEntity);
         return true;
     }
     else if ( m_remainingUpdates < 0 )
@@ -76,14 +76,14 @@ bool EffectDispMessage::Update()
 
 EffectDispMessage::~EffectDispMessage()
 {
-    if ( m_pMsgEntity && m_fired && m_remainingUpdates > 0 && m_world.GetEntity(m_msgEntityName) )
-        m_pCompTrigger->gameEvents->wantToDeleteEntity.Fire(*m_pMsgEntity);
+    if ( m_pMsgEntity && m_fired && m_remainingUpdates > 0 && m_world.getEntity(m_msgEntityName) )
+        m_pCompTrigger->gameEvents->wantToDeleteEntity.fire(*m_pMsgEntity);
 }
 
 // ========= EndLevel ===========
-void EffectEndLevel::Fire()
+void EffectEndLevel::fire()
 {
-    m_pCompTrigger->gameEvents->levelEnd.Fire(m_win, m_message);
+    m_pCompTrigger->gameEvents->levelEnd.fire(m_win, m_message);
 }
 
 // ========= ChangeVariable ===========
@@ -94,7 +94,7 @@ EffectChangeVariable::EffectChangeVariable(std::map<const std::string,int>::iter
 {
 }
 
-void EffectChangeVariable::Fire()
+void EffectChangeVariable::fire()
 {
     switch ( m_changeType )
     {

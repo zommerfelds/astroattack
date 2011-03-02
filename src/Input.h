@@ -79,18 +79,18 @@ public:
     InputSubSystem();
 
 public:
-    void Update(); // aktualisieren
+    void update(); // aktualisieren
 
-    bool KeyState ( Key key ) const;    // Status der SDL_Key Taste erhalten
-    bool KeyStateConsume( Key key );    // gleich wie oben, aber der Status der Taste zurückgesetzt (nicht mehr gedrückt)
-    bool RMouseKeyState( ) const;       // status des rechten Mausknopfes
-    bool RMouseKeyStateConsume();       // gleich wie oben, aber der Status der Taste zurückgesetzt (nicht mehr gedrückt)
-    bool LMouseKeyState( ) const;       // status des linken Mausknopfes
-    bool LMouseKeyStateConsume();       // gleich wie oben, aber der Status der Taste zurückgesetzt (nicht mehr gedrückt)
-    const Vector2D& GetMousePos() const;   // Mausposition erhalten (0/0 ist oben links, 1/1 ist unten rechts)
-    void PutMouseOnCenter();
-    MouseState GetMouseStateInArea( const Rect& rButtonRect ) const;    // Wird die gegebene Fläche gedrückt?
-    MouseState GetMouseStateInAreaConsume( const Rect& rButtonRect );   // gleich wie oben, aber der Status der Taste zurückgesetzt (nicht mehr gedrückt)
+    bool getKeyState ( Key key ) const;    // Status der SDL_Key Taste erhalten
+    bool getKeyStateConsume( Key key );    // gleich wie oben, aber der Status der Taste zurückgesetzt (nicht mehr gedrückt)
+    bool getRMouseKeyState( ) const;       // status des rechten Mausknopfes
+    bool getRMouseKeyStateConsume();       // gleich wie oben, aber der Status der Taste zurückgesetzt (nicht mehr gedrückt)
+    bool getLMouseKeyState( ) const;       // status des linken Mausknopfes
+    bool getLMouseKeyStateConsume();       // gleich wie oben, aber der Status der Taste zurückgesetzt (nicht mehr gedrückt)
+    const Vector2D& getMousePos() const;   // Mausposition erhalten (0/0 ist oben links, 1/1 ist unten rechts)
+    void putMouseOnCenter();
+    MouseState getMouseStateInArea( const Rect& rButtonRect ) const;    // Wird die gegebene Fläche gedrückt?
+    MouseState getMouseStateInAreaConsume( const Rect& rButtonRect );   // gleich wie oben, aber der Status der Taste zurückgesetzt (nicht mehr gedrückt)
 
 private:
     Uint8 *m_pKeystates;

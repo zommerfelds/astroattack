@@ -27,21 +27,20 @@ public:
     CompPosition();
 
     // Base component methods
-	const CompIdType& FamilyID() const { return COMPONENT_ID; }
-    const CompIdType& ComponentId() const { return COMPONENT_ID; }
+    const CompIdType& getComponentId() const { return COMPONENT_ID; }
 	static const CompIdType COMPONENT_ID;
 
     // =========== Getters ==========
-    const Vector2D& GetPosition() const; // get current drawing (smooth) position. If a CampPhysics exist, it gets the position from there.
-    const Vector2D& GetPosIgnoreCompPhys() const; // this is not meant to be extensively used. this bypasses the check for CompPhysics position.
-    float GetOrientation() const;
+    const Vector2D& getPosition() const; // get current drawing (smooth) position. If a CampPhysics exist, it gets the position from there.
+    const Vector2D& getPosIgnoreCompPhys() const; // this is not meant to be extensively used. this bypasses the check for CompPhysics position.
+    float getOrientation() const;
 
     // =========== Setters ===========
-    void SetOrientation(float orientation);
-    void SetPosition(const Vector2D& pos);
+    void setOrientation(float orientation);
+    void setPosition(const Vector2D& pos);
 
-    static boost::shared_ptr<CompPosition> LoadFromXml(const pugi::xml_node& compElem);
-    void WriteToXml(pugi::xml_node& compNode) const;
+    static boost::shared_ptr<CompPosition> loadFromXml(const pugi::xml_node& compElem);
+    void writeToXml(pugi::xml_node& compNode) const;
 
 private:
     void OnUpdate();
@@ -49,8 +48,5 @@ private:
     Vector2D m_position;
     float m_orientation;
 };
-//--------------------------------------------//
-//-------- Ende CompPosition Klasse ----------//
-//--------------------------------------------//
 
 #endif

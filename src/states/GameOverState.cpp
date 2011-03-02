@@ -25,45 +25,45 @@ GameOverState::GameOverState( SubSystems& subSystems, std::string stringToShow, 
 {
 }
 
-void GameOverState::Init()        // State starten
+void GameOverState::init()        // State starten
 {
     // GUI modus (Graphical User Interface)
-    GetSubSystems().renderer.SetMatrix(RenderSubSystem::GUI);
+    getSubSystems().renderer.setMatrix(RenderSubSystem::GUI);
 }
 
-void GameOverState::Cleanup()     // State abbrechen
+void GameOverState::cleanup()     // State abbrechen
 {
 }
 
-void GameOverState::Pause()       // State anhalten
+void GameOverState::pause()       // State anhalten
 {
 }
 
-void GameOverState::Resume()      // State wiederaufnehmen
+void GameOverState::resume()      // State wiederaufnehmen
 {
 }
 
-void GameOverState::Update()      // Spiel aktualisieren
+void GameOverState::update()      // Spiel aktualisieren
 {
-    if ( GetSubSystems().input.KeyState( Enter ) )
+    if ( getSubSystems().input.getKeyState( Enter ) )
     {
-        boost::shared_ptr<PlayingState> playState (new PlayingState(GetSubSystems(), m_levelFileName)); // Zum Spiel-Stadium wechseln
-        GetSubSystems().stateManager.ChangeState( playState );
+        boost::shared_ptr<PlayingState> playState (new PlayingState(getSubSystems(), m_levelFileName)); // Zum Spiel-Stadium wechseln
+        getSubSystems().stateManager.changeState( playState );
         return;
     }
 }
 
-void GameOverState::Frame( float /*deltaTime*/ )
+void GameOverState::frame( float /*deltaTime*/ )
 {
-    GetSubSystems().input.Update(); // neue Eingaben lesen
+    getSubSystems().input.update(); // neue Eingaben lesen
 }
 
-void GameOverState::Draw( float /*accumulator*/ )        // Spiel zeichnen
+void GameOverState::draw( float /*accumulator*/ )        // Spiel zeichnen
 {
-    RenderSubSystem& renderer = GetSubSystems().renderer;
+    RenderSubSystem& renderer = getSubSystems().renderer;
 
-    renderer.DrawOverlay( cBackgroundColor[0], cBackgroundColor[1], cBackgroundColor[2], 1.0f );
-    renderer.DrawString( m_stringToShow.c_str(), "FontW_b", 2.0f, 1.5f, AlignCenter, AlignCenter );
+    renderer.drawOverlay( cBackgroundColor[0], cBackgroundColor[1], cBackgroundColor[2], 1.0f );
+    renderer.drawString( m_stringToShow.c_str(), "FontW_b", 2.0f, 1.5f, AlignCenter, AlignCenter );
 
-    renderer.DrawString( "ENTER: erneut starten   ESC: abbrechen", "FontW_m", 2.0f, 3.0f, AlignCenter, AlignBottom );
+    renderer.drawString( "ENTER: erneut starten   ESC: abbrechen", "FontW_m", 2.0f, 3.0f, AlignCenter, AlignBottom );
 }

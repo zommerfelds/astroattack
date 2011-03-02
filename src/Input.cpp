@@ -57,7 +57,7 @@ InputSubSystem::InputSubSystem() : m_pKeystates ( NULL ),
 }
 
 // Eingabestatus speichern (Maus und Tastatur)
-void InputSubSystem::Update()
+void InputSubSystem::update()
 {
     // Eingabe aktualisieren
     m_pKeystates = SDL_GetKeyState ( NULL );
@@ -66,24 +66,24 @@ void InputSubSystem::Update()
     {
         next = it;
         ++it;
-        if ( KeyState(*it)==false )
+        if ( getKeyState(*it)==false )
             m_pKeysConsumed.erase( it );
     }
 
-    if ( gAaConfig.GetInt("FullScreen") == 0 )
+    if ( gAaConfig.getInt("FullScreen") == 0 )
     {
         int mousePosX;
         int mousePosY;
         m_mousestates = SDL_GetMouseState ( &mousePosX, &mousePosY );
-        m_windowMousePos.x = mousePosX / ( float ) gAaConfig.GetInt("ScreenWidth");
-        m_windowMousePos.y = mousePosY / ( float ) gAaConfig.GetInt("ScreenHeight");
+        m_windowMousePos.x = mousePosX / ( float ) gAaConfig.getInt("ScreenWidth");
+        m_windowMousePos.y = mousePosY / ( float ) gAaConfig.getInt("ScreenHeight");
     }
     else
     {
         int relMouseX = 0, relMouseY = 0;
         m_mousestates = SDL_GetRelativeMouseState( &relMouseX, &relMouseY );
-        m_windowMousePos.x += relMouseX * cMouseSensivityFactor * gAaConfig.GetFloat("MouseSensitivity");
-        m_windowMousePos.y += relMouseY * cMouseSensivityFactor * gAaConfig.GetFloat("MouseSensitivity");
+        m_windowMousePos.x += relMouseX * cMouseSensivityFactor * gAaConfig.getFloat("MouseSensitivity");
+        m_windowMousePos.y += relMouseY * cMouseSensivityFactor * gAaConfig.getFloat("MouseSensitivity");
         if ( m_windowMousePos.x < 0.0f )
             m_windowMousePos.x = 0.0f;
         if ( m_windowMousePos.x > 1.0f )
@@ -99,7 +99,7 @@ void InputSubSystem::Update()
         m_LMouseConsumed = false;
 }
 
-bool InputSubSystem::KeyState( Key key ) const
+bool InputSubSystem::getKeyState( Key key ) const
 {
     std::map<Key,SDLKey>::const_iterator i = m_keyMap.find(key);
     if ( i == m_keyMap.end() )
@@ -111,7 +111,7 @@ bool InputSubSystem::KeyState( Key key ) const
     return ( m_pKeystates[ i->second ] == 1 );
 }
 
-bool InputSubSystem::KeyStateConsume( Key key )
+bool InputSubSystem::getKeyStateConsume( Key key )
 {
     std::map<Key,SDLKey>::const_iterator i = m_keyMap.find(key);
     if ( i == m_keyMap.end() )
@@ -122,14 +122,14 @@ bool InputSubSystem::KeyStateConsume( Key key )
     return inserted && ( m_pKeystates[ i->second ] == 1 );
 }
 
-bool InputSubSystem::RMouseKeyState() const
+bool InputSubSystem::getRMouseKeyState() const
 {
     if ( m_RMouseConsumed )
         return false;
     return ( (m_mousestates & SDL_BUTTON ( SDL_BUTTON_RIGHT ))!=0 );
 }
 
-bool InputSubSystem::RMouseKeyStateConsume()
+bool InputSubSystem::getRMouseKeyStateConsume()
 {
     if ( m_RMouseConsumed )
         return false;
@@ -137,14 +137,14 @@ bool InputSubSystem::RMouseKeyStateConsume()
     return ( (m_mousestates & SDL_BUTTON ( SDL_BUTTON_RIGHT ))!=0 );
 }
 
-bool InputSubSystem::LMouseKeyState() const
+bool InputSubSystem::getLMouseKeyState() const
 {
     if ( m_LMouseConsumed )
         return false;
     return ( (m_mousestates & SDL_BUTTON ( SDL_BUTTON_LEFT ))!=0 );
 }
 
-bool InputSubSystem::LMouseKeyStateConsume()
+bool InputSubSystem::getLMouseKeyStateConsume()
 {
     if ( m_LMouseConsumed )
         return false;
@@ -152,42 +152,42 @@ bool InputSubSystem::LMouseKeyStateConsume()
     return ( (m_mousestates & SDL_BUTTON ( SDL_BUTTON_LEFT ))!=0 );
 }
 
-const Vector2D& InputSubSystem::GetMousePos() const
+const Vector2D& InputSubSystem::getMousePos() const
 {
     return m_windowMousePos;
 }
 
-void InputSubSystem::PutMouseOnCenter()
+void InputSubSystem::putMouseOnCenter()
 {
-    SDL_WarpMouse((Uint16)(gAaConfig.GetInt("ScreenWidth")/2), (Uint16)(gAaConfig.GetInt("ScreenHeight")/2));
+    SDL_WarpMouse((Uint16)(gAaConfig.getInt("ScreenWidth")/2), (Uint16)(gAaConfig.getInt("ScreenHeight")/2));
 }
 
-MouseState InputSubSystem::GetMouseStateInArea( const Rect& rButtonRect ) const
+MouseState InputSubSystem::getMouseStateInArea( const Rect& rButtonRect ) const
 {
     if ( rButtonRect.x1 > m_windowMousePos.x || rButtonRect.x2 < m_windowMousePos.x ||
          rButtonRect.y1 > m_windowMousePos.y || rButtonRect.y2 < m_windowMousePos.y )
         return Away;
-    else if ( LMouseKeyState() )
+    else if ( getLMouseKeyState() )
         return PressedL;
-    else if ( RMouseKeyState() )
+    else if ( getRMouseKeyState() )
         return PressedR;
     else
         return MouseOver;
 }
 
-MouseState InputSubSystem::GetMouseStateInAreaConsume( const Rect& rButtonRect )
+MouseState InputSubSystem::getMouseStateInAreaConsume( const Rect& rButtonRect )
 {
     if ( rButtonRect.x1 > m_windowMousePos.x || rButtonRect.x2 < m_windowMousePos.x ||
          rButtonRect.y1 > m_windowMousePos.y || rButtonRect.y2 < m_windowMousePos.y )
         return Away;
-    else if ( LMouseKeyState() )
+    else if ( getLMouseKeyState() )
     {
-        LMouseKeyStateConsume();
+        getLMouseKeyStateConsume();
         return PressedL;
     }
-    else if ( RMouseKeyState() )
+    else if ( getRMouseKeyState() )
     {
-        RMouseKeyStateConsume();
+        getRMouseKeyStateConsume();
         return PressedR;
     }
     else

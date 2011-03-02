@@ -25,20 +25,14 @@ class Exception
 {
 public:
     Exception ( const std::string &iMsg ) // std::string als Parameter
-    {
-        SetMsg ( iMsg );
-    }
+    : m_msg ( iMsg ) {}
 
-    const std::string& GetMsg() const // Abfrage nach dem Errorstring
+    const std::string& getMsg() const // Abfrage nach dem Errorstring
     {
         return m_msg;
     }
 
 private:
-    void SetMsg ( std::string message )
-    {
-        m_msg = message;
-    }
     std::string m_msg;
 };
 

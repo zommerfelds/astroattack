@@ -25,13 +25,13 @@ TextureManager::TextureManager()
     if ( il_dynamic_library_version < IL_VERSION )
     {
         // falsche Version
-        throw Exception( gAaLog.Write ( "DevIL (IL) library is too old!\nFound %i, need > %i.", il_dynamic_library_version, IL_VERSION ) );
+        throw Exception( gAaLog.write ( "DevIL (IL) library is too old!\nFound %i, need > %i.", il_dynamic_library_version, IL_VERSION ) );
     }
     ILint ilu_dynamic_library_version = iluGetInteger(ILU_VERSION_NUM);
     if ( ilu_dynamic_library_version < ILU_VERSION )
     {
         // falsche Version
-        throw Exception( gAaLog.Write ( "DevIL (ILU) library is too old!\nFound %i, need > %i.", ilu_dynamic_library_version, ILU_VERSION ) );
+        throw Exception( gAaLog.write ( "DevIL (ILU) library is too old!\nFound %i, need > %i.", ilu_dynamic_library_version, ILU_VERSION ) );
     }
 
     ilInit(); // Initialization von DevIL (IL)
@@ -56,7 +56,7 @@ void CheckOpenlGlError()
     if ((errCode = glGetError()) != GL_NO_ERROR)
     {
         errString = gluErrorString(errCode);
-        gAaLog.Write ( "========= OpenGL Error: %u: %s =========\n", errCode, errString );
+        gAaLog.write ( "========= OpenGL Error: %u: %s =========\n", errCode, errString );
     }
 }
 
@@ -72,17 +72,17 @@ int getNext2PowN( int x )
 }
 
 // Textur laden
-void TextureManager::LoadTexture( const std::string& name, TextureIdType id, const LoadTextureInfo& loadTexInfo, int quality, int* pW, int* pH )
+void TextureManager::loadTexture( const std::string& name, TextureIdType id, const LoadTextureInfo& loadTexInfo, int quality, int* pW, int* pH )
 {
     if ( m_textures.count( id )==1 )
     {
-        gAaLog.Write( "*** WARNING: Loading texture: Texture with ID \"%s\" already exists! (new texture was not loaded) ***\n", id.c_str() );
+        gAaLog.write( "*** WARNING: Loading texture: Texture with ID \"%s\" already exists! (new texture was not loaded) ***\n", id.c_str() );
         return;
     }
     try
     {
         //TODO: check for DevIL errors ilGetError()
-        gAaLog.Write( "Loading Texture \"%s\"... ", name.c_str() );
+        gAaLog.write( "Loading Texture \"%s\"... ", name.c_str() );
 
         ILuint devIl_tex_id;                              // ID des DevIL Bildes
         ILboolean success;                                // Speichert ob die Funktionen erfolgreich sind
@@ -164,18 +164,18 @@ void TextureManager::LoadTexture( const std::string& name, TextureIdType id, con
              throw 0; // Error
 
         ilDeleteImages(1, &devIl_tex_id); // Löschen weil es schon eine kopie in OpenGL gibt
-        gAaLog.Write( "Done!\n" );
+        gAaLog.write( "Done!\n" );
     }
     catch (...)
     {
         // Error
-        throw Exception ( gAaLog.Write ( "Error while loading the texture \"%s\"!\n%s\n", name.c_str(), (const char*)iluErrorString(ilGetError()) ) );
+        throw Exception ( gAaLog.write ( "Error while loading the texture \"%s\"!\n%s\n", name.c_str(), (const char*)iluErrorString(ilGetError()) ) );
     }
     CheckOpenlGlError();
     //gAaLog.Write ( "IL error: %s\n", (const char*)iluErrorString(ilGetError()) );
 }
 
-void TextureManager::FreeTexture( const TextureIdType& id )
+void TextureManager::freeTexture( const TextureIdType& id )
 {
     TextureMap::iterator c_it = m_textures.find( id );
     if ( c_it != m_textures.end() )
@@ -190,7 +190,7 @@ void TextureManager::FreeTexture( const TextureIdType& id )
     }
 }
 
-void TextureManager::SetTexture( const TextureIdType& id )
+void TextureManager::setTexture( const TextureIdType& id )
 {
     TextureMap::const_iterator i ( m_textures.find( id ) );
     if ( i != m_textures.end() )
@@ -204,10 +204,10 @@ void TextureManager::SetTexture( const TextureIdType& id )
         //m_currentTexture = id;
     }
     else
-        gAaLog.Write ( "*** SetTexture(): Texture ID not found! ***\n" );
+        gAaLog.write ( "*** SetTexture(): Texture ID not found! ***\n" );
 }
 
-std::vector<TextureIdType> TextureManager::GetTextureList() const
+std::vector<TextureIdType> TextureManager::getTextureList() const
 {
     std::vector<TextureIdType> texList (m_textures.size());
 
@@ -220,7 +220,7 @@ std::vector<TextureIdType> TextureManager::GetTextureList() const
     return texList;
 }
 
-void TextureManager::Clear()
+void TextureManager::clear()
 {
     //glBindTexture(GL_TEXTURE_2D, 0 );
     glMatrixMode(GL_TEXTURE);
@@ -235,11 +235,11 @@ AnimationManager::AnimationManager( TextureManager& tm )
 }
 
 // Lädt eine Animationsdatei
-void AnimationManager::LoadAnimation( const char* name, AnimationIdType id,const LoadTextureInfo& texInfo, int quality )
+void AnimationManager::loadAnimation( const char* name, AnimationIdType id,const LoadTextureInfo& texInfo, int quality )
 {
     if ( m_animInfoMap.count( id )==1 )
     {
-        gAaLog.Write ( "Warning loading animation: Animation with ID \"%s\" exists already! (new animation was not loaded)\n", id.c_str() );
+        gAaLog.write ( "Warning loading animation: Animation with ID \"%s\" exists already! (new animation was not loaded)\n", id.c_str() );
         return;
     }
 
@@ -247,7 +247,7 @@ void AnimationManager::LoadAnimation( const char* name, AnimationIdType id,const
     input_stream.open( name );
 	if( input_stream.fail() ) // Fehler beim Öffnen
     {
-        throw Exception ( gAaLog.Write ( "Animation file \"%s\" could not be opened.\n", name ) );
+        throw Exception ( gAaLog.write ( "Animation file \"%s\" could not be opened.\n", name ) );
     }
 
     boost::shared_ptr<AnimInfo> pAnimInfo = boost::make_shared<AnimInfo>();
@@ -279,7 +279,7 @@ void AnimationManager::LoadAnimation( const char* name, AnimationIdType id,const
             digits_str << i;
             std::string file_to_load = path + prefix + digits_str.str() + suffix;
             TextureIdType tex_id = std::string("_")+id+digits_str.str();
-            m_texManager.LoadTexture(file_to_load,tex_id,texInfo,quality);
+            m_texManager.loadTexture(file_to_load,tex_id,texInfo,quality);
         }
         pAnimInfo->totalFrames = num_frames;
         pAnimInfo->numDigits = num_digits;
@@ -311,13 +311,13 @@ void AnimationManager::LoadAnimation( const char* name, AnimationIdType id,const
     }
     catch (...)
     {
-        throw Exception ( gAaLog.Write ( "Error loading \"%s\". (Bad syntax?)\n", name ) );
+        throw Exception ( gAaLog.write ( "Error loading \"%s\". (Bad syntax?)\n", name ) );
     }
 
     input_stream.close();
 }
 
-const AnimInfo* AnimationManager::GetAnimInfo( AnimationIdType animId ) const
+const AnimInfo* AnimationManager::getAnimInfo( AnimationIdType animId ) const
 {
     AnimInfoMap::const_iterator cit = m_animInfoMap.find( animId );
     if (cit!=m_animInfoMap.end())
@@ -326,7 +326,7 @@ const AnimInfo* AnimationManager::GetAnimInfo( AnimationIdType animId ) const
         return NULL;
 }
 
-void AnimationManager::FreeAnimation( AnimationIdType id )
+void AnimationManager::freeAnimation( AnimationIdType id )
 {
     AnimInfo* animInfo = m_animInfoMap[id].get();
     for ( int i = 0; i < animInfo->totalFrames; ++i )
@@ -335,6 +335,6 @@ void AnimationManager::FreeAnimation( AnimationIdType id )
         digits_str.fill('0');
         digits_str.width(animInfo->numDigits);
         digits_str << i;
-        m_texManager.FreeTexture( animInfo->name + digits_str.str() );
+        m_texManager.freeTexture( animInfo->name + digits_str.str() );
     }
 }

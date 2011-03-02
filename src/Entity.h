@@ -27,10 +27,10 @@ class Entity
 private:
     Entity() {}
 public:
-    Entity( const EntityIdType& rId ) { SetId(rId); }
+    Entity( const EntityIdType& rId ) { setId(rId); }
 
-    const EntityIdType& GetId() const { return m_Id; }
-    void SetId( const EntityIdType& rId ) { m_Id = rId; }
+    const EntityIdType& getId() const { return m_Id; }
+    void setId( const EntityIdType& rId ) { m_Id = rId; }
 
     // === GetComponent ===
     // There are 2 version of this method:
@@ -40,27 +40,26 @@ public:
     //   e.g. Component x = GetComponent("CompX");
     // Prefer using the first one (no need to cast)
     // Only use the second version if you can only get the component ID at runtime (as a string)
-    template <typename CompType>       CompType* GetComponent();
-    template <typename CompType> const CompType* GetComponent() const;
-          Component* GetComponent(const CompIdType& rCompId );
-    const Component* GetComponent(const CompIdType& rCompId ) const;
+    template <typename CompType>       CompType* getComponent();
+    template <typename CompType> const CompType* getComponent() const;
+          Component* getComponent(const CompIdType& rCompId );
+    const Component* getComponent(const CompIdType& rCompId ) const;
     
     // === GetComponents ===
     // As GetComponent, this method has 2 versions (see above)
     // Returns a vector of all matching components
-    template <typename CompType> std::vector<      CompType*> GetComponents();
-    template <typename CompType> std::vector<const CompType*> GetComponents() const;
-    std::vector<      Component*> GetComponents(const CompIdType& rCompId );
-    std::vector<const Component*> GetComponents(const CompIdType& rCompId ) const;
+    template <typename CompType> std::vector<      CompType*> getComponents();
+    template <typename CompType> std::vector<const CompType*> getComponents() const;
+    std::vector<      Component*> getComponents(const CompIdType& rCompId );
+    std::vector<const Component*> getComponents(const CompIdType& rCompId ) const;
 
-    //ComponentMap* GetAllComponents() { return &m_components; }
-    const ComponentMap& GetAllComponents() const;
+    const ComponentMap& getAllComponents() const;
 
-    void AddComponent(const boost::shared_ptr<Component>& pNewComp); // Setzt eine neue Komponente in die Einheit
+    void addComponent(const boost::shared_ptr<Component>& pNewComp); // Setzt eine neue Komponente in die Einheit
 
-    void ClearComponents() { m_components.clear(); }
+    void clearComponents() { m_components.clear(); }
 
-    void WriteEntityInfoToLogger( Logger& log );
+    void writeEntityInfoToLogger( Logger& log );
 
 private:
     EntityIdType m_Id; // unique identifier for this object
@@ -70,19 +69,19 @@ private:
 
 // needs to be implemented here because of templates
 template <typename CompType>
-CompType* Entity::GetComponent()
+CompType* Entity::getComponent()
 {
-   return static_cast<CompType*>( GetComponent(CompType::COMPONENT_ID) );
+   return static_cast<CompType*>( getComponent(CompType::COMPONENT_ID) );
 }
 
 template <typename CompType>
-const CompType* Entity::GetComponent() const
+const CompType* Entity::getComponent() const
 {
-   return static_cast<const CompType*>( GetComponent(CompType::COMPONENT_ID) );
+   return static_cast<const CompType*>( getComponent(CompType::COMPONENT_ID) );
 }
 
 template <typename CompType>
-std::vector<CompType*> Entity::GetComponents()
+std::vector<CompType*> Entity::getComponents()
 {
     std::pair<ComponentMap::iterator, ComponentMap::iterator> equalRange = m_components.equal_range(CompType::COMPONENT_ID);
     std::vector<CompType*> ret;
@@ -93,7 +92,7 @@ std::vector<CompType*> Entity::GetComponents()
 }
 
 template <typename CompType>
-std::vector<const CompType*> Entity::GetComponents() const
+std::vector<const CompType*> Entity::getComponents() const
 {
     std::pair<ComponentMap::const_iterator, ComponentMap::const_iterator> equalRange = m_components.equal_range(CompType::COMPONENT_ID);
     std::vector<const CompType*> ret;

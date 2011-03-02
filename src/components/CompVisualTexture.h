@@ -30,25 +30,22 @@ class CompVisualTexture : public Component
 public:
     CompVisualTexture( TextureIdType texId );
 
-	const CompIdType& ComponentId() const { return COMPONENT_ID; }
+	const CompIdType& getComponentId() const { return COMPONENT_ID; }
 	static const CompIdType COMPONENT_ID;
 
     // Textur setzen
-    void SetTexture( TextureIdType texId ) { m_textureId = texId; }
+    void setTexture( TextureIdType texId ) { m_textureId = texId; }
     // Aktive Textur
-    TextureIdType GetTexture() const { return m_textureId; }
-    size_t GetNumTexturedEdges() const { return m_edgeTexId.size(); }
-    TextureIdType GetEdgeTexture(size_t edgeNum) const;
+    TextureIdType getTexture() const { return m_textureId; }
+    size_t getNumTexturedEdges() const { return m_edgeTexId.size(); }
+    TextureIdType getEdgeTexture(size_t edgeNum) const;
 
-    static boost::shared_ptr<CompVisualTexture> LoadFromXml(const pugi::xml_node& compElem);
-    void WriteToXml(pugi::xml_node& compNode) const;
+    static boost::shared_ptr<CompVisualTexture> loadFromXml(const pugi::xml_node& compElem);
+    void writeToXml(pugi::xml_node& compNode) const;
 
 private:
     TextureIdType m_textureId;
     std::map<size_t, TextureIdType> m_edgeTexId;
 };
-//--------------------------------------------//
-//------ Ende CompVisualTexture Klasse -------//
-//--------------------------------------------//
 
 #endif

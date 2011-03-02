@@ -41,17 +41,17 @@ public:
     float x, y;
 
     // Convert to a Box2D vector
-    boost::shared_ptr<b2Vec2> To_b2Vec2() const;
+    boost::shared_ptr<b2Vec2> to_b2Vec2() const;
 
     // Set new values for x and y
-    inline void Set( float new_x, float new_y )
+    inline void set( float new_x, float new_y )
     {
         x = new_x;
         y = new_y;
     }
 
     // Set new x/y values from polar coordinates
-    inline void SetPolar( float lenght, float angle )
+    inline void setPolar( float lenght, float angle )
     {
         x = lenght * cos(angle);
         y = lenght * sin(angle);
@@ -146,37 +146,37 @@ public:
     }
 
 	// Betrag
-    inline float Length() const
+    inline float length() const
     {
         return sqrt ( x*x + y*y );
     }
 
 	// Betrag im Quadrat (is schneller als Lenght())
-    inline float LengthSquared() const
+    inline float lengthSquared() const
     {
         return x*x + y*y ;
     }
 
     // Skaliert den Vektor auf Länge 1
-    void Normalise();
+    void normalize();
 
 	// Gibt zurück ob rV sich Rechts von diesem Vektor befindet (=kleinster Winkel ist im Uhrzeigersinn)
-	bool IsRight( const Vector2D &rV ) const;
+	bool isRight( const Vector2D &rV ) const;
 
 	// Winkel herausfinden, dass der Vektor mit der X-Achse schliesst ( [1,0] hat Winkel 0, im Gegenuhrzeigersinn +, im Uhrzeigersinn - )
 	// Der erhaltene Winkel ist in Radian (zwischen -pi und +pi)
-	float GetAngle() const;
+	float getAngle() const;
 
     // Vektor um Winkel angle (in Bogenmass) drehen im Gegenuhrzeigersinn
-    void Rotate( float angle );
+    void rotate( float angle );
 
     // Gibt einen Vektor zurück, der um Winkel angle (in Bogenmass) im Gegenuhrzeigersinn gedreht ist
-    Vector2D Rotated( float angle ) const;
+    Vector2D rotated( float angle ) const;
 
     // Gibt die Richtung des Vektors als Einheitsvektor zurück
-    inline Vector2D GetUnitVector() const
+    inline Vector2D getUnitVector() const
     {
-        float fLength = Length();
+        float fLength = length();
 
         if ( fLength == 0.0f )
             return Vector2D(0.0f,0.0f);

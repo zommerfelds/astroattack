@@ -27,11 +27,11 @@ class ConditionCompareVariable : public Condition
 {
 public:
     ConditionCompareVariable( std::map<const std::string, int>::iterator itVariable, CompareOperator comp, int numToCompareWith );
-    bool ConditionIsTrue();
-    ConditionIdType ID() const { return "CompareVariable"; }
-    CompareOperator GetCompareType() const { return m_compareType; }
-    int GetNum() const { return m_numToCompareWith; }
-    std::string GetVariable() const { return m_itVariable->first; }
+    bool isConditionTrue();
+    ConditionIdType getId() const { return "CompareVariable"; }
+    CompareOperator getCompareType() const { return m_compareType; }
+    int getNum() const { return m_numToCompareWith; }
+    std::string getVariable() const { return m_itVariable->first; }
     
 private:
     std::map<const std::string, int>::iterator m_itVariable;
@@ -45,9 +45,9 @@ class ConditionEntityTouchedThis : public Condition
 {
 public:
     ConditionEntityTouchedThis( std::string entityName );
-    bool ConditionIsTrue();
-    ConditionIdType ID() const { return "EntityTouchedThis"; }
-    std::string GetEntityName() const { return m_entityName; }
+    bool isConditionTrue();
+    ConditionIdType getId() const { return "EntityTouchedThis"; }
+    std::string getEntityName() const { return m_entityName; }
 
 private:
     std::string m_entityName;

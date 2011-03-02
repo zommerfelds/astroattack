@@ -19,10 +19,10 @@ const CompIdType CompTrigger::COMPONENT_ID = "CompTrigger";
 
 CompTrigger::CompTrigger() : m_fired ( false )
 {
-    m_eventConnection = gameEvents->gameUpdate.RegisterListener( boost::bind( &CompTrigger::OnUpdate, this ) );
+    m_eventConnection = gameEvents->gameUpdate.registerListener( boost::bind( &CompTrigger::onUpdate, this ) );
 }
 
-void CompTrigger::OnUpdate()
+void CompTrigger::onUpdate()
 {
     if ( !m_fired )
     {
@@ -30,7 +30,7 @@ void CompTrigger::OnUpdate()
 
         for ( size_t i = 0; i < m_conditions.size(); ++i )
         {
-            if ( !m_conditions[i]->ConditionIsTrue() )
+            if ( !m_conditions[i]->isConditionTrue() )
             {
                 conditionsAreTrue = false;
                 break;
@@ -41,7 +41,7 @@ void CompTrigger::OnUpdate()
         {
             for ( size_t i = 0; i < m_effects.size(); ++i )
             {
-                m_effects[i]->Fire();
+                m_effects[i]->fire();
             }
             m_fired = true;
         }
@@ -50,24 +50,24 @@ void CompTrigger::OnUpdate()
     {
         for ( size_t i = 0; i < m_effects.size(); ++i )
         {
-            m_effects[i]->Update();
+            m_effects[i]->update();
         }
     }
 }
 
-void CompTrigger::AddCondition( const boost::shared_ptr<Condition>& pCond )
+void CompTrigger::addCondition( const boost::shared_ptr<Condition>& pCond )
 {
     pCond->m_pCompTrigger = this;
     m_conditions.push_back( pCond );
 }
 
-void CompTrigger::AddEffect( const boost::shared_ptr<Effect>& pTrig )
+void CompTrigger::addEffect( const boost::shared_ptr<Effect>& pTrig )
 {
     pTrig->m_pCompTrigger = this;
     m_effects.push_back(pTrig);
 }
 
-boost::shared_ptr<CompTrigger> CompTrigger::LoadFromXml(const pugi::xml_node& compElem, GameWorld& gameWorld)
+boost::shared_ptr<CompTrigger> CompTrigger::loadFromXml(const pugi::xml_node& compElem, GameWorld& gameWorld)
 {
     boost::shared_ptr<CompTrigger> compTrig = boost::make_shared<CompTrigger>();
 
@@ -99,9 +99,9 @@ boost::shared_ptr<CompTrigger> CompTrigger::LoadFromXml(const pugi::xml_node& co
                 else if (strCompareType == "net")
                     compareType = NotEqualTo;
                 else
-                    gAaLog.Write("WARNING: No compare operation with name \"%s\" found!", strCompareType.c_str());
+                    gAaLog.write("WARNING: No compare operation with name \"%s\" found!", strCompareType.c_str());
 
-                compTrig->AddCondition(boost::make_shared<ConditionCompareVariable>(gameWorld.GetItToVariable(varName),
+                compTrig->addCondition(boost::make_shared<ConditionCompareVariable>(gameWorld.getItToVariable(varName),
                         compareType, numToCompare));
             }
         }
@@ -111,11 +111,11 @@ boost::shared_ptr<CompTrigger> CompTrigger::LoadFromXml(const pugi::xml_node& co
             {
                 std::string entityName = paramsElem.attribute("entity").value();
 
-                compTrig->AddCondition(boost::make_shared<ConditionEntityTouchedThis>(entityName));
+                compTrig->addCondition(boost::make_shared<ConditionEntityTouchedThis>(entityName));
             }
         }
         else
-            gAaLog.Write("WARNING: No condition found with id \"%s\"!", condId.c_str());
+            gAaLog.write("WARNING: No condition found with id \"%s\"!", condId.c_str());
     }
 
     for (pugi::xml_node effectElem = compElem.child("effect"); effectElem; effectElem = effectElem.next_sibling("effect"))
@@ -127,7 +127,7 @@ boost::shared_ptr<CompTrigger> CompTrigger::LoadFromXml(const pugi::xml_node& co
         {
             const char* entity = paramsElem.attribute("entity").value();
 
-            compTrig->AddEffect(boost::make_shared<EffectKillEntity>(entity, gameWorld));
+            compTrig->addEffect(boost::make_shared<EffectKillEntity>(entity, gameWorld));
         }
         else if (effectId == "DispMessage")
         {
@@ -135,13 +135,13 @@ boost::shared_ptr<CompTrigger> CompTrigger::LoadFromXml(const pugi::xml_node& co
             int time = paramsElem.attribute("timems").as_int();
             if (time == 0)
                 time = 3000;
-            compTrig->AddEffect(boost::shared_ptr<EffectDispMessage>(new EffectDispMessage(msg, time, gameWorld)));
+            compTrig->addEffect(boost::shared_ptr<EffectDispMessage>(new EffectDispMessage(msg, time, gameWorld)));
         }
         else if (effectId == "EndLevel")
         {
             const char* msg = paramsElem.attribute("msg").value();
             int win = paramsElem.attribute("win").as_int();
-            compTrig->AddEffect(boost::make_shared<EffectEndLevel>(msg, win == 1));
+            compTrig->addEffect(boost::make_shared<EffectEndLevel>(msg, win == 1));
         }
         else if (effectId == "ChangeVariable")
         {
@@ -160,34 +160,34 @@ boost::shared_ptr<CompTrigger> CompTrigger::LoadFromXml(const pugi::xml_node& co
                 else if (strChangeType == "divide")
                     changeType = Divide;
                 else
-                    gAaLog.Write("WARNING: No change operation with name \"%s\" found!", strChangeType.c_str());
+                    gAaLog.write("WARNING: No change operation with name \"%s\" found!", strChangeType.c_str());
 
-                compTrig->AddEffect(boost::make_shared<EffectChangeVariable>(gameWorld.GetItToVariable(varName), changeType, num));
+                compTrig->addEffect(boost::make_shared<EffectChangeVariable>(gameWorld.getItToVariable(varName), changeType, num));
             }
         }
         else
-            gAaLog.Write("WARNING: No effect found with id \"%s\"!", effectId.c_str());
+            gAaLog.write("WARNING: No effect found with id \"%s\"!", effectId.c_str());
     }
     return compTrig;
 }
 
-void CompTrigger::WriteToXml(pugi::xml_node& compNode) const
+void CompTrigger::writeToXml(pugi::xml_node& compNode) const
 {
     // Alle Kontidionen
-    for (size_t i = 0; i < GetConditions().size(); ++i)
+    for (size_t i = 0; i < getConditions().size(); ++i)
     {
         pugi::xml_node condNode = compNode.append_child("Condition");
 
-        Condition* pCond = GetConditions()[i].get();
-        condNode.append_attribute("id").set_value(pCond->ID().c_str());
+        Condition* pCond = getConditions()[i].get();
+        condNode.append_attribute("id").set_value(pCond->getId().c_str());
 
         pugi::xml_node paramsNode = condNode.append_child("params");
 
-        if (pCond->ID() == "CompareVariable")
+        if (pCond->getId() == "CompareVariable")
         {
             ConditionCompareVariable* condComp = static_cast<ConditionCompareVariable*> (pCond);
-            paramsNode.append_attribute("var").set_value(condComp->GetVariable().c_str());
-            switch (condComp->GetCompareType())
+            paramsNode.append_attribute("var").set_value(condComp->getVariable().c_str());
+            switch (condComp->getCompareType())
             {
             case GreaterThan:
                 paramsNode.append_attribute("compare").set_value("gt");
@@ -208,46 +208,46 @@ void CompTrigger::WriteToXml(pugi::xml_node& compNode) const
                 paramsNode.append_attribute("compare").set_value("net");
                 break;
             }
-            paramsNode.append_attribute("num").set_value(condComp->GetNum());
+            paramsNode.append_attribute("num").set_value(condComp->getNum());
         }
-        else if (pCond->ID() == "EntityTouchedThis")
+        else if (pCond->getId() == "EntityTouchedThis")
         {
             ConditionEntityTouchedThis* condTouched = static_cast<ConditionEntityTouchedThis*> (pCond);
-            paramsNode.append_attribute("entity").set_value(condTouched->GetEntityName().c_str());
+            paramsNode.append_attribute("entity").set_value(condTouched->getEntityName().c_str());
         }
     }
 
     // Alle Effekt
-    for (size_t i = 0; i < GetEffects().size(); ++i)
+    for (size_t i = 0; i < getEffects().size(); ++i)
     {
-        Effect* pEffect = GetEffects()[i].get();
+        Effect* pEffect = getEffects()[i].get();
         pugi::xml_node effectNode = compNode.append_child("Effect");
-        effectNode.append_attribute("id").set_value(pEffect->ID().c_str());
+        effectNode.append_attribute("id").set_value(pEffect->getId().c_str());
 
         pugi::xml_node paramsNode = effectNode.append_child("params");
 
-        if (pEffect->ID() == "KillEntity")
+        if (pEffect->getId() == "KillEntity")
         {
             EffectKillEntity* effctKill = static_cast<EffectKillEntity*> (pEffect);
-            paramsNode.append_attribute("entity").set_value(effctKill->GetEntityName().c_str());
+            paramsNode.append_attribute("entity").set_value(effctKill->getEntityName().c_str());
         }
-        else if (pEffect->ID() == "DispMessage")
+        else if (pEffect->getId() == "DispMessage")
         {
             EffectDispMessage* effctMsg = static_cast<EffectDispMessage*> (pEffect);
-            paramsNode.append_attribute("msg").set_value(effctMsg->GetMessage().c_str());
-            paramsNode.append_attribute("timems").set_value(effctMsg->GetTotalTime());
+            paramsNode.append_attribute("msg").set_value(effctMsg->getMessage().c_str());
+            paramsNode.append_attribute("timems").set_value(effctMsg->getTotalTime());
         }
-        else if (pEffect->ID() == "EndLevel")
+        else if (pEffect->getId() == "EndLevel")
         {
             EffectEndLevel* effctWin = static_cast<EffectEndLevel*> (pEffect);
-            paramsNode.append_attribute("msg").set_value(effctWin->GetMessage().c_str());
-            paramsNode.append_attribute("win").set_value((effctWin->GetWin() ? 1 : 0));
+            paramsNode.append_attribute("msg").set_value(effctWin->getMessage().c_str());
+            paramsNode.append_attribute("win").set_value((effctWin->isWin() ? 1 : 0));
         }
-        else if (pEffect->ID() == "ChangeVariable")
+        else if (pEffect->getId() == "ChangeVariable")
         {
             EffectChangeVariable* effctChange = static_cast<EffectChangeVariable*> (pEffect);
-            paramsNode.append_attribute("var").set_value(effctChange->GetVariable().c_str());
-            switch (effctChange->GetChangeType())
+            paramsNode.append_attribute("var").set_value(effctChange->getVariable().c_str());
+            switch (effctChange->getChangeType())
             {
             case Set:
                 paramsNode.append_attribute("change").set_value("set");
@@ -262,7 +262,7 @@ void CompTrigger::WriteToXml(pugi::xml_node& compNode) const
                 paramsNode.append_attribute("change").set_value("divide");
                 break;
             }
-            paramsNode.append_attribute("num").set_value(effctChange->GetNum());
+            paramsNode.append_attribute("num").set_value(effctChange->getNum());
         }
     }
 }

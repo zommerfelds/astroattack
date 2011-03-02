@@ -32,77 +32,78 @@ class RenderSubSystem
 {
 public:
     RenderSubSystem( GameEvents& gameEvents );
+    ~RenderSubSystem();
 
-    void Init( int width, int height );
-    void DeInit();
-    bool LoadData();
+    void init( int width, int height );
+    void deInit();
+    bool loadData();
 
-    void ClearScreen();
-    void FlipBuffer();
+    void clearScreen();
+    void flipBuffer();
 
     enum MatrixId
     {
         World, GUI, Text
     };
 
-    void SetMatrix(MatrixId matrix);
+    void setMatrix(MatrixId matrix);
 
     // Visuele Komponenten anzeigen
-    void DrawVisualTextureComps();
-    void DrawVisualAnimationComps();
-    void DrawVisualMessageComps();
+    void drawVisualTextureComps();
+    void drawVisualAnimationComps();
+    void drawVisualMessageComps();
 
     // ******** Zeichnungsfunktionen ********* //
 
     // einen Texturierten Quadrat zeichnen
-    void DrawTexturedQuad( float texCoord[8], float vertexCoord[8], std::string texId, bool border=false, float alpha=1.0f );
+    void drawTexturedQuad( float texCoord[8], float vertexCoord[8], std::string texId, bool border=false, float alpha=1.0f );
     // einen Quadrat zeichnen
-    void DrawColorQuad( float vertexCoord[8], float r, float g, float b, float a, bool border = false );
+    void drawColorQuad( float vertexCoord[8], float r, float g, float b, float a, bool border = false );
     // Schreibt Text
-    void DrawString( const std::string &str, const FontIdType &fontId, float x, float y, Align horizAlign=AlignLeft, Align vertAlign=AlignTop, float red=1.0f, float green=1.0f, float blue=1.0f, float alpha=1.0f );
+    void drawString( const std::string &str, const FontIdType &fontId, float x, float y, Align horizAlign=AlignLeft, Align vertAlign=AlignTop, float red=1.0f, float green=1.0f, float blue=1.0f, float alpha=1.0f );
 
     // -------- nur für MatrixWorld Modus --------   
 
     // Polygon zeichnen
-    void DrawTexturedPolygon( const CompShapePolygon& rPoly, const CompVisualTexture& rTex, bool border = false );
+    void drawTexturedPolygon( const CompShapePolygon& rPoly, const CompVisualTexture& rTex, bool border = false );
     // Kreis zeichnen
-    void DrawTexturedCircle( const CompShapeCircle& rCircle, const CompVisualTexture& rTex, bool border = false );
+    void drawTexturedCircle( const CompShapeCircle& rCircle, const CompVisualTexture& rTex, bool border = false );
     // Draw an edge effect
-    void DrawEdge(const Vector2D& vertexA, const Vector2D& vertexB, std::string& tex, float offset = 0.0f, float preCalcEdgeLenght = -1.0f);
+    void drawEdge(const Vector2D& vertexA, const Vector2D& vertexB, std::string& tex, float offset = 0.0f, float preCalcEdgeLenght = -1.0f);
     // Zeichnet einen Vector2D (Pfeil) an einer bestimmten Postion
-    void DrawVector( const Vector2D& rVector, const Vector2D& rPos );
+    void drawVector( const Vector2D& rVector, const Vector2D& rPos );
     // Zeichnet einen punkt an einer bestimmten Postion
-    void DrawPoint( const Vector2D& rPos );
+    void drawPoint( const Vector2D& rPos );
     // Zeichnet den Fadenkreuz
-    void DrawCrosshairs( const Vector2D& rCrosshairsPos );
+    void drawCrosshairs( const Vector2D& rCrosshairsPos );
 
     // Camera control
-    void SetViewPosition( const Vector2D& pos, float scale, float angle);
-    void SetViewSize( float width, float height );
+    void setViewPosition( const Vector2D& pos, float scale, float angle);
+    void setViewSize( float width, float height );
 
     // -------- nur für MatrixGUI Modus --------   
 
     // Zeichnet den Mauszeiger für den Editor
-    void DrawEditorCursor ( const Vector2D& rPos );
+    void drawEditorCursor ( const Vector2D& rPos );
     // das ganze Bildschirm mit einer Farbe überdecken
-    void DrawOverlay( float r, float g, float b, float a );
+    void drawOverlay( float r, float g, float b, float a );
 
     // ****************************************//
 
-    void DrawFPS(int fps);
+    void drawFPS(int fps);
 
-    void DisplayLoadingScreen();
-    void DisplayTextScreen( const std::string& text );
+    void displayLoadingScreen();
+    void displayTextScreen( const std::string& text );
 
-    const TextureManager& GetTextureManager() const { return m_textureManager; }
-    const AnimationManager& GetAnimationManager() const { return m_animationManager; }
-    const FontManager& GetFontManager() const { return m_fontManager; }
-    TextureManager& GetTextureManager() { return m_textureManager; }
-    AnimationManager& GetAnimationManager() { return m_animationManager; }
-    FontManager& GetFontManager() { return m_fontManager; }
+    const TextureManager& getTextureManager() const { return m_textureManager; }
+          TextureManager& getTextureManager()       { return m_textureManager; }
+    const AnimationManager& getAnimationManager() const { return m_animationManager; }
+          AnimationManager& getAnimationManager()       { return m_animationManager; }
+    const FontManager& getFontManager() const { return m_fontManager; }
+          FontManager& getFontManager()       { return m_fontManager; }
 
 private:
-    void InitOpenGL( int width, int height ); // OpenGL initialisieren
+    void initOpenGL( int width, int height ); // OpenGL initialisieren
 
     bool m_isInit;
 
@@ -121,8 +122,8 @@ private:
     CompVisualAnimationSet m_visualAnimComps;
     CompVisualMessageSet m_visualMsgComps;
 
-    void RegisterCompVisual( Entity& entity );
-    void UnregisterCompVisual( Entity& entity );
+    void onRegisterCompVisual( Entity& entity );
+    void onUnregisterCompVisual( Entity& entity );
 
     MatrixId m_currentMatrix;
     float m_matrixGUI[16];

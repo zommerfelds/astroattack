@@ -26,12 +26,12 @@ public:
     ~EventConnection();
     EventConnection& operator = (const EventConnection& con);
     
-    // IsValid: returns true if this connection has objects connected on both ends
-    bool IsValid() const;
+    // isValid: returns true if this connection has objects connected on both ends
+    bool isValid() const;
 
 private:
     int* m_refCount;
-    void Release(); // release the current counter
+    void release(); // release the current counter
 };
 
 // template <typename ArgType1, typename ArgType2, ..., typename ArgTypeN>
@@ -52,15 +52,15 @@ public:
     // Return value is an EventConnection.
     // When the EventConnection object is deleted, the listener is automatically unregistered.
     // This means that the return value must be kept as long as the function should be registered
-    EventConnection RegisterListener(Function func);
+    EventConnection registerListener(Function func);
 
     // Fire the event
-    void Fire();
+    void fire();
 private:
     FunctionList m_listenerFuncs; // list of all registered listener call back functions
 
     // Unregister the listener at position pos. Is used by the Connection object.
-    void UnregisterListener(FunctionList::iterator pos);
+    void unregisterListener(FunctionList::iterator pos);
 };
 
 // same thing for 1 argument
@@ -69,11 +69,11 @@ class Event1 {
 public:
     typedef boost::function<void (ArgType)> Function;
     typedef std::list< std::pair< Function, EventConnection > > FunctionList;
-    EventConnection RegisterListener(Function func);
-    void Fire(ArgType arg);
+    EventConnection registerListener(Function func);
+    void fire(ArgType arg);
 private:
     FunctionList m_listenerFuncs;
-    void UnregisterListener(typename FunctionList::iterator pos);
+    void unregisterListener(typename FunctionList::iterator pos);
 };
 
 // same thing for 2 arguments
@@ -82,11 +82,11 @@ class Event2 {
 public:
     typedef boost::function<void (ArgType1,ArgType2)> Function;
     typedef std::list< std::pair< Function, EventConnection > > FunctionList;
-    EventConnection RegisterListener(Function func);
-    void Fire(ArgType1 arg1,ArgType2 arg2);
+    EventConnection registerListener(Function func);
+    void fire(ArgType1 arg1,ArgType2 arg2);
 private:
     FunctionList m_listenerFuncs;
-    void UnregisterListener(typename FunctionList::iterator pos);
+    void unregisterListener(typename FunctionList::iterator pos);
 };
 
 // we need to include the cpp because the template methods need to be implemented in the header...

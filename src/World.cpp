@@ -23,19 +23,19 @@ GameWorld::~GameWorld()
     {
         next = it;
         ++next;
-        RemoveEntity( it->first );
+        removeEntity( it->first );
     }
 }
 
-void GameWorld::AddEntity( const boost::shared_ptr<Entity>& pEntity )
+void GameWorld::addEntity( const boost::shared_ptr<Entity>& pEntity )
 {
-    EntityIdType id = pEntity->GetId();
+    EntityIdType id = pEntity->getId();
     m_entities[id] = pEntity; // if there is an entity with the same ID before, it will get deleted
 
-    m_gameEvents.newEntity.Fire( *pEntity );
+    m_gameEvents.newEntity.fire( *pEntity );
 }
 
-Entity* GameWorld::GetEntity( const EntityIdType& id ) const
+Entity* GameWorld::getEntity( const EntityIdType& id ) const
 {
     EntityMap::const_iterator i = m_entities.find( id );
     if ( i == m_entities.end() )
@@ -44,21 +44,21 @@ Entity* GameWorld::GetEntity( const EntityIdType& id ) const
         return i->second.get();
 }
 
-void GameWorld::RemoveEntity( const EntityIdType& id )
+void GameWorld::removeEntity( const EntityIdType& id )
 {
-    m_gameEvents.deleteEntity.Fire( *m_entities[id] );
+    m_gameEvents.deleteEntity.fire( *m_entities[id] );
     m_entities.erase( id );
 }
 
-void GameWorld::WriteWorldToLogger( Logger& log )
+void GameWorld::writeWorldToLogger( Logger& log )
 {
     for ( EntityMap::iterator it = m_entities.begin(); it != m_entities.end(); ++it )
     {
-        it->second->WriteEntityInfoToLogger( log );
+        it->second->writeEntityInfoToLogger( log );
     }
 }
 
-int GameWorld::GetVariable( const WorldVariableType& varName )
+int GameWorld::getVariable( const WorldVariableType& varName )
 {
     WorldVariblesMap::const_iterator i = m_variables.find( varName );
     if ( i == m_variables.end() )
@@ -67,18 +67,18 @@ int GameWorld::GetVariable( const WorldVariableType& varName )
         return i->second;
 }
 
-void GameWorld::SetVariable( const WorldVariableType& varName, int value )
+void GameWorld::setVariable( const WorldVariableType& varName, int value )
 {
     m_variables[varName] = value;
 }
 
-WorldVariblesMap::iterator GameWorld::GetItToVariable( const WorldVariableType& varName )
+WorldVariblesMap::iterator GameWorld::getItToVariable( const WorldVariableType& varName )
 {
     // es wird ein neues Elemen hinzugefügt, falls noch keines existiert
     return m_variables.insert( std::make_pair( varName, 0 ) ).first;
 }
 
-const EntityMap& GameWorld::GetAllEntities() const
+const EntityMap& GameWorld::getAllEntities() const
 {
     return m_entities;
 }

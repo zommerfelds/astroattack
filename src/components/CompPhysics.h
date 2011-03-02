@@ -114,52 +114,51 @@ class CompPhysics : public Component
 public:
     CompPhysics(const BodyDef& rBodyDef = BodyDef());
 
-    const CompIdType& ComponentId() const { return COMPONENT_ID; }
+    const CompIdType& getComponentId() const { return COMPONENT_ID; }
 
-    void SetBodyDef(const BodyDef& rBodyDef) { m_bodyDef = rBodyDef; }
+    void setBodyDef(const BodyDef& rBodyDef) { m_bodyDef = rBodyDef; }
 
     // Add a shape to the object. Only do this before attaching the Entity to the world.
-    void AddShapeDef( const boost::shared_ptr<ShapeDef>& pShapeDef );
+    void addShapeDef( const boost::shared_ptr<ShapeDef>& pShapeDef );
 
-    bool SetShapeFriction(const CompNameType& shapeName, float friction);
-    const ShapeInfoVec& GetShapeInfos() const { return m_shapeInfos; }
+    bool setShapeFriction(const CompNameType& shapeName, float friction);
+    const ShapeInfoVec& getShapeInfos() const { return m_shapeInfos; }
 
-    float GetMass() const;
+    float getMass() const;
 
-    ContactVector GetContacts(bool getSensors=false) const;
+    ContactVector getContacts(bool getSensors=false) const;
 
-    Vector2D GetCenterOfMassPosition() const;
-    Vector2D GetSmoothCenterOfMassPosition() const;
-    const Vector2D GetPosition() const;
-    const Vector2D& GetSmoothPosition() const;
-    float GetAngle() const;
-    float GetSmoothAngle() const { return m_smoothAngle; }
+    Vector2D getCenterOfMassPosition() const;
+    Vector2D getSmoothCenterOfMassPosition() const;
+    const Vector2D getPosition() const;
+    const Vector2D& getSmoothPosition() const;
+    float getAngle() const;
+    float getSmoothAngle() const { return m_smoothAngle; }
 
-    const Vector2D& GetLocalRotationPoint() const { return m_localRotationPoint; }
-    void SetLocalRotationPoint(const Vector2D& rotPoint) { m_localRotationPoint = rotPoint; }
-    const Vector2D& GetLocalGravitationPoint() const { return m_localGravitationPoint; }
-    void SetLocalGravitationPoint(const Vector2D& gravPoint) { m_localGravitationPoint = gravPoint; }
+    const Vector2D& getLocalRotationPoint() const { return m_localRotationPoint; }
+    void setLocalRotationPoint(const Vector2D& rotPoint) { m_localRotationPoint = rotPoint; }
+    const Vector2D& getLocalGravitationPoint() const { return m_localGravitationPoint; }
+    void setLocalGravitationPoint(const Vector2D& gravPoint) { m_localGravitationPoint = gravPoint; }
 
-    Vector2D GetLinearVelocity() const;
-    void SetLinearVelocity(const Vector2D& vel);
+    Vector2D getLinearVelocity() const;
+    void setLinearVelocity(const Vector2D& vel);
 
-    void ApplyLinearImpulse(const Vector2D& impulse, const Vector2D& point);
-    void ApplyForce(const Vector2D& impulse, const Vector2D& point);
+    void applyLinearImpulse(const Vector2D& impulse, const Vector2D& point);
+    void applyForce(const Vector2D& impulse, const Vector2D& point);
 
-    bool IsAllowedToSleep() const;
-    float GetLinearDamping() const;
-    float GetAngularDamping() const;
-    bool IsFixedRotation() const;
-    bool IsBullet() const;
-    /*bool GetSaveContacts() const;*/
+    bool isAllowedToSleep() const;
+    float getLinearDamping() const;
+    float getAngularDamping() const;
+    bool isFixedRotation() const;
+    bool isBullet() const;
 
-    void Rotate( float deltaAngle, const Vector2D& localPoint ); // Rotate the body by daltaAngle counterclockwise around a local point
+    void rotate( float deltaAngle, const Vector2D& localPoint ); // Rotate the body by daltaAngle counterclockwise around a local point
 
 	// Grav
-    const CompGravField* GetActiveGravField() const { return m_gravField; }
+    const CompGravField* getActiveGravField() const { return m_gravField; }
 
-    static boost::shared_ptr<CompPhysics> LoadFromXml(const pugi::xml_node& compElem);
-    void WriteToXml(pugi::xml_node& compElem) const;
+    static boost::shared_ptr<CompPhysics> loadFromXml(const pugi::xml_node& compElem);
+    void writeToXml(pugi::xml_node& compElem) const;
 
 	static const CompIdType COMPONENT_ID; // eindeutige ID für diese Komponentenart (gleich wie Klassennamen, siehe CompPhysics.cpp)
 
@@ -183,8 +182,5 @@ private:
 
     friend class PhysicsSubSystem; // Das Physik-System darf auf alles hier zugreifen!
 };
-//--------------------------------------------//
-//-------- Ende CompPhysics Klasse -----------//
-//--------------------------------------------//
 
 #endif

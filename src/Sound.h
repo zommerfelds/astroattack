@@ -28,19 +28,19 @@ public:
     SoundSubSystem();
     ~SoundSubSystem();
 
-    bool Init();
-    void DeInit();
+    bool init();
+    void deInit();
 
-    void LoadSound( const char* name, SoundIdType id );
-    void FreeSound( const SoundIdType& id );
-    void PlaySound( const SoundIdType& id );
+    void loadSound( const char* name, SoundIdType id );
+    void freeSound( const SoundIdType& id );
+    void playSound( const SoundIdType& id );
 
-    void LoadMusic( const char* name, MusicIdType id );
-    void FreeMusic( const MusicIdType& id );
-    void PlayMusic( const MusicIdType& id, bool forever, int fadeInMs );
-    void StopMusic( int fadeOutMs );
-    void PauseMusic();
-    void ContinueMusic();
+    void loadMusic( const char* name, MusicIdType id );
+    void freeMusic( const MusicIdType& id );
+    void playMusic( const MusicIdType& id, bool forever, int fadeInMs );
+    void stopMusic( int fadeOutMs );
+    void pauseMusic();
+    void continueMusic();
 
 private:
     bool m_isInit;
@@ -52,9 +52,9 @@ private:
     bool m_deletePlayingMusicAtEnd;
 
     // does this really has to be static?
-    static void MusicFinishedCallback();
+    static void musicFinishedCallback();
     static SoundSubSystem* soundSystemToNotifyMusicFinished;
-    void MusicFinished();
+    void onMusicFinished();
 };
 
 #endif

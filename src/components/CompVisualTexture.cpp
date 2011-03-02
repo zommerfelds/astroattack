@@ -23,7 +23,7 @@ const CompIdType CompVisualTexture::COMPONENT_ID = "CompVisualTexture";
 CompVisualTexture::CompVisualTexture( TextureIdType texId ): m_textureId(texId)
 {}
 
-boost::shared_ptr<CompVisualTexture> CompVisualTexture::LoadFromXml(const pugi::xml_node& compElem)
+boost::shared_ptr<CompVisualTexture> CompVisualTexture::loadFromXml(const pugi::xml_node& compElem)
 {
     std::string strTexName = compElem.child("tex").attribute("name").value();
 
@@ -53,15 +53,15 @@ boost::shared_ptr<CompVisualTexture> CompVisualTexture::LoadFromXml(const pugi::
     return comp;
 }
 
-void CompVisualTexture::WriteToXml(pugi::xml_node& compNode) const
+void CompVisualTexture::writeToXml(pugi::xml_node& compNode) const
 {
     pugi::xml_node texNode = compNode.append_child("tex");
-    texNode.append_attribute("name").set_value(GetTexture().c_str());
+    texNode.append_attribute("name").set_value(getTexture().c_str());
 
     std::map<TextureIdType, std::set<size_t> > edgeTextures;
     for (size_t i=0; i<CompShapePolygon::cMaxVertices; i++)
     {
-        TextureIdType edgeTex = GetEdgeTexture(i);
+        TextureIdType edgeTex = getEdgeTexture(i);
         if (!edgeTex.empty())
         {
             edgeTextures[edgeTex].insert(i);
@@ -80,7 +80,7 @@ void CompVisualTexture::WriteToXml(pugi::xml_node& compNode) const
     }
 }
 
-TextureIdType CompVisualTexture::GetEdgeTexture(size_t edgeNum) const
+TextureIdType CompVisualTexture::getEdgeTexture(size_t edgeNum) const
 {
     std::map<size_t, TextureIdType>::const_iterator it = m_edgeTexId.find(edgeNum);
     if (it == m_edgeTexId.end())

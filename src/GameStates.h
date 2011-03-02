@@ -23,21 +23,21 @@ class GameState
 public:
     GameState( SubSystems& subSystems );
 
-    virtual const StateIdType& StateID() const = 0; // Komponente ID -> Name der Komponente
+    virtual const StateIdType& getId() const = 0; // Komponente ID -> Name der Komponente
 
-	virtual void Init() = 0;                    // State starten
-	virtual void Cleanup() = 0;                 // State abbrechen
+	virtual void init() = 0;                    // State starten
+	virtual void cleanup() = 0;                 // State abbrechen
 
-	virtual void Pause() = 0;                   // State anhalten
-	virtual void Resume() = 0;                  // State wiederaufnehmen
+	virtual void pause() = 0;                   // State anhalten
+	virtual void resume() = 0;                  // State wiederaufnehmen
 
-	virtual void Update() = 0;                  // Spiel aktualisieren
-    virtual void Frame( float deltaTime ) = 0;  // pro Frame einmal aufgerufen (am Anfang)
-	virtual void Draw( float accumulator ) = 0; // Spiel zeichnen
+	virtual void update() = 0;                  // Spiel aktualisieren
+    virtual void frame( float deltaTime ) = 0;  // pro Frame einmal aufgerufen (am Anfang)
+	virtual void draw( float accumulator ) = 0; // Spiel zeichnen
 
     virtual ~GameState() {};                    // Destruktor
 
-    SubSystems& GetSubSystems() { return m_subSystems; }
+    SubSystems& getSubSystems() { return m_subSystems; }
 private:
     SubSystems& m_subSystems;
 };
@@ -48,12 +48,12 @@ public:
     StateManager();
     ~StateManager();
 
-    void ChangeState( const boost::shared_ptr<GameState>& pState );
-	void PushState( const boost::shared_ptr<GameState>& pState );
-	void PopState();
-	void Clear();
+    void changeState( const boost::shared_ptr<GameState>& pState );
+	void pushState( const boost::shared_ptr<GameState>& pState );
+	void popState();
+	void clear();
 
-    GameState* GetCurrentState() { return m_states.back().get(); }
+    GameState* getCurrentState() { return m_states.back().get(); }
 private:
     // Stack von States
     std::vector< boost::shared_ptr<GameState> > m_states;

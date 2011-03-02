@@ -39,11 +39,11 @@ class TextureManager
 public:
     TextureManager();
     ~TextureManager();
-    void LoadTexture( const std::string& name, TextureIdType id, const LoadTextureInfo& loadTexInfo, int quality, int* pW=NULL, int* pH=NULL );
-    void FreeTexture( const TextureIdType& id );
-    void SetTexture( const TextureIdType& id );
-    std::vector<TextureIdType> GetTextureList() const;
-    void Clear();
+    void loadTexture( const std::string& name, TextureIdType id, const LoadTextureInfo& loadTexInfo, int quality, int* pW=NULL, int* pH=NULL );
+    void freeTexture( const TextureIdType& id );
+    void setTexture( const TextureIdType& id );
+    std::vector<TextureIdType> getTextureList() const;
+    void clear();
 private:
     typedef std::map<TextureIdType, TexInfo> TextureMap;
     TextureMap m_textures;      // Textur-Addressen für OpenGL
@@ -62,9 +62,9 @@ class AnimationManager
 public:
     AnimationManager( TextureManager& );
     ~AnimationManager() {}
-    void LoadAnimation( const char* name,AnimationIdType id,const LoadTextureInfo& texInfo, int quality );
-    void FreeAnimation( AnimationIdType id );
-    const AnimInfo* GetAnimInfo( AnimationIdType animId ) const;
+    void loadAnimation( const char* name,AnimationIdType id,const LoadTextureInfo& texInfo, int quality );
+    void freeAnimation( AnimationIdType id );
+    const AnimInfo* getAnimInfo( AnimationIdType animId ) const;
 
 private:
     typedef std::map<AnimationIdType, boost::shared_ptr<AnimInfo> > AnimInfoMap;

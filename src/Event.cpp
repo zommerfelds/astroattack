@@ -16,10 +16,10 @@ EventConnection::EventConnection(const EventConnection& evCon) : m_refCount (evC
 
 EventConnection::~EventConnection()
 {
-    Release();
+    release();
 }
 
-void EventConnection::Release()
+void EventConnection::release()
 {
     if (m_refCount == NULL)
         return;
@@ -34,14 +34,14 @@ void EventConnection::Release()
 
 EventConnection& EventConnection::operator = (const EventConnection& con)
 {
-    Release();
+    release();
     m_refCount = con.m_refCount; // share the same smart pointer
     (*m_refCount)++;
     return *this;  // by convention, always return *this
 }
 
 // IsValid: returns true if this connection has objects connected on both ends
-bool EventConnection::IsValid() const
+bool EventConnection::isValid() const
 {
     //return !m_sharedPtr.unique();
     if (m_refCount == NULL || *m_refCount < 2)
@@ -49,7 +49,7 @@ bool EventConnection::IsValid() const
     return true;
 }
 
-EventConnection Event0::RegisterListener(Function func)
+EventConnection Event0::registerListener(Function func)
 {
     // Create a new EventConnection
     EventConnection evCon;
@@ -60,21 +60,21 @@ EventConnection Event0::RegisterListener(Function func)
 }
 
 // Fire the event
-void Event0::Fire()
+void Event0::fire()
 {
     // For each listener function in our list
     for (FunctionList::iterator it = m_listenerFuncs.begin(); it != m_listenerFuncs.end();)
     {
         FunctionList::iterator cur_pos = it++; // store the current position and set (it) to
                                                // point to the next element (cur_pos can get deleted)
-        if (!cur_pos->second.IsValid()) // if the connection is no longer valid
+        if (!cur_pos->second.isValid()) // if the connection is no longer valid
             m_listenerFuncs.erase(cur_pos); // the listener probably got deleted
         else
             (cur_pos->first)(); // call the function
     }
 }
 // Unregister the listener at position pos. Is used by the Connection object.
-void Event0::UnregisterListener(FunctionList::iterator pos)
+void Event0::unregisterListener(FunctionList::iterator pos)
 {
     m_listenerFuncs.erase(pos);
 }

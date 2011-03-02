@@ -28,12 +28,12 @@ CompPhysics::CompPhysics(const BodyDef& rBodyDef) :
     m_remainingUpdatesTillGravFieldChangeIsPossible (0)
 {}
 
-void CompPhysics::AddShapeDef( const boost::shared_ptr<ShapeDef>& pShapeDef )
+void CompPhysics::addShapeDef( const boost::shared_ptr<ShapeDef>& pShapeDef )
 {
     m_shapeInfos.push_back( pShapeDef );
 }
 
-bool CompPhysics::SetShapeFriction(const CompNameType& shapeName, float friction)
+bool CompPhysics::setShapeFriction(const CompNameType& shapeName, float friction)
 {
     FixtureMap::const_iterator it = m_fixtureMap.find( shapeName );
     if ( it != m_fixtureMap.end() )
@@ -43,86 +43,86 @@ bool CompPhysics::SetShapeFriction(const CompNameType& shapeName, float friction
     return true;
 }
 
-float CompPhysics::GetMass() const
+float CompPhysics::getMass() const
 {
     return m_body->GetMass();
 }
 
-float CompPhysics::GetAngle() const
+float CompPhysics::getAngle() const
 {
     return m_body->GetAngle();
 }
 
-float CompPhysics::GetLinearDamping() const
+float CompPhysics::getLinearDamping() const
 {
     if (m_body)
         return m_body->GetLinearDamping();
     return m_bodyDef.linearDamping;
 }
 
-float CompPhysics::GetAngularDamping() const
+float CompPhysics::getAngularDamping() const
 {
     if (m_body)
         return m_body->GetAngularDamping();
     return m_bodyDef.angularDamping;
 }
 
-bool CompPhysics::IsFixedRotation() const
+bool CompPhysics::isFixedRotation() const
 {
     if (m_body)
         return m_body->IsFixedRotation();
     return m_bodyDef.fixedRotation;
 }
 
-bool CompPhysics::IsBullet() const
+bool CompPhysics::isBullet() const
 {
     if (m_body)
         return m_body->IsBullet();
     return m_bodyDef.bullet;
 }
 
-Vector2D CompPhysics::GetLinearVelocity() const
+Vector2D CompPhysics::getLinearVelocity() const
 {
     return Vector2D( m_body->GetLinearVelocity() );
 }
 
-void CompPhysics::SetLinearVelocity(const Vector2D& vel)
+void CompPhysics::setLinearVelocity(const Vector2D& vel)
 {
-    m_body->SetLinearVelocity( *vel.To_b2Vec2() );
+    m_body->SetLinearVelocity( *vel.to_b2Vec2() );
 }
 
-void CompPhysics::ApplyLinearImpulse(const Vector2D& impulse, const Vector2D& point)
+void CompPhysics::applyLinearImpulse(const Vector2D& impulse, const Vector2D& point)
 {
-    m_body->ApplyLinearImpulse(*impulse.To_b2Vec2(), *point.To_b2Vec2());
+    m_body->ApplyLinearImpulse(*impulse.to_b2Vec2(), *point.to_b2Vec2());
 }
 
-void CompPhysics::ApplyForce(const Vector2D& impulse, const Vector2D& point)
+void CompPhysics::applyForce(const Vector2D& impulse, const Vector2D& point)
 {
-    m_body->ApplyForce(*impulse.To_b2Vec2(), *point.To_b2Vec2());
+    m_body->ApplyForce(*impulse.to_b2Vec2(), *point.to_b2Vec2());
 }
 
-void CompPhysics::Rotate( float deltaAngle, const Vector2D& localPoint )
+void CompPhysics::rotate( float deltaAngle, const Vector2D& localPoint )
 {
     float current_angle = m_body->GetAngle();
 
-    Vector2D worldRotationCenter( Vector2D(m_body->GetPosition()) + localPoint.Rotated(current_angle) );
-    Vector2D worldRotationCenterToBodyCenter ( -localPoint.Rotated(current_angle+deltaAngle) );
+    Vector2D worldRotationCenter( Vector2D(m_body->GetPosition()) + localPoint.rotated(current_angle) );
+    Vector2D worldRotationCenterToBodyCenter ( -localPoint.rotated(current_angle+deltaAngle) );
 
-    m_body->SetTransform( *(worldRotationCenter+worldRotationCenterToBodyCenter).To_b2Vec2(), current_angle+deltaAngle );
+    m_body->SetTransform( *(worldRotationCenter+worldRotationCenterToBodyCenter).to_b2Vec2(), current_angle+deltaAngle );
 }
 
 
-const Vector2D CompPhysics::GetPosition() const
+const Vector2D CompPhysics::getPosition() const
 {
     return m_body->GetPosition();
 }
 
-const Vector2D& CompPhysics::GetSmoothPosition() const
+const Vector2D& CompPhysics::getSmoothPosition() const
 {
     return m_smoothPosition;
 }
 
-ContactVector CompPhysics::GetContacts(bool getSensors) const
+ContactVector CompPhysics::getContacts(bool getSensors) const
 {
     std::vector<boost::shared_ptr<ContactInfo> > vecTouchInfo;
     for ( b2ContactEdge* contactEdge = m_body->GetContactList();
@@ -147,17 +147,17 @@ ContactVector CompPhysics::GetContacts(bool getSensors) const
     return vecTouchInfo;
 }
 
-Vector2D CompPhysics::GetSmoothCenterOfMassPosition() const
+Vector2D CompPhysics::getSmoothCenterOfMassPosition() const
 {
-    return m_smoothPosition + m_body->GetLocalCenter();
+    return m_smoothPosition + Vector2D(m_body->GetLocalCenter()).rotated(m_smoothAngle);
 }
 
-Vector2D CompPhysics::GetCenterOfMassPosition() const
+Vector2D CompPhysics::getCenterOfMassPosition() const
 {
     return Vector2D( m_body->GetWorldCenter() );
 }
 
-boost::shared_ptr<CompPhysics> CompPhysics::LoadFromXml(const pugi::xml_node& compElem)
+boost::shared_ptr<CompPhysics> CompPhysics::loadFromXml(const pugi::xml_node& compElem)
 {
     pugi::xml_node dampElem = compElem.child("damping");
     float linearDamping = dampElem.attribute("linear").as_float();
@@ -184,8 +184,8 @@ boost::shared_ptr<CompPhysics> CompPhysics::LoadFromXml(const pugi::xml_node& co
     body_def.linearDamping = linearDamping;
 
     boost::shared_ptr<CompPhysics> compPhysics = boost::make_shared<CompPhysics> ();
-    compPhysics->SetLocalRotationPoint(rotationPoint);
-    compPhysics->SetLocalGravitationPoint(gravitationPoint);
+    compPhysics->setLocalRotationPoint(rotationPoint);
+    compPhysics->setLocalGravitationPoint(gravitationPoint);
 
     for (pugi::xml_node shapeElem = compElem.child("shape"); shapeElem; shapeElem = shapeElem.next_sibling("shape"))
     {
@@ -200,31 +200,31 @@ boost::shared_ptr<CompPhysics> CompPhysics::LoadFromXml(const pugi::xml_node& co
         if (density != 0.0f)
             body_def.type = BodyDef::dynamicBody;
 
-        compPhysics->AddShapeDef(boost::make_shared<ShapeDef>(shapeName, density, friction, restitution, isSensor));
+        compPhysics->addShapeDef(boost::make_shared<ShapeDef>(shapeName, density, friction, restitution, isSensor));
     }
 
-    compPhysics->SetBodyDef(body_def);
+    compPhysics->setBodyDef(body_def);
     return compPhysics;
 }
 
-void CompPhysics::WriteToXml(pugi::xml_node& compNode) const
+void CompPhysics::writeToXml(pugi::xml_node& compNode) const
 {
     // damping element
     pugi::xml_node dampNode = compNode.append_child("damping");
-    dampNode.append_attribute("linear").set_value(GetLinearDamping());
-    dampNode.append_attribute("angular").set_value(GetAngularDamping());
+    dampNode.append_attribute("linear").set_value(getLinearDamping());
+    dampNode.append_attribute("angular").set_value(getAngularDamping());
 
-    if (IsFixedRotation())
+    if (isFixedRotation())
     {
         compNode.append_child("fixedRotation");
     }
 
-    if (IsBullet())
+    if (isBullet())
     {
         compNode.append_child("isBullet");
     }
 
-    for (ShapeInfoVec::const_iterator it = GetShapeInfos().begin(); it != GetShapeInfos().end(); ++it)
+    for (ShapeInfoVec::const_iterator it = getShapeInfos().begin(); it != getShapeInfos().end(); ++it)
     {
         pugi::xml_node shapeNode = compNode.append_child("shape");
         shapeNode.append_attribute("comp_name").set_value((*it)->compName.c_str());

@@ -52,10 +52,15 @@ RenderSubSystem::RenderSubSystem( GameEvents& gameEvents )
     m_matrixGUI[3] = 0; m_matrixGUI[7] = 0; m_matrixGUI[11] = 0; m_matrixGUI[15] = 1;
 }
 
-// RenderSubSystem initialisieren
-void RenderSubSystem::Init( int width, int height )
+RenderSubSystem::~RenderSubSystem()
 {
-    InitOpenGL ( width, height );
+    deInit();
+}
+
+// RenderSubSystem initialisieren
+void RenderSubSystem::init( int width, int height )
+{
+    initOpenGL ( width, height );
 
     GLenum errCode;
     const GLubyte *errString;
@@ -63,16 +68,16 @@ void RenderSubSystem::Init( int width, int height )
     if ((errCode = glGetError()) != GL_NO_ERROR)
     {
         errString = gluErrorString(errCode);
-        gAaLog.Write ( " OpenGL Error: %s ", errString );
+        gAaLog.write ( " OpenGL Error: %s ", errString );
     }
 
-    m_eventConnection1 = m_gameEvents.newEntity.RegisterListener( boost::bind( &RenderSubSystem::RegisterCompVisual, this, _1 ) );
-    m_eventConnection2 = m_gameEvents.deleteEntity.RegisterListener(  boost::bind( &RenderSubSystem::UnregisterCompVisual, this, _1 ) );
+    m_eventConnection1 = m_gameEvents.newEntity.registerListener( boost::bind( &RenderSubSystem::onRegisterCompVisual, this, _1 ) );
+    m_eventConnection2 = m_gameEvents.deleteEntity.registerListener(  boost::bind( &RenderSubSystem::onUnregisterCompVisual, this, _1 ) );
 
     m_isInit = true;
 }
 
-void RenderSubSystem::DeInit()
+void RenderSubSystem::deInit()
 {
     if (m_isInit)
     {
@@ -85,16 +90,14 @@ void RenderSubSystem::DeInit()
     }
 }
 
-bool RenderSubSystem::LoadData()
+bool RenderSubSystem::loadData()
 {
-    XmlLoader xml;
-    xml.LoadGraphics( cGraphisFileName, &m_textureManager, &m_animationManager, &m_fontManager );
-
+    XmlLoader::loadGraphics( cGraphisFileName, &m_textureManager, &m_animationManager, &m_fontManager );
     return true;
 }
 
 // OpenGL initialisieren
-void RenderSubSystem::InitOpenGL ( int width, int height )
+void RenderSubSystem::initOpenGL ( int width, int height )
 {
     glViewport ( 0,0,width, height );
 
@@ -131,13 +134,13 @@ void RenderSubSystem::InitOpenGL ( int width, int height )
     glLoadIdentity();
 }
 
-void RenderSubSystem::ClearScreen()
+void RenderSubSystem::clearScreen()
 {
     // Bildschirm leeren
     glClear ( GL_COLOR_BUFFER_BIT );
 }
 
-void RenderSubSystem::FlipBuffer()
+void RenderSubSystem::flipBuffer()
 {
     GLenum errCode;
     const GLubyte *errString;
@@ -145,13 +148,13 @@ void RenderSubSystem::FlipBuffer()
     if ((errCode = glGetError()) != GL_NO_ERROR)
     {
         errString = gluErrorString(errCode);
-        gAaLog.Write ( "!=========! OpenGL Error %u: %s !=========! \n", errCode, errString );
+        gAaLog.write ( "!=========! OpenGL Error %u: %s !=========! \n", errCode, errString );
     }
 
     SDL_GL_SwapBuffers(); // vom Backbuffer zum Frontbuffer wechseln (neues Bild zeigen)
 }
 
-void RenderSubSystem::SetMatrix(MatrixId matrix)
+void RenderSubSystem::setMatrix(MatrixId matrix)
 {
     if (m_currentMatrix == matrix)
         return;
@@ -190,9 +193,9 @@ void RenderSubSystem::SetMatrix(MatrixId matrix)
     }
 }
 
-void RenderSubSystem::DrawTexturedQuad( float texCoord[8], float vertexCoord[8], std::string texId, bool border, float alpha )
+void RenderSubSystem::drawTexturedQuad( float texCoord[8], float vertexCoord[8], std::string texId, bool border, float alpha )
 {
-    m_textureManager.SetTexture( texId );
+    m_textureManager.setTexture( texId );
     glColor4f( 1.0f, 1.0f, 1.0f, alpha );
     glBegin ( GL_QUADS );
         // Oben links
@@ -207,7 +210,7 @@ void RenderSubSystem::DrawTexturedQuad( float texCoord[8], float vertexCoord[8],
     glEnd();
     if ( border )
     {
-        m_textureManager.Clear();
+        m_textureManager.clear();
         glColor3ub ( 220, 220, 220 );
         glBegin ( GL_LINE_LOOP );
         for ( int i = 0; i < 4; ++i)
@@ -221,9 +224,9 @@ void RenderSubSystem::DrawTexturedQuad( float texCoord[8], float vertexCoord[8],
     glColor4f( 255, 255, 255, 255 );
 }
 
-void RenderSubSystem::DrawColorQuad( float vertexCoord[8], float r, float g, float b, float a, bool border )
+void RenderSubSystem::drawColorQuad( float vertexCoord[8], float r, float g, float b, float a, bool border )
 {
-    m_textureManager.Clear();
+    m_textureManager.clear();
     if ( a > 0.01f ) // Falls eine Füllung vorhanden ist
     {
         glColor4f ( r, g, b, a );
@@ -245,9 +248,9 @@ void RenderSubSystem::DrawColorQuad( float vertexCoord[8], float r, float g, flo
     glColor4f( 255, 255, 255, 255 );
 }
 
-void RenderSubSystem::DrawOverlay( float r, float g, float b, float a )
+void RenderSubSystem::drawOverlay( float r, float g, float b, float a )
 {
-    m_textureManager.Clear();
+    m_textureManager.clear();
     glColor4f ( r, g, b, a );
     glBegin ( GL_QUADS );
         // Oben links
@@ -265,34 +268,34 @@ void RenderSubSystem::DrawOverlay( float r, float g, float b, float a )
     glColor4f( 255, 255, 255, 255 );
 }
 
-void RenderSubSystem::DrawTexturedPolygon ( const CompShapePolygon& rPoly, const CompVisualTexture& rTex, bool border )
+void RenderSubSystem::drawTexturedPolygon ( const CompShapePolygon& rPoly, const CompVisualTexture& rTex, bool border )
 {
-    m_textureManager.SetTexture( rTex.GetTexture() );
+    m_textureManager.setTexture( rTex.getTexture() );
     glBegin ( GL_POLYGON );
-    for ( size_t iCountVertices = 0; iCountVertices < rPoly.GetVertexCount(); ++iCountVertices )
+    for ( size_t iCountVertices = 0; iCountVertices < rPoly.getVertexCount(); ++iCountVertices )
     {
-        glTexCoord2f( rPoly.GetVertex( iCountVertices )->x, rPoly.GetVertex( iCountVertices )->y );
-        glVertex2f ( rPoly.GetVertex( iCountVertices )->x, rPoly.GetVertex( iCountVertices )->y );
+        glTexCoord2f( rPoly.getVertex( iCountVertices )->x, rPoly.getVertex( iCountVertices )->y );
+        glVertex2f ( rPoly.getVertex( iCountVertices )->x, rPoly.getVertex( iCountVertices )->y );
     }
     glEnd();
 
-    for ( size_t iCountVertices = 0; iCountVertices < rPoly.GetVertexCount(); ++iCountVertices )
+    for ( size_t iCountVertices = 0; iCountVertices < rPoly.getVertexCount(); ++iCountVertices )
     {
-    	std::string tex = rTex.GetEdgeTexture(iCountVertices);
+    	std::string tex = rTex.getEdgeTexture(iCountVertices);
     	if (tex == "")
     		continue;
 
-        size_t vetex2Index = (iCountVertices==rPoly.GetVertexCount()-1) ? (0) : (iCountVertices+1);
-    	DrawEdge( *rPoly.GetVertex( iCountVertices ), *rPoly.GetVertex( vetex2Index ), tex);
+        size_t vetex2Index = (iCountVertices==rPoly.getVertexCount()-1) ? (0) : (iCountVertices+1);
+    	drawEdge( *rPoly.getVertex( iCountVertices ), *rPoly.getVertex( vetex2Index ), tex);
     }
 
     if ( border )
     {
-        m_textureManager.Clear();
+        m_textureManager.clear();
         glColor3ub ( 220, 220, 220 );
         glBegin ( GL_LINE_LOOP );
-        for ( size_t iCountVertices = 0; iCountVertices < rPoly.GetVertexCount(); ++iCountVertices )
-            glVertex2f ( rPoly.GetVertex( iCountVertices )->x, rPoly.GetVertex( iCountVertices )->y );
+        for ( size_t iCountVertices = 0; iCountVertices < rPoly.getVertexCount(); ++iCountVertices )
+            glVertex2f ( rPoly.getVertex( iCountVertices )->x, rPoly.getVertex( iCountVertices )->y );
         glEnd();
         /*glBegin( GL_POINTS );
         for ( size_t iCountVertices = 0; iCountVertices < rPoly.GetVertexCount(); ++iCountVertices )
@@ -303,40 +306,40 @@ void RenderSubSystem::DrawTexturedPolygon ( const CompShapePolygon& rPoly, const
     glColor4f( 255, 255, 255, 255 );
 }
 
-void RenderSubSystem::DrawTexturedCircle ( const CompShapeCircle& rCircle, const CompVisualTexture& rTex, bool border )
+void RenderSubSystem::drawTexturedCircle ( const CompShapeCircle& rCircle, const CompVisualTexture& rTex, bool border )
 {
-    m_textureManager.SetTexture( rTex.GetTexture() );
+    m_textureManager.setTexture( rTex.getTexture() );
     GLUquadricObj *pQuacric = gluNewQuadric();
     gluQuadricTexture(pQuacric, true);
     gluQuadricDrawStyle(pQuacric, GLU_FILL);
 
     glPushMatrix();
-    glTranslatef(rCircle.GetCenter().x, rCircle.GetCenter().y, 0.0f);
+    glTranslatef(rCircle.getCenter().x, rCircle.getCenter().y, 0.0f);
 
-    gluDisk(pQuacric, 0.0f, rCircle.GetRadius(), cCircleSlices,  1);
+    gluDisk(pQuacric, 0.0f, rCircle.getRadius(), cCircleSlices,  1);
     
-    std::string tex = rTex.GetEdgeTexture(0);
+    std::string tex = rTex.getEdgeTexture(0);
     //tex = "EdgeGrass1";
     if (tex != "")
     {
         float angle = cPi*2/cCircleSlices;
-        float edgeLenght = tan(angle/2)*2.0f*rCircle.GetRadius();
+        float edgeLenght = tan(angle/2)*2.0f*rCircle.getRadius();
         float textureCut = fmod(edgeLenght, 1.0f);
 
         for ( size_t i = 0; i < cCircleSlices; ++i )
         {
-            Vector2D cross ( rCircle.GetRadius(), 0.0f );
+            Vector2D cross ( rCircle.getRadius(), 0.0f );
 
-            DrawEdge(cross.Rotated(angle*i), cross.Rotated(angle*(i+1)), tex, textureCut*i, edgeLenght);
+            drawEdge(cross.rotated(angle*i), cross.rotated(angle*(i+1)), tex, textureCut*i, edgeLenght);
         }
     }
 
     if ( border )
     {
-        m_textureManager.Clear();
+        m_textureManager.clear();
         glColor3ub ( 220, 220, 220 );
         gluQuadricDrawStyle(pQuacric, GLU_SILHOUETTE);
-        gluDisk(pQuacric, 0.0f, rCircle.GetRadius(), cCircleSlices,  1);
+        gluDisk(pQuacric, 0.0f, rCircle.getRadius(), cCircleSlices,  1);
     }
 
     glPopMatrix();
@@ -345,14 +348,14 @@ void RenderSubSystem::DrawTexturedCircle ( const CompShapeCircle& rCircle, const
     glColor4f( 255, 255, 255, 255 );
 }
 
-void RenderSubSystem::DrawEdge(const Vector2D& vertexA, const Vector2D& vertexB, std::string& tex, float offset, float preCalcEdgeLenght)
+void RenderSubSystem::drawEdge(const Vector2D& vertexA, const Vector2D& vertexB, std::string& tex, float offset, float preCalcEdgeLenght)
 {
     Vector2D edgeNorm = vertexB - vertexA;
     float edgeLenght = preCalcEdgeLenght;
     if (edgeLenght < 0.0f)
-        edgeLenght = edgeNorm.Length();
-    edgeNorm.Normalise();
-    edgeNorm.Rotate(cPi/2);
+        edgeLenght = edgeNorm.length();
+    edgeNorm.normalize();
+    edgeNorm.rotate(cPi/2);
     Vector2D vertex1 = vertexA - edgeNorm*0.01f;
     Vector2D vertex2 = vertexB - edgeNorm*0.01f;
     Vector2D vertex3 = vertex2 + edgeNorm;
@@ -366,13 +369,13 @@ void RenderSubSystem::DrawEdge(const Vector2D& vertexA, const Vector2D& vertexB,
                              vertex3.x, vertex3.y,
                              vertex4.x, vertex4.y,
                              vertex1.x, vertex1.y, };
-    DrawTexturedQuad( texCoord, vertexCoord, tex, false, 1.0f );
+    drawTexturedQuad( texCoord, vertexCoord, tex, false, 1.0f );
 }
 
 // Zeichnet einen Vector2D (Pfeil) in einer bestimmten Postion
-void RenderSubSystem::DrawVector ( const Vector2D& rVector, const Vector2D& rPos )
+void RenderSubSystem::drawVector ( const Vector2D& rVector, const Vector2D& rPos )
 {
-    m_textureManager.Clear();
+    m_textureManager.clear();
     glColor4ub ( 0, 0, 255, 150 );
 
     // Pfeikörper zeichnen
@@ -383,14 +386,14 @@ void RenderSubSystem::DrawVector ( const Vector2D& rVector, const Vector2D& rPos
 
     // Pfeilspitze zeichnen
     Vector2D vector_tip = rVector;
-    vector_tip.Normalise();
+    vector_tip.normalize();
     vector_tip *= 0.5;
-    vector_tip.Rotate ( cPi*0.75f );
+    vector_tip.rotate ( cPi*0.75f );
     glBegin ( GL_LINES );
     glVertex2f ( rVector.x + rPos.x, rVector.y + rPos.y );
     glVertex2f ( rVector.x + rPos.x + vector_tip.x, rVector.y + rPos.y + vector_tip.y );
     glEnd();
-    vector_tip.Rotate ( cPi*0.5f );
+    vector_tip.rotate ( cPi*0.5f );
     glBegin ( GL_LINES );
     glVertex2f ( rVector.x + rPos.x, rVector.y + rPos.y );
     glVertex2f ( rVector.x + rPos.x + vector_tip.x, rVector.y + rPos.y + vector_tip.y );
@@ -400,9 +403,9 @@ void RenderSubSystem::DrawVector ( const Vector2D& rVector, const Vector2D& rPos
 }
 
 // Zeichnet einen punkt an einer bestimmten Postion
-void RenderSubSystem::DrawPoint ( const Vector2D& rPos )
+void RenderSubSystem::drawPoint ( const Vector2D& rPos )
 {
-    m_textureManager.Clear();
+    m_textureManager.clear();
     glColor4ub ( 255, 0, 0, 150 );
 
     glBegin ( GL_POINTS );
@@ -424,9 +427,9 @@ void RenderSubSystem::DrawPoint ( const Vector2D& rPos )
 }
 
 // Zeichnet den Fadenkreuz
-void RenderSubSystem::DrawCrosshairs ( const Vector2D& rCrosshairsPos )
+void RenderSubSystem::drawCrosshairs ( const Vector2D& rCrosshairsPos )
 {
-    m_textureManager.Clear();
+    m_textureManager.clear();
     glColor4ub ( 0, 255, 0, 150 );
 
     glBegin ( GL_QUADS );
@@ -461,9 +464,9 @@ void RenderSubSystem::DrawCrosshairs ( const Vector2D& rCrosshairsPos )
 }
 
 // Zeichnet den Fadenkreuz
-void RenderSubSystem::DrawEditorCursor ( const Vector2D& rPos )
+void RenderSubSystem::drawEditorCursor ( const Vector2D& rPos )
 {
-    m_textureManager.Clear();
+    m_textureManager.clear();
 
     glColor4f ( 0.5f, 1.0f, 1.0f, 0.6f );
     glBegin ( GL_LINES );
@@ -476,42 +479,42 @@ void RenderSubSystem::DrawEditorCursor ( const Vector2D& rPos )
     glColor4f( 255, 255, 255, 255 );
 }
 
-void RenderSubSystem::DrawString( const std::string &str, const FontIdType &fontId, float x, float y, Align horizAlign, Align vertAlign, float red, float green, float blue, float alpha )
+void RenderSubSystem::drawString( const std::string &str, const FontIdType &fontId, float x, float y, Align horizAlign, Align vertAlign, float red, float green, float blue, float alpha )
 {
     MatrixId stored_matrix = m_currentMatrix;
-    SetMatrix(Text);
-    m_fontManager.DrawString(str, fontId, x, y, horizAlign, vertAlign, red, green, blue, alpha);
-    SetMatrix(stored_matrix);
+    setMatrix(Text);
+    m_fontManager.drawString(str, fontId, x, y, horizAlign, vertAlign, red, green, blue, alpha);
+    setMatrix(stored_matrix);
 }
 
-void RenderSubSystem::DrawVisualTextureComps()
+void RenderSubSystem::drawVisualTextureComps()
 {
     BOOST_FOREACH(CompVisualTexture* pTexComp, m_visualTextureComps)
     {
-        CompPosition* compPos = pTexComp->GetOwnerEntity()->GetComponent<CompPosition>();
-        std::vector<CompShape*> compShapes = pTexComp->GetOwnerEntity()->GetComponents<CompShape>();
+        CompPosition* compPos = pTexComp->getOwnerEntity()->getComponent<CompPosition>();
+        std::vector<CompShape*> compShapes = pTexComp->getOwnerEntity()->getComponents<CompShape>();
         if ( compPos )
         {
             glPushMatrix();
 
-            float angle = compPos->GetOrientation();
-            const Vector2D& position = compPos->GetPosition();
+            float angle = compPos->getOrientation();
+            const Vector2D& position = compPos->getPosition();
 
             glTranslatef(position.x, position.y, 0.0f);
             glRotatef( radToDeg(angle), 0.0, 0.0, 1.0f);
 
             for ( size_t i=0; i<compShapes.size(); ++i )
             {
-                switch (compShapes[i]->GetType())
+                switch (compShapes[i]->getType())
                 {
                 case CompShape::Polygon:
                 {
-                    DrawTexturedPolygon(*static_cast<const CompShapePolygon*>(compShapes[i]), *pTexComp);
+                    drawTexturedPolygon(*static_cast<const CompShapePolygon*>(compShapes[i]), *pTexComp);
                     break;
                 }
                 case CompShape::Circle:
                 {
-                    DrawTexturedCircle(*static_cast<const CompShapeCircle*>(compShapes[i]), *pTexComp);
+                    drawTexturedCircle(*static_cast<const CompShapeCircle*>(compShapes[i]), *pTexComp);
                     break;
                 }
                 default:
@@ -523,22 +526,22 @@ void RenderSubSystem::DrawVisualTextureComps()
     }
 }
 
-void RenderSubSystem::DrawVisualAnimationComps()
+void RenderSubSystem::drawVisualAnimationComps()
 {
     BOOST_FOREACH(CompVisualAnimation* pAnimComp, m_visualAnimComps)
     {
-        CompPosition* compPos = pAnimComp->GetOwnerEntity()->GetComponent<CompPosition>();
+        CompPosition* compPos = pAnimComp->getOwnerEntity()->getComponent<CompPosition>();
         if (compPos)
         {
-            m_textureManager.SetTexture(pAnimComp->GetCurrentTexture());
+            m_textureManager.setTexture(pAnimComp->getCurrentTexture());
 
             glPushMatrix();
 
-            float angle = compPos->GetOrientation();
-            const Vector2D& position = compPos->GetPosition();
+            float angle = compPos->getOrientation();
+            const Vector2D& position = compPos->getPosition();
 
-            bool isFlipped = pAnimComp->GetFlip();
-            Vector2D center = pAnimComp->Center();
+            bool isFlipped = pAnimComp->getFlip();
+            Vector2D center = pAnimComp->center();
             if ( isFlipped )
                 center.x = -center.x;
 
@@ -549,7 +552,7 @@ void RenderSubSystem::DrawVisualAnimationComps()
             {
                 // FLIP ONCE
                 float hw, hh;
-                pAnimComp->GetDimensions( &hw, &hh );
+                pAnimComp->getDimensions( &hw, &hh );
 
                 glBegin ( GL_QUADS );
                 // Oben links
@@ -586,64 +589,64 @@ void RenderSubSystem::DrawVisualAnimationComps()
     }
 }
 
-void RenderSubSystem::DrawVisualMessageComps()
+void RenderSubSystem::drawVisualMessageComps()
 {
     int y = 0;
     float lineHeight = 0.2f;
     BOOST_FOREACH(CompVisualMessage* pMsgComp, m_visualMsgComps)
     {
-        DrawString( std::string("- ")+pMsgComp->GetMsg(), "FontW_m", 0.4f, 0.6f + y*lineHeight );
+        drawString( std::string("- ")+pMsgComp->getMsg(), "FontW_m", 0.4f, 0.6f + y*lineHeight );
         ++y;
     }
 }
 
-void RenderSubSystem::DrawFPS(int fps)
+void RenderSubSystem::drawFPS(int fps)
 {
     std::ostringstream oss;
     oss << fps;
-    DrawString( "FPS", "FontW_s", 3.8f, 0.03f, AlignRight, AlignTop );
-    DrawString( oss.str(), "FontW_s", 3.95f, 0.03f, AlignRight, AlignTop );
+    drawString( "FPS", "FontW_s", 3.8f, 0.03f, AlignRight, AlignTop );
+    drawString( oss.str(), "FontW_s", 3.95f, 0.03f, AlignRight, AlignTop );
 }
 
-void RenderSubSystem::RegisterCompVisual( Entity& entity )
+void RenderSubSystem::onRegisterCompVisual( Entity& entity )
 {
-    BOOST_FOREACH(CompVisualTexture* pTexComp, entity.GetComponents<CompVisualTexture>())
+    BOOST_FOREACH(CompVisualTexture* pTexComp, entity.getComponents<CompVisualTexture>())
         m_visualTextureComps.insert( pTexComp );
 
-    BOOST_FOREACH(CompVisualAnimation* pAnimComp, entity.GetComponents<CompVisualAnimation>())
+    BOOST_FOREACH(CompVisualAnimation* pAnimComp, entity.getComponents<CompVisualAnimation>())
         m_visualAnimComps.insert( pAnimComp );
 
-    BOOST_FOREACH(CompVisualMessage* pMsgComp, entity.GetComponents<CompVisualMessage>())
+    BOOST_FOREACH(CompVisualMessage* pMsgComp, entity.getComponents<CompVisualMessage>())
         m_visualMsgComps.insert( pMsgComp );
 }
 
-void RenderSubSystem::UnregisterCompVisual( Entity& entity )
+void RenderSubSystem::onUnregisterCompVisual( Entity& entity )
 {
-    BOOST_FOREACH(CompVisualTexture* pTexComp, entity.GetComponents<CompVisualTexture>())
+    BOOST_FOREACH(CompVisualTexture* pTexComp, entity.getComponents<CompVisualTexture>())
         m_visualTextureComps.erase( pTexComp );
 
-    BOOST_FOREACH(CompVisualAnimation* pAnimComp, entity.GetComponents<CompVisualAnimation>())
+    BOOST_FOREACH(CompVisualAnimation* pAnimComp, entity.getComponents<CompVisualAnimation>())
         m_visualAnimComps.erase( pAnimComp );
 
-    BOOST_FOREACH(CompVisualMessage* pMsgComp, entity.GetComponents<CompVisualMessage>())
+    BOOST_FOREACH(CompVisualMessage* pMsgComp, entity.getComponents<CompVisualMessage>())
         m_visualMsgComps.erase( pMsgComp );
 }
 
-void RenderSubSystem::DisplayTextScreen( const std::string& text )
+void RenderSubSystem::displayTextScreen( const std::string& text )
 {
-    SetMatrix(GUI);
-    DrawOverlay( 0.0f, 0.0f, 0.0f, 1.0f );
-    DrawString( text, "FontW_m", 2.0f, 1.5f, AlignCenter, AlignCenter );
+    setMatrix(GUI);
+    drawOverlay( 0.0f, 0.0f, 0.0f, 1.0f );
+    drawString( text, "FontW_m", 2.0f, 1.5f, AlignCenter, AlignCenter );
 }
 
-void RenderSubSystem::DisplayLoadingScreen()
+void RenderSubSystem::displayLoadingScreen()
 {
     glMatrixMode ( GL_PROJECTION );
     glPushMatrix();
     glLoadIdentity(); //Reset projection matrix
 
-    float w = (float)gAaConfig.GetInt("ScreenWidth");
-    float h = (float)gAaConfig.GetInt("ScreenHeight");
+    float w = (float)gAaConfig.getInt("ScreenWidth");
+    float h = (float)gAaConfig.getInt("ScreenHeight");
 
     gluOrtho2D( 0, w, h, 0 ); // orthographic mode (z is not important)
     glMatrixMode ( GL_MODELVIEW );
@@ -655,8 +658,8 @@ void RenderSubSystem::DisplayLoadingScreen()
     info.textureWrapModeY = GL_CLAMP;
     info.scale = 1.0;
     int picw=0,pich=0;
-    m_textureManager.LoadTexture("data/Loading.png","loading",info,gAaConfig.GetInt("TexQuality"),&picw,&pich);
-    m_textureManager.SetTexture( "loading" );
+    m_textureManager.loadTexture("data/Loading.png","loading",info,gAaConfig.getInt("TexQuality"),&picw,&pich);
+    m_textureManager.setTexture( "loading" );
     
     //gAaLog.Write( "Pic: w=%i, h=%i\n", picw, pich );
     //gAaLog.Write( "Res: w=%f, h=%f\n", w, h );
@@ -705,10 +708,10 @@ void RenderSubSystem::DisplayLoadingScreen()
 
     SDL_GL_SwapBuffers();
 
-    m_textureManager.FreeTexture("loading");
+    m_textureManager.freeTexture("loading");
 }
 
-void RenderSubSystem::SetViewPosition( const Vector2D& pos, float scale, float angle)
+void RenderSubSystem::setViewPosition( const Vector2D& pos, float scale, float angle)
 {
     glLoadIdentity();
 
@@ -717,9 +720,9 @@ void RenderSubSystem::SetViewPosition( const Vector2D& pos, float scale, float a
     glTranslatef( pos.x * -1, pos.y * -1, 0.0f);
 }
 
-void RenderSubSystem::SetViewSize( float width, float height )
+void RenderSubSystem::setViewSize( float width, float height )
 {
-    SetMatrix(RenderSubSystem::World);
+    setMatrix(RenderSubSystem::World);
     glMatrixMode ( GL_PROJECTION );
     glLoadIdentity(); //Reset projection matrix
 

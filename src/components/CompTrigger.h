@@ -35,17 +35,17 @@ class CompTrigger : public Component
 public:
     CompTrigger();
 
-    const CompIdType& ComponentId() const { return COMPONENT_ID; }
+    const CompIdType& getComponentId() const { return COMPONENT_ID; }
 	static const CompIdType COMPONENT_ID; // eindeutige ID für diese Komponentenart (gleich wie Klassennamen, siehe CompCollectable.cpp)
 
-    void AddCondition( const boost::shared_ptr<Condition>& );
-    void AddEffect( const boost::shared_ptr<Effect>& );
+    void addCondition( const boost::shared_ptr<Condition>& );
+    void addEffect( const boost::shared_ptr<Effect>& );
 
-    const std::vector< boost::shared_ptr<Condition> >& GetConditions() const { return m_conditions; }
-    const std::vector< boost::shared_ptr<Effect> >& GetEffects() const { return m_effects; }
+    const std::vector< boost::shared_ptr<Condition> >& getConditions() const { return m_conditions; }
+    const std::vector< boost::shared_ptr<Effect> >& getEffects() const { return m_effects; }
 
-    static boost::shared_ptr<CompTrigger> LoadFromXml(const pugi::xml_node& compElem, GameWorld& gameWorld);
-    void WriteToXml(pugi::xml_node& compNode) const;
+    static boost::shared_ptr<CompTrigger> loadFromXml(const pugi::xml_node& compElem, GameWorld& gameWorld);
+    void writeToXml(pugi::xml_node& compNode) const;
 
 private:
     std::vector< boost::shared_ptr<Condition> > m_conditions;
@@ -54,13 +54,10 @@ private:
     EventConnection m_eventConnection;
 
     // Hier werden alle nötigen aktionen Durgeführt pro Aktualisierung
-    void OnUpdate();
+    void onUpdate();
 
     bool m_fired;
 };
-//--------------------------------------------//
-//--------- Ende CompTrigger Klasse- ---------//
-//--------------------------------------------//
 
 // Basisklasse Bedingung
 class Condition
@@ -68,9 +65,9 @@ class Condition
 public:
     virtual ~Condition() {}
 
-    virtual ConditionIdType ID() const = 0;
+    virtual ConditionIdType getId() const = 0;
 
-    virtual bool ConditionIsTrue() = 0;
+    virtual bool isConditionTrue() = 0;
 
     CompTrigger* m_pCompTrigger;
 };
@@ -81,10 +78,10 @@ class Effect
 public:
     virtual ~Effect() {}
 
-    virtual EffectIdType ID() const = 0;
+    virtual EffectIdType getId() const = 0;
 
-    virtual void Fire() = 0;
-    virtual bool Update() = 0; // true zurückgeben wenn der Effekt vollstänkdig ausgeführt wurde
+    virtual void fire() = 0;
+    virtual bool update() = 0; // true zurückgeben wenn der Effekt vollstänkdig ausgeführt wurde
 
     CompTrigger* m_pCompTrigger;
 };

@@ -21,11 +21,11 @@ Logger::Logger( const char *pFileName )
   m_indentationLevel ( 0 ),
   m_lastCharWasNewline ( false )
 {
-    OpenFile( pFileName );
+    openFile( pFileName );
 }
 
 // Text in Log-Datei schreiben (beleibig viele Parameter nach dem format Parameter, wie printf())
-const char* Logger::Write( const char *format, ... )
+const char* Logger::write( const char *format, ... )
 {
     // Parameterliste
     va_list List;
@@ -69,7 +69,7 @@ const char* Logger::Write( const char *format, ... )
     return m_buf; // Pointer zum Text zurückgeben
 }
 
-void Logger::WriteCurrentTime()
+void Logger::writeCurrentTime()
 {
     if ( !m_isOpen )
         return;
@@ -79,16 +79,16 @@ void Logger::WriteCurrentTime()
 #ifdef USE_SAFE_CRT_FUNCTIONS
     char time_str[30] = {0};
     ctime_s ( time_str, 30, &t );
-    Write ( time_str );
+    write ( time_str );
 #else
-    Write ( ctime ( &t ) );
+    write ( ctime ( &t ) );
 #endif
 }
 
-bool Logger::OpenFile( const char *pFileName )
+bool Logger::openFile( const char *pFileName )
 {
     if (m_isOpen)
-        CloseFile();
+        closeFile();
     m_LogStreamOut.open( pFileName );
 	if( m_LogStreamOut.fail() )
     {
@@ -99,7 +99,7 @@ bool Logger::OpenFile( const char *pFileName )
 	return true;
 }
 
-void Logger::CloseFile()
+void Logger::closeFile()
 {
     m_LogStreamOut.close();
     m_LogStreamOut.clear();
@@ -107,18 +107,18 @@ void Logger::CloseFile()
 }
 
 //------ Hilfsfunktionen ------//
-void Logger::WriteInfoStart()
+void Logger::writeInfoStart()
 {
-    Write ( "*** " GAME_NAME " %s ***\nStart: ", GAME_VERSION ); // Version in der Log-Datei anzeigen
-    WriteCurrentTime(); // Startzeit aufschreiben
-    Write ( "-------------------------------\n\n" );
+    write ( "*** " GAME_NAME " %s ***\nStart: ", GAME_VERSION ); // Version in der Log-Datei anzeigen
+    writeCurrentTime(); // Startzeit aufschreiben
+    write ( "-------------------------------\n\n" );
 }
 
-void Logger::WriteInfoEnd()
+void Logger::writeInfoEnd()
 {
     // Endinforamtionen in Log-Datei schreiben
-    SetIndentationLevel( 0 ); // Keine Texteinrückung
-    Write ( "\n-----------------------------\n" );
-    Write ( "End: " );
-    WriteCurrentTime();
+    setIndentationLevel( 0 ); // Keine Texteinrückung
+    write ( "\n-----------------------------\n" );
+    write ( "End: " );
+    writeCurrentTime();
 }

@@ -16,7 +16,7 @@ ConditionCompareVariable::ConditionCompareVariable( std::map<const std::string, 
   m_numToCompareWith ( numToCompareWith )
 {}
 
-bool ConditionCompareVariable::ConditionIsTrue()
+bool ConditionCompareVariable::isConditionTrue()
 {
     switch ( m_compareType )
     {
@@ -42,19 +42,19 @@ ConditionEntityTouchedThis::ConditionEntityTouchedThis( std::string entityName )
 : m_entityName ( entityName )
 {}
 
-bool ConditionEntityTouchedThis::ConditionIsTrue()
+bool ConditionEntityTouchedThis::isConditionTrue()
 {
     // could use events instead of polling every time
 
     // TODO: all physics components
-    CompPhysics* thisCompPhysics = m_pCompTrigger->GetOwnerEntity()->GetComponent<CompPhysics>();
+    CompPhysics* thisCompPhysics = m_pCompTrigger->getOwnerEntity()->getComponent<CompPhysics>();
     if ( thisCompPhysics == NULL )
         return false; // TODO: handle this
 
-    ContactVector contacts = thisCompPhysics->GetContacts(true);
+    ContactVector contacts = thisCompPhysics->getContacts(true);
 
     for (size_t i=0; i<contacts.size(); i++)
-        if (contacts[i]->comp->GetOwnerEntity()->GetId() == m_entityName)
+        if (contacts[i]->comp->getOwnerEntity()->getId() == m_entityName)
             return true;
 
     return false;

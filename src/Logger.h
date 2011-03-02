@@ -23,17 +23,17 @@ class Logger
 public:
     Logger( const char *pFileName ); // Konstruktor mit Parameter
 
-    bool OpenFile( const char *pFileName ); // Neue Datei öffnen
-	void CloseFile(); // Datei schliessen
-    bool IsOpen() { return m_isOpen; } // Is eine Datei offen?
-    const char* Write( const char *format, ... ); // Text in Datei schreiben
-    void WriteCurrentTime(); // Zeit aufschreiben
-    void SetIndentationLevel( int level ) { m_indentationLevel = level; } // Texteinrückung bestimmen
-    void IncreaseIndentationLevel() { ++m_indentationLevel; } // Texteinrückung erhöhen
-    void DecreaseIndentationLevel() { if (m_indentationLevel>0) --m_indentationLevel; } // Texteinrückung reduzieren
+    bool openFile( const char *pFileName ); // Neue Datei öffnen
+	void closeFile(); // Datei schliessen
+    bool isOpen() { return m_isOpen; } // Is eine Datei offen?
+    const char* write( const char *format, ... ); // Text in Datei schreiben
+    void writeCurrentTime(); // Zeit aufschreiben
+    void setIndentationLevel( int level ) { m_indentationLevel = level; } // Texteinrückung bestimmen
+    void increaseIndentationLevel() { ++m_indentationLevel; } // Texteinrückung erhöhen
+    void decreaseIndentationLevel() { if (m_indentationLevel>0) --m_indentationLevel; } // Texteinrückung reduzieren
 
-    void WriteInfoStart();  // Gibt einige Informationen in der Logdatei aus -> Titel und Startzeit (für den Anfang des Dokumentes)
-    void WriteInfoEnd();    // Gibt einige Informationen in der Logdatei aus -> Endzeit (für den Schluss des Dokumentes)
+    void writeInfoStart();  // Gibt einige Informationen in der Logdatei aus -> Titel und Startzeit (für den Anfang des Dokumentes)
+    void writeInfoEnd();    // Gibt einige Informationen in der Logdatei aus -> Endzeit (für den Schluss des Dokumentes)
 private:
     Logger() {} // Default Konstruktor ist privat, weil man das andere Konstruktor
                                                            // verwenden muss: Logger( const char *pFileName )

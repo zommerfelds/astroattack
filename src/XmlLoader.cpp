@@ -40,28 +40,28 @@
 // TODO: a lot of work to do here (error checking etc..)
 
 // Load Level from XML
-void XmlLoader::LoadXmlToWorld( const char* pFileName, GameWorld& gameWorld, SubSystems& subSystems )
+void XmlLoader::loadXmlToWorld( const char* pFileName, GameWorld& gameWorld, SubSystems& subSystems )
 {
 	using boost::shared_ptr;
 	using boost::make_shared;
 
-    gAaLog.Write ( "Loading XML file \"%s\"...\n", pFileName );
-    gAaLog.IncreaseIndentationLevel();
+    gAaLog.write ( "Loading XML file \"%s\"...\n", pFileName );
+    gAaLog.increaseIndentationLevel();
 
     pugi::xml_document doc;
     pugi::xml_parse_result result = doc.load_file(pFileName);
     if (!result)
     {
-        gAaLog.Write( "[ Error parsing file '%s' at offset %d!\nError description: %s ]\n\n", pFileName, result.offset, result.description() );
+        gAaLog.write( "[ Error parsing file '%s' at offset %d!\nError description: %s ]\n\n", pFileName, result.offset, result.description() );
         return;
     }
 
     BOOST_FOREACH(const pugi::xml_node& entityElem, doc.first_child() )
     {
         const char* entityName = entityElem.attribute("name").value();
-        shared_ptr<Entity> pEntity( make_shared<Entity>( entityName ) );
-        gAaLog.Write ( "Creating entity \"%s\"\n", entityName );
-        gAaLog.IncreaseIndentationLevel();
+        shared_ptr<Entity> pEntity = make_shared<Entity>( entityName );
+        gAaLog.write ( "Creating entity \"%s\"\n", entityName );
+        gAaLog.increaseIndentationLevel();
 
         BOOST_FOREACH(const pugi::xml_node& compElem, entityElem)
         {
@@ -69,83 +69,83 @@ void XmlLoader::LoadXmlToWorld( const char* pFileName, GameWorld& gameWorld, Sub
             if ( compId.empty() )
                 continue;
             std::string compName = compElem.attribute("name").value();
-            gAaLog.Write ( "Creating component \"%s\"... ", compId.c_str() );
+            gAaLog.write ( "Creating component \"%s\"... ", compId.c_str() );
 
             shared_ptr<Component> component;
 
             if ( compId == "CompShape" )
             {
-                component = CompShape::LoadFromXml( compElem );
+                component = CompShape::loadFromXml( compElem );
             }
             else if ( compId == "CompPhysics" )
             {
-                component = CompPhysics::LoadFromXml( compElem );
+                component = CompPhysics::loadFromXml( compElem );
             }
             else if ( compId == "CompPlayerController" )
             {
-                component = CompPlayerController::LoadFromXml( compElem, subSystems.input, gameWorld.GetItToVariable( "JetpackEnergy" ) );
+                component = CompPlayerController::loadFromXml( compElem, subSystems.input, gameWorld.getItToVariable( "JetpackEnergy" ) );
             }
             else if ( compId == "CompPosition" )
             {
-                component = CompPosition::LoadFromXml( compElem );
+                component = CompPosition::loadFromXml( compElem );
             }
             else if ( compId == "CompVisualAnimation" )
             {
-                component = CompVisualAnimation::LoadFromXml( compElem, subSystems.renderer.GetAnimationManager() );
+                component = CompVisualAnimation::loadFromXml( compElem, subSystems.renderer.getAnimationManager() );
             }
             else if ( compId == "CompVisualTexture" )
             {
-                component = CompVisualTexture::LoadFromXml( compElem );
+                component = CompVisualTexture::loadFromXml( compElem );
             }
             else if ( compId == "CompVisualMessage" )
             {
-                component = CompVisualMessage::LoadFromXml( compElem );
+                component = CompVisualMessage::loadFromXml( compElem );
             }
 			else if ( compId == "CompGravField" )
             {
-			    component = CompGravField::LoadFromXml( compElem );
+			    component = CompGravField::loadFromXml( compElem );
             }
             else if ( compId == "CompTrigger" )
             {
-                component = CompTrigger::LoadFromXml( compElem, gameWorld );
+                component = CompTrigger::loadFromXml( compElem, gameWorld );
             }
             else
             {
-                gAaLog.Write ( "Component ID not found!" );
+                gAaLog.write ( "Component ID not found!" );
                 continue;
             }
 
             if ( !component )
             {
-                gAaLog.Write ( "Error, component was not allocated!" );
+                gAaLog.write ( "Error, component was not allocated!" );
                 continue;
             }
 
             if ( !compName.empty() )
-            	component->SetName( compName );
-            pEntity->AddComponent( component );
+            	component->setName( compName );
+            pEntity->addComponent( component );
 
-            gAaLog.Write ( "[ Done ]\n" );
+            gAaLog.write ( "[ Done ]\n" );
         }
 
-        gameWorld.AddEntity( pEntity );
-        gAaLog.DecreaseIndentationLevel();
+        gameWorld.addEntity( pEntity );
+        gAaLog.decreaseIndentationLevel();
     }
 
-    gAaLog.DecreaseIndentationLevel();
-    gAaLog.Write ( "[ Done ]\n\n", pFileName );
+    gAaLog.decreaseIndentationLevel();
+    gAaLog.write ( "[ Done ]\n\n", pFileName );
 }
 
-void XmlLoader::LoadSlideShow( const char* pFileName, SlideShow* pSlideShow )
+void XmlLoader::loadSlideShow( const char* pFileName, SlideShow* pSlideShow )
 {
-    gAaLog.Write ( "Loading XML file \"%s\"...\n", pFileName );
-    gAaLog.IncreaseIndentationLevel();
+    gAaLog.write ( "Loading XML file \"%s\"...\n", pFileName );
+    gAaLog.increaseIndentationLevel();
 
     pugi::xml_document doc;
     pugi::xml_parse_result result = doc.load_file(pFileName);
     if (!result)
     {
-		gAaLog.Write( "[ Error parsing file '%s' at offset %d!\nError description: %s ]\n\n", pFileName, result.offset, result.description() );
+		gAaLog.write( "[ Error parsing file '%s' at offset %d!\nError description: %s ]\n\n", pFileName, result.offset, result.description() );
 		return;
 	}
 
@@ -181,14 +181,14 @@ void XmlLoader::LoadSlideShow( const char* pFileName, SlideShow* pSlideShow )
         pSlideShow->slides.push_back( slide );
     }
 
-    gAaLog.DecreaseIndentationLevel();
-    gAaLog.Write ( "[ Done ]\n\n" );
+    gAaLog.decreaseIndentationLevel();
+    gAaLog.write ( "[ Done ]\n\n" );
 }
 
-ResourceIds XmlLoader::LoadGraphics( const char* pFileName, TextureManager* pTextureManager, AnimationManager* pAnimationManager, FontManager* pFontManager )
+ResourceIds XmlLoader::loadGraphics( const char* pFileName, TextureManager* pTextureManager, AnimationManager* pAnimationManager, FontManager* pFontManager )
 {
-    gAaLog.Write ( "Loading XML file \"%s\"...\n", pFileName );
-    gAaLog.IncreaseIndentationLevel();
+    gAaLog.write ( "Loading XML file \"%s\"...\n", pFileName );
+    gAaLog.increaseIndentationLevel();
 
     ResourceIds loadedResources;
 
@@ -196,7 +196,7 @@ ResourceIds XmlLoader::LoadGraphics( const char* pFileName, TextureManager* pTex
     pugi::xml_parse_result result = doc.load_file(pFileName);
     if (!result)
     {
-        gAaLog.Write( "[ Error parsing file '%s' at offset %d!\nError description: %s ]\n\n", pFileName, result.offset, result.description() );
+        gAaLog.write( "[ Error parsing file '%s' at offset %d!\nError description: %s ]\n\n", pFileName, result.offset, result.description() );
         return loadedResources;
     }
 
@@ -242,7 +242,7 @@ ResourceIds XmlLoader::LoadGraphics( const char* pFileName, TextureManager* pTex
 
             info.scale = scale;
 
-            pTextureManager->LoadTexture(name,id,info,gAaConfig.GetInt("TexQuality"));
+            pTextureManager->loadTexture(name,id,info,gAaConfig.getInt("TexQuality"));
             loadedResources.textures.insert(id);
         }
     }
@@ -281,7 +281,7 @@ ResourceIds XmlLoader::LoadGraphics( const char* pFileName, TextureManager* pTex
 
             info.scale = 1.0f;
 
-            pAnimationManager->LoadAnimation(name,id,info,gAaConfig.GetInt("TexQuality"));
+            pAnimationManager->loadAnimation(name,id,info,gAaConfig.getInt("TexQuality"));
             loadedResources.animations.insert(id);
         }
     }
@@ -295,71 +295,71 @@ ResourceIds XmlLoader::LoadGraphics( const char* pFileName, TextureManager* pTex
             const char* id = fontElement.attribute("id").value();
             int size = fontElement.attribute("size").as_int();
 
-            pFontManager->LoadFont(name,size,id);
+            pFontManager->loadFont(name,size,id);
             loadedResources.fonts.insert(id);
         }
     }
-    gAaLog.DecreaseIndentationLevel();
-    gAaLog.Write ( "[ Done ]\n\n", pFileName );
+    gAaLog.decreaseIndentationLevel();
+    gAaLog.write ( "[ Done ]\n\n", pFileName );
     return loadedResources;
 }
 
-void XmlLoader::UnLoadGraphics( const ResourceIds& resourcesToUnload, TextureManager* pTextureManager, AnimationManager* pAnimationManager, FontManager* pFontManager )
+void XmlLoader::unLoadGraphics( const ResourceIds& resourcesToUnload, TextureManager* pTextureManager, AnimationManager* pAnimationManager, FontManager* pFontManager )
 {
-    gAaLog.Write ( "Unloading resources... " );
+    gAaLog.write ( "Unloading resources... " );
 
     // Texturen laden
     if ( pTextureManager )
     {
         BOOST_FOREACH(const TextureIdType& id, resourcesToUnload.textures)
-            pTextureManager->FreeTexture(id);
+            pTextureManager->freeTexture(id);
     }
 
     // Animationen laden
     if ( pAnimationManager )
     {
         BOOST_FOREACH(const AnimationIdType& id, resourcesToUnload.animations)
-            pAnimationManager->FreeAnimation(id);
+            pAnimationManager->freeAnimation(id);
     }
 
     // Schriften laden
     if ( pFontManager )
     {
         BOOST_FOREACH(const FontIdType& id, resourcesToUnload.fonts)
-            pFontManager->FreeFont(id);
+            pFontManager->freeFont(id);
     }
-    gAaLog.Write ( "[ Done ]\n\n" );
+    gAaLog.write ( "[ Done ]\n\n" );
 }
 
-void XmlLoader::SaveWorldToXml( const char* pFileName, const GameWorld& gameWorld )
+void XmlLoader::saveWorldToXml( const char* pFileName, const GameWorld& gameWorld )
 {
-    gAaLog.Write ( "Saving XML file \"%s\"...\n", pFileName );
-    gAaLog.IncreaseIndentationLevel();
+    gAaLog.write ( "Saving XML file \"%s\"...\n", pFileName );
+    gAaLog.increaseIndentationLevel();
     
     pugi::xml_document doc;
 
     pugi::xml_node levelNode = doc.append_child();
     levelNode.set_name("level");
 	
-    const EntityMap& entities = gameWorld.GetAllEntities();
+    const EntityMap& entities = gameWorld.getAllEntities();
     BOOST_FOREACH(const EntityMap::value_type& entPair, entities)
     {
         pugi::xml_node entityNode = levelNode.append_child("entity");
-        entityNode.append_attribute("name").set_value(entPair.second->GetId().c_str());
+        entityNode.append_attribute("name").set_value(entPair.second->getId().c_str());
 
-        const ComponentMap& comps = entPair.second->GetAllComponents();
+        const ComponentMap& comps = entPair.second->getAllComponents();
         BOOST_FOREACH(const ComponentMap::value_type& compPair, comps)
         {
             pugi::xml_node compNode = entityNode.append_child("component");
-            compNode.append_attribute("id").set_value(compPair.second->ComponentId().c_str());
-            compNode.append_attribute("name").set_value(compPair.second->GetName().c_str());
+            compNode.append_attribute("id").set_value(compPair.second->getComponentId().c_str());
+            compNode.append_attribute("name").set_value(compPair.second->getName().c_str());
 
-            compPair.second->WriteToXml(compNode);
+            compPair.second->writeToXml(compNode);
         }
     }
 
     doc.save_file(pFileName);
     
-    gAaLog.DecreaseIndentationLevel();
-    gAaLog.Write ( "[ Done saving XML file \"%s\" ]\n\n", pFileName );
+    gAaLog.decreaseIndentationLevel();
+    gAaLog.write ( "[ Done saving XML file \"%s\" ]\n\n", pFileName );
 }

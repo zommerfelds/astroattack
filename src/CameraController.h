@@ -33,35 +33,35 @@ public:
     CameraController( const InputSubSystem& inputSubSystem, RenderSubSystem& renderSubSystem, const GameWorld& world );
 
     // Initialisierung
-    void Init();
+    void init();
 
-    void Update( float deltaTime ); // Kamarabewegung aktualisieren und auf Eingabe, die die Kamera beeinflusst, reagieren
-    void Look() const; // OpenGL-Ansicht aktualisieren (wird von Update() automatisch aufgerufen)
+    void update( float deltaTime ); // Kamarabewegung aktualisieren und auf Eingabe, die die Kamera beeinflusst, reagieren
+    void look() const; // OpenGL-Ansicht aktualisieren (wird von Update() automatisch aufgerufen)
 
     // Methoden um die Kamera zu bewegen:
     // timeToArrive ist die Zeit, die benötigt werden soll, damit die Kamera den Zielort erreicht
-    void MoveRelative( const Vector2D& rMove, float timeToArrive ); // rMove ist Position des Zielortes relativ zur Lage der Kamera
-    void MoveAbsolute( const Vector2D& rPos, float timeToArrive ); // rPos ist absolute Position des Zielortes
+    void moveRelative( const Vector2D& rMove, float timeToArrive ); // rMove ist Position des Zielortes relativ zur Lage der Kamera
+    void moveAbsolute( const Vector2D& rPos, float timeToArrive ); // rPos ist absolute Position des Zielortes
 
     // Um heran- oder herauszuzoomen
-    void Zoom( float zoom ); // zoom ist der Zoomfaktor ( < 1 bedeutet herauszoomen; > 1 bedeutet herazoomen )
-    void SetZoom( float zoom ); // zoom ist der Zoomfaktor ( < 1 bedeutet herauszoomen; > 1 bedeutet herazoomen )
-    bool SetFollowPlayer( bool follow ); // soll die Kamera den Spieles folgen oder nicht?
+    void zoom( float zoom ); // zoom ist der Zoomfaktor ( < 1 bedeutet herauszoomen; > 1 bedeutet herazoomen )
+    void setZoom( float zoom ); // zoom ist der Zoomfaktor ( < 1 bedeutet herauszoomen; > 1 bedeutet herazoomen )
+    bool setFollowPlayer( bool follow ); // soll die Kamera den Spieles folgen oder nicht?
 
-    void RotateAbsolute( float angle, float timeToArrive ); // Den Winkel der Kamera setzen. angle als neuer Winkel nehmen.
-    void RotateRelative( float angle, float timeToArrive ); // Den Winkel der Kamera verändern. Um angle drehen. (+:Gegenuhrzegersinn, -:Uhrzeigersinn)
+    void rotateAbsolute( float angle, float timeToArrive ); // Den Winkel der Kamera setzen. angle als neuer Winkel nehmen.
+    void rotateRelative( float angle, float timeToArrive ); // Den Winkel der Kamera verändern. Um angle drehen. (+:Gegenuhrzegersinn, -:Uhrzeigersinn)
 
-    Vector2D ScreenToWorld( const Vector2D& screenPos );
-    Vector2D WorldToScreen( const Vector2D& worldPos );
+    Vector2D screenToWorld( const Vector2D& screenPos );
+    Vector2D worldToScreen( const Vector2D& worldPos );
 
     // ========= Zugriff ==========
-    const Vector2D& GetCameraPos() const;
-    float GetCameraAngle() const;
-    float GetViewWidth() const // wie weit ist die Strecke vom linken Bildschirmrand zum Rechten?
+    const Vector2D& getCameraPos() const;
+    float getCameraAngle() const;
+    float getViewWidth() const // wie weit ist die Strecke vom linken Bildschirmrand zum Rechten?
     {
         return m_viewWidth;
     }
-    float GetViewHeight() const // oben - unten
+    float getViewHeight() const // oben - unten
     {
         return m_viewHeight;
     }

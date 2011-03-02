@@ -38,12 +38,12 @@ PhysicsSubSystem::PhysicsSubSystem( GameEvents& gameEvents)
 }
 
 // PhysicsSubSystem initialisieren
-void PhysicsSubSystem::Init()
+void PhysicsSubSystem::init()
 {
-    m_eventConnection1 = m_gameEvents.newEntity.RegisterListener( boost::bind( &PhysicsSubSystem::RegisterPhysicsComp, this, _1 ) );
-    m_eventConnection2 = m_gameEvents.deleteEntity.RegisterListener( boost::bind( &PhysicsSubSystem::UnregisterPhysicsComp, this, _1 ) );
-    m_eventConnection3 = m_gameEvents.newEntity.RegisterListener( boost::bind( &PhysicsSubSystem::RegisterGravFieldComp, this, _1 ) );
-    m_eventConnection4 = m_gameEvents.deleteEntity.RegisterListener( boost::bind( &PhysicsSubSystem::UnregisterGravFieldComp, this, _1 ) );
+    m_eventConnection1 = m_gameEvents.newEntity.registerListener( boost::bind( &PhysicsSubSystem::onRegisterPhysicsComp, this, _1 ) );
+    m_eventConnection2 = m_gameEvents.deleteEntity.registerListener( boost::bind( &PhysicsSubSystem::onUnregisterPhysicsComp, this, _1 ) );
+    m_eventConnection3 = m_gameEvents.newEntity.registerListener( boost::bind( &PhysicsSubSystem::onRegisterGravFieldComp, this, _1 ) );
+    m_eventConnection4 = m_gameEvents.deleteEntity.registerListener( boost::bind( &PhysicsSubSystem::onUnregisterGravFieldComp, this, _1 ) );
 
     m_pGravitationalAcc.x = 0.0f;
     m_pGravitationalAcc.y = -25.0f;
@@ -59,8 +59,8 @@ boost::shared_ptr<b2BodyDef> convertToB2BodyDef(const BodyDef& bodyDef)
     pB2BodyDef->bullet = bodyDef.bullet;
     pB2BodyDef->fixedRotation = bodyDef.fixedRotation;
     pB2BodyDef->linearDamping = bodyDef.linearDamping;
-    pB2BodyDef->linearVelocity = *bodyDef.linearVelocity.To_b2Vec2();
-    pB2BodyDef->position = *bodyDef.position.To_b2Vec2();
+    pB2BodyDef->linearVelocity = *bodyDef.linearVelocity.to_b2Vec2();
+    pB2BodyDef->position = *bodyDef.position.to_b2Vec2();
     switch (bodyDef.type)
     {
     case BodyDef::staticBody:
@@ -76,20 +76,20 @@ boost::shared_ptr<b2BodyDef> convertToB2BodyDef(const BodyDef& bodyDef)
     return pB2BodyDef;
 }
 
-void PhysicsSubSystem::RegisterPhysicsComp(Entity& entity)
+void PhysicsSubSystem::onRegisterPhysicsComp(Entity& entity)
 {
-    CompPhysics* comp_phys = entity.GetComponent<CompPhysics>();
+    CompPhysics* comp_phys = entity.getComponent<CompPhysics>();
     if ( comp_phys ) // Falls es eine "CompPhysics"-Komponente gibt
     {
         // get position from CompPosition, if it exists
-        CompPosition* compPos = entity.GetComponent<CompPosition>();
+        CompPosition* compPos = entity.getComponent<CompPosition>();
         if (compPos)
-            comp_phys->m_bodyDef.position = compPos->GetPosIgnoreCompPhys();
+            comp_phys->m_bodyDef.position = compPos->getPosIgnoreCompPhys();
 
         comp_phys->m_body = m_world.CreateBody( convertToB2BodyDef(comp_phys->m_bodyDef).get() );
         comp_phys->m_body->SetUserData( comp_phys );
 
-		std::vector<CompShape*> compShapes = entity.GetComponents<CompShape>();
+		std::vector<CompShape*> compShapes = entity.getComponents<CompShape>();
 
     	for (size_t i=0; i < comp_phys->m_shapeInfos.size(); i++)
     	{
@@ -98,7 +98,7 @@ void PhysicsSubSystem::RegisterPhysicsComp(Entity& entity)
     		CompShape* pCompShape = NULL;
     		for (size_t a=0; a < compShapes.size(); a++) // TODO: could use get component by name instead
     		{
-    			if (compShapes[i]->GetName() == comp_phys->m_shapeInfos[i]->compName)
+    			if (compShapes[i]->getName() == comp_phys->m_shapeInfos[i]->compName)
     			{
     				pCompShape = compShapes[i];
     				break;
@@ -116,16 +116,16 @@ void PhysicsSubSystem::RegisterPhysicsComp(Entity& entity)
     		fixtureDef->filter.maskBits = 1;
             b2Fixture* pFixture = comp_phys->m_body->CreateFixture( fixtureDef.get() );
             pFixture->SetUserData( comp_phys );
-            comp_phys->m_fixtureMap.insert( std::make_pair(pCompShape->GetName(), pFixture) );
+            comp_phys->m_fixtureMap.insert( std::make_pair(pCompShape->getName(), pFixture) );
         }
 
         m_physicsComps.push_back( comp_phys );
     }
 }
 
-void PhysicsSubSystem::UnregisterPhysicsComp( Entity& entity )
+void PhysicsSubSystem::onUnregisterPhysicsComp( Entity& entity )
 {
-    CompPhysics* comp_phys = entity.GetComponent<CompPhysics>();
+    CompPhysics* comp_phys = entity.getComponent<CompPhysics>();
     if ( comp_phys ) // Falls es eine "CompPhysics"-Komponente gibt
     {
         if ( comp_phys->m_body )
@@ -145,7 +145,7 @@ void PhysicsSubSystem::UnregisterPhysicsComp( Entity& entity )
 }
 
 // PhysicsSubSystem aktualisieren (ganze Physik wird aktulisiert -> Positionen, Geschwindigkeiten...)
-void PhysicsSubSystem::Update()
+void PhysicsSubSystem::update()
 {
     //----Box2D Aktualisieren!----//
     m_world.Step(m_timeStep, m_velocityIterations, m_positionIterations);
@@ -164,14 +164,14 @@ void PhysicsSubSystem::Update()
             CompPhysics* compContact = static_cast<CompPhysics*>(body->GetUserData());
             if ( compContact == NULL ) // TODO: should not happen
                 continue;
-            CompGravField* grav = compContact->GetOwnerEntity()->GetComponent<CompGravField>();
+            CompGravField* grav = compContact->getOwnerEntity()->getComponent<CompGravField>();
             if ( grav == NULL )
                 continue;
             //if ( compContact->GetFixture()->TestPoint( pBody->GetWorldCenter() ) ) // TODO: handle multiple shapes
-            Vector2D gravPoint = m_physicsComps[i]->m_localGravitationPoint.Rotated(pBody->GetAngle()); //(0.0f,-0.65f);
-            if ( compContact->m_body->GetFixtureList()->TestPoint( pBody->GetPosition() + *gravPoint.To_b2Vec2() ) ) // TODO: handle multiple shapes
+            Vector2D gravPoint = m_physicsComps[i]->m_localGravitationPoint.rotated(pBody->GetAngle()); //(0.0f,-0.65f);
+            if ( compContact->m_body->GetFixtureList()->TestPoint( pBody->GetPosition() + *gravPoint.to_b2Vec2() ) ) // TODO: handle multiple shapes
             {
-                int pri = grav->GetPriority();
+                int pri = grav->getPriority();
                 if ( pri > highestPriority )
                 {
                     highestPriority = pri;
@@ -193,15 +193,15 @@ void PhysicsSubSystem::Update()
 
         boost::shared_ptr<b2Vec2> acc;
         if (m_physicsComps[i]->m_gravField == NULL)
-            acc = m_pGravitationalAcc.To_b2Vec2();
+            acc = m_pGravitationalAcc.to_b2Vec2();
         else
-            acc = m_physicsComps[i]->m_gravField->GetAcceleration(pBody->GetWorldCenter()).To_b2Vec2();
+            acc = m_physicsComps[i]->m_gravField->getAcceleration(pBody->GetWorldCenter()).to_b2Vec2();
         b2Vec2 force ( pBody->GetMass() * *acc );
         pBody->ApplyForce( force, pBody->GetWorldCenter() );
 	}
 }
 
-void PhysicsSubSystem::CalculateSmoothPositions(float accumulator)
+void PhysicsSubSystem::calculateSmoothPositions(float accumulator)
 {
     for ( size_t i = 0; i < m_physicsComps.size(); ++i )
     {
@@ -211,25 +211,25 @@ void PhysicsSubSystem::CalculateSmoothPositions(float accumulator)
         float angle = pBody->GetAngle();
         Vector2D v = pBody->GetPosition() + accumulator * pBody->GetLinearVelocity();
         Vector2D c = pBody->GetLocalCenter();
-        v += (c - c.Rotated(extra_angle)).Rotated(angle); // TODO: can we optimize this?
+        v += (c - c.rotated(extra_angle)).rotated(angle); // TODO: can we optimize this?
 
         m_physicsComps[i]->m_smoothAngle = angle + extra_angle;
         m_physicsComps[i]->m_smoothPosition = v;
     }
 }
 
-void PhysicsSubSystem::RegisterGravFieldComp( Entity& entity )
+void PhysicsSubSystem::onRegisterGravFieldComp( Entity& entity )
 {
-    CompGravField* comp_grav = entity.GetComponent<CompGravField>();
+    CompGravField* comp_grav = entity.getComponent<CompGravField>();
     if ( comp_grav != NULL ) // Falls es eine "CompGravField"-Komponente gibt
     {
         m_gravFields.push_back( comp_grav );
     }
 }
 
-void PhysicsSubSystem::UnregisterGravFieldComp( Entity& entity )
+void PhysicsSubSystem::onUnregisterGravFieldComp( Entity& entity )
 {
-    CompGravField* comp_grav = entity.GetComponent<CompGravField>();
+    CompGravField* comp_grav = entity.getComponent<CompGravField>();
     if ( comp_grav != NULL ) // Falls es eine "CompGravField"-Komponente gibt
     {
         for ( size_t i = 0; i < m_gravFields.size(); ++i )

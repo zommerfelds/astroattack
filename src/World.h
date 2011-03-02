@@ -38,16 +38,16 @@ public:
     GameWorld( GameEvents& events );
     ~GameWorld();
 
-    void AddEntity( const boost::shared_ptr<Entity>& pEntity );
-    void RemoveEntity( const EntityIdType& id );
-    Entity* GetEntity( const EntityIdType& id ) const;
-    const EntityMap& GetAllEntities() const;
+    void addEntity( const boost::shared_ptr<Entity>& pEntity );
+    void removeEntity( const EntityIdType& id );
+    Entity* getEntity( const EntityIdType& id ) const;
+    const EntityMap& getAllEntities() const;
 
-    int GetVariable( const WorldVariableType& varName );
-    WorldVariblesMap::iterator GetItToVariable( const WorldVariableType& varName );
-    void SetVariable( const WorldVariableType& varName, int value );
+    int getVariable( const WorldVariableType& varName );
+    WorldVariblesMap::iterator getItToVariable( const WorldVariableType& varName );
+    void setVariable( const WorldVariableType& varName, int value );
 
-    void WriteWorldToLogger( Logger& log );
+    void writeWorldToLogger( Logger& log );
 
 private:
     GameEvents& m_gameEvents;

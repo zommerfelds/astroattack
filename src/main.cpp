@@ -27,7 +27,7 @@ int main ( int argc, char* argv[] )
 
     std::vector<std::string> args (argv+1, argv+argc);
 
-    if ( gAaLog.IsOpen()==false ) // Fehler beim Öffnen?
+    if ( gAaLog.isOpen()==false ) // Fehler beim Öffnen?
 	{
         DispError( "ERROR: Log file \"" LOG_FILE_NAME "\" could not be opened!\n" );
 		return 1; // Programm beenden
@@ -35,37 +35,37 @@ int main ( int argc, char* argv[] )
 
     for(;;)
     {
-        gAaLog.WriteInfoStart();
+        gAaLog.writeInfoStart();
 
         try
         {
             GameApp aaApp(args);   // create application object
-            aaApp.Run();           // run the game!
+            aaApp.run();           // run the game!
         }
         catch ( Exception &e ) // falls es einen Fehler gab (Ausnahmebehandlung)
         {
-            DispError( e.GetMsg() ); // Diesen anzeigen
+            DispError( e.getMsg() ); // Diesen anzeigen
         }
         catch ( std::bad_alloc& ) // Falls nicht genügend Speicherplatz für alle Objekte gefunden wurde wird diese Ausnahme aufgerufen
         {
-            DispError( gAaLog.Write( "Error: Memory could not be allocated!\n" ) );
+            DispError( gAaLog.write( "Error: Memory could not be allocated!\n" ) );
         }
         catch ( std::exception& e ) // Falls eine andere Standart-Ausnahme
         {
             std::string error_msg = std::string("Error: ") + e.what();
-            DispError( gAaLog.Write( error_msg.c_str() ) ); // Fehler ausgeben
+            DispError( gAaLog.write( error_msg.c_str() ) ); // Fehler ausgeben
         }
         catch (...) // Falls eine unbekannte Ausnahme
         {
             char std_err_msg[] = "AstroAttack has encountered an unrecoverable error.\n";
             char std_err_msg2[] = "See the log file \"" LOG_FILE_NAME "\" for more information.";
-            DispError( std::string( gAaLog.Write( std_err_msg ) ) + std_err_msg2 );
+            DispError( std::string( gAaLog.write( std_err_msg ) ) + std_err_msg2 );
         }
 
-        gAaLog.WriteInfoEnd();
+        gAaLog.writeInfoEnd();
         if ( gRestart )
         {
-            gAaLog.Write( "\n\n============= Restarting " GAME_NAME " =============\n\n" );
+            gAaLog.write( "\n\n============= Restarting " GAME_NAME " =============\n\n" );
             gRestart = false;
         }
         else

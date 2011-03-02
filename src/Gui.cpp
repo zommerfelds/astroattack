@@ -12,7 +12,7 @@
 GuiSubSystem::GuiSubSystem( RenderSubSystem& renderer, InputSubSystem& input ) : m_renderer (renderer), m_input (input), m_clear(false), m_isUpdating ( false )
 {}
 
-void GuiSubSystem::Update()
+void GuiSubSystem::update()
 {
     m_isUpdating = true;
     for ( WidgetMap::iterator it = m_widgets.begin(); it != m_widgets.end(); ++it )
@@ -20,30 +20,30 @@ void GuiSubSystem::Update()
         if ( m_groupsToHide.count( it->first ) == 0 )
             for ( std::vector< boost::shared_ptr<Widget> >::iterator it2 = it->second.begin(); it2 != it->second.end(); ++it2 )
             {
-                MouseState newMouseState = m_input.GetMouseStateInAreaConsume( (*it2)->m_area );
+                MouseState newMouseState = m_input.getMouseStateInAreaConsume( (*it2)->m_area );
                 if ( (*it2)->m_mouseState != newMouseState )
-                    (*it2)->MouseStateChanged(newMouseState);
+                    (*it2)->onMouseStateChanged(newMouseState);
                 (*it2)->m_mouseState = newMouseState;
             }
     }
     if ( m_clear )
-        ClearContainers();
+        clearContainers();
     m_isUpdating = false;
 }
 
-void GuiSubSystem::Draw()
+void GuiSubSystem::draw()
 {
     for ( WidgetMap::iterator it = m_widgets.begin(); it != m_widgets.end(); ++it )
     {
         if ( m_groupsToHide.count( it->first ) == 0 )
             for ( std::vector< boost::shared_ptr<Widget> >::iterator it2 = it->second.begin(); it2 != it->second.end(); ++it2 )
             {
-                (*it2)->Draw( &m_renderer );
+                (*it2)->draw( &m_renderer );
             }
     }
 }
 
-void GuiSubSystem::InsertWidget( GroupId groupId, const boost::shared_ptr<Widget>& pWidget )
+void GuiSubSystem::insertWidget( GroupId groupId, const boost::shared_ptr<Widget>& pWidget )
 {
     WidgetMap::iterator it = m_widgets.find( groupId );
     if ( it == m_widgets.end() )
@@ -52,7 +52,7 @@ void GuiSubSystem::InsertWidget( GroupId groupId, const boost::shared_ptr<Widget
         it->second.push_back( pWidget );
 }
 
-void GuiSubSystem::DeleteGroup( GroupId groupId )
+void GuiSubSystem::deleteGroup( GroupId groupId )
 {
     m_widgets.erase( groupId );
 }
@@ -63,18 +63,18 @@ void GuiSubSystem::DeleteGroup( GroupId groupId )
 WidgetLabel::WidgetLabel( float x, float y, std::string text, const FontManager& fontMngr ) : m_text ( text )
 {
     float w = 0.0f, h = 0.0f;
-    fontMngr.GetDimensions(text, "FontW_m", w, h);
-    SetArea( Rect( x, x+w/4.0f, y, y+h/3.0f ) );
+    fontMngr.getDimensions(text, "FontW_m", w, h);
+    setArea( Rect( x, x+w/4.0f, y, y+h/3.0f ) );
 }
 
-void WidgetLabel::Draw( RenderSubSystem* pRenderer )
+void WidgetLabel::draw( RenderSubSystem* pRenderer )
 {
     /*float vertexCoord[8] = { GetArea().x1*4.0f, GetArea().y1*3.0f,
                              GetArea().x1*4.0f, GetArea().y2*3.0f,
                              GetArea().x2*4.0f, GetArea().y2*3.0f,
                              GetArea().x2*4.0f, GetArea().y1*3.0f };
     pRenderer->DrawColorQuad( vertexCoord, 0.1f, 0.9f, 0.3f, 0.3f, true );*/
-    pRenderer->DrawString( m_text, "FontW_m", GetArea().x1*4, GetArea().y1*3 );
+    pRenderer->drawString( m_text, "FontW_m", getArea().x1*4, getArea().y1*3 );
 }
 
 WidgetLabel::~WidgetLabel() {}
@@ -85,13 +85,13 @@ WidgetButton::WidgetButton( Rect area, std::string caption, ButCallbackFunc clic
   m_caption (caption),
   m_butCallbackFunc ( clickedCallbackFunc ),
   m_mouseOverCallbackFunc ( mouseOverCallbackFunc ),
-  m_oldMouseState ( GetMouseState() )
+  m_oldMouseState ( getMouseState() )
 {
 }
 
 WidgetButton::~WidgetButton() {}
 
-void WidgetButton::MouseStateChanged( MouseState newState )
+void WidgetButton::onMouseStateChanged( MouseState newState )
 {
     if ( newState == PressedL )
         m_butCallbackFunc();
@@ -100,12 +100,12 @@ void WidgetButton::MouseStateChanged( MouseState newState )
     m_oldMouseState = newState;
 }
 
-void WidgetButton::Draw( RenderSubSystem* pRenderer )
+void WidgetButton::draw( RenderSubSystem* pRenderer )
 {
     /*float vertexCoord[8] = { GetArea().x1*4.0f, GetArea().y1*3.0f,
                              GetArea().x1*4.0f, GetArea().y2*3.0f,
                              GetArea().x2*4.0f, GetArea().y2*3.0f,
                              GetArea().x2*4.0f, GetArea().y1*3.0f };
     pRenderer->DrawColorQuad( vertexCoord, 0.1f, 0.9f, 0.3f, (GetMouseState()==MouseOver||GetMouseState()==PressedL)?0.3f:0.0f, true );*/
-    pRenderer->DrawString( m_caption, "FontW_m", (GetArea().x1+GetArea().x2)*2.0f /* /2*4 */, (GetArea().y1+GetArea().y2)*1.5f /* /2*3 */, AlignCenter, AlignCenter, 1.0f, 1.0f, 1.0f, (GetMouseState()==MouseOver||GetMouseState()==PressedL)?1.0f:0.5f );
+    pRenderer->drawString( m_caption, "FontW_m", (getArea().x1+getArea().x2)*2.0f /* /2*4 */, (getArea().y1+getArea().y2)*1.5f /* /2*3 */, AlignCenter, AlignCenter, 1.0f, 1.0f, 1.0f, (getMouseState()==MouseOver||getMouseState()==PressedL)?1.0f:0.5f );
 }

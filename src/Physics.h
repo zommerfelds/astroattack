@@ -32,10 +32,10 @@ class PhysicsSubSystem
 public:
     PhysicsSubSystem( GameEvents& gameEvents);
 
-    void Init();
-    void Update();
+    void init();
+    void update();
 
-    void CalculateSmoothPositions(float accumulator);
+    void calculateSmoothPositions(float accumulator);
 
 private:
     Vector2D m_pGravitationalAcc; // Fallbeschleunigung [m/s^2]
@@ -49,10 +49,10 @@ private:
     EventConnection m_eventConnection4;
     GameEvents& m_gameEvents;
 
-    void RegisterPhysicsComp( Entity& entity );
-    void UnregisterPhysicsComp( Entity& entity );
-	void RegisterGravFieldComp( Entity& entity );
-    void UnregisterGravFieldComp( Entity& entity );
+    void onRegisterPhysicsComp( Entity& entity );
+    void onUnregisterPhysicsComp( Entity& entity );
+	void onRegisterGravFieldComp( Entity& entity );
+    void onUnregisterGravFieldComp( Entity& entity );
 
     b2World m_world;
     float m_timeStep;

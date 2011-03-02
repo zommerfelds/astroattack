@@ -36,33 +36,33 @@ class MainMenuState : public GameState
 public:
     MainMenuState( SubSystems& subSystems, SubMenu startingSubMenu = Main );
 
-    const StateIdType& StateID() const { return stateId; }
+    const StateIdType& getId() const { return stateId; }
 
-	void Init();        // State starten
-	void Cleanup();     // State abbrechen
+	void init();        // State starten
+	void cleanup();     // State abbrechen
 
-	void Pause();       // State anhalten
-	void Resume();      // State wiederaufnehmen
-    void Frame( float deltaTime );
+	void pause();       // State anhalten
+	void resume();      // State wiederaufnehmen
+    void frame( float deltaTime );
 
-	void Update();      // Spiel aktualisieren
-	void Draw( float accumulator ); // Spiel zeichnen
+	void update();      // Spiel aktualisieren
+	void draw( float accumulator ); // Spiel zeichnen
 private:
     static const StateIdType stateId;
 
     // --- Callbacks für GUI ---
-    void CallbackButPlay();
-    void CallbackButEditor();
-    void CallbackButCredits();
-    void CallbackButOptions();
-    void CallbackButExit();
-    void CallbackButBack();
-    void CallbackOpenLevel( std::string filename );
-    void CallbackOpenSlideShow( std::string filename );
-    void CallbackSound();
-    void CallbackResolution( int w, int h );
-    void CallbackButApplyConfig();
-    void CallbackButDiscardConfig();
+    void onPressedButPlay();
+    void onPressedButEditor();
+    void onPressedButCredits();
+    void onPressedButOptions();
+    void onPressedButExit();
+    void onPressedButBack();
+    void onPressedOpenLevel( std::string filename );
+    void onPressedOpenSlideShow( std::string filename );
+    void onPressedSound();
+    void onPressedResolution( int w, int h );
+    void onPressedButApplyConfig();
+    void onPressedButDiscardConfig();
 
     // Bannerinformationen
     float m_titleIntensityPhase;
@@ -78,8 +78,5 @@ private:
 
     ResourceIds m_menuResources;
 };
-//--------------------------------------------//
-//------- Ende MainMenuState Klasse ----------//
-//--------------------------------------------//
 
 #endif

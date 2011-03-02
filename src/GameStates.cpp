@@ -18,68 +18,68 @@ StateManager::StateManager()
 
 StateManager::~StateManager()
 {
-    Clear();
+    clear();
 }
 
-void StateManager::ChangeState( const boost::shared_ptr<GameState>& pState )
+void StateManager::changeState( const boost::shared_ptr<GameState>& pState )
 {
-    gAaLog.Write ( "\n=== Changing State to \"%s\" ===\n\n", pState->StateID().c_str() );
+    gAaLog.write ( "\n=== Changing State to \"%s\" ===\n\n", pState->getId().c_str() );
 
 	// Momentaner State aufräumen und löschen
 	if ( !m_states.empty() )
     {
-		m_states.back()->Cleanup();
+		m_states.back()->cleanup();
 		m_states.pop_back();
 	}
 
 	// Neuer State speichern und initialisieren
 	m_states.push_back( pState );
-	m_states.back()->Init();
-    m_states.back()->GetSubSystems().isLoading = true;
+	m_states.back()->init();
+    m_states.back()->getSubSystems().isLoading = true;
 }
 
-void StateManager::PushState( const boost::shared_ptr<GameState>& pState )
+void StateManager::pushState( const boost::shared_ptr<GameState>& pState )
 {
 	// Momentaner State anhalten
 	if ( !m_states.empty() )
     {
-        gAaLog.Write ( "\n=== Pausing State \"%s\" ===\n\n", m_states.back()->StateID().c_str() );
-		m_states.back()->Pause();
+        gAaLog.write ( "\n=== Pausing State \"%s\" ===\n\n", m_states.back()->getId().c_str() );
+		m_states.back()->pause();
 	}
 
-    gAaLog.Write ( "\n=== Pushing State \"%s\" ===\n\n", pState->StateID().c_str() );
+    gAaLog.write ( "\n=== Pushing State \"%s\" ===\n\n", pState->getId().c_str() );
 	// Neuer State speichern und initialisieren
 	m_states.push_back( pState );
-	m_states.back()->Init();
-    m_states.back()->GetSubSystems().isLoading = true;
+	m_states.back()->init();
+    m_states.back()->getSubSystems().isLoading = true;
 }
 
-void StateManager::PopState()
+void StateManager::popState()
 {
 	// Momentaner State aufräumen und löschen
 	if ( !m_states.empty() )
     {
-        gAaLog.Write ( "\n=== Popping State \"%s\" ===\n\n", m_states.back()->StateID().c_str() );
-		m_states.back()->Cleanup();
-        m_states.back()->GetSubSystems().isLoading = true;
+        gAaLog.write ( "\n=== Popping State \"%s\" ===\n\n", m_states.back()->getId().c_str() );
+		m_states.back()->cleanup();
+        m_states.back()->getSubSystems().isLoading = true;
 		m_states.pop_back();
 	}
 
 	// Voheriger State wiederaufnehmen
 	if ( !m_states.empty() )
     {
-        gAaLog.Write ( "\n=== Resuming State \"%s\" ===\n\n", m_states.back()->StateID().c_str() );
-		m_states.back()->Resume();
+        gAaLog.write ( "\n=== Resuming State \"%s\" ===\n\n", m_states.back()->getId().c_str() );
+		m_states.back()->resume();
 	}
 }
 
-void StateManager::Clear()
+void StateManager::clear()
 {
     // Alle States aufräumen
     while ( !m_states.empty() )
     {
-        gAaLog.Write ( "\n=== Cleaning up State \"%s\" ===\n\n", m_states.back()->StateID().c_str() );
-        m_states.back()->Cleanup();
+        gAaLog.write ( "\n=== Cleaning up State \"%s\" ===\n\n", m_states.back()->getId().c_str() );
+        m_states.back()->cleanup();
         m_states.pop_back();
     }
 }

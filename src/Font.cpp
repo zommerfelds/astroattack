@@ -34,7 +34,7 @@ namespace
 }
 
 // .ttf Datei in in OpenGL Texturen laden laden
-void FontManager::LoadFont( const char* fileName, int size, FontIdType id )
+void FontManager::loadFont( const char* fileName, int size, FontIdType id )
 {
     if ( m_fonts.find(id) != m_fonts.end() )
         return;
@@ -52,7 +52,7 @@ void FontManager::LoadFont( const char* fileName, int size, FontIdType id )
     m_fonts.insert( std::make_pair(id, font) );
 }
 
-void FontManager::FreeFont( FontIdType id )
+void FontManager::freeFont( FontIdType id )
 {
     FontMap::iterator c_it = m_fonts.find( id );
     if ( c_it != m_fonts.end() )
@@ -62,14 +62,14 @@ void FontManager::FreeFont( FontIdType id )
 //const float s = 0.0025f;
 //const float line_height = 1.2f;
 
-void FontManager::DrawString(const std::string &str, const FontIdType &fontId, float x, float y, Align horizAlign, Align vertAlign, float red, float green, float blue, float alpha )
+void FontManager::drawString(const std::string &str, const FontIdType &fontId, float x, float y, Align horizAlign, Align vertAlign, float red, float green, float blue, float alpha )
 {
     FontMap::iterator font_it = m_fonts.find( fontId );
     assert ( font_it != m_fonts.end() );
 
     // convert to FTGL coordinates
-    x = x / 4.0f * gAaConfig.GetInt("ScreenWidth");
-    y = (1.0f - y / 3.0f) * gAaConfig.GetInt("ScreenHeight");
+    x = x / 4.0f * gAaConfig.getInt("ScreenWidth");
+    y = (1.0f - y / 3.0f) * gAaConfig.getInt("ScreenHeight");
 
     FTFont* font = font_it->second.get();
 
@@ -78,7 +78,7 @@ void FontManager::DrawString(const std::string &str, const FontIdType &fontId, f
     std::list<std::string> lines;
     std::list<float> lineWidths;
     float lineSpacing = 0.0f;
-    GetDetailedDimensions(str, *font, NULL, NULL, &lines, &lineWidths, &lineSpacing);
+    getDetailedDimensions(str, *font, NULL, NULL, &lines, &lineWidths, &lineSpacing);
 
     float lineY = 0.0f;
     switch ( vertAlign )
@@ -116,19 +116,19 @@ void FontManager::DrawString(const std::string &str, const FontIdType &fontId, f
     glColor4f( 255, 255, 255, 255 );
 }
 
-void FontManager::GetDimensions(const std::string &text, const FontIdType &fontId, float& w, float& h) const
+void FontManager::getDimensions(const std::string &text, const FontIdType &fontId, float& w, float& h) const
 {
 
     FontMap::const_iterator font_it = m_fonts.find( fontId );
     if ( font_it == m_fonts.end() )
         return; // TODO: log error
 
-    GetDetailedDimensions(text, *font_it->second.get(), &w, &h, NULL, NULL, NULL);
-    w = w/gAaConfig.GetInt("ScreenWidth")*4.0f;
-    h = h/gAaConfig.GetInt("ScreenHeight")*3.0f;
+    getDetailedDimensions(text, *font_it->second.get(), &w, &h, NULL, NULL, NULL);
+    w = w/gAaConfig.getInt("ScreenWidth")*4.0f;
+    h = h/gAaConfig.getInt("ScreenHeight")*3.0f;
 }
 
-void FontManager::GetDetailedDimensions(const std::string &text, FTFont& font, float* totalWidth, float* totalHeight,
+void FontManager::getDetailedDimensions(const std::string &text, FTFont& font, float* totalWidth, float* totalHeight,
         std::list<std::string>* lines, std::list<float>* lineWidths, float* lineSpacing) const
 {
     int line_count = 1;

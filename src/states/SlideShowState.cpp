@@ -50,16 +50,15 @@ SlideShowState::SlideShowState( SubSystems& subSystems, std::string slideXmlFile
     }
 }
 
-void SlideShowState::Init()        // State starten
+void SlideShowState::init()        // State starten
 {
-    gAaLog.Write ( "Loading slide show..." );
+    gAaLog.write ( "Loading slide show..." );
     //GetSubSystems().renderer.DisplayLoadingScreen();
     //GetSubSystems().renderer.DisplayTextScreen("p l e a s e    w a i t");
-    gAaLog.IncreaseIndentationLevel();
+    gAaLog.increaseIndentationLevel();
 
     // "Dia-Show" laden
-    XmlLoader loader;
-    loader.LoadSlideShow( m_slideXmlFile.c_str(), &m_slideShow );
+    XmlLoader::loadSlideShow( m_slideXmlFile.c_str(), &m_slideShow );
 
     // Dazugehörende Bilder laden
     LoadTextureInfo info;
@@ -68,62 +67,62 @@ void SlideShowState::Init()        // State starten
     info.textureWrapModeY = TEX_CLAMP;
     info.scale = 1.0;
     for ( size_t i = 0; i < m_slideShow.slides.size(); ++i )
-        GetSubSystems().renderer.GetTextureManager().LoadTexture( m_slideShow.slides[i].imageFileName.c_str(), m_slideShow.slides[i].imageFileName,info,gAaConfig.GetInt("TexQuality") );
+        getSubSystems().renderer.getTextureManager().loadTexture( m_slideShow.slides[i].imageFileName.c_str(), m_slideShow.slides[i].imageFileName,info,gAaConfig.getInt("TexQuality") );
     
     // GUI modus
-    GetSubSystems().renderer.SetMatrix(RenderSubSystem::GUI);
+    getSubSystems().renderer.setMatrix(RenderSubSystem::GUI);
 
     // TEST
-    GetSubSystems().sound.LoadSound( "data/Sounds/scifi01.wav", "sound" );
-    GetSubSystems().sound.LoadSound( "data/Sounds/keyboard bang.wav", "write" );
+    getSubSystems().sound.loadSound( "data/Sounds/scifi01.wav", "sound" );
+    getSubSystems().sound.loadSound( "data/Sounds/keyboard bang.wav", "write" );
     //GetSubSystems().sound.LoadMusic( "data/Music/music.ogg", "music" );
     //GetSubSystems().sound.LoadMusic( "data/Music/music2.ogg", "music2" );
-    GetSubSystems().sound.LoadMusic( m_slideShow.musicFileName.c_str(), "slideShowMusic" );
+    getSubSystems().sound.loadMusic( m_slideShow.musicFileName.c_str(), "slideShowMusic" );
 
-    GetSubSystems().sound.PlayMusic( "slideShowMusic", true, 0 );
+    getSubSystems().sound.playMusic( "slideShowMusic", true, 0 );
 
-    gAaLog.DecreaseIndentationLevel();
-    gAaLog.Write ( "[ Done ]\n" );
+    gAaLog.decreaseIndentationLevel();
+    gAaLog.write ( "[ Done ]\n" );
 }
 
-void SlideShowState::Cleanup()     // State abbrechen
+void SlideShowState::cleanup()     // State abbrechen
 {
     // wird gebremst...
-    GetSubSystems().sound.StopMusic( 500 );
-    GetSubSystems().sound.FreeSound( "sound" );
-    GetSubSystems().sound.FreeSound( "write" );
-    GetSubSystems().sound.FreeMusic( "slideShowMusic" );
+    getSubSystems().sound.stopMusic( 500 );
+    getSubSystems().sound.freeSound( "sound" );
+    getSubSystems().sound.freeSound( "write" );
+    getSubSystems().sound.freeMusic( "slideShowMusic" );
 
     // Bilder wieder freisetzen
     for ( size_t i = 0; i < m_slideShow.slides.size(); ++i )
     {
-        GetSubSystems().renderer.GetTextureManager().FreeTexture( m_slideShow.slides[i].imageFileName );
+        getSubSystems().renderer.getTextureManager().freeTexture( m_slideShow.slides[i].imageFileName );
     }
 }
 
-void SlideShowState::Pause()       // State anhalten
+void SlideShowState::pause()       // State anhalten
 {
 }
 
-void SlideShowState::Resume()      // State wiederaufnehmen
+void SlideShowState::resume()      // State wiederaufnehmen
 {
 }
 
 #define OVERLAY_STEP 0.03f
-void SlideShowState::Update()      // Spiel aktualisieren
+void SlideShowState::update()      // Spiel aktualisieren
 {
     ++m_textUpdateCounter;
     if( m_textUpdateCounter > 1 ) // 1 is the speed (fast)
     {
         if ( m_slideShow.slides[m_currentSlide].textPages[m_currentTextPage].size() > m_dispCharCount )
         {
-            GetSubSystems().sound.PlaySound( "write" );
+            getSubSystems().sound.playSound( "write" );
             ++m_dispCharCount;
         }
         m_textUpdateCounter = 0;
     }
 
-    if ( GetSubSystems().input.KeyState( SlideShowNext ) )
+    if ( getSubSystems().input.getKeyState( SlideShowNext ) )
     {
         if ( m_nextKeyDownOld == false && m_overlayAlpha == 0.0f )
         {
@@ -134,7 +133,7 @@ void SlideShowState::Update()      // Spiel aktualisieren
             }
             else
             {
-                GetSubSystems().sound.PlaySound( "sound" );
+                getSubSystems().sound.playSound( "sound" );
                 m_fadeOut = true;
                 m_overlayAlpha = OVERLAY_STEP;
                 m_nextKeyDownOld = true;
@@ -149,7 +148,7 @@ void SlideShowState::Update()      // Spiel aktualisieren
         m_nextKeyDownOld = false;
     }
 
-    if ( GetSubSystems().input.KeyState( SlideShowBack ) )
+    if ( getSubSystems().input.getKeyState( SlideShowBack ) )
     {
         if ( m_backKeyDownOld == false && m_overlayAlpha == 0.0f && m_currentSlide != 0 )
         {
@@ -160,7 +159,7 @@ void SlideShowState::Update()      // Spiel aktualisieren
             }
             else
             {
-                GetSubSystems().sound.PlaySound("sound");
+                getSubSystems().sound.playSound("sound");
                 m_fadeOut = true;
                 m_overlayAlpha = OVERLAY_STEP;
                 m_backKeyDownOld = true;
@@ -175,12 +174,12 @@ void SlideShowState::Update()      // Spiel aktualisieren
         m_backKeyDownOld = false;
     }
 
-    if ( GetSubSystems().input.KeyState( SlideShowSkip ) )
+    if ( getSubSystems().input.getKeyState( SlideShowSkip ) )
     {
         //boost::shared_ptr<PlayingState> playState ( new PlayingState( GetSubSystems() ) ); // Zum Spiel-Stadium wechseln
         //GetSubSystems().stateManager->ChangeState( playState ); // State wird gewechselt (und diese wird gelöscht)
-        boost::shared_ptr<MainMenuState> menuState ( new MainMenuState(GetSubSystems(), Play ) );
-        GetSubSystems().stateManager.ChangeState( menuState ); // State wird gewechselt (und diese wird gelöscht)
+        boost::shared_ptr<MainMenuState> menuState ( new MainMenuState(getSubSystems(), Play ) );
+        getSubSystems().stateManager.changeState( menuState ); // State wird gewechselt (und diese wird gelöscht)
         return; // Sofort raus, da dieser State nicht mehr existiert!
     }
 
@@ -223,8 +222,8 @@ void SlideShowState::Update()      // Spiel aktualisieren
             {
                 //boost::shared_ptr<PlayingState> playState ( new PlayingState( GetSubSystems() ) ); // Zum Spiel-Stadium wechseln
                 //GetSubSystems().stateManager->ChangeState( playState ); // State wird gewechselt (und diese wird gelöscht)
-                boost::shared_ptr<MainMenuState> menuState ( new MainMenuState( GetSubSystems(), Play ) );
-                GetSubSystems().stateManager.ChangeState( menuState ); // State wird gewechselt (und diese wird gelöscht)
+                boost::shared_ptr<MainMenuState> menuState ( new MainMenuState( getSubSystems(), Play ) );
+                getSubSystems().stateManager.changeState( menuState ); // State wird gewechselt (und diese wird gelöscht)
                 return; // Sofort raus, da dieser State nicht mehr existiert!
             }
         }
@@ -265,14 +264,14 @@ void SlideShowState::Update()      // Spiel aktualisieren
     }
 }
 
-void SlideShowState::Frame( float /*deltaTime*/ )
+void SlideShowState::frame( float /*deltaTime*/ )
 {
-    GetSubSystems().input.Update(); // neue Eingaben lesen
+    getSubSystems().input.update(); // neue Eingaben lesen
 }
 
-void SlideShowState::Draw( float /*accumulator*/ )        // Spiel zeichnen
+void SlideShowState::draw( float /*accumulator*/ )        // Spiel zeichnen
 {
-    RenderSubSystem& renderer = GetSubSystems().renderer;
+    RenderSubSystem& renderer = getSubSystems().renderer;
 
     // Bild zeichnen
     {
@@ -284,10 +283,10 @@ void SlideShowState::Draw( float /*accumulator*/ )        // Spiel zeichnen
                                  0.3f + m_imageCornerOffsetX[1] + m_imageCornerOffsetMasterX, 2.47f + m_imageCornerOffsetY[1] + m_imageCornerOffsetMasterY,
                                  3.7f + m_imageCornerOffsetX[2] + m_imageCornerOffsetMasterX, 2.47f + m_imageCornerOffsetY[2] + m_imageCornerOffsetMasterY,
                                  3.7f + m_imageCornerOffsetX[3] + m_imageCornerOffsetMasterX, 0.07f + m_imageCornerOffsetY[3] + m_imageCornerOffsetMasterY };
-        renderer.DrawTexturedQuad( texCoord, vertexCoord, m_slideShow.slides[m_currentSlide].imageFileName.c_str(), true );
+        renderer.drawTexturedQuad( texCoord, vertexCoord, m_slideShow.slides[m_currentSlide].imageFileName.c_str(), true );
     }
     // Text zeichnen
-    renderer.DrawString( m_slideShow.slides[m_currentSlide].textPages[m_currentTextPage].substr(0,m_dispCharCount), "FontW_b", 0.3f, 2.55f );
+    renderer.drawString( m_slideShow.slides[m_currentSlide].textPages[m_currentTextPage].substr(0,m_dispCharCount), "FontW_b", 0.3f, 2.55f );
     
     // Farbe über dem Text (nur Test)
     /*{
@@ -301,10 +300,10 @@ void SlideShowState::Draw( float /*accumulator*/ )        // Spiel zeichnen
     }*/
 
     // schwarze Blendung zeichnen
-    renderer.DrawOverlay( 0.0f, 0.0f, 0.0f, m_overlayAlpha );
+    renderer.drawOverlay( 0.0f, 0.0f, 0.0f, m_overlayAlpha );
 
     // Info-Text
-    renderer.DrawString( "PFEIL NACH RECHTS: weiterfahren   PFEIL NACH LINKS: zurück   DELETE: Intro überspringen", "FontW_s", 0.8f, 2.92f );
+    renderer.drawString( "PFEIL NACH RECHTS: weiterfahren   PFEIL NACH LINKS: zurück   DELETE: Intro überspringen", "FontW_s", 0.8f, 2.92f );
 
     // Maus zeichnen
     /*{

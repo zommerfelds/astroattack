@@ -26,17 +26,17 @@ class EditorState : public GameState
 public:
     EditorState( SubSystems& subSystems );
 
-    const StateIdType& StateID() const { return stateId; }
+    const StateIdType& getId() const { return stateId; }
 
-	void Init();                    // State starten
-	void Cleanup();                 // State abbrechen
+	void init();                    // State starten
+	void cleanup();                 // State abbrechen
 
-	void Pause();                   // State anhalten
-	void Resume();                  // State wiederaufnehmen
+	void pause();                   // State anhalten
+	void resume();                  // State wiederaufnehmen
 
-    void Frame( float deltaTime );  // pro Frame
-	void Update();                  // Spiel aktualisieren
-	void Draw( float accumulator ); // Spiel zeichnen
+    void frame( float deltaTime );  // pro Frame
+	void update();                  // Spiel aktualisieren
+	void draw( float accumulator ); // Spiel zeichnen
 private:
     static const StateIdType stateId;
 
@@ -56,8 +56,5 @@ private:
     bool m_prevTextureKeyDownOld;
     bool m_helpKeyDownOld;
 };
-//--------------------------------------------//
-//--------- Ende EditorState Klasse ----------//
-//--------------------------------------------//
 
 #endif

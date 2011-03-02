@@ -23,25 +23,22 @@ class GameOverState : public GameState
 public:
     GameOverState( SubSystems& subSystems, std::string stringToShow, std::string levelFileName );
 
-    const StateIdType& StateID() const { return stateId; }
+    const StateIdType& getId() const { return stateId; }
 
-	void Init();        // State starten
-	void Cleanup();     // State abbrechen
+	void init();        // State starten
+	void cleanup();     // State abbrechen
 
-	void Pause();       // State anhalten
-	void Resume();      // State wiederaufnehmen
-    void Frame( float deltaTime );
+	void pause();       // State anhalten
+	void resume();      // State wiederaufnehmen
+    void frame( float deltaTime );
 
-	void Update();      // Spiel aktualisieren
-	void Draw( float accumulator );        // Spiel zeichnen
+	void update();      // Spiel aktualisieren
+	void draw( float accumulator );        // Spiel zeichnen
 private:
     static const StateIdType stateId;
 
     std::string m_stringToShow;
     std::string m_levelFileName;
 };
-//--------------------------------------------//
-//------- Ende GameOverState Klasse ----------//
-//--------------------------------------------//
 
 #endif

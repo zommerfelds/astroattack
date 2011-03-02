@@ -19,15 +19,15 @@ CompVisualMessage::CompVisualMessage( std::string text )
 : m_text ( text )
 {}
 
-boost::shared_ptr<CompVisualMessage> CompVisualMessage::LoadFromXml(const pugi::xml_node& compElem)
+boost::shared_ptr<CompVisualMessage> CompVisualMessage::loadFromXml(const pugi::xml_node& compElem)
 {
     const char* msg = compElem.child("msg").attribute("text").value();
 
     return boost::make_shared<CompVisualMessage>(msg);
 }
 
-void CompVisualMessage::WriteToXml(pugi::xml_node& compNode) const
+void CompVisualMessage::writeToXml(pugi::xml_node& compNode) const
 {
     pugi::xml_node textNode = compNode.append_child("msg");
-    textNode.append_attribute("text").set_value(GetMsg().c_str());
+    textNode.append_attribute("text").set_value(getMsg().c_str());
 }

@@ -27,20 +27,20 @@ class CompPlayerController : public Component
 public:
     CompPlayerController( const InputSubSystem&, std::map<const std::string, int>::iterator itJetPackVar );
 
-    const CompIdType& ComponentId() const { return COMPONENT_ID; }
+    const CompIdType& getComponentId() const { return COMPONENT_ID; }
     static const CompIdType COMPONENT_ID;
 
-    static boost::shared_ptr<CompPlayerController> LoadFromXml(const pugi::xml_node& compElem, const InputSubSystem&, std::map<const std::string, int>::iterator itJetPackVar);
-    virtual void WriteToXml(pugi::xml_node&) const {}; // this component has no XML data
+    static boost::shared_ptr<CompPlayerController> loadFromXml(const pugi::xml_node& compElem, const InputSubSystem&, std::map<const std::string, int>::iterator itJetPackVar);
+    virtual void writeToXml(pugi::xml_node&) const {}; // this component has no XML data
 
 private:
     const InputSubSystem& m_inputSubSystem;
 
     // Hier werden alle nötigen aktionen Durgeführt pro Aktualisierung
-    void OnUpdate();
+    void onUpdate();
 
-    void SetLowFriction( CompPhysics* playerCompPhysics );
-    void SetHighFriction( CompPhysics* playerCompPhysics );
+    void setLowFriction( CompPhysics* playerCompPhysics );
+    void setHighFriction( CompPhysics* playerCompPhysics );
     bool m_currentFrictionIsLow;
 
     EventConnection m_eventConnection;

@@ -17,10 +17,10 @@ class EffectKillEntity : public Effect
 {
 public:
     EffectKillEntity( std::string entityToKill, const GameWorld& world );
-    EffectIdType ID() const { return "KillEntity"; }
-    void Fire();
-    bool Update() { return false; }
-    std::string GetEntityName() const { return m_entityToKill; }
+    EffectIdType getId() const { return "KillEntity"; }
+    void fire();
+    bool update() { return false; }
+    std::string getEntityName() const { return m_entityToKill; }
 private:
     std::string m_entityToKill;
     const GameWorld& m_world;
@@ -31,12 +31,12 @@ class EffectDispMessage : public Effect
 {
 public:
     EffectDispMessage( std::string message, int timeMs, GameWorld& world );
-    EffectIdType ID() const { return "DispMessage"; }
     ~EffectDispMessage();
-    void Fire();
-    bool Update();
-    std::string GetMessage() const { return m_message; }
-    int GetTotalTime() const { return m_totalTimeMs; }
+    EffectIdType getId() const { return "DispMessage"; }
+    void fire();
+    bool update();
+    std::string getMessage() const { return m_message; }
+    int getTotalTime() const { return m_totalTimeMs; }
 private:
     std::string m_message;
     int m_remainingUpdates;
@@ -52,11 +52,11 @@ class EffectEndLevel : public Effect
 {
 public:
     EffectEndLevel( std::string message, bool win ) : m_message( message ), m_win ( win ) {}
-    EffectIdType ID() const { return "EndLevel"; }
-    void Fire();
-    bool Update() { return false; }
-    std::string GetMessage() const { return m_message; }
-    bool GetWin() const { return m_win; }
+    EffectIdType getId() const { return "EndLevel"; }
+    void fire();
+    bool update() { return false; }
+    std::string getMessage() const { return m_message; }
+    bool isWin() const { return m_win; }
 private:
     std::string m_message;
     bool m_win;
@@ -75,12 +75,12 @@ class EffectChangeVariable : public Effect
 {
 public:
     EffectChangeVariable( std::map<const std::string, int>::iterator itVariable, const ChangeType& changeType, int num );
-    EffectIdType ID() const { return "ChangeVariable"; }
-    void Fire();
-    bool Update() { return true; }
-    int GetNum() const { return m_num; }
-    std::string GetVariable() const { return m_itVariable->first; }
-    ChangeType GetChangeType() const { return m_changeType; }
+    EffectIdType getId() const { return "ChangeVariable"; }
+    void fire();
+    bool update() { return true; }
+    int getNum() const { return m_num; }
+    std::string getVariable() const { return m_itVariable->first; }
+    ChangeType getChangeType() const { return m_changeType; }
 private:
     std::map<const std::string, int>::iterator m_itVariable;
 

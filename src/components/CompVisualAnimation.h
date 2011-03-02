@@ -29,44 +29,44 @@ class CompVisualAnimation : public Component
 public:
     CompVisualAnimation( const AnimInfo* pAnimInfo );
 
-    const CompIdType& ComponentId() const { return COMPONENT_ID; }
+    const CompIdType& getComponentId() const { return COMPONENT_ID; }
 	static const CompIdType COMPONENT_ID;
 
     // Welche Textur muss rerade gezeichnet werden? (Eine Animation besteht aus mehreren Texturen)
-    TextureIdType GetCurrentTexture() const;
+    TextureIdType getCurrentTexture() const;
 
     // Die Mitte der Animation (relativ zur Position der Einheit)
-    const Vector2D& Center() { return m_center; }
+    const Vector2D& center() { return m_center; }
 
     // Dimensionen (Grösse)
-    void SetDimensions( float hw, float hh ) { m_halfWidth = hw; m_halfHeight = hh; }
-    void GetDimensions( float *hw, float *hh ) { *hw = m_halfWidth; *hh = m_halfHeight; }
+    void setDimensions( float hw, float hh ) { m_halfWidth = hw; m_halfHeight = hh; }
+    void getDimensions( float *hw, float *hh ) { *hw = m_halfWidth; *hh = m_halfHeight; }
 
     // Animation steuern
-    void Start();                                              // Starten
-    void Continue();                                           // Fortfahren
-    void End() { m_running = false; }                          // Sofort enden
-    void Finish() { m_wantToFinish = true; }                   // Enden wenn ein Stopppunkt erreicht wurde
-    void SetDirection(int dir) { if (dir>0) m_direction=1; else m_direction= -1; } // 1 ist vorwärz und 0 ist rückwärz
-    int IsRunning() const { return m_running; }                // ob die Animation gerade läuft
+    void start();                                              // Starten
+    void carryOn();                                           // Fortfahren
+    void end() { m_running = false; }                          // Sofort enden
+    void finish() { m_wantToFinish = true; }                   // Enden wenn ein Stopppunkt erreicht wurde
+    void setDirection(int dir) { if (dir>0) m_direction=1; else m_direction= -1; } // 1 ist vorwärz und 0 ist rückwärz
+    int isRunning() const { return m_running; }                // ob die Animation gerade läuft
 
     // Animationsstand (z.B. Rennen, Springen, Reden )
-    void SetState( StateIdType new_state );
-    StateIdType GetState() { return m_curState; }    
+    void setState( StateIdType new_state );
+    StateIdType getState() { return m_curState; }    
 
-    const AnimInfo* GetAnimInfo() const { return m_animInfo; }    
+    const AnimInfo* getAnimInfo() const { return m_animInfo; }    
 
     // Ausrichtung ( wenn flip=true wird die Animation eifach horizontal gespiegelt )
-    void SetFlip( bool flip ) { m_flip = flip; }
-    bool GetFlip() { return m_flip; }
+    void setFlip( bool flip ) { m_flip = flip; }
+    bool getFlip() { return m_flip; }
 
-    static boost::shared_ptr<CompVisualAnimation> LoadFromXml(const pugi::xml_node& compElem, const AnimationManager& animMngr);
-    void WriteToXml(pugi::xml_node& compNode) const;
+    static boost::shared_ptr<CompVisualAnimation> loadFromXml(const pugi::xml_node& compElem, const AnimationManager& animMngr);
+    void writeToXml(pugi::xml_node& compNode) const;
 
 private:
 
     // Animation Aktualisieren
-    void OnUpdate();
+    void onUpdate();
 
     EventConnection m_eventConnection;
 
@@ -85,8 +85,5 @@ private:
     bool m_flip;
     int m_direction; // Animationsrichtung (vorwärz (1) oder rückwärz (-1))
 };
-//--------------------------------------------//
-//---- Ende CompVisualAnimation Klasse -------//
-//--------------------------------------------//
 
 #endif

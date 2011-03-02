@@ -22,40 +22,40 @@ const CompIdType CompPosition::COMPONENT_ID = "CompPosition";
 
 CompPosition::CompPosition() : m_position (), m_orientation ( 0.0f ) {}
 
-void CompPosition::SetPosition(const Vector2D& pos)
+void CompPosition::setPosition(const Vector2D& pos)
 {
     // TODO: set Box2D pos
     m_position = pos;
 }
 
-const Vector2D& CompPosition::GetPosition() const
+const Vector2D& CompPosition::getPosition() const
 {
-    const CompPhysics* compPhys = GetOwnerEntity()->GetComponent<CompPhysics>(); // important TODO: this can segfault
+    const CompPhysics* compPhys = getOwnerEntity()->getComponent<CompPhysics>(); // important TODO: this can segfault
     if (compPhys)
-        return compPhys->GetSmoothPosition();
+        return compPhys->getSmoothPosition();
     return m_position;
 }
 
-const Vector2D& CompPosition::GetPosIgnoreCompPhys() const
+const Vector2D& CompPosition::getPosIgnoreCompPhys() const
 {
     return m_position;
 }
 
-float CompPosition::GetOrientation() const
+float CompPosition::getOrientation() const
 {
-    const CompPhysics* compPhys = GetOwnerEntity()->GetComponent<CompPhysics>();
+    const CompPhysics* compPhys = getOwnerEntity()->getComponent<CompPhysics>();
     if (compPhys)
-        return compPhys->GetSmoothAngle();
+        return compPhys->getSmoothAngle();
     return m_orientation;
 }
 
-void CompPosition::SetOrientation(float orientation)
+void CompPosition::setOrientation(float orientation)
 {
     // TODO: set Box2D angle
     m_orientation = orientation;
 
 }
-boost::shared_ptr<CompPosition> CompPosition::LoadFromXml(const pugi::xml_node& compElem)
+boost::shared_ptr<CompPosition> CompPosition::loadFromXml(const pugi::xml_node& compElem)
 {
     float x = compElem.attribute("x").as_float();
     float y = compElem.attribute("y").as_float();
@@ -65,14 +65,14 @@ boost::shared_ptr<CompPosition> CompPosition::LoadFromXml(const pugi::xml_node& 
         a = 1;
 
     boost::shared_ptr<CompPosition> compPos = boost::make_shared<CompPosition> ();
-    compPos->SetPosition(Vector2D(x, y));
-    compPos->SetOrientation(a);
+    compPos->setPosition(Vector2D(x, y));
+    compPos->setOrientation(a);
     return compPos;
 }
 
-void CompPosition::WriteToXml(pugi::xml_node& compNode) const
+void CompPosition::writeToXml(pugi::xml_node& compNode) const
 {
-    compNode.append_attribute("x").set_value(GetPosition().x);
-    compNode.append_attribute("y").set_value(GetPosition().y);
-    compNode.append_attribute("a").set_value(GetOrientation());
+    compNode.append_attribute("x").set_value(getPosition().x);
+    compNode.append_attribute("y").set_value(getPosition().y);
+    compNode.append_attribute("a").set_value(getOrientation());
 }

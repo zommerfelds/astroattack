@@ -24,19 +24,16 @@ class CompVisualMessage : public Component
 public:
     CompVisualMessage( std::string text );
 
-    const CompIdType& ComponentId() const { return COMPONENT_ID; }
+    const CompIdType& getComponentId() const { return COMPONENT_ID; }
 	static const CompIdType COMPONENT_ID; // eindeutige ID für diese Komponentenart (gleich wie Klassennamen, siehe CompCollectable.cpp)
 
-    const std::string& GetMsg() const { return m_text; }
+    const std::string& getMsg() const { return m_text; }
 
-    static boost::shared_ptr<CompVisualMessage> LoadFromXml(const pugi::xml_node& compElem);
-    void WriteToXml(pugi::xml_node& compNode) const;
+    static boost::shared_ptr<CompVisualMessage> loadFromXml(const pugi::xml_node& compElem);
+    void writeToXml(pugi::xml_node& compNode) const;
 
 private:
     std::string m_text;
 };
-//--------------------------------------------//
-//------ Ende CompVisualMessage Klasse -------//
-//--------------------------------------------//
 
 #endif
