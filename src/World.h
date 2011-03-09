@@ -24,10 +24,10 @@ class Logger;
 
 #include <boost/shared_ptr.hpp>
 
-typedef std::string WorldVariableType;
+typedef std::string WorldVariableIdType;
 
 typedef std::map<const EntityIdType, boost::shared_ptr<Entity> > EntityMap;
-typedef std::map<const WorldVariableType, int> WorldVariblesMap;
+typedef std::map<const WorldVariableIdType, int> WorldVariblesMap;
 
 /*
     Hier ist die Spielwelt gespeichert.
@@ -43,9 +43,9 @@ public:
     Entity* getEntity( const EntityIdType& id ) const;
     const EntityMap& getAllEntities() const;
 
-    int getVariable( const WorldVariableType& varName );
-    WorldVariblesMap::iterator getItToVariable( const WorldVariableType& varName );
-    void setVariable( const WorldVariableType& varName, int value );
+    int getVariable( const WorldVariableIdType& varName );
+    WorldVariblesMap::iterator getItToVariable( const WorldVariableIdType& varName );
+    void setVariable( const WorldVariableIdType& varName, int value );
 
     void writeWorldToLogger( Logger& log );
 

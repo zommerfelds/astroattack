@@ -58,7 +58,7 @@ void GameWorld::writeWorldToLogger( Logger& log )
     }
 }
 
-int GameWorld::getVariable( const WorldVariableType& varName )
+int GameWorld::getVariable( const WorldVariableIdType& varName )
 {
     WorldVariblesMap::const_iterator i = m_variables.find( varName );
     if ( i == m_variables.end() )
@@ -67,12 +67,12 @@ int GameWorld::getVariable( const WorldVariableType& varName )
         return i->second;
 }
 
-void GameWorld::setVariable( const WorldVariableType& varName, int value )
+void GameWorld::setVariable( const WorldVariableIdType& varName, int value )
 {
     m_variables[varName] = value;
 }
 
-WorldVariblesMap::iterator GameWorld::getItToVariable( const WorldVariableType& varName )
+WorldVariblesMap::iterator GameWorld::getItToVariable( const WorldVariableIdType& varName )
 {
     // es wird ein neues Elemen hinzugefügt, falls noch keines existiert
     return m_variables.insert( std::make_pair( varName, 0 ) ).first;

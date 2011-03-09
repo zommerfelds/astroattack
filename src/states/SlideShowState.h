@@ -79,8 +79,5 @@ private:
     float m_imageCornerOffsetYDir[4];
 
 };
-//--------------------------------------------//
-//------- Ende SlideShowState Klasse ---------//
-//--------------------------------------------//
 
 #endif

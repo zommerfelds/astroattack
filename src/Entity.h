@@ -39,7 +39,7 @@ public:
     // And one that returns the component as a base Component type
     //   e.g. Component x = GetComponent("CompX");
     // Prefer using the first one (no need to cast)
-    // Only use the second version if you can only get the component ID at runtime (as a string)
+    // Use the second version if you can only get the component ID at runtime (as a string)
     template <typename CompType>       CompType* getComponent();
     template <typename CompType> const CompType* getComponent() const;
           Component* getComponent(const CompIdType& rCompId );

@@ -29,12 +29,13 @@ int main ( int argc, char* argv[] )
 
     if ( gAaLog.isOpen()==false ) // Fehler beim Öffnen?
 	{
-        DispError( "ERROR: Log file \"" LOG_FILE_NAME "\" could not be opened!\n" );
-		return 1; // Programm beenden
+        OsMsgBox( "Log file \"" LOG_FILE_NAME "\" could not be opened!\n", "Error" );
 	}
 
-    for(;;)
+    do
     {
+        gRestart = false;
+
         gAaLog.writeInfoStart();
 
         try
@@ -44,33 +45,30 @@ int main ( int argc, char* argv[] )
         }
         catch ( Exception &e ) // falls es einen Fehler gab (Ausnahmebehandlung)
         {
-            DispError( e.getMsg() ); // Diesen anzeigen
+            OsMsgBox( e.getMsg(), "Exception" ); // Diesen anzeigen
         }
         catch ( std::bad_alloc& ) // Falls nicht genügend Speicherplatz für alle Objekte gefunden wurde wird diese Ausnahme aufgerufen
         {
-            DispError( gAaLog.write( "Error: Memory could not be allocated!\n" ) );
+            OsMsgBox( gAaLog.write( "Error: Memory could not be allocated!\n" ), "Exception" );
         }
         catch ( std::exception& e ) // Falls eine andere Standart-Ausnahme
         {
             std::string error_msg = std::string("Error: ") + e.what();
-            DispError( gAaLog.write( error_msg.c_str() ) ); // Fehler ausgeben
+            OsMsgBox( gAaLog.write( error_msg.c_str() ), "Exception" ); // Fehler ausgeben
         }
         catch (...) // Falls eine unbekannte Ausnahme
         {
             char std_err_msg[] = "AstroAttack has encountered an unrecoverable error.\n";
             char std_err_msg2[] = "See the log file \"" LOG_FILE_NAME "\" for more information.";
-            DispError( std::string( gAaLog.write( std_err_msg ) ) + std_err_msg2 );
+            OsMsgBox( std::string( gAaLog.write( std_err_msg ) ) + std_err_msg2, "Exception" );
         }
 
         gAaLog.writeInfoEnd();
         if ( gRestart )
         {
             gAaLog.write( "\n\n============= Restarting " GAME_NAME " =============\n\n" );
-            gRestart = false;
         }
-        else
-            break;
-    }
+    } while (gRestart);
 
     return 0; // Programm beenden!
 }

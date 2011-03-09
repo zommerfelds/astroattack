@@ -33,7 +33,8 @@ public:
     Entity* getOwnerEntity() { return m_pOwnerEntity; } // Einheit, die die Komponente besitzt, abfragen
     const Entity* getOwnerEntity() const { return m_pOwnerEntity; } // Einheit, die die Komponente besitzt, abfragen
 
-    //static boost::shared_ptr<ComponentType> loadFromXml(const pugi::xml_node& compElem); // every component must to implement this
+    // every component should to implement this too
+    //static boost::shared_ptr<ComponentType> loadFromXml(const pugi::xml_node& compElem);
     virtual void writeToXml(pugi::xml_node& compElem) const = 0;
 
     static GameEvents* gameEvents; // EventManager für alle Komponenten

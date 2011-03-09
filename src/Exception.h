@@ -41,9 +41,6 @@ private:
 
 // Plattform-übergreifende Dialog-Box Funktion
 // Nur benutzen in schweren Fällen wann die GUI noch nicht bereit ist.
-void OsMsgBox ( const std::string& message, const std::string& title ); // in OsMsgBox.cpp
-
-// Fehlermeldung bei Ausnahmebehandlung anzeigen
-void DispError( const std::string& msg ); // in OsMsgBox.cpp
+void OsMsgBox( const std::string& message, const std::string& title ); // in OsMsgBox.cpp
 
 #endif

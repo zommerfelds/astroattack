@@ -21,7 +21,7 @@
 
 // Zeigt eine Nachricht message mit Titel title (Platform-unabhängig).
 // Kann Windows Dialogboxen, Mac OS X Dialogboxen und die standard Ausgabe verwenden (cout)
-void OsMsgBox ( const std::string& message, const std::string& title )
+void OsMsgBox( const std::string& message, const std::string& title )
 {
 
 #ifdef WIN32 // Windows
@@ -54,11 +54,4 @@ void OsMsgBox ( const std::string& message, const std::string& title )
 
 #endif
 
-}
-
-// Fehlertext in eine Message Box ausgeben
-void DispError( const std::string& msg )
-{
-    // Zeige den Fehlertext mit OsMsgBox() an
-    OsMsgBox ( msg, "Fatal Error" ); // Fehlermeldung ausgeben (siehe OsMsgBox.cpp)
 }
