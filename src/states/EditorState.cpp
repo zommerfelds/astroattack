@@ -4,14 +4,17 @@
  * Copyright 2011 Christian Zommerfelds
  */
 
-#include "../GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
-#include "EditorState.h"
 
+#include <cmath>
+#include <sstream>
+#include <boost/make_shared.hpp>
+
+#include "EditorState.h"
 #include "../GameApp.h"
 #include "../Renderer.h"
 #include "../Input.h"
 #include "../main.h"
-#include "../XmlLoader.h"
+#include "../DataLoader.h"
 #include "../Physics.h"
 
 #include "../components/CompVisualTexture.h"
@@ -19,12 +22,7 @@
 #include "../components/CompShape.h"
 #include "../components/CompPosition.h"
 
-#include <cmath>
-#include <sstream>
-
-#include <boost/make_shared.hpp>
-
-const StateIdType EditorState::stateId = "EditorState";
+const GameStateId EditorState::stateId = "EditorState";
 
 #include "../Texture.h"
 
@@ -63,13 +61,13 @@ void EditorState::init()        // State starten
     m_cameraController.init();
     m_cameraController.setFollowPlayer ( false );
 
-    XmlLoader::loadXmlToWorld( gAaConfig.getString("EditorLevel").c_str(), m_gameWorld, getSubSystems() );
+    DataLoader::loadWorld( gAaConfig.getString("EditorLevel"), m_gameWorld, getSubSystems() );
 }
 
 void EditorState::cleanup()     // State abbrechen
 {
     // Grafiken aus XML-Datei laden
-    XmlLoader::saveWorldToXml( gAaConfig.getString("EditorLevel").c_str(), m_gameWorld );
+    DataLoader::saveWorldToXml( gAaConfig.getString("EditorLevel"), m_gameWorld );
 }
 
 void EditorState::pause()       // State anhalten
@@ -167,7 +165,7 @@ void EditorState::update()      // Spiel aktualisieren
             pEntity->addComponent( compPhysics );
 
             boost::shared_ptr<CompShapePolygon> compShape = boost::make_shared<CompShapePolygon>();
-            compShape->setName("shape1");
+            compShape->setId("shape1");
             for ( int i = 0; i < m_currentPoint; ++i )
             {
             	compShape->setVertex(i, m_clickedPoints[i]);
@@ -177,7 +175,7 @@ void EditorState::update()      // Spiel aktualisieren
             boost::shared_ptr<CompPosition> compPos = boost::make_shared<CompPosition>();
             pEntity->addComponent( compPos );
 
-            TextureIdType textureName = m_currentTexture;
+            TextureId textureName = m_currentTexture;
             boost::shared_ptr<CompVisualTexture> compPolyTex = boost::make_shared<CompVisualTexture>(textureName);
             pEntity->addComponent( compPolyTex );
 

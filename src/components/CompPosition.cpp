@@ -6,29 +6,26 @@
 
 // CompPosition.h für mehr Informationen
 
-#include "../GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
+#include <boost/property_tree/ptree.hpp>
 
 #include "CompPosition.h"
 #include "CompPhysics.h"
 #include "../Entity.h"
-#include <boost/make_shared.hpp>
-
-#include "../contrib/pugixml/pugixml.hpp"
 
 // eindeutige ID
-const CompIdType CompPosition::COMPONENT_ID = "CompPosition";
+const ComponentTypeId CompPosition::COMPONENT_TYPE_ID = "CompPosition";
 
 // TODO: use weak_ptr for CompPhysics pointer (store for multiple uses)
 
 CompPosition::CompPosition() : m_position (), m_orientation ( 0.0f ) {}
 
-void CompPosition::setPosition(const Vector2D& pos)
+/*void CompPosition::setPosition(const Vector2D& pos)
 {
     // TODO: set Box2D pos
     m_position = pos;
-}
+}*/
 
-const Vector2D& CompPosition::getPosition() const
+const Vector2D& CompPosition::getDrawingPosition() const
 {
     const CompPhysics* compPhys = getOwnerEntity()->getComponent<CompPhysics>(); // important TODO: this can segfault
     if (compPhys)
@@ -36,12 +33,7 @@ const Vector2D& CompPosition::getPosition() const
     return m_position;
 }
 
-const Vector2D& CompPosition::getPosIgnoreCompPhys() const
-{
-    return m_position;
-}
-
-float CompPosition::getOrientation() const
+float CompPosition::getDrawingOrientation() const
 {
     const CompPhysics* compPhys = getOwnerEntity()->getComponent<CompPhysics>();
     if (compPhys)
@@ -49,30 +41,26 @@ float CompPosition::getOrientation() const
     return m_orientation;
 }
 
-void CompPosition::setOrientation(float orientation)
+/*void CompPosition::setOrientation(float orientation)
 {
     // TODO: set Box2D angle
     m_orientation = orientation;
+}*/
 
-}
-boost::shared_ptr<CompPosition> CompPosition::loadFromXml(const pugi::xml_node& compElem)
+void CompPosition::loadFromPropertyTree(const boost::property_tree::ptree& propTree)
 {
-    float x = compElem.attribute("x").as_float();
-    float y = compElem.attribute("y").as_float();
-    float a = compElem.attribute("a").as_float();
+    float x = propTree.get<float>("x");
+    float y = propTree.get<float>("y");
+    float a = propTree.get("a", 0.0f);
 
-    if (y < 0)
-        a = 1;
-
-    boost::shared_ptr<CompPosition> compPos = boost::make_shared<CompPosition> ();
-    compPos->setPosition(Vector2D(x, y));
-    compPos->setOrientation(a);
-    return compPos;
+    m_position.set(x, y);
+    m_orientation = a;
 }
 
-void CompPosition::writeToXml(pugi::xml_node& compNode) const
+void CompPosition::writeToPropertyTree(boost::property_tree::ptree& propTree) const
 {
-    compNode.append_attribute("x").set_value(getPosition().x);
-    compNode.append_attribute("y").set_value(getPosition().y);
-    compNode.append_attribute("a").set_value(getOrientation());
+    propTree.add("x", m_position.x);
+    propTree.add("y", m_position.y);
+    propTree.add("a", m_orientation);
 }
+

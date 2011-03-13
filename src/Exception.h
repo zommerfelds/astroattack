@@ -7,8 +7,6 @@
 #ifndef EXCEPTION_H
 #define EXCEPTION_H
 
-#include "GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
-
 #include <string>
 
 /*

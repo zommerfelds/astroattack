@@ -9,39 +9,42 @@
 #ifndef COMPONENT_H
 #define COMPONENT_H
 
-#include "GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
-
 #include <string>
 
 struct GameEvents;
 class Entity;
-namespace pugi { class xml_node; }
-typedef std::string CompIdType;
-typedef std::string CompNameType;
+
+typedef std::string ComponentTypeId;
+typedef std::string ComponentId;
+
+// forward declare ptree (PropertyTree), quite complex but I don't want to include the big header here
+namespace boost { namespace property_tree {
+    template<class Key, class Data, class KeyCompare> class basic_ptree;
+    typedef basic_ptree<std::string, std::string, std::less<std::string> > ptree;
+}}
 
 class Component {
 public:
 
-    Component() : m_pOwnerEntity (NULL), m_name ("std") {} // Konstruktor
+    Component() : m_pOwnerEntity (NULL), m_id () {} // Konstruktor
     virtual ~Component() {} // Destruktor
 
-    virtual const CompIdType& getComponentId() const = 0;   // Komponent ID -> Name des Komponententyps
-    const CompNameType& getName() const { return m_name; } // Eigener Namen (optional)
-    void setName( std::string name ) { m_name = name; }
+    virtual const ComponentTypeId& getTypeId() const = 0;   // Komponenttyp -> Name des Komponententyps
+    const ComponentId& getId() const { return m_id; } // Eigener Namen (optional)
+    void setId( std::string id ) { m_id = id; }
 
     void setOwnerEntity( Entity* obj ) { m_pOwnerEntity = obj; } // Einheit, die die Komponente besitzt, festlegen
     Entity* getOwnerEntity() { return m_pOwnerEntity; } // Einheit, die die Komponente besitzt, abfragen
     const Entity* getOwnerEntity() const { return m_pOwnerEntity; } // Einheit, die die Komponente besitzt, abfragen
 
-    // every component should to implement this too
-    //static boost::shared_ptr<ComponentType> loadFromXml(const pugi::xml_node& compElem);
-    virtual void writeToXml(pugi::xml_node& compElem) const = 0;
+    virtual void loadFromPropertyTree(const boost::property_tree::ptree& propTree) = 0;
+    virtual void writeToPropertyTree(boost::property_tree::ptree& propTree) const = 0;
 
     static GameEvents* gameEvents; // EventManager für alle Komponenten
 
 private:
     Entity* m_pOwnerEntity; // Einheit, die die Komponente besitzt
-    std::string m_name;
+    std::string m_id;
 };
 
 #endif

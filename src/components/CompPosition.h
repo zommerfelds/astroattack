@@ -10,13 +10,8 @@
 #ifndef COMPPOSITION_H
 #define COMPPOSITION_H
 
-#include "../GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
-
 #include "../Component.h"
-#include <boost/shared_ptr.hpp>
-
 #include "../Vector2D.h"
-namespace pugi { class xml_node; }
 
 //--------------------------------------------//
 //----------- CompPosition Klasse ------------//
@@ -27,26 +22,28 @@ public:
     CompPosition();
 
     // Base component methods
-    const CompIdType& getComponentId() const { return COMPONENT_ID; }
-	static const CompIdType COMPONENT_ID;
+    const ComponentTypeId& getTypeId() const { return COMPONENT_TYPE_ID; }
+	static const ComponentTypeId COMPONENT_TYPE_ID;
 
     // =========== Getters ==========
-    const Vector2D& getPosition() const; // get current drawing (smooth) position. If a CampPhysics exist, it gets the position from there.
-    const Vector2D& getPosIgnoreCompPhys() const; // this is not meant to be extensively used. this bypasses the check for CompPhysics position.
-    float getOrientation() const;
+    const Vector2D& getDrawingPosition() const; // get current drawing (smooth) position. If a CampPhysics exist, it gets the position from there.
+    float getDrawingOrientation() const;
 
     // =========== Setters ===========
-    void setOrientation(float orientation);
-    void setPosition(const Vector2D& pos);
+    // (no setters currently available because not needed)
+    //void setOrientation(float orientation);
+    //void setPosition(const Vector2D& pos);
 
-    static boost::shared_ptr<CompPosition> loadFromXml(const pugi::xml_node& compElem);
-    void writeToXml(pugi::xml_node& compNode) const;
+    void loadFromPropertyTree(const boost::property_tree::ptree& propTree);
+    void writeToPropertyTree(boost::property_tree::ptree& propTree) const;
 
 private:
     void OnUpdate();
 
     Vector2D m_position;
     float m_orientation;
+
+    friend class PhysicsSubSystem; // Physics sub-system is allowed to change the position
 };
 
 #endif

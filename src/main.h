@@ -12,8 +12,6 @@
 #ifndef MAIN_H
 #define MAIN_H
 
-#include "GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
-
 // Version des Spieles
 #define GAME_NAME "AstroAttack"
 #define GAME_VERSION "0.1.0"

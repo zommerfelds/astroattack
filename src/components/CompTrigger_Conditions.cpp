@@ -4,7 +4,6 @@
  * Copyright 2011 Christian Zommerfelds
  */
 
-#include "../GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
 #include "CompTrigger_Conditions.h"
 #include "CompPhysics.h"
 #include "../Entity.h"

@@ -7,18 +7,15 @@
 #ifndef GUI_H
 #define GUI_H
 
-#include "GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
-
 #include <map>
 #include <set>
 #include <vector>
 #include <string>
 #include <boost/shared_ptr.hpp>
 
-class RenderSubSystem;
-
 #include "Input.h"
 
+class RenderSubSystem;
 class Widget;
 class WidgetLabel;
 class WidgetButton;

@@ -4,10 +4,7 @@
  * Copyright 2011 Christian Zommerfelds
  */
 
-#include "GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
-
 #include "main.h" // wichtige Definitionen und Dateien einbinden
-
 #include "Input.h"
 
 const float cMouseSensivityFactor = 0.001f;

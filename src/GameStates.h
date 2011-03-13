@@ -9,21 +9,20 @@
 #ifndef GAMESTATES_H
 #define GAMESTATES_H
 
-#include "GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
 #include <vector>
-#include <boost/shared_ptr.hpp>
 #include <string>
+#include <boost/shared_ptr.hpp>
 
 struct SubSystems;
 
-typedef std::string StateIdType;
+typedef std::string GameStateId;
 
 class GameState
 {
 public:
     GameState( SubSystems& subSystems );
 
-    virtual const StateIdType& getId() const = 0; // Komponente ID -> Name der Komponente
+    virtual const GameStateId& getId() const = 0; // Komponente ID -> Name der Komponente
 
 	virtual void init() = 0;                    // State starten
 	virtual void cleanup() = 0;                 // State abbrechen

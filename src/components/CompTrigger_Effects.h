@@ -4,12 +4,13 @@
  * Copyright 2011 Christian Zommerfelds
  */
 
-// Enzelne Effekte für CompTrigger Komponente
+// Enizelne Effekte für CompTrigger Komponente
 
-#include "../GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
-#include "CompTrigger.h"
 #include <string>
 #include <map>
+
+#include "CompTrigger.h"
+
 class GameWorld;
 
 // ========= KillEntity ===========
@@ -17,7 +18,7 @@ class EffectKillEntity : public Effect
 {
 public:
     EffectKillEntity( std::string entityToKill, const GameWorld& world );
-    EffectIdType getId() const { return "KillEntity"; }
+    EffectId getId() const { return "KillEntity"; }
     void fire();
     bool update() { return false; }
     std::string getEntityName() const { return m_entityToKill; }
@@ -32,7 +33,7 @@ class EffectDispMessage : public Effect
 public:
     EffectDispMessage( std::string message, int timeMs, GameWorld& world );
     ~EffectDispMessage();
-    EffectIdType getId() const { return "DispMessage"; }
+    EffectId getId() const { return "DispMessage"; }
     void fire();
     bool update();
     std::string getMessage() const { return m_message; }
@@ -52,7 +53,7 @@ class EffectEndLevel : public Effect
 {
 public:
     EffectEndLevel( std::string message, bool win ) : m_message( message ), m_win ( win ) {}
-    EffectIdType getId() const { return "EndLevel"; }
+    EffectId getId() const { return "EndLevel"; }
     void fire();
     bool update() { return false; }
     std::string getMessage() const { return m_message; }
@@ -66,7 +67,7 @@ private:
 enum ChangeType
 {
     Set,
-    Increase,
+    Add,
     Multiply,
     Divide
 };
@@ -75,7 +76,7 @@ class EffectChangeVariable : public Effect
 {
 public:
     EffectChangeVariable( std::map<const std::string, int>::iterator itVariable, const ChangeType& changeType, int num );
-    EffectIdType getId() const { return "ChangeVariable"; }
+    EffectId getId() const { return "ChangeVariable"; }
     void fire();
     bool update() { return true; }
     int getNum() const { return m_num; }

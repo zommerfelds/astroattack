@@ -4,11 +4,16 @@
  * Copyright 2011 Christian Zommerfelds
  */
 
-#include "GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
+#include <string>
+#include <iostream>
+#include <SDL.h>
+#include <SDL_opengl.h>
+#include <boost/shared_ptr.hpp>
+#include <boost/bind.hpp>
+#include <boost/make_shared.hpp>
 
 #include "main.h" // wichtige Definitionen und Dateien einbinden
 #include "GameApp.h"
-
 #include "Input.h"
 #include "Physics.h"
 #include "Sound.h"
@@ -21,19 +26,13 @@
 #include "Texture.h"
 #include "Exception.h" // Ausnahmen im Program (werden in main.cpp eingefangen)
 
-#include <boost/shared_ptr.hpp>
-#include <boost/bind.hpp>
-#include <boost/make_shared.hpp>
-#include <string>
-#include <iostream>
-
-#include "SDL.h"
-// cross platform OpenGL include (provided by SDL)
-#include "SDL_opengl.h"
-
 const char* cMainLogFileName = "data/config.xml";
 
+// ugly globals
+// TODO: dont use globals
 Configuration gAaConfig; // Spieleinstellungen.
+Logger gAaLog( LOG_FILE_NAME ); // Haupt-Log-Datei erstellen, wo wichtige Ereignisse aufgeschrieben werden.
+bool gRestart = false;
 
 // Konstruktor
 GameApp::GameApp(const std::vector<std::string>& args) :
@@ -323,10 +322,10 @@ void GameApp::mainLoop()
             m_subSystems.isLoading = false;
         }
         
-        while ( accumulator_secs >= PHYS_DELTA_TIME/*+0.3f*/ )
+        while ( accumulator_secs >= cPhysicsTimeStep/*+0.3f*/ )
         {
             UPDATE(); // Hier wird das gesammte Spiel aktualisiert (Physik und Spiellogik)
-            accumulator_secs -= PHYS_DELTA_TIME/*+0.3f*/;
+            accumulator_secs -= cPhysicsTimeStep/*+0.3f*/;
         }
 
         m_subSystems.renderer.clearScreen();

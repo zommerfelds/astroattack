@@ -9,19 +9,13 @@
 #ifndef FONT_H
 #define FONT_H
 
-#include "GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
-
 #include <map>
 #include <string>
 #include <list>
 #include <boost/shared_ptr.hpp>
 
-#define ORIENT_CCW true   // Gegenuhrzeigersiin
-#define ORIENT_CW false   // Uhrzeigersinn
-
 struct Box;
 struct Font;
-
 class FTFont;
 
 enum Align
@@ -33,7 +27,7 @@ enum Align
     AlignBottom = AlignRight
 };
 
-typedef std::string FontIdType;
+typedef std::string FontId;
 
 //----------------------------------------//
 // Klasse für das Verwalten von Schriften //
@@ -41,17 +35,17 @@ typedef std::string FontIdType;
 class FontManager
 {
 public:
-    typedef std::map< FontIdType,boost::shared_ptr<FTFont> > FontMap;
+    typedef std::map< FontId,boost::shared_ptr<FTFont> > FontMap;
 
-    void loadFont( const char* fileName, int size, FontIdType id );
-    void freeFont( FontIdType id );
+    void loadFont( const std::string& fileName, int size, FontId id );
+    void freeFont( FontId id );
 
     // DrawString
     // x/y: upper left position of text box
-    void drawString(const std::string &str, const FontIdType &fontId, float x, float y, Align horizAlign, Align vertAlign,
+    void drawString(const std::string &str, const FontId &fontId, float x, float y, Align horizAlign, Align vertAlign,
             float red, float green, float blue, float alpha);
 
-    void getDimensions(const std::string &text, const FontIdType &fontId, float& w, float& h) const;
+    void getDimensions(const std::string &text, const FontId &fontId, float& w, float& h) const;
 
 private:
     void getDetailedDimensions(const std::string &text, FTFont& font, float* totalWidth, float* totalHeight, std::list<std::string>* lines,

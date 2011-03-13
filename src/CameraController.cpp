@@ -4,8 +4,9 @@
  * Copyright 2011 Christian Zommerfelds
  */
 
-#include "GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
-
+#include <cmath>
+#include <algorithm>
+#include <boost/make_shared.hpp>
 
 #include "CameraController.h"
 #include "Input.h"
@@ -14,14 +15,9 @@
 #include "Renderer.h"
 #include "main.h"
 
-//#include "components/CompPosition.h"
 #include "components/CompPhysics.h"
 #include "components/CompVisualAnimation.h"
 #include "components/CompGravField.h"
-
-#include <cmath>
-#include <algorithm>
-#include <boost/make_shared.hpp>
 
 const float cMinZoom = 1.0f;
 const float cMaxZoom = 9.0f;
@@ -42,6 +38,7 @@ CameraController::CameraController( const InputSubSystem& inputSubSystem, Render
   : m_position (),
     m_zoom ( 1.0f ),
     m_rotation ( 0.0f ),
+    m_rotationVel ( 0.0f ),
     m_viewWidth ( gAaConfig.getInt("WideScreen")?STDViewWidth_8_5:STDViewWidth_4_3 ),
     m_viewHeight ( gAaConfig.getInt("WideScreen")?STDViewHeight_8_5:STDViewHeight_4_3 ),
     m_inputSubSystem ( inputSubSystem ),
@@ -303,7 +300,7 @@ void CameraController::update ( float deltaTime ) // time_span in seconds
     {
         const float cRotResetVelocity = 2.0f;
         float angle = getCameraAngle();
-        float angle2Pi = fabs(angle - 2*cPi);
+        float angle2Pi = std::fabs(angle - 2*cPi);
         float time = std::min(angle, angle2Pi);
         time /= cRotResetVelocity;
         rotateAbsolute( 0.0f, time );

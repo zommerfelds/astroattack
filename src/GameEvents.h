@@ -9,10 +9,9 @@
 #ifndef GAMEEVENTS_H
 #define GAMEEVENTS_H
 
-#include "GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
+#include <string>
 
 #include "Event.h"
-#include <string>
 
 class Entity;
 

@@ -9,8 +9,6 @@
 #ifndef VECTOR2D_H
 #define VECTOR2D_H
 
-#include "GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
-
 #include <cmath>
 #include <boost/shared_ptr.hpp>
 

@@ -4,13 +4,13 @@
  * Copyright 2011 Christian Zommerfelds
  */
 
-#include "../GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
-#include "CompTrigger_Effects.h"
-#include "../World.h"
-#include <boost/make_shared.hpp>
-#include "../Physics.h"
-#include "CompVisualMessage.h"
 #include <sstream>
+#include <boost/make_shared.hpp>
+
+#include "CompTrigger_Effects.h"
+#include "CompVisualMessage.h"
+#include "../World.h"
+#include "../Physics.h"
 
 // ========= KillEntity ===========
 EffectKillEntity::EffectKillEntity( std::string entityToKill, const GameWorld& world )
@@ -26,7 +26,7 @@ void EffectKillEntity::fire()
 // ========= DispMessage ===========
 EffectDispMessage::EffectDispMessage( std::string message, int timeMs, GameWorld& world )
 : m_message (message),
-  m_remainingUpdates ( (int)((float)timeMs*0.001f/PHYS_DELTA_TIME) ),
+  m_remainingUpdates ( (int)((float)timeMs*0.001f/cPhysicsTimeStep) ),
   m_fired (false),
   m_world ( world ),
   m_pMsgEntity (NULL),
@@ -52,7 +52,7 @@ void EffectDispMessage::fire()
     boost::shared_ptr<Entity> pEntity = boost::make_shared<Entity>(entityName);
     m_pMsgEntity = pEntity.get();
     boost::shared_ptr<CompVisualMessage> compMsg = boost::make_shared<CompVisualMessage>(m_message);
-    compMsg->setName( "autoname" );
+    compMsg->setId( "autoname" );
     pEntity->addComponent( compMsg );
 
     m_world.addEntity( pEntity );
@@ -101,7 +101,7 @@ void EffectChangeVariable::fire()
     case Set:
         m_itVariable->second = m_num;
         break;
-    case Increase:
+    case Add:
         m_itVariable->second += m_num;
         break;
     case Multiply:

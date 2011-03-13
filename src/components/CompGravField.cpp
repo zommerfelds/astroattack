@@ -4,15 +4,12 @@
  * Copyright 2011 Christian Zommerfelds
  */
 
-#include "../GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
+#include <boost/property_tree/ptree.hpp>
 
 #include "CompGravField.h"
-#include <boost/make_shared.hpp>
-
-#include "../contrib/pugixml/pugixml.hpp"
 
 // eindeutige ID
-const CompIdType CompGravField::COMPONENT_ID = "CompGravField";
+const ComponentTypeId CompGravField::COMPONENT_TYPE_ID = "CompGravField";
 
 // Konstruktor
 CompGravField::CompGravField() : m_gravType ( Directional ), m_priority( 50 )
@@ -56,52 +53,49 @@ Vector2D CompGravField::getAcceleration(const Vector2D& centerOfMass) const
     return Vector2D( 0.0f, 0.0f );
 }
 
-boost::shared_ptr<CompGravField> CompGravField::loadFromXml(const pugi::xml_node& compElem)
+void CompGravField::loadFromPropertyTree(const boost::property_tree::ptree& propTree)
 {
-    pugi::xml_node gravElem = compElem.child("grav");
-    std::string typeStr = gravElem.attribute("type").value();
-
-    boost::shared_ptr<CompGravField> compGrav = boost::make_shared<CompGravField>();
-
+    std::string typeStr = propTree.get<std::string>("type");
     if (typeStr == "directional")
     {
-        compGrav->setGravType(Directional);
+        setGravType(Directional);
 
-        float gx = gravElem.attribute("gx").as_float();
-        float gy = gravElem.attribute("gy").as_float();
+        float gx = propTree.get("gx", 0.0f);
+        float gy = propTree.get("gy", 0.0f);
 
-        compGrav->setGravDir(Vector2D(gx, gy));
+        setGravDir(Vector2D(gx, gy));
     }
     else if (typeStr == "radial")
     {
-        compGrav->setGravType(Radial);
+        setGravType(Radial);
 
-        float cx = gravElem.attribute("cx").as_float();
-        float cy = gravElem.attribute("cy").as_float();
-        float s = gravElem.attribute("s").as_float();
+        float cx = propTree.get("cx", 0.0f);
+        float cy = propTree.get("cy", 0.0f);
+        float s = propTree.get("s", 0.0f);
 
-        compGrav->setGravCenter(Vector2D(cx, cy), s);
+        setGravCenter(Vector2D(cx, cy), s);
     }
-    return compGrav;
 }
 
-void CompGravField::writeToXml(pugi::xml_node& compNode) const
+void CompGravField::writeToPropertyTree(boost::property_tree::ptree& propTree) const
 {
-    pugi::xml_node gravNode = compNode.append_child("grav");
     switch (getGravType())
     {
     case Directional:
     {
-        gravNode.append_attribute("type").set_value("directional");
-        gravNode.append_attribute("gx").set_value(getGravDir().x);
-        gravNode.append_attribute("gy").set_value(getGravDir().y);
+        propTree.add("type", "directional");
+        propTree.add("gx", getGravDir().x);
+        propTree.add("gy", getGravDir().y);
+        break;
     }
     case Radial:
     {
-        gravNode.append_attribute("type").set_value("radial");
-        gravNode.append_attribute("cx").set_value(getGravCenter().x);
-        gravNode.append_attribute("cy").set_value(getGravCenter().y);
-        gravNode.append_attribute("s").set_value(getStrenght());
+        propTree.add("type", "radial");
+        propTree.add("cx", getGravCenter().x);
+        propTree.add("cy", getGravCenter().y);
+        propTree.add("s", getStrenght());
+        break;
     }
     }
 }
+

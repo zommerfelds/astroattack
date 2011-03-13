@@ -1,11 +1,25 @@
-AC_INIT(src/main.cpp)
-AM_CONFIG_HEADER(config.h)
-AM_INIT_AUTOMAKE(AstroAttack, 0.1.0)
+AC_INIT([AstroAttack], [0.1.0])
+AM_INIT_AUTOMAKE([foreign no-define subdir-objects])
 
 AC_PROG_CXX
 AC_LANG(C++)
 
-AC_PROG_INSTALL
+# enable compilation of unit tests (needs google test library)
+enabletest=true
+AC_ARG_ENABLE( [test],
+               [  --enable-test    Compile the tests (Requires Google C++ Testing Framework)],
+               [case "${enableval}" in
+               yes) enabletest=true ;;
+               no)  enabletest=false ;;
+               *)   AC_MSG_ERROR([bad value ${enableval} for --enable-test]) ;;
+               esac],
+               [test=false]
+             )
+
+AS_VAR_IF(enabletest, true,
+[AC_CHECK_HEADER([gtest/gtest.h],[],[AC_MSG_ERROR([You need the Google C++ Testing Framework])])],
+[])
+AM_CONDITIONAL([ENABLETEST], [test x$enabletest = xtrue])
 
 AC_SEARCH_LIBS(SDL_Init, SDL, [], [AC_MSG_ERROR("SDL required!")])
 AC_SEARCH_LIBS(ftglGetFontError, ftgl, [], [AC_MSG_ERROR("FTGL required!")])
@@ -21,4 +35,11 @@ AC_CHECK_HEADER(boost/scoped_ptr.hpp, [], [AC_MSG_ERROR("boost/scoped_ptr.hpp re
 AC_CHECK_HEADER(boost/foreach.hpp, [], [AC_MSG_ERROR("boost/foreach.hpp required!")] )
 AC_CHECK_HEADER(boost/bind.hpp, [], [AC_MSG_ERROR("boost/bind.hpp required!")] )
 
-AC_OUTPUT(Makefile src/Makefile)
+AC_CONFIG_FILES(Makefile)
+AC_OUTPUT
+
+AS_VAR_IF(enabletest, true,
+[AC_MSG_NOTICE(* Tests are enabled (use --disable-test to disable))],
+[AC_MSG_NOTICE(* Tests are disabled)])
+
+AC_MSG_NOTICE(* You can now run make.)

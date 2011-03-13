@@ -1,11 +1,12 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?info version="1.0" encoding="UTF-8"?>
 <root>
-  <slides file="data/Intro/introShow.xml" name="Intro">Spielintro</slides>
-  <level file="data/Levels/level1.xml" name="Level #1">Das erste Level</level>
-  <level file="data/Levels/level2.xml" name="Level #2">Das zweite Level</level>
-  <level file="data/Levels/level3.xml" name="Level #3">Das dritte Level</level>
-  <level file="data/Levels/level_visita.xml" name="Visita">Bla bla</level>
-  <level file="data/Levels/level_grav.xml" name="Grav Test"/>
-  <level file="data/Levels/adjacent_problem.xml" name="Adjacent Problem">bla bla</level>
-  <level file="data/Levels/level_new.xml" name="Editor level">keine Ahnung</level>
+  <slides file="data/Intro/introShow.info" name="Intro">Spielintro</slides>
+  <level file="data/Levels/level1.info" name="Level #1">Das erste Level</level>
+  <level file="data/Levels/level2.info" name="Level #2">Das zweite Level</level>
+  <level file="data/Levels/level3.info" name="Level #3">Das dritte Level</level>
+  <level file="data/Levels/level_visita.info" name="Visita">Bla bla</level>
+  <level file="data/Levels/level_grav.info" name="Grav Test"/>
+  <level file="data/Levels/adjacent_problem.info" name="Adjacent Problem">bla bla</level>
+  <level file="data/Levels/level_new.info" name="Editor level">keine Ahnung</level>
+  <level file="data/Levels/simple.info" name="simple">keine Ahnung</level>
 </root>

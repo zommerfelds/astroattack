@@ -4,16 +4,13 @@
  * Copyright 2011 Christian Zommerfelds
  */
 
-#include "GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
-
 #include "main.h"
 #include "Logger.h"
 
-#include <stdarg.h>
+#include <cstdarg>
 #include <ctime>
-// .h
 
-#define INDENT_SPACE "   " // pro indentation level (Texteinrückung) wird dieser Zeichensatz eingefügt
+const char cIdentString[] = "   "; // pro indentation level (Texteinrückung) wird dieser Zeichensatz eingefügt
 
 // Constructor
 Logger::Logger( const char *pFileName )
@@ -36,7 +33,7 @@ const char* Logger::write( const char *format, ... )
 #ifdef USE_SAFE_CRT_FUNCTIONS
     num_chars = vsnprintf_s ( m_buf,sizeof ( m_buf ),_TRUNCATE,format,List );
 #else
-    num_chars = vsnprintf ( m_buf,LOG_BUF_SIZE,format,List );
+    num_chars = vsnprintf ( m_buf,cLogBufSize,format,List );
 #endif
 
     va_end ( List );
@@ -50,7 +47,7 @@ const char* Logger::write( const char *format, ... )
     {
         if (m_lastCharWasNewline) // wenn eine Zeile gerade neu angefangen wird, den Text entsprechend einrücken
             for( unsigned int a = 0; a < m_indentationLevel; ++a)
-                m_LogStreamOut << INDENT_SPACE;
+                m_LogStreamOut << cIdentString;
         for( int i = 0; i < num_chars; ++i) // für jedes einzelne Zeichen
         {
             m_LogStreamOut << m_buf[i]; // Zeichen in Datei schreiben schreiben
@@ -58,7 +55,7 @@ const char* Logger::write( const char *format, ... )
                 if ( m_buf[i]=='\n' && m_buf[i+1]!='\n' ) // wenn eine neue Zeile angefangen wird, Text einrücken
                                                           // (Ausnahme wenn gerade einen Zeilenumbruch folgt)
                     for( unsigned int a = 0; a < m_indentationLevel; ++a)
-                        m_LogStreamOut << INDENT_SPACE;
+                        m_LogStreamOut << cIdentString;
         }
         m_lastCharWasNewline = m_buf[num_chars-1]=='\n'; // Speichern ob das letzte Zeichen einen Zeilenumbruch war,
                                                           // damit nächstes mal am anfang eine Texteinrückckung gemacht wird.

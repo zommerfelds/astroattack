@@ -4,8 +4,6 @@
  * Copyright 2011 Christian Zommerfelds
  */
 
-#include "GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
-
 #include "World.h"
 #include "GameEvents.h" // Steuert die Spielerreignisse
 
@@ -58,21 +56,21 @@ void GameWorld::writeWorldToLogger( Logger& log )
     }
 }
 
-int GameWorld::getVariable( const WorldVariableIdType& varName )
+int GameWorld::getVariable( const WorldVariableId& varName )
 {
-    WorldVariblesMap::const_iterator i = m_variables.find( varName );
+    WorldVariablesMap::const_iterator i = m_variables.find( varName );
     if ( i == m_variables.end() )
         return 0;
     else
         return i->second;
 }
 
-void GameWorld::setVariable( const WorldVariableIdType& varName, int value )
+void GameWorld::setVariable( const WorldVariableId& varName, int value )
 {
     m_variables[varName] = value;
 }
 
-WorldVariblesMap::iterator GameWorld::getItToVariable( const WorldVariableIdType& varName )
+WorldVariablesMap::iterator GameWorld::getItToVariable( const WorldVariableId& varName )
 {
     // es wird ein neues Elemen hinzugefügt, falls noch keines existiert
     return m_variables.insert( std::make_pair( varName, 0 ) ).first;

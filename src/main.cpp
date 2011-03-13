@@ -7,16 +7,12 @@
 // -> Hauptablauf <-
 // Hier startet und beendet die Anwendung!
 
-#include "GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
-#include "main.h" // wichtige Definitionen und Dateien einbinden
-#include "GameApp.h"
-#include "Exception.h" // Ausnahmen im Program
-
 #include <vector>
 #include <string>
 
-Logger gAaLog( LOG_FILE_NAME ); // Haupt-Log-Datei erstellen, wo wichtige Ereignisse aufgeschrieben werden.
-bool gRestart = false; // TODO: dont use globals
+#include "main.h" // wichtige Definitionen und Dateien einbinden
+#include "GameApp.h"
+#include "Exception.h" // Ausnahmen im Program
 
 // Programmstart!
 int main ( int argc, char* argv[] )

@@ -4,18 +4,17 @@
  * Copyright 2011 Christian Zommerfelds
  */
 
-#include "GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
-#include "Texture.h"
-#include "main.h"       // für Logdatei
-#include "Exception.h"  // Exceptions
-#include <IL/il.h>      // DevIL für Laden von Bilddateien
-#include <IL/ilu.h>     // DevIL (U) bearbeiten von Bilddaten
 #include <fstream>
 #include <sstream>
 #include <cmath>
-// cross platform OpenGL include (provided by SDL)
-#include "SDL_opengl.h"
+#include <IL/il.h>      // DevIL für das Laden von Bilddateien
+#include <IL/ilu.h>     // DevILU für das Bearbeiten von Bilddaten
 #include <boost/make_shared.hpp>
+#include <SDL_opengl.h> // cross platform OpenGL include (provided by SDL)
+
+#include "Texture.h"
+#include "main.h"       // für Logdatei
+#include "Exception.h"  // Exceptions
 
 // Konstruktor
 TextureManager::TextureManager()
@@ -72,7 +71,7 @@ int getNext2PowN( int x )
 }
 
 // Textur laden
-void TextureManager::loadTexture( const std::string& name, TextureIdType id, const LoadTextureInfo& loadTexInfo, int quality, int* pW, int* pH )
+void TextureManager::loadTexture( const std::string& fileName, TextureId id, const LoadTextureInfo& loadTexInfo, int* pW, int* pH )
 {
     if ( m_textures.count( id )==1 )
     {
@@ -82,13 +81,13 @@ void TextureManager::loadTexture( const std::string& name, TextureIdType id, con
     try
     {
         //TODO: check for DevIL errors ilGetError()
-        gAaLog.write( "Loading Texture \"%s\"... ", name.c_str() );
+        gAaLog.write( "Loading Texture \"%s\"... ", fileName.c_str() );
 
         ILuint devIl_tex_id;                              // ID des DevIL Bildes
         ILboolean success;                                // Speichert ob die Funktionen erfolgreich sind
         ilGenImages(1, &devIl_tex_id);                    // neue Bild ID
         ilBindImage(devIl_tex_id);                        // Textur binden (als aktuelle setzen)
-        success = ilLoadImage( (ILstring)name.c_str() );  // bild laden
+        success = ilLoadImage( (ILstring)fileName.c_str() );  // bild laden
         if (success)                                      // Falls keine Fehler
         {
             if ( pW != NULL )
@@ -103,16 +102,16 @@ void TextureManager::loadTexture( const std::string& name, TextureIdType id, con
             //gAaLog.Write( "GL: w=%i, h=%i\n", width_2pown, height_2pown );
 
             // TODO: don't shift small numbers
-            if ( quality == TEX_QUALITY_BEST )
+            if ( loadTexInfo.quality == LoadTextureInfo::QualityBest )
                 iluScale( width_2pown, height_2pown, ilGetInteger(IL_IMAGE_DEPTH));
             // Bild verkleinern, falls man eine schlechtere Qualität wünscht.
-            else if ( quality == TEX_QUALITY_GOOD )
+            else if ( loadTexInfo.quality == LoadTextureInfo::QualityGood )
                 iluScale( width_2pown>>1, height_2pown>>1, ilGetInteger(IL_IMAGE_DEPTH));
-            else if ( quality == TEX_QUALITY_MIDDLE )
+            else if ( loadTexInfo.quality == LoadTextureInfo::QualityMiddle )
                 iluScale( width_2pown>>2, height_2pown>>2, ilGetInteger(IL_IMAGE_DEPTH));
-            else if ( quality == TEX_QUALITY_LOW )
+            else if ( loadTexInfo.quality == LoadTextureInfo::QualityLow )
                 iluScale( width_2pown>>3, height_2pown>>3, ilGetInteger(IL_IMAGE_DEPTH));
-            else if ( quality == TEX_QUALITY_LOWEST )
+            else if ( loadTexInfo.quality == LoadTextureInfo::QualityLowest )
                 iluScale( width_2pown>>4, height_2pown>>4, ilGetInteger(IL_IMAGE_DEPTH));
 
             success = ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE); // Farbkomponente in unsigned byte konvertieren
@@ -124,8 +123,10 @@ void TextureManager::loadTexture( const std::string& name, TextureIdType id, con
             glGenTextures(1, &openGl_tex_id); // OpenGL Texture generieren
             glBindTexture(GL_TEXTURE_2D, openGl_tex_id); // binden
 
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, loadTexInfo.textureWrapModeX);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, loadTexInfo.textureWrapModeY);
+            GLint texWrapModeX = (loadTexInfo.wrapModeX == LoadTextureInfo::WrapClamp) ? GL_CLAMP : GL_REPEAT;
+            GLint texWrapModeY = (loadTexInfo.wrapModeY == LoadTextureInfo::WrapClamp) ? GL_CLAMP : GL_REPEAT;
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, texWrapModeX);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, texWrapModeY);
 
             if (loadTexInfo.loadMipmaps)
             {
@@ -169,13 +170,13 @@ void TextureManager::loadTexture( const std::string& name, TextureIdType id, con
     catch (...)
     {
         // Error
-        throw Exception ( gAaLog.write ( "Error while loading the texture \"%s\"!\n%s\n", name.c_str(), (const char*)iluErrorString(ilGetError()) ) );
+        throw Exception ( gAaLog.write ( "Error while loading the texture \"%s\"!\n%s\n", fileName.c_str(), (const char*)iluErrorString(ilGetError()) ) );
     }
     CheckOpenlGlError();
     //gAaLog.Write ( "IL error: %s\n", (const char*)iluErrorString(ilGetError()) );
 }
 
-void TextureManager::freeTexture( const TextureIdType& id )
+void TextureManager::freeTexture( const TextureId& id )
 {
     TextureMap::iterator c_it = m_textures.find( id );
     if ( c_it != m_textures.end() )
@@ -190,7 +191,7 @@ void TextureManager::freeTexture( const TextureIdType& id )
     }
 }
 
-void TextureManager::setTexture( const TextureIdType& id )
+void TextureManager::setTexture( const TextureId& id )
 {
     TextureMap::const_iterator i ( m_textures.find( id ) );
     if ( i != m_textures.end() )
@@ -207,9 +208,9 @@ void TextureManager::setTexture( const TextureIdType& id )
         gAaLog.write ( "*** SetTexture(): Texture ID not found! ***\n" );
 }
 
-std::vector<TextureIdType> TextureManager::getTextureList() const
+std::vector<TextureId> TextureManager::getTextureList() const
 {
-    std::vector<TextureIdType> texList (m_textures.size());
+    std::vector<TextureId> texList (m_textures.size());
 
     int i = 0;
     for( TextureMap::const_iterator it = m_textures.begin(); it != m_textures.end(); ++it, ++i )
@@ -235,7 +236,7 @@ AnimationManager::AnimationManager( TextureManager& tm )
 }
 
 // Lädt eine Animationsdatei
-void AnimationManager::loadAnimation( const char* name, AnimationIdType id,const LoadTextureInfo& texInfo, int quality )
+void AnimationManager::loadAnimation( const char* name, AnimationId id,const LoadTextureInfo& texInfo )
 {
     if ( m_animInfoMap.count( id )==1 )
     {
@@ -278,17 +279,17 @@ void AnimationManager::loadAnimation( const char* name, AnimationIdType id,const
             digits_str.width(num_digits);
             digits_str << i;
             std::string file_to_load = path + prefix + digits_str.str() + suffix;
-            TextureIdType tex_id = std::string("_")+id+digits_str.str();
-            m_texManager.loadTexture(file_to_load,tex_id,texInfo,quality);
+            TextureId tex_id = std::string("_")+id+digits_str.str();
+            m_texManager.loadTexture(file_to_load, tex_id, texInfo);
         }
         pAnimInfo->totalFrames = num_frames;
         pAnimInfo->numDigits = num_digits;
         pAnimInfo->name = id;
 
-        StateIdType stateId;
+        AnimStateId stateId;
         while ( input_stream >> stateId )
         {
-            std::map< StateIdType, boost::shared_ptr<StateInfo> >::const_iterator it = 
+            std::map< AnimStateId, boost::shared_ptr<StateInfo> >::const_iterator it = 
                 pAnimInfo->states.insert( std::make_pair( stateId, boost::make_shared<StateInfo>() ) ).first;
             if ( !(input_stream >> it->second->begin ) )
                 throw 0;
@@ -317,7 +318,7 @@ void AnimationManager::loadAnimation( const char* name, AnimationIdType id,const
     input_stream.close();
 }
 
-const AnimInfo* AnimationManager::getAnimInfo( AnimationIdType animId ) const
+const AnimInfo* AnimationManager::getAnimInfo( AnimationId animId ) const
 {
     AnimInfoMap::const_iterator cit = m_animInfoMap.find( animId );
     if (cit!=m_animInfoMap.end())
@@ -326,7 +327,7 @@ const AnimInfo* AnimationManager::getAnimInfo( AnimationIdType animId ) const
         return NULL;
 }
 
-void AnimationManager::freeAnimation( AnimationIdType id )
+void AnimationManager::freeAnimation( AnimationId id )
 {
     AnimInfo* animInfo = m_animInfoMap[id].get();
     for ( int i = 0; i < animInfo->totalFrames; ++i )

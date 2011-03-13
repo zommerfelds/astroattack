@@ -7,7 +7,6 @@
 #ifndef CONFIGURATION_H
 #define CONFIGURATION_H
 
-#include "GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
 #include <string>
 #include <map>
 

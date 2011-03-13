@@ -6,8 +6,6 @@
 
 // Dialog-Box für win32, macosx und gewöhnliche command line
 
-#include "GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
-
 #include <iostream>
 #include <string>
 

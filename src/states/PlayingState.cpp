@@ -4,9 +4,11 @@
  * Copyright 2011 Christian Zommerfelds
  */
 
-// PlayingState.h für mehr Informationen
 
-#include "../GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
+#include <sstream>
+#include <boost/bind.hpp>
+#include <boost/foreach.hpp>
+
 #include "PlayingState.h"
 #include "GameOverState.h"
 #include "../GameApp.h"
@@ -16,10 +18,9 @@
 #include "../Entity.h"
 #include "../Logger.h"
 #include "../GameEvents.h"
-#include "../XmlLoader.h"
+#include "../DataLoader.h"
 #include "../Sound.h"
 #include "../Vector2D.h"
-
 #include "../main.h"
 
 // define this to draw gravitation vector and other
@@ -30,15 +31,10 @@
 #include "../components/CompGravField.h"
 #endif
 
-#include <boost/bind.hpp>
-#include <boost/foreach.hpp>
-
-#include <sstream>
-
 // Alle Entities in der Welt werden in dieser Datei aufgelistet
 const char* cWordLogFileName = "world.txt";
 
-const StateIdType PlayingState::stateId = "PlayingState";
+const GameStateId PlayingState::stateId = "PlayingState";
 
 PlayingState::PlayingState( SubSystems& subSystems, std::string levelFileName )
 : GameState( subSystems ),
@@ -67,8 +63,8 @@ void PlayingState::init()        // State starten
     m_gameWorld.setVariable( "Health", 1000 );
 
     // Welt von XML-Datei laden
-    XmlLoader::loadXmlToWorld( "data/player.xml", m_gameWorld, getSubSystems() );
-    XmlLoader::loadXmlToWorld( m_levelFileName.c_str(), m_gameWorld, getSubSystems() );
+    DataLoader::loadWorld( "data/player.info", m_gameWorld, getSubSystems() );
+    DataLoader::loadWorld( m_levelFileName, m_gameWorld, getSubSystems() );
 
     getSubSystems().sound.loadMusic( "data/Music/Aerospace.ogg", "music" );
     getSubSystems().sound.playMusic( "music", true, 0 );
@@ -180,14 +176,14 @@ void PlayingState::draw( float accumulator )        // Spiel zeichnen
 
     // Draw debug info
 #ifdef DRAW_DEBUG
-    Entity* player = m_gameWorld.getEntity("Player").get();
+    Entity* player = m_gameWorld.getEntity("Player");
     if ( player )
     {
         CompPhysics* player_phys = player->getComponent<CompPhysics>();
         if ( player_phys )
         {
             const CompGravField* grav = player_phys->getActiveGravField();
-            Vector2D gravPoint = player_phys->getLocalGravitationPoint().rotated( player_phys->getSmoothAngle() ) + player_phys->getPosition();
+            Vector2D gravPoint = player_phys->getLocalGravitationPoint().rotated( player_phys->getSmoothAngle() ) + player_phys->getDrawingPosition();
             Vector2D smoothGravPoint = player_phys->getLocalGravitationPoint().rotated( player_phys->getSmoothAngle() ) + player_phys->getSmoothPosition();
             Vector2D smoothRotPoint = player_phys->getLocalRotationPoint().rotated( player_phys->getSmoothAngle() ) + player_phys->getSmoothPosition();
             if ( grav )
@@ -225,7 +221,7 @@ void PlayingState::draw( float accumulator )        // Spiel zeichnen
         ss.setf(std::ios::fixed, std::ios::floatfield);
         ss << jetpackEnergy*100 << "%";
         renderer.drawString( "Jetpack", "FontW_m", x, y, AlignRight, AlignCenter, 1.0f, 1.0f, 1.0f, 1.0f );
-        renderer.drawString( ss.str().c_str(), "FontW_m", x+0.1f, y, AlignLeft, AlignCenter, 1.0f, 1.0f, 1.0f, 1.0f );
+        renderer.drawString( ss.str(), "FontW_m", x+0.1f, y, AlignLeft, AlignCenter, 1.0f, 1.0f, 1.0f, 1.0f );
     }
 
     // Health %-display
@@ -244,7 +240,7 @@ void PlayingState::draw( float accumulator )        // Spiel zeichnen
         ss.setf(std::ios::fixed, std::ios::floatfield);
         ss << health*100 << "%";
         renderer.drawString( "Health", "FontW_m", x, y, AlignRight, AlignCenter, 1.0f, 1.0f, 1.0f, 1.0f );
-        renderer.drawString( ss.str().c_str(), "FontW_m", x+0.1f, y, AlignLeft, AlignCenter, 1.0f, 1.0f, 1.0f, 1.0f );
+        renderer.drawString( ss.str(), "FontW_m", x+0.1f, y, AlignLeft, AlignCenter, 1.0f, 1.0f, 1.0f, 1.0f );
     }
 
     if ( m_alphaOverlay != 0.0f )

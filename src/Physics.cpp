@@ -4,7 +4,9 @@
  * Copyright 2011 Christian Zommerfelds
  */
 
-#include "GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
+#include <boost/bind.hpp>
+#include <boost/make_shared.hpp>
+#include <Box2D/Box2D.h>
 
 #include "Physics.h"
 #include "GameEvents.h"
@@ -17,13 +19,7 @@
 #include "components/CompGravField.h"
 #include "components/CompShape.h"
 
-#include <boost/bind.hpp>
-#include <boost/make_shared.hpp>
-#include <Box2D/Box2D.h>
-
-//#include "main.h" // temp
-
-const float PHYS_DELTA_TIME = 1.0f/60.0f;
+const float cPhysicsTimeStep = 1.0f/60.0f;
 const int PHYS_ITERATIONS = 10;
 
 // Number of game updates a CompPhysics has to wait till it can change to an other GravField
@@ -32,7 +28,7 @@ const unsigned int cUpdatesTillGravFieldChangeIsPossible = 10;
 PhysicsSubSystem::PhysicsSubSystem( GameEvents& gameEvents)
 : m_pGravitationalAcc (), m_eventConnection1 (), m_eventConnection2 (),
   m_eventConnection3 (), m_eventConnection4 (), m_gameEvents ( gameEvents ),
-  m_world (b2Vec2(0.0f, 0.0f), true), m_timeStep ( PHYS_DELTA_TIME ),
+  m_world (b2Vec2(0.0f, 0.0f), true), m_timeStep ( cPhysicsTimeStep ),
   m_velocityIterations( PHYS_ITERATIONS ), m_positionIterations( PHYS_ITERATIONS )
 {
 }
@@ -84,7 +80,10 @@ void PhysicsSubSystem::onRegisterPhysicsComp(Entity& entity)
         // get position from CompPosition, if it exists
         CompPosition* compPos = entity.getComponent<CompPosition>();
         if (compPos)
-            comp_phys->m_bodyDef.position = compPos->getPosIgnoreCompPhys();
+        {
+            comp_phys->m_bodyDef.position = compPos->m_position;
+            comp_phys->m_bodyDef.angle = compPos->m_orientation;
+        }
 
         comp_phys->m_body = m_world.CreateBody( convertToB2BodyDef(comp_phys->m_bodyDef).get() );
         comp_phys->m_body->SetUserData( comp_phys );
@@ -98,7 +97,7 @@ void PhysicsSubSystem::onRegisterPhysicsComp(Entity& entity)
     		CompShape* pCompShape = NULL;
     		for (size_t a=0; a < compShapes.size(); a++) // TODO: could use get component by name instead
     		{
-    			if (compShapes[i]->getName() == comp_phys->m_shapeInfos[i]->compName)
+    			if (compShapes[i]->getId() == comp_phys->m_shapeInfos[i]->compName)
     			{
     				pCompShape = compShapes[i];
     				break;
@@ -116,7 +115,7 @@ void PhysicsSubSystem::onRegisterPhysicsComp(Entity& entity)
     		fixtureDef->filter.maskBits = 1;
             b2Fixture* pFixture = comp_phys->m_body->CreateFixture( fixtureDef.get() );
             pFixture->SetUserData( comp_phys );
-            comp_phys->m_fixtureMap.insert( std::make_pair(pCompShape->getName(), pFixture) );
+            comp_phys->m_fixtureMap.insert( std::make_pair(pCompShape->getId(), pFixture) );
         }
 
         m_physicsComps.push_back( comp_phys );
@@ -154,6 +153,13 @@ void PhysicsSubSystem::update()
     for ( size_t i = 0; i < m_physicsComps.size(); ++i )
 	{
 		b2Body* pBody = m_physicsComps[i]->m_body;
+
+		CompPosition* compPos = m_physicsComps[i]->getOwnerEntity()->getComponent<CompPosition>();
+		if (compPos)
+        {
+            compPos->m_position = m_physicsComps[i]->getPosition();
+            compPos->m_orientation = m_physicsComps[i]->getAngle();
+        }
 
         int highestPriority = 0;
         CompGravField* gravWithHighestPriority = NULL;

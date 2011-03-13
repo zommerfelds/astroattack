@@ -9,19 +9,17 @@
 #ifndef CAMERACONTROLLER_H
 #define CAMERACONTROLLER_H
 
-#include "GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
 #include <boost/shared_ptr.hpp>
+
+#include "Vector2D.h"
 
 class InputSubSystem;
 class RenderSubSystem;
 class GameWorld;
 
-#include "Vector2D.h"
-
 //----------//
 //  Camera  //
 //----------//
-
 /*
     Dieses Klass bedient die Kamera (OpenGL-Ansicht).
     Die Methoden dieser Klasse werden genutzt um Kameraeinstellungen wie Zoom oder Lage zu ändern.

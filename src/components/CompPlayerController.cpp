@@ -6,23 +6,19 @@
 
 // CompPlayerController.h für mehr Informationen
 
-#include "../GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
+#include <boost/bind.hpp>
 
 #include "CompPlayerController.h"
-
-#include "../Physics.h"
 #include "CompVisualAnimation.h"
 #include "CompGravField.h"
 #include "CompPhysics.h"
+#include "../Physics.h"
 #include "../Input.h"
 #include "../Entity.h"
 #include "../Vector2D.h"
 
-#include <boost/bind.hpp>
-#include <boost/make_shared.hpp>
-
 // eindeutige ID
-const CompIdType CompPlayerController::COMPONENT_ID = "CompPlayerController";
+const ComponentTypeId CompPlayerController::COMPONENT_TYPE_ID = "CompPlayerController";
 
 // Constants
 const int cMaxRecharge = 15;                    // wie wie muss der Spieler warten bis der Racketenrucksack startet?
@@ -57,9 +53,7 @@ void CompPlayerController::onUpdate()
     bool canWalkR = false;                          // ob der Spieler nach rechts Laufen kann (am Boden?, Steiligkeit)
     bool canWalkL = false;                          // ob der Spieler nach links Laufen kann (am Boden?, Steiligkeit)
     bool isTouchingSth = false;                     // ob der Spieler etwas berührt (Boden, Wand, Objekt)
-    bool wasTouchingSth = false;
     bool usedJetpack = false;                       // ob der Spieler den Jetpack brauchen will
-    //bool air = false;                             // ob der Spieler sich in der Luft befindet (Sprung/Fliegen)
     bool jumped = false;
     bool wantToMoveSidewards = false;               // ob der Spieler sich seitwärts bewegen will
     bool isPushing = false;                         // ob der Spieler einen Gegenstand stösst
@@ -469,9 +463,9 @@ void CompPlayerController::onUpdate()
     CompVisualAnimation* jetpackAnim = NULL;
     std::vector<CompVisualAnimation*> player_anims = getOwnerEntity()->getComponents<CompVisualAnimation>();
     for ( size_t i = 0; i < player_anims.size(); ++i )
-        if ( player_anims[i]->getName() == "bodyAnim" )
+        if ( player_anims[i]->getId() == "bodyAnim" )
             bodyAnim = player_anims[i];
-        else if ( player_anims[i]->getName() == "jetpack" )
+        else if ( player_anims[i]->getId() == "jetpack" )
             jetpackAnim = player_anims[i];
 
     if ( bodyAnim )
@@ -536,7 +530,6 @@ void CompPlayerController::onUpdate()
         }
     }
 
-    wasTouchingSth = isTouchingSth;
     m_playerCouldWalkLastUpdate = ( canWalkR || canWalkL );
 }
 
@@ -558,7 +551,6 @@ void CompPlayerController::setHighFriction( CompPhysics* playerCompPhysics )
     playerCompPhysics->setShapeFriction("bottom", 4.0f);
 }
 
-boost::shared_ptr<CompPlayerController> CompPlayerController::loadFromXml(const pugi::xml_node&, const InputSubSystem& inputSys, std::map<const std::string, int>::iterator itJetPackVar)
-{
-   return boost::make_shared<CompPlayerController>( inputSys, itJetPackVar );
-}
+void CompPlayerController::loadFromPropertyTree(const boost::property_tree::ptree&)
+{}  // dont need to do anything, because there is no data for this component
+

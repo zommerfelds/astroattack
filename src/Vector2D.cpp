@@ -4,8 +4,6 @@
  * Copyright 2011 Christian Zommerfelds
  */
 
-#include "GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
-
 #include "Vector2D.h"
 #include <Box2D/Box2D.h>
 #include <boost/make_shared.hpp>

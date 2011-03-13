@@ -7,13 +7,10 @@
 #ifndef GAMEAPP_H
 #define GAMEAPP_H
 
-#include "GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
-
 #include <vector>
 #include <string>
 
 #include "Event.h"
-
 #include "Input.h"
 #include "Physics.h"
 #include "Renderer.h"

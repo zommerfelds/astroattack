@@ -1,0 +1,4261 @@
+entity
+{
+	name EdBlock00000
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x -5.5
+				y -2.5
+			}
+			vertex
+			{
+				x -5.5
+				y -5
+			}
+			vertex
+			{
+				x 5
+				y -5
+			}
+			vertex
+			{
+				x 5
+				y -2.5
+			}
+		}
+	}
+	component
+	{
+		id CompTrigger
+		condition
+		{
+			id CompareVariable
+			params
+			{
+				var Collected
+				compare gtoet
+				num 3
+			}
+		}
+		effect
+		{
+			id KillEntity
+			params
+			{
+				entity door1
+			}
+		}
+		effect
+		{
+			id DispMessage
+			params
+			{
+				msg "Das Tor wurde geöffnet!"
+				timems 8000
+			}
+		}
+	}
+	component
+	{
+		id CompVisualMessage
+		text "Willkommen zu AstroAttack! Mit den Tasten A und D kann der\nAstronaut nach links und rechts bewegen."
+	}
+	component
+	{
+		id CompVisualTexture
+		texture "Kirks Entry"
+	}
+}
+entity
+{
+	name EdBlock00001
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x -3
+				y -2
+			}
+			vertex
+			{
+				x -3
+				y -2.5
+			}
+			vertex
+			{
+				x 2.5
+				y -2.5
+			}
+			vertex
+			{
+				x 2.5
+				y -2
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture "Kirks Entry"
+	}
+}
+entity
+{
+	name EdBlock00002
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x -2
+				y -1.5
+			}
+			vertex
+			{
+				x -2
+				y -2
+			}
+			vertex
+			{
+				x 1.5
+				y -2
+			}
+			vertex
+			{
+				x 1.5
+				y -1.5
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture "Kirks Entry"
+	}
+}
+entity
+{
+	name EdBlock00003
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x -1
+				y -1
+			}
+			vertex
+			{
+				x -1
+				y -1.5
+			}
+			vertex
+			{
+				x 0.5
+				y -1.5
+			}
+			vertex
+			{
+				x 0.5
+				y -1
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture "Kirks Entry"
+	}
+}
+entity
+{
+	name EdBlock00004
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x 5
+				y -2.5
+			}
+			vertex
+			{
+				x 5
+				y -5
+			}
+			vertex
+			{
+				x 6
+				y -2.5
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture "Steel Vault"
+	}
+}
+entity
+{
+	name EdBlock00005
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x -6.5
+				y -2.5
+			}
+			vertex
+			{
+				x -5.5
+				y -5
+			}
+			vertex
+			{
+				x -5.5
+				y -2.5
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture "Steel Vault"
+	}
+}
+entity
+{
+	name EdBlock00006
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x -5.5
+				y -5
+			}
+			vertex
+			{
+				x -3
+				y -6
+			}
+			vertex
+			{
+				x -1
+				y -5
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture "Steel Vault"
+	}
+}
+entity
+{
+	name EdBlock00007
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x 0.5
+				y -5
+			}
+			vertex
+			{
+				x 2.5
+				y -6
+			}
+			vertex
+			{
+				x 5
+				y -5
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture "Steel Vault"
+	}
+}
+entity
+{
+	name EdBlock00008
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x -1
+				y -5
+			}
+			vertex
+			{
+				x -0.5
+				y -6
+			}
+			vertex
+			{
+				x 0
+				y -6
+			}
+			vertex
+			{
+				x 0.5
+				y -5
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture "Steel Vault"
+	}
+}
+entity
+{
+	name EdBlock00009
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x 8.5
+				y -1.5
+			}
+			vertex
+			{
+				x 9.5
+				y -4.5
+			}
+			vertex
+			{
+				x 10
+				y -2
+			}
+			vertex
+			{
+				x 10
+				y -1
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture "Rainbow Shards"
+		edge
+		{
+			tex EdgeGrass1
+			edges "3 "
+		}
+	}
+}
+entity
+{
+	name EdBlock00010
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x 10
+				y -2
+			}
+			vertex
+			{
+				x 11
+				y -4.5
+			}
+			vertex
+			{
+				x 11.5
+				y -2
+			}
+			vertex
+			{
+				x 11.5
+				y -1
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture "Rainbow Shards"
+	}
+}
+entity
+{
+	name EdBlock00011
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x 10
+				y -2
+			}
+			vertex
+			{
+				x 11.5
+				y -1
+			}
+			vertex
+			{
+				x 10
+				y -1
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture "Rainbow Shards"
+		edge
+		{
+			tex EdgeGrass1
+			edges "1 "
+		}
+	}
+}
+entity
+{
+	name EdBlock00012
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x 11.5
+				y -2
+			}
+			vertex
+			{
+				x 12
+				y -5.5
+			}
+			vertex
+			{
+				x 14.5
+				y -1.5
+			}
+			vertex
+			{
+				x 14.5
+				y -0.5
+			}
+			vertex
+			{
+				x 11.5
+				y -1
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture "Rainbow Shards"
+		edge
+		{
+			tex EdgeGrass1
+			edges "3 "
+		}
+	}
+}
+entity
+{
+	name EdBlock00013
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x 14.5
+				y -1.5
+			}
+			vertex
+			{
+				x 15.5
+				y -4
+			}
+			vertex
+			{
+				x 16.5
+				y -1.5
+			}
+			vertex
+			{
+				x 16.5
+				y 0.5
+			}
+			vertex
+			{
+				x 14.5
+				y -0.5
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture "Rainbow Shards"
+		edge
+		{
+			tex EdgeGrass1
+			edges "3 "
+		}
+	}
+}
+entity
+{
+	name EdBlock00014
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x 16.5
+				y 0.5
+			}
+			vertex
+			{
+				x 16.5
+				y -1.5
+			}
+			vertex
+			{
+				x 18.5
+				y -2
+			}
+			vertex
+			{
+				x 18.5
+				y -1
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture "Rainbow Shards"
+		edge
+		{
+			tex EdgeGrass1
+			edges "3 "
+		}
+	}
+}
+entity
+{
+	name EdBlock00015
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x 18.5
+				y -2
+			}
+			vertex
+			{
+				x 19.5
+				y -3.5
+			}
+			vertex
+			{
+				x 22
+				y -3
+			}
+			vertex
+			{
+				x 22
+				y -1
+			}
+			vertex
+			{
+				x 18.5
+				y -1
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture "Rainbow Shards"
+		edge
+		{
+			tex EdgeGrass1
+			edges "3 "
+		}
+	}
+}
+entity
+{
+	name EdBlock00016
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x 26.5
+				y 0.5
+			}
+			vertex
+			{
+				x 24
+				y -2
+			}
+			vertex
+			{
+				x 28.5
+				y -4.5
+			}
+			vertex
+			{
+				x 30
+				y -3
+			}
+			vertex
+			{
+				x 29.5
+				y -2
+			}
+			vertex
+			{
+				x 28
+				y 0
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture "Rainbow Shards"
+		edge
+		{
+			tex EdgeGrass1
+			edges "0 3 4 5 "
+		}
+	}
+}
+entity
+{
+	name EdBlock00017
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x 31.5
+				y -1
+			}
+			vertex
+			{
+				x 32
+				y -2.5
+			}
+			vertex
+			{
+				x 35
+				y -3
+			}
+			vertex
+			{
+				x 37.5
+				y -1
+			}
+			vertex
+			{
+				x 37
+				y 0.5
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture "Rainbow Shards"
+		edge
+		{
+			tex EdgeGrass1
+			edges "4 "
+		}
+	}
+}
+entity
+{
+	name EdBlock00018
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x 39
+				y 1
+			}
+			vertex
+			{
+				x 38.5
+				y -0.5
+			}
+			vertex
+			{
+				x 44
+				y -2.5
+			}
+			vertex
+			{
+				x 46
+				y -0.5
+			}
+			vertex
+			{
+				x 45.5
+				y 1.5
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture "Rainbow Shards"
+		edge
+		{
+			tex EdgeGrass1
+			edges "0 3 4 "
+		}
+	}
+}
+entity
+{
+	name EdBlock00019
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x 48.5
+				y 3
+			}
+			vertex
+			{
+				x 48.5
+				y -2
+			}
+			vertex
+			{
+				x 54
+				y -2
+			}
+			vertex
+			{
+				x 54
+				y 3
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture "Solar Plate"
+	}
+}
+entity
+{
+	name EdBlock00020
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x 50
+				y 5.5
+			}
+			vertex
+			{
+				x 50
+				y 5
+			}
+			vertex
+			{
+				x 56.5
+				y 5
+			}
+			vertex
+			{
+				x 56.5
+				y 5.5
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture "Solar Plate"
+	}
+}
+entity
+{
+	name EdBlock00021
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x 56
+				y 5
+			}
+			vertex
+			{
+				x 56
+				y -4
+			}
+			vertex
+			{
+				x 56.5
+				y -4
+			}
+			vertex
+			{
+				x 56.5
+				y 5
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture "Solar Plate"
+	}
+}
+entity
+{
+	name EdBlock00022
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x 52.5
+				y -4
+			}
+			vertex
+			{
+				x 52.5
+				y -4.5
+			}
+			vertex
+			{
+				x 56.5
+				y -4.5
+			}
+			vertex
+			{
+				x 56.5
+				y -4
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture "Solar Plate"
+	}
+}
+entity
+{
+	name EdBlock00023
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x 50.5
+				y -2
+			}
+			vertex
+			{
+				x 50.5
+				y -7
+			}
+			vertex
+			{
+				x 51
+				y -7
+			}
+			vertex
+			{
+				x 51
+				y -2
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture "Solar Plate"
+	}
+}
+entity
+{
+	name EdBlock00024
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x 51
+				y -6.5
+			}
+			vertex
+			{
+				x 51
+				y -7
+			}
+			vertex
+			{
+				x 65
+				y -7
+			}
+			vertex
+			{
+				x 65
+				y -6.5
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture "Solar Plate"
+	}
+}
+entity
+{
+	name EdBlock00025
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x 56.5
+				y -4.5
+			}
+			vertex
+			{
+				x 58.5
+				y -4.5
+			}
+			vertex
+			{
+				x 58.5
+				y -4
+			}
+			vertex
+			{
+				x 56.5
+				y -4
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture "Solar Plate"
+	}
+}
+entity
+{
+	name EdBlock00026
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x 61
+				y -1
+			}
+			vertex
+			{
+				x 61
+				y -4.5
+			}
+			vertex
+			{
+				x 61.5
+				y -4.5
+			}
+			vertex
+			{
+				x 61.5
+				y -1
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture "Solar Plate"
+	}
+}
+entity
+{
+	name EdBlock00027
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x 59.5
+				y -0.5
+			}
+			vertex
+			{
+				x 59.5
+				y -1
+			}
+			vertex
+			{
+				x 61.5
+				y -1
+			}
+			vertex
+			{
+				x 61.5
+				y -0.5
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture "Solar Plate"
+	}
+}
+entity
+{
+	name EdBlock00028
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x 53.5
+				y 7.5
+			}
+			vertex
+			{
+				x 53.5
+				y 5.5
+			}
+			vertex
+			{
+				x 54
+				y 5.5
+			}
+			vertex
+			{
+				x 54
+				y 7.5
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture "Solar Plate"
+	}
+}
+entity
+{
+	name EdBlock00029
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x 53.5
+				y 8
+			}
+			vertex
+			{
+				x 53.5
+				y 7.5
+			}
+			vertex
+			{
+				x 61
+				y 7.5
+			}
+			vertex
+			{
+				x 61
+				y 8
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture "Solar Plate"
+	}
+}
+entity
+{
+	name EdBlock00030
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x 61
+				y 8
+			}
+			vertex
+			{
+				x 61
+				y -0.5
+			}
+			vertex
+			{
+				x 61.5
+				y -0.5
+			}
+			vertex
+			{
+				x 61.5
+				y 8
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture "Solar Plate"
+	}
+}
+entity
+{
+	name EdBlock00031
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x 61.5
+				y -4
+			}
+			vertex
+			{
+				x 61.5
+				y -4.5
+			}
+			vertex
+			{
+				x 63
+				y -4.5
+			}
+			vertex
+			{
+				x 63
+				y -4
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture "Solar Plate"
+	}
+}
+entity
+{
+	name EdBlock00032
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x 64.5
+				y 0.5
+			}
+			vertex
+			{
+				x 64.5
+				y -6.5
+			}
+			vertex
+			{
+				x 65
+				y -6.5
+			}
+			vertex
+			{
+				x 65
+				y 0.5
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture "Solar Plate"
+	}
+}
+entity
+{
+	name EdBlock00033
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x 63
+				y 1
+			}
+			vertex
+			{
+				x 63
+				y 0.5
+			}
+			vertex
+			{
+				x 65
+				y 0.5
+			}
+			vertex
+			{
+				x 65
+				y 1
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture "Solar Plate"
+	}
+}
+entity
+{
+	name EdBlock00034
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x 61.5
+				y 4.5
+			}
+			vertex
+			{
+				x 61.5
+				y 4
+			}
+			vertex
+			{
+				x 63.5
+				y 4
+			}
+			vertex
+			{
+				x 63.5
+				y 4.5
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture "Solar Plate"
+	}
+}
+entity
+{
+	name EdBlock00035
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x 65
+				y 1
+			}
+			vertex
+			{
+				x 65
+				y 0.5
+			}
+			vertex
+			{
+				x 66.5
+				y 0.5
+			}
+			vertex
+			{
+				x 66.5
+				y 1
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture "Solar Plate"
+	}
+}
+entity
+{
+	name EdBlock00036
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x 66
+				y 6
+			}
+			vertex
+			{
+				x 66
+				y 1
+			}
+			vertex
+			{
+				x 66.5
+				y 1
+			}
+			vertex
+			{
+				x 66.5
+				y 6
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture "Solar Plate"
+	}
+}
+entity
+{
+	name EdBlock00037
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x 65
+				y 6.5
+			}
+			vertex
+			{
+				x 65
+				y 6
+			}
+			vertex
+			{
+				x 66.5
+				y 6
+			}
+			vertex
+			{
+				x 66.5
+				y 6.5
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture "Solar Plate"
+	}
+}
+entity
+{
+	name EdBlock00038
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x 61
+				y 9.5
+			}
+			vertex
+			{
+				x 61
+				y 8
+			}
+			vertex
+			{
+				x 61.5
+				y 8
+			}
+			vertex
+			{
+				x 61.5
+				y 9.5
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture "Solar Plate"
+	}
+}
+entity
+{
+	name EdBlock00039
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x 61.5
+				y 9.5
+			}
+			vertex
+			{
+				x 61.5
+				y 9
+			}
+			vertex
+			{
+				x 68
+				y 9
+			}
+			vertex
+			{
+				x 68
+				y 9.5
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture "Solar Plate"
+	}
+}
+entity
+{
+	name EdBlock00040
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x 68
+				y 9.5
+			}
+			vertex
+			{
+				x 68
+				y 3.5
+			}
+			vertex
+			{
+				x 68.5
+				y 3.5
+			}
+			vertex
+			{
+				x 68.5
+				y 9.5
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture "Solar Plate"
+	}
+}
+entity
+{
+	name EdBlock00041
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x 68.5
+				y 4
+			}
+			vertex
+			{
+				x 68.5
+				y 3.5
+			}
+			vertex
+			{
+				x 70.5
+				y 3.5
+			}
+			vertex
+			{
+				x 70.5
+				y 4
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture "Solar Plate"
+	}
+}
+entity
+{
+	name EdBlock00042
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x 66.5
+				y 1
+			}
+			vertex
+			{
+				x 66.5
+				y 0.5
+			}
+			vertex
+			{
+				x 68.5
+				y 0.5
+			}
+			vertex
+			{
+				x 68.5
+				y 1
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture "Solar Plate"
+	}
+}
+entity
+{
+	name EdBlock00043
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x 70
+				y 3.5
+			}
+			vertex
+			{
+				x 70
+				y -3
+			}
+			vertex
+			{
+				x 70.5
+				y -3
+			}
+			vertex
+			{
+				x 70.5
+				y 3.5
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture "Solar Plate"
+	}
+}
+entity
+{
+	name EdBlock00044
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x 67
+				y -2.5
+			}
+			vertex
+			{
+				x 67
+				y -3
+			}
+			vertex
+			{
+				x 70
+				y -3
+			}
+			vertex
+			{
+				x 70
+				y -2.5
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture "Solar Plate"
+	}
+}
+entity
+{
+	name EdBlock00045
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x 67
+				y -3
+			}
+			vertex
+			{
+				x 67
+				y -7
+			}
+			vertex
+			{
+				x 70.5
+				y -7
+			}
+			vertex
+			{
+				x 70.5
+				y -3
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture "Solar Plate"
+	}
+}
+entity
+{
+	name EdBlock00046
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x 64
+				y -11.5
+			}
+			vertex
+			{
+				x 62.5
+				y -12
+			}
+			vertex
+			{
+				x 62
+				y -14
+			}
+			vertex
+			{
+				x 63
+				y -15
+			}
+			vertex
+			{
+				x 65.5
+				y -15.5
+			}
+			vertex
+			{
+				x 67
+				y -14.5
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture Craterscape
+	}
+}
+entity
+{
+	name EdBlock00047
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x 64
+				y -11.5
+			}
+			vertex
+			{
+				x 67
+				y -14.5
+			}
+			vertex
+			{
+				x 68.5
+				y -14.5
+			}
+			vertex
+			{
+				x 70
+				y -14
+			}
+			vertex
+			{
+				x 70.5
+				y -12.5
+			}
+			vertex
+			{
+				x 70
+				y -11
+			}
+			vertex
+			{
+				x 68
+				y -10
+			}
+			vertex
+			{
+				x 64.5
+				y -10.5
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture Craterscape
+	}
+}
+entity
+{
+	name EdBlock00048
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x 58
+				y -15
+			}
+			vertex
+			{
+				x 57
+				y -15.5
+			}
+			vertex
+			{
+				x 59
+				y -17
+			}
+			vertex
+			{
+				x 61
+				y -17
+			}
+			vertex
+			{
+				x 61.5
+				y -16.5
+			}
+			vertex
+			{
+				x 61
+				y -16
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture Craterscape
+	}
+}
+entity
+{
+	name EdBlock00049
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x 59
+				y -17
+			}
+			vertex
+			{
+				x 59
+				y -17.5
+			}
+			vertex
+			{
+				x 60
+				y -18
+			}
+			vertex
+			{
+				x 60.5
+				y -18
+			}
+			vertex
+			{
+				x 61.5
+				y -17.5
+			}
+			vertex
+			{
+				x 61
+				y -17
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture Craterscape
+	}
+}
+entity
+{
+	name EdBlock00050
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x 62
+				y -19.5
+			}
+			vertex
+			{
+				x 61.5
+				y -20.5
+			}
+			vertex
+			{
+				x 62.5
+				y -21.5
+			}
+			vertex
+			{
+				x 65.5
+				y -22
+			}
+			vertex
+			{
+				x 70
+				y -22
+			}
+			vertex
+			{
+				x 71
+				y -21
+			}
+			vertex
+			{
+				x 70.5
+				y -19
+			}
+			vertex
+			{
+				x 68
+				y -18
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture Craterscape
+	}
+}
+entity
+{
+	name EdBlock00051
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x 62
+				y -19.5
+			}
+			vertex
+			{
+				x 68
+				y -18
+			}
+			vertex
+			{
+				x 66
+				y -18
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture Craterscape
+	}
+}
+entity
+{
+	name EdBlock00052
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x 70.5
+				y -26.5
+			}
+			vertex
+			{
+				x 70.5
+				y -27.5
+			}
+			vertex
+			{
+				x 73
+				y -28.5
+			}
+			vertex
+			{
+				x 77.5
+				y -28.5
+			}
+			vertex
+			{
+				x 78.5
+				y -27.5
+			}
+			vertex
+			{
+				x 78.5
+				y -26
+			}
+			vertex
+			{
+				x 77.5
+				y -24
+			}
+			vertex
+			{
+				x 73.5
+				y -24.5
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture Craterscape
+	}
+}
+entity
+{
+	name EdBlock00053
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x 64
+				y -34
+			}
+			vertex
+			{
+				x 63
+				y -35.5
+			}
+			vertex
+			{
+				x 65
+				y -36.5
+			}
+			vertex
+			{
+				x 69
+				y -37
+			}
+			vertex
+			{
+				x 70.5
+				y -36.5
+			}
+			vertex
+			{
+				x 71
+				y -34.5
+			}
+			vertex
+			{
+				x 68.5
+				y -33.5
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture Craterscape
+	}
+}
+entity
+{
+	name EdBlock00054
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x 58
+				y -33.5
+			}
+			vertex
+			{
+				x 58
+				y -37
+			}
+			vertex
+			{
+				x 60.5
+				y -37
+			}
+			vertex
+			{
+				x 60.5
+				y -33.5
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture "Plaster Blocks"
+	}
+}
+entity
+{
+	name EdBlock00055
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x 58
+				y -29
+			}
+			vertex
+			{
+				x 58
+				y -30.5
+			}
+			vertex
+			{
+				x 59.5
+				y -30.5
+			}
+			vertex
+			{
+				x 59.5
+				y -29
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture "Plaster Blocks"
+	}
+}
+entity
+{
+	name EdBlock00056
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x 48.5
+				y -29
+			}
+			vertex
+			{
+				x 48.5
+				y -29.5
+			}
+			vertex
+			{
+				x 58
+				y -29.5
+			}
+			vertex
+			{
+				x 58
+				y -29
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture "Plaster Blocks"
+	}
+}
+entity
+{
+	name EdBlock00057
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x 49
+				y -36.5
+			}
+			vertex
+			{
+				x 49
+				y -37
+			}
+			vertex
+			{
+				x 58
+				y -37
+			}
+			vertex
+			{
+				x 58
+				y -36.5
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture "Plaster Blocks"
+	}
+}
+entity
+{
+	name EdBlock00058
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x 36.5
+				y -29
+			}
+			vertex
+			{
+				x 36.5
+				y -29.5
+			}
+			vertex
+			{
+				x 48.5
+				y -29.5
+			}
+			vertex
+			{
+				x 48.5
+				y -29
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture "Plaster Blocks"
+	}
+}
+entity
+{
+	name EdBlock00059
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x 37
+				y -36.5
+			}
+			vertex
+			{
+				x 37
+				y -37
+			}
+			vertex
+			{
+				x 49
+				y -37
+			}
+			vertex
+			{
+				x 49
+				y -36.5
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture "Plaster Blocks"
+	}
+}
+entity
+{
+	name EdBlock00060
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x 40
+				y -33
+			}
+			vertex
+			{
+				x 40
+				y -33.5
+			}
+			vertex
+			{
+				x 48.5
+				y -33.5
+			}
+			vertex
+			{
+				x 48.5
+				y -33
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture "Plaster Blocks"
+	}
+}
+entity
+{
+	name EdBlock00061
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x 36
+				y -29
+			}
+			vertex
+			{
+				x 36
+				y -33
+			}
+			vertex
+			{
+				x 36.5
+				y -33
+			}
+			vertex
+			{
+				x 36.5
+				y -29
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture "Plaster Blocks"
+	}
+}
+entity
+{
+	name EdBlock00062
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x 33
+				y -33
+			}
+			vertex
+			{
+				x 33
+				y -33.5
+			}
+			vertex
+			{
+				x 36.5
+				y -33.5
+			}
+			vertex
+			{
+				x 36.5
+				y -33
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture "Plaster Blocks"
+	}
+}
+entity
+{
+	name EdBlock00063
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x 31
+				y -32
+			}
+			vertex
+			{
+				x 31
+				y -33.5
+			}
+			vertex
+			{
+				x 33
+				y -33.5
+			}
+			vertex
+			{
+				x 33
+				y -32
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture "Plaster Blocks"
+	}
+}
+entity
+{
+	name EdBlock00064
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x 31
+				y -36.5
+			}
+			vertex
+			{
+				x 31
+				y -38.5
+			}
+			vertex
+			{
+				x 37
+				y -38.5
+			}
+			vertex
+			{
+				x 37
+				y -36.5
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture "Plaster Blocks"
+	}
+}
+entity
+{
+	name Flameentity
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x -6
+		y -1
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x -6
+				y -1
+			}
+			vertex
+			{
+				x -6
+				y -1.5
+			}
+			vertex
+			{
+				x -5.5
+				y -1.5
+			}
+			vertex
+			{
+				x -5.5
+				y -1
+			}
+		}
+	}
+	component
+	{
+		id CompVisualAnimation
+		anim
+		{
+			name flame
+		}
+		center
+		{
+			x 0
+			y 0
+		}
+		dim
+		{
+			hw 0.7
+			hh 0.7
+		}
+		start true
+	}
+}
+entity
+{
+	name Killerentity
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+			isSensor true
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 7.4
+		y -4
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x -0.4
+				y 0.4
+			}
+			vertex
+			{
+				x -0.4
+				y -0.4
+			}
+			vertex
+			{
+				x 0.4
+				y -0.4
+			}
+			vertex
+			{
+				x 0.4
+				y 0.4
+			}
+		}
+	}
+	component
+	{
+		id CompTrigger
+		condition
+		{
+			id EntityTouchedThis
+			params
+			{
+				entity Player
+			}
+		}
+		effect
+		{
+			id EndLevel
+			params
+			{
+				msg "Game Over"
+				win false
+			}
+		}
+	}
+	component
+	{
+		id CompVisualAnimation
+		anim
+		{
+			name killer
+		}
+		center
+		{
+			x 0
+			y 0
+		}
+		dim
+		{
+			hw 0.7
+			hh 0.7
+		}
+		start true
+	}
+}

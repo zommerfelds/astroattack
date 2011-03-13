@@ -11,27 +11,25 @@
 #ifndef COMPPLAYERCONTROLLER_H
 #define COMPPLAYERCONTROLLER_H
 
-#include "../GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
+#include <map>
 
 #include "../Component.h"
 #include "../GameEvents.h"
-
-#include <map>
+#include "../World.h"
 
 class CompPhysics;
-
 class InputSubSystem; // benötigt Eingabesystem für die Tasten zu lesen
 
 class CompPlayerController : public Component
 {
 public:
-    CompPlayerController( const InputSubSystem&, std::map<const std::string, int>::iterator itJetPackVar );
+    CompPlayerController( const InputSubSystem&, WorldVariablesMap::iterator itJetPackVar );
 
-    const CompIdType& getComponentId() const { return COMPONENT_ID; }
-    static const CompIdType COMPONENT_ID;
+    const ComponentTypeId& getTypeId() const { return COMPONENT_TYPE_ID; }
+    static const ComponentTypeId COMPONENT_TYPE_ID;
 
-    static boost::shared_ptr<CompPlayerController> loadFromXml(const pugi::xml_node& compElem, const InputSubSystem&, std::map<const std::string, int>::iterator itJetPackVar);
-    virtual void writeToXml(pugi::xml_node&) const {}; // this component has no XML data
+    void loadFromPropertyTree(const boost::property_tree::ptree& propTree);
+    void writeToPropertyTree(boost::property_tree::ptree& propTree) const {}
 
 private:
     const InputSubSystem& m_inputSubSystem;
@@ -44,7 +42,7 @@ private:
     bool m_currentFrictionIsLow;
 
     EventConnection m_eventConnection;
-    std::map<const std::string, int>::iterator m_itJetPackVar;
+    WorldVariablesMap::iterator m_itJetPackVar;
 
     // Player controller fields
     bool m_spaceKeyDownLastUpdate;     // ob die Leerschlagtaste letztes Frame gerade gedrückt wurde

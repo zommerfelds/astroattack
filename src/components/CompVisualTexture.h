@@ -13,14 +13,10 @@
 #ifndef COMPVISUALTEXTURE_H
 #define COMPVISUALTEXTURE_H
 
-#include "../GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
+#include <map>
 
 #include "../Component.h"
 #include "../Texture.h"
-
-#include <map>
-
-namespace pugi { class xml_node; }
 
 //--------------------------------------------//
 //-------- CompVisualTexture Klasse ----------//
@@ -28,24 +24,25 @@ namespace pugi { class xml_node; }
 class CompVisualTexture : public Component
 {
 public:
-    CompVisualTexture( TextureIdType texId );
+    CompVisualTexture();
+    CompVisualTexture( TextureId texId );
 
-	const CompIdType& getComponentId() const { return COMPONENT_ID; }
-	static const CompIdType COMPONENT_ID;
+	const ComponentTypeId& getTypeId() const { return COMPONENT_TYPE_ID; }
+	static const ComponentTypeId COMPONENT_TYPE_ID;
 
     // Textur setzen
-    void setTexture( TextureIdType texId ) { m_textureId = texId; }
+    void setTexture( TextureId texId ) { m_textureId = texId; }
     // Aktive Textur
-    TextureIdType getTexture() const { return m_textureId; }
+    TextureId getTextureId() const { return m_textureId; }
     size_t getNumTexturedEdges() const { return m_edgeTexId.size(); }
-    TextureIdType getEdgeTexture(size_t edgeNum) const;
+    TextureId getEdgeTexture(size_t edgeNum) const;
 
-    static boost::shared_ptr<CompVisualTexture> loadFromXml(const pugi::xml_node& compElem);
-    void writeToXml(pugi::xml_node& compNode) const;
+    void loadFromPropertyTree(const boost::property_tree::ptree& propTree);
+    void writeToPropertyTree(boost::property_tree::ptree& propTree) const;
 
 private:
-    TextureIdType m_textureId;
-    std::map<size_t, TextureIdType> m_edgeTexId;
+    TextureId m_textureId;
+    std::map<size_t, TextureId> m_edgeTexId;
 };
 
 #endif

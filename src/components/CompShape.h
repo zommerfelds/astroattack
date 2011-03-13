@@ -8,15 +8,12 @@
 #ifndef COMPSHAPE_H
 #define COMPSHAPE_H
 
-#include "../GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
-
-#include "../Component.h"
-
 #include <boost/shared_ptr.hpp>
 #include <vector>
 
+#include "../Component.h"
 #include "../Vector2D.h"
-namespace pugi { class xml_node; }
+
 class b2Shape;
 
 //--------------------------------------------//
@@ -27,16 +24,14 @@ class CompShape : public Component
 public:
 	virtual ~CompShape() {}
 
-    const CompIdType& getComponentId() const { return COMPONENT_ID; }
-
-    static boost::shared_ptr<CompShape> loadFromXml(const pugi::xml_node& compElem);
+    const ComponentTypeId& getTypeId() const { return COMPONENT_TYPE_ID; }
 
     virtual boost::shared_ptr<b2Shape> toB2Shape() const = 0;
 
     enum Type { Polygon, Circle };
     virtual Type getType() const = 0;
 
-	static const CompIdType COMPONENT_ID;
+	static const ComponentTypeId COMPONENT_TYPE_ID;
 };
 
 //--------------------------------------------//
@@ -45,8 +40,8 @@ public:
 class CompShapePolygon : public CompShape
 {
 public:
-    static boost::shared_ptr<CompShapePolygon> loadFromXml(const pugi::xml_node& polyElem);
-    void writeToXml(pugi::xml_node& compElem) const;
+    void loadFromPropertyTree(const boost::property_tree::ptree& propTree);
+    void writeToPropertyTree(boost::property_tree::ptree& propTree) const;
 
     boost::shared_ptr<b2Shape> toB2Shape() const; // up to the caller to delete the shape
 
@@ -72,8 +67,8 @@ public:
 	CompShapeCircle();
 	CompShapeCircle(const Vector2D& center, float radius);
 
-    static boost::shared_ptr<CompShapeCircle> loadFromXml(const pugi::xml_node& circleElem);
-    void writeToXml(pugi::xml_node& compElem) const;
+    void loadFromPropertyTree(const boost::property_tree::ptree& propTree);
+    void writeToPropertyTree(boost::property_tree::ptree& propTree) const;
 
     boost::shared_ptr<b2Shape> toB2Shape() const;
 

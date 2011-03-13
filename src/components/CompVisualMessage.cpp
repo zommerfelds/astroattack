@@ -4,30 +4,29 @@
  * Copyright 2011 Christian Zommerfelds
  */
 
-#include "../GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
+#include <boost/property_tree/ptree.hpp>
 
 #include "CompVisualMessage.h"
 
-#include "../contrib/pugixml/pugixml.hpp"
-#include <boost/make_shared.hpp>
-
 // eindeutige ID
-const CompIdType CompVisualMessage::COMPONENT_ID = "CompVisualMessage";
+const ComponentTypeId CompVisualMessage::COMPONENT_TYPE_ID = "CompVisualMessage";
 
 // Konstruktor
-CompVisualMessage::CompVisualMessage( std::string text )
+CompVisualMessage::CompVisualMessage(std::string text)
 : m_text ( text )
 {}
 
-boost::shared_ptr<CompVisualMessage> CompVisualMessage::loadFromXml(const pugi::xml_node& compElem)
+void CompVisualMessage::setMsg(std::string text)
 {
-    const char* msg = compElem.child("msg").attribute("text").value();
-
-    return boost::make_shared<CompVisualMessage>(msg);
+    m_text = text;
 }
 
-void CompVisualMessage::writeToXml(pugi::xml_node& compNode) const
+void CompVisualMessage::loadFromPropertyTree(const boost::property_tree::ptree& propTree)
 {
-    pugi::xml_node textNode = compNode.append_child("msg");
-    textNode.append_attribute("text").set_value(getMsg().c_str());
+    m_text = propTree.get<std::string>("text");
+}
+
+void CompVisualMessage::writeToPropertyTree(boost::property_tree::ptree& propTree) const
+{
+    propTree.add("text", getMsg());
 }

@@ -6,15 +6,17 @@
 
 // CompPhysics.h für mehr Informationen
 
-#include "../GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
-
-#include "CompPhysics.h"
 #include <Box2D/Box2D.h>       // extere Physikbibliothek
 #include <boost/make_shared.hpp>
-#include "../contrib/pugixml/pugixml.hpp"
+#include <boost/foreach.hpp>
+#include <boost/property_tree/ptree.hpp>
+
+#include "CompPhysics.h"
+
+using boost::property_tree::ptree;
 
 // eindeutige ID
-const CompIdType CompPhysics::COMPONENT_ID = "CompPhysics";
+const ComponentTypeId CompPhysics::COMPONENT_TYPE_ID = "CompPhysics";
 
 // Konstruktor
 CompPhysics::CompPhysics(const BodyDef& rBodyDef) :
@@ -33,7 +35,7 @@ void CompPhysics::addShapeDef( const boost::shared_ptr<ShapeDef>& pShapeDef )
     m_shapeInfos.push_back( pShapeDef );
 }
 
-bool CompPhysics::setShapeFriction(const CompNameType& shapeName, float friction)
+bool CompPhysics::setShapeFriction(const ComponentId& shapeName, float friction)
 {
     FixtureMap::const_iterator it = m_fixtureMap.find( shapeName );
     if ( it != m_fixtureMap.end() )
@@ -157,25 +159,22 @@ Vector2D CompPhysics::getCenterOfMassPosition() const
     return Vector2D( m_body->GetWorldCenter() );
 }
 
-boost::shared_ptr<CompPhysics> CompPhysics::loadFromXml(const pugi::xml_node& compElem)
+void CompPhysics::loadFromPropertyTree(const ptree& propTree)
 {
-    pugi::xml_node dampElem = compElem.child("damping");
-    float linearDamping = dampElem.attribute("linear").as_float();
-    float angularDamping = dampElem.attribute("angular").as_float();
+    float linearDamping = propTree.get("damping.linear", 0.0f);
+    float angularDamping = propTree.get("damping.angular", 0.0f);
 
-    bool fixedRotation = !compElem.child("fixedRotation").empty();
+    bool fixedRotation = propTree.get("isFixedRotation", false);
 
-    bool isBullet = !compElem.child("bullet").empty();
+    bool isBullet = propTree.get("isBullet", false);
 
-    pugi::xml_node rotPtElem = compElem.child("rotationPoint");
     Vector2D rotationPoint;
-    rotationPoint.x = rotPtElem.attribute("x").as_float();
-    rotationPoint.y = rotPtElem.attribute("y").as_float();
+    rotationPoint.x = propTree.get("rotationPoint.x", 0.0f);
+    rotationPoint.y = propTree.get("rotationPoint.y", 0.0f);
 
-    pugi::xml_node gravPtElem = compElem.child("gravitationPoint");
     Vector2D gravitationPoint;
-    gravitationPoint.x = gravPtElem.attribute("x").as_float();
-    gravitationPoint.y = gravPtElem.attribute("y").as_float();
+    gravitationPoint.x = propTree.get("gravitationPoint.x", 0.0f);
+    gravitationPoint.y = propTree.get("gravitationPoint.y", 0.0f);
 
     BodyDef body_def;
     body_def.angularDamping = angularDamping;
@@ -183,57 +182,60 @@ boost::shared_ptr<CompPhysics> CompPhysics::loadFromXml(const pugi::xml_node& co
     body_def.bullet = isBullet;
     body_def.linearDamping = linearDamping;
 
-    boost::shared_ptr<CompPhysics> compPhysics = boost::make_shared<CompPhysics> ();
-    compPhysics->setLocalRotationPoint(rotationPoint);
-    compPhysics->setLocalGravitationPoint(gravitationPoint);
+    setLocalRotationPoint(rotationPoint);
+    setLocalGravitationPoint(gravitationPoint);
 
-    for (pugi::xml_node shapeElem = compElem.child("shape"); shapeElem; shapeElem = shapeElem.next_sibling("shape"))
+    BOOST_FOREACH(const ptree::value_type &v, propTree)
     {
-        std::string shapeName = shapeElem.attribute("comp_name").value();
+        if (v.first != "shape")
+            continue;
 
-        float density = shapeElem.attribute("density").as_float();
-        float friction = shapeElem.attribute("friction").as_float();
-        float restitution = shapeElem.attribute("restitution").as_float();
+        const ptree& shapeProps = v.second;
+        std::string shapeName = shapeProps.get<std::string>("comp_name");
 
-        bool isSensor = shapeElem.attribute("isSensor").as_bool();
+        float density = shapeProps.get("density", 0.0f);
+        float friction = shapeProps.get("friction", 0.0f);
+        float restitution = shapeProps.get("restitution", 0.0f);
+
+        bool isSensor = shapeProps.get("isSensor", false);
 
         if (density != 0.0f)
             body_def.type = BodyDef::dynamicBody;
 
-        compPhysics->addShapeDef(boost::make_shared<ShapeDef>(shapeName, density, friction, restitution, isSensor));
+        addShapeDef(boost::make_shared<ShapeDef>(shapeName, density, friction, restitution, isSensor));
     }
 
-    compPhysics->setBodyDef(body_def);
-    return compPhysics;
+    setBodyDef(body_def);
 }
 
-void CompPhysics::writeToXml(pugi::xml_node& compNode) const
+void CompPhysics::writeToPropertyTree(ptree& propTree) const
 {
     // damping element
-    pugi::xml_node dampNode = compNode.append_child("damping");
-    dampNode.append_attribute("linear").set_value(getLinearDamping());
-    dampNode.append_attribute("angular").set_value(getAngularDamping());
+
+    propTree.add("damping.linear", getLinearDamping());
+    propTree.add("damping.angular", getAngularDamping());
 
     if (isFixedRotation())
     {
-        compNode.append_child("fixedRotation");
+        propTree.add("isFixedRotation", true);
     }
 
     if (isBullet())
     {
-        compNode.append_child("isBullet");
+        propTree.add("isBullet", true);
     }
 
     for (ShapeInfoVec::const_iterator it = getShapeInfos().begin(); it != getShapeInfos().end(); ++it)
     {
-        pugi::xml_node shapeNode = compNode.append_child("shape");
-        shapeNode.append_attribute("comp_name").set_value((*it)->compName.c_str());
+        ptree shapePropTree;
+        shapePropTree.add("comp_name", (*it)->compName);
 
-        shapeNode.append_attribute("density").set_value((*it)->density);
-        shapeNode.append_attribute("friction").set_value((*it)->friction);
-        shapeNode.append_attribute("restitution").set_value((*it)->restitution);
+        shapePropTree.add("density", (*it)->density);
+        shapePropTree.add("friction", (*it)->friction);
+        shapePropTree.add("restitution", (*it)->restitution);
 
         if ((*it)->isSensor)
-            shapeNode.append_attribute("isSensor").set_value("true");
+            shapePropTree.add("isSensor", true);
+        propTree.add_child("shape", shapePropTree);
     }
 }

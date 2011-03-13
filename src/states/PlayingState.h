@@ -11,14 +11,14 @@
 #ifndef PLAYINGSTATE_H
 #define PLAYINGSTATE_H
 
-#include "../GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
-#include "../GameStates.h"
-#include "../GameEvents.h"
 #include <set>
 #include <string>
 
+#include "../GameStates.h"
+#include "../GameEvents.h"
 #include "../World.h"
 #include "../CameraController.h"
+
 class Entity;
 class EventConnection;
 
@@ -30,7 +30,7 @@ class PlayingState : public GameState
 public:
     PlayingState( SubSystems& subSystems, std::string levelFileName );
 
-    const StateIdType& getId() const { return stateId; }
+    const GameStateId& getId() const { return stateId; }
 
 	void init();        // State starten
 	void cleanup();     // State abbrechen
@@ -42,7 +42,7 @@ public:
 	void update();      // Spiel aktualisieren
 	void draw( float accumulator );        // Spiel zeichnen
 private:
-    static const StateIdType stateId;
+    static const GameStateId stateId;
     
     GameWorld m_gameWorld;          // Spielwelt
     CameraController m_cameraController;        // Kamera

@@ -9,10 +9,7 @@
 #ifndef LOGGER_H
 #define LOGGER_H
 
-#include "GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
-
 #include <fstream>
-#define LOG_BUF_SIZE 8192
 
 /*
     Diese Klasse kann Texte in einer Log-Datei speichern.
@@ -25,7 +22,7 @@ public:
 
     bool openFile( const char *pFileName ); // Neue Datei öffnen
 	void closeFile(); // Datei schliessen
-    bool isOpen() { return m_isOpen; } // Is eine Datei offen?
+    bool isOpen() const { return m_isOpen; } // Is eine Datei offen?
     const char* write( const char *format, ... ); // Text in Datei schreiben
     void writeCurrentTime(); // Zeit aufschreiben
     void setIndentationLevel( int level ) { m_indentationLevel = level; } // Texteinrückung bestimmen
@@ -39,7 +36,8 @@ private:
                                                            // verwenden muss: Logger( const char *pFileName )
                                                            // So wird versichert, dass schon an Anfang eine Datei offen ist.
     std::ofstream m_LogStreamOut;
-    char m_buf[LOG_BUF_SIZE];
+    static const int cLogBufSize = 8192;
+    char m_buf[cLogBufSize];
     bool m_isOpen;
     unsigned int m_indentationLevel;
 

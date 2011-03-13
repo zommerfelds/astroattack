@@ -12,14 +12,10 @@
 #ifndef COMPVISUALANIMATION_H
 #define COMPVISUALANIMATION_H
 
-#include "../GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
-
 #include "../Component.h"
 #include "../Texture.h"
 #include "../GameEvents.h"
-
 #include "../Vector2D.h"
-namespace pugi { class xml_node; }
 
 //--------------------------------------------//
 //------ CompVisualAnimation Klasse ----------//
@@ -27,13 +23,15 @@ namespace pugi { class xml_node; }
 class CompVisualAnimation : public Component
 {
 public:
-    CompVisualAnimation( const AnimInfo* pAnimInfo );
+    CompVisualAnimation( const AnimationManager& animManager );
 
-    const CompIdType& getComponentId() const { return COMPONENT_ID; }
-	static const CompIdType COMPONENT_ID;
+    const ComponentTypeId& getTypeId() const { return COMPONENT_TYPE_ID; }
+	static const ComponentTypeId COMPONENT_TYPE_ID;
+
+	void setAnim(const AnimationId& animInfoId);
 
     // Welche Textur muss rerade gezeichnet werden? (Eine Animation besteht aus mehreren Texturen)
-    TextureIdType getCurrentTexture() const;
+    TextureId getCurrentTexture() const;
 
     // Die Mitte der Animation (relativ zur Position der Einheit)
     const Vector2D& center() { return m_center; }
@@ -51,8 +49,8 @@ public:
     int isRunning() const { return m_running; }                // ob die Animation gerade läuft
 
     // Animationsstand (z.B. Rennen, Springen, Reden )
-    void setState( StateIdType new_state );
-    StateIdType getState() { return m_curState; }    
+    void setState( AnimStateId new_state );
+    AnimStateId getState() { return m_curState; }    
 
     const AnimInfo* getAnimInfo() const { return m_animInfo; }    
 
@@ -60,14 +58,15 @@ public:
     void setFlip( bool flip ) { m_flip = flip; }
     bool getFlip() { return m_flip; }
 
-    static boost::shared_ptr<CompVisualAnimation> loadFromXml(const pugi::xml_node& compElem, const AnimationManager& animMngr);
-    void writeToXml(pugi::xml_node& compNode) const;
+    void loadFromPropertyTree(const boost::property_tree::ptree& propTree);
+    void writeToPropertyTree(boost::property_tree::ptree& propTree) const;
 
 private:
 
     // Animation Aktualisieren
     void onUpdate();
 
+    const AnimationManager& m_animManager;
     EventConnection m_eventConnection;
 
     // für Anzeige
@@ -78,8 +77,9 @@ private:
     // für Animation
     int m_currentFrame;
     int m_updateCounter;
-    const AnimInfo * m_animInfo;
-    StateIdType m_curState;
+    const AnimInfo* m_animInfo;
+    AnimationId m_animInfoId;
+    AnimStateId m_curState;
     bool m_running;
     bool m_wantToFinish;
     bool m_flip;

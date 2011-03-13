@@ -10,24 +10,20 @@
 #ifndef WORLD_H
 #define WORLD_H
 
-#include "GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
-
 #include <vector>
 #include <map>
 #include <string>
+#include <boost/shared_ptr.hpp>
+
+#include "Entity.h"
 
 class Vector2D;
 struct GameEvents;
 class Logger;
 
-#include "Entity.h"
-
-#include <boost/shared_ptr.hpp>
-
-typedef std::string WorldVariableIdType;
-
+typedef std::string WorldVariableId;
 typedef std::map<const EntityIdType, boost::shared_ptr<Entity> > EntityMap;
-typedef std::map<const WorldVariableIdType, int> WorldVariblesMap;
+typedef std::map<const WorldVariableId, int> WorldVariablesMap;
 
 /*
     Hier ist die Spielwelt gespeichert.
@@ -43,9 +39,9 @@ public:
     Entity* getEntity( const EntityIdType& id ) const;
     const EntityMap& getAllEntities() const;
 
-    int getVariable( const WorldVariableIdType& varName );
-    WorldVariblesMap::iterator getItToVariable( const WorldVariableIdType& varName );
-    void setVariable( const WorldVariableIdType& varName, int value );
+    int getVariable( const WorldVariableId& varName );
+    WorldVariablesMap::iterator getItToVariable( const WorldVariableId& varName );
+    void setVariable( const WorldVariableId& varName, int value );
 
     void writeWorldToLogger( Logger& log );
 
@@ -53,7 +49,7 @@ private:
     GameEvents& m_gameEvents;
 
     EntityMap m_entities;
-    WorldVariblesMap m_variables;
+    WorldVariablesMap m_variables;
 };
 
 #endif

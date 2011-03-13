@@ -9,9 +9,8 @@
 #ifndef MAINMENUSTATE_H
 #define MAINMENUSTATE_H
 
-#include "../GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
-#include "../GameStates.h"
 #include <string>
+#include "../GameStates.h"
 
 const float cBackgroundColor[3] = { 0.3f, 0.1f, 0.2f };
 
@@ -23,7 +22,7 @@ class GameOverState : public GameState
 public:
     GameOverState( SubSystems& subSystems, std::string stringToShow, std::string levelFileName );
 
-    const StateIdType& getId() const { return stateId; }
+    const GameStateId& getId() const { return stateId; }
 
 	void init();        // State starten
 	void cleanup();     // State abbrechen
@@ -35,7 +34,7 @@ public:
 	void update();      // Spiel aktualisieren
 	void draw( float accumulator );        // Spiel zeichnen
 private:
-    static const StateIdType stateId;
+    static const GameStateId stateId;
 
     std::string m_stringToShow;
     std::string m_levelFileName;

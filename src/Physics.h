@@ -9,23 +9,19 @@
 #ifndef PHYSICS_H
 #define PHYSICS_H
 
-#include "GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
-
 #include <vector>
+#include <Box2D/Box2D.h>
 
 #include "Event.h"
-#include <Box2D/Box2D.h>
 #include "Vector2D.h"
-
-extern const float PHYS_DELTA_TIME;
 
 struct GameEvents;
 class Entity;
 class EventConnection;
 class CompPhysics;
 class CompGravField;
-//class b2World;
-//class Vector2D;
+
+extern const float cPhysicsTimeStep;
 
 class PhysicsSubSystem
 {

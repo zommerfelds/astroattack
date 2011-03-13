@@ -147,7 +147,6 @@
     <ClInclude Include="..\src\states\PlayingState.h" />
     <ClInclude Include="..\src\states\SlideShowState.h" />
     <ClInclude Include="..\src\Exception.h" />
-    <ClInclude Include="..\src\GNU_config.h" />
     <ClInclude Include="..\src\Logger.h" />
     <ClInclude Include="..\src\Vector2D.h" />
   </ItemGroup>

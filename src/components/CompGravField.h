@@ -9,15 +9,9 @@
 #ifndef COMPGRAVFIELD_H
 #define COMPGRAVFIELD_H
 
-#include "../GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
-
-#include "../Component.h"
 #include <set>
-
-enum GravType { Directional, Radial };
-
+#include "../Component.h"
 #include "Vector2D.h"
-namespace pugi { class xml_node; }
 
 //--------------------------------------------//
 //--------- CompGravField Klasse -------------//
@@ -25,10 +19,12 @@ namespace pugi { class xml_node; }
 class CompGravField : public Component
 {
 public:
+    enum GravType { Directional, Radial };
+
     CompGravField();
 
-    const CompIdType& getComponentId() const { return COMPONENT_ID; }
-    static const CompIdType COMPONENT_ID; // eindeutige ID für diese Komponentenart (gleich wie Klassennamen, siehe CompGravField.cpp)
+    const ComponentTypeId& getTypeId() const { return COMPONENT_TYPE_ID; }
+    static const ComponentTypeId COMPONENT_TYPE_ID; // eindeutige ID für diese Komponentenart (gleich wie Klassennamen, siehe CompGravField.cpp)
 
     // Setters
 	void setGravType( GravType t ) { m_gravType = t; }
@@ -46,8 +42,8 @@ public:
 	// Get the acceleration of a body with center of mass "centerOfMass"
 	Vector2D getAcceleration(const Vector2D& centerOfMass) const;
 
-    static boost::shared_ptr<CompGravField> loadFromXml(const pugi::xml_node& compElem);
-    void writeToXml(pugi::xml_node& compNode) const;
+    void loadFromPropertyTree(const boost::property_tree::ptree& propTree);
+    void writeToPropertyTree(boost::property_tree::ptree& propTree) const;
 
 private:
 

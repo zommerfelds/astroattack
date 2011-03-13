@@ -7,8 +7,6 @@
 #ifndef EVENT_H
 #define EVENT_H
 
-#include "GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
-
 #include <list>
 #include <boost/function.hpp>
 

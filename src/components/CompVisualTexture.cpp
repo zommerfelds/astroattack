@@ -4,85 +4,82 @@
  * Copyright 2011 Christian Zommerfelds
  */
 
-#include "../GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
+#include <sstream>
+#include <boost/foreach.hpp>
+#include <boost/property_tree/ptree.hpp>
 
 #include "CompVisualTexture.h"
-
-#include <boost/foreach.hpp>
-#include "../contrib/pugixml/pugixml.hpp"
-#include "../contrib/pugixml/foreach.hpp"
-
-#include <boost/make_shared.hpp>
 #include "CompShape.h"
 
-#include <sstream>
+using boost::property_tree::ptree;
 
 // eindeutige ID
-const CompIdType CompVisualTexture::COMPONENT_ID = "CompVisualTexture";
+const ComponentTypeId CompVisualTexture::COMPONENT_TYPE_ID = "CompVisualTexture";
 
-CompVisualTexture::CompVisualTexture( TextureIdType texId ): m_textureId(texId)
-{}
+CompVisualTexture::CompVisualTexture(): m_textureId () {}
 
-boost::shared_ptr<CompVisualTexture> CompVisualTexture::loadFromXml(const pugi::xml_node& compElem)
+CompVisualTexture::CompVisualTexture( TextureId texId ): m_textureId (texId) {}
+
+void CompVisualTexture::loadFromPropertyTree(const ptree& propTree)
 {
-    std::string strTexName = compElem.child("tex").attribute("name").value();
+    m_textureId = propTree.get<std::string>("texture");
 
-    boost::shared_ptr<CompVisualTexture> comp = boost::make_shared<CompVisualTexture>(strTexName);
-
-    for(pugi::xml_node edgeElem = compElem.child("edge"); edgeElem; edgeElem = edgeElem.next_sibling("edge"))
+    BOOST_FOREACH(const ptree::value_type &v, propTree)
     {
-    	const char* texName = edgeElem.attribute("tex").value();
-    	const char* edgeNums = edgeElem.attribute("edges").value();
+        if (v.first != "edge")
+            continue;
 
-    	if (texName[0] == 0 || edgeNums[0] == 0)
-    		continue; // TODO: disp error
+        const ptree& edgeProps = v.second;
 
-    	std::istringstream iss (edgeNums);
-    	for (;;)
-    	{
-    		size_t edgeNum = 0;
-    		iss >> edgeNum;
-    		if ( iss.rdstate() & std::istringstream::failbit ) {
-    			break;
-    		}
-    		//if (edgeNum >= 0 && edgeNum < CompShapePolygon::cMaxVertices)
-    		comp->m_edgeTexId[edgeNum] = texName;
-    		// TODO: disp error
-    	}
+        std::string texName = edgeProps.get<std::string>("tex");
+        std::string edgeNumStr = edgeProps.get<std::string>("edges");
+
+        std::istringstream iss (edgeNumStr);
+        for (;;)
+        {
+            size_t edgeNum = 0;
+            iss >> edgeNum;
+            if ( iss.rdstate() & std::istringstream::failbit ) {
+                break;
+            }
+            //if (edgeNum >= 0 && edgeNum < CompShapePolygon::cMaxVertices)
+            m_edgeTexId[edgeNum] = texName;
+            // TODO: disp error
+        }
     }
-    return comp;
 }
 
-void CompVisualTexture::writeToXml(pugi::xml_node& compNode) const
+void CompVisualTexture::writeToPropertyTree(boost::property_tree::ptree& propTree) const
 {
-    pugi::xml_node texNode = compNode.append_child("tex");
-    texNode.append_attribute("name").set_value(getTexture().c_str());
+    propTree.add("texture", getTextureId());
 
-    std::map<TextureIdType, std::set<size_t> > edgeTextures;
+    std::map<TextureId, std::set<size_t> > edgeTextures;
     for (size_t i=0; i<CompShapePolygon::cMaxVertices; i++)
     {
-        TextureIdType edgeTex = getEdgeTexture(i);
+        TextureId edgeTex = getEdgeTexture(i);
         if (!edgeTex.empty())
         {
             edgeTextures[edgeTex].insert(i);
         }
     }
-    for (std::map<TextureIdType, std::set<size_t> >::iterator it = edgeTextures.begin(); it != edgeTextures.end(); it++)
+    for (std::map<TextureId, std::set<size_t> >::iterator it = edgeTextures.begin(); it != edgeTextures.end(); it++)
     {
-        pugi::xml_node edgeNode = compNode.append_child("edge");
+        ptree edgePropTree;
         std::ostringstream edgeString;
         BOOST_FOREACH(size_t e, it->second)
         {
             edgeString << e << " ";
         }
-        edgeNode.append_attribute("tex").set_value(it->first.c_str());
-        edgeNode.append_attribute("edges").set_value(edgeString.str().c_str());
+        edgePropTree.add("tex", it->first);
+        edgePropTree.add("edges", edgeString.str());
+
+        propTree.add_child("edge", edgePropTree);
     }
 }
 
-TextureIdType CompVisualTexture::getEdgeTexture(size_t edgeNum) const
+TextureId CompVisualTexture::getEdgeTexture(size_t edgeNum) const
 {
-    std::map<size_t, TextureIdType>::const_iterator it = m_edgeTexId.find(edgeNum);
+    std::map<size_t, TextureId>::const_iterator it = m_edgeTexId.find(edgeNum);
     if (it == m_edgeTexId.end())
         return "";
     return it->second;

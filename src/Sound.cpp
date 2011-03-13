@@ -4,14 +4,12 @@
  * Copyright 2011 Christian Zommerfelds
  */
 
-// Sound Funktionen
+#include <boost/bind.hpp>
 
-#include "GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
 #include "Sound.h"
 #include "SDL_mixer.h"
 #include "main.h" // wichtige Definitionen und Dateien einbinden
 #include "Exception.h" // Ausnahmen im Program (werden in main.cpp eingefangen)
-#include <boost/bind.hpp>
 
 /*void Vol(int chan, void *stream, int len, void *udata)
 {
@@ -27,7 +25,7 @@
 
 SoundSubSystem* SoundSubSystem::soundSystemToNotifyMusicFinished = NULL;
 
-SoundSubSystem::SoundSubSystem() : m_isInit ( false ), m_deletePlayingMusicAtEnd ( false )
+SoundSubSystem::SoundSubSystem() : m_isInit ( false ), m_currentPlayingMusic (), m_deletePlayingMusicAtEnd ( false )
 {
 }
 
@@ -89,7 +87,7 @@ void SoundSubSystem::musicFinishedCallback()
     soundSystemToNotifyMusicFinished->onMusicFinished();
 }
 
-void SoundSubSystem::loadSound( const char *name, SoundIdType id )
+void SoundSubSystem::loadSound( const std::string& name, SoundId id )
 {
     if ( !m_isInit )
     {
@@ -101,7 +99,7 @@ void SoundSubSystem::loadSound( const char *name, SoundIdType id )
         gAaLog.write ( "Warning loading sound: Sound with ID \"%s\" exists already! (new sound was not loaded)\n", id.c_str() );
         return;
     }
-    Mix_Chunk *sample = Mix_LoadWAV( name );
+    Mix_Chunk *sample = Mix_LoadWAV( name.c_str() );
     if( !sample )
     {
         gAaLog.write ( "Error loading sound: %s\n", Mix_GetError() );
@@ -111,7 +109,7 @@ void SoundSubSystem::loadSound( const char *name, SoundIdType id )
     m_sounds.insert( std::make_pair(id,sample) );
 }
 
-void SoundSubSystem::freeSound(const SoundIdType &id)
+void SoundSubSystem::freeSound(const SoundId &id)
 {
     SoundMap::iterator c_it = m_sounds.find( id );
     if ( c_it != m_sounds.end() )
@@ -130,7 +128,7 @@ void SoundSubSystem::freeSound(const SoundIdType &id)
     }
 }
 
-void SoundSubSystem::playSound(const SoundIdType &id)
+void SoundSubSystem::playSound(const SoundId &id)
 {
     SoundMap::iterator c_it = m_sounds.find( id );
     if ( c_it != m_sounds.end() )
@@ -142,7 +140,7 @@ void SoundSubSystem::playSound(const SoundIdType &id)
     }
 }
 
-void SoundSubSystem::loadMusic(const char *name, MusicIdType id)
+void SoundSubSystem::loadMusic(const std::string& name, MusicId id)
 {
     if ( !m_isInit )
     {
@@ -155,7 +153,7 @@ void SoundSubSystem::loadMusic(const char *name, MusicIdType id)
         return;
     }
     Mix_Music *music;
-    music=Mix_LoadMUS( name );
+    music=Mix_LoadMUS( name.c_str() );
     if( !music )
     {
         gAaLog.write ( "Error loading music: %s\n", Mix_GetError() );
@@ -165,7 +163,7 @@ void SoundSubSystem::loadMusic(const char *name, MusicIdType id)
     m_music.insert( std::make_pair(id,music) );
 }
 
-void SoundSubSystem::freeMusic(const MusicIdType &id)
+void SoundSubSystem::freeMusic(const MusicId &id)
 {
     MusicMap::iterator c_it = m_music.find( id );
     if ( c_it != m_music.end() )
@@ -177,7 +175,7 @@ void SoundSubSystem::freeMusic(const MusicIdType &id)
     }
 }
 
-void SoundSubSystem::playMusic(const MusicIdType &id, bool forever, int fadeInMs)
+void SoundSubSystem::playMusic(const MusicId &id, bool forever, int fadeInMs)
 {
     if (Mix_VolumeMusic(-1) == 0)
         return; // dont do anything if volume is 0, since you cant change the volume while playing. (tmp for saving fading out time)

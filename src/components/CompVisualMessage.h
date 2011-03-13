@@ -9,12 +9,9 @@
 #ifndef COMPVISUALMESSAGE_H
 #define COMPVISUALMESSAGE_H
 
-#include "../GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
+#include <string>
 
 #include "../Component.h"
-#include <string>
-#include <boost/shared_ptr.hpp>
-namespace pugi { class xml_node; }
 
 //--------------------------------------------//
 //-------- CompVisualMessage Klasse ----------//
@@ -22,15 +19,16 @@ namespace pugi { class xml_node; }
 class CompVisualMessage : public Component
 {
 public:
-    CompVisualMessage( std::string text );
+    CompVisualMessage( std::string text="" );
 
-    const CompIdType& getComponentId() const { return COMPONENT_ID; }
-	static const CompIdType COMPONENT_ID; // eindeutige ID für diese Komponentenart (gleich wie Klassennamen, siehe CompCollectable.cpp)
+    const ComponentTypeId& getTypeId() const { return COMPONENT_TYPE_ID; }
+	static const ComponentTypeId COMPONENT_TYPE_ID; // eindeutige ID für diese Komponentenart (gleich wie Klassennamen, siehe CompCollectable.cpp)
 
+	void setMsg(std::string);
     const std::string& getMsg() const { return m_text; }
 
-    static boost::shared_ptr<CompVisualMessage> loadFromXml(const pugi::xml_node& compElem);
-    void writeToXml(pugi::xml_node& compNode) const;
+    void loadFromPropertyTree(const boost::property_tree::ptree& propTree);
+    void writeToPropertyTree(boost::property_tree::ptree& propTree) const;
 
 private:
     std::string m_text;

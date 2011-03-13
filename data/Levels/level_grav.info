@@ -1,0 +1,407 @@
+entity
+{
+	name EdBlock00000
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x -4.5
+				y -1
+			}
+			vertex
+			{
+				x -4.5
+				y -3.5
+			}
+			vertex
+			{
+				x 5.5
+				y -3.5
+			}
+			vertex
+			{
+				x 5.5
+				y -1
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture Craterscape
+	}
+}
+entity
+{
+	name grav1
+	component
+	{
+		id CompGravField
+		type directional
+		gx 0
+		gy -20
+	}
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+			isSensor true
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x -8
+				y 2.5
+			}
+			vertex
+			{
+				x -4.5
+				y -1
+			}
+			vertex
+			{
+				x 5.5
+				y -1
+			}
+			vertex
+			{
+				x 9
+				y 2.5
+			}
+		}
+	}
+}
+entity
+{
+	name grav2
+	component
+	{
+		id CompGravField
+		type directional
+		gx -20
+		gy 0
+	}
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+			isSensor true
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x 5.5
+				y -1
+			}
+			vertex
+			{
+				x 5.5
+				y -3.5
+			}
+			vertex
+			{
+				x 8.5
+				y -8.5
+			}
+			vertex
+			{
+				x 9
+				y 2.5
+			}
+		}
+	}
+}
+entity
+{
+	name grav3
+	component
+	{
+		id CompGravField
+		type directional
+		gx 0
+		gy 20
+	}
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+			isSensor true
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x -4.5
+				y -3.5
+			}
+			vertex
+			{
+				x -9
+				y -7
+			}
+			vertex
+			{
+				x 8.5
+				y -8.5
+			}
+			vertex
+			{
+				x 5.5
+				y -3.5
+			}
+		}
+	}
+}
+entity
+{
+	name grav4
+	component
+	{
+		id CompGravField
+		type directional
+		gx 20
+		gy 0
+	}
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+			isSensor true
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x -8
+				y 2.5
+			}
+			vertex
+			{
+				x -9
+				y -7
+			}
+			vertex
+			{
+				x -4.5
+				y -3.5
+			}
+			vertex
+			{
+				x -4.5
+				y -1
+			}
+		}
+	}
+}
+entity
+{
+	name grav_circular
+	component
+	{
+		id CompGravField
+		type radial
+		cx -25
+		cy 0
+		s 40
+	}
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+			isSensor true
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		circle
+		{
+			x -25
+			y 0
+			r 10
+		}
+	}
+}
+entity
+{
+	name roundPlanet
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		circle
+		{
+			x -25
+			y 0
+			r 3
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture "Liquid Crystal 2"
+		edge
+		{
+			tex EdgeMud1
+			edges "0 "
+		}
+	}
+}

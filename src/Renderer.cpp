@@ -4,36 +4,28 @@
  * Copyright 2011 Christian Zommerfelds
  */
 
-#include "GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
-
-#include "SDL.h"
-// cross platform OpenGL include (provided by SDL)
-#include "SDL_opengl.h"
-
-#include "Renderer.h"
-#include "Entity.h"
 #include <fstream>
 #include <cmath>
 #include <sstream>
+#include <boost/bind.hpp>
+#include <boost/foreach.hpp>
+#include <SDL.h>
+// cross platform OpenGL include (provided by SDL)
+#include <SDL_opengl.h>
+
+#include "Renderer.h"
+#include "Entity.h"
 #include "main.h"
-#include "XmlLoader.h"
-
-// Wegen Zeichnenfrunktionen wie DrawPoly(), DrawVector(), ...
+#include "DataLoader.h"
 #include "Vector2D.h"
-
+#include "GameEvents.h"
 #include "components/CompVisualTexture.h"
 #include "components/CompShape.h"
 #include "components/CompPosition.h"
 #include "components/CompVisualAnimation.h"
 #include "components/CompVisualMessage.h"
 
-#include "GameEvents.h" // Steuert die Spielerreignisse
-
-#include <boost/bind.hpp>
-#include <boost/foreach.hpp>
-
 const char* cGraphisFileName = "data/graphics.xml";
-
 const unsigned int cCircleSlices = 20; // number of slices for drawing a circle
 
 RenderSubSystem::RenderSubSystem( GameEvents& gameEvents )
@@ -92,7 +84,7 @@ void RenderSubSystem::deInit()
 
 bool RenderSubSystem::loadData()
 {
-    XmlLoader::loadGraphics( cGraphisFileName, &m_textureManager, &m_animationManager, &m_fontManager );
+    DataLoader::loadGraphics( cGraphisFileName, &m_textureManager, &m_animationManager, &m_fontManager );
     return true;
 }
 
@@ -270,7 +262,7 @@ void RenderSubSystem::drawOverlay( float r, float g, float b, float a )
 
 void RenderSubSystem::drawTexturedPolygon ( const CompShapePolygon& rPoly, const CompVisualTexture& rTex, bool border )
 {
-    m_textureManager.setTexture( rTex.getTexture() );
+    m_textureManager.setTexture( rTex.getTextureId() );
     glBegin ( GL_POLYGON );
     for ( size_t iCountVertices = 0; iCountVertices < rPoly.getVertexCount(); ++iCountVertices )
     {
@@ -308,7 +300,7 @@ void RenderSubSystem::drawTexturedPolygon ( const CompShapePolygon& rPoly, const
 
 void RenderSubSystem::drawTexturedCircle ( const CompShapeCircle& rCircle, const CompVisualTexture& rTex, bool border )
 {
-    m_textureManager.setTexture( rTex.getTexture() );
+    m_textureManager.setTexture( rTex.getTextureId() );
     GLUquadricObj *pQuacric = gluNewQuadric();
     gluQuadricTexture(pQuacric, true);
     gluQuadricDrawStyle(pQuacric, GLU_FILL);
@@ -479,7 +471,7 @@ void RenderSubSystem::drawEditorCursor ( const Vector2D& rPos )
     glColor4f( 255, 255, 255, 255 );
 }
 
-void RenderSubSystem::drawString( const std::string &str, const FontIdType &fontId, float x, float y, Align horizAlign, Align vertAlign, float red, float green, float blue, float alpha )
+void RenderSubSystem::drawString( const std::string &str, const FontId &fontId, float x, float y, Align horizAlign, Align vertAlign, float red, float green, float blue, float alpha )
 {
     MatrixId stored_matrix = m_currentMatrix;
     setMatrix(Text);
@@ -497,8 +489,8 @@ void RenderSubSystem::drawVisualTextureComps()
         {
             glPushMatrix();
 
-            float angle = compPos->getOrientation();
-            const Vector2D& position = compPos->getPosition();
+            float angle = compPos->getDrawingOrientation();
+            const Vector2D& position = compPos->getDrawingPosition();
 
             glTranslatef(position.x, position.y, 0.0f);
             glRotatef( radToDeg(angle), 0.0, 0.0, 1.0f);
@@ -537,8 +529,8 @@ void RenderSubSystem::drawVisualAnimationComps()
 
             glPushMatrix();
 
-            float angle = compPos->getOrientation();
-            const Vector2D& position = compPos->getPosition();
+            float angle = compPos->getDrawingOrientation();
+            const Vector2D& position = compPos->getDrawingPosition();
 
             bool isFlipped = pAnimComp->getFlip();
             Vector2D center = pAnimComp->center();
@@ -654,12 +646,13 @@ void RenderSubSystem::displayLoadingScreen()
 
     LoadTextureInfo info;
     info.loadMipmaps = false;
-    info.textureWrapModeX = GL_CLAMP;
-    info.textureWrapModeY = GL_CLAMP;
+    info.wrapModeX = LoadTextureInfo::WrapClamp;
+    info.wrapModeY = LoadTextureInfo::WrapClamp;
     info.scale = 1.0;
+    info.quality = (LoadTextureInfo::Quality) gAaConfig.getInt("TexQuality");
     int picw=0,pich=0;
-    m_textureManager.loadTexture("data/Loading.png","loading",info,gAaConfig.getInt("TexQuality"),&picw,&pich);
-    m_textureManager.setTexture( "loading" );
+    m_textureManager.loadTexture("data/Loading.png", "loading", info, &picw, &pich);
+    m_textureManager.setTexture("loading");
     
     //gAaLog.Write( "Pic: w=%i, h=%i\n", picw, pich );
     //gAaLog.Write( "Res: w=%f, h=%f\n", w, h );

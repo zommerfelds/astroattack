@@ -12,15 +12,12 @@
 #ifndef COMPPHYSICS_H
 #define COMPPHYSICS_H
 
-#include "../GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
+#include <vector>
+#include <map>
+#include <boost/shared_ptr.hpp>
 
 #include "../Component.h"
 #include "../Vector2D.h"
-#include <boost/shared_ptr.hpp>
-#include <vector>
-#include <map>
-
-namespace pugi { class xml_node; }
 
 // Klassen und Strukturen von Box2D
 class b2Body;
@@ -94,9 +91,9 @@ struct BodyDef
 
 struct ShapeDef {
     ShapeDef() : density (0.0f), friction (0.0f), restitution (0.0f), isSensor (false) {}
-    ShapeDef(CompNameType n, float d, float f, float r, bool s) : compName (n), density (d), friction (f), restitution (r), isSensor (s) {}
+    ShapeDef(ComponentId n, float d, float f, float r, bool s) : compName (n), density (d), friction (f), restitution (r), isSensor (s) {}
 
-    CompNameType compName; // the name of the CompShape component
+    ComponentId compName; // the name of the CompShape component
     float density;
     float friction;
     float restitution;
@@ -114,14 +111,14 @@ class CompPhysics : public Component
 public:
     CompPhysics(const BodyDef& rBodyDef = BodyDef());
 
-    const CompIdType& getComponentId() const { return COMPONENT_ID; }
+    const ComponentTypeId& getTypeId() const { return COMPONENT_TYPE_ID; }
 
     void setBodyDef(const BodyDef& rBodyDef) { m_bodyDef = rBodyDef; }
 
     // Add a shape to the object. Only do this before attaching the Entity to the world.
     void addShapeDef( const boost::shared_ptr<ShapeDef>& pShapeDef );
 
-    bool setShapeFriction(const CompNameType& shapeName, float friction);
+    bool setShapeFriction(const ComponentId& shapeName, float friction);
     const ShapeInfoVec& getShapeInfos() const { return m_shapeInfos; }
 
     float getMass() const;
@@ -157,10 +154,10 @@ public:
 	// Grav
     const CompGravField* getActiveGravField() const { return m_gravField; }
 
-    static boost::shared_ptr<CompPhysics> loadFromXml(const pugi::xml_node& compElem);
-    void writeToXml(pugi::xml_node& compElem) const;
+    void loadFromPropertyTree(const boost::property_tree::ptree& propTree);
+    void writeToPropertyTree(boost::property_tree::ptree& propTree) const;
 
-	static const CompIdType COMPONENT_ID; // eindeutige ID für diese Komponentenart (gleich wie Klassennamen, siehe CompPhysics.cpp)
+	static const ComponentTypeId COMPONENT_TYPE_ID; // eindeutige ID für diese Komponentenart (gleich wie Klassennamen, siehe CompPhysics.cpp)
 
 private:
 
@@ -174,7 +171,7 @@ private:
     float m_smoothAngle;
 
     ShapeInfoVec m_shapeInfos;
-    typedef std::map<CompNameType, b2Fixture*> FixtureMap;
+    typedef std::map<ComponentId, b2Fixture*> FixtureMap;
     FixtureMap m_fixtureMap;
 
 	const CompGravField* m_gravField;

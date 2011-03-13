@@ -1,0 +1,1536 @@
+entity
+{
+	name Box1
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 30
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x 2.5
+				y 2.5
+			}
+			vertex
+			{
+				x 2.5
+				y 1.5
+			}
+			vertex
+			{
+				x 3.5
+				y 1.5
+			}
+			vertex
+			{
+				x 3.5
+				y 2.5
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture brick
+	}
+}
+entity
+{
+	name Box2
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 30
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x 13
+				y 3
+			}
+			vertex
+			{
+				x 13
+				y 2
+			}
+			vertex
+			{
+				x 14
+				y 2
+			}
+			vertex
+			{
+				x 14
+				y 3
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture brick
+	}
+}
+entity
+{
+	name Box3
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 30
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x 7
+				y 7
+			}
+			vertex
+			{
+				x 7
+				y 6
+			}
+			vertex
+			{
+				x 8
+				y 6
+			}
+			vertex
+			{
+				x 8
+				y 7
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture brick
+	}
+}
+entity
+{
+	name Box4
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 30
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x -2
+				y 4.5
+			}
+			vertex
+			{
+				x -2
+				y 3.5
+			}
+			vertex
+			{
+				x -1
+				y 3.5
+			}
+			vertex
+			{
+				x -1
+				y 4.5
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture brick
+	}
+}
+entity
+{
+	name EdBlock00000
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x -5
+				y -3
+			}
+			vertex
+			{
+				x -5
+				y -4
+			}
+			vertex
+			{
+				x 4
+				y -4
+			}
+			vertex
+			{
+				x 4
+				y -3
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture blocks
+	}
+}
+entity
+{
+	name EdBlock00001
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x 3
+				y -4
+			}
+			vertex
+			{
+				x 3
+				y -7
+			}
+			vertex
+			{
+				x 4
+				y -7
+			}
+			vertex
+			{
+				x 4
+				y -4
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture blocks
+	}
+}
+entity
+{
+	name EdBlock00002
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x 4
+				y -6
+			}
+			vertex
+			{
+				x 4
+				y -7
+			}
+			vertex
+			{
+				x 7
+				y -7
+			}
+			vertex
+			{
+				x 7
+				y -6
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture blocks
+	}
+}
+entity
+{
+	name EdBlock00003
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x 7
+				y -7
+			}
+			vertex
+			{
+				x 8
+				y -7
+			}
+			vertex
+			{
+				x 8
+				y -4
+			}
+			vertex
+			{
+				x 7
+				y -4
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture blocks
+	}
+}
+entity
+{
+	name EdBlock00004
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x 7
+				y -4
+			}
+			vertex
+			{
+				x 13.5
+				y -4
+			}
+			vertex
+			{
+				x 13.5
+				y -3
+			}
+			vertex
+			{
+				x 7
+				y -3
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture blocks
+	}
+}
+entity
+{
+	name EdBlock00005
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x 12.5
+				y -3
+			}
+			vertex
+			{
+				x 13.5
+				y -3
+			}
+			vertex
+			{
+				x 13.5
+				y 2
+			}
+			vertex
+			{
+				x 12.5
+				y 2
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture blocks
+	}
+}
+entity
+{
+	name EdBlock00006
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x 13.5
+				y 2
+			}
+			vertex
+			{
+				x 13.5
+				y 1
+			}
+			vertex
+			{
+				x 16.5
+				y 1
+			}
+			vertex
+			{
+				x 16.5
+				y 2
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture blocks
+	}
+}
+entity
+{
+	name EdBlock00007
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x 15.5
+				y 5
+			}
+			vertex
+			{
+				x 15.5
+				y 2
+			}
+			vertex
+			{
+				x 16.5
+				y 2
+			}
+			vertex
+			{
+				x 16.5
+				y 5
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture blocks
+	}
+}
+entity
+{
+	name EdBlock00008
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x 16.5
+				y 5
+			}
+			vertex
+			{
+				x 16.5
+				y 6
+			}
+			vertex
+			{
+				x 6.5
+				y 6
+			}
+			vertex
+			{
+				x 6.5
+				y 5
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture blocks
+	}
+}
+entity
+{
+	name EdBlock00009
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x 2
+				y 1.5
+			}
+			vertex
+			{
+				x 2
+				y 0.5
+			}
+			vertex
+			{
+				x 4
+				y 0.5
+			}
+			vertex
+			{
+				x 4
+				y 1.5
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture blocks
+	}
+}
+entity
+{
+	name EdBlock00010
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x 9
+				y 6
+			}
+			vertex
+			{
+				x 10
+				y 6
+			}
+			vertex
+			{
+				x 10
+				y 10
+			}
+			vertex
+			{
+				x 9
+				y 10
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture blocks
+	}
+}
+entity
+{
+	name EdBlock00011
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x 0
+				y 10
+			}
+			vertex
+			{
+				x 10
+				y 10
+			}
+			vertex
+			{
+				x 10
+				y 11
+			}
+			vertex
+			{
+				x 0
+				y 11
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture blocks
+	}
+}
+entity
+{
+	name EdBlock00012
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x -1
+				y 11
+			}
+			vertex
+			{
+				x -1
+				y 8
+			}
+			vertex
+			{
+				x 0
+				y 8
+			}
+			vertex
+			{
+				x 0
+				y 11
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture blocks
+	}
+}
+entity
+{
+	name EdBlock00013
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x -5
+				y 8
+			}
+			vertex
+			{
+				x -5
+				y 7
+			}
+			vertex
+			{
+				x 0
+				y 7
+			}
+			vertex
+			{
+				x 0
+				y 8
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture blocks
+	}
+}
+entity
+{
+	name EdBlock00014
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x -5
+				y 7
+			}
+			vertex
+			{
+				x -5
+				y 3.5
+			}
+			vertex
+			{
+				x -4
+				y 3.5
+			}
+			vertex
+			{
+				x -4
+				y 7
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture blocks
+	}
+}
+entity
+{
+	name EdBlock00015
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x -5
+				y 3.5
+			}
+			vertex
+			{
+				x -5
+				y 2.5
+			}
+			vertex
+			{
+				x -1
+				y 2.5
+			}
+			vertex
+			{
+				x -1
+				y 3.5
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture blocks
+	}
+}
+entity
+{
+	name EdBlock00016
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x -5
+				y 2.5
+			}
+			vertex
+			{
+				x -5
+				y -3
+			}
+			vertex
+			{
+				x -4
+				y -3
+			}
+			vertex
+			{
+				x -4
+				y 2.5
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture blocks
+	}
+}
+entity
+{
+	name EdBlock00017
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x 4
+				y 1.5
+			}
+			vertex
+			{
+				x 4
+				y 0
+			}
+			vertex
+			{
+				x 4.5
+				y 0
+			}
+			vertex
+			{
+				x 4.5
+				y 1.5
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture blocks
+	}
+}
+entity
+{
+	name EdBlock00018
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x 3.5
+				y 0
+			}
+			vertex
+			{
+				x 4.5
+				y -1
+			}
+			vertex
+			{
+				x 5.5
+				y 0
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture blocks
+	}
+}
+entity
+{
+	name EdBlock00019
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x 4.5
+				y 1
+			}
+			vertex
+			{
+				x 4.5
+				y 0
+			}
+			vertex
+			{
+				x 5
+				y 0
+			}
+			vertex
+			{
+				x 5
+				y 1
+			}
+		}
+	}
+	component
+	{
+		id CompVisualTexture
+		texture blocks
+	}
+}
+entity
+{
+	name Zone1
+	component
+	{
+		id CompPhysics
+		damping
+		{
+			linear 0
+			angular 0
+		}
+		shape
+		{
+			comp_name shape1
+			density 0
+			friction 0.3
+			restitution 0
+			isSensor true
+		}
+	}
+	component
+	{
+		id CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		id CompShape
+		name shape1
+		polygon
+		{
+			vertex
+			{
+				x 3.5
+				y -3.5
+			}
+			vertex
+			{
+				x 3.5
+				y -6.5
+			}
+			vertex
+			{
+				x 7.5
+				y -6.5
+			}
+			vertex
+			{
+				x 7.5
+				y -3.5
+			}
+		}
+	}
+	component
+	{
+		id CompTrigger
+		condition
+		{
+			id EntityTouchedThis
+			params
+			{
+				entity Box1
+			}
+		}
+		condition
+		{
+			id EntityTouchedThis
+			params
+			{
+				entity Box2
+			}
+		}
+		condition
+		{
+			id EntityTouchedThis
+			params
+			{
+				entity Box3
+			}
+		}
+		condition
+		{
+			id EntityTouchedThis
+			params
+			{
+				entity Box4
+			}
+		}
+		effect
+		{
+			id EndLevel
+			params
+			{
+				msg "The End!"
+				win true
+			}
+		}
+	}
+}

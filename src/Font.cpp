@@ -4,43 +4,22 @@
  * Copyright 2011 Christian Zommerfelds
  */
 
-#include "GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
-
-#include "Font.h"
-
-// cross platform OpenGL include (provided by SDL)
-#include "SDL_opengl.h"
-
-//#include "contrib/utfcpp/utf8.h"
-#include <FTGL/ftgl.h>
-
 #include <utility>
+#include <SDL_opengl.h>
+#include <FTGL/ftgl.h>
 #include <boost/make_shared.hpp>
 
+#include "Font.h"
 #include "main.h"
 
-namespace
-{
-    int PowerOf2(int num)
-    {
-      int value = 1;
-
-      while (value < num)
-      {
-        value <<= 1;
-      }
-      return value;
-    }
-}
-
 // .ttf Datei in in OpenGL Texturen laden laden
-void FontManager::loadFont( const char* fileName, int size, FontIdType id )
+void FontManager::loadFont( const std::string& fileName, int size, FontId id )
 {
     if ( m_fonts.find(id) != m_fonts.end() )
         return;
 
     // Create a pixmap font from a TrueType file.
-    boost::shared_ptr<FTTextureFont> font(boost::make_shared<FTTextureFont>(fileName) );
+    boost::shared_ptr<FTTextureFont> font(boost::make_shared<FTTextureFont>(fileName.c_str()) );
 
     // If something went wrong, return
     if(font->Error())
@@ -52,17 +31,14 @@ void FontManager::loadFont( const char* fileName, int size, FontIdType id )
     m_fonts.insert( std::make_pair(id, font) );
 }
 
-void FontManager::freeFont( FontIdType id )
+void FontManager::freeFont( FontId id )
 {
     FontMap::iterator c_it = m_fonts.find( id );
     if ( c_it != m_fonts.end() )
         m_fonts.erase( c_it ); 
 }
 
-//const float s = 0.0025f;
-//const float line_height = 1.2f;
-
-void FontManager::drawString(const std::string &str, const FontIdType &fontId, float x, float y, Align horizAlign, Align vertAlign, float red, float green, float blue, float alpha )
+void FontManager::drawString(const std::string &str, const FontId &fontId, float x, float y, Align horizAlign, Align vertAlign, float red, float green, float blue, float alpha )
 {
     FontMap::iterator font_it = m_fonts.find( fontId );
     assert ( font_it != m_fonts.end() );
@@ -116,7 +92,7 @@ void FontManager::drawString(const std::string &str, const FontIdType &fontId, f
     glColor4f( 255, 255, 255, 255 );
 }
 
-void FontManager::getDimensions(const std::string &text, const FontIdType &fontId, float& w, float& h) const
+void FontManager::getDimensions(const std::string &text, const FontId &fontId, float& w, float& h) const
 {
 
     FontMap::const_iterator font_it = m_fonts.find( fontId );

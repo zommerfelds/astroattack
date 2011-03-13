@@ -6,9 +6,9 @@
 
 // SlideShowState.h für mehr Informationen
 
-#include "../GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
-#include "SlideShowState.h"
-#include "MainMenuState.h"
+#include <boost/shared_ptr.hpp>
+#include <boost/make_shared.hpp>
+
 #include "../Renderer.h"
 #include "../main.h"
 #include "../GameApp.h"
@@ -16,12 +16,12 @@
 #include "../Vector2D.h"
 #include "../Texture.h"
 #include "../Sound.h"
-#include "../XmlLoader.h"
-#include <boost/shared_ptr.hpp>
-#include <boost/make_shared.hpp>
+#include "../DataLoader.h"
+#include "SlideShowState.h"
+#include "MainMenuState.h"
 
 // eindeutige ID
-const StateIdType SlideShowState::stateId = "SlideShowState";
+const GameStateId SlideShowState::stateId = "SlideShowState";
 
 // Konstruktor
 // slideXmlFile ist der Name der Bildshow-Datei
@@ -58,16 +58,17 @@ void SlideShowState::init()        // State starten
     gAaLog.increaseIndentationLevel();
 
     // "Dia-Show" laden
-    XmlLoader::loadSlideShow( m_slideXmlFile.c_str(), &m_slideShow );
+    DataLoader::loadSlideShow( m_slideXmlFile, &m_slideShow );
 
     // Dazugehörende Bilder laden
     LoadTextureInfo info;
     info.loadMipmaps = false;
-    info.textureWrapModeX = TEX_CLAMP;
-    info.textureWrapModeY = TEX_CLAMP;
+    info.wrapModeX = LoadTextureInfo::WrapClamp;
+    info.wrapModeY = LoadTextureInfo::WrapClamp;
     info.scale = 1.0;
+    info.quality = (LoadTextureInfo::Quality) gAaConfig.getInt("TexQuality");
     for ( size_t i = 0; i < m_slideShow.slides.size(); ++i )
-        getSubSystems().renderer.getTextureManager().loadTexture( m_slideShow.slides[i].imageFileName.c_str(), m_slideShow.slides[i].imageFileName,info,gAaConfig.getInt("TexQuality") );
+        getSubSystems().renderer.getTextureManager().loadTexture( m_slideShow.slides[i].imageFileName, m_slideShow.slides[i].imageFileName, info );
     
     // GUI modus
     getSubSystems().renderer.setMatrix(RenderSubSystem::GUI);
@@ -77,7 +78,7 @@ void SlideShowState::init()        // State starten
     getSubSystems().sound.loadSound( "data/Sounds/keyboard bang.wav", "write" );
     //GetSubSystems().sound.LoadMusic( "data/Music/music.ogg", "music" );
     //GetSubSystems().sound.LoadMusic( "data/Music/music2.ogg", "music2" );
-    getSubSystems().sound.loadMusic( m_slideShow.musicFileName.c_str(), "slideShowMusic" );
+    getSubSystems().sound.loadMusic( m_slideShow.musicFileName, "slideShowMusic" );
 
     getSubSystems().sound.playMusic( "slideShowMusic", true, 0 );
 
@@ -283,7 +284,7 @@ void SlideShowState::draw( float /*accumulator*/ )        // Spiel zeichnen
                                  0.3f + m_imageCornerOffsetX[1] + m_imageCornerOffsetMasterX, 2.47f + m_imageCornerOffsetY[1] + m_imageCornerOffsetMasterY,
                                  3.7f + m_imageCornerOffsetX[2] + m_imageCornerOffsetMasterX, 2.47f + m_imageCornerOffsetY[2] + m_imageCornerOffsetMasterY,
                                  3.7f + m_imageCornerOffsetX[3] + m_imageCornerOffsetMasterX, 0.07f + m_imageCornerOffsetY[3] + m_imageCornerOffsetMasterY };
-        renderer.drawTexturedQuad( texCoord, vertexCoord, m_slideShow.slides[m_currentSlide].imageFileName.c_str(), true );
+        renderer.drawTexturedQuad( texCoord, vertexCoord, m_slideShow.slides[m_currentSlide].imageFileName, true );
     }
     // Text zeichnen
     renderer.drawString( m_slideShow.slides[m_currentSlide].textPages[m_currentTextPage].substr(0,m_dispCharCount), "FontW_b", 0.3f, 2.55f );

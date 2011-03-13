@@ -10,15 +10,13 @@
 #ifndef MAINMENUSTATE_H
 #define MAINMENUSTATE_H
 
-#include "../GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
-#include "../GameStates.h"
-
-#include <boost/shared_ptr.hpp>
 #include <vector>
 #include <string>
 
+#include "../GameStates.h"
+#include "DataLoader.h"
+
 struct Button;
-#include "XmlLoader.h"
 
 enum SubMenu 
 {
@@ -36,7 +34,7 @@ class MainMenuState : public GameState
 public:
     MainMenuState( SubSystems& subSystems, SubMenu startingSubMenu = Main );
 
-    const StateIdType& getId() const { return stateId; }
+    const GameStateId& getId() const { return stateId; }
 
 	void init();        // State starten
 	void cleanup();     // State abbrechen
@@ -48,7 +46,7 @@ public:
 	void update();      // Spiel aktualisieren
 	void draw( float accumulator ); // Spiel zeichnen
 private:
-    static const StateIdType stateId;
+    static const GameStateId stateId;
 
     // --- Callbacks für GUI ---
     void onPressedButPlay();

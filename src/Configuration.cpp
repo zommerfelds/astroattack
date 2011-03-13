@@ -4,16 +4,15 @@
  * Copyright 2011 Christian Zommerfelds
  */
 
-#include "GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
+#include <fstream>
+#include <string>
+#include <sstream>
+#include <boost/foreach.hpp>
 
 #include "main.h" // wichtige Definitionen und Dateien einbinden
 #include "Configuration.h"
 #include "Texture.h"
-#include <fstream>
-#include <string>
-#include <sstream>
 #include "contrib/pugixml/pugixml.hpp"
-#include <boost/foreach.hpp>
 #include "contrib/pugixml/foreach.hpp"
 
 // Standarteinstellungen laden

@@ -7,12 +7,11 @@
 #ifndef ENTITY_H
 #define ENTITY_H
 
-#include "GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
-
 #include <string>
 #include <map>
 #include <vector>
 #include <boost/shared_ptr.hpp>
+
 #include "Component.h"
 
 // TODO: get comp by name
@@ -20,7 +19,7 @@
 class Logger;
 
 typedef std::string EntityIdType;
-typedef std::multimap< const CompIdType, boost::shared_ptr<Component> > ComponentMap;
+typedef std::multimap< const ComponentTypeId, boost::shared_ptr<Component> > ComponentMap;
 
 class Entity
 {
@@ -42,16 +41,16 @@ public:
     // Use the second version if you can only get the component ID at runtime (as a string)
     template <typename CompType>       CompType* getComponent();
     template <typename CompType> const CompType* getComponent() const;
-          Component* getComponent(const CompIdType& rCompId );
-    const Component* getComponent(const CompIdType& rCompId ) const;
+          Component* getComponent(const ComponentTypeId& rCompId );
+    const Component* getComponent(const ComponentTypeId& rCompId ) const;
     
     // === GetComponents ===
     // As GetComponent, this method has 2 versions (see above)
     // Returns a vector of all matching components
     template <typename CompType> std::vector<      CompType*> getComponents();
     template <typename CompType> std::vector<const CompType*> getComponents() const;
-    std::vector<      Component*> getComponents(const CompIdType& rCompId );
-    std::vector<const Component*> getComponents(const CompIdType& rCompId ) const;
+    std::vector<      Component*> getComponents(const ComponentTypeId& rCompId );
+    std::vector<const Component*> getComponents(const ComponentTypeId& rCompId ) const;
 
     const ComponentMap& getAllComponents() const;
 
@@ -71,19 +70,19 @@ private:
 template <typename CompType>
 CompType* Entity::getComponent()
 {
-   return static_cast<CompType*>( getComponent(CompType::COMPONENT_ID) );
+   return static_cast<CompType*>( getComponent(CompType::COMPONENT_TYPE_ID) );
 }
 
 template <typename CompType>
 const CompType* Entity::getComponent() const
 {
-   return static_cast<const CompType*>( getComponent(CompType::COMPONENT_ID) );
+   return static_cast<const CompType*>( getComponent(CompType::COMPONENT_TYPE_ID) );
 }
 
 template <typename CompType>
 std::vector<CompType*> Entity::getComponents()
 {
-    std::pair<ComponentMap::iterator, ComponentMap::iterator> equalRange = m_components.equal_range(CompType::COMPONENT_ID);
+    std::pair<ComponentMap::iterator, ComponentMap::iterator> equalRange = m_components.equal_range(CompType::COMPONENT_TYPE_ID);
     std::vector<CompType*> ret;
 
     for (ComponentMap::iterator it = equalRange.first; it != equalRange.second; ++it )
@@ -94,7 +93,7 @@ std::vector<CompType*> Entity::getComponents()
 template <typename CompType>
 std::vector<const CompType*> Entity::getComponents() const
 {
-    std::pair<ComponentMap::const_iterator, ComponentMap::const_iterator> equalRange = m_components.equal_range(CompType::COMPONENT_ID);
+    std::pair<ComponentMap::const_iterator, ComponentMap::const_iterator> equalRange = m_components.equal_range(CompType::COMPONENT_TYPE_ID);
     std::vector<const CompType*> ret;
 
     for (ComponentMap::const_iterator it = equalRange.first; it != equalRange.second; ++it )

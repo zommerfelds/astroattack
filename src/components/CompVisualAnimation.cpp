@@ -6,44 +6,40 @@
 
 // CompVisualAnimation.h für mehr Informationen
 
-#include "../GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
+
+#include <boost/bind.hpp>
+#include <sstream>
+#include <boost/make_shared.hpp>
+#include <boost/property_tree/ptree.hpp>
 
 #include "CompVisualAnimation.h"
 #include "../GameEvents.h"
 #include "../main.h"
-#include <boost/bind.hpp>
-#include <sstream>
-#include <boost/make_shared.hpp>
-
-#include "../contrib/pugixml/pugixml.hpp"
 
 // einduetige ID
-const CompIdType CompVisualAnimation::COMPONENT_ID = "CompVisualAnimation";
+const ComponentTypeId CompVisualAnimation::COMPONENT_TYPE_ID = "CompVisualAnimation";
 
-CompVisualAnimation::CompVisualAnimation( const AnimInfo* pAnimInfo )
-: m_eventConnection(),
-  m_center(),
-  m_halfWidth ( 0.0f ),
-  m_halfHeight ( 0.0f ),
-  m_currentFrame ( 0 ),
-  m_updateCounter (0 ),
-  m_animInfo ( pAnimInfo ),
+CompVisualAnimation::CompVisualAnimation( const AnimationManager& animManager )
+: m_animManager (animManager),
+  m_eventConnection (),
+  m_center (),
+  m_halfWidth (0.0f),
+  m_halfHeight (0.0f),
+  m_currentFrame (0),
+  m_updateCounter (0),
+  m_animInfo (NULL),
+  m_animInfoId (),
   m_curState (),
-  m_running ( false ),
-  m_wantToFinish ( false ),
-  m_flip ( false ),
-  m_direction ( 1 )
+  m_running (false),
+  m_wantToFinish (false),
+  m_flip (false),
+  m_direction (1)
 {
-    if ( pAnimInfo != NULL )
-        m_curState = pAnimInfo->states.begin()->first;
-    else
-        gAaLog.write ( "*** WARNING ***: pointer passed to CompVisualAnimation is NULL! (Animation does not exist?) " );
-
     // Update() registrieren. Das hat die Folge, dass Update() pro Aktualisierung (GameUpdate) aufgerufen wird.
     m_eventConnection = gameEvents->gameUpdate.registerListener( boost::bind( &CompVisualAnimation::onUpdate, this ) );
 }
 
-TextureIdType CompVisualAnimation::getCurrentTexture() const
+TextureId CompVisualAnimation::getCurrentTexture() const
 {
     if ( m_animInfo!=NULL )
     {
@@ -58,7 +54,7 @@ TextureIdType CompVisualAnimation::getCurrentTexture() const
         return "";
 }
 
-void CompVisualAnimation::setState( StateIdType new_state )
+void CompVisualAnimation::setState( AnimStateId new_state )
 {
     if ( m_curState == new_state )
         return;
@@ -122,47 +118,45 @@ void CompVisualAnimation::onUpdate()
     }
 }
 
-boost::shared_ptr<CompVisualAnimation> CompVisualAnimation::loadFromXml(const pugi::xml_node& compElem, const AnimationManager& animMngr)
+void CompVisualAnimation::setAnim(const AnimationId& animInfoId)
 {
-    std::string animName = compElem.child("anim").attribute("name").value();
-
-    pugi::xml_node dimElem = compElem.child("dim");
-    float hw = dimElem.attribute("hw").as_float();
-    if (hw == 0.0f)
-        hw = 1.0f;
-    float hh = dimElem.attribute("hh").as_float();
-    if (hh == 0.0f)
-        hh = 1.0f;
-
-    pugi::xml_node centerElem = compElem.child("center");
-    float centerX = centerElem.attribute("x").as_float();
-    float centerY = centerElem.attribute("y").as_float();
-
-    bool start = !compElem.child("start").empty();
-
-    boost::shared_ptr<CompVisualAnimation> compAnim = boost::make_shared<CompVisualAnimation>(animMngr.getAnimInfo(animName));
-    compAnim->m_center.set(centerX, centerY);
-    compAnim->setDimensions(hw, hh);
-    if (start)
-        compAnim->start();
-    return compAnim;
+    m_animInfoId = animInfoId;
+    m_animInfo = m_animManager.getAnimInfo(animInfoId);
+    if (m_animInfo)
+        m_curState = m_animInfo->states.begin()->first;
 }
 
-void CompVisualAnimation::writeToXml(pugi::xml_node& compNode) const
+void CompVisualAnimation::loadFromPropertyTree(const boost::property_tree::ptree& propTree)
 {
-    pugi::xml_node animNode = compNode.append_child("anim");
-    animNode.append_attribute("name").set_value(getAnimInfo()->name.c_str());
+    std::string animName = propTree.get<std::string>("anim.name");
+    setAnim(animName);
 
-    pugi::xml_node centerNode = compNode.append_child("anim");
-    animNode.append_attribute("x").set_value(m_center.x);
-    animNode.append_attribute("y").set_value(m_center.y);
+    float hw = propTree.get("dim.hw", 1.0f);
+    float hh =  propTree.get("dim.hh", 1.0f);
 
-    pugi::xml_node dimNode = compNode.append_child("dim");
-    dimNode.append_attribute("hw").set_value(m_halfWidth);
-    dimNode.append_attribute("hh").set_value(m_halfHeight);
+    float centerX = propTree.get("center.x", 0.0f);
+    float centerY = propTree.get("center.y", 0.0f);
+
+    bool startAnim = propTree.get("start", false);
+
+    m_center.set(centerX, centerY);
+    setDimensions(hw, hh);
+    if (startAnim)
+        start();
+}
+
+void CompVisualAnimation::writeToPropertyTree(boost::property_tree::ptree& propTree) const
+{
+    propTree.add("anim.name", m_animInfoId);
+
+    propTree.add("center.x", m_center.x);
+    propTree.add("center.y", m_center.y);
+
+    propTree.add("dim.hw", m_halfWidth);
+    propTree.add("dim.hh", m_halfHeight);
 
     if ( isRunning() )
     {
-        compNode.append_child("start");
+        propTree.add("start", true);
     }
 }

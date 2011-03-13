@@ -9,8 +9,11 @@
 #ifndef RENDERER_H
 #define RENDERER_H
 
-#include "GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
-#include "Event.h" // TODO: use pimpl to hide this
+#include <set>
+#include <string>
+#include "Event.h"
+#include "Font.h"
+#include "Texture.h"
 
 class Entity;
 struct GameEvents;
@@ -20,11 +23,6 @@ class CompVisualMessage;
 class CompShapePolygon;
 class CompShapeCircle;
 class Vector2D;
-
-#include "Font.h"
-#include "Texture.h"
-#include <set>
-#include <string>
 
 // Diese Klasse ist verantwortilch für die Grafik im Spiel.
 // Alle Visuelen Komponenten werden hier gezeichnet.
@@ -60,7 +58,7 @@ public:
     // einen Quadrat zeichnen
     void drawColorQuad( float vertexCoord[8], float r, float g, float b, float a, bool border = false );
     // Schreibt Text
-    void drawString( const std::string &str, const FontIdType &fontId, float x, float y, Align horizAlign=AlignLeft, Align vertAlign=AlignTop, float red=1.0f, float green=1.0f, float blue=1.0f, float alpha=1.0f );
+    void drawString( const std::string &str, const FontId &fontId, float x, float y, Align horizAlign=AlignLeft, Align vertAlign=AlignTop, float red=1.0f, float green=1.0f, float blue=1.0f, float alpha=1.0f );
 
     // -------- nur für MatrixWorld Modus --------   
 

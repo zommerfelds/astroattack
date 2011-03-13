@@ -1,13 +1,24 @@
 /*
- * XmlLoader.cpp
+ * DataLoader.cpp
  * This file is part of Astro Attack
  * Copyright 2011 Christian Zommerfelds
  */
 
-#include "XmlLoader.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
+#include <sstream>
+#include <boost/bind.hpp>
+#include <boost/make_shared.hpp>
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/info_parser.hpp>
+#include <boost/foreach.hpp>
+
+#include "DataLoader.h"
 #include "World.h"
 #include "main.h"
 #include "GameApp.h"
+#include "Renderer.h"
+#include "Physics.h"
+#include "Font.h"
+#include "Texture.h"
 
 #include "components/CompGravField.h"
 #include "components/CompVisualTexture.h"
@@ -21,93 +32,119 @@
 #include "components/CompVisualMessage.h"
 #include "components/CompShape.h"
 
-#include <boost/foreach.hpp>
+#include "states/SlideShowState.h"
+
 #include "contrib/pugixml/pugixml.hpp"
 #include "contrib/pugixml/foreach.hpp"
 
-#include "Renderer.h"
-#include "Physics.h"
-
-#include "states/SlideShowState.h"
-
-#include <sstream>
-#include <boost/bind.hpp>
-#include <boost/make_shared.hpp>
-
-#include "Font.h"
-#include "Texture.h"
-
 // TODO: a lot of work to do here (error checking etc..)
 
+using boost::property_tree::ptree;
+
+#include <iostream>
+using namespace std;
+
+namespace
+{
+
+void xmlNodeToPropertyTree(const pugi::xml_node& xmlNode, ptree& propertyTree)
+{
+    for(pugi::xml_attribute_iterator ait = xmlNode.attributes_begin(); ait != xmlNode.attributes_end(); ait++) {
+        propertyTree.put(ait->name(), ait->value());
+    }
+    BOOST_FOREACH(const pugi::xml_node& node, xmlNode )
+    {
+        if (!std::string(node.name()).empty())
+            xmlNodeToPropertyTree(node, propertyTree.add_child(node.name(), ptree()));
+    }
+}
+
+void dumpPropertyTree(const ptree& propertyTree, std::ostream& os, unsigned int identation=0)
+{
+    BOOST_FOREACH(const ptree::value_type &v, propertyTree)
+    {
+        std::string identationString (identation*3, ' ');
+
+        os << identationString << v.first << " : " << v.second.data() << std::endl;
+        dumpPropertyTree(v.second, os, identation+1);
+    }
+}
+
+} // namespace
+
 // Load Level from XML
-void XmlLoader::loadXmlToWorld( const char* pFileName, GameWorld& gameWorld, SubSystems& subSystems )
+void DataLoader::loadWorld( const std::string& fileName, GameWorld& gameWorld, SubSystems& subSystems )
 {
 	using boost::shared_ptr;
 	using boost::make_shared;
 
-    gAaLog.write ( "Loading XML file \"%s\"...\n", pFileName );
+    gAaLog.write ( "Loading XML file \"%s\"...\n", fileName.c_str() );
     gAaLog.increaseIndentationLevel();
 
-    pugi::xml_document doc;
-    pugi::xml_parse_result result = doc.load_file(pFileName);
-    if (!result)
-    {
-        gAaLog.write( "[ Error parsing file '%s' at offset %d!\nError description: %s ]\n\n", pFileName, result.offset, result.description() );
-        return;
-    }
+    ptree levelPropTree;
+    read_info(fileName, levelPropTree);
 
-    BOOST_FOREACH(const pugi::xml_node& entityElem, doc.first_child() )
+    BOOST_FOREACH(const ptree::value_type &value1, levelPropTree)
     {
-        const char* entityName = entityElem.attribute("name").value();
+        if (value1.first != "entity")
+            continue; // TODO: error
+        const ptree& entityPropTree = value1.second;
+
+        std::string entityName = entityPropTree.get<std::string>("name");
         shared_ptr<Entity> pEntity = make_shared<Entity>( entityName );
-        gAaLog.write ( "Creating entity \"%s\"\n", entityName );
+        gAaLog.write ( "Creating entity \"%s\"\n", entityName.c_str() );
         gAaLog.increaseIndentationLevel();
 
-        BOOST_FOREACH(const pugi::xml_node& compElem, entityElem)
+        BOOST_FOREACH(const ptree::value_type &value2, entityPropTree)
         {
-            std::string compId = compElem.attribute("id").value();
-            if ( compId.empty() )
-                continue;
-            std::string compName = compElem.attribute("name").value();
+            if (value2.first != "component")
+               continue; // TODO: error
+           const ptree& compPropTree = value2.second;
+
+            std::string compId = compPropTree.get<std::string>("id");
+            std::string compName = compPropTree.get("name", "");
             gAaLog.write ( "Creating component \"%s\"... ", compId.c_str() );
 
             shared_ptr<Component> component;
 
             if ( compId == "CompShape" )
             {
-                component = CompShape::loadFromXml( compElem );
+                if (compPropTree.count("polygon"))
+                    component = boost::make_shared<CompShapePolygon>();
+                else
+                    component = boost::make_shared<CompShapeCircle>();
             }
             else if ( compId == "CompPhysics" )
             {
-                component = CompPhysics::loadFromXml( compElem );
+                component = boost::make_shared<CompPhysics>();
             }
             else if ( compId == "CompPlayerController" )
             {
-                component = CompPlayerController::loadFromXml( compElem, subSystems.input, gameWorld.getItToVariable( "JetpackEnergy" ) );
+                component = boost::make_shared<CompPlayerController>( subSystems.input, gameWorld.getItToVariable( "JetpackEnergy" ) );
             }
             else if ( compId == "CompPosition" )
             {
-                component = CompPosition::loadFromXml( compElem );
+                component = boost::make_shared<CompPosition>();
             }
             else if ( compId == "CompVisualAnimation" )
             {
-                component = CompVisualAnimation::loadFromXml( compElem, subSystems.renderer.getAnimationManager() );
+                component = boost::make_shared<CompVisualAnimation>( subSystems.renderer.getAnimationManager() );
             }
             else if ( compId == "CompVisualTexture" )
             {
-                component = CompVisualTexture::loadFromXml( compElem );
+                component = boost::make_shared<CompVisualTexture>();
             }
             else if ( compId == "CompVisualMessage" )
             {
-                component = CompVisualMessage::loadFromXml( compElem );
+                component = boost::make_shared<CompVisualMessage>();
             }
 			else if ( compId == "CompGravField" )
             {
-			    component = CompGravField::loadFromXml( compElem );
+			    component = boost::make_shared<CompGravField>();
             }
             else if ( compId == "CompTrigger" )
             {
-                component = CompTrigger::loadFromXml( compElem, gameWorld );
+                component = boost::shared_ptr<CompTrigger>(new CompTrigger(gameWorld));
             }
             else
             {
@@ -121,8 +158,10 @@ void XmlLoader::loadXmlToWorld( const char* pFileName, GameWorld& gameWorld, Sub
                 continue;
             }
 
+            component->loadFromPropertyTree(compPropTree);
+
             if ( !compName.empty() )
-            	component->setName( compName );
+            	component->setId( compName );
             pEntity->addComponent( component );
 
             gAaLog.write ( "[ Done ]\n" );
@@ -133,19 +172,19 @@ void XmlLoader::loadXmlToWorld( const char* pFileName, GameWorld& gameWorld, Sub
     }
 
     gAaLog.decreaseIndentationLevel();
-    gAaLog.write ( "[ Done ]\n\n", pFileName );
+    gAaLog.write ( "[ Done ]\n\n", fileName.c_str() );
 }
 
-void XmlLoader::loadSlideShow( const char* pFileName, SlideShow* pSlideShow )
+void DataLoader::loadSlideShow( const std::string& fileName, SlideShow* pSlideShow )
 {
-    gAaLog.write ( "Loading XML file \"%s\"...\n", pFileName );
+    gAaLog.write ( "Loading XML file \"%s\"...\n", fileName.c_str() );
     gAaLog.increaseIndentationLevel();
 
     pugi::xml_document doc;
-    pugi::xml_parse_result result = doc.load_file(pFileName);
+    pugi::xml_parse_result result = doc.load_file(fileName.c_str());
     if (!result)
     {
-		gAaLog.write( "[ Error parsing file '%s' at offset %d!\nError description: %s ]\n\n", pFileName, result.offset, result.description() );
+		gAaLog.write( "[ Error parsing file '%s' at offset %d!\nError description: %s ]\n\n", fileName.c_str(), result.offset, result.description() );
 		return;
 	}
 
@@ -185,18 +224,18 @@ void XmlLoader::loadSlideShow( const char* pFileName, SlideShow* pSlideShow )
     gAaLog.write ( "[ Done ]\n\n" );
 }
 
-ResourceIds XmlLoader::loadGraphics( const char* pFileName, TextureManager* pTextureManager, AnimationManager* pAnimationManager, FontManager* pFontManager )
+ResourceIds DataLoader::loadGraphics( const std::string& fileName, TextureManager* pTextureManager, AnimationManager* pAnimationManager, FontManager* pFontManager )
 {
-    gAaLog.write ( "Loading XML file \"%s\"...\n", pFileName );
+    gAaLog.write ( "Loading XML file \"%s\"...\n", fileName.c_str() );
     gAaLog.increaseIndentationLevel();
 
     ResourceIds loadedResources;
 
     pugi::xml_document doc;
-    pugi::xml_parse_result result = doc.load_file(pFileName);
+    pugi::xml_parse_result result = doc.load_file(fileName.c_str());
     if (!result)
     {
-        gAaLog.write( "[ Error parsing file '%s' at offset %d!\nError description: %s ]\n\n", pFileName, result.offset, result.description() );
+        gAaLog.write( "[ Error parsing file '%s' at offset %d!\nError description: %s ]\n\n", fileName.c_str(), result.offset, result.description() );
         return loadedResources;
     }
 
@@ -232,17 +271,18 @@ ResourceIds XmlLoader::loadGraphics( const char* pFileName, TextureManager* pTex
                 info.loadMipmaps = false;
 
             if ( texRepeatX )
-                info.textureWrapModeX = TEX_REPEAT;
+                info.wrapModeX = LoadTextureInfo::WrapRepeat;
             else
-                info.textureWrapModeX = TEX_CLAMP;
+                info.wrapModeX = LoadTextureInfo::WrapClamp;
             if ( texRepeatY )
-                info.textureWrapModeY = TEX_REPEAT;
+                info.wrapModeY = LoadTextureInfo::WrapRepeat;
             else
-                info.textureWrapModeY = TEX_CLAMP;
+                info.wrapModeY = LoadTextureInfo::WrapClamp;
 
             info.scale = scale;
+            info.quality = (LoadTextureInfo::Quality) gAaConfig.getInt("TexQuality");
 
-            pTextureManager->loadTexture(name,id,info,gAaConfig.getInt("TexQuality"));
+            pTextureManager->loadTexture(name,id,info);
             loadedResources.textures.insert(id);
         }
     }
@@ -271,17 +311,18 @@ ResourceIds XmlLoader::loadGraphics( const char* pFileName, TextureManager* pTex
                 info.loadMipmaps = false;
 
             if ( texRepeatX )
-                info.textureWrapModeX = TEX_REPEAT;
+                info.wrapModeX = LoadTextureInfo::WrapRepeat;
             else
-                info.textureWrapModeX = TEX_CLAMP;
+                info.wrapModeX = LoadTextureInfo::WrapClamp;
             if ( texRepeatY )
-                info.textureWrapModeY = TEX_REPEAT;
+                info.wrapModeY = LoadTextureInfo::WrapRepeat;
             else
-                info.textureWrapModeY = TEX_CLAMP;
+                info.wrapModeY = LoadTextureInfo::WrapClamp;
 
             info.scale = 1.0f;
+            info.quality = (LoadTextureInfo::Quality) gAaConfig.getInt("TexQuality");
 
-            pAnimationManager->loadAnimation(name,id,info,gAaConfig.getInt("TexQuality"));
+            pAnimationManager->loadAnimation(name, id, info);
             loadedResources.animations.insert(id);
         }
     }
@@ -300,66 +341,68 @@ ResourceIds XmlLoader::loadGraphics( const char* pFileName, TextureManager* pTex
         }
     }
     gAaLog.decreaseIndentationLevel();
-    gAaLog.write ( "[ Done ]\n\n", pFileName );
+    gAaLog.write ( "[ Done ]\n\n", fileName.c_str() );
     return loadedResources;
 }
 
-void XmlLoader::unLoadGraphics( const ResourceIds& resourcesToUnload, TextureManager* pTextureManager, AnimationManager* pAnimationManager, FontManager* pFontManager )
+void DataLoader::unLoadGraphics( const ResourceIds& resourcesToUnload, TextureManager* pTextureManager, AnimationManager* pAnimationManager, FontManager* pFontManager )
 {
     gAaLog.write ( "Unloading resources... " );
 
     // Texturen laden
     if ( pTextureManager )
     {
-        BOOST_FOREACH(const TextureIdType& id, resourcesToUnload.textures)
+        BOOST_FOREACH(const TextureId& id, resourcesToUnload.textures)
             pTextureManager->freeTexture(id);
     }
 
     // Animationen laden
     if ( pAnimationManager )
     {
-        BOOST_FOREACH(const AnimationIdType& id, resourcesToUnload.animations)
+        BOOST_FOREACH(const AnimationId& id, resourcesToUnload.animations)
             pAnimationManager->freeAnimation(id);
     }
 
     // Schriften laden
     if ( pFontManager )
     {
-        BOOST_FOREACH(const FontIdType& id, resourcesToUnload.fonts)
+        BOOST_FOREACH(const FontId& id, resourcesToUnload.fonts)
             pFontManager->freeFont(id);
     }
     gAaLog.write ( "[ Done ]\n\n" );
 }
 
-void XmlLoader::saveWorldToXml( const char* pFileName, const GameWorld& gameWorld )
+void DataLoader::saveWorldToXml( const std::string& fileName, const GameWorld& gameWorld )
 {
-    gAaLog.write ( "Saving XML file \"%s\"...\n", pFileName );
+    gAaLog.write ( "Saving XML file \"%s\"...\n", fileName.c_str() );
     gAaLog.increaseIndentationLevel();
     
-    pugi::xml_document doc;
-
-    pugi::xml_node levelNode = doc.append_child();
-    levelNode.set_name("level");
+    ptree levelPropTree;
 	
     const EntityMap& entities = gameWorld.getAllEntities();
     BOOST_FOREACH(const EntityMap::value_type& entPair, entities)
     {
-        pugi::xml_node entityNode = levelNode.append_child("entity");
-        entityNode.append_attribute("name").set_value(entPair.second->getId().c_str());
+        ptree entityPropTree;
+        entityPropTree.add("name", entPair.second->getId());
 
         const ComponentMap& comps = entPair.second->getAllComponents();
         BOOST_FOREACH(const ComponentMap::value_type& compPair, comps)
         {
-            pugi::xml_node compNode = entityNode.append_child("component");
-            compNode.append_attribute("id").set_value(compPair.second->getComponentId().c_str());
-            compNode.append_attribute("name").set_value(compPair.second->getName().c_str());
+            ptree compPropTree;
+            compPropTree.add("id", compPair.second->getTypeId());
+            std::string compName = compPair.second->getId();
+            if (!compName.empty())
+                compPropTree.add("name", compName);
+            compPair.second->writeToPropertyTree(compPropTree);
 
-            compPair.second->writeToXml(compNode);
+            entityPropTree.add_child("component", compPropTree);
         }
-    }
 
-    doc.save_file(pFileName);
+        levelPropTree.add_child("entity", entityPropTree);
+    }
     
+    write_info(fileName, levelPropTree, std::locale(), boost::property_tree::info_parser::info_writer_settings<char>('\t',1));
+
     gAaLog.decreaseIndentationLevel();
-    gAaLog.write ( "[ Done saving XML file \"%s\" ]\n\n", pFileName );
+    gAaLog.write ( "[ Done saving XML file \"%s\" ]\n\n", fileName.c_str() );
 }

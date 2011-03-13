@@ -4,13 +4,11 @@
  * Copyright 2011 Christian Zommerfelds
  */
 
-#include "GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
-
 #include "Entity.h"
 #include "Logger.h"
 
 // Gibt einen Zeiger zur aufgeforderten Komponente. Fall es keinen Komponent des gefragten Typs gibt, gibt es NULL zurück.
-Component* Entity::getComponent(const CompIdType& rCompId )
+Component* Entity::getComponent(const ComponentTypeId& rCompId )
 {
     ComponentMap::const_iterator i = m_components.find( rCompId );
     if ( i == m_components.end() )
@@ -19,7 +17,7 @@ Component* Entity::getComponent(const CompIdType& rCompId )
         return i->second.get();
 }
 
-const Component* Entity::getComponent(const CompIdType& rCompId ) const
+const Component* Entity::getComponent(const ComponentTypeId& rCompId ) const
 {
     ComponentMap::const_iterator i = m_components.find( rCompId );
     if ( i == m_components.end() )
@@ -28,7 +26,7 @@ const Component* Entity::getComponent(const CompIdType& rCompId ) const
         return i->second.get();
 }
 
-std::vector<Component*> Entity::getComponents(const CompIdType& rCompId )
+std::vector<Component*> Entity::getComponents(const ComponentTypeId& rCompId )
 {
     std::pair<ComponentMap::iterator, ComponentMap::iterator> equalRange = m_components.equal_range(rCompId);
     std::vector<Component*> ret;
@@ -38,7 +36,7 @@ std::vector<Component*> Entity::getComponents(const CompIdType& rCompId )
     return ret;
 }
 
-std::vector<const Component*> Entity::getComponents(const CompIdType& rCompId ) const
+std::vector<const Component*> Entity::getComponents(const ComponentTypeId& rCompId ) const
 {
     std::pair<ComponentMap::const_iterator, ComponentMap::const_iterator> equalRange = m_components.equal_range(rCompId);
     std::vector<const Component*> ret;
@@ -52,7 +50,7 @@ std::vector<const Component*> Entity::getComponents(const CompIdType& rCompId ) 
  // Setzt eine neue Komponente in die Einheit
 void Entity::addComponent(const boost::shared_ptr<Component>& pNewComp)
 {
-    CompIdType compId = pNewComp->getComponentId();
+    ComponentTypeId compId = pNewComp->getTypeId();
     m_components.insert( std::make_pair(compId, pNewComp) );
     pNewComp->setOwnerEntity( this );
 }
@@ -62,7 +60,7 @@ void Entity::writeEntityInfoToLogger( Logger& log )
     log.write( "--- Entity name: %s ---\n", m_Id.c_str() );
     for ( ComponentMap::iterator it = m_components.begin(); it != m_components.end(); ++it )
     {
-        log.write( " Component: %s\n" , it->second->getComponentId().c_str() );
+        log.write( " Component: %s\n" , it->second->getId().c_str() );
     }
     log.write( "\n" );
 }

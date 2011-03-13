@@ -9,12 +9,11 @@
 #ifndef INPUT_H
 #define INPUT_H
 
-#include "GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
-
 #include <map>
 #include <set>
+#include <SDL.h>
+
 #include "Vector2D.h"
-#include "SDL.h"
 
 enum Key
 {
@@ -93,7 +92,7 @@ public:
     MouseState getMouseStateInAreaConsume( const Rect& rButtonRect );   // gleich wie oben, aber der Status der Taste zurückgesetzt (nicht mehr gedrückt)
 
 private:
-    Uint8 *m_pKeystates;
+    Uint8* m_pKeystates;
     std::set<Key> m_pKeysConsumed;
     Uint8 m_mousestates;
     bool m_RMouseConsumed;

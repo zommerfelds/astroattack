@@ -1,5 +1,5 @@
 /*
- * XmlLoader.h
+ * DataLoader.h
  * This file is part of Astro Attack
  * Copyright 2011 Christian Zommerfelds
  */
@@ -9,7 +9,8 @@
 #ifndef XMLLOADER_H
 #define XMLLOADER_H
 
-#include "GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
+#include <set>
+#include <string>
 
 class GameWorld;
 struct SubSystems;
@@ -18,9 +19,6 @@ class TextureManager;
 class AnimationManager;
 class FontManager;
 
-#include <set>
-#include <string>
-
 struct ResourceIds
 {
     std::set<std::string> textures;
@@ -28,14 +26,14 @@ struct ResourceIds
     std::set<std::string> fonts;
 };
 
-class XmlLoader
+class DataLoader
 {
 public:
-    static void loadXmlToWorld( const char* pFileName, GameWorld& gameWorld, SubSystems& subSystems );
-    static void loadSlideShow( const char* pFileName, SlideShow* pSlideShow );
-    static ResourceIds loadGraphics( const char* pFileName, TextureManager* pTextureManager, AnimationManager* pAnimationManager, FontManager* pFontManager );
+    static void loadWorld( const std::string& fileName, GameWorld& gameWorld, SubSystems& subSystems );
+    static void loadSlideShow( const std::string& fileName, SlideShow* pSlideShow );
+    static ResourceIds loadGraphics( const std::string& fileName, TextureManager* pTextureManager, AnimationManager* pAnimationManager, FontManager* pFontManager );
     static void unLoadGraphics( const ResourceIds& resourcesToUnload, TextureManager* pTextureManager, AnimationManager* pAnimationManager, FontManager* pFontManager );
-    static void saveWorldToXml( const char* pFileName, const GameWorld& gameWorld );
+    static void saveWorldToXml( const std::string& fileName, const GameWorld& gameWorld );
 private:
 };
 

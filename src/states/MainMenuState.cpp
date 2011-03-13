@@ -4,9 +4,11 @@
  * Copyright 2011 Christian Zommerfelds
  */
 
-// MainMenuState.h für mehr Informationen
+#include <cmath>
+#include <boost/bind.hpp>
+#include <boost/make_shared.hpp>
+#include <boost/foreach.hpp>
 
-#include "../GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
 #include "MainMenuState.h"
 #include "EditorState.h"
 #include "PlayingState.h"
@@ -20,17 +22,14 @@
 #include "../Vector2D.h"
 #include "../Texture.h"
 #include "../contrib/pugixml/pugixml.hpp"
-#include <boost/foreach.hpp>
 #include "../contrib/pugixml/foreach.hpp"
-#include "../XmlLoader.h"
-#include <cmath>
-#include <boost/bind.hpp>
-#include <boost/make_shared.hpp>
+#include "../DataLoader.h"
 
 const char* cIntroFileName   = "data/intro/introShow.xml";
 const char* cLevelSequenceFileName = "data/levelSequence.xml";
 const char* cMenuGraphicsFileName = "data/graphicsMenu.xml"; // hier sind Menügrafiken angegeben
-const StateIdType MainMenuState::stateId = "MainMenuState";        // eindeutige ID
+
+const GameStateId MainMenuState::stateId = "MainMenuState";
 
 const std::string menuNames[] =
 { 
@@ -44,14 +43,6 @@ const float cTitleVertexCoord[8] = { 0.3f, 0.2f,
                                      0.3f, 0.7f,
                                      3.5f, 0.7f,
                                      3.5f, 0.2f };
-
-struct Button
-{
-    Rect rect;
-    Vector2D textPos;
-    std::string caption;
-    MouseState state;
-};
 
 MainMenuState::MainMenuState( SubSystems& subSystems, SubMenu startingSubMenu )
 : GameState( subSystems ),
@@ -74,7 +65,7 @@ void MainMenuState::init()        // State starten
     //GetSubSystems().renderer.DisplayLoadingScreen();
     
     // Grafiken aus XML-Datei laden
-    m_menuResources = XmlLoader::loadGraphics( cMenuGraphicsFileName, &getSubSystems().renderer.getTextureManager(), NULL, NULL );
+    m_menuResources = DataLoader::loadGraphics( cMenuGraphicsFileName, &getSubSystems().renderer.getTextureManager(), NULL, NULL );
 
     getSubSystems().sound.loadMusic( "data/Music/ParagonX9___Chaoz_C.ogg", "menuMusic" );
     getSubSystems().sound.loadSound( "data/Sounds/Single click stab with delay_Nightingale Music Productions_12046.wav", "mouseclick" );
@@ -212,7 +203,7 @@ void MainMenuState::cleanup()     // State abbrechen
     getSubSystems().sound.freeSound( "mouseclick" );
 
     // Grafiken wieder freisetzen
-     XmlLoader::unLoadGraphics( m_menuResources, &getSubSystems().renderer.getTextureManager(), NULL, NULL );
+     DataLoader::unLoadGraphics( m_menuResources, &getSubSystems().renderer.getTextureManager(), NULL, NULL );
 
     getSubSystems().gui.clear();
 

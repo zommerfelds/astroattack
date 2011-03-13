@@ -6,66 +6,38 @@
 
 // CompPosition.h für mehr Informationen
 
-#include "../GNU_config.h" // GNU Compiler-Konfiguration einbeziehen (für Linux Systeme)
-#include "CompShape.h"
 
 #include <Box2D/Box2D.h> // need this for converting to Box2D shapes
-
-#include "../contrib/pugixml/pugixml.hpp"
+#include <boost/property_tree/ptree.hpp>
+#include <boost/foreach.hpp>
 #include <boost/make_shared.hpp>
 
+#include "CompShape.h"
+
+using boost::property_tree::ptree;
+
 // eindeutige ID
-const CompIdType CompShape::COMPONENT_ID = "CompShape";
+const ComponentTypeId CompShape::COMPONENT_TYPE_ID = "CompShape";
 
-boost::shared_ptr<CompShape> CompShape::loadFromXml(const pugi::xml_node& compNode)
+void CompShapePolygon::loadFromPropertyTree(const ptree& propTree)
 {
-    pugi::xml_node polygonElement = compNode.child("polygon");
-
-	// Shape is a polygon
-	if (polygonElement)
-	{
-		return CompShapePolygon::loadFromXml(polygonElement);
-	}
-
-	pugi::xml_node circleElement = compNode.child("circle");
-
-	// Shape is a circle
-	if (circleElement)
-	{
-		return CompShapeCircle::loadFromXml(circleElement);
-	}
-
-	// TODO: error
-
-	return boost::shared_ptr<CompShape>();
+    BOOST_FOREACH(const ptree::value_type &v, propTree.get_child("polygon"))
+    {
+        const ptree& vertex = v.second;
+        float x = vertex.get<float>("x");
+        float y = vertex.get<float>("y");
+        m_vertices.push_back( Vector2D(x, y) );
+    }
 }
 
-boost::shared_ptr<CompShapePolygon> CompShapePolygon::loadFromXml(
-		const pugi::xml_node& polyElem)
+void CompShapePolygon::writeToPropertyTree(ptree& propTree) const
 {
-	boost::shared_ptr<CompShapePolygon> pPoly = boost::make_shared<CompShapePolygon>();
-
-	pugi::xml_node vertexElement = polyElem.child("vertex");
-	for (size_t i=0; vertexElement && i<cMaxVertices; vertexElement = vertexElement.next_sibling("vertex"))
-	{
-		float x = vertexElement.attribute("x").as_float();
-        float y = vertexElement.attribute("y").as_float();
-		pPoly->m_vertices.push_back( Vector2D(x, y) );
-	}
-
-	// TODO: check for errors
-	return pPoly;
-}
-
-void CompShapePolygon::writeToXml(pugi::xml_node& compNode) const
-{
-    pugi::xml_node polyNode = compNode.append_child("polygon");
-
     for ( size_t i = 0; i < getVertexCount(); ++i )
     {
-        pugi::xml_node vertexNode = polyNode.append_child("vertex");
-        vertexNode.append_attribute("x").set_value(m_vertices[i].x);
-        vertexNode.append_attribute("y").set_value(m_vertices[i].y);
+        ptree vertexPropTree;
+        vertexPropTree.add("x", m_vertices[i].x);
+        vertexPropTree.add("y", m_vertices[i].y);
+        propTree.add_child("polygon.vertex", vertexPropTree);
     }
 }
 
@@ -110,25 +82,18 @@ CompShapeCircle::CompShapeCircle(const Vector2D& center, float radius) :
 		m_radius (radius)
 {}
 
-boost::shared_ptr<CompShapeCircle> CompShapeCircle::loadFromXml(
-		const pugi::xml_node& circleElem)
+void CompShapeCircle::loadFromPropertyTree(const boost::property_tree::ptree& propTree)
 {
-	Vector2D center;
-	center.x = circleElem.attribute("x").as_float();
-    center.y = circleElem.attribute("y").as_float();
-	float radius = circleElem.attribute("r").as_float();
-	if (radius == 0.0f)
-	    radius = 1.0f;
-
-	return boost::make_shared<CompShapeCircle>(center, radius);
+    m_center.x = propTree.get("circle.x", 0.0f);
+    m_center.y = propTree.get("circle.y", 0.0f);
+    m_radius = propTree.get("circle.r", 1.0f);
 }
 
-void CompShapeCircle::writeToXml(pugi::xml_node& compNode) const
+void CompShapeCircle::writeToPropertyTree(ptree& propTree) const
 {
-    pugi::xml_node circleNode = compNode.append_child("circle");
-    circleNode.append_attribute("x").set_value(m_center.x);
-    circleNode.append_attribute("y").set_value(m_center.y);
-    circleNode.append_attribute("r").set_value(m_radius);
+    propTree.add("circle.x", m_center.x);
+    propTree.add("circle.y", m_center.y);
+    propTree.add("circle.r", m_radius);
 }
 
 boost::shared_ptr<b2Shape> CompShapeCircle::toB2Shape() const
