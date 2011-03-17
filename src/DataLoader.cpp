@@ -372,7 +372,7 @@ void DataLoader::unLoadGraphics( const ResourceIds& resourcesToUnload, TextureMa
     gAaLog.write ( "[ Done ]\n\n" );
 }
 
-void DataLoader::saveWorldToXml( const std::string& fileName, const GameWorld& gameWorld )
+void DataLoader::saveWorldToXml(const std::string& fileName, const GameWorld& gameWorld)
 {
     gAaLog.write ( "Saving XML file \"%s\"...\n", fileName.c_str() );
     gAaLog.increaseIndentationLevel();
