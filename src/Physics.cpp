@@ -6,6 +6,7 @@
 
 #include <boost/bind.hpp>
 #include <boost/make_shared.hpp>
+#include <boost/foreach.hpp>
 #include <Box2D/Box2D.h>
 
 #include "Physics.h"
@@ -36,10 +37,10 @@ PhysicsSubSystem::PhysicsSubSystem( GameEvents& gameEvents)
 // PhysicsSubSystem initialisieren
 void PhysicsSubSystem::init()
 {
-    m_eventConnection1 = m_gameEvents.newEntity.registerListener( boost::bind( &PhysicsSubSystem::onRegisterPhysicsComp, this, _1 ) );
-    m_eventConnection2 = m_gameEvents.deleteEntity.registerListener( boost::bind( &PhysicsSubSystem::onUnregisterPhysicsComp, this, _1 ) );
-    m_eventConnection3 = m_gameEvents.newEntity.registerListener( boost::bind( &PhysicsSubSystem::onRegisterGravFieldComp, this, _1 ) );
-    m_eventConnection4 = m_gameEvents.deleteEntity.registerListener( boost::bind( &PhysicsSubSystem::onUnregisterGravFieldComp, this, _1 ) );
+    m_eventConnection1 = m_gameEvents.newEntity.registerListener( boost::bind( &PhysicsSubSystem::onRegisterEntity_phys, this, _1 ) );
+    m_eventConnection2 = m_gameEvents.deleteEntity.registerListener( boost::bind( &PhysicsSubSystem::onUnregisterEntity_phys, this, _1 ) );
+    m_eventConnection3 = m_gameEvents.newEntity.registerListener( boost::bind( &PhysicsSubSystem::onRegisterEntity_grav, this, _1 ) );
+    m_eventConnection4 = m_gameEvents.deleteEntity.registerListener( boost::bind( &PhysicsSubSystem::onUnregisterEntity_grav, this, _1 ) );
 
     m_pGravitationalAcc.x = 0.0f;
     m_pGravitationalAcc.y = -25.0f;
@@ -72,32 +73,34 @@ boost::shared_ptr<b2BodyDef> convertToB2BodyDef(const BodyDef& bodyDef)
     return pB2BodyDef;
 }
 
-void PhysicsSubSystem::onRegisterPhysicsComp(Entity& entity)
+void PhysicsSubSystem::onRegisterEntity_phys(Entity& entity)
 {
-    CompPhysics* comp_phys = entity.getComponent<CompPhysics>();
-    if ( comp_phys ) // Falls es eine "CompPhysics"-Komponente gibt
+    CompPhysics* compPhys = entity.getComponent<CompPhysics>();
+    if ( compPhys ) // Falls es eine "CompPhysics"-Komponente gibt
     {
         // get position from CompPosition, if it exists
         CompPosition* compPos = entity.getComponent<CompPosition>();
         if (compPos)
         {
-            comp_phys->m_bodyDef.position = compPos->m_position;
-            comp_phys->m_bodyDef.angle = compPos->m_orientation;
+            compPhys->m_bodyDef.position = compPos->m_position;
+            compPhys->m_bodyDef.angle = compPos->m_orientation;
+            compPhys->m_smoothPosition = compPos->m_position;
+            compPhys->m_smoothAngle = compPos->m_orientation;
         }
 
-        comp_phys->m_body = m_world.CreateBody( convertToB2BodyDef(comp_phys->m_bodyDef).get() );
-        comp_phys->m_body->SetUserData( comp_phys );
+        compPhys->m_body = m_world.CreateBody( convertToB2BodyDef(compPhys->m_bodyDef).get() );
+        compPhys->m_body->SetUserData( compPhys );
 
 		std::vector<CompShape*> compShapes = entity.getComponents<CompShape>();
 
-    	for (size_t i=0; i < comp_phys->m_shapeInfos.size(); i++)
+    	for (size_t i=0; i < compPhys->m_shapeInfos.size(); i++)
     	{
     		boost::shared_ptr<b2FixtureDef> fixtureDef = boost::make_shared<b2FixtureDef>();
 
     		CompShape* pCompShape = NULL;
     		for (size_t a=0; a < compShapes.size(); a++) // TODO: could use get component by name instead
     		{
-    			if (compShapes[i]->getId() == comp_phys->m_shapeInfos[i]->compName)
+    			if (compShapes[i]->getId() == compPhys->m_shapeInfos[i]->compName)
     			{
     				pCompShape = compShapes[i];
     				break;
@@ -108,33 +111,33 @@ void PhysicsSubSystem::onRegisterPhysicsComp(Entity& entity)
 
     		boost::shared_ptr<b2Shape> pB2Shape = pCompShape->toB2Shape(); // this object has to live so long till Box2D has made a copy of it in createFixture
             fixtureDef->shape = pB2Shape.get();
-            fixtureDef->density = comp_phys->m_shapeInfos[i]->density;
-            fixtureDef->friction = comp_phys->m_shapeInfos[i]->friction;
-            fixtureDef->restitution = comp_phys->m_shapeInfos[i]->restitution;
-            fixtureDef->isSensor = comp_phys->m_shapeInfos[i]->isSensor;
+            fixtureDef->density = compPhys->m_shapeInfos[i]->density;
+            fixtureDef->friction = compPhys->m_shapeInfos[i]->friction;
+            fixtureDef->restitution = compPhys->m_shapeInfos[i]->restitution;
+            fixtureDef->isSensor = compPhys->m_shapeInfos[i]->isSensor;
     		fixtureDef->filter.maskBits = 1;
-            b2Fixture* pFixture = comp_phys->m_body->CreateFixture( fixtureDef.get() );
-            pFixture->SetUserData( comp_phys );
-            comp_phys->m_fixtureMap.insert( std::make_pair(pCompShape->getId(), pFixture) );
+            b2Fixture* pFixture = compPhys->m_body->CreateFixture( fixtureDef.get() );
+            pFixture->SetUserData( compPhys );
+            compPhys->m_fixtureMap.insert( std::make_pair(pCompShape->getId(), pFixture) );
         }
 
-        m_physicsComps.push_back( comp_phys );
+        m_physicsComps.push_back( compPhys );
     }
 }
 
-void PhysicsSubSystem::onUnregisterPhysicsComp( Entity& entity )
+void PhysicsSubSystem::onUnregisterEntity_phys( Entity& entity )
 {
-    CompPhysics* comp_phys = entity.getComponent<CompPhysics>();
-    if ( comp_phys ) // Falls es eine "CompPhysics"-Komponente gibt
+    CompPhysics* compPhysToUnregister = entity.getComponent<CompPhysics>();
+    if ( compPhysToUnregister ) // Falls es eine "CompPhysics"-Komponente gibt
     {
-        if ( comp_phys->m_body )
+        if ( compPhysToUnregister->m_body )
         {
-            m_world.DestroyBody( comp_phys->m_body );
-            comp_phys->m_body = NULL;
+            m_world.DestroyBody( compPhysToUnregister->m_body );
+            compPhysToUnregister->m_body = NULL;
         }
-        for ( size_t i = 0; i < m_physicsComps.size(); ++i )
+        for (size_t i = 0; i < m_physicsComps.size(); i++)
         {
-            if ( m_physicsComps[i] == comp_phys )
+            if ( m_physicsComps[i] == compPhysToUnregister )
             {
                 m_physicsComps.erase( m_physicsComps.begin()+i );
                 break;
@@ -146,19 +149,25 @@ void PhysicsSubSystem::onUnregisterPhysicsComp( Entity& entity )
 // PhysicsSubSystem aktualisieren (ganze Physik wird aktulisiert -> Positionen, Geschwindigkeiten...)
 void PhysicsSubSystem::update()
 {
+    BOOST_FOREACH(CompPhysics* compPhys, m_physicsComps)
+    {
+        compPhys->m_previousPosition = compPhys->getPosition();
+        compPhys->m_previousAngle = compPhys->getAngle();
+    }
+
     //----Box2D Aktualisieren!----//
     m_world.Step(m_timeStep, m_velocityIterations, m_positionIterations);
     //----------------------------//
 
-    for ( size_t i = 0; i < m_physicsComps.size(); ++i )
+    BOOST_FOREACH(CompPhysics* compPhys, m_physicsComps)
 	{
-		b2Body* pBody = m_physicsComps[i]->m_body;
+		b2Body* pBody = compPhys->m_body;
 
-		CompPosition* compPos = m_physicsComps[i]->getOwnerEntity()->getComponent<CompPosition>();
+		CompPosition* compPos = compPhys->getOwnerEntity()->getComponent<CompPosition>();
 		if (compPos)
         {
-            compPos->m_position = m_physicsComps[i]->getPosition();
-            compPos->m_orientation = m_physicsComps[i]->getAngle();
+            compPos->m_position = compPhys->getPosition();
+            compPos->m_orientation = compPhys->getAngle();
         }
 
         int highestPriority = 0;
@@ -174,7 +183,7 @@ void PhysicsSubSystem::update()
             if ( grav == NULL )
                 continue;
             //if ( compContact->GetFixture()->TestPoint( pBody->GetWorldCenter() ) ) // TODO: handle multiple shapes
-            Vector2D gravPoint = m_physicsComps[i]->m_localGravitationPoint.rotated(pBody->GetAngle()); //(0.0f,-0.65f);
+            Vector2D gravPoint = compPhys->m_localGravitationPoint.rotated(pBody->GetAngle()); //(0.0f,-0.65f);
             if ( compContact->m_body->GetFixtureList()->TestPoint( pBody->GetPosition() + *gravPoint.to_b2Vec2() ) ) // TODO: handle multiple shapes
             {
                 int pri = grav->getPriority();
@@ -186,22 +195,22 @@ void PhysicsSubSystem::update()
             }
         }
 
-        if ( m_physicsComps[i]->m_remainingUpdatesTillGravFieldChangeIsPossible == 0 )
+        if ( compPhys->m_remainingUpdatesTillGravFieldChangeIsPossible == 0 )
         {
-            if ( m_physicsComps[i]->m_gravField != gravWithHighestPriority )
+            if ( compPhys->m_gravField != gravWithHighestPriority )
             {
-                m_physicsComps[i]->m_gravField = gravWithHighestPriority;
-                m_physicsComps[i]->m_remainingUpdatesTillGravFieldChangeIsPossible = cUpdatesTillGravFieldChangeIsPossible;
+                compPhys->m_gravField = gravWithHighestPriority;
+                compPhys->m_remainingUpdatesTillGravFieldChangeIsPossible = cUpdatesTillGravFieldChangeIsPossible;
             }
         }
-        if ( m_physicsComps[i]->m_remainingUpdatesTillGravFieldChangeIsPossible>0 )
-            m_physicsComps[i]->m_remainingUpdatesTillGravFieldChangeIsPossible--;
+        if ( compPhys->m_remainingUpdatesTillGravFieldChangeIsPossible>0 )
+            compPhys->m_remainingUpdatesTillGravFieldChangeIsPossible--;
 
         boost::shared_ptr<b2Vec2> acc;
-        if (m_physicsComps[i]->m_gravField == NULL)
+        if (compPhys->m_gravField == NULL)
             acc = m_pGravitationalAcc.to_b2Vec2();
         else
-            acc = m_physicsComps[i]->m_gravField->getAcceleration(pBody->GetWorldCenter()).to_b2Vec2();
+            acc = compPhys->m_gravField->getAcceleration(pBody->GetWorldCenter()).to_b2Vec2();
         b2Vec2 force ( pBody->GetMass() * *acc );
         pBody->ApplyForce( force, pBody->GetWorldCenter() );
 	}
@@ -209,38 +218,39 @@ void PhysicsSubSystem::update()
 
 void PhysicsSubSystem::calculateSmoothPositions(float accumulator)
 {
-    for ( size_t i = 0; i < m_physicsComps.size(); ++i )
+    float ratio = accumulator/cPhysicsTimeStep;
+    BOOST_FOREACH(CompPhysics* compPhys, m_physicsComps)
     {
-        b2Body* pBody = m_physicsComps[i]->m_body;
+        b2Body* pBody = compPhys->m_body;
+        if (pBody->GetType() == b2_staticBody)
+            continue;
 
-        float extra_angle = pBody->GetAngularVelocity() * accumulator;
-        float angle = pBody->GetAngle();
-        Vector2D v = pBody->GetPosition() + accumulator * pBody->GetLinearVelocity();
-        Vector2D c = pBody->GetLocalCenter();
-        v += (c - c.rotated(extra_angle)).rotated(angle); // TODO: can we optimize this?
+        // interpolation of last state and current state
+        float angle = (ratio * pBody->GetAngle()) + ((1-ratio) * compPhys->m_previousAngle);
+        Vector2D v = Vector2D(ratio * pBody->GetPosition()) + (compPhys->m_previousPosition * (1-ratio));
 
-        m_physicsComps[i]->m_smoothAngle = angle + extra_angle;
-        m_physicsComps[i]->m_smoothPosition = v;
+        compPhys->m_smoothAngle = angle;
+        compPhys->m_smoothPosition = v;
     }
 }
 
-void PhysicsSubSystem::onRegisterGravFieldComp( Entity& entity )
+void PhysicsSubSystem::onRegisterEntity_grav( Entity& entity )
 {
-    CompGravField* comp_grav = entity.getComponent<CompGravField>();
-    if ( comp_grav != NULL ) // Falls es eine "CompGravField"-Komponente gibt
+    CompGravField* compGrav = entity.getComponent<CompGravField>();
+    if ( compGrav != NULL ) // Falls es eine "CompGravField"-Komponente gibt
     {
-        m_gravFields.push_back( comp_grav );
+        m_gravFields.push_back( compGrav );
     }
 }
 
-void PhysicsSubSystem::onUnregisterGravFieldComp( Entity& entity )
+void PhysicsSubSystem::onUnregisterEntity_grav( Entity& entity )
 {
-    CompGravField* comp_grav = entity.getComponent<CompGravField>();
-    if ( comp_grav != NULL ) // Falls es eine "CompGravField"-Komponente gibt
+    CompGravField* compGrav = entity.getComponent<CompGravField>();
+    if ( compGrav != NULL ) // Falls es eine "CompGravField"-Komponente gibt
     {
         for ( size_t i = 0; i < m_gravFields.size(); ++i )
         {
-            if ( m_gravFields[i] == comp_grav )
+            if ( m_gravFields[i] == compGrav )
             {
                 m_gravFields.erase( m_gravFields.begin()+i );
                 break;

@@ -13,7 +13,6 @@
 - time accumulator... (very unstable when put delay on main loop)
 - improve logger
 - asynchonous fading out music (separate thread)
-- Use physical state interpolation instead of extrapolation
 - Strange physical behavior under "arrow" of level 2
 - Test OpenGL error checking (glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR) did not generate error)
 - Bug in Logger: Loading Texture "(null)"... Done!
@@ -54,6 +53,7 @@
 
 
 DONE:
+- Use physical state interpolation instead of extrapolation
 - Make camera functionality frame rate independent
 - Bug: can't fly away from wall if you jump near a wall
 - XML node names (maybe capital beginning?)

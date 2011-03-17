@@ -120,8 +120,8 @@ private:
     CompVisualAnimationSet m_visualAnimComps;
     CompVisualMessageSet m_visualMsgComps;
 
-    void onRegisterCompVisual( Entity& entity );
-    void onUnregisterCompVisual( Entity& entity );
+    void onRegisterEntity( Entity& entity );
+    void onUnregisterEntity( Entity& entity );
 
     MatrixId m_currentMatrix;
     float m_matrixGUI[16];

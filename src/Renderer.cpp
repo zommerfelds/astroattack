@@ -63,8 +63,8 @@ void RenderSubSystem::init( int width, int height )
         gAaLog.write ( " OpenGL Error: %s ", errString );
     }
 
-    m_eventConnection1 = m_gameEvents.newEntity.registerListener( boost::bind( &RenderSubSystem::onRegisterCompVisual, this, _1 ) );
-    m_eventConnection2 = m_gameEvents.deleteEntity.registerListener(  boost::bind( &RenderSubSystem::onUnregisterCompVisual, this, _1 ) );
+    m_eventConnection1 = m_gameEvents.newEntity.registerListener( boost::bind( &RenderSubSystem::onRegisterEntity, this, _1 ) );
+    m_eventConnection2 = m_gameEvents.deleteEntity.registerListener(  boost::bind( &RenderSubSystem::onUnregisterEntity, this, _1 ) );
 
     m_isInit = true;
 }
@@ -600,7 +600,7 @@ void RenderSubSystem::drawFPS(int fps)
     drawString( oss.str(), "FontW_s", 3.95f, 0.03f, AlignRight, AlignTop );
 }
 
-void RenderSubSystem::onRegisterCompVisual( Entity& entity )
+void RenderSubSystem::onRegisterEntity( Entity& entity )
 {
     BOOST_FOREACH(CompVisualTexture* pTexComp, entity.getComponents<CompVisualTexture>())
         m_visualTextureComps.insert( pTexComp );
@@ -612,7 +612,7 @@ void RenderSubSystem::onRegisterCompVisual( Entity& entity )
         m_visualMsgComps.insert( pMsgComp );
 }
 
-void RenderSubSystem::onUnregisterCompVisual( Entity& entity )
+void RenderSubSystem::onUnregisterEntity( Entity& entity )
 {
     BOOST_FOREACH(CompVisualTexture* pTexComp, entity.getComponents<CompVisualTexture>())
         m_visualTextureComps.erase( pTexComp );

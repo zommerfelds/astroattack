@@ -45,10 +45,10 @@ private:
     EventConnection m_eventConnection4;
     GameEvents& m_gameEvents;
 
-    void onRegisterPhysicsComp( Entity& entity );
-    void onUnregisterPhysicsComp( Entity& entity );
-	void onRegisterGravFieldComp( Entity& entity );
-    void onUnregisterGravFieldComp( Entity& entity );
+    void onRegisterEntity_phys( Entity& entity );
+    void onUnregisterEntity_phys( Entity& entity );
+	void onRegisterEntity_grav( Entity& entity );
+    void onUnregisterEntity_grav( Entity& entity );
 
     b2World m_world;
     float m_timeStep;

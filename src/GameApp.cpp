@@ -329,7 +329,7 @@ void GameApp::mainLoop()
         }
 
         m_subSystems.renderer.clearScreen();
-        DRAW( accumulator_secs/*/(PHYS_DELTA_TIME+0.3f)*PHYS_DELTA_TIME*/ ); // Spiel zeichnen
+        DRAW( accumulator_secs/*/(cPhysicsTimeStep+0.3f)*cPhysicsTimeStep*/ ); // Spiel zeichnen
         m_subSystems.renderer.drawFPS(m_fps);
         m_subSystems.renderer.flipBuffer();
     }

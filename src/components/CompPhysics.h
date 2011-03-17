@@ -170,6 +170,10 @@ private:
     Vector2D m_smoothPosition;
     float m_smoothAngle;
 
+    // for interpolation
+    Vector2D m_previousPosition;
+    float m_previousAngle;
+
     ShapeInfoVec m_shapeInfos;
     typedef std::map<ComponentId, b2Fixture*> FixtureMap;
     FixtureMap m_fixtureMap;
