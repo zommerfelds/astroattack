@@ -6,6 +6,7 @@
 
 #include "World.h"
 #include "GameEvents.h" // Steuert die Spielerreignisse
+#include "Entity.h"
 
 // Konstruktor
 GameWorld::GameWorld( GameEvents& events )

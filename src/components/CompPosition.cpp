@@ -15,7 +15,7 @@
 // eindeutige ID
 const ComponentTypeId CompPosition::COMPONENT_TYPE_ID = "CompPosition";
 
-// TODO: use weak_ptr for CompPhysics pointer (store for multiple uses)
+// TODO: store CompPhysics pointer for multiple uses (maybe weak_ptr?)
 
 CompPosition::CompPosition() : m_position (), m_orientation ( 0.0f ) {}
 

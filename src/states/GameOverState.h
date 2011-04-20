@@ -7,7 +7,7 @@
 // Wenn Spiel vorbei ist.
 
 #ifndef MAINMENUSTATE_H
-#define MAINMENUSTATE_H
+#define GAMEOVERSTATE_H
 
 #include <string>
 #include "../GameStates.h"

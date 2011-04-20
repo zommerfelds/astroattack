@@ -4,8 +4,6 @@
  * Copyright 2011 Christian Zommerfelds
  */
 
-// CompPlayerController.h für mehr Informationen
-
 #include <boost/bind.hpp>
 
 #include "CompPlayerController.h"
@@ -17,7 +15,7 @@
 #include "../Entity.h"
 #include "../Vector2D.h"
 
-// eindeutige ID
+// ID of this component
 const ComponentTypeId CompPlayerController::COMPONENT_TYPE_ID = "CompPlayerController";
 
 // Constants
@@ -49,21 +47,21 @@ void CompPlayerController::onUpdate()
         return; // keine Physikkomponente, also abbrechen
 
 	// Jump
-    bool hasMovedOnGround = false;                  // ob der Spieler sich am Boden bewegt hat
-    bool canWalkR = false;                          // ob der Spieler nach rechts Laufen kann (am Boden?, Steiligkeit)
-    bool canWalkL = false;                          // ob der Spieler nach links Laufen kann (am Boden?, Steiligkeit)
-    bool isTouchingSth = false;                     // ob der Spieler etwas berührt (Boden, Wand, Objekt)
-    bool usedJetpack = false;                       // ob der Spieler den Jetpack brauchen will
-    bool jumped = false;
-    bool wantToMoveSidewards = false;               // ob der Spieler sich seitwärts bewegen will
-    bool isPushing = false;                         // ob der Spieler einen Gegenstand stösst
+    bool movingOnGround = false;      // ob der Spieler sich am Boden bewegt hat
+    bool canWalkR = false;            // ob der Spieler nach rechts Laufen kann (am Boden?, Steiligkeit)
+    bool canWalkL = false;            // ob der Spieler nach links Laufen kann (am Boden?, Steiligkeit)
+    bool isTouchingSth = false;       // ob der Spieler etwas berührt (Boden, Wand, Objekt)
+    bool usingJetpack = false;        // ob der Spieler den Jetpack brauchen will
+    bool jumping = false;
+    bool wantToMoveSidewards = false; // ob der Spieler sich seitwärts bewegen will
+    bool isPushing = false;           // ob der Spieler einen Gegenstand stösst
 
-    bool isIncreasingAngle = false;                 // ob die Spielerfigur sich neigt (zum fliegen)
-    bool directionClw = false;                      // in welche Richtung neigt sich die Figur (true wenn Uhrzeigersinn)
+    bool isIncreasingAngle = false;   // ob die Spielerfigur sich neigt (zum fliegen)
+    bool directionClw = false;        // in welche Richtung neigt sich die Figur (true wenn Uhrzeigersinn)
 
-    const float maxAngleRel = 0.25f;                 // maximaler Neigungswinkel +/- (Relativ zu upVector)
-    const float incStep = 0.05f;                     // Winkelschritt pro Aktualisierung beim Vergrössern
-    const float decStep = 0.02f;                     // Winkelschritt pro Aktualisierung beim Verkleinern
+    const float maxAngleRel = 0.25f;  // maximaler Neigungswinkel +/- (Relativ zu upVector)
+    const float incStep = 0.05f;      // Winkelschritt pro Aktualisierung beim Vergrössern
+    const float decStep = 0.02f;      // Winkelschritt pro Aktualisierung beim Verkleinern
 
     std::vector<boost::shared_ptr<ContactInfo> > contacts = playerCompPhysics->getContacts();
     isTouchingSth = !contacts.empty();
@@ -135,16 +133,11 @@ void CompPlayerController::onUpdate()
 		// normalSteepestLeft finden
         if ( contacts.size()==1 ) // Da es sowieso meistens nur eine Normale gibt, wird hier aus der rechten Normale die Linke gerechnet (das gleiche! ausser der Winkel ist anders)
 		{
-			/*if ( normalSteepestRight == NULL ) // wenn Rechts nicht gültig ist, dann ist Links auch nicht gültig
-				minAngleL = 2*cPi;
-			else
-			{*/
-				normalSteepestLeft = normalSteepestRight;                // es gibt ja nur eine, die Gleiche
-				iContactLeft = iContactRight;                            // auch gleicher Körper
-				minAngleL = 2*cPi-minAngleR + (cPi*0.5f-cMaxWalkAngle)*2;  // Winkel berechnen (orientierung ändern + verschiebung)
-				if ( minAngleL > 2*cPi )                                  // > als 360 wird wieder bei 0 angefangen
-					minAngleL -= 2*cPi;
-			//}
+			normalSteepestLeft = normalSteepestRight;                // es gibt ja nur eine, die Gleiche
+            iContactLeft = iContactRight;                            // auch gleicher Körper
+            minAngleL = 2*cPi-minAngleR + (cPi*0.5f-cMaxWalkAngle)*2;  // Winkel berechnen (orientierung ändern + verschiebung)
+            if ( minAngleL > 2*cPi )                                  // > als 360 wird wieder bei 0 angefangen
+                minAngleL -= 2*cPi;
 		}
 		else // falls normalSteepestLeft noch gesucht werden muss
 		// gleiches Vorgehen wie oben (siehe Kommentare)
@@ -199,7 +192,7 @@ void CompPlayerController::onUpdate()
         // Taste muss erst gerade gedrück werden und nicht schon gedrück sein (und Spielerfigur muss ein Block berühren)
         if ( !m_spaceKeyDownLastUpdate && isTouchingSth )
         {
-            jumped = true;
+            jumping = true;
             Vector2D impulse( 0.0f, 0.0f ); // Impuls
 
             // Je nachdem ob der Spieler am Boden ist oder an der Wand anders abstossen
@@ -256,8 +249,8 @@ void CompPlayerController::onUpdate()
     if ( m_inputSubSystem.getKeyState ( Up ) && m_itJetPackVar->second > 0 && (m_rechargeTime==cMaxRecharge || !isTouchingSth ) )
     {
         const float maxVelYJetpack = 12.0f;
-        jumped = true;
-        usedJetpack = true;
+        jumping = true;
+        usingJetpack = true;
         m_itJetPackVar->second -= 21;
         if (m_itJetPackVar->second < 0)
         {
@@ -303,7 +296,7 @@ void CompPlayerController::onUpdate()
                     factor = mass/smallMass;
                 contacts[iContactRight]->comp->applyForce( -force*cReactionWalk*factor, contacts[iContactRight]->point ); // TODO: get middle between 2 points
             }
-            hasMovedOnGround = true;
+            movingOnGround = true;
         }
     
         // Laufen nach links
@@ -329,14 +322,14 @@ void CompPlayerController::onUpdate()
                     factor = mass/smallMass;
                 contacts[iContactLeft]->comp->applyForce( -force*cReactionWalk*factor, contacts[iContactLeft]->point ); // TODO: get middle between 2 points
             }
-            hasMovedOnGround = true;
+            movingOnGround = true;
         }
 
         ++m_rechargeTime;
         if ( m_rechargeTime > cMaxRecharge )
             m_rechargeTime = cMaxRecharge;
 
-        if ( !usedJetpack )
+        if ( !usingJetpack )
             m_itJetPackVar->second += 13;
         if ( m_itJetPackVar->second > 1000 )
             m_itJetPackVar->second = 1000;
@@ -347,7 +340,7 @@ void CompPlayerController::onUpdate()
         // Jetpack nach rechts
         if ( m_inputSubSystem.getKeyState ( Right ) )
         {
-            if ( usedJetpack && !isTouchingSth )
+            if ( usingJetpack && !isTouchingSth )
             {
                 isIncreasingAngle = true;
                 directionClw = true;
@@ -356,7 +349,7 @@ void CompPlayerController::onUpdate()
             //if ( (!isTouchingSth || usedJetpack) && playerCompPhysics->GetBody()->GetLinearVelocity().x < maxVelXFly )
             if ( playerCompPhysics->getLinearVelocity().x < maxVelXFly )
 			{
-				Vector2D force (upVector * (usedJetpack?fly_jet_force_magnitude:fly_force_magnitude));
+				Vector2D force (upVector * (usingJetpack?fly_jet_force_magnitude:fly_force_magnitude));
 				force.rotate(-cPi*0.5f);
                 playerCompPhysics->applyForce( force, playerCompPhysics->getCenterOfMassPosition() );
 			}
@@ -365,7 +358,7 @@ void CompPlayerController::onUpdate()
         // Jetpack nach links
         else if ( m_inputSubSystem.getKeyState ( Left ) )
         {
-            if ( usedJetpack && !isTouchingSth )
+            if ( usingJetpack && !isTouchingSth )
             {
                 isIncreasingAngle = true;
                 directionClw = false;
@@ -374,7 +367,7 @@ void CompPlayerController::onUpdate()
             //if ( (!isTouchingSth || usedJetpack) && playerCompPhysics->GetBody()->GetLinearVelocity().x > -maxVelXFly )
             if ( playerCompPhysics->getLinearVelocity().x > -maxVelXFly )
             {
-				Vector2D force (upVector * (usedJetpack?fly_jet_force_magnitude:fly_force_magnitude));
+				Vector2D force (upVector * (usingJetpack?fly_jet_force_magnitude:fly_force_magnitude));
 				force.rotate(cPi*0.5f);
 				playerCompPhysics->applyForce( force, playerCompPhysics->getCenterOfMassPosition() );
 			}
@@ -470,13 +463,13 @@ void CompPlayerController::onUpdate()
 
     if ( bodyAnim )
     {
-        if ( jumped )
+        if ( jumping )
         {
             bodyAnim->setState( "Jumping" );
             bodyAnim->start();
             bodyAnim->finish();
         }
-        else if (hasMovedOnGround)
+        else if (movingOnGround)
         {
             bodyAnim->setDirection( 1 );
             bodyAnim->setState( "Running" );
@@ -493,7 +486,7 @@ void CompPlayerController::onUpdate()
                 bodyAnim->finish(); // jack has to finish his step
         }
 
-        if ( hasMovedOnGround )
+        if ( movingOnGround )
             ++m_walkingTime;
         else
             m_walkingTime = 0;
@@ -501,7 +494,7 @@ void CompPlayerController::onUpdate()
     
     if ( jetpackAnim ) // Raketenrucksack animation
     {
-        if ( usedJetpack ) // Spieler benutzt gerade den Jetpack
+        if ( usingJetpack ) // Spieler benutzt gerade den Jetpack
         {
             if ( jetpackAnim->getState()=="Off" ) // wenn ausgeschaltet
             {

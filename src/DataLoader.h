@@ -12,6 +12,8 @@
 #include <set>
 #include <string>
 
+#include "Exception.h"
+
 class GameWorld;
 struct SubSystems;
 struct SlideShow;
@@ -24,6 +26,11 @@ struct ResourceIds
     std::set<std::string> textures;
     std::set<std::string> animations;
     std::set<std::string> fonts;
+};
+
+class DataLoadException : public Exception {
+public:
+    DataLoadException(const std::string& msg);
 };
 
 class DataLoader

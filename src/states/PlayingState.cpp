@@ -11,6 +11,7 @@
 
 #include "PlayingState.h"
 #include "GameOverState.h"
+#include "MainMenuState.h"
 #include "../GameApp.h"
 #include "../Renderer.h"
 #include "../Physics.h"
@@ -49,22 +50,29 @@ PlayingState::PlayingState( SubSystems& subSystems, std::string levelFileName )
 void PlayingState::init()        // State starten
 {
     //GetSubSystems().renderer.DisplayLoadingScreen();
-    
-	getSubSystems().input.putMouseOnCenter();
-
-    m_cameraController.init();
-    m_cameraController.setFollowPlayer( true );
 
     gAaLog.write ( "Loading world...\n\n" );
     gAaLog.increaseIndentationLevel();
 
+    try
+    {
+        // Welt von XML-Datei laden
+        DataLoader::loadWorld( "data/player.info", m_gameWorld, getSubSystems() );
+        DataLoader::loadWorld( m_levelFileName, m_gameWorld, getSubSystems() );
+    }
+    catch (DataLoadException e)
+    {
+        // TODO is this a good thing to do?
+        // TODO show error
+        gAaLog.write("Error loading file : %s", e.getMsg().c_str());
+        boost::shared_ptr<MainMenuState> menuState (new MainMenuState(getSubSystems()));
+        getSubSystems().stateManager.changeState(menuState);
+        return;
+    }
+
     m_gameWorld.setVariable( "Collected", 0 );
     m_gameWorld.setVariable( "JetpackEnergy", 1000 );
     m_gameWorld.setVariable( "Health", 1000 );
-
-    // Welt von XML-Datei laden
-    DataLoader::loadWorld( "data/player.info", m_gameWorld, getSubSystems() );
-    DataLoader::loadWorld( m_levelFileName, m_gameWorld, getSubSystems() );
 
     getSubSystems().sound.loadMusic( "data/Music/Aerospace.ogg", "music" );
     getSubSystems().sound.playMusic( "music", true, 0 );
@@ -77,6 +85,11 @@ void PlayingState::init()        // State starten
     log.write( "World Entities:\n\n" );
     m_gameWorld.writeWorldToLogger( log );
     log.closeFile();
+
+    getSubSystems().input.putMouseOnCenter();
+
+    m_cameraController.init();
+    m_cameraController.setFollowPlayer( true );
 
     m_eventConnection1 = getSubSystems().events.wantToDeleteEntity.registerListener( boost::bind( &PlayingState::onEntityDeleted, this, _1 ) );
     m_eventConnection2 = getSubSystems().events.levelEnd.registerListener( boost::bind( &PlayingState::onLevelEnd, this, _1, _2 ) );

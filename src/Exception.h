@@ -19,13 +19,13 @@
    Oder wenn man auch in der Log-Datei schreiben möchte:
    throw Exception ( gAaLog.Write( "Fehlertext" ) );
 */
-class Exception
+class Exception //: public std::exception TODO
 {
 public:
     Exception ( const std::string &iMsg ) // std::string als Parameter
     : m_msg ( iMsg ) {}
 
-    const std::string& getMsg() const // Abfrage nach dem Errorstring
+    virtual const std::string& getMsg() const // Abfrage nach dem Errorstring
     {
         return m_msg;
     }
