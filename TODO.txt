@@ -19,10 +19,9 @@
 - Kontakt Events nicht für jeden Box2D Kontakt erzeugen, sonders Box2D Kontakte zuerst verarbeiten und zusammenfügen.
 - GUI System
 - Konkave Polygone im Editor
-- Fehlerchecking und Beschreibung beim Level Laden
 - Check widescreen mode
 - Handle UTF-8 symbols in the slide show state (a multi-byte character is treated as single bytes)
-
+- Migrate XML file to INFO (slide show, config, resource)
 
 * Low priority *
 
@@ -43,7 +42,7 @@
 - Energie und Energie-Killer
 - Gegner (Monster)
 - Port to CMake
-- Use unordered_map
+- Maybe use unordered_map
 
 * ? *
 
@@ -53,6 +52,7 @@
 
 
 DONE:
+- Fehlerchecking und Beschreibung beim Level Laden
 - Use physical state interpolation instead of extrapolation
 - Make camera functionality frame rate independent
 - Bug: can't fly away from wall if you jump near a wall

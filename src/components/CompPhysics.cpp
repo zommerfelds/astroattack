@@ -24,7 +24,7 @@ CompPhysics::CompPhysics(const BodyDef& rBodyDef) :
     m_bodyDef (rBodyDef),
     m_localRotationPoint (),
     m_localGravitationPoint (),
-    m_smoothPosition (),
+    m_smoothCenterOfMass (),
     m_smoothAngle (0.0f),
     m_gravField (NULL),
     m_remainingUpdatesTillGravFieldChangeIsPossible (0)
@@ -114,14 +114,14 @@ void CompPhysics::rotate( float deltaAngle, const Vector2D& localPoint )
 }
 
 
-const Vector2D CompPhysics::getPosition() const
+Vector2D CompPhysics::getPosition() const
 {
     return m_body->GetPosition();
 }
 
-const Vector2D& CompPhysics::getSmoothPosition() const
+Vector2D CompPhysics::getSmoothPosition() const
 {
-    return m_smoothPosition;
+    return m_smoothCenterOfMass - Vector2D(m_body->GetLocalCenter()).rotated(m_smoothAngle);
 }
 
 ContactVector CompPhysics::getContacts(bool getSensors) const
@@ -149,12 +149,12 @@ ContactVector CompPhysics::getContacts(bool getSensors) const
     return vecTouchInfo;
 }
 
-Vector2D CompPhysics::getSmoothCenterOfMassPosition() const
+const Vector2D& CompPhysics::getSmoothCenterOfMass() const
 {
-    return m_smoothPosition + Vector2D(m_body->GetLocalCenter()).rotated(m_smoothAngle);
+    return m_smoothCenterOfMass;
 }
 
-Vector2D CompPhysics::getCenterOfMassPosition() const
+Vector2D CompPhysics::getCenterOfMass() const
 {
     return Vector2D( m_body->GetWorldCenter() );
 }

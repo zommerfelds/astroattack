@@ -125,10 +125,10 @@ public:
 
     ContactVector getContacts(bool getSensors=false) const;
 
-    Vector2D getCenterOfMassPosition() const;
-    Vector2D getSmoothCenterOfMassPosition() const;
-    const Vector2D getPosition() const;
-    const Vector2D& getSmoothPosition() const;
+    Vector2D getCenterOfMass() const;
+    const Vector2D& getSmoothCenterOfMass() const;
+    Vector2D getPosition() const;
+    Vector2D getSmoothPosition() const;
     float getAngle() const;
     float getSmoothAngle() const { return m_smoothAngle; }
 
@@ -167,11 +167,11 @@ private:
     Vector2D m_localRotationPoint;
     Vector2D m_localGravitationPoint;
 
-    Vector2D m_smoothPosition;
+    Vector2D m_smoothCenterOfMass;
     float m_smoothAngle;
 
     // for interpolation
-    Vector2D m_previousPosition;
+    Vector2D m_previousCenterOfMass;
     float m_previousAngle;
 
     ShapeInfoVec m_shapeInfos;

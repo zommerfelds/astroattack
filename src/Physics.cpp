@@ -84,7 +84,7 @@ void PhysicsSubSystem::onRegisterEntity_phys(Entity& entity)
         {
             compPhys->m_bodyDef.position = compPos->m_position;
             compPhys->m_bodyDef.angle = compPos->m_orientation;
-            compPhys->m_smoothPosition = compPos->m_position;
+            compPhys->m_smoothCenterOfMass = compPos->m_position; // TODO: center of mass instead of position
             compPhys->m_smoothAngle = compPos->m_orientation;
         }
 
@@ -109,7 +109,7 @@ void PhysicsSubSystem::onRegisterEntity_phys(Entity& entity)
     		if (!pCompShape)
     			continue; // error
 
-    		boost::shared_ptr<b2Shape> pB2Shape = pCompShape->toB2Shape(); // this object has to live so long till Box2D has made a copy of it in createFixture
+    		boost::shared_ptr<b2Shape> pB2Shape = pCompShape->toB2Shape(); // this object has to live till Box2D has made a copy of it in createFixture
             fixtureDef->shape = pB2Shape.get();
             fixtureDef->density = compPhys->m_shapeInfos[i]->density;
             fixtureDef->friction = compPhys->m_shapeInfos[i]->friction;
@@ -151,7 +151,7 @@ void PhysicsSubSystem::update()
 {
     BOOST_FOREACH(CompPhysics* compPhys, m_physicsComps)
     {
-        compPhys->m_previousPosition = compPhys->getPosition();
+        compPhys->m_previousCenterOfMass = compPhys->getCenterOfMass();
         compPhys->m_previousAngle = compPhys->getAngle();
     }
 
@@ -227,10 +227,10 @@ void PhysicsSubSystem::calculateSmoothPositions(float accumulator)
 
         // interpolation of last state and current state
         float angle = (ratio * pBody->GetAngle()) + ((1-ratio) * compPhys->m_previousAngle);
-        Vector2D v = Vector2D(ratio * pBody->GetPosition()) + (compPhys->m_previousPosition * (1-ratio));
+        Vector2D v = Vector2D(ratio * pBody->GetWorldCenter()) + (compPhys->m_previousCenterOfMass * (1-ratio));
 
         compPhys->m_smoothAngle = angle;
-        compPhys->m_smoothPosition = v;
+        compPhys->m_smoothCenterOfMass = v;
     }
 }
 

@@ -197,7 +197,7 @@ void CameraController::update ( float deltaTime ) // time_span in seconds
         CompPhysics* playerPhys = player->getComponent<CompPhysics>();
         if ( playerPhys )
         {
-            const Vector2D& playerPos = playerPhys->getSmoothCenterOfMassPosition(); // Position des Spielers
+            const Vector2D& playerPos = playerPhys->getSmoothCenterOfMass(); // Position des Spielers
 
             if ( m_isFollowingPlayer )
             {
@@ -247,8 +247,8 @@ void CameraController::update ( float deltaTime ) // time_span in seconds
                 const CompGravField* grav = playerPhys->getActiveGravField();
                 Vector2D upVector(0.0f,1.0f);
                 if ( grav )
-                    upVector = grav->getAcceleration( playerPhys->getCenterOfMassPosition() ).getUnitVector()*-1;
-                bool right = upVector.isRight( screenToWorld(m_inputSubSystem.getMousePos()) - playerPhys->getCenterOfMassPosition() );
+                    upVector = grav->getAcceleration( playerPhys->getCenterOfMass() ).getUnitVector()*-1;
+                bool right = upVector.isRight( screenToWorld(m_inputSubSystem.getMousePos()) - playerPhys->getCenterOfMass() );
                 if ( m_playerHeading == 0 || right != (m_playerHeading==1) )
                 {
                     if ( m_timeSinceLastSwitchHeading > cTimeTillAnimSwitchHeadingIsPossible )

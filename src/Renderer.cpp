@@ -106,7 +106,7 @@ void RenderSubSystem::initOpenGL ( int width, int height )
     glEnable( GL_LINE_SMOOTH );                                   // Kanten-Antialiasing bei Linien
     glEnable( GL_POINT_SMOOTH );                                  // Kanten-Antialiasing bei Punkten
     glLineWidth( 2.0f );                                          // Liniendicke
-    glPointSize( 10.0f );                                          // Punktgrösse
+    glPointSize( 10.0f );                                         // Punktgrösse
     //glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE ); // Farben sollen Texturen nicht überdecken
 
 
@@ -273,12 +273,12 @@ void RenderSubSystem::drawTexturedPolygon ( const CompShapePolygon& rPoly, const
 
     for ( size_t iCountVertices = 0; iCountVertices < rPoly.getVertexCount(); ++iCountVertices )
     {
-    	std::string tex = rTex.getEdgeTexture(iCountVertices);
-    	if (tex == "")
+    	std::string edgeTex = rTex.getEdgeTexture(iCountVertices);
+    	if (edgeTex == "")
     		continue;
 
         size_t vetex2Index = (iCountVertices==rPoly.getVertexCount()-1) ? (0) : (iCountVertices+1);
-    	drawEdge( *rPoly.getVertex( iCountVertices ), *rPoly.getVertex( vetex2Index ), tex);
+    	drawEdge( *rPoly.getVertex( iCountVertices ), *rPoly.getVertex( vetex2Index ), edgeTex);
     }
 
     if ( border )
@@ -310,9 +310,8 @@ void RenderSubSystem::drawTexturedCircle ( const CompShapeCircle& rCircle, const
 
     gluDisk(pQuacric, 0.0f, rCircle.getRadius(), cCircleSlices,  1);
     
-    std::string tex = rTex.getEdgeTexture(0);
-    //tex = "EdgeGrass1";
-    if (tex != "")
+    std::string edgeTex = rTex.getEdgeTexture(0);
+    if (edgeTex != "")
     {
         float angle = cPi*2/cCircleSlices;
         float edgeLenght = tan(angle/2)*2.0f*rCircle.getRadius();
@@ -322,7 +321,7 @@ void RenderSubSystem::drawTexturedCircle ( const CompShapeCircle& rCircle, const
         {
             Vector2D cross ( rCircle.getRadius(), 0.0f );
 
-            drawEdge(cross.rotated(angle*i), cross.rotated(angle*(i+1)), tex, textureCut*i, edgeLenght);
+            drawEdge(cross.rotated(angle*i), cross.rotated(angle*(i+1)), edgeTex, textureCut*i, edgeLenght);
         }
     }
 
@@ -490,12 +489,12 @@ void RenderSubSystem::drawVisualTextureComps()
             glPushMatrix();
 
             float angle = compPos->getDrawingOrientation();
-            const Vector2D& position = compPos->getDrawingPosition();
+            Vector2D position = compPos->getDrawingPosition();
 
             glTranslatef(position.x, position.y, 0.0f);
             glRotatef( radToDeg(angle), 0.0, 0.0, 1.0f);
 
-            for ( size_t i=0; i<compShapes.size(); ++i )
+            for (size_t i = 0; i < compShapes.size(); ++i)
             {
                 switch (compShapes[i]->getType())
                 {
@@ -530,16 +529,17 @@ void RenderSubSystem::drawVisualAnimationComps()
             glPushMatrix();
 
             float angle = compPos->getDrawingOrientation();
-            const Vector2D& position = compPos->getDrawingPosition();
+            Vector2D position = compPos->getDrawingPosition();
+
 
             bool isFlipped = pAnimComp->getFlip();
             Vector2D center = pAnimComp->center();
             if ( isFlipped )
                 center.x = -center.x;
 
-            glTranslated(position.x, position.y, 0.0f);
+            glTranslatef(position.x, position.y, 0.0f);
             glRotatef(radToDeg(angle), 0.0, 0.0, 1.0f);
-            glTranslated(-center.x, -center.y, 0.0f);
+            glTranslatef(-center.x, -center.y, 0.0f);
 
             {
                 // FLIP ONCE

@@ -26,7 +26,7 @@ public:
 	static const ComponentTypeId COMPONENT_TYPE_ID;
 
     // =========== Getters ==========
-    const Vector2D& getDrawingPosition() const; // get current drawing (smooth) position. If a CampPhysics exist, it gets the position from there.
+    Vector2D getDrawingPosition() const; // get current drawing (smooth) position. If a CampPhysics exist, it gets the position from there.
     float getDrawingOrientation() const;
 
     // =========== Setters ===========

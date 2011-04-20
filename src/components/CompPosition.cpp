@@ -25,7 +25,7 @@ CompPosition::CompPosition() : m_position (), m_orientation ( 0.0f ) {}
     m_position = pos;
 }*/
 
-const Vector2D& CompPosition::getDrawingPosition() const
+Vector2D CompPosition::getDrawingPosition() const
 {
     const CompPhysics* compPhys = getOwnerEntity()->getComponent<CompPhysics>(); // important TODO: this can segfault
     if (compPhys)

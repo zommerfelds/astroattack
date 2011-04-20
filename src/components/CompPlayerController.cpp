@@ -91,7 +91,7 @@ void CompPlayerController::onUpdate()
 	const CompGravField* grav = playerCompPhysics->getActiveGravField();
 	Vector2D upVector(0.0f,1.0f);
 	if ( grav!=NULL )
-		upVector = grav->getAcceleration( playerCompPhysics->getCenterOfMassPosition() ).getUnitVector()*-1;
+		upVector = grav->getAcceleration( playerCompPhysics->getCenterOfMass() ).getUnitVector()*-1;
 
 	float upAngleAbs = upVector.getAngle();
 
@@ -222,7 +222,7 @@ void CompPlayerController::onUpdate()
             }
             
             // Impuls auf Spielerfigur wirken lassen
-            playerCompPhysics->applyLinearImpulse( impulse , playerCompPhysics->getCenterOfMassPosition() );
+            playerCompPhysics->applyLinearImpulse( impulse , playerCompPhysics->getCenterOfMass() );
             
             // Gegenimpulse auf andere Objekte (physikalisch korrektere Simulation)
             float amountPerBody = 1.0f/contacts.size();
@@ -260,7 +260,7 @@ void CompPlayerController::onUpdate()
         if ( playerCompPhysics->getLinearVelocity().y < maxVelYJetpack )
 		{
 			Vector2D force (upVector * jetpack_force_magnitude);
-            playerCompPhysics->applyForce( force, playerCompPhysics->getCenterOfMassPosition() );
+            playerCompPhysics->applyForce( force, playerCompPhysics->getCenterOfMass() );
 		}
 	}
 
@@ -287,7 +287,7 @@ void CompPlayerController::onUpdate()
             // Impuls auf Spielerfigur wirken lassen
             if ( playerCompPhysics->getLinearVelocity().x < maxVelXWalk )
             {
-                playerCompPhysics->applyForce( force, playerCompPhysics->getCenterOfMassPosition() );
+                playerCompPhysics->applyForce( force, playerCompPhysics->getCenterOfMass() );
 		        
                 // Gegenimpuls auf Grundobjekt wirken lassen
                 float factor = 1.0f;
@@ -314,7 +314,7 @@ void CompPlayerController::onUpdate()
             // Impuls auf Spielerfigur wirken lassen
             if ( playerCompPhysics->getLinearVelocity().x > -maxVelXWalk )
             {
-                playerCompPhysics->applyForce( force, playerCompPhysics->getCenterOfMassPosition() );
+                playerCompPhysics->applyForce( force, playerCompPhysics->getCenterOfMass() );
 
                 float factor = 1.0f;
                 float mass = contacts[iContactLeft]->comp->getMass();
@@ -351,7 +351,7 @@ void CompPlayerController::onUpdate()
 			{
 				Vector2D force (upVector * (usingJetpack?fly_jet_force_magnitude:fly_force_magnitude));
 				force.rotate(-cPi*0.5f);
-                playerCompPhysics->applyForce( force, playerCompPhysics->getCenterOfMassPosition() );
+                playerCompPhysics->applyForce( force, playerCompPhysics->getCenterOfMass() );
 			}
         }
         
@@ -369,7 +369,7 @@ void CompPlayerController::onUpdate()
             {
 				Vector2D force (upVector * (usingJetpack?fly_jet_force_magnitude:fly_force_magnitude));
 				force.rotate(cPi*0.5f);
-				playerCompPhysics->applyForce( force, playerCompPhysics->getCenterOfMassPosition() );
+				playerCompPhysics->applyForce( force, playerCompPhysics->getCenterOfMass() );
 			}
         }
     }

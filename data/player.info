@@ -172,4 +172,9 @@ entity
 		y 0.000000
 		a 0.000000
 	}
+    ;component
+    ;{
+    ;    id CompVisualTexture
+    ;    texture "Kirks Entry"
+    ;}
 }
