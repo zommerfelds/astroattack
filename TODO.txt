@@ -4,11 +4,12 @@
 
 * High priority *
 
-- Refactor
-
+- Setting the rotation can lead to overlap and strange behavior (ex. level 2 under "arrow")
+- Rotating around planet: strange flickering
 
 * Medium priority *
 
+- Entities as pure aggregation
 - Test Init() => DeInit() => Init() on GameApp and SubSystems
 - time accumulator... (very unstable when put delay on main loop)
 - improve logger

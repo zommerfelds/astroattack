@@ -33,15 +33,21 @@ RenderSubSystem::RenderSubSystem( GameEvents& gameEvents )
   m_textureManager (), m_animationManager ( m_textureManager ),
   m_fontManager (), m_currentMatrix (World)
 {
-    m_matrixText[0] = 1; m_matrixText[4] = 0; m_matrixText[8] = 0; m_matrixText[12] = 0;
-    m_matrixText[1] = 0; m_matrixText[5] = 1; m_matrixText[9] = 0; m_matrixText[13] = 0;
-    m_matrixText[2] = 0; m_matrixText[6] = 0; m_matrixText[10] = 1; m_matrixText[14] = 0;
-    m_matrixText[3] = 0; m_matrixText[7] = 0; m_matrixText[11] = 0; m_matrixText[15] = 1;
+    float* M;
 
-    m_matrixGUI[0] = 1; m_matrixGUI[4] = 0; m_matrixGUI[8] = 0; m_matrixGUI[12] = 0;
-    m_matrixGUI[1] = 0; m_matrixGUI[5] = 1; m_matrixGUI[9] = 0; m_matrixGUI[13] = 0;
-    m_matrixGUI[2] = 0; m_matrixGUI[6] = 0; m_matrixGUI[10] = 1; m_matrixGUI[14] = 0;
-    m_matrixGUI[3] = 0; m_matrixGUI[7] = 0; m_matrixGUI[11] = 0; m_matrixGUI[15] = 1;
+    M = m_matrixText;
+    // load identity
+    M[0] = 1; M[4] = 0; M[ 8] = 0; M[12] = 0;
+    M[1] = 0; M[5] = 1; M[ 9] = 0; M[13] = 0;
+    M[2] = 0; M[6] = 0; M[10] = 1; M[14] = 0;
+    M[3] = 0; M[7] = 0; M[11] = 0; M[15] = 1;
+
+    M = m_matrixGUI;
+    // load identity
+    M[0] = 1; M[4] = 0; M[ 8] = 0; M[12] = 0;
+    M[1] = 0; M[5] = 1; M[ 9] = 0; M[13] = 0;
+    M[2] = 0; M[6] = 0; M[10] = 1; M[14] = 0;
+    M[3] = 0; M[7] = 0; M[11] = 0; M[15] = 1;
 }
 
 RenderSubSystem::~RenderSubSystem()

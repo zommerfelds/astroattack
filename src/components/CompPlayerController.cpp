@@ -14,6 +14,7 @@
 #include "../Input.h"
 #include "../Entity.h"
 #include "../Vector2D.h"
+#include "../main.h"
 
 // ID of this component
 const ComponentTypeId CompPlayerController::COMPONENT_TYPE_ID = "CompPlayerController";
@@ -40,11 +41,14 @@ CompPlayerController::CompPlayerController( const InputSubSystem& inputSubSystem
 // Funktion die Tastendrücke in Physikalische Reaktionen umwandelt.
 // Wird immer aktualisiert.
 void CompPlayerController::onUpdate()
-{    
+{
     // Physikkomponente vom Spieler suchen, damit wir Kräfte an ihm ausüben können
     CompPhysics* playerCompPhysics = getOwnerEntity()->getComponent<CompPhysics>();
     if ( playerCompPhysics == NULL )
+    {
+        gAaLog.write("WARNING: entity '%s' has component CompPlayerController but no CompPhysics", getOwnerEntity()->getId().c_str());
         return; // keine Physikkomponente, also abbrechen
+    }
 
 	// Jump
     bool movingOnGround = false;      // ob der Spieler sich am Boden bewegt hat
@@ -54,14 +58,14 @@ void CompPlayerController::onUpdate()
     bool usingJetpack = false;        // ob der Spieler den Jetpack brauchen will
     bool jumping = false;
     bool wantToMoveSidewards = false; // ob der Spieler sich seitwärts bewegen will
-    bool isPushing = false;           // ob der Spieler einen Gegenstand stösst
+    bool isPushing = false;           // ob der Spieler einen Gegenstand stosst
 
     bool isIncreasingAngle = false;   // ob die Spielerfigur sich neigt (zum fliegen)
     bool directionClw = false;        // in welche Richtung neigt sich die Figur (true wenn Uhrzeigersinn)
 
     const float maxAngleRel = 0.25f;  // maximaler Neigungswinkel +/- (Relativ zu upVector)
     const float incStep = 0.05f;      // Winkelschritt pro Aktualisierung beim Vergrössern
-    const float decStep = 0.02f;      // Winkelschritt pro Aktualisierung beim Verkleinern
+    const float cDecStep = 0.02f;      // Winkelschritt pro Aktualisierung beim Verkleinern
 
     std::vector<boost::shared_ptr<ContactInfo> > contacts = playerCompPhysics->getContacts();
     isTouchingSth = !contacts.empty();
@@ -72,8 +76,8 @@ void CompPlayerController::onUpdate()
     // Es kann sein, dass der Spieler mehrere Blöcke berührt. Je nachdem ob der Spieler nach links oder rechts gehen will,
     // muss die das richtige Block gewählt werden (die richtige Normale). Für jede Laufrichtung gibt es eine Normale:
 
-    Vector2D normalSteepestRight; // Normale zum steilsten begehbaren Anstieg nach rechts (wo der Spieler darauf ist)
-    Vector2D normalSteepestLeft;  // Normale zum steilsten begehbaren Anstieg nach links (wo der Spieler darauf ist)
+    Vector2D normalSteepestRight;
+    Vector2D normalSteepestLeft;
 
     // Winkeln zwischen maximum und momentane Wegrichtung (Radian)
     float minAngleR = 2*cPi; // Je grösser desto mehr ist der Boden von der steilsten Rechts-Anstiegsmöchglichkeit im Uhrzeigersinn gedreht
@@ -101,7 +105,7 @@ void CompPlayerController::onUpdate()
         // TODO: normals should be from ground to player, not from player to ground
 		{
 			// Normale zur steilsten Anstiegsmöchglichkeit nach rechts
-			Vector2D normWalkable( upVector.rotated( -cMaxWalkAngle-cPi/2.0f ) ); // kann auch eifach mit y/-x oder -y/x gerechnet werden
+			Vector2D normWalkable( upVector.rotated( -cMaxWalkAngle-cPi/2.0f ) );
 
 			float min_angle = 2.0f*cPi;       // kleinster gefundener Winkel
 
@@ -143,7 +147,7 @@ void CompPlayerController::onUpdate()
 		// gleiches Vorgehen wie oben (siehe Kommentare)
 		{
 			// Normale zur steilsten Anstiegsmöchglichkeit nach links
-			Vector2D normWalkable( upVector.rotated( cMaxWalkAngle+cPi/2.0f ) ); // kann auch eifach mit y/-x oder -y/x gerechnet werden
+			Vector2D normWalkable( upVector.rotated( cMaxWalkAngle+cPi/2.0f ) );
 
 			float min_angle = 2*cPi;
 
@@ -416,18 +420,16 @@ void CompPlayerController::onUpdate()
 
 			if ( returnClw )
 			{
-				m_bodyAngleAbs -= decStep*bonusFactor;
-				if ( fabs(diffAngle) < decStep*bonusFactor ) {
+				m_bodyAngleAbs -= cDecStep*bonusFactor;
+				if ( fabs(diffAngle) < cDecStep*bonusFactor ) {
 					m_bodyAngleAbs = upAngleAbs;
-                    //std::cout << "inside!   fabs(diffAngle) = " << fabs(diffAngle) << "; decStep*bonusFactor = " << decStep*bonusFactor << std::endl;
                 }
 			}
 			else
 			{
-				m_bodyAngleAbs += decStep*bonusFactor;
-                if ( fabs(diffAngle) < decStep*bonusFactor ) {
+				m_bodyAngleAbs += cDecStep*bonusFactor;
+                if ( fabs(diffAngle) < cDecStep*bonusFactor ) {
 					m_bodyAngleAbs = upAngleAbs;
-                    //std::cout << "inside!   fabs(diffAngle) = " << fabs(diffAngle) << "; decStep*bonusFactor = " << decStep*bonusFactor << std::endl;
                 }
 			}
 		}
@@ -451,6 +453,34 @@ void CompPlayerController::onUpdate()
             setHighFriction( playerCompPhysics );               // die Reibung vergrössern, damit er nicht zu viel rutscht
     }
 
+    updateAnims(jumping, movingOnGround, usingJetpack);
+
+    m_playerCouldWalkLastUpdate = ( canWalkR || canWalkL );
+}
+
+void CompPlayerController::setLowFriction( CompPhysics* playerCompPhysics )
+{
+    if ( m_currentFrictionIsLow )
+        return;
+    m_currentFrictionIsLow = true;
+
+    playerCompPhysics->setShapeFriction("bottom", 0.3f);
+}
+
+void CompPlayerController::setHighFriction( CompPhysics* playerCompPhysics )
+{
+    if ( !m_currentFrictionIsLow )
+        return;
+    m_currentFrictionIsLow = false;
+
+    playerCompPhysics->setShapeFriction("bottom", 4.0f);
+}
+
+void CompPlayerController::loadFromPropertyTree(const boost::property_tree::ptree&)
+{}  // dont need to do anything, because there is no data for this component
+
+void CompPlayerController::updateAnims(bool jumping, bool movingOnGround, bool usingJetpack)
+{
     // Laufanimation steuern
     CompVisualAnimation* bodyAnim = NULL;
     CompVisualAnimation* jetpackAnim = NULL;
@@ -461,7 +491,9 @@ void CompPlayerController::onUpdate()
         else if ( player_anims[i]->getId() == "jetpack" )
             jetpackAnim = player_anims[i];
 
-    if ( bodyAnim )
+    if (bodyAnim == NULL)
+        gAaLog.write("WARNING: entity '%s' has component CompPlayerController but no 'bodyAnim' shape", getOwnerEntity()->getId().c_str());
+    else
     {
         if ( jumping )
         {
@@ -492,7 +524,9 @@ void CompPlayerController::onUpdate()
             m_walkingTime = 0;
     }
     
-    if ( jetpackAnim ) // Raketenrucksack animation
+    if (jetpackAnim == NULL)
+        gAaLog.write("WARNING: entity '%s' has component CompPlayerController but no 'jetpack' shape", getOwnerEntity()->getId().c_str());
+    else // Raketenrucksack animation
     {
         if ( usingJetpack ) // Spieler benutzt gerade den Jetpack
         {
@@ -522,28 +556,5 @@ void CompPlayerController::onUpdate()
             }
         }
     }
-
-    m_playerCouldWalkLastUpdate = ( canWalkR || canWalkL );
 }
-
-void CompPlayerController::setLowFriction( CompPhysics* playerCompPhysics )
-{
-    if ( m_currentFrictionIsLow )
-        return;
-    m_currentFrictionIsLow = true;
-
-    playerCompPhysics->setShapeFriction("bottom", 0.3f);
-}
-
-void CompPlayerController::setHighFriction( CompPhysics* playerCompPhysics )
-{
-    if ( !m_currentFrictionIsLow )
-        return;
-    m_currentFrictionIsLow = false;
-
-    playerCompPhysics->setShapeFriction("bottom", 4.0f);
-}
-
-void CompPlayerController::loadFromPropertyTree(const boost::property_tree::ptree&)
-{}  // dont need to do anything, because there is no data for this component
 

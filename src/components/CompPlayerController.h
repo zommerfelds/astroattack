@@ -41,6 +41,8 @@ private:
     void setHighFriction( CompPhysics* playerCompPhysics );
     bool m_currentFrictionIsLow;
 
+    void updateAnims(bool jumping, bool movingOnGround, bool usingJetpack);
+
     EventConnection m_eventConnection;
     WorldVariablesMap::iterator m_itJetPackVar;
 
@@ -49,7 +51,7 @@ private:
     bool m_playerCouldWalkLastUpdate; // ob der Spieler in der letzte überprüfung laufen konnte
     int m_rechargeTime;               // wie lange hat der Spieler schon den Racketenrucksack aufgeladen?
     float m_bodyAngleAbs;             // Neigungswinkel Absolut (0:Kopf nach links,cPi/2:Kopf nach oben,-cPi/2:Kopf nach unten)
-                                // TODO: use rel angle and delete this variable
+                                      // TODO: use rel angle and delete this variable
     int m_walkingTime;                // number of updates the player is walking (pressing walk key on ground)
 };
 
