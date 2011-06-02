@@ -45,9 +45,9 @@ int main ( int argc, char* argv[] )
         {
             OsMsgBox( e.getMsg(), "Exception" ); // Diesen anzeigen
         }
-        catch ( std::bad_alloc& ) // Falls nicht genügend Speicherplatz für alle Objekte gefunden wurde wird diese Ausnahme aufgerufen
+        catch ( std::bad_alloc& e ) // Falls nicht genügend Speicherplatz für alle Objekte gefunden wurde wird diese Ausnahme aufgerufen
         {
-            OsMsgBox( gAaLog.write( "Error: Memory could not be allocated!\n" ), "Exception" );
+            OsMsgBox( gAaLog.write( "Error: Memory error: %s\n", e.what() ), "Exception" );
         }
         catch ( std::exception& e ) // Falls eine andere Standart-Ausnahme
         {

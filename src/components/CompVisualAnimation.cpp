@@ -34,7 +34,7 @@ CompVisualAnimation::CompVisualAnimation(GameEvents& gameEvents, const Animation
   m_running (false),
   m_wantToFinish (false),
   m_flip (false),
-  m_direction (1)
+  m_playDirection (1)
 {
     // Update() registrieren. Das hat die Folge, dass Update() pro Aktualisierung (GameUpdate) aufgerufen wird.
     m_eventConnection = gameEvents.gameUpdate.registerListener( boost::bind( &CompVisualAnimation::onUpdate, this ) );
@@ -100,8 +100,8 @@ void CompVisualAnimation::onUpdate()
     if ( m_updateCounter > animStateInfoIter->second->speed ) // ein Frame vorbei ist
     {
         m_updateCounter = 0;
-        m_currentFrame += m_direction; // +1 oder -1 je nach Richtung der Animation
-        if ( m_direction == 1 )
+        m_currentFrame += m_playDirection; // +1 oder -1 je nach Richtung der Animation
+        if ( m_playDirection == 1 )
         {
             if ( m_currentFrame > animStateInfoIter->second->end ) // wenn letzter Frame erreicht wurde
                 m_currentFrame = animStateInfoIter->second->begin; // wieder zum start setzen

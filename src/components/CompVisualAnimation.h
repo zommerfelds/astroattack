@@ -45,7 +45,7 @@ public:
     void carryOn();                                           // Fortfahren
     void end() { m_running = false; }                          // Sofort enden
     void finish() { m_wantToFinish = true; }                   // Enden wenn ein Stopppunkt erreicht wurde
-    void setDirection(int dir) { if (dir>0) m_direction=1; else m_direction= -1; } // 1 ist vorwärz und 0 ist rückwärz
+    void setReverse(bool reverse) { if (reverse) m_playDirection=-1; else m_playDirection= 1; } // 1 ist vorwärz und 0 ist rückwärz
     int isRunning() const { return m_running; }                // ob die Animation gerade läuft
 
     // Animationsstand (z.B. Rennen, Springen, Reden )
@@ -83,7 +83,7 @@ private:
     bool m_running;
     bool m_wantToFinish;
     bool m_flip;
-    int m_direction; // Animationsrichtung (vorwärz (1) oder rückwärz (-1))
+    int m_playDirection; // Animationsrichtung (vorwärz (1) oder rückwärz (-1))
 };
 
 #endif
