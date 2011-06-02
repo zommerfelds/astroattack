@@ -30,7 +30,7 @@ class PlayingState : public GameState
 public:
     PlayingState( SubSystems& subSystems, std::string levelFileName );
 
-    const GameStateId& getId() const { return stateId; }
+    const GameStateId& getId() const { return STATE_ID; }
 
 	void init();        // State starten
 	void cleanup();     // State abbrechen
@@ -42,7 +42,7 @@ public:
 	void update();      // Spiel aktualisieren
 	void draw( float accumulator );        // Spiel zeichnen
 private:
-    static const GameStateId stateId;
+    static const GameStateId STATE_ID;
     
     GameWorld m_gameWorld;          // Spielwelt
     CameraController m_cameraController;        // Kamera

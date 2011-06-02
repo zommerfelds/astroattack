@@ -109,7 +109,7 @@ typedef std::vector< boost::shared_ptr<ShapeDef> > ShapeInfoVec;
 class CompPhysics : public Component
 {
 public:
-    CompPhysics(const BodyDef& rBodyDef = BodyDef());
+    CompPhysics(GameEvents& gameEvents, const BodyDef& rBodyDef = BodyDef());
 
     const ComponentTypeId& getTypeId() const { return COMPONENT_TYPE_ID; }
 

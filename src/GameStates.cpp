@@ -5,7 +5,7 @@
  */
 
 #include "GameStates.h"
-#include "main.h"
+#include "Logger.h"
 #include "GameApp.h"
 
 GameState::GameState( SubSystems& subSystems ) : m_subSystems ( subSystems )

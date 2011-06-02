@@ -35,7 +35,7 @@
 // Alle Entities in der Welt werden in dieser Datei aufgelistet
 const char* cWordLogFileName = "world.txt";
 
-const GameStateId PlayingState::stateId = "PlayingState";
+const GameStateId PlayingState::STATE_ID = "PlayingState";
 
 PlayingState::PlayingState( SubSystems& subSystems, std::string levelFileName )
 : GameState( subSystems ),

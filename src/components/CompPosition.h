@@ -19,7 +19,7 @@
 class CompPosition : public Component
 {
 public:
-    CompPosition();
+    CompPosition(GameEvents& gameEvents);
 
     // Base component methods
     const ComponentTypeId& getTypeId() const { return COMPONENT_TYPE_ID; }

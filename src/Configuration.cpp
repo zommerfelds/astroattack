@@ -9,11 +9,13 @@
 #include <sstream>
 #include <boost/foreach.hpp>
 
-#include "main.h" // wichtige Definitionen und Dateien einbinden
+#include "Logger.h"
 #include "Configuration.h"
 #include "Texture.h"
 #include "contrib/pugixml/pugixml.hpp"
 #include "contrib/pugixml/foreach.hpp"
+
+Configuration gAaConfig; // Spieleinstellungen.
 
 // Standarteinstellungen laden
 void Configuration::loadDefault()

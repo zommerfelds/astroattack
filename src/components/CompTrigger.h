@@ -30,7 +30,7 @@ typedef std::string EffectId;
 class CompTrigger : public Component
 {
 public:
-    CompTrigger(GameWorld& gameWorld);
+    CompTrigger(GameEvents& gameEvents, GameWorld& gameWorld);
 
     const ComponentTypeId& getTypeId() const { return COMPONENT_TYPE_ID; }
 	static const ComponentTypeId COMPONENT_TYPE_ID; // eindeutige ID für diese Komponentenart (gleich wie Klassennamen, siehe CompCollectable.cpp)

@@ -24,8 +24,8 @@
 class CompVisualTexture : public Component
 {
 public:
-    CompVisualTexture();
-    CompVisualTexture( TextureId texId );
+    CompVisualTexture(GameEvents& gameEvents);
+    CompVisualTexture(GameEvents& gameEvents, TextureId texId);
 
 	const ComponentTypeId& getTypeId() const { return COMPONENT_TYPE_ID; }
 	static const ComponentTypeId COMPONENT_TYPE_ID;

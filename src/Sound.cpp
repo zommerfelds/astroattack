@@ -8,7 +8,8 @@
 
 #include "Sound.h"
 #include "SDL_mixer.h"
-#include "main.h" // wichtige Definitionen und Dateien einbinden
+#include "Configuration.h"
+#include "Logger.h"v
 #include "Exception.h" // Ausnahmen im Program (werden in main.cpp eingefangen)
 
 /*void Vol(int chan, void *stream, int len, void *udata)

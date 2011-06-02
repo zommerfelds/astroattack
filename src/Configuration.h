@@ -22,6 +22,10 @@
     TEX_QUALITY
 };*/
 
+class Configuration;
+
+extern Configuration gAaConfig; // Spieleinstellungen.
+
 struct ConfigEntry
 {
     int type;           // 0 bedeutet eine ganze Zahl, 1 ein float, 2 ein string

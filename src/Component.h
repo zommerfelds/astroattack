@@ -26,7 +26,7 @@ namespace boost { namespace property_tree {
 class Component {
 public:
 
-    Component() : m_pOwnerEntity (NULL), m_id () {} // Konstruktor
+    Component(GameEvents& gameEvents) : m_gameEvents(gameEvents), m_pOwnerEntity (NULL), m_id () {} // Konstruktor
     virtual ~Component() {} // Destruktor
 
     virtual const ComponentTypeId& getTypeId() const = 0;   // Komponenttyp -> Name des Komponententyps
@@ -40,9 +40,11 @@ public:
     virtual void loadFromPropertyTree(const boost::property_tree::ptree& propTree) = 0;
     virtual void writeToPropertyTree(boost::property_tree::ptree& propTree) const = 0;
 
-    static GameEvents* gameEvents; // EventManager für alle Komponenten
+protected:
+    GameEvents& m_gameEvents;
 
 private:
+
     Entity* m_pOwnerEntity; // Einheit, die die Komponente besitzt
     std::string m_id;
 };

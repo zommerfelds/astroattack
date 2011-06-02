@@ -14,6 +14,8 @@
 #include "GameApp.h"
 #include "Exception.h" // Ausnahmen im Program
 
+#include "Logger.h"
+
 // Programmstart!
 int main ( int argc, char* argv[] )
 {

@@ -12,7 +12,9 @@
 #include <boost/bind.hpp>
 #include <boost/make_shared.hpp>
 
-#include "main.h" // wichtige Definitionen und Dateien einbinden
+#include "main.h"
+#include "Configuration.h"
+#include "Logger.h"
 #include "GameApp.h"
 #include "Input.h"
 #include "Physics.h"
@@ -28,11 +30,7 @@
 
 const char* cMainLogFileName = "data/config.xml";
 
-// ugly globals
-// TODO: dont use globals
-Configuration gAaConfig; // Spieleinstellungen.
-Logger gAaLog( LOG_FILE_NAME ); // Haupt-Log-Datei erstellen, wo wichtige Ereignisse aufgeschrieben werden.
-bool gRestart = false;
+bool gRestart = false; // TODO remove this global
 
 // Konstruktor
 GameApp::GameApp(const std::vector<std::string>& args) :
@@ -47,7 +45,6 @@ GameApp::GameApp(const std::vector<std::string>& args) :
         m_fullScreen ( false ),
         m_overRideFullScreen ( false )
 {
-    Component::gameEvents = &m_subSystems.events;
     m_eventConnection = m_subSystems.events.quitGame.registerListener( boost::bind( &GameApp::onQuit, this ) );
 
     parseArguments(args);
@@ -236,8 +233,6 @@ void GameApp::deInit()
         gAaLog.increaseIndentationLevel();
 
         gAaLog.write ( "Cleaning up SubSystems..." );
-        Component::gameEvents = NULL; // set the component's GameEvents pointer to zero,
-                                      // so the components know its no longer valid
         m_subSystems.deInit();
         gAaLog.write ( "[ Done ]\n" );
 

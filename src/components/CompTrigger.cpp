@@ -13,16 +13,16 @@
 #include "CompTrigger_Effects.h"
 #include "CompTrigger_Conditions.h"
 #include "../World.h"
-#include "../main.h"
+#include "../Logger.h"
 
 using boost::property_tree::ptree;
 
 // eindeutige ID
 const ComponentTypeId CompTrigger::COMPONENT_TYPE_ID = "CompTrigger";
 
-CompTrigger::CompTrigger(GameWorld& gameWorld) : m_gameWorld (gameWorld), m_fired ( false )
+CompTrigger::CompTrigger(GameEvents& gameEvents, GameWorld& gameWorld) : Component(gameEvents), m_gameWorld (gameWorld), m_fired ( false )
 {
-    m_eventConnection = gameEvents->gameUpdate.registerListener( boost::bind( &CompTrigger::onUpdate, this ) );
+    m_eventConnection = gameEvents.gameUpdate.registerListener( boost::bind( &CompTrigger::onUpdate, this ) );
 }
 
 void CompTrigger::onUpdate()
@@ -120,19 +120,19 @@ void CompTrigger::loadFromPropertyTree(const ptree& propTree)
             {
                 std::string entityName = subPropTree.get<std::string>("params.entity");
 
-                addEffect(boost::make_shared<EffectKillEntity>(entityName, m_gameWorld));
+                addEffect(boost::shared_ptr<EffectKillEntity>(new EffectKillEntity(m_gameEvents, entityName, m_gameWorld)));
             }
             else if (effectId == "DispMessage")
             {
                 std::string msg = subPropTree.get<std::string>("params.msg");
                 int timems = subPropTree.get("params.timems", 3000);
-                addEffect(boost::shared_ptr<EffectDispMessage>(new EffectDispMessage(msg, timems, m_gameWorld)));
+                addEffect(boost::shared_ptr<EffectDispMessage>(new EffectDispMessage(m_gameEvents, msg, timems, m_gameWorld)));
             }
             else if (effectId == "EndLevel")
             {
                 std::string msg = subPropTree.get<std::string>("params.msg");
                 bool win = subPropTree.get<bool>("params.win");
-                addEffect(boost::make_shared<EffectEndLevel>(msg, win));
+                addEffect(boost::shared_ptr<EffectEndLevel>(new EffectEndLevel(m_gameEvents, msg, win)));
             }
             else if (effectId == "ChangeVariable")
             {

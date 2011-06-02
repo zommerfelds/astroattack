@@ -13,7 +13,8 @@
 
 #include "DataLoader.h"
 #include "World.h"
-#include "main.h"
+#include "Logger.h"
+#include "Configuration.h"
 #include "GameApp.h"
 #include "Renderer.h"
 #include "Physics.h"
@@ -78,7 +79,7 @@ DataLoadException::DataLoadException(const std::string& msg)
 }
 
 // Load Level from XML
-void DataLoader::loadWorld( const std::string& fileName, GameWorld& gameWorld, SubSystems& subSystems )
+void DataLoader::loadWorld(const std::string& fileName, GameWorld& gameWorld, SubSystems& subSystems)
 {
     try {
         using boost::shared_ptr;
@@ -118,26 +119,26 @@ void DataLoader::loadWorld( const std::string& fileName, GameWorld& gameWorld, S
                 if ( compId == "CompShape" )
                 {
                     if (compPropTree.count("polygon"))
-                        component = boost::make_shared<CompShapePolygon>();
+                        component = boost::shared_ptr<CompShapePolygon>(new CompShapePolygon(subSystems.events));
                     else
-                        component = boost::make_shared<CompShapeCircle>();
+                        component = boost::shared_ptr<CompShapeCircle>(new CompShapeCircle(subSystems.events));
                 }
                 else if ( compId == "CompPhysics" )
-                    component = boost::make_shared<CompPhysics>();
+                    component = boost::shared_ptr<CompPhysics>(new CompPhysics(subSystems.events));
                 else if ( compId == "CompPlayerController" )
-                    component = boost::make_shared<CompPlayerController>( subSystems.input, gameWorld.getItToVariable( "JetpackEnergy" ) );
+                    component = boost::shared_ptr<CompPlayerController>(new CompPlayerController(subSystems.events, subSystems.input, gameWorld.getItToVariable( "JetpackEnergy" )));
                 else if ( compId == "CompPosition" )
-                    component = boost::make_shared<CompPosition>();
+                    component = boost::shared_ptr<CompPosition>(new CompPosition(subSystems.events));
                 else if ( compId == "CompVisualAnimation" )
-                    component = boost::make_shared<CompVisualAnimation>( subSystems.renderer.getAnimationManager() );
+                    component = boost::shared_ptr<CompVisualAnimation>(new CompVisualAnimation(subSystems.events, subSystems.renderer.getAnimationManager()));
                 else if ( compId == "CompVisualTexture" )
-                    component = boost::make_shared<CompVisualTexture>();
+                    component = boost::shared_ptr<CompVisualTexture>(new CompVisualTexture(subSystems.events));
                 else if ( compId == "CompVisualMessage" )
-                    component = boost::make_shared<CompVisualMessage>();
+                    component = boost::shared_ptr<CompVisualMessage>(new CompVisualMessage(subSystems.events));
                 else if ( compId == "CompGravField" )
-                    component = boost::make_shared<CompGravField>();
+                    component = boost::shared_ptr<CompGravField>(new CompGravField(subSystems.events));
                 else if ( compId == "CompTrigger" )
-                    component = boost::shared_ptr<CompTrigger>(new CompTrigger(gameWorld));
+                    component = boost::shared_ptr<CompTrigger>(new CompTrigger(subSystems.events, gameWorld));
                 else
                     throw DataLoadException(fileName + " - In entity '" + entityName + "': invalid component ID (" + compId + ")");
 

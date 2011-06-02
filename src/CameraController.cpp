@@ -13,7 +13,7 @@
 #include "World.h"
 #include "Entity.h"
 #include "Renderer.h"
-#include "main.h"
+#include "Configuration.h"
 
 #include "components/CompPhysics.h"
 #include "components/CompVisualAnimation.h"

@@ -23,7 +23,7 @@ class InputSubSystem; // benötigt Eingabesystem für die Tasten zu lesen
 class CompPlayerController : public Component
 {
 public:
-    CompPlayerController( const InputSubSystem&, WorldVariablesMap::iterator itJetPackVar );
+    CompPlayerController(GameEvents& gameEvents, const InputSubSystem&, WorldVariablesMap::iterator itJetPackVar);
 
     const ComponentTypeId& getTypeId() const { return COMPONENT_TYPE_ID; }
     static const ComponentTypeId COMPONENT_TYPE_ID;

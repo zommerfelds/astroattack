@@ -17,12 +17,13 @@ class GameWorld;
 class EffectKillEntity : public Effect
 {
 public:
-    EffectKillEntity( std::string entityToKill, const GameWorld& world );
+    EffectKillEntity(GameEvents& gameEvents, std::string entityToKill, const GameWorld& world );
     EffectId getId() const { return "KillEntity"; }
     void fire();
     bool update() { return false; }
     std::string getEntityName() const { return m_entityToKill; }
 private:
+    GameEvents& m_gameEvents;
     std::string m_entityToKill;
     const GameWorld& m_world;
 };
@@ -31,7 +32,7 @@ private:
 class EffectDispMessage : public Effect
 {
 public:
-    EffectDispMessage( std::string message, int timeMs, GameWorld& world );
+    EffectDispMessage(GameEvents& gameEvents, std::string message, int timeMs, GameWorld& world );
     ~EffectDispMessage();
     EffectId getId() const { return "DispMessage"; }
     void fire();
@@ -39,6 +40,7 @@ public:
     std::string getMessage() const { return m_message; }
     int getTotalTime() const { return m_totalTimeMs; }
 private:
+    GameEvents& m_gameEvents;
     std::string m_message;
     int m_remainingUpdates;
     bool m_fired;
@@ -52,13 +54,14 @@ private:
 class EffectEndLevel : public Effect
 {
 public:
-    EffectEndLevel( std::string message, bool win ) : m_message( message ), m_win ( win ) {}
+    EffectEndLevel(GameEvents& gameEvents, std::string message, bool win);
     EffectId getId() const { return "EndLevel"; }
     void fire();
     bool update() { return false; }
     std::string getMessage() const { return m_message; }
     bool isWin() const { return m_win; }
 private:
+    GameEvents& m_gameEvents;
     std::string m_message;
     bool m_win;
 };

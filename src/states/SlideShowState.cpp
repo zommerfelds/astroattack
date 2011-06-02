@@ -10,18 +10,20 @@
 #include <boost/make_shared.hpp>
 
 #include "../Renderer.h"
-#include "../main.h"
+#include "../Configuration.h"
+#include "../Logger.h"
 #include "../GameApp.h"
 #include "../Input.h"
 #include "../Vector2D.h"
 #include "../Texture.h"
 #include "../Sound.h"
 #include "../DataLoader.h"
+#include "../Configuration.h"
 #include "SlideShowState.h"
 #include "MainMenuState.h"
 
 // eindeutige ID
-const GameStateId SlideShowState::stateId = "SlideShowState";
+const GameStateId SlideShowState::STATE_ID = "SlideShowState";
 
 // Konstruktor
 // slideXmlFile ist der Name der Bildshow-Datei

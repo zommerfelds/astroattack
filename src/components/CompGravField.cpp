@@ -12,7 +12,7 @@
 const ComponentTypeId CompGravField::COMPONENT_TYPE_ID = "CompGravField";
 
 // Konstruktor
-CompGravField::CompGravField() : m_gravType ( Directional ), m_priority( 50 )
+CompGravField::CompGravField(GameEvents& gameEvents) : Component(gameEvents), m_gravType ( Directional ), m_priority( 50 )
 {
     m_gravitationDir.set( 0.0, 1.0 );
     m_gravitationCenter.set( 0.0, 1.0 );

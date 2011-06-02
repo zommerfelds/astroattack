@@ -15,7 +15,7 @@
 #include "../Input.h"
 
 // eindeutige ID
-const GameStateId GameOverState::stateId = "GameOverState";
+const GameStateId GameOverState::STATE_ID = "GameOverState";
 
 GameOverState::GameOverState( SubSystems& subSystems, std::string stringToShow, std::string levelFileName )
 : GameState( subSystems ),

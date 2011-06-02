@@ -13,7 +13,7 @@
 #include <SDL_opengl.h> // cross platform OpenGL include (provided by SDL)
 
 #include "Texture.h"
-#include "main.h"       // für Logdatei
+#include "Logger.h"
 #include "Exception.h"  // Exceptions
 
 // Konstruktor

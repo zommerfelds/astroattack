@@ -10,7 +10,7 @@
 #include <boost/make_shared.hpp>
 
 #include "Font.h"
-#include "main.h"
+#include "Configuration.h"
 
 // .ttf Datei in in OpenGL Texturen laden laden
 void FontManager::loadFont( const std::string& fileName, int size, FontId id )

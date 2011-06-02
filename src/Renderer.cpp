@@ -13,12 +13,13 @@
 // cross platform OpenGL include (provided by SDL)
 #include <SDL_opengl.h>
 
+#include "Logger.h"
 #include "Renderer.h"
 #include "Entity.h"
-#include "main.h"
 #include "DataLoader.h"
 #include "Vector2D.h"
 #include "GameEvents.h"
+#include "Configuration.h"
 #include "components/CompVisualTexture.h"
 #include "components/CompShape.h"
 #include "components/CompPosition.h"

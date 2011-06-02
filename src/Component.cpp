@@ -6,5 +6,3 @@
 
 #include "Component.h"
 #include "GameEvents.h" // Steuert die Spielerreignisse
-
-GameEvents* Component::gameEvents = NULL;

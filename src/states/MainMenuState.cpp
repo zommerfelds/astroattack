@@ -16,7 +16,8 @@
 #include "../Renderer.h"
 #include "../Gui.h"
 #include "../Sound.h"
-#include "../main.h"
+#include "../Configuration.h"
+#include "../Logger.h"
 #include "../GameApp.h"
 #include "../Input.h"
 #include "../Vector2D.h"
@@ -24,12 +25,13 @@
 #include "../contrib/pugixml/pugixml.hpp"
 #include "../contrib/pugixml/foreach.hpp"
 #include "../DataLoader.h"
+#include "../main.h"
 
 const char* cIntroFileName   = "data/intro/introShow.xml";
 const char* cLevelSequenceFileName = "data/levelSequence.xml";
 const char* cMenuGraphicsFileName = "data/graphicsMenu.xml"; // hier sind Menügrafiken angegeben
 
-const GameStateId MainMenuState::stateId = "MainMenuState";
+const GameStateId MainMenuState::STATE_ID = "MainMenuState";
 
 const std::string menuNames[] =
 { 

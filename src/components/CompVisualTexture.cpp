@@ -16,9 +16,9 @@ using boost::property_tree::ptree;
 // eindeutige ID
 const ComponentTypeId CompVisualTexture::COMPONENT_TYPE_ID = "CompVisualTexture";
 
-CompVisualTexture::CompVisualTexture(): m_textureId () {}
+CompVisualTexture::CompVisualTexture(GameEvents& gameEvents) : Component(gameEvents), m_textureId () {}
 
-CompVisualTexture::CompVisualTexture( TextureId texId ): m_textureId (texId) {}
+CompVisualTexture::CompVisualTexture(GameEvents& gameEvents, TextureId texId) : Component(gameEvents), m_textureId (texId) {}
 
 void CompVisualTexture::loadFromPropertyTree(const ptree& propTree)
 {

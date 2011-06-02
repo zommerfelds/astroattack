@@ -19,7 +19,8 @@ using boost::property_tree::ptree;
 const ComponentTypeId CompPhysics::COMPONENT_TYPE_ID = "CompPhysics";
 
 // Konstruktor
-CompPhysics::CompPhysics(const BodyDef& rBodyDef) :
+CompPhysics::CompPhysics(GameEvents& gameEvents, const BodyDef& rBodyDef) :
+    Component(gameEvents),
     m_body (NULL),
     m_bodyDef (rBodyDef),
     m_localRotationPoint (),

@@ -38,7 +38,7 @@ class SlideShowState : public GameState
 public:
     SlideShowState( SubSystems& subSystems, std::string slideXmlFile );
 
-    const GameStateId& getId() const { return stateId; }
+    const GameStateId& getId() const { return STATE_ID; }
 
 	void init();        // State starten
 	void cleanup();     // State abbrechen
@@ -50,7 +50,7 @@ public:
 	void update();      // Spiel aktualisieren
 	void draw( float accumulator );        // Spiel zeichnen
 private:
-    static const GameStateId stateId;
+    static const GameStateId STATE_ID;
 
     // Slideshow Informationen
     std::string m_slideXmlFile;

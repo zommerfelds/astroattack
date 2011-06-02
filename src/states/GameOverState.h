@@ -22,7 +22,7 @@ class GameOverState : public GameState
 public:
     GameOverState( SubSystems& subSystems, std::string stringToShow, std::string levelFileName );
 
-    const GameStateId& getId() const { return stateId; }
+    const GameStateId& getId() const { return STATE_ID; }
 
 	void init();        // State starten
 	void cleanup();     // State abbrechen
@@ -34,7 +34,7 @@ public:
 	void update();      // Spiel aktualisieren
 	void draw( float accumulator );        // Spiel zeichnen
 private:
-    static const GameStateId stateId;
+    static const GameStateId STATE_ID;
 
     std::string m_stringToShow;
     std::string m_levelFileName;

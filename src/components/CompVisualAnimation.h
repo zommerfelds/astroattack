@@ -23,7 +23,7 @@
 class CompVisualAnimation : public Component
 {
 public:
-    CompVisualAnimation( const AnimationManager& animManager );
+    CompVisualAnimation(GameEvents& gameEvents, const AnimationManager& animManager);
 
     const ComponentTypeId& getTypeId() const { return COMPONENT_TYPE_ID; }
 	static const ComponentTypeId COMPONENT_TYPE_ID;

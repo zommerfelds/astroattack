@@ -10,6 +10,9 @@
 #include <cstdarg>
 #include <ctime>
 
+// global log
+Logger gAaLog( LOG_FILE_NAME );
+
 const char cIdentString[] = "   "; // pro indentation level (Texteinrückung) wird dieser Zeichensatz eingefügt
 
 // Constructor

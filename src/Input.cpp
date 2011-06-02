@@ -4,7 +4,7 @@
  * Copyright 2011 Christian Zommerfelds
  */
 
-#include "main.h" // wichtige Definitionen und Dateien einbinden
+#include "Configuration.h"
 #include "Input.h"
 
 const float cMouseSensivityFactor = 0.001f;

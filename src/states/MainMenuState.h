@@ -34,7 +34,7 @@ class MainMenuState : public GameState
 public:
     MainMenuState( SubSystems& subSystems, SubMenu startingSubMenu = Main );
 
-    const GameStateId& getId() const { return stateId; }
+    const GameStateId& getId() const { return STATE_ID; }
 
 	void init();        // State starten
 	void cleanup();     // State abbrechen
@@ -46,7 +46,7 @@ public:
 	void update();      // Spiel aktualisieren
 	void draw( float accumulator ); // Spiel zeichnen
 private:
-    static const GameStateId stateId;
+    static const GameStateId STATE_ID;
 
     // --- Callbacks für GUI ---
     void onPressedButPlay();

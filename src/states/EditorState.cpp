@@ -13,7 +13,8 @@
 #include "../GameApp.h"
 #include "../Renderer.h"
 #include "../Input.h"
-#include "../main.h"
+#include "../Logger.h"
+#include "../Configuration.h"
 #include "../DataLoader.h"
 #include "../Physics.h"
 
@@ -22,7 +23,7 @@
 #include "../components/CompShape.h"
 #include "../components/CompPosition.h"
 
-const GameStateId EditorState::stateId = "EditorState";
+const GameStateId EditorState::STATE_ID = "EditorState";
 
 #include "../Texture.h"
 
@@ -157,14 +158,14 @@ void EditorState::update()      // Spiel aktualisieren
             }
             boost::shared_ptr<Entity> pEntity = boost::make_shared<Entity>(entityName);
 
-            boost::shared_ptr<CompPhysics> compPhysics = boost::make_shared<CompPhysics>();
+            boost::shared_ptr<CompPhysics> compPhysics = boost::shared_ptr<CompPhysics>(new CompPhysics(getSubSystems().events));
             boost::shared_ptr<ShapeDef> shapeDef = boost::make_shared<ShapeDef>();
             shapeDef->friction = 0.3f;
             shapeDef->compName = "shape1";
             compPhysics->addShapeDef( shapeDef );
             pEntity->addComponent( compPhysics );
 
-            boost::shared_ptr<CompShapePolygon> compShape = boost::make_shared<CompShapePolygon>();
+            boost::shared_ptr<CompShapePolygon> compShape = boost::shared_ptr<CompShapePolygon>(new CompShapePolygon(getSubSystems().events));
             compShape->setId("shape1");
             for ( int i = 0; i < m_currentPoint; ++i )
             {
@@ -172,11 +173,11 @@ void EditorState::update()      // Spiel aktualisieren
             }
             pEntity->addComponent( compShape );
 
-            boost::shared_ptr<CompPosition> compPos = boost::make_shared<CompPosition>();
+            boost::shared_ptr<CompPosition> compPos = boost::shared_ptr<CompPosition>(new CompPosition(getSubSystems().events));
             pEntity->addComponent( compPos );
 
             TextureId textureName = m_currentTexture;
-            boost::shared_ptr<CompVisualTexture> compPolyTex = boost::make_shared<CompVisualTexture>(textureName);
+            boost::shared_ptr<CompVisualTexture> compPolyTex = boost::shared_ptr<CompVisualTexture>(new CompVisualTexture(getSubSystems().events, textureName));
             pEntity->addComponent( compPolyTex );
 
             m_gameWorld.addEntity( pEntity );

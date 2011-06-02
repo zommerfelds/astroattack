@@ -7,6 +7,7 @@
 #include "CompTrigger_Conditions.h"
 #include "CompPhysics.h"
 #include "../Entity.h"
+#include "../Logger.h"
 
 // ========== CompareVariable =========
 ConditionCompareVariable::ConditionCompareVariable( std::map<const std::string, int>::iterator itVariable, CompareOperator comp, int numToCompareWith )
@@ -48,7 +49,10 @@ bool ConditionEntityTouchedThis::isConditionTrue()
     // TODO: all physics components
     CompPhysics* thisCompPhysics = m_pCompTrigger->getOwnerEntity()->getComponent<CompPhysics>();
     if ( thisCompPhysics == NULL )
-        return false; // TODO: handle this
+    {
+        gAaLog.write("WARNING entity '%s': testing if 'EntityTouchedThis' condition is true but there is no CompPhysics", m_pCompTrigger->getOwnerEntity()->getId());
+        return false;
+    }
 
     ContactVector contacts = thisCompPhysics->getContacts(true);
 

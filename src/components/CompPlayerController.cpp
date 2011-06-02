@@ -10,6 +10,8 @@
 #include "CompVisualAnimation.h"
 #include "CompGravField.h"
 #include "CompPhysics.h"
+
+#include "../Logger.h"
 #include "../Physics.h"
 #include "../Input.h"
 #include "../Entity.h"
@@ -23,7 +25,8 @@ const ComponentTypeId CompPlayerController::COMPONENT_TYPE_ID = "CompPlayerContr
 const int cMaxRecharge = 15;                    // wie wie muss der Spieler warten bis der Racketenrucksack startet?
 
 // Konstruktor der Komponente
-CompPlayerController::CompPlayerController( const InputSubSystem& inputSubSystem, std::map<const std::string, int>::iterator itJetPackVar ) :
+CompPlayerController::CompPlayerController(GameEvents& gameEvents, const InputSubSystem& inputSubSystem, std::map<const std::string, int>::iterator itJetPackVar) :
+     Component(gameEvents),
      m_inputSubSystem ( inputSubSystem ),
      m_currentFrictionIsLow ( false ),
      m_eventConnection (),
@@ -35,7 +38,7 @@ CompPlayerController::CompPlayerController( const InputSubSystem& inputSubSystem
      m_walkingTime ( 0 )
 {
     // Update-Methode registrieren, damit sie in jede Aktualisierung (GameUpdate) aufgerufen wird:
-    m_eventConnection = gameEvents->gameUpdate.registerListener( boost::bind( &CompPlayerController::onUpdate, this ) );
+    m_eventConnection = gameEvents.gameUpdate.registerListener( boost::bind( &CompPlayerController::onUpdate, this ) );
 }
 
 // Funktion die Tastendrücke in Physikalische Reaktionen umwandelt.

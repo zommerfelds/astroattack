@@ -16,7 +16,6 @@ using namespace std;
 TEST(LevelLoadTest, LoadWriteTest)
 {
     SubSystems subSystems;
-    Component::gameEvents = &subSystems.events;
 
     string lvlFileNames[] = { "data/Levels/level1.info",
                               "data/Levels/level2.info",

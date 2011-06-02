@@ -11,6 +11,11 @@
 
 #include <fstream>
 
+class Logger;
+
+// global logger
+extern Logger gAaLog;
+
 /*
     Diese Klasse kann Texte in einer Log-Datei speichern.
 */

@@ -19,8 +19,9 @@
 // einduetige ID
 const ComponentTypeId CompVisualAnimation::COMPONENT_TYPE_ID = "CompVisualAnimation";
 
-CompVisualAnimation::CompVisualAnimation( const AnimationManager& animManager )
-: m_animManager (animManager),
+CompVisualAnimation::CompVisualAnimation(GameEvents& gameEvents, const AnimationManager& animManager) :
+  Component(gameEvents),
+  m_animManager (animManager),
   m_eventConnection (),
   m_center (),
   m_halfWidth (0.0f),
@@ -36,7 +37,7 @@ CompVisualAnimation::CompVisualAnimation( const AnimationManager& animManager )
   m_direction (1)
 {
     // Update() registrieren. Das hat die Folge, dass Update() pro Aktualisierung (GameUpdate) aufgerufen wird.
-    m_eventConnection = gameEvents->gameUpdate.registerListener( boost::bind( &CompVisualAnimation::onUpdate, this ) );
+    m_eventConnection = gameEvents.gameUpdate.registerListener( boost::bind( &CompVisualAnimation::onUpdate, this ) );
 }
 
 TextureId CompVisualAnimation::getCurrentTexture() const
