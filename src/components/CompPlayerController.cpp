@@ -34,6 +34,7 @@ CompPlayerController::CompPlayerController(GameEvents& gameEvents, const InputSu
      m_spaceKeyDownLastUpdate ( false ),
      m_playerCouldWalkLastUpdate ( false ),
      m_rechargeTime ( cMaxRecharge ),
+     m_bodyAngleAbs ( cPi*0.5f ),
      m_walkingTime ( 0 )
 {
     // Update-Methode registrieren, damit sie in jede Aktualisierung (GameUpdate) aufgerufen wird:
@@ -65,6 +66,10 @@ void CompPlayerController::onUpdate()
     bool isIncreasingAngle = false;   // ob die Spielerfigur sich neigt (zum fliegen)
     bool directionClw = false;        // in welche Richtung neigt sich die Figur (true wenn Uhrzeigersinn)
 
+    const float maxAngleRel = 0.25f;  // maximaler Neigungswinkel +/- (Relativ zu upVector)
+    const float incStep = 0.05f;      // Winkelschritt pro Aktualisierung beim Vergrössern
+    const float cDecStep = 0.02f;      // Winkelschritt pro Aktualisierung beim Verkleinern
+
     std::vector<boost::shared_ptr<ContactInfo> > contacts = playerCompPhysics->getContacts();
     isTouchingSth = !contacts.empty();
 
@@ -94,6 +99,8 @@ void CompPlayerController::onUpdate()
 	Vector2D upVector(0.0f,1.0f);
 	if ( grav!=NULL )
 		upVector = grav->getAcceleration( playerCompPhysics->getCenterOfMass() ).getUnitVector()*-1;
+
+	float upAngleAbs = upVector.getAngle();
 
     // normalSteepestRight finden
     if ( isTouchingSth )
@@ -373,6 +380,70 @@ void CompPlayerController::onUpdate()
 			}
         }
     }
+
+	float diffAngle = m_bodyAngleAbs - upAngleAbs;
+	if ( diffAngle<-cPi )
+		diffAngle+=2*cPi;
+	else if ( diffAngle>cPi )
+		diffAngle-=2*cPi;
+
+	bool decrease = true;
+    //#if 0
+    if ( isIncreasingAngle && !m_playerCouldWalkLastUpdate && (fabs(diffAngle)<maxAngleRel) )
+    {
+		decrease = false;
+        if ( directionClw )
+		{
+			if ( maxAngleRel-fabs(diffAngle) < incStep )
+				m_bodyAngleAbs = upAngleAbs - maxAngleRel;
+			else
+				m_bodyAngleAbs -= incStep;
+		}
+        else
+		{
+			if ( maxAngleRel-fabs(diffAngle) < incStep )
+				m_bodyAngleAbs = upAngleAbs + maxAngleRel;
+			else
+				m_bodyAngleAbs += incStep;
+		}
+    }
+    //#endif
+
+    if ( !isIncreasingAngle	|| decrease )
+    {
+		if ( diffAngle != 0.0f )
+		{			
+			bool returnClw = diffAngle > 0.0f;
+            
+            //std::cout << "diffAngle = " << diffAngle << std::endl;
+
+			float bonusFactor = fabs(diffAngle)*4.0f+0.1f;
+			if (fabs(diffAngle)<maxAngleRel)
+				bonusFactor = 1.0f;
+
+			if ( returnClw )
+			{
+				m_bodyAngleAbs -= cDecStep*bonusFactor;
+				if ( fabs(diffAngle) < cDecStep*bonusFactor ) {
+					m_bodyAngleAbs = upAngleAbs;
+                }
+			}
+			else
+			{
+				m_bodyAngleAbs += cDecStep*bonusFactor;
+                if ( fabs(diffAngle) < cDecStep*bonusFactor ) {
+					m_bodyAngleAbs = upAngleAbs;
+                }
+			}
+		}
+    }
+
+	if (m_bodyAngleAbs>cPi)
+		m_bodyAngleAbs-=2*cPi;
+	else if (m_bodyAngleAbs<-cPi)
+		m_bodyAngleAbs+=2*cPi;
+    
+    playerCompPhysics->rotate( m_bodyAngleAbs-cPi*0.5f-playerCompPhysics->getAngle(), playerCompPhysics->getLocalRotationPoint() );
     
     if ( !isTouchingSth )
         setLowFriction( playerCompPhysics ); // wenn der Spieler in der Luft ist, soll die Reibung der "Schuhe" schon verkleinert werden

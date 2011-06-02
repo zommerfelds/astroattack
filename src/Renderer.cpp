@@ -150,6 +150,32 @@ void RenderSubSystem::flipBuffer()
         gAaLog.write ( "!=========! OpenGL Error %u: %s !=========! \n", errCode, errString );
     }
 
+    /* the following code takes screenshots of all frames and stores them to video/
+    static unsigned char* data = new unsigned char[gAaConfig.getInt("ScreenWidth")*gAaConfig.getInt("ScreenHeight")*4];
+    static int frameNum = 0;
+
+    glReadPixels(0, 0, gAaConfig.getInt("ScreenWidth"), gAaConfig.getInt("ScreenHeight"), GL_RGBA, GL_UNSIGNED_BYTE, data);
+    Uint32 rmask, gmask, bmask, amask;
+
+    #if SDL_BYTEORDER == SDL_BIG_ENDIAN
+    rmask = 0xff000000;
+    gmask = 0x00ff0000;
+    bmask = 0x0000ff00;
+    amask = 0x000000ff;
+    #else
+    rmask = 0x000000ff;
+    gmask = 0x0000ff00;
+    bmask = 0x00ff0000;
+    amask = 0xff000000;
+    #endif
+
+    static SDL_Surface* textGFX = SDL_CreateRGBSurfaceFrom( data, gAaConfig.getInt("ScreenWidth"), gAaConfig.getInt("ScreenHeight"), 32, gAaConfig.getInt("ScreenWidth")*4, rmask, gmask, bmask, amask );
+
+    std::ostringstream oss;
+    oss << "video/frame" << frameNum << ".bmp";
+    SDL_SaveBMP(textGFX, oss.str().c_str());
+    frameNum++;*/
+
     SDL_GL_SwapBuffers(); // vom Backbuffer zum Frontbuffer wechseln (neues Bild zeigen)
 }
 

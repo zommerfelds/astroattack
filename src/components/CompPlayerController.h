@@ -20,8 +20,6 @@
 class CompPhysics;
 class InputSubSystem; // benötigt Eingabesystem für die Tasten zu lesen
 
-// NOTE Rotating while flying was removed in rev 20 due to physics problems.
-//      If reimplementation is needed, some code of rev 19 could be used.
 class CompPlayerController : public Component
 {
 public:
@@ -52,6 +50,8 @@ private:
     bool m_spaceKeyDownLastUpdate;    // ob die Leerschlagtaste letztes Frame gerade gedrückt wurde
     bool m_playerCouldWalkLastUpdate; // ob der Spieler in der letzte überprüfung laufen konnte
     int m_rechargeTime;               // wie lange hat der Spieler schon den Racketenrucksack aufgeladen?
+    float m_bodyAngleAbs;             // Neigungswinkel Absolut (0:Kopf nach links,cPi/2:Kopf nach oben,-cPi/2:Kopf nach unten)
+                                      // TODO: use rel angle and delete this variable
     int m_walkingTime;                // number of updates the player is walking (pressing walk key on ground)
 };
 

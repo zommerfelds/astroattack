@@ -24,7 +24,7 @@ entity
 	{
 		id CompVisualAnimation
 		name bodyAnim
-    	anim
+		anim
 		{
 			name astro
 		}

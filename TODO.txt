@@ -4,6 +4,7 @@
 
 * High priority *
 
+- Setting the rotation can lead to overlap and strange behavior (ex. level 2 under "arrow")
 - Rotating around planet: strange flickering
 
 * Medium priority *
@@ -52,8 +53,6 @@
 
 
 DONE:
-
-- Removed rotation: Setting the rotation can lead to overlap and strange behavior (ex. level 2 under "arrow")
 - Fehlerchecking und Beschreibung beim Level Laden
 - Use physical state interpolation instead of extrapolation
 - Make camera functionality frame rate independent
