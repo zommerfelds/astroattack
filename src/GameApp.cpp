@@ -317,14 +317,16 @@ void GameApp::mainLoop()
             m_subSystems.isLoading = false;
         }
         
-        while ( accumulator_secs >= cPhysicsTimeStep/*+0.3f*/ )
+        const float slowMotionDelay = 0.0f;
+
+        while ( accumulator_secs >= cPhysicsTimeStep + slowMotionDelay )
         {
             UPDATE(); // Hier wird das gesammte Spiel aktualisiert (Physik und Spiellogik)
-            accumulator_secs -= cPhysicsTimeStep/*+0.3f*/;
+            accumulator_secs -= cPhysicsTimeStep + slowMotionDelay;
         }
 
         m_subSystems.renderer.clearScreen();
-        DRAW( accumulator_secs/*/(cPhysicsTimeStep+0.3f)*cPhysicsTimeStep*/ ); // Spiel zeichnen
+        DRAW( accumulator_secs/(cPhysicsTimeStep + slowMotionDelay)*cPhysicsTimeStep ); // Spiel zeichnen
         m_subSystems.renderer.drawFPS(m_fps);
         m_subSystems.renderer.flipBuffer();
     }

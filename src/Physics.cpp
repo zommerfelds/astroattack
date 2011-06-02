@@ -225,12 +225,16 @@ void PhysicsSubSystem::calculateSmoothPositions(float accumulator)
         if (pBody->GetType() == b2_staticBody)
             continue;
 
-        // interpolation of last state and current state
-        float angle = (ratio * pBody->GetAngle()) + ((1-ratio) * compPhys->m_previousAngle);
-        Vector2D v = Vector2D(ratio * pBody->GetWorldCenter()) + (compPhys->m_previousCenterOfMass * (1-ratio));
+        float curAngle = pBody->GetAngle();
+        // make sure angle difference is inside [-π,π]
+        while (curAngle - compPhys->m_previousAngle > cPi)
+            curAngle -= 2*cPi;
+        while (curAngle - compPhys->m_previousAngle < -cPi)
+            curAngle += 2*cPi;
 
-        compPhys->m_smoothAngle = angle;
-        compPhys->m_smoothCenterOfMass = v;
+        // interpolation of last state and current state
+        compPhys->m_smoothAngle = (ratio * curAngle) + ((1-ratio) * compPhys->m_previousAngle);
+        compPhys->m_smoothCenterOfMass = Vector2D(ratio * pBody->GetWorldCenter()) + (compPhys->m_previousCenterOfMass * (1-ratio));
     }
 }
 

@@ -222,9 +222,6 @@ void MainMenuState::resume()      // State wiederaufnehmen
 
 void MainMenuState::update()      // Spiel aktualisieren
 {
-    getSubSystems().input.update();   // neue Eingaben lesen
-    getSubSystems().gui.update();     // Benutzeroberfläche aktualisieren
-
     if ( m_wantToQuit )
     {
         getSubSystems().events.quitGame.fire();
@@ -257,7 +254,8 @@ void MainMenuState::update()      // Spiel aktualisieren
 
 void MainMenuState::frame( float /*deltaTime*/ )
 {
-    //GetSubSystems().input->Update(); // neue Eingaben lesen
+    getSubSystems().input.update();   // neue Eingaben lesen
+    getSubSystems().gui.update();     // Benutzeroberfläche aktualisieren
 }
 
 void MainMenuState::draw( float /*accumulator*/ )        // Spiel zeichnen

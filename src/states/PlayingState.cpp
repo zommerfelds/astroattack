@@ -189,6 +189,7 @@ void PlayingState::draw( float accumulator )        // Spiel zeichnen
 
     // Draw debug info
 #ifdef DRAW_DEBUG
+    // TODO use CompPosition
     Entity* player = m_gameWorld.getEntity("Player");
     if ( player )
     {

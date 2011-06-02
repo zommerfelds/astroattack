@@ -27,6 +27,7 @@ CompPhysics::CompPhysics(GameEvents& gameEvents, const BodyDef& rBodyDef) :
     m_localGravitationPoint (),
     m_smoothCenterOfMass (),
     m_smoothAngle (0.0f),
+    m_previousAngle (0.0f),
     m_gravField (NULL),
     m_remainingUpdatesTillGravFieldChangeIsPossible (0)
 {}
