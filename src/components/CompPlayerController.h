@@ -16,6 +16,7 @@
 #include "../Component.h"
 #include "../GameEvents.h"
 #include "../World.h"
+#include "../Vector2D.h"
 
 class CompPhysics;
 class InputSubSystem; // benötigt Eingabesystem für die Tasten zu lesen
@@ -29,7 +30,7 @@ public:
     static const ComponentTypeId COMPONENT_TYPE_ID;
 
     void loadFromPropertyTree(const boost::property_tree::ptree& propTree);
-    void writeToPropertyTree(boost::property_tree::ptree& propTree) const {}
+    void writeToPropertyTree(boost::property_tree::ptree& propTree) const;
 
 private:
     const InputSubSystem& m_inputSubSystem;
@@ -53,6 +54,8 @@ private:
     float m_bodyAngleAbs;             // Neigungswinkel Absolut (0:Kopf nach links,cPi/2:Kopf nach oben,-cPi/2:Kopf nach unten) [-π,π]
                                       // TODO: use rel angle and delete this variable
     int m_walkingTime;                // number of updates the player is walking (pressing walk key on ground)
+
+    Vector2D m_rotationPoint;
 };
 
 #endif

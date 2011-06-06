@@ -29,6 +29,9 @@ public:
     Vector2D getDrawingPosition() const; // get current drawing (smooth) position. If a CampPhysics exist, it gets the position from there.
     float getDrawingOrientation() const;
 
+    // NOTE
+    // probably a getPosition() and a getOrientation() should come here, but for the moment nobody needs them
+
     // =========== Setters ===========
     // (no setters currently available because not needed)
     //void setOrientation(float orientation);

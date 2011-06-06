@@ -197,16 +197,21 @@ void PlayingState::draw( float accumulator )        // Spiel zeichnen
         if ( player_phys )
         {
             const CompGravField* grav = player_phys->getActiveGravField();
-            Vector2D gravPoint = player_phys->getLocalGravitationPoint().rotated( player_phys->getSmoothAngle() ) + player_phys->getDrawingPosition();
+            Vector2D gravPoint = player_phys->getLocalGravitationPoint().rotated( player_phys->getSmoothAngle() ) + player_phys->getSmoothPosition();
             Vector2D smoothGravPoint = player_phys->getLocalGravitationPoint().rotated( player_phys->getSmoothAngle() ) + player_phys->getSmoothPosition();
-            Vector2D smoothRotPoint = player_phys->getLocalRotationPoint().rotated( player_phys->getSmoothAngle() ) + player_phys->getSmoothPosition();
             if ( grav )
             {
                 Vector2D vec = grav->getAcceleration( gravPoint );
                 renderer.drawVector( vec*0.1f, smoothGravPoint );
             }
             renderer.drawPoint( smoothGravPoint );
-            renderer.drawPoint( smoothRotPoint );
+
+            // draw contacts
+            //ContactVector contacts = player_phys->getContacts();
+            /*BOOST_FOREACH (boost::shared_ptr<ContactInfo> contact, contacts)
+            {
+                renderer.drawPoint( contact->point );
+            }*/
         }
     }
 #endif

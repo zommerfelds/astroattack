@@ -28,8 +28,8 @@ class CompPhysics;
 
 struct ContactInfo
 {
-    ContactInfo() : comp (NULL) {}
-	CompPhysics* comp; // the component that is touching
+    ContactInfo(CompPhysics& comp) : comp (comp) {}
+	CompPhysics& comp; // the component that is touching
 	Vector2D point; // touching point
 	Vector2D normal; // contact normal (pointing away from body)
 };
@@ -125,6 +125,8 @@ public:
 
     ContactVector getContacts(bool getSensors=false) const;
 
+    Vector2D globalToLocal(const Vector2D& global) const;
+
     Vector2D getCenterOfMass() const;
     const Vector2D& getSmoothCenterOfMass() const;
     Vector2D getPosition() const;
@@ -132,10 +134,10 @@ public:
     float getAngle() const;
     float getSmoothAngle() const { return m_smoothAngle; }
 
-    const Vector2D& getLocalRotationPoint() const { return m_localRotationPoint; }
-    void setLocalRotationPoint(const Vector2D& rotPoint) { m_localRotationPoint = rotPoint; }
     const Vector2D& getLocalGravitationPoint() const { return m_localGravitationPoint; }
     void setLocalGravitationPoint(const Vector2D& gravPoint) { m_localGravitationPoint = gravPoint; }
+
+    unsigned int getNumUpdatesSinceGravFieldChange() const { return m_nUpdatesSinceGravFieldChange; }
 
     Vector2D getLinearVelocity() const;
     void setLinearVelocity(const Vector2D& vel);
@@ -164,7 +166,6 @@ private:
     // Box2D Informationen
     b2Body* m_body;
     BodyDef m_bodyDef;
-    Vector2D m_localRotationPoint;
     Vector2D m_localGravitationPoint;
 
     Vector2D m_smoothCenterOfMass;
@@ -179,7 +180,7 @@ private:
     FixtureMap m_fixtureMap;
 
 	const CompGravField* m_gravField;
-    unsigned int m_remainingUpdatesTillGravFieldChangeIsPossible;
+    unsigned int m_nUpdatesSinceGravFieldChange;
 
     friend class PhysicsSubSystem; // Das Physik-System darf auf alles hier zugreifen!
 };

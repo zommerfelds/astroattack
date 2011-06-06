@@ -27,7 +27,7 @@ const int PHYS_ITERATIONS = 10;
 const unsigned int cUpdatesTillGravFieldChangeIsPossible = 10;
 
 PhysicsSubSystem::PhysicsSubSystem( GameEvents& gameEvents)
-: m_pGravitationalAcc (), m_eventConnection1 (), m_eventConnection2 (),
+: m_pGlobalGravAcc (), m_eventConnection1 (), m_eventConnection2 (),
   m_eventConnection3 (), m_eventConnection4 (), m_gameEvents ( gameEvents ),
   m_world (b2Vec2(0.0f, 0.0f), true), m_timeStep ( cPhysicsTimeStep ),
   m_velocityIterations( PHYS_ITERATIONS ), m_positionIterations( PHYS_ITERATIONS )
@@ -42,8 +42,8 @@ void PhysicsSubSystem::init()
     m_eventConnection3 = m_gameEvents.newEntity.registerListener( boost::bind( &PhysicsSubSystem::onRegisterEntity_grav, this, _1 ) );
     m_eventConnection4 = m_gameEvents.deleteEntity.registerListener( boost::bind( &PhysicsSubSystem::onUnregisterEntity_grav, this, _1 ) );
 
-    m_pGravitationalAcc.x = 0.0f;
-    m_pGravitationalAcc.y = -25.0f;
+    m_pGlobalGravAcc.x = 0.0f;
+    m_pGlobalGravAcc.y = -25.0f;
 }
 
 // helper function
@@ -84,8 +84,6 @@ void PhysicsSubSystem::onRegisterEntity_phys(Entity& entity)
         {
             compPhys->m_bodyDef.position = compPos->m_position;
             compPhys->m_bodyDef.angle = compPos->m_orientation;
-            compPhys->m_smoothCenterOfMass = compPos->m_position; // TODO: center of mass instead of position
-            compPhys->m_smoothAngle = compPos->m_orientation;
         }
 
         compPhys->m_body = m_world.CreateBody( convertToB2BodyDef(compPhys->m_bodyDef).get() );
@@ -120,6 +118,12 @@ void PhysicsSubSystem::onRegisterEntity_phys(Entity& entity)
             pFixture->SetUserData( compPhys );
             compPhys->m_fixtureMap.insert( std::make_pair(pCompShape->getId(), pFixture) );
         }
+
+        compPhys->m_smoothCenterOfMass = compPhys->m_body->GetWorldCenter();
+        compPhys->m_previousCenterOfMass = compPhys->m_smoothCenterOfMass;
+
+        compPhys->m_smoothAngle = compPhys->m_body->GetAngle();
+        compPhys->m_previousAngle = compPhys->m_smoothAngle;
 
         m_physicsComps.push_back( compPhys );
     }
@@ -195,24 +199,24 @@ void PhysicsSubSystem::update()
             }
         }
 
-        if ( compPhys->m_remainingUpdatesTillGravFieldChangeIsPossible == 0 )
+        if ( compPhys->m_nUpdatesSinceGravFieldChange >= cUpdatesTillGravFieldChangeIsPossible )
         {
             if ( compPhys->m_gravField != gravWithHighestPriority )
             {
                 compPhys->m_gravField = gravWithHighestPriority;
-                compPhys->m_remainingUpdatesTillGravFieldChangeIsPossible = cUpdatesTillGravFieldChangeIsPossible;
+                compPhys->m_nUpdatesSinceGravFieldChange = 0;
             }
         }
-        if ( compPhys->m_remainingUpdatesTillGravFieldChangeIsPossible>0 )
-            compPhys->m_remainingUpdatesTillGravFieldChangeIsPossible--;
 
-        boost::shared_ptr<b2Vec2> acc;
+        Vector2D gravForce;
         if (compPhys->m_gravField == NULL)
-            acc = m_pGravitationalAcc.to_b2Vec2();
+            gravForce = m_pGlobalGravAcc;
         else
-            acc = compPhys->m_gravField->getAcceleration(pBody->GetWorldCenter()).to_b2Vec2();
-        b2Vec2 force ( pBody->GetMass() * *acc );
-        pBody->ApplyForce( force, pBody->GetWorldCenter() );
+            gravForce = compPhys->m_gravField->getAcceleration(pBody->GetWorldCenter());
+        gravForce *= pBody->GetMass();
+        pBody->ApplyForce( *gravForce.to_b2Vec2(), pBody->GetWorldCenter() );
+
+        compPhys->m_nUpdatesSinceGravFieldChange++;
 	}
 }
 

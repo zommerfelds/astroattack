@@ -5,6 +5,8 @@
  */
 
 #include <boost/bind.hpp>
+#include <boost/foreach.hpp>
+#include <boost/property_tree/ptree.hpp>
 
 #include "CompPlayerController.h"
 #include "CompVisualAnimation.h"
@@ -16,6 +18,8 @@
 #include "../Input.h"
 #include "../Entity.h"
 #include "../Vector2D.h"
+
+using boost::property_tree::ptree;
 
 // ID of this component
 const ComponentTypeId CompPlayerController::COMPONENT_TYPE_ID = "CompPlayerController";
@@ -235,7 +239,7 @@ void CompPlayerController::onUpdate()
             for (unsigned int i=0; i<contacts.size(); i++)
             {
                 // Gegenimpuls auf Grundobjekt wirken lassen
-                contacts[i]->comp->applyLinearImpulse( -impulse*cReactionJump*amountPerBody, contacts[i]->point ); // TODO: get middle between 2 points
+                contacts[i]->comp.applyLinearImpulse( -impulse*cReactionJump*amountPerBody, contacts[i]->point ); // TODO: get middle between 2 points
             }
             m_spaceKeyDownLastUpdate = true;
         }
@@ -297,10 +301,10 @@ void CompPlayerController::onUpdate()
 		        
                 // Gegenimpuls auf Grundobjekt wirken lassen
                 float factor = 1.0f;
-                float mass = contacts[iContactRight]->comp->getMass();
+                float mass = contacts[iContactRight]->comp.getMass();
                 if ( mass < smallMass )
                     factor = mass/smallMass;
-                contacts[iContactRight]->comp->applyForce( -force*cReactionWalk*factor, contacts[iContactRight]->point ); // TODO: get middle between 2 points
+                contacts[iContactRight]->comp.applyForce( -force*cReactionWalk*factor, contacts[iContactRight]->point ); // TODO: get middle between 2 points
             }
             movingOnGround = true;
         }
@@ -323,10 +327,10 @@ void CompPlayerController::onUpdate()
                 playerCompPhysics->applyForce( force, playerCompPhysics->getCenterOfMass() );
 
                 float factor = 1.0f;
-                float mass = contacts[iContactLeft]->comp->getMass();
+                float mass = contacts[iContactLeft]->comp.getMass();
                 if ( mass < smallMass )
                     factor = mass/smallMass;
-                contacts[iContactLeft]->comp->applyForce( -force*cReactionWalk*factor, contacts[iContactLeft]->point ); // TODO: get middle between 2 points
+                contacts[iContactLeft]->comp.applyForce( -force*cReactionWalk*factor, contacts[iContactLeft]->point ); // TODO: get middle between 2 points
             }
             movingOnGround = true;
         }
@@ -385,9 +389,10 @@ void CompPlayerController::onUpdate()
 		diffAngle += 2*cPi;
 	else if ( diffAngle > cPi )
 		diffAngle -= 2*cPi;
+    float absDiffAngle = fabs(diffAngle);
 
 	bool decrease = true;
-    if ( isIncreasingAngle && !m_playerCouldWalkLastUpdate && (fabs(diffAngle)<cMaxAngleRel) )
+    if ( isIncreasingAngle && !m_playerCouldWalkLastUpdate && (absDiffAngle<cMaxAngleRel) )
     {
 		decrease = false;
         if ( directionClw )
@@ -412,20 +417,20 @@ void CompPlayerController::onUpdate()
 		{			
 			bool returnClw = diffAngle > 0.0f;
             
-			float bonusFactor = fabs(diffAngle)*4.0f + 0.1f;
-			if ( fabs(diffAngle) < cMaxAngleRel )
+			float bonusFactor = absDiffAngle*4.0f + 0.1f;
+			if ( absDiffAngle < cMaxAngleRel )
 				bonusFactor = 1.0f;
 
 			if ( returnClw )
 			{
-			    if ( fabs(diffAngle) < cDecStep * bonusFactor )
+			    if ( absDiffAngle < cDecStep * bonusFactor )
                     m_bodyAngleAbs = upAngleAbs;
                 else
                     m_bodyAngleAbs -= cDecStep * bonusFactor;
 			}
 			else
 			{
-                if ( fabs(diffAngle) < cDecStep * bonusFactor )
+                if ( absDiffAngle < cDecStep * bonusFactor )
                     m_bodyAngleAbs = upAngleAbs;
                 else
                     m_bodyAngleAbs += cDecStep * bonusFactor;
@@ -437,12 +442,20 @@ void CompPlayerController::onUpdate()
 		m_bodyAngleAbs -= 2*cPi;
 	else if (m_bodyAngleAbs < -cPi)
 		m_bodyAngleAbs += 2*cPi;
-    
-    playerCompPhysics->rotate( m_bodyAngleAbs - cPi*0.5f - playerCompPhysics->getAngle(), playerCompPhysics->getLocalRotationPoint() );
+
+	// 50 is the number of updates after which we assume the body of the player has turned to the new position
+	if (playerCompPhysics->getNumUpdatesSinceGravFieldChange() < 50) // if the player is changing gravity
+	    // rotate around his feet
+        playerCompPhysics->rotate( m_bodyAngleAbs - cPi*0.5f - playerCompPhysics->getAngle(), m_rotationPoint );
+	else // (last change is long enough ago)
+	    // rotate around the middle
+	    playerCompPhysics->rotate( m_bodyAngleAbs - cPi*0.5f - playerCompPhysics->getAngle(), Vector2D() );
     
     if ( !isTouchingSth )
+    {
         setLowFriction( playerCompPhysics ); // wenn der Spieler in der Luft ist, soll die Reibung der "Schuhe" schon verkleinert werden
                                              // damit wenn er landet, er auf der Oberfläche etwas rutscht und nicht abrupt stoppt
+    }
     else
     {
         if ( wantToMoveSidewards && ( canWalkR || canWalkL ) )  // wenn er am Boden ist und laufen möchte,
@@ -474,8 +487,18 @@ void CompPlayerController::setHighFriction( CompPhysics* playerCompPhysics )
     playerCompPhysics->setShapeFriction("bottom", 4.0f);
 }
 
-void CompPlayerController::loadFromPropertyTree(const boost::property_tree::ptree&)
-{}  // dont need to do anything, because there is no data for this component
+void CompPlayerController::loadFromPropertyTree(const ptree& propTree)
+{
+    m_rotationPoint.x = propTree.get("rotationPoint.x", 0.0f);
+    m_rotationPoint.y = propTree.get("rotationPoint.y", 0.0f);
+}
+
+
+void CompPlayerController::writeToPropertyTree(ptree& propTree) const
+{
+    propTree.add("rotationPoint.x", m_rotationPoint.x);
+    propTree.add("rotationPoint.y", m_rotationPoint.y);
+}
 
 void CompPlayerController::updateAnims(bool jumping, bool movingOnGround, bool usingJetpack)
 {

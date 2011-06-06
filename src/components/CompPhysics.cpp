@@ -23,13 +23,12 @@ CompPhysics::CompPhysics(GameEvents& gameEvents, const BodyDef& rBodyDef) :
     Component(gameEvents),
     m_body (NULL),
     m_bodyDef (rBodyDef),
-    m_localRotationPoint (),
     m_localGravitationPoint (),
     m_smoothCenterOfMass (),
     m_smoothAngle (0.0f),
     m_previousAngle (0.0f),
     m_gravField (NULL),
-    m_remainingUpdatesTillGravFieldChangeIsPossible (0)
+    m_nUpdatesSinceGravFieldChange (0)
 {}
 
 void CompPhysics::addShapeDef( const boost::shared_ptr<ShapeDef>& pShapeDef )
@@ -107,12 +106,13 @@ void CompPhysics::applyForce(const Vector2D& impulse, const Vector2D& point)
 
 void CompPhysics::rotate( float deltaAngle, const Vector2D& localPoint )
 {
-    float current_angle = m_body->GetAngle();
+    float newAngle = m_body->GetAngle() + deltaAngle;
 
-    Vector2D worldRotationCenter( Vector2D(m_body->GetPosition()) + localPoint.rotated(current_angle) );
-    Vector2D worldRotationCenterToBodyCenter ( -localPoint.rotated(current_angle+deltaAngle) );
+    Vector2D worldRotationCenter( Vector2D(m_body->GetPosition()) + localPoint.rotated(m_body->GetAngle()) );
+    Vector2D worldRotationCenterToBodyCenter ( -localPoint.rotated(newAngle) );
+    Vector2D newPos = worldRotationCenter + worldRotationCenterToBodyCenter;
 
-    m_body->SetTransform( *(worldRotationCenter+worldRotationCenterToBodyCenter).to_b2Vec2(), current_angle+deltaAngle );
+    m_body->SetTransform( *newPos.to_b2Vec2(), newAngle );
 }
 
 
@@ -137,13 +137,13 @@ ContactVector CompPhysics::getContacts(bool getSensors) const
              ( !getSensors && ( contactEdge->contact->GetFixtureA()->IsSensor() ||
                contactEdge->contact->GetFixtureB()->IsSensor() ) ) )
             continue;
-        boost::shared_ptr<ContactInfo> touchInfo = boost::make_shared<ContactInfo>();
+        boost::shared_ptr<ContactInfo> touchInfo = boost::shared_ptr<ContactInfo>(
+                new ContactInfo(*static_cast<CompPhysics*>(contactEdge->other->GetUserData())));
         b2WorldManifold worldManifold;
         contactEdge->contact->GetWorldManifold( &worldManifold );
         touchInfo->normal = worldManifold.normal;
         if (contactEdge->contact->GetFixtureA()->GetBody() != m_body) // is this needed?
             touchInfo->normal = -touchInfo->normal;
-        touchInfo->comp = static_cast<CompPhysics*>(contactEdge->other->GetUserData());
         touchInfo->point = worldManifold.points[0]; // TODO: use all points
 
         vecTouchInfo.push_back(touchInfo);
@@ -170,10 +170,6 @@ void CompPhysics::loadFromPropertyTree(const ptree& propTree)
 
     bool isBullet = propTree.get("isBullet", false);
 
-    Vector2D rotationPoint;
-    rotationPoint.x = propTree.get("rotationPoint.x", 0.0f);
-    rotationPoint.y = propTree.get("rotationPoint.y", 0.0f);
-
     Vector2D gravitationPoint;
     gravitationPoint.x = propTree.get("gravitationPoint.x", 0.0f);
     gravitationPoint.y = propTree.get("gravitationPoint.y", 0.0f);
@@ -184,7 +180,6 @@ void CompPhysics::loadFromPropertyTree(const ptree& propTree)
     body_def.bullet = isBullet;
     body_def.linearDamping = linearDamping;
 
-    setLocalRotationPoint(rotationPoint);
     setLocalGravitationPoint(gravitationPoint);
 
     BOOST_FOREACH(const ptree::value_type &v, propTree)
@@ -217,6 +212,9 @@ void CompPhysics::writeToPropertyTree(ptree& propTree) const
     propTree.add("damping.linear", getLinearDamping());
     propTree.add("damping.angular", getAngularDamping());
 
+    propTree.add("gravitationPoint.x", m_localGravitationPoint.x);
+    propTree.add("gravitationPoint.y", m_localGravitationPoint.y);
+
     if (isFixedRotation())
     {
         propTree.add("isFixedRotation", true);
@@ -240,4 +238,9 @@ void CompPhysics::writeToPropertyTree(ptree& propTree) const
             shapePropTree.add("isSensor", true);
         propTree.add_child("shape", shapePropTree);
     }
+}
+
+Vector2D CompPhysics::globalToLocal(const Vector2D& global) const
+{
+    return m_body->GetWorldVector(*global.to_b2Vec2());
 }

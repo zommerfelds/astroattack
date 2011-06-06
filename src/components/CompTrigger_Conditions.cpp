@@ -50,14 +50,14 @@ bool ConditionEntityTouchedThis::isConditionTrue()
     CompPhysics* thisCompPhysics = m_pCompTrigger->getOwnerEntity()->getComponent<CompPhysics>();
     if ( thisCompPhysics == NULL )
     {
-        gAaLog.write("WARNING entity '%s': testing if 'EntityTouchedThis' condition is true but there is no CompPhysics", m_pCompTrigger->getOwnerEntity()->getId());
+        gAaLog.write("WARNING entity '%s': testing if 'EntityTouchedThis' condition is true but there is no CompPhysics", m_pCompTrigger->getOwnerEntity()->getId().c_str());
         return false;
     }
 
     ContactVector contacts = thisCompPhysics->getContacts(true);
 
     for (size_t i=0; i<contacts.size(); i++)
-        if (contacts[i]->comp->getOwnerEntity()->getId() == m_entityName)
+        if (contacts[i]->comp.getOwnerEntity()->getId() == m_entityName)
             return true;
 
     return false;

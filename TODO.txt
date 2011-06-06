@@ -4,8 +4,6 @@
 
 * High priority *
 
-- Setting the rotation can lead to overlap and strange behavior (ex. level 2 under "arrow")
-
 * Medium priority *
 
 - Entities as pure aggregation
@@ -52,7 +50,8 @@
 
 
 DONE:
-- Fixed: Rotating around planet: strange flickering (was bad angle interpolation)
+- Fixed rotation issue with strange physical behavior (ex. level 2 under "arrow")
+- Fixed strange flickering when rotating around planet (was bad angle interpolation)
 - Fehlerchecking und Beschreibung beim Level Laden
 - Use physical state interpolation instead of extrapolation
 - Make camera functionality frame rate independent

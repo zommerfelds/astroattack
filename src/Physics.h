@@ -34,7 +34,7 @@ public:
     void calculateSmoothPositions(float accumulator);
 
 private:
-    Vector2D m_pGravitationalAcc; // Fallbeschleunigung [m/s^2]
+    Vector2D m_pGlobalGravAcc; // Fallbeschleunigung [m/s^2]
 
     std::vector< CompPhysics* > m_physicsComps;
 	std::vector< CompGravField* > m_gravFields;
