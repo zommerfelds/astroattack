@@ -60,6 +60,7 @@ void CompVisualAnimation::setState( AnimStateId new_state )
     if ( m_curState == new_state )
         return;
     m_curState = new_state; // neuer Animationsstand
+    m_updateCounter = 0;
     if ( m_animInfo!=NULL )
     {
         StateInfoMap::const_iterator cit = m_animInfo->states.find(new_state);
@@ -72,6 +73,7 @@ void CompVisualAnimation::start()
 {
     m_running = true;
     m_wantToFinish = false;
+    m_updateCounter = 0;
     if ( m_animInfo!=NULL )
     {
         StateInfoMap::const_iterator cit = m_animInfo->states.find(m_curState);
@@ -84,6 +86,27 @@ void CompVisualAnimation::carryOn()
 {
     m_running = true;
     m_wantToFinish = false;
+}
+
+void CompVisualAnimation::end()
+{
+    m_running = false;
+}
+
+void CompVisualAnimation::finish()
+{
+    m_wantToFinish = true;
+}
+
+void CompVisualAnimation::setReverse(bool reverse)
+{
+    if (reverse) m_playDirection = -1;
+    else         m_playDirection = +1;
+}
+
+int CompVisualAnimation::isRunning() const
+{
+    return m_running;
 }
 
 void CompVisualAnimation::onUpdate()

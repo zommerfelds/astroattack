@@ -62,7 +62,7 @@ void CompPlayerController::onUpdate()
     bool canWalkL = false;            // ob der Spieler nach links Laufen kann (am Boden?, Steiligkeit)
     bool isTouchingSth = false;       // ob der Spieler etwas berührt (Boden, Wand, Objekt)
     bool usingJetpack = false;        // ob der Spieler den Jetpack brauchen will
-    bool jumping = false;
+    bool flyingUp = false;            // if the player is trying to go up in the air
     bool wantToMoveSidewards = false; // ob der Spieler sich seitwärts bewegen will
     bool isPushing = false;           // ob der Spieler einen Gegenstand stosst
 
@@ -202,7 +202,7 @@ void CompPlayerController::onUpdate()
         // Taste muss erst gerade gedrück werden und nicht schon gedrück sein (und Spielerfigur muss ein Block berühren)
         if ( !m_spaceKeyDownLastUpdate && isTouchingSth )
         {
-            jumping = true;
+            flyingUp = true;
             Vector2D impulse( 0.0f, 0.0f ); // Impuls
 
             // Je nachdem ob der Spieler am Boden ist oder an der Wand anders abstossen
@@ -259,7 +259,7 @@ void CompPlayerController::onUpdate()
     if ( m_inputSubSystem.getKeyState ( Up ) && m_itJetPackVar->second > 0 && (m_rechargeTime==cMaxRecharge || !isTouchingSth ) )
     {
         const float maxVelYJetpack = 12.0f;
-        jumping = true;
+        flyingUp = true;
         usingJetpack = true;
         m_itJetPackVar->second -= 21;
         if (m_itJetPackVar->second < 0)
@@ -464,7 +464,7 @@ void CompPlayerController::onUpdate()
             setHighFriction( playerCompPhysics );               // die Reibung vergrössern, damit er nicht zu viel rutscht
     }
 
-    updateAnims(jumping, movingOnGround, usingJetpack);
+    updateAnims(flyingUp, movingOnGround, usingJetpack);
 
     m_playerCouldWalkLastUpdate = ( canWalkR || canWalkL );
 }
@@ -500,7 +500,7 @@ void CompPlayerController::writeToPropertyTree(ptree& propTree) const
     propTree.add("rotationPoint.y", m_rotationPoint.y);
 }
 
-void CompPlayerController::updateAnims(bool jumping, bool movingOnGround, bool usingJetpack)
+void CompPlayerController::updateAnims(bool flyingUp, bool movingOnGround, bool usingJetpack)
 {
     // Laufanimation steuern
     CompVisualAnimation* bodyAnim = NULL;
@@ -518,7 +518,7 @@ void CompPlayerController::updateAnims(bool jumping, bool movingOnGround, bool u
         gAaLog.write("WARNING: entity '%s' has component CompPlayerController but no 'bodyAnim' shape", getOwnerEntity()->getId().c_str());
     else
     {
-        if ( jumping )
+        if (flyingUp)
         {
             bodyAnim->setState( "Jumping" );
             bodyAnim->start();
@@ -530,7 +530,7 @@ void CompPlayerController::updateAnims(bool jumping, bool movingOnGround, bool u
             bodyAnim->setState( "Running" );
             bodyAnim->carryOn(); // Wenn Spieler läuft (Laufanimation starten)
         }
-        else if ( m_walkingTime!=0 )
+        else if (m_walkingTime!=0)
         {
             if (m_walkingTime<12)
             {
@@ -541,7 +541,7 @@ void CompPlayerController::updateAnims(bool jumping, bool movingOnGround, bool u
                 bodyAnim->finish(); // jack has to finish his step
         }
 
-        if ( movingOnGround )
+        if (movingOnGround)
             ++m_walkingTime;
         else
             m_walkingTime = 0;

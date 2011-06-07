@@ -55,12 +55,24 @@ SlideShowState::SlideShowState( SubSystems& subSystems, std::string slideXmlFile
 void SlideShowState::init()        // State starten
 {
     gAaLog.write ( "Loading slide show..." );
-    //GetSubSystems().renderer.DisplayLoadingScreen();
-    //GetSubSystems().renderer.DisplayTextScreen("p l e a s e    w a i t");
+    //GetSubSystems().renderer.displayLoadingScreen();
+    //GetSubSystems().renderer.displayTextScreen("p l e a s e    w a i t");
     gAaLog.increaseIndentationLevel();
 
-    // "Dia-Show" laden
-    DataLoader::loadSlideShow( m_slideXmlFile, &m_slideShow );
+    try
+    {
+        // "Dia-Show" laden
+        DataLoader::loadSlideShow( m_slideXmlFile, &m_slideShow );
+    }
+    catch (DataLoadException e)
+    {
+        // TODO is this a good thing to do?
+        // TODO show error
+        gAaLog.write("Error loading file : %s", e.getMsg().c_str());
+        boost::shared_ptr<MainMenuState> menuState (new MainMenuState(getSubSystems()));
+        getSubSystems().stateManager.changeState(menuState);
+        return;
+    }
 
     // Dazugehörende Bilder laden
     LoadTextureInfo info;

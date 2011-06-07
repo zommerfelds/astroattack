@@ -42,9 +42,6 @@
 
 using boost::property_tree::ptree;
 
-#include <iostream>
-using namespace std;
-
 namespace
 {
 
@@ -60,19 +57,6 @@ void xmlNodeToPropertyTree(const pugi::xml_node& xmlNode, ptree& propertyTree)
     }
 }
 
-/*
-void dumpPropertyTree(const ptree& propertyTree, std::ostream& os, unsigned int identation=0)
-{
-    BOOST_FOREACH(const ptree::value_type &v, propertyTree)
-    {
-        std::string identationString (identation*3, ' ');
-
-        os << identationString << v.first << " : " << v.second.data() << std::endl;
-        dumpPropertyTree(v.second, os, identation+1);
-    }
-}
-*/
-
 } // namespace
 
 DataLoadException::DataLoadException(const std::string& msg)
@@ -83,11 +67,12 @@ DataLoadException::DataLoadException(const std::string& msg)
 // Load Level from XML
 void DataLoader::loadWorld(const std::string& fileName, GameWorld& gameWorld, SubSystems& subSystems)
 {
-    try {
+    try
+    {
         using boost::shared_ptr;
         using boost::make_shared;
 
-        gAaLog.write ( "Loading XML file \"%s\"...\n", fileName.c_str() );
+        gAaLog.write ( "Loading world file \"%s\"...\n", fileName.c_str() );
         gAaLog.increaseIndentationLevel();
 
         ptree levelPropTree;
@@ -170,51 +155,48 @@ void DataLoader::loadWorld(const std::string& fileName, GameWorld& gameWorld, Su
 
 void DataLoader::loadSlideShow( const std::string& fileName, SlideShow* pSlideShow )
 {
-    gAaLog.write ( "Loading XML file \"%s\"...\n", fileName.c_str() );
-    gAaLog.increaseIndentationLevel();
-
-    pugi::xml_document doc;
-    pugi::xml_parse_result result = doc.load_file(fileName.c_str());
-    if (!result)
+    try
     {
-		gAaLog.write( "[ Error parsing file '%s' at offset %d!\nError description: %s ]\n\n", fileName.c_str(), result.offset, result.description() );
-		return;
-	}
+        using boost::shared_ptr;
+        using boost::make_shared;
 
-	pugi::xml_node rootElem = doc.first_child();
+        gAaLog.write ( "Loading slide show file \"%s\"...\n", fileName.c_str() );
+        gAaLog.increaseIndentationLevel();
 
-    pSlideShow->musicFileName = "";
-    pSlideShow->timerDelay = 0;
+        ptree propTree;
+        read_info(fileName, propTree);
 
-    pSlideShow->musicFileName = rootElem.child("music").attribute("file").value();
+        pSlideShow->musicFileName = propTree.get<std::string>("music");
+        pSlideShow->timerDelay = 5000;
 
-    pSlideShow->timerDelay = rootElem.child("timer").attribute("delayms").as_int();
-
-    for(pugi::xml_node slideElem = rootElem.child("slide"); slideElem; slideElem = slideElem.next_sibling("slide"))
-    {
-        Slide slide;
-        slide.imageFileName = slideElem.attribute("image").value();
-        std::string text;
-        
-        BOOST_FOREACH(const pugi::xml_node& childElem, slideElem)
+        BOOST_FOREACH(const ptree::value_type &value, propTree)
         {
-            if (std::string("p") == childElem.name())
+            if (value.first == "slide")
             {
-                slide.textPages.push_back(text);
-                text.clear();
-            }
-            else
-            {
-                text += childElem.value();
+                ptree slidePropTree = value.second;
+                Slide slide;
+                slide.imageFileName = slidePropTree.get<std::string>("image");
+
+                BOOST_FOREACH(const ptree::value_type &value2, slidePropTree)
+                {
+                    if (value2.first == "text")
+                    {
+                        std::string text = value2.second.get_value("");
+                        slide.textPages.push_back(text);
+                    }
+                }
+
+                pSlideShow->slides.push_back( slide );
             }
         }
-        if (!text.empty())
-            slide.textPages.push_back(text);
-        pSlideShow->slides.push_back( slide );
-    }
 
-    gAaLog.decreaseIndentationLevel();
-    gAaLog.write ( "[ Done ]\n\n" );
+        gAaLog.decreaseIndentationLevel();
+        gAaLog.write ( "[ Done ]\n\n", fileName.c_str() );
+    }
+    catch (boost::property_tree::ptree_error e)
+    {
+        throw DataLoadException(e.what());
+    }
 }
 
 ResourceIds DataLoader::loadGraphics( const std::string& fileName, TextureManager* pTextureManager, AnimationManager* pAnimationManager, FontManager* pFontManager )

@@ -146,7 +146,7 @@ void EditorState::update()      // Spiel aktualisieren
             for ( int i = 0;; ++i )
             {
                 std::stringstream ss;
-                ss << "EdBlock";
+                ss << "Block";
                 ss.fill('0');
                 ss.width(5);
                 ss << i;

@@ -564,7 +564,6 @@ void RenderSubSystem::drawVisualAnimationComps()
             float angle = compPos->getDrawingOrientation();
             Vector2D position = compPos->getDrawingPosition();
 
-
             bool isFlipped = pAnimComp->getFlip();
             Vector2D center = pAnimComp->center();
             if ( isFlipped )
@@ -662,6 +661,8 @@ void RenderSubSystem::displayTextScreen( const std::string& text )
     setMatrix(GUI);
     drawOverlay( 0.0f, 0.0f, 0.0f, 1.0f );
     drawString( text, "FontW_m", 2.0f, 1.5f, AlignCenter, AlignCenter );
+
+    SDL_GL_SwapBuffers();
 }
 
 void RenderSubSystem::displayLoadingScreen()
@@ -686,9 +687,6 @@ void RenderSubSystem::displayLoadingScreen()
     int picw=0,pich=0;
     m_textureManager.loadTexture("data/Loading.png", "loading", info, &picw, &pich);
     m_textureManager.setTexture("loading");
-    
-    //gAaLog.Write( "Pic: w=%i, h=%i\n", picw, pich );
-    //gAaLog.Write( "Res: w=%f, h=%f\n", w, h );
 
     glClear ( GL_COLOR_BUFFER_BIT );
 
@@ -708,23 +706,6 @@ void RenderSubSystem::displayLoadingScreen()
         // Oben rechts
         glTexCoord2f(1.0f, 0.0f);
         glVertex2f(w, h-pich);
-        /*
-        // Oben links
-        glTexCoord2f(0.0f, 0.0f);
-        glVertex2f(0.0f, 0);
-
-        // Unten links
-        glTexCoord2f(0.0f, 1.0f);
-        glVertex2f(0.0f, pich);
-
-        // Unten rechts
-        glTexCoord2f(1.0f, 1.0f);
-        glVertex2f(picw, pich);
-
-        // Oben rechts
-        glTexCoord2f(1.0f, 0.0f);
-        glVertex2f(picw, 0);
-        * */
     glEnd();
 
     glMatrixMode ( GL_PROJECTION );

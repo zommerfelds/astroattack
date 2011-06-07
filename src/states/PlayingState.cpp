@@ -43,13 +43,12 @@ PlayingState::PlayingState( SubSystems& subSystems, std::string levelFileName )
   m_cameraController ( getSubSystems().input, getSubSystems().renderer, m_gameWorld ),
   m_eventConnection1 (), m_eventConnection2 (),
   m_curentDeleteSet (1), m_wantToEndGame( false ), m_alphaOverlay( 0.0 ),
-  m_levelFileName ( levelFileName ),
-  m_showLoadingScreenAtCleanUp ( true )
+  m_levelFileName ( levelFileName )
 {}
 
 void PlayingState::init()        // State starten
 {
-    //GetSubSystems().renderer.DisplayLoadingScreen();
+    //GetSubSystems().renderer.displayLoadingScreen();
 
     gAaLog.write ( "Loading world...\n\n" );
     gAaLog.increaseIndentationLevel();
@@ -97,9 +96,6 @@ void PlayingState::init()        // State starten
 
 void PlayingState::cleanup()     // State abbrechen
 {
-    // loading screen
-    if ( m_showLoadingScreenAtCleanUp )
-        getSubSystems().renderer.displayTextScreen("p l e a s e    w a i t");
 
     getSubSystems().sound.stopMusic( 500 );
     getSubSystems().sound.freeMusic( "music" );
@@ -133,6 +129,7 @@ void PlayingState::update()      // Spiel aktualisieren
     }
 
     getSubSystems().physics.update();                       // Physik aktualisieren
+
     getSubSystems().events.gameUpdate.fire();
 
     if ( m_curentDeleteSet == 1 )
@@ -281,7 +278,6 @@ void PlayingState::onEntityDeleted( Entity& entity )
 
 void PlayingState::onLevelEnd(bool /*win*/, const std::string& msg)
 {
-    m_showLoadingScreenAtCleanUp = false;
     m_wantToEndGame = true;
     m_gameOverMessage = msg;
 }

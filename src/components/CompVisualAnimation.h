@@ -41,12 +41,12 @@ public:
     void getDimensions( float *hw, float *hh ) { *hw = m_halfWidth; *hh = m_halfHeight; }
 
     // Animation steuern
-    void start();                                              // Starten
-    void carryOn();                                           // Fortfahren
-    void end() { m_running = false; }                          // Sofort enden
-    void finish() { m_wantToFinish = true; }                   // Enden wenn ein Stopppunkt erreicht wurde
-    void setReverse(bool reverse) { if (reverse) m_playDirection=-1; else m_playDirection= 1; } // 1 ist vorwärz und 0 ist rückwärz
-    int isRunning() const { return m_running; }                // ob die Animation gerade läuft
+    void start();                  // Starten
+    void carryOn();                // Fortfahren
+    void end();                    // Sofort enden
+    void finish();                 // Enden wenn ein Stopppunkt erreicht wurde
+    void setReverse(bool reverse);
+    int isRunning() const;         // ob die Animation gerade läuft
 
     // Animationsstand (z.B. Rennen, Springen, Reden )
     void setState( AnimStateId new_state );

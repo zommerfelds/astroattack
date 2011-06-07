@@ -4,14 +4,14 @@
 
 * High priority *
 
+- test rename introShow.infox
+
 * Medium priority *
 
 - Entities as pure aggregation
 - Test Init() => DeInit() => Init() on GameApp and SubSystems
-- time accumulator... (very unstable when put delay on main loop)
 - improve logger
 - asynchonous fading out music (separate thread)
-- Strange physical behavior under "arrow" of level 2
 - Test OpenGL error checking (glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR) did not generate error)
 - Bug in Logger: Loading Texture "(null)"... Done!
 - Kontakt Events nicht für jeden Box2D Kontakt erzeugen, sonders Box2D Kontakte zuerst verarbeiten und zusammenfügen.

@@ -272,16 +272,15 @@ void GameApp::mainLoop()
     m_fpsMeasureStart = SDL_GetTicks();
 
     // Variablen um Zeit zu messen
-    Uint32 current_time_msecs = 0;              // momentane Zeit
-    Uint32 last_time_msecs = 0;                 // Zeit, wo letzes Frame gerendert wurde
-    current_time_msecs = last_time_msecs = SDL_GetTicks(); // Alle mit aktuellen Zeit initialisieren
+    Uint32 currentTimeMsecs = 0;              // momentane Zeit
+    Uint32 lastTimeMsecs = 0;                 // Zeit, wo letzes Frame gerendert wurde
+    currentTimeMsecs = lastTimeMsecs = SDL_GetTicks(); // Alle mit aktuellen Zeit initialisieren
 
-    float accumulator_secs = 0.0f; // Time Akkumulator: damit eine PC unabhängige interne schlaufe immer mit 60Hz durchlaufen kann
+    float timeAccumulator = 0.0f; // Time Akkumulator: damit eine PC unabhängige interne schlaufe immer mit 60Hz durchlaufen kann
 
-    float delta_time_secs = 0.0; // Zeit seit letzter Frame -> um Bewegungen in einer konstanten Rate zu aktualisieren
+    float deltaTime = 0.0; // Zeit seit letzter Frame -> um Bewegungen in einer konstanten Rate zu aktualisieren
 
-    SDL_Event sdl_window_events; // SDL Eingabe-Ereignisse (nur für den Fall, wann der Benutzer das Fenster schliessen will)
-    //memset(&sdl_window_events,0,sizeof(SDL_Event));
+    SDL_Event sdlWindowEvent; // SDL Eingabe-Ereignisse (nur für den Fall, wann der Benutzer das Fenster schliessen will)
     // Die restlichen Eingaben werden in Input.cpp gemacht.
 
     gAaLog.increaseIndentationLevel();
@@ -295,42 +294,51 @@ void GameApp::mainLoop()
     // Solange der benutzer noch nicht abgebrochen hat
     while ( m_quit == false )
     {
-        current_time_msecs = SDL_GetTicks();  // Aktualisieren der Zeit
-        calcFPS( current_time_msecs );        // Berechnet die Aktualisierungsrate
+        currentTimeMsecs = SDL_GetTicks();  // Aktualisieren der Zeit
+        calcFPS( currentTimeMsecs );        // Berechnet die Aktualisierungsrate
 
         // Zeiten berechnen
-        delta_time_secs = ( current_time_msecs-last_time_msecs ) * 0.001f; // Zeit seit letztem Frame in Sekunden berechnen
-        last_time_msecs = current_time_msecs; // Die momentane Zeit in last_time_msecs speichern
-
-        handleSdlQuitEvents( sdl_window_events, m_quit ); // Sehen ob der Benutzer das fenster schliessen will.
+        deltaTime = ( currentTimeMsecs-lastTimeMsecs ) * 0.001f; // Zeit seit letztem Frame in Sekunden berechnen
+        lastTimeMsecs = currentTimeMsecs; // Die momentane Zeit in last_time_msecs speichern
         
-        FRAME( delta_time_secs ); // Frameabhängige Arbeiten hier durchführen
-
-        accumulator_secs += delta_time_secs; // time accumulator
-
-        //gAaLog.Write ( "State: %i\n", (int)SDL_GetAppState() );
-        // TEST THIS !!!!!!! (getstate)
-        // The update loop stops, but the frame loop does not stop (camera)
-        if ( m_subSystems.isLoading || delta_time_secs>0.5f || ((SDL_GetAppState()&SDL_APPINPUTFOCUS)==0) ) // falls etwas gerade am laden war, wird der Akkumultor zurückgesetzt,
-        {                                                       // damit delta_time_secs nicht ultra gross wird und eine grosse Anzahl von Uptates verlangt wird
-            accumulator_secs = 0;
-            m_subSystems.isLoading = false;
-
-            std::cerr << "time accumulator reset! isLoading = " << m_subSystems.isLoading << std::endl;
-        }
-        
-        const float slowMotionDelay = 0.0f;
-
-        while ( accumulator_secs >= cPhysicsTimeStep + slowMotionDelay )
+        bool hasFocus = ((SDL_GetAppState() & SDL_APPINPUTFOCUS) != 0);
+        if (hasFocus)
         {
-            UPDATE(); // Hier wird das gesammte Spiel aktualisiert (Physik und Spiellogik)
-            accumulator_secs -= cPhysicsTimeStep + slowMotionDelay;
+            FRAME( deltaTime ); // Frameabhängige Arbeiten hier durchführen
+
+            timeAccumulator += deltaTime; // time accumulator
+
+            const float cMaxTimeAccumulator = 0.5f;
+
+            // If the game was in a loading state, the accumulator is too big or the windows hanst focus, reset the accumulator
+            if ( m_subSystems.isLoading || deltaTime > cMaxTimeAccumulator )
+            {
+                if (!m_subSystems.isLoading)
+                    std::cerr << "time accumulator too big, skipping updates" << std::endl;
+
+                timeAccumulator = 0;
+                m_subSystems.isLoading = false;
+
+            }
+
+            const float slowMotionDelay = 0.0f;
+
+            while ( timeAccumulator >= cPhysicsTimeStep + slowMotionDelay )
+            {
+                UPDATE(); // Hier wird das gesammte Spiel aktualisiert (Physik und Spiellogik)
+                timeAccumulator -= cPhysicsTimeStep + slowMotionDelay;
+            }
+
+            if (m_quit)
+                break; // don't redraw the screen if we are quitting
+
+            m_subSystems.renderer.clearScreen();
+            DRAW( timeAccumulator/(cPhysicsTimeStep + slowMotionDelay)*cPhysicsTimeStep ); // Spiel zeichnen
+            m_subSystems.renderer.drawFPS(m_fps);
+            m_subSystems.renderer.flipBuffer();
         }
 
-        m_subSystems.renderer.clearScreen();
-        DRAW( accumulator_secs/(cPhysicsTimeStep + slowMotionDelay)*cPhysicsTimeStep ); // Spiel zeichnen
-        m_subSystems.renderer.drawFPS(m_fps);
-        m_subSystems.renderer.flipBuffer();
+        handleSdlQuitEvents( sdlWindowEvent ); // Sehen ob der Benutzer das fenster schliessen will.
     }
 
     ////////////////////////////////////////////////////////
@@ -342,51 +350,51 @@ void GameApp::mainLoop()
     gAaLog.decreaseIndentationLevel();
 }
 
-// SDL Fensterereignisse behandeln (ob man das Fenster schliessen will)
-void GameApp::handleSdlQuitEvents( SDL_Event& sdlEvent, bool& quit )
+void GameApp::onQuit()
 {
-    while ( SDL_PollEvent( &sdlEvent ) )
+    m_quit = true;
+    gAaLog.write ( "User requested to quit, quitting...\n" );
+    m_subSystems.renderer.displayTextScreen("Closing AstroAttack...");
+}
+
+// SDL Fensterereignisse behandeln (ob man das Fenster schliessen will)
+void GameApp::handleSdlQuitEvents(SDL_Event& sdlEvent)
+{
+    while (SDL_PollEvent(&sdlEvent))
     {
-        switch ( sdlEvent.type )
+        switch (sdlEvent.type)
         {
-            // Wenn eine Taste gedrück wurde
+        // Wenn eine Taste gedrück wurde
         case SDL_KEYDOWN:
-        {
-            switch ( sdlEvent.key.keysym.sym )
             {
-            case SDLK_ESCAPE: // ESC gedrückt, quit -> true
-                if ( m_subSystems.stateManager.getCurrentState()->getId() == "MainMenuState" )
+                switch (sdlEvent.key.keysym.sym)
                 {
-                    gAaLog.write ( "User requested to quit, quitting...\n" );
-                    quit = true;
-                }
-                else
-                {
-                    boost::shared_ptr<MainMenuState> menuState = boost::shared_ptr<MainMenuState>( new MainMenuState(m_subSystems) );
-                    m_subSystems.stateManager.changeState( menuState );
-                }
-                break;
-            case SDLK_F4:
-                if ( sdlEvent.key.keysym.mod & KMOD_LALT ) // ALT-F4
-                {
-                    gAaLog.write ( "User requested to quit, quitting...\n" );
-                    quit = true;
-                }
-                break;
+                case SDLK_ESCAPE: // ESC gedrückt, quit -> true
+                    if (m_subSystems.stateManager.getCurrentState()->getId() == "MainMenuState")
+                    {
+                        onQuit();
+                    }
+                    else
+                    {
+                        boost::shared_ptr<MainMenuState> menuState = boost::shared_ptr<MainMenuState>(new MainMenuState(m_subSystems));
+                        m_subSystems.stateManager.changeState(menuState);
+                    }
+                    break;
+                case SDLK_F4:
+                    if (sdlEvent.key.keysym.mod & KMOD_LALT) // ALT-F4
+                        onQuit();
+                    break;
 
-            default:
-                break;
+                default:
+                    break;
+                }
             }
-        }
-        break;
+            break;
 
-        // Quit-Ereignis (zum Beispiel das X Knopf drücken), quit -> true
+            // Quit-Ereignis (zum Beispiel das X Knopf drücken), quit -> true
         case SDL_QUIT:
-        {
-            gAaLog.write ( "User requested to quit, quitting...\n" );
-            quit = true;
-        }
-        break;
+            onQuit();
+            break;
 
         default:
             break;

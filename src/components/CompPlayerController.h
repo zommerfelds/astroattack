@@ -42,7 +42,7 @@ private:
     void setHighFriction( CompPhysics* playerCompPhysics );
     bool m_currentFrictionIsLow;
 
-    void updateAnims(bool jumping, bool movingOnGround, bool usingJetpack);
+    void updateAnims(bool flyingUp, bool movingOnGround, bool usingJetpack);
 
     EventConnection m_eventConnection;
     WorldVariablesMap::iterator m_itJetPackVar;

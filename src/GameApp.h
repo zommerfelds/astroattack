@@ -62,12 +62,12 @@ private:
     SubSystems m_subSystems; // Untersysteme
 
     bool m_quit; // Ob Programm beenden werden soll
-    void onQuit() { m_quit = true; } // Spiel beenden (Wird von einem Event aufgerufen)
+    void onQuit(); // Spiel beenden (Wird von einem Event aufgerufen)
 
     EventConnection m_eventConnection; // TODO: scoped_ptr
 
     void updateGame();
-    void handleSdlQuitEvents( SDL_Event&, bool& quit );
+    void handleSdlQuitEvents( SDL_Event& );
     void calcFPS( unsigned int curTime );
 
     unsigned int m_fpsMeasureStart;

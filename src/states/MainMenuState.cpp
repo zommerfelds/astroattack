@@ -195,9 +195,6 @@ void MainMenuState::init()        // State starten
 
 void MainMenuState::cleanup()     // State abbrechen
 {
-    // loading screen
-    getSubSystems().renderer.displayTextScreen("p l e a s e    w a i t");
-
     if ( m_appliedConfig == false )
         gAaConfig.discardConfig();
     getSubSystems().sound.stopMusic( 300 );
