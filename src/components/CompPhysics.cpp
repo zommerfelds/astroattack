@@ -209,11 +209,17 @@ void CompPhysics::writeToPropertyTree(ptree& propTree) const
 {
     // damping element
 
-    propTree.add("damping.linear", getLinearDamping());
-    propTree.add("damping.angular", getAngularDamping());
+    if (getLinearDamping() != 0.0f || getAngularDamping() != 0.0f)
+    {
+        propTree.add("damping.linear", getLinearDamping());
+        propTree.add("damping.angular", getAngularDamping());
+    }
 
-    propTree.add("gravitationPoint.x", m_localGravitationPoint.x);
-    propTree.add("gravitationPoint.y", m_localGravitationPoint.y);
+    if (m_localGravitationPoint != Vector2D(0.0f, 0.0f))
+    {
+        propTree.add("gravitationPoint.x", m_localGravitationPoint.x);
+        propTree.add("gravitationPoint.y", m_localGravitationPoint.y);
+    }
 
     if (isFixedRotation())
     {
@@ -230,9 +236,12 @@ void CompPhysics::writeToPropertyTree(ptree& propTree) const
         ptree shapePropTree;
         shapePropTree.add("comp_name", (*it)->compName);
 
-        shapePropTree.add("density", (*it)->density);
-        shapePropTree.add("friction", (*it)->friction);
-        shapePropTree.add("restitution", (*it)->restitution);
+        if ((*it)->density != 0)
+            shapePropTree.add("density", (*it)->density);
+        if ((*it)->friction != 0)
+            shapePropTree.add("friction", (*it)->friction);
+        if ((*it)->restitution != 0)
+            shapePropTree.add("restitution", (*it)->restitution);
 
         if ((*it)->isSensor)
             shapePropTree.add("isSensor", true);

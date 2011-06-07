@@ -207,40 +207,55 @@ void CameraController::update ( float deltaTime ) // time_span in seconds
                 cursorPos.y = (cursorPos.y - 0.5f) * -1;
                 cursorPos.rotate(m_rotation);
 
-                // calculate new camera position
-                // the position depends on the player position and on the mouse cursor position
-                const float cPosFollowQuicknessFactor = 15.0f; // how fast the camera moves to the new position
                 const float cRangeOfSightFactor = 6.0f; // how far the mouse can move the camera away from the player
+                Vector2D target = playerPos + cursorPos * cRangeOfSightFactor;
 
-                Vector2D posTargetDiff = playerPos + cursorPos * cRangeOfSightFactor - m_position;
-                Vector2D posVelocity = posTargetDiff * cPosFollowQuicknessFactor;
-                m_position += posVelocity * deltaTime;
+                // to integrate over the full deltaTime step (which can be big) we split it into smaller steps
+                // this prevents explosive behavior when deltaTime is very big
+                // all sub-steps will be the same size except for the last one that will be just the remainder time (smaller than the others)
+                const float cCameraTimeStep = 0.015f;
+                float timeStep = cCameraTimeStep;
+                float remainingTime = deltaTime;
+                while (remainingTime > 0.0f)
+                {
+                    if (remainingTime < cCameraTimeStep) // in the last step pick the remaining time
+                        timeStep = remainingTime;
+                    remainingTime -= cCameraTimeStep;
 
-                // calculate new camera zoom
-                // the zoom depends on the mouse cursor position and on the players velocity
-                const float cZoomFollowQuicknessFactor = 1.5f;
-                const float cMaxFollowZoom = 2.5f;
-                const float cMinFollowZoom = 1.34f;
-                const float cGradientStart = 0.1f;
-                const float cGradientEnd = 1.0f;
-                const float cPlayerMaxVel = 5.0f;
+                    // calculate new camera position
+                    // the position depends on the player position and on the mouse cursor position
+                    const float cPosFollowQuicknessFactor = 15.0f; // how fast the camera moves to the new position
 
-                float zoomGradient = (cMaxFollowZoom - cMinFollowZoom) / (cGradientEnd - cGradientStart);
-                float velFraction = playerPhys->getLinearVelocity().length() / cPlayerMaxVel;
-                if (velFraction > 1.0f || playerPhys->getContacts().empty())
-                    velFraction = 1.0f;
-                float zoomParameter = cursorPos.length() + velFraction * 0.5f;
-                float zoomTarget = 0.0f;
-                if (zoomParameter < cGradientStart)
-                    zoomTarget = cMaxFollowZoom;
-                else if (zoomParameter > cGradientEnd)
-                    zoomTarget = cMinFollowZoom;//cMaxFollowZoom - (cGradientEnd - cGradientStart) * cZoomGradient;
-                else
-                    zoomTarget = cMaxFollowZoom - (zoomParameter - cGradientStart) * zoomGradient;
+                    Vector2D velocity = (target - m_position) * cPosFollowQuicknessFactor;
+                    m_position += velocity * timeStep;
 
-                float zoomVelocity = (zoomTarget - m_zoom) * cZoomFollowQuicknessFactor;
-                setZoom(m_zoom + zoomVelocity * deltaTime);
+                    // calculate new camera zoom
+                    // the zoom depends on the mouse cursor position and on the players velocity
+                    const float cZoomFollowQuicknessFactor = 1.5f;
+                    const float cMaxFollowZoom = 2.5f;
+                    const float cMinFollowZoom = 1.34f;
+                    const float cGradientStart = 0.1f;
+                    const float cGradientEnd = 1.0f;
+                    const float cPlayerMaxVel = 5.0f;
+
+                    float zoomGradient = (cMaxFollowZoom - cMinFollowZoom) / (cGradientEnd - cGradientStart);
+                    float velFraction = playerPhys->getLinearVelocity().length() / cPlayerMaxVel;
+                    if (velFraction > 1.0f || playerPhys->getContacts().empty())
+                        velFraction = 1.0f;
+                    float zoomParameter = cursorPos.length() + velFraction * 0.5f;
+                    float zoomTarget = 0.0f;
+                    if (zoomParameter < cGradientStart)
+                        zoomTarget = cMaxFollowZoom;
+                    else if (zoomParameter > cGradientEnd)
+                        zoomTarget = cMinFollowZoom; // cMaxFollowZoom - (cGradientEnd - cGradientStart) * cZoomGradient;
+                    else
+                        zoomTarget = cMaxFollowZoom - (zoomParameter - cGradientStart) * zoomGradient;
+
+                    float zoomVelocity = (zoomTarget - m_zoom) * cZoomFollowQuicknessFactor;
+                    setZoom(m_zoom + zoomVelocity * timeStep);
+                }
             }
+
             // flip player's heading according to cursor
             {
                 std::vector<CompVisualAnimation*> player_anims = player->getComponents<CompVisualAnimation>();
@@ -292,7 +307,7 @@ void CameraController::update ( float deltaTime ) // time_span in seconds
 
     const float cRotVelocity = 2.0f;
     if ( m_inputSubSystem.getKeyState ( CameraRotateCw ) )
-    rotateRelative( -cRotVelocity * deltaTime, 0.0f);
+        rotateRelative( -cRotVelocity * deltaTime, 0.0f);
     else if ( m_inputSubSystem.getKeyState ( CameraRotateCcw ) )
         rotateRelative( cRotVelocity * deltaTime, 0.0f);
 
@@ -404,11 +419,9 @@ float CameraController::getCameraAngle() const
     return mod2pi(m_rotation);
 }
 
-bool CameraController::setFollowPlayer( bool follow )
+void CameraController::setFollowPlayer( bool follow )
 {
-    bool oldIsFollowingPlayer = m_isFollowingPlayer;
     m_isFollowingPlayer = follow;
-    return oldIsFollowingPlayer; // alte Einstellung zurückgeben
 }
 
 Vector2D CameraController::screenToWorld( const Vector2D& screenPos )

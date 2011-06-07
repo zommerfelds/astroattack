@@ -13,6 +13,17 @@ using boost::property_tree::ptree;
 
 using namespace std;
 
+void dumpPropertyTree(const ptree& propertyTree, ostream& os, unsigned int identation=0)
+{
+    BOOST_FOREACH(const ptree::value_type &v, propertyTree)
+    {
+        std::string identationString (identation*3, ' ');
+
+        os << identationString << v.first << " : " << v.second.data() << std::endl;
+        dumpPropertyTree(v.second, os, identation+1);
+    }
+}
+
 TEST(LevelLoadTest, LoadWriteTest)
 {
     SubSystems subSystems;
@@ -23,7 +34,8 @@ TEST(LevelLoadTest, LoadWriteTest)
                               "data/Levels/level_grav.info",
                               "data/Levels/level_visita.info",
                               "data/Levels/level_new.info",
-                              "data/Levels/adjacent_problem.info" };
+                              "data/Levels/adjacent_problem.info",
+                              "data/player.info" };
     string lvlFileNameOut = "tmp_test_write_lvl.info";
 
     BOOST_FOREACH(string lvlFileName, lvlFileNames)
@@ -39,6 +51,13 @@ TEST(LevelLoadTest, LoadWriteTest)
         read_info(lvlFileNameOut, levelPropTreeAfter);
 
         bool equal = (levelPropTreeBefore == levelPropTreeAfter);
+        if (!equal)
+        {
+            cout << "--- before ---" << endl;
+            dumpPropertyTree(levelPropTreeBefore, cout);
+            cout << "--- after ---" << endl;
+            dumpPropertyTree(levelPropTreeAfter, cout);
+        }
         EXPECT_TRUE(equal);
     }
 }

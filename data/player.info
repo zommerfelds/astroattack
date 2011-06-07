@@ -1,13 +1,91 @@
 entity
 {
 	name Player
+    component
+    {
+        id CompPhysics
+        damping { linear 0.1 angular 0 }
+        gravitationPoint { x 0 y -0.65 }
+        isFixedRotation true
+        isBullet true
+        shape
+        {
+            comp_name middle
+            density 40
+            friction 0.2
+        }
+        shape
+        {
+            comp_name top
+            density 1
+            friction 0.2
+        }
+        shape
+        {
+            comp_name mid2
+            density 40
+            friction 0.1
+        }
+        shape
+        {
+            comp_name bottom
+            density 40
+            friction 0.1
+        }
+    }
+    component
+    {
+        id CompPlayerController
+        rotationPoint { x 0 y -0.75 }
+    }
+    component
+    {
+        id CompPosition
+        x 0 y 0 a 0
+    }
+    component
+    {
+        id CompShape
+        name middle
+        polygon
+        {
+            vertex { x -0.44 y -0.35 }
+            vertex { x 0.44 y -0.35 }
+            vertex { x 0.44 y 0.35 }
+            vertex { x -0.44 y 0.35 }
+        }
+    }
+    component
+    {
+        id CompShape
+        name top
+        circle { x 0 y 0.35 r 0.45 }
+    }
+    component
+    {
+        id CompShape
+        name mid2
+        polygon
+        {
+            vertex { x -0.18 y -0.66 }
+            vertex { x 0.18 y -0.66 }
+            vertex { x 0.44 y -0.35 }
+            vertex { x -0.44 y -0.35 }
+        }
+    }
+    component
+    {
+        id CompShape
+        name bottom
+        circle { x 0 y -0.5 r 0.25 }
+    }
 	component
 	{
 		id CompVisualAnimation
 		name jetpack
 		anim { name jetpack }
 		center { x 0.5 y 0.03 }
-		dim	{ hw 0.3 hh 1.0	}
+		dim	{ hw 0.3 hh 1	}
 	}
 	component
 	{
@@ -16,84 +94,6 @@ entity
 		anim { name astro }
 		center { x -0.05 y 0.03 }
 		dim { hw 0.74 hh 0.88 }
-	}
-	component
-	{
-		id CompShape
-		name middle
-		polygon
-		{
-			vertex { x -0.44 y -0.35 }
-			vertex { x 0.44 y -0.35 }
-			vertex { x 0.44 y 0.35 }
-			vertex { x -0.44 y 0.35	}
-		}
-	}
-	component
-	{
-		id CompShape
-		name top
-		circle { x 0 y 0.35 r 0.45 }
-	}
-	component
-	{
-		id CompShape
-		name mid2
-		polygon
-		{
-			vertex { x -0.18 y -0.66 }
-			vertex { x 0.18 y -0.66 }
-			vertex { x 0.440 y -0.35 }
-			vertex { x -0.440 y -0.35 }
-		}
-	}
-	component
-	{
-		id CompShape
-		name bottom
-		circle { x 0 y -0.5 r 0.25 }
-	}
-	component
-	{
-		id CompPhysics
-		isFixedRotation true
-		isBullet true
-		damping { linear 0.1 }
-		gravitationPoint { x 0.0 y -0.65 }
-		shape
-		{
-			comp_name middle
-			density 40.0
-			friction 0.2
-		}
-		shape
-		{
-			comp_name top
-			density 1.0
-			friction 0.2
-		}
-		shape
-		{
-			comp_name mid2
-			density 40.0
-			friction 0.1
-		}
-		shape
-		{
-			comp_name bottom
-			density 40.0
-			friction 0.1
-		}
-	}
-	component
-	{
-		id CompPlayerController
-        rotationPoint { x 0.0 y -0.75 }
-	}
-	component
-	{
-		id CompPosition
-		x 0.000000 y 0.000000 a 0.000000
 	}
     ;component
     ;{

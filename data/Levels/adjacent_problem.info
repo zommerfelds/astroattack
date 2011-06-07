@@ -4,17 +4,10 @@ entity
 	component
 	{
 		id CompPhysics
-		damping
-		{
-			linear 0
-			angular 0
-		}
 		shape
 		{
 			comp_name shape1
-			density 0
 			friction 0.3
-			restitution 0
 		}
 	}
 	component
@@ -64,17 +57,10 @@ entity
 	component
 	{
 		id CompPhysics
-		damping
-		{
-			linear 0
-			angular 0
-		}
 		shape
 		{
 			comp_name shape1
-			density 0
 			friction 0.3
-			restitution 0
 		}
 	}
 	component
@@ -124,17 +110,10 @@ entity
 	component
 	{
 		id CompPhysics
-		damping
-		{
-			linear 0
-			angular 0
-		}
 		shape
 		{
 			comp_name shape1
-			density 0
 			friction 0.3
-			restitution 0
 		}
 	}
 	component
@@ -179,17 +158,10 @@ entity
 	component
 	{
 		id CompPhysics
-		damping
-		{
-			linear 0
-			angular 0
-		}
 		shape
 		{
 			comp_name shape1
-			density 0
 			friction 0.3
-			restitution 0
 		}
 	}
 	component
@@ -234,17 +206,10 @@ entity
 	component
 	{
 		id CompPhysics
-		damping
-		{
-			linear 0
-			angular 0
-		}
 		shape
 		{
 			comp_name shape1
-			density 0
 			friction 0.3
-			restitution 0
 		}
 	}
 	component
@@ -289,17 +254,10 @@ entity
 	component
 	{
 		id CompPhysics
-		damping
-		{
-			linear 0
-			angular 0
-		}
 		shape
 		{
 			comp_name shape1
-			density 0
 			friction 0.3
-			restitution 0
 		}
 	}
 	component
@@ -344,17 +302,10 @@ entity
 	component
 	{
 		id CompPhysics
-		damping
-		{
-			linear 0
-			angular 0
-		}
 		shape
 		{
 			comp_name shape1
-			density 0
 			friction 0.3
-			restitution 0
 		}
 	}
 	component
@@ -399,17 +350,10 @@ entity
 	component
 	{
 		id CompPhysics
-		damping
-		{
-			linear 0
-			angular 0
-		}
 		shape
 		{
 			comp_name shape1
-			density 0
 			friction 0.3
-			restitution 0
 		}
 	}
 	component
@@ -454,17 +398,10 @@ entity
 	component
 	{
 		id CompPhysics
-		damping
-		{
-			linear 0
-			angular 0
-		}
 		shape
 		{
 			comp_name shape1
-			density 0
 			friction 0.3
-			restitution 0
 		}
 	}
 	component
@@ -509,17 +446,10 @@ entity
 	component
 	{
 		id CompPhysics
-		damping
-		{
-			linear 0
-			angular 0
-		}
 		shape
 		{
 			comp_name shape1
-			density 0
 			friction 0.3
-			restitution 0
 		}
 	}
 	component
@@ -564,17 +494,10 @@ entity
 	component
 	{
 		id CompPhysics
-		damping
-		{
-			linear 0
-			angular 0
-		}
 		shape
 		{
 			comp_name shape1
-			density 0
 			friction 0.3
-			restitution 0
 		}
 	}
 	component
@@ -619,17 +542,10 @@ entity
 	component
 	{
 		id CompPhysics
-		damping
-		{
-			linear 0
-			angular 0
-		}
 		shape
 		{
 			comp_name shape1
-			density 0
 			friction 0.3
-			restitution 0
 		}
 	}
 	component
@@ -674,17 +590,10 @@ entity
 	component
 	{
 		id CompPhysics
-		damping
-		{
-			linear 0
-			angular 0
-		}
 		shape
 		{
 			comp_name shape1
-			density 0
 			friction 0.3
-			restitution 0
 		}
 	}
 	component
@@ -729,17 +638,10 @@ entity
 	component
 	{
 		id CompPhysics
-		damping
-		{
-			linear 0
-			angular 0
-		}
 		shape
 		{
 			comp_name shape1
-			density 0
 			friction 0.3
-			restitution 0
 		}
 	}
 	component
@@ -784,17 +686,10 @@ entity
 	component
 	{
 		id CompPhysics
-		damping
-		{
-			linear 0
-			angular 0
-		}
 		shape
 		{
 			comp_name shape1
-			density 0
 			friction 0.3
-			restitution 0
 		}
 	}
 	component
@@ -839,17 +734,10 @@ entity
 	component
 	{
 		id CompPhysics
-		damping
-		{
-			linear 0
-			angular 0
-		}
 		shape
 		{
 			comp_name shape1
-			density 0
 			friction 0.3
-			restitution 0
 		}
 	}
 	component

@@ -19,7 +19,7 @@
 - Konkave Polygone im Editor
 - Check widescreen mode
 - Handle UTF-8 symbols in the slide show state (a multi-byte character is treated as single bytes)
-- Migrate XML file to INFO (slide show, config, resource)
+- Migrate XML files to INFO (slide show, config, resource)
 
 * Low priority *
 

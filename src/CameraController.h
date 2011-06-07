@@ -44,7 +44,7 @@ public:
     // Um heran- oder herauszuzoomen
     void zoom( float zoom ); // zoom ist der Zoomfaktor ( < 1 bedeutet herauszoomen; > 1 bedeutet herazoomen )
     void setZoom( float zoom ); // zoom ist der Zoomfaktor ( < 1 bedeutet herauszoomen; > 1 bedeutet herazoomen )
-    bool setFollowPlayer( bool follow ); // soll die Kamera den Spieles folgen oder nicht?
+    void setFollowPlayer( bool follow ); // soll die Kamera den Spieles folgen oder nicht?
 
     void rotateAbsolute( float angle, float timeToArrive ); // Den Winkel der Kamera setzen. angle als neuer Winkel nehmen.
     void rotateRelative( float angle, float timeToArrive ); // Den Winkel der Kamera verändern. Um angle drehen. (+:Gegenuhrzegersinn, -:Uhrzeigersinn)

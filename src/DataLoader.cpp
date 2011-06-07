@@ -60,6 +60,7 @@ void xmlNodeToPropertyTree(const pugi::xml_node& xmlNode, ptree& propertyTree)
     }
 }
 
+/*
 void dumpPropertyTree(const ptree& propertyTree, std::ostream& os, unsigned int identation=0)
 {
     BOOST_FOREACH(const ptree::value_type &v, propertyTree)
@@ -70,6 +71,7 @@ void dumpPropertyTree(const ptree& propertyTree, std::ostream& os, unsigned int 
         dumpPropertyTree(v.second, os, identation+1);
     }
 }
+*/
 
 } // namespace
 

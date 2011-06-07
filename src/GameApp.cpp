@@ -288,7 +288,7 @@ void GameApp::mainLoop()
 
     ////////////////////////////////////////////////////////
     //                                                    //
-    //            m_fpsMeasureStart DER HAUPTSCHLEIFE                 //
+    //                     MAIN LOOP                      //
     //                                                    //
     ////////////////////////////////////////////////////////
 
@@ -315,6 +315,8 @@ void GameApp::mainLoop()
         {                                                       // damit delta_time_secs nicht ultra gross wird und eine grosse Anzahl von Uptates verlangt wird
             accumulator_secs = 0;
             m_subSystems.isLoading = false;
+
+            std::cerr << "time accumulator reset! isLoading = " << m_subSystems.isLoading << std::endl;
         }
         
         const float slowMotionDelay = 0.0f;
@@ -333,7 +335,7 @@ void GameApp::mainLoop()
 
     ////////////////////////////////////////////////////////
     //                                                    //
-    //             ENDE DER HAUPTSCHLEIFE                 //
+    //                  END OF MAIN LOOP                  //
     //                                                    //
     ////////////////////////////////////////////////////////
 
