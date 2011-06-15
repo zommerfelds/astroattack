@@ -188,7 +188,7 @@ void CompPhysics::loadFromPropertyTree(const ptree& propTree)
             continue;
 
         const ptree& shapeProps = v.second;
-        std::string shapeName = shapeProps.get<std::string>("comp_name");
+        std::string shapeName = shapeProps.get<std::string>("comp_id");
 
         float density = shapeProps.get("density", 0.0f);
         float friction = shapeProps.get("friction", 0.0f);
@@ -234,7 +234,7 @@ void CompPhysics::writeToPropertyTree(ptree& propTree) const
     for (ShapeInfoVec::const_iterator it = getShapeInfos().begin(); it != getShapeInfos().end(); ++it)
     {
         ptree shapePropTree;
-        shapePropTree.add("comp_name", (*it)->compId);
+        shapePropTree.add("comp_id", (*it)->compId);
 
         if ((*it)->density != 0)
             shapePropTree.add("density", (*it)->density);

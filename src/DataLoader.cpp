@@ -84,21 +84,21 @@ void DataLoader::loadWorld(const std::string& fileName, World& gameWorld, SubSys
                 throw DataLoadException(fileName + " - At top level: parse error, expected 'entity', got '" + value1.first + "'"); // TODO: add node path
             const ptree& entityPropTree = value1.second;
 
-            std::string entityId = entityPropTree.get<std::string>("name");
+            std::string entityId = entityPropTree.get<std::string>("id");
             ComponentList entity;
             gAaLog.write ( "Creating entity \"%s\"\n", entityId.c_str() );
             gAaLog.increaseIndentationLevel();
 
             BOOST_FOREACH(const ptree::value_type &value2, entityPropTree)
             {
-                if (value2.first == "name")
+                if (value2.first == "id")
                     continue;
                 if (value2.first != "component")
                     throw DataLoadException(fileName + " - In entity '" + entityId + "': parse error, expected 'component', got '" + value2.first + "'"); // TODO: add node path
                 const ptree& compPropTree = value2.second;
 
-                std::string compType = compPropTree.get<std::string>("id");
-                std::string compId = compPropTree.get("name", "");
+                std::string compType = compPropTree.get<std::string>("type");
+                std::string compId = compPropTree.get("id", "");
                 gAaLog.write ( "Creating component \"%s\"... ", compType.c_str() );
 
                 shared_ptr<Component> component;
@@ -147,7 +147,7 @@ void DataLoader::loadWorld(const std::string& fileName, World& gameWorld, SubSys
     }
     catch (boost::property_tree::ptree_error e)
     {
-        throw DataLoadException(e.what());
+        throw DataLoadException(std::string("PropertyTree error: ") + e.what());
     }
 }
 
@@ -193,7 +193,7 @@ void DataLoader::loadSlideShow( const std::string& fileName, SlideShow* pSlideSh
     }
     catch (boost::property_tree::ptree_error e)
     {
-        throw DataLoadException(e.what());
+        throw DataLoadException(std::string("PropertyTree error: ") + e.what());
     }
 }
 
@@ -255,7 +255,7 @@ ResourceIds DataLoader::loadGraphics( const std::string& fileName, TextureManage
             info.scale = scale;
             info.quality = (LoadTextureInfo::Quality) gAaConfig.getInt("TexQuality");
 
-            pTextureManager->loadTexture(name,id,info);
+            pTextureManager->loadTexture(name, id, info);
             loadedResources.textures.insert(id);
         }
     }
@@ -356,16 +356,16 @@ void DataLoader::saveWorldToXml(const std::string& fileName, const World& gameWo
     BOOST_FOREACH(const EntityMap::value_type& entPair, entities)
     {
         ptree entityPropTree;
-        entityPropTree.add("name", entPair.first);
+        entityPropTree.add("id", entPair.first);
 
         const ComponentMap& comps = entPair.second;
         BOOST_FOREACH(const ComponentMap::value_type& compPair, comps)
         {
             ptree compPropTree;
-            compPropTree.add("id", compPair.second->getTypeId());
+            compPropTree.add("type", compPair.second->getTypeId());
             std::string compId = compPair.second->getId();
             if (!compId.empty())
-                compPropTree.add("name", compId);
+                compPropTree.add("id", compId);
             compPair.second->writeToPropertyTree(compPropTree);
 
             entityPropTree.add_child("component", compPropTree);

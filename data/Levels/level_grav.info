@@ -1,26 +1,26 @@
 entity
 {
-	name EdBlock00000
+	id EdBlock00000
 	component
 	{
-		id CompPhysics
+		type CompPhysics
 		shape
 		{
-			comp_name shape1
+			comp_id shape1
 			friction 0.3
 		}
 	}
 	component
 	{
-		id CompPosition
+		type CompPosition
 		x 0
 		y 0
 		a 0
 	}
 	component
 	{
-		id CompShape
-		name shape1
+		type CompShape
+		id shape1
 		polygon
 		{
 			vertex
@@ -47,41 +47,41 @@ entity
 	}
 	component
 	{
-		id CompVisualTexture
+		type CompVisualTexture
 		texture Craterscape
 	}
 }
 entity
 {
-	name grav1
+	id grav1
 	component
 	{
-		id CompGravField
-		type directional
+		type CompGravField
+		grav_type directional
 		gx 0
 		gy -20
 	}
 	component
 	{
-		id CompPhysics
+		type CompPhysics
 		shape
 		{
-			comp_name shape1
+			comp_id shape1
 			friction 0.3
 			isSensor true
 		}
 	}
 	component
 	{
-		id CompPosition
+		type CompPosition
 		x 0
 		y 0
 		a 0
 	}
 	component
 	{
-		id CompShape
-		name shape1
+		type CompShape
+		id shape1
 		polygon
 		{
 			vertex
@@ -109,35 +109,35 @@ entity
 }
 entity
 {
-	name grav2
+	id grav2
 	component
 	{
-		id CompGravField
-		type directional
+		type CompGravField
+		grav_type directional
 		gx -20
 		gy 0
 	}
 	component
 	{
-		id CompPhysics
+		type CompPhysics
 		shape
 		{
-			comp_name shape1
+			comp_id shape1
 			friction 0.3
 			isSensor true
 		}
 	}
 	component
 	{
-		id CompPosition
+		type CompPosition
 		x 0
 		y 0
 		a 0
 	}
 	component
 	{
-		id CompShape
-		name shape1
+		type CompShape
+		id shape1
 		polygon
 		{
 			vertex
@@ -165,35 +165,35 @@ entity
 }
 entity
 {
-	name grav3
+	id grav3
 	component
 	{
-		id CompGravField
-		type directional
+		type CompGravField
+		grav_type directional
 		gx 0
 		gy 20
 	}
 	component
 	{
-		id CompPhysics
+		type CompPhysics
 		shape
 		{
-			comp_name shape1
+			comp_id shape1
 			friction 0.3
 			isSensor true
 		}
 	}
 	component
 	{
-		id CompPosition
+		type CompPosition
 		x 0
 		y 0
 		a 0
 	}
 	component
 	{
-		id CompShape
-		name shape1
+		type CompShape
+		id shape1
 		polygon
 		{
 			vertex
@@ -221,35 +221,35 @@ entity
 }
 entity
 {
-	name grav4
+	id grav4
 	component
 	{
-		id CompGravField
-		type directional
+		type CompGravField
+		grav_type directional
 		gx 20
 		gy 0
 	}
 	component
 	{
-		id CompPhysics
+		type CompPhysics
 		shape
 		{
-			comp_name shape1
+			comp_id shape1
 			friction 0.3
 			isSensor true
 		}
 	}
 	component
 	{
-		id CompPosition
+		type CompPosition
 		x 0
 		y 0
 		a 0
 	}
 	component
 	{
-		id CompShape
-		name shape1
+		type CompShape
+		id shape1
 		polygon
 		{
 			vertex
@@ -277,36 +277,36 @@ entity
 }
 entity
 {
-	name grav_circular
+	id grav_circular
 	component
 	{
-		id CompGravField
-		type radial
+		type CompGravField
+		grav_type radial
 		cx -25
 		cy 0
 		s 40
 	}
 	component
 	{
-		id CompPhysics
+		type CompPhysics
 		shape
 		{
-			comp_name shape1
+			comp_id shape1
 			friction 0.3
 			isSensor true
 		}
 	}
 	component
 	{
-		id CompPosition
+		type CompPosition
 		x 0
 		y 0
 		a 0
 	}
 	component
 	{
-		id CompShape
-		name shape1
+		type CompShape
+		id shape1
 		circle
 		{
 			x -25
@@ -317,27 +317,27 @@ entity
 }
 entity
 {
-	name roundPlanet
+	id roundPlanet
 	component
 	{
-		id CompPhysics
+		type CompPhysics
 		shape
 		{
-			comp_name shape1
+			comp_id shape1
 			friction 0.3
 		}
 	}
 	component
 	{
-		id CompPosition
+		type CompPosition
 		x 0
 		y 0
 		a 0
 	}
 	component
 	{
-		id CompShape
-		name shape1
+		type CompShape
+		id shape1
 		circle
 		{
 			x -25
@@ -347,7 +347,7 @@ entity
 	}
 	component
 	{
-		id CompVisualTexture
+		type CompVisualTexture
 		texture "Liquid Crystal 2"
 		edge
 		{

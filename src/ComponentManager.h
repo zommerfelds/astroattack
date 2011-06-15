@@ -12,7 +12,6 @@
 #include <map>
 #include <list>
 #include <boost/shared_ptr.hpp>
-#include <boost/unordered_map.hpp>
 
 class Component;
 struct GameEvents;
@@ -23,7 +22,7 @@ typedef std::string ComponentTypeId;
 
 typedef std::list< boost::shared_ptr<Component> > ComponentList;
 typedef std::multimap< const ComponentTypeId, boost::shared_ptr<Component> > ComponentMap;
-typedef boost::unordered_map<const EntityIdType, ComponentMap > EntityMap;
+typedef std::map<const EntityIdType, ComponentMap > EntityMap;
 
 class ComponentManager
 {

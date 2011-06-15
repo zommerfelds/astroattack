@@ -1,52 +1,52 @@
 entity
 {
-	name Player
+	id Player
     component
     {
-        id CompPhysics
+        type CompPhysics
         damping { linear 0.1 angular 0 }
         gravitationPoint { x 0 y -0.65 }
         isFixedRotation true
         isBullet true
         shape
         {
-            comp_name middle
+            comp_id middle
             density 40
             friction 0.2
         }
         shape
         {
-            comp_name top
+            comp_id top
             density 1
             friction 0.2
         }
         shape
         {
-            comp_name mid2
+            comp_id mid2
             density 40
             friction 0.1
         }
         shape
         {
-            comp_name bottom
+            comp_id bottom
             density 40
             friction 0.1
         }
     }
     component
     {
-        id CompPlayerController
+        type CompPlayerController
         rotationPoint { x 0 y -0.75 }
     }
     component
     {
-        id CompPosition
+        type CompPosition
         x 0 y 0 a 0
     }
     component
     {
-        id CompShape
-        name middle
+        type CompShape
+        id middle
         polygon
         {
             vertex { x -0.44 y -0.35 }
@@ -57,14 +57,14 @@ entity
     }
     component
     {
-        id CompShape
-        name top
+        type CompShape
+        id top
         circle { x 0 y 0.35 r 0.45 }
     }
     component
     {
-        id CompShape
-        name mid2
+        type CompShape
+        id mid2
         polygon
         {
             vertex { x -0.18 y -0.66 }
@@ -75,29 +75,29 @@ entity
     }
     component
     {
-        id CompShape
-        name bottom
+        type CompShape
+        id bottom
         circle { x 0 y -0.5 r 0.25 }
     }
 	component
 	{
-		id CompVisualAnimation
-		name jetpack
-		anim { name jetpack }
+		type CompVisualAnimation
+		id jetpack
+		anim { id jetpack }
 		center { x 0.5 y 0.03 }
 		dim	{ hw 0.3 hh 1	}
 	}
 	component
 	{
-		id CompVisualAnimation
-		name bodyAnim
-		anim { name astro }
+		type CompVisualAnimation
+		id bodyAnim
+		anim { id astro }
 		center { x -0.05 y 0.03 }
 		dim { hw 0.74 hh 0.88 }
 	}
     ;component
     ;{
-    ;    id CompVisualTexture
+    ;    type CompVisualTexture
     ;    texture "Kirks Entry"
     ;}
 }

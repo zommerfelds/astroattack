@@ -7,6 +7,7 @@
 #include <boost/property_tree/ptree.hpp>
 
 #include "CompGravField.h"
+#include "DataLoader.h"
 
 // eindeutige ID
 const ComponentTypeId CompGravField::COMPONENT_TYPE_ID = "CompGravField";
@@ -56,7 +57,7 @@ Vector2D CompGravField::getAcceleration(const Vector2D& centerOfMass) const
 
 void CompGravField::loadFromPropertyTree(const boost::property_tree::ptree& propTree)
 {
-    std::string typeStr = propTree.get<std::string>("type");
+    std::string typeStr = propTree.get<std::string>("grav_type");
     if (typeStr == "directional")
     {
         setGravType(Directional);
@@ -76,6 +77,8 @@ void CompGravField::loadFromPropertyTree(const boost::property_tree::ptree& prop
 
         setGravCenter(Vector2D(cx, cy), s);
     }
+    else
+        throw DataLoadException(std::string("invalid gravitation type '") + typeStr + "'");
 }
 
 void CompGravField::writeToPropertyTree(boost::property_tree::ptree& propTree) const
@@ -84,14 +87,14 @@ void CompGravField::writeToPropertyTree(boost::property_tree::ptree& propTree) c
     {
     case Directional:
     {
-        propTree.add("type", "directional");
+        propTree.add("grav_type", "directional");
         propTree.add("gx", getGravDir().x);
         propTree.add("gy", getGravDir().y);
         break;
     }
     case Radial:
     {
-        propTree.add("type", "radial");
+        propTree.add("grav_type", "radial");
         propTree.add("cx", getGravCenter().x);
         propTree.add("cy", getGravCenter().y);
         propTree.add("s", getStrenght());

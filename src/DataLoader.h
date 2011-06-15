@@ -6,8 +6,8 @@
 
 // Lesen von XML-Dateien und übersetzung in Entities
 
-#ifndef XMLLOADER_H
-#define XMLLOADER_H
+#ifndef DATALOADER_H
+#define DATALOADER_H
 
 #include <set>
 #include <string>

@@ -1,26 +1,26 @@
 entity
 {
-	name EdBlock00000
+	id EdBlock00000
 	component
 	{
-		id CompPhysics
+		type CompPhysics
 		shape
 		{
-			comp_name shape1
+			comp_id shape1
 			friction 0.3
 		}
 	}
 	component
 	{
-		id CompPosition
+		type CompPosition
 		x 0
 		y 0
 		a 0
 	}
 	component
 	{
-		id CompShape
-		name shape1
+		type CompShape
+		id shape1
 		polygon
 		{
 			vertex
@@ -47,33 +47,33 @@ entity
 	}
 	component
 	{
-		id CompVisualTexture
+		type CompVisualTexture
 		texture "Kirks Entry"
 	}
 }
 entity
 {
-	name EdBlock00010
+	id EdBlock00010
 	component
 	{
-		id CompPhysics
+		type CompPhysics
 		shape
 		{
-			comp_name shape1
+			comp_id shape1
 			friction 0.3
 		}
 	}
 	component
 	{
-		id CompPosition
+		type CompPosition
 		x 0
 		y 0
 		a 0
 	}
 	component
 	{
-		id CompShape
-		name shape1
+		type CompShape
+		id shape1
 		polygon
 		{
 			vertex
@@ -100,33 +100,33 @@ entity
 	}
 	component
 	{
-		id CompVisualTexture
+		type CompVisualTexture
 		texture "Kirks Entry"
 	}
 }
 entity
 {
-	name EdBlock00011
+	id EdBlock00011
 	component
 	{
-		id CompPhysics
+		type CompPhysics
 		shape
 		{
-			comp_name shape1
+			comp_id shape1
 			friction 0.3
 		}
 	}
 	component
 	{
-		id CompPosition
+		type CompPosition
 		x 0
 		y 0
 		a 0
 	}
 	component
 	{
-		id CompShape
-		name shape1
+		type CompShape
+		id shape1
 		polygon
 		{
 			vertex
@@ -153,33 +153,33 @@ entity
 	}
 	component
 	{
-		id CompVisualTexture
+		type CompVisualTexture
 		texture "Kirks Entry"
 	}
 }
 entity
 {
-	name EdBlock00012
+	id EdBlock00012
 	component
 	{
-		id CompPhysics
+		type CompPhysics
 		shape
 		{
-			comp_name shape1
+			comp_id shape1
 			friction 0.3
 		}
 	}
 	component
 	{
-		id CompPosition
+		type CompPosition
 		x 0
 		y 0
 		a 0
 	}
 	component
 	{
-		id CompShape
-		name shape1
+		type CompShape
+		id shape1
 		polygon
 		{
 			vertex
@@ -206,33 +206,33 @@ entity
 	}
 	component
 	{
-		id CompVisualTexture
+		type CompVisualTexture
 		texture "Plaster Blocks"
 	}
 }
 entity
 {
-	name EdBlock00013
+	id EdBlock00013
 	component
 	{
-		id CompPhysics
+		type CompPhysics
 		shape
 		{
-			comp_name shape1
+			comp_id shape1
 			friction 0.3
 		}
 	}
 	component
 	{
-		id CompPosition
+		type CompPosition
 		x 0
 		y 0
 		a 0
 	}
 	component
 	{
-		id CompShape
-		name shape1
+		type CompShape
+		id shape1
 		polygon
 		{
 			vertex
@@ -259,33 +259,33 @@ entity
 	}
 	component
 	{
-		id CompVisualTexture
+		type CompVisualTexture
 		texture "Plaster Blocks"
 	}
 }
 entity
 {
-	name EdBlock00014
+	id EdBlock00014
 	component
 	{
-		id CompPhysics
+		type CompPhysics
 		shape
 		{
-			comp_name shape1
+			comp_id shape1
 			friction 0.3
 		}
 	}
 	component
 	{
-		id CompPosition
+		type CompPosition
 		x 0
 		y 0
 		a 0
 	}
 	component
 	{
-		id CompShape
-		name shape1
+		type CompShape
+		id shape1
 		polygon
 		{
 			vertex
@@ -312,33 +312,33 @@ entity
 	}
 	component
 	{
-		id CompVisualTexture
+		type CompVisualTexture
 		texture "Plaster Blocks"
 	}
 }
 entity
 {
-	name EdBlock00015
+	id EdBlock00015
 	component
 	{
-		id CompPhysics
+		type CompPhysics
 		shape
 		{
-			comp_name shape1
+			comp_id shape1
 			friction 0.3
 		}
 	}
 	component
 	{
-		id CompPosition
+		type CompPosition
 		x 0
 		y 0
 		a 0
 	}
 	component
 	{
-		id CompShape
-		name shape1
+		type CompShape
+		id shape1
 		polygon
 		{
 			vertex
@@ -365,33 +365,33 @@ entity
 	}
 	component
 	{
-		id CompVisualTexture
+		type CompVisualTexture
 		texture "Plaster Blocks"
 	}
 }
 entity
 {
-	name EdBlock00016
+	id EdBlock00016
 	component
 	{
-		id CompPhysics
+		type CompPhysics
 		shape
 		{
-			comp_name shape1
+			comp_id shape1
 			friction 0.3
 		}
 	}
 	component
 	{
-		id CompPosition
+		type CompPosition
 		x 0
 		y 0
 		a 0
 	}
 	component
 	{
-		id CompShape
-		name shape1
+		type CompShape
+		id shape1
 		polygon
 		{
 			vertex
@@ -418,33 +418,33 @@ entity
 	}
 	component
 	{
-		id CompVisualTexture
+		type CompVisualTexture
 		texture "Plaster Blocks"
 	}
 }
 entity
 {
-	name EdBlock00017
+	id EdBlock00017
 	component
 	{
-		id CompPhysics
+		type CompPhysics
 		shape
 		{
-			comp_name shape1
+			comp_id shape1
 			friction 0.3
 		}
 	}
 	component
 	{
-		id CompPosition
+		type CompPosition
 		x 0
 		y 0
 		a 0
 	}
 	component
 	{
-		id CompShape
-		name shape1
+		type CompShape
+		id shape1
 		polygon
 		{
 			vertex
@@ -471,33 +471,33 @@ entity
 	}
 	component
 	{
-		id CompVisualTexture
+		type CompVisualTexture
 		texture "Plaster Blocks"
 	}
 }
 entity
 {
-	name EdBlock00018
+	id EdBlock00018
 	component
 	{
-		id CompPhysics
+		type CompPhysics
 		shape
 		{
-			comp_name shape1
+			comp_id shape1
 			friction 0.3
 		}
 	}
 	component
 	{
-		id CompPosition
+		type CompPosition
 		x 0
 		y 0
 		a 0
 	}
 	component
 	{
-		id CompShape
-		name shape1
+		type CompShape
+		id shape1
 		polygon
 		{
 			vertex
@@ -524,33 +524,33 @@ entity
 	}
 	component
 	{
-		id CompVisualTexture
+		type CompVisualTexture
 		texture "Plaster Blocks"
 	}
 }
 entity
 {
-	name EdBlock00019
+	id EdBlock00019
 	component
 	{
-		id CompPhysics
+		type CompPhysics
 		shape
 		{
-			comp_name shape1
+			comp_id shape1
 			friction 0.3
 		}
 	}
 	component
 	{
-		id CompPosition
+		type CompPosition
 		x 0
 		y 0
 		a 0
 	}
 	component
 	{
-		id CompShape
-		name shape1
+		type CompShape
+		id shape1
 		polygon
 		{
 			vertex
@@ -572,33 +572,33 @@ entity
 	}
 	component
 	{
-		id CompVisualTexture
+		type CompVisualTexture
 		texture fault
 	}
 }
 entity
 {
-	name EdBlock00020
+	id EdBlock00020
 	component
 	{
-		id CompPhysics
+		type CompPhysics
 		shape
 		{
-			comp_name shape1
+			comp_id shape1
 			friction 0.3
 		}
 	}
 	component
 	{
-		id CompPosition
+		type CompPosition
 		x 0
 		y 0
 		a 0
 	}
 	component
 	{
-		id CompShape
-		name shape1
+		type CompShape
+		id shape1
 		polygon
 		{
 			vertex
@@ -620,33 +620,33 @@ entity
 	}
 	component
 	{
-		id CompVisualTexture
+		type CompVisualTexture
 		texture fault
 	}
 }
 entity
 {
-	name EdBlock00021
+	id EdBlock00021
 	component
 	{
-		id CompPhysics
+		type CompPhysics
 		shape
 		{
-			comp_name shape1
+			comp_id shape1
 			friction 0.3
 		}
 	}
 	component
 	{
-		id CompPosition
+		type CompPosition
 		x 0
 		y 0
 		a 0
 	}
 	component
 	{
-		id CompShape
-		name shape1
+		type CompShape
+		id shape1
 		polygon
 		{
 			vertex
@@ -668,33 +668,33 @@ entity
 	}
 	component
 	{
-		id CompVisualTexture
+		type CompVisualTexture
 		texture fault
 	}
 }
 entity
 {
-	name EdBlock00022
+	id EdBlock00022
 	component
 	{
-		id CompPhysics
+		type CompPhysics
 		shape
 		{
-			comp_name shape1
+			comp_id shape1
 			friction 0.3
 		}
 	}
 	component
 	{
-		id CompPosition
+		type CompPosition
 		x 0
 		y 0
 		a 0
 	}
 	component
 	{
-		id CompShape
-		name shape1
+		type CompShape
+		id shape1
 		polygon
 		{
 			vertex
@@ -716,33 +716,33 @@ entity
 	}
 	component
 	{
-		id CompVisualTexture
+		type CompVisualTexture
 		texture fault
 	}
 }
 entity
 {
-	name EdBlock00023
+	id EdBlock00023
 	component
 	{
-		id CompPhysics
+		type CompPhysics
 		shape
 		{
-			comp_name shape1
+			comp_id shape1
 			friction 0.3
 		}
 	}
 	component
 	{
-		id CompPosition
+		type CompPosition
 		x 0
 		y 0
 		a 0
 	}
 	component
 	{
-		id CompShape
-		name shape1
+		type CompShape
+		id shape1
 		polygon
 		{
 			vertex
@@ -764,33 +764,33 @@ entity
 	}
 	component
 	{
-		id CompVisualTexture
+		type CompVisualTexture
 		texture fault
 	}
 }
 entity
 {
-	name EdBlock00024
+	id EdBlock00024
 	component
 	{
-		id CompPhysics
+		type CompPhysics
 		shape
 		{
-			comp_name shape1
+			comp_id shape1
 			friction 0.3
 		}
 	}
 	component
 	{
-		id CompPosition
+		type CompPosition
 		x 0
 		y 0
 		a 0
 	}
 	component
 	{
-		id CompShape
-		name shape1
+		type CompShape
+		id shape1
 		polygon
 		{
 			vertex
@@ -812,33 +812,33 @@ entity
 	}
 	component
 	{
-		id CompVisualTexture
+		type CompVisualTexture
 		texture fault
 	}
 }
 entity
 {
-	name EdBlock00025
+	id EdBlock00025
 	component
 	{
-		id CompPhysics
+		type CompPhysics
 		shape
 		{
-			comp_name shape1
+			comp_id shape1
 			friction 0.3
 		}
 	}
 	component
 	{
-		id CompPosition
+		type CompPosition
 		x 0
 		y 0
 		a 0
 	}
 	component
 	{
-		id CompShape
-		name shape1
+		type CompShape
+		id shape1
 		polygon
 		{
 			vertex
@@ -860,33 +860,33 @@ entity
 	}
 	component
 	{
-		id CompVisualTexture
+		type CompVisualTexture
 		texture fault
 	}
 }
 entity
 {
-	name EdBlock00026
+	id EdBlock00026
 	component
 	{
-		id CompPhysics
+		type CompPhysics
 		shape
 		{
-			comp_name shape1
+			comp_id shape1
 			friction 0.3
 		}
 	}
 	component
 	{
-		id CompPosition
+		type CompPosition
 		x 0
 		y 0
 		a 0
 	}
 	component
 	{
-		id CompShape
-		name shape1
+		type CompShape
+		id shape1
 		polygon
 		{
 			vertex
@@ -913,33 +913,33 @@ entity
 	}
 	component
 	{
-		id CompVisualTexture
+		type CompVisualTexture
 		texture fault
 	}
 }
 entity
 {
-	name EdBlock00027
+	id EdBlock00027
 	component
 	{
-		id CompPhysics
+		type CompPhysics
 		shape
 		{
-			comp_name shape1
+			comp_id shape1
 			friction 0.3
 		}
 	}
 	component
 	{
-		id CompPosition
+		type CompPosition
 		x 0
 		y 0
 		a 0
 	}
 	component
 	{
-		id CompShape
-		name shape1
+		type CompShape
+		id shape1
 		polygon
 		{
 			vertex
@@ -961,33 +961,33 @@ entity
 	}
 	component
 	{
-		id CompVisualTexture
+		type CompVisualTexture
 		texture fault
 	}
 }
 entity
 {
-	name EdBlock00028
+	id EdBlock00028
 	component
 	{
-		id CompPhysics
+		type CompPhysics
 		shape
 		{
-			comp_name shape1
+			comp_id shape1
 			friction 0.3
 		}
 	}
 	component
 	{
-		id CompPosition
+		type CompPosition
 		x 0
 		y 0
 		a 0
 	}
 	component
 	{
-		id CompShape
-		name shape1
+		type CompShape
+		id shape1
 		polygon
 		{
 			vertex
@@ -1009,33 +1009,33 @@ entity
 	}
 	component
 	{
-		id CompVisualTexture
+		type CompVisualTexture
 		texture fault
 	}
 }
 entity
 {
-	name EdBlock00029
+	id EdBlock00029
 	component
 	{
-		id CompPhysics
+		type CompPhysics
 		shape
 		{
-			comp_name shape1
+			comp_id shape1
 			friction 0.3
 		}
 	}
 	component
 	{
-		id CompPosition
+		type CompPosition
 		x 0
 		y 0
 		a 0
 	}
 	component
 	{
-		id CompShape
-		name shape1
+		type CompShape
+		id shape1
 		polygon
 		{
 			vertex
@@ -1057,33 +1057,33 @@ entity
 	}
 	component
 	{
-		id CompVisualTexture
+		type CompVisualTexture
 		texture fault
 	}
 }
 entity
 {
-	name EdBlock00030
+	id EdBlock00030
 	component
 	{
-		id CompPhysics
+		type CompPhysics
 		shape
 		{
-			comp_name shape1
+			comp_id shape1
 			friction 0.3
 		}
 	}
 	component
 	{
-		id CompPosition
+		type CompPosition
 		x 0
 		y 0
 		a 0
 	}
 	component
 	{
-		id CompShape
-		name shape1
+		type CompShape
+		id shape1
 		polygon
 		{
 			vertex
@@ -1105,33 +1105,33 @@ entity
 	}
 	component
 	{
-		id CompVisualTexture
+		type CompVisualTexture
 		texture fault
 	}
 }
 entity
 {
-	name EdBlock00031
+	id EdBlock00031
 	component
 	{
-		id CompPhysics
+		type CompPhysics
 		shape
 		{
-			comp_name shape1
+			comp_id shape1
 			friction 0.3
 		}
 	}
 	component
 	{
-		id CompPosition
+		type CompPosition
 		x 0
 		y 0
 		a 0
 	}
 	component
 	{
-		id CompShape
-		name shape1
+		type CompShape
+		id shape1
 		polygon
 		{
 			vertex
@@ -1153,33 +1153,33 @@ entity
 	}
 	component
 	{
-		id CompVisualTexture
+		type CompVisualTexture
 		texture fault
 	}
 }
 entity
 {
-	name EdBlock00032
+	id EdBlock00032
 	component
 	{
-		id CompPhysics
+		type CompPhysics
 		shape
 		{
-			comp_name shape1
+			comp_id shape1
 			friction 0.3
 		}
 	}
 	component
 	{
-		id CompPosition
+		type CompPosition
 		x 0
 		y 0
 		a 0
 	}
 	component
 	{
-		id CompShape
-		name shape1
+		type CompShape
+		id shape1
 		polygon
 		{
 			vertex
@@ -1201,33 +1201,33 @@ entity
 	}
 	component
 	{
-		id CompVisualTexture
+		type CompVisualTexture
 		texture fault
 	}
 }
 entity
 {
-	name EdBlock00033
+	id EdBlock00033
 	component
 	{
-		id CompPhysics
+		type CompPhysics
 		shape
 		{
-			comp_name shape1
+			comp_id shape1
 			friction 0.3
 		}
 	}
 	component
 	{
-		id CompPosition
+		type CompPosition
 		x 0
 		y 0
 		a 0
 	}
 	component
 	{
-		id CompShape
-		name shape1
+		type CompShape
+		id shape1
 		polygon
 		{
 			vertex
@@ -1249,33 +1249,33 @@ entity
 	}
 	component
 	{
-		id CompVisualTexture
+		type CompVisualTexture
 		texture fault
 	}
 }
 entity
 {
-	name EdBlock00034
+	id EdBlock00034
 	component
 	{
-		id CompPhysics
+		type CompPhysics
 		shape
 		{
-			comp_name shape1
+			comp_id shape1
 			friction 0.3
 		}
 	}
 	component
 	{
-		id CompPosition
+		type CompPosition
 		x 0
 		y 0
 		a 0
 	}
 	component
 	{
-		id CompShape
-		name shape1
+		type CompShape
+		id shape1
 		polygon
 		{
 			vertex
@@ -1302,33 +1302,33 @@ entity
 	}
 	component
 	{
-		id CompVisualTexture
+		type CompVisualTexture
 		texture fault
 	}
 }
 entity
 {
-	name EdBlock00035
+	id EdBlock00035
 	component
 	{
-		id CompPhysics
+		type CompPhysics
 		shape
 		{
-			comp_name shape1
+			comp_id shape1
 			friction 0.3
 		}
 	}
 	component
 	{
-		id CompPosition
+		type CompPosition
 		x 0
 		y 0
 		a 0
 	}
 	component
 	{
-		id CompShape
-		name shape1
+		type CompShape
+		id shape1
 		polygon
 		{
 			vertex
@@ -1355,33 +1355,33 @@ entity
 	}
 	component
 	{
-		id CompVisualTexture
+		type CompVisualTexture
 		texture fault
 	}
 }
 entity
 {
-	name EdBlock00036
+	id EdBlock00036
 	component
 	{
-		id CompPhysics
+		type CompPhysics
 		shape
 		{
-			comp_name shape1
+			comp_id shape1
 			friction 0.3
 		}
 	}
 	component
 	{
-		id CompPosition
+		type CompPosition
 		x 0
 		y 0
 		a 0
 	}
 	component
 	{
-		id CompShape
-		name shape1
+		type CompShape
+		id shape1
 		polygon
 		{
 			vertex
@@ -1403,33 +1403,33 @@ entity
 	}
 	component
 	{
-		id CompVisualTexture
+		type CompVisualTexture
 		texture fault
 	}
 }
 entity
 {
-	name EdBlock00037
+	id EdBlock00037
 	component
 	{
-		id CompPhysics
+		type CompPhysics
 		shape
 		{
-			comp_name shape1
+			comp_id shape1
 			friction 0.3
 		}
 	}
 	component
 	{
-		id CompPosition
+		type CompPosition
 		x 0
 		y 0
 		a 0
 	}
 	component
 	{
-		id CompShape
-		name shape1
+		type CompShape
+		id shape1
 		polygon
 		{
 			vertex
@@ -1456,33 +1456,33 @@ entity
 	}
 	component
 	{
-		id CompVisualTexture
+		type CompVisualTexture
 		texture fault
 	}
 }
 entity
 {
-	name EdBlock00038
+	id EdBlock00038
 	component
 	{
-		id CompPhysics
+		type CompPhysics
 		shape
 		{
-			comp_name shape1
+			comp_id shape1
 			friction 0.3
 		}
 	}
 	component
 	{
-		id CompPosition
+		type CompPosition
 		x 0
 		y 0
 		a 0
 	}
 	component
 	{
-		id CompShape
-		name shape1
+		type CompShape
+		id shape1
 		polygon
 		{
 			vertex
@@ -1509,33 +1509,33 @@ entity
 	}
 	component
 	{
-		id CompVisualTexture
+		type CompVisualTexture
 		texture fault
 	}
 }
 entity
 {
-	name EdBlock00039
+	id EdBlock00039
 	component
 	{
-		id CompPhysics
+		type CompPhysics
 		shape
 		{
-			comp_name shape1
+			comp_id shape1
 			friction 0.3
 		}
 	}
 	component
 	{
-		id CompPosition
+		type CompPosition
 		x 0
 		y 0
 		a 0
 	}
 	component
 	{
-		id CompShape
-		name shape1
+		type CompShape
+		id shape1
 		polygon
 		{
 			vertex
@@ -1562,33 +1562,33 @@ entity
 	}
 	component
 	{
-		id CompVisualTexture
+		type CompVisualTexture
 		texture "Ancient Stone Slabs"
 	}
 }
 entity
 {
-	name EdBlock00040
+	id EdBlock00040
 	component
 	{
-		id CompPhysics
+		type CompPhysics
 		shape
 		{
-			comp_name shape1
+			comp_id shape1
 			friction 0.3
 		}
 	}
 	component
 	{
-		id CompPosition
+		type CompPosition
 		x 0
 		y 0
 		a 0
 	}
 	component
 	{
-		id CompShape
-		name shape1
+		type CompShape
+		id shape1
 		polygon
 		{
 			vertex
@@ -1615,33 +1615,33 @@ entity
 	}
 	component
 	{
-		id CompVisualTexture
+		type CompVisualTexture
 		texture "Ancient Stone Slabs"
 	}
 }
 entity
 {
-	name EdBlock00041
+	id EdBlock00041
 	component
 	{
-		id CompPhysics
+		type CompPhysics
 		shape
 		{
-			comp_name shape1
+			comp_id shape1
 			friction 0.3
 		}
 	}
 	component
 	{
-		id CompPosition
+		type CompPosition
 		x 0
 		y 0
 		a 0
 	}
 	component
 	{
-		id CompShape
-		name shape1
+		type CompShape
+		id shape1
 		polygon
 		{
 			vertex
@@ -1668,33 +1668,33 @@ entity
 	}
 	component
 	{
-		id CompVisualTexture
+		type CompVisualTexture
 		texture "Ancient Stone Slabs"
 	}
 }
 entity
 {
-	name EdBlock00042
+	id EdBlock00042
 	component
 	{
-		id CompPhysics
+		type CompPhysics
 		shape
 		{
-			comp_name shape1
+			comp_id shape1
 			friction 0.3
 		}
 	}
 	component
 	{
-		id CompPosition
+		type CompPosition
 		x 0
 		y 0
 		a 0
 	}
 	component
 	{
-		id CompShape
-		name shape1
+		type CompShape
+		id shape1
 		polygon
 		{
 			vertex
@@ -1721,33 +1721,33 @@ entity
 	}
 	component
 	{
-		id CompVisualTexture
+		type CompVisualTexture
 		texture "Ancient Stone Slabs"
 	}
 }
 entity
 {
-	name EdBlock00043
+	id EdBlock00043
 	component
 	{
-		id CompPhysics
+		type CompPhysics
 		shape
 		{
-			comp_name shape1
+			comp_id shape1
 			friction 0.3
 		}
 	}
 	component
 	{
-		id CompPosition
+		type CompPosition
 		x 0
 		y 0
 		a 0
 	}
 	component
 	{
-		id CompShape
-		name shape1
+		type CompShape
+		id shape1
 		polygon
 		{
 			vertex
@@ -1774,34 +1774,34 @@ entity
 	}
 	component
 	{
-		id CompVisualTexture
+		type CompVisualTexture
 		texture "Ancient Stone Slabs"
 	}
 }
 entity
 {
-	name ball
+	id ball
 	component
 	{
-		id CompPhysics
+		type CompPhysics
 		shape
 		{
-			comp_name shape1
+			comp_id shape1
 			density 40
 			friction 0.3
 		}
 	}
 	component
 	{
-		id CompPosition
+		type CompPosition
 		x 0
 		y 0
 		a 0
 	}
 	component
 	{
-		id CompShape
-		name shape1
+		type CompShape
+		id shape1
 		circle
 		{
 			x 72.5
@@ -1811,34 +1811,34 @@ entity
 	}
 	component
 	{
-		id CompVisualTexture
+		type CompVisualTexture
 		texture "Liquid Crystal 2"
 	}
 }
 entity
 {
-	name box00001
+	id box00001
 	component
 	{
-		id CompPhysics
+		type CompPhysics
 		shape
 		{
-			comp_name shape1
+			comp_id shape1
 			density 40
 			friction 0.3
 		}
 	}
 	component
 	{
-		id CompPosition
+		type CompPosition
 		x 0
 		y 0
 		a 0
 	}
 	component
 	{
-		id CompShape
-		name shape1
+		type CompShape
+		id shape1
 		polygon
 		{
 			vertex
@@ -1865,34 +1865,34 @@ entity
 	}
 	component
 	{
-		id CompVisualTexture
+		type CompVisualTexture
 		texture blocks
 	}
 }
 entity
 {
-	name box00002
+	id box00002
 	component
 	{
-		id CompPhysics
+		type CompPhysics
 		shape
 		{
-			comp_name shape1
+			comp_id shape1
 			density 40
 			friction 0.3
 		}
 	}
 	component
 	{
-		id CompPosition
+		type CompPosition
 		x 0
 		y 0
 		a 0
 	}
 	component
 	{
-		id CompShape
-		name shape1
+		type CompShape
+		id shape1
 		polygon
 		{
 			vertex
@@ -1919,34 +1919,34 @@ entity
 	}
 	component
 	{
-		id CompVisualTexture
+		type CompVisualTexture
 		texture blocks
 	}
 }
 entity
 {
-	name box00003
+	id box00003
 	component
 	{
-		id CompPhysics
+		type CompPhysics
 		shape
 		{
-			comp_name shape1
+			comp_id shape1
 			density 40
 			friction 0.3
 		}
 	}
 	component
 	{
-		id CompPosition
+		type CompPosition
 		x 0
 		y 0
 		a 0
 	}
 	component
 	{
-		id CompShape
-		name shape1
+		type CompShape
+		id shape1
 		polygon
 		{
 			vertex
@@ -1973,34 +1973,34 @@ entity
 	}
 	component
 	{
-		id CompVisualTexture
+		type CompVisualTexture
 		texture blocks
 	}
 }
 entity
 {
-	name box00004
+	id box00004
 	component
 	{
-		id CompPhysics
+		type CompPhysics
 		shape
 		{
-			comp_name shape1
+			comp_id shape1
 			density 40
 			friction 0.3
 		}
 	}
 	component
 	{
-		id CompPosition
+		type CompPosition
 		x 0
 		y 0
 		a 0
 	}
 	component
 	{
-		id CompShape
-		name shape1
+		type CompShape
+		id shape1
 		polygon
 		{
 			vertex
@@ -2027,34 +2027,34 @@ entity
 	}
 	component
 	{
-		id CompVisualTexture
+		type CompVisualTexture
 		texture blocks
 	}
 }
 entity
 {
-	name box00005
+	id box00005
 	component
 	{
-		id CompPhysics
+		type CompPhysics
 		shape
 		{
-			comp_name shape1
+			comp_id shape1
 			density 40
 			friction 0.3
 		}
 	}
 	component
 	{
-		id CompPosition
+		type CompPosition
 		x 0
 		y 0
 		a 0
 	}
 	component
 	{
-		id CompShape
-		name shape1
+		type CompShape
+		id shape1
 		polygon
 		{
 			vertex
@@ -2081,34 +2081,34 @@ entity
 	}
 	component
 	{
-		id CompVisualTexture
+		type CompVisualTexture
 		texture blocks
 	}
 }
 entity
 {
-	name box00006
+	id box00006
 	component
 	{
-		id CompPhysics
+		type CompPhysics
 		shape
 		{
-			comp_name shape1
+			comp_id shape1
 			density 40
 			friction 0.3
 		}
 	}
 	component
 	{
-		id CompPosition
+		type CompPosition
 		x 0
 		y 0
 		a 0
 	}
 	component
 	{
-		id CompShape
-		name shape1
+		type CompShape
+		id shape1
 		polygon
 		{
 			vertex
@@ -2135,34 +2135,34 @@ entity
 	}
 	component
 	{
-		id CompVisualTexture
+		type CompVisualTexture
 		texture blocks
 	}
 }
 entity
 {
-	name box00007
+	id box00007
 	component
 	{
-		id CompPhysics
+		type CompPhysics
 		shape
 		{
-			comp_name shape1
+			comp_id shape1
 			density 40
 			friction 0.3
 		}
 	}
 	component
 	{
-		id CompPosition
+		type CompPosition
 		x 0
 		y 0
 		a 0
 	}
 	component
 	{
-		id CompShape
-		name shape1
+		type CompShape
+		id shape1
 		polygon
 		{
 			vertex
@@ -2189,34 +2189,34 @@ entity
 	}
 	component
 	{
-		id CompVisualTexture
+		type CompVisualTexture
 		texture blocks
 	}
 }
 entity
 {
-	name box00008
+	id box00008
 	component
 	{
-		id CompPhysics
+		type CompPhysics
 		shape
 		{
-			comp_name shape1
+			comp_id shape1
 			density 40
 			friction 0.3
 		}
 	}
 	component
 	{
-		id CompPosition
+		type CompPosition
 		x 0
 		y 0
 		a 0
 	}
 	component
 	{
-		id CompShape
-		name shape1
+		type CompShape
+		id shape1
 		polygon
 		{
 			vertex
@@ -2243,34 +2243,34 @@ entity
 	}
 	component
 	{
-		id CompVisualTexture
+		type CompVisualTexture
 		texture blocks
 	}
 }
 entity
 {
-	name box00009
+	id box00009
 	component
 	{
-		id CompPhysics
+		type CompPhysics
 		shape
 		{
-			comp_name shape1
+			comp_id shape1
 			density 40
 			friction 0.3
 		}
 	}
 	component
 	{
-		id CompPosition
+		type CompPosition
 		x 0
 		y 0
 		a 0
 	}
 	component
 	{
-		id CompShape
-		name shape1
+		type CompShape
+		id shape1
 		polygon
 		{
 			vertex
@@ -2297,19 +2297,19 @@ entity
 	}
 	component
 	{
-		id CompVisualTexture
+		type CompVisualTexture
 		texture blocks
 	}
 }
 entity
 {
-	name ca
+	id ca
 	component
 	{
-		id CompPhysics
+		type CompPhysics
 		shape
 		{
-			comp_name shape1
+			comp_id shape1
 			density 40
 			friction 0.3
 			restitution 0.5
@@ -2317,15 +2317,15 @@ entity
 	}
 	component
 	{
-		id CompPosition
+		type CompPosition
 		x 0
 		y 0
 		a 0
 	}
 	component
 	{
-		id CompShape
-		name shape1
+		type CompShape
+		id shape1
 		circle
 		{
 			x 29
@@ -2335,19 +2335,19 @@ entity
 	}
 	component
 	{
-		id CompVisualTexture
+		type CompVisualTexture
 		texture "Solar Plate"
 	}
 }
 entity
 {
-	name cb
+	id cb
 	component
 	{
-		id CompPhysics
+		type CompPhysics
 		shape
 		{
-			comp_name shape1
+			comp_id shape1
 			density 40
 			friction 0.3
 			restitution 0.5
@@ -2355,15 +2355,15 @@ entity
 	}
 	component
 	{
-		id CompPosition
+		type CompPosition
 		x 0
 		y 0
 		a 0
 	}
 	component
 	{
-		id CompShape
-		name shape1
+		type CompShape
+		id shape1
 		circle
 		{
 			x 30
@@ -2373,19 +2373,19 @@ entity
 	}
 	component
 	{
-		id CompVisualTexture
+		type CompVisualTexture
 		texture "Solar Plate"
 	}
 }
 entity
 {
-	name cc
+	id cc
 	component
 	{
-		id CompPhysics
+		type CompPhysics
 		shape
 		{
-			comp_name shape1
+			comp_id shape1
 			density 40
 			friction 0.3
 			restitution 0.5
@@ -2393,15 +2393,15 @@ entity
 	}
 	component
 	{
-		id CompPosition
+		type CompPosition
 		x 0
 		y 0
 		a 0
 	}
 	component
 	{
-		id CompShape
-		name shape1
+		type CompShape
+		id shape1
 		circle
 		{
 			x 29
@@ -2411,19 +2411,19 @@ entity
 	}
 	component
 	{
-		id CompVisualTexture
+		type CompVisualTexture
 		texture "Solar Plate"
 	}
 }
 entity
 {
-	name cd
+	id cd
 	component
 	{
-		id CompPhysics
+		type CompPhysics
 		shape
 		{
-			comp_name shape1
+			comp_id shape1
 			density 40
 			friction 0.3
 			restitution 0.5
@@ -2431,15 +2431,15 @@ entity
 	}
 	component
 	{
-		id CompPosition
+		type CompPosition
 		x 0
 		y 0
 		a 0
 	}
 	component
 	{
-		id CompShape
-		name shape1
+		type CompShape
+		id shape1
 		circle
 		{
 			x 29
@@ -2449,19 +2449,19 @@ entity
 	}
 	component
 	{
-		id CompVisualTexture
+		type CompVisualTexture
 		texture "Solar Plate"
 	}
 }
 entity
 {
-	name ce
+	id ce
 	component
 	{
-		id CompPhysics
+		type CompPhysics
 		shape
 		{
-			comp_name shape1
+			comp_id shape1
 			density 40
 			friction 0.3
 			restitution 0.5
@@ -2469,15 +2469,15 @@ entity
 	}
 	component
 	{
-		id CompPosition
+		type CompPosition
 		x 0
 		y 0
 		a 0
 	}
 	component
 	{
-		id CompShape
-		name shape1
+		type CompShape
+		id shape1
 		circle
 		{
 			x 28
@@ -2487,19 +2487,19 @@ entity
 	}
 	component
 	{
-		id CompVisualTexture
+		type CompVisualTexture
 		texture "Solar Plate"
 	}
 }
 entity
 {
-	name cf
+	id cf
 	component
 	{
-		id CompPhysics
+		type CompPhysics
 		shape
 		{
-			comp_name shape1
+			comp_id shape1
 			density 40
 			friction 0.3
 			restitution 0.5
@@ -2507,15 +2507,15 @@ entity
 	}
 	component
 	{
-		id CompPosition
+		type CompPosition
 		x 0
 		y 0
 		a 0
 	}
 	component
 	{
-		id CompShape
-		name shape1
+		type CompShape
+		id shape1
 		circle
 		{
 			x 31
@@ -2525,19 +2525,19 @@ entity
 	}
 	component
 	{
-		id CompVisualTexture
+		type CompVisualTexture
 		texture "Solar Plate"
 	}
 }
 entity
 {
-	name cg
+	id cg
 	component
 	{
-		id CompPhysics
+		type CompPhysics
 		shape
 		{
-			comp_name shape1
+			comp_id shape1
 			density 40
 			friction 0.3
 			restitution 0.5
@@ -2545,15 +2545,15 @@ entity
 	}
 	component
 	{
-		id CompPosition
+		type CompPosition
 		x 0
 		y 0
 		a 0
 	}
 	component
 	{
-		id CompShape
-		name shape1
+		type CompShape
+		id shape1
 		circle
 		{
 			x 30
@@ -2563,19 +2563,19 @@ entity
 	}
 	component
 	{
-		id CompVisualTexture
+		type CompVisualTexture
 		texture "Solar Plate"
 	}
 }
 entity
 {
-	name ch
+	id ch
 	component
 	{
-		id CompPhysics
+		type CompPhysics
 		shape
 		{
-			comp_name shape1
+			comp_id shape1
 			density 40
 			friction 0.3
 			restitution 0.5
@@ -2583,15 +2583,15 @@ entity
 	}
 	component
 	{
-		id CompPosition
+		type CompPosition
 		x 0
 		y 0
 		a 0
 	}
 	component
 	{
-		id CompShape
-		name shape1
+		type CompShape
+		id shape1
 		circle
 		{
 			x 30
@@ -2601,33 +2601,33 @@ entity
 	}
 	component
 	{
-		id CompVisualTexture
+		type CompVisualTexture
 		texture "Solar Plate"
 	}
 }
 entity
 {
-	name door1
+	id door1
 	component
 	{
-		id CompPhysics
+		type CompPhysics
 		shape
 		{
-			comp_name shape1
+			comp_id shape1
 			friction 0.3
 		}
 	}
 	component
 	{
-		id CompPosition
+		type CompPosition
 		x 0
 		y 0
 		a 0
 	}
 	component
 	{
-		id CompShape
-		name shape1
+		type CompShape
+		id shape1
 		polygon
 		{
 			vertex
@@ -2654,34 +2654,34 @@ entity
 	}
 	component
 	{
-		id CompVisualTexture
+		type CompVisualTexture
 		texture "Silver Hex"
 	}
 }
 entity
 {
-	name finish
+	id finish
 	component
 	{
-		id CompPhysics
+		type CompPhysics
 		shape
 		{
-			comp_name shape1
+			comp_id shape1
 			friction 0.3
 			isSensor true
 		}
 	}
 	component
 	{
-		id CompPosition
+		type CompPosition
 		x 81
 		y 0
 		a 0
 	}
 	component
 	{
-		id CompShape
-		name shape1
+		type CompShape
+		id shape1
 		polygon
 		{
 			vertex
@@ -2708,7 +2708,7 @@ entity
 	}
 	component
 	{
-		id CompTrigger
+		type CompTrigger
 		condition
 		{
 			id EntityTouchedThis
@@ -2729,10 +2729,10 @@ entity
 	}
 	component
 	{
-		id CompVisualAnimation
+		type CompVisualAnimation
 		anim
 		{
-			name hexagon
+			id hexagon
 		}
 		center
 		{
@@ -2749,28 +2749,28 @@ entity
 }
 entity
 {
-	name key1
+	id key1
 	component
 	{
-		id CompPhysics
+		type CompPhysics
 		shape
 		{
-			comp_name shape1
+			comp_id shape1
 			friction 0.3
 			isSensor true
 		}
 	}
 	component
 	{
-		id CompPosition
+		type CompPosition
 		x 34
 		y -1
 		a 0
 	}
 	component
 	{
-		id CompShape
-		name shape1
+		type CompShape
+		id shape1
 		polygon
 		{
 			vertex
@@ -2797,7 +2797,7 @@ entity
 	}
 	component
 	{
-		id CompTrigger
+		type CompTrigger
 		condition
 		{
 			id EntityTouchedThis
@@ -2825,10 +2825,10 @@ entity
 	}
 	component
 	{
-		id CompVisualAnimation
+		type CompVisualAnimation
 		anim
 		{
-			name hexagon
+			id hexagon
 		}
 		center
 		{

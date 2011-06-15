@@ -152,7 +152,7 @@ void CompVisualAnimation::setAnim(const AnimationId& animInfoId)
 
 void CompVisualAnimation::loadFromPropertyTree(const boost::property_tree::ptree& propTree)
 {
-    std::string animName = propTree.get<std::string>("anim.name");
+    std::string animName = propTree.get<std::string>("anim.id");
     setAnim(animName);
 
     float hw = propTree.get("dim.hw", 1.0f);
@@ -171,7 +171,7 @@ void CompVisualAnimation::loadFromPropertyTree(const boost::property_tree::ptree
 
 void CompVisualAnimation::writeToPropertyTree(boost::property_tree::ptree& propTree) const
 {
-    propTree.add("anim.name", m_animInfoId);
+    propTree.add("anim.id", m_animInfoId);
 
     propTree.add("center.x", m_center.x);
     propTree.add("center.y", m_center.y);
