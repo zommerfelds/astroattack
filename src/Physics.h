@@ -16,7 +16,7 @@
 #include "Vector2D.h"
 
 struct GameEvents;
-class Entity;
+class Component;
 class EventConnection;
 class CompPhysics;
 class CompGravField;
@@ -45,10 +45,10 @@ private:
     EventConnection m_eventConnection4;
     GameEvents& m_gameEvents;
 
-    void onRegisterEntity_phys( Entity& entity );
-    void onUnregisterEntity_phys( Entity& entity );
-	void onRegisterEntity_grav( Entity& entity );
-    void onUnregisterEntity_grav( Entity& entity );
+    void onRegisterComp_phys( Component& entity );
+    void onUnregisterComp_phys( Component& entity );
+	void onRegisterComp_grav( Component& entity );
+    void onUnregisterComp_grav( Component& entity );
 
     b2World m_world;
     float m_timeStep;

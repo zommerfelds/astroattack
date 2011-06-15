@@ -15,11 +15,11 @@
 
 #include "Logger.h"
 #include "Renderer.h"
-#include "Entity.h"
 #include "DataLoader.h"
 #include "Vector2D.h"
 #include "GameEvents.h"
 #include "Configuration.h"
+#include "Component.h"
 #include "components/CompVisualTexture.h"
 #include "components/CompShape.h"
 #include "components/CompPosition.h"
@@ -70,8 +70,8 @@ void RenderSubSystem::init( int width, int height )
         gAaLog.write ( " OpenGL Error: %s ", errString );
     }
 
-    m_eventConnection1 = m_gameEvents.newEntity.registerListener( boost::bind( &RenderSubSystem::onRegisterEntity, this, _1 ) );
-    m_eventConnection2 = m_gameEvents.deleteEntity.registerListener(  boost::bind( &RenderSubSystem::onUnregisterEntity, this, _1 ) );
+    m_eventConnection1 = m_gameEvents.newComponent.registerListener( boost::bind( &RenderSubSystem::onRegisterComponent, this, _1 ) );
+    m_eventConnection2 = m_gameEvents.deleteComponent.registerListener(  boost::bind( &RenderSubSystem::onUnregisterComponent, this, _1 ) );
 
     m_isInit = true;
 }
@@ -515,8 +515,8 @@ void RenderSubSystem::drawVisualTextureComps()
 {
     BOOST_FOREACH(CompVisualTexture* pTexComp, m_visualTextureComps)
     {
-        CompPosition* compPos = pTexComp->getOwnerEntity()->getComponent<CompPosition>();
-        std::vector<CompShape*> compShapes = pTexComp->getOwnerEntity()->getComponents<CompShape>();
+        CompPosition* compPos = pTexComp->getSiblingComponent<CompPosition>();
+        std::vector<CompShape*> compShapes = pTexComp->getSiblingComponents<CompShape>();
         if ( compPos )
         {
             glPushMatrix();
@@ -554,7 +554,7 @@ void RenderSubSystem::drawVisualAnimationComps()
 {
     BOOST_FOREACH(CompVisualAnimation* pAnimComp, m_visualAnimComps)
     {
-        CompPosition* compPos = pAnimComp->getOwnerEntity()->getComponent<CompPosition>();
+        CompPosition* compPos = pAnimComp->getSiblingComponent<CompPosition>();
         if (compPos)
         {
             m_textureManager.setTexture(pAnimComp->getCurrentTexture());
@@ -632,28 +632,24 @@ void RenderSubSystem::drawFPS(int fps)
     drawString( oss.str(), "FontW_s", 3.95f, 0.03f, AlignRight, AlignTop );
 }
 
-void RenderSubSystem::onRegisterEntity( Entity& entity )
+void RenderSubSystem::onRegisterComponent(Component& component)
 {
-    BOOST_FOREACH(CompVisualTexture* pTexComp, entity.getComponents<CompVisualTexture>())
-        m_visualTextureComps.insert( pTexComp );
-
-    BOOST_FOREACH(CompVisualAnimation* pAnimComp, entity.getComponents<CompVisualAnimation>())
-        m_visualAnimComps.insert( pAnimComp );
-
-    BOOST_FOREACH(CompVisualMessage* pMsgComp, entity.getComponents<CompVisualMessage>())
-        m_visualMsgComps.insert( pMsgComp );
+    if (component.getTypeId() == CompVisualTexture::COMPONENT_TYPE_ID)
+        m_visualTextureComps.insert(&static_cast<CompVisualTexture&>(component));
+    else if (component.getTypeId() == CompVisualAnimation::COMPONENT_TYPE_ID)
+        m_visualAnimComps.insert(&static_cast<CompVisualAnimation&>(component));
+    else if (component.getTypeId() == CompVisualMessage::COMPONENT_TYPE_ID)
+        m_visualMsgComps.insert(&static_cast<CompVisualMessage&>(component));
 }
 
-void RenderSubSystem::onUnregisterEntity( Entity& entity )
+void RenderSubSystem::onUnregisterComponent(Component& component)
 {
-    BOOST_FOREACH(CompVisualTexture* pTexComp, entity.getComponents<CompVisualTexture>())
-        m_visualTextureComps.erase( pTexComp );
-
-    BOOST_FOREACH(CompVisualAnimation* pAnimComp, entity.getComponents<CompVisualAnimation>())
-        m_visualAnimComps.erase( pAnimComp );
-
-    BOOST_FOREACH(CompVisualMessage* pMsgComp, entity.getComponents<CompVisualMessage>())
-        m_visualMsgComps.erase( pMsgComp );
+    if (component.getTypeId() == CompVisualTexture::COMPONENT_TYPE_ID)
+        m_visualTextureComps.erase(&static_cast<CompVisualTexture&>(component));
+    else if (component.getTypeId() == CompVisualAnimation::COMPONENT_TYPE_ID)
+        m_visualAnimComps.erase(&static_cast<CompVisualAnimation&>(component));
+    else if (component.getTypeId() == CompVisualMessage::COMPONENT_TYPE_ID)
+        m_visualMsgComps.erase(&static_cast<CompVisualMessage&>(component));
 }
 
 void RenderSubSystem::displayTextScreen( const std::string& text )

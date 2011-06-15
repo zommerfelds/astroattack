@@ -19,10 +19,12 @@ using boost::property_tree::ptree;
 // eindeutige ID
 const ComponentTypeId CompShape::COMPONENT_TYPE_ID = "CompShape";
 
-CompShape::CompShape(GameEvents& gameEvents) : Component(gameEvents)
+CompShape::CompShape(const ComponentIdType& id, GameEvents& gameEvents)
+: Component(id, gameEvents)
 {}
 
-CompShapePolygon::CompShapePolygon(GameEvents& gameEvents) : CompShape(gameEvents)
+CompShapePolygon::CompShapePolygon(const ComponentIdType& id, GameEvents& gameEvents)
+: CompShape(id, gameEvents)
 {}
 
 void CompShapePolygon::loadFromPropertyTree(const ptree& propTree)
@@ -79,14 +81,9 @@ const Vector2D* CompShapePolygon::getVertex(size_t i) const
 	return &m_vertices[i];
 }
 
-CompShapeCircle::CompShapeCircle(GameEvents& gameEvents) :
-        CompShape(gameEvents),
-		m_radius (1.0f)
-{}
-
-CompShapeCircle::CompShapeCircle(GameEvents& gameEvents, const Vector2D& center, float radius) :
-        CompShape(gameEvents),
-		m_center ( center ),
+CompShapeCircle::CompShapeCircle(const ComponentIdType& id, GameEvents& gameEvents, const Vector2D& center, float radius) :
+        CompShape(id, gameEvents),
+		m_center (center),
 		m_radius (radius)
 {}
 

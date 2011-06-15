@@ -40,7 +40,7 @@ TEST(LevelLoadTest, LoadWriteTest)
 
     BOOST_FOREACH(string lvlFileName, lvlFileNames)
     {
-        GameWorld world (subSystems.events);
+        World world (subSystems.events);
 
         DataLoader::loadWorld(lvlFileName, world, subSystems);
         DataLoader::saveWorldToXml(lvlFileNameOut, world);

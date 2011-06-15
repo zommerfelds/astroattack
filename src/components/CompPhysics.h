@@ -91,9 +91,9 @@ struct BodyDef
 
 struct ShapeDef {
     ShapeDef() : density (0.0f), friction (0.0f), restitution (0.0f), isSensor (false) {}
-    ShapeDef(ComponentId n, float d, float f, float r, bool s) : compName (n), density (d), friction (f), restitution (r), isSensor (s) {}
+    ShapeDef(ComponentIdType n, float d, float f, float r, bool s) : compId (n), density (d), friction (f), restitution (r), isSensor (s) {}
 
-    ComponentId compName; // the name of the CompShape component
+    ComponentIdType compId; // the name of the CompShape component
     float density;
     float friction;
     float restitution;
@@ -109,16 +109,16 @@ typedef std::vector< boost::shared_ptr<ShapeDef> > ShapeInfoVec;
 class CompPhysics : public Component
 {
 public:
-    CompPhysics(GameEvents& gameEvents, const BodyDef& rBodyDef = BodyDef());
+    CompPhysics(const ComponentIdType& id, GameEvents& gameEvents, const BodyDef& rBodyDef = BodyDef());
 
     const ComponentTypeId& getTypeId() const { return COMPONENT_TYPE_ID; }
 
     void setBodyDef(const BodyDef& rBodyDef) { m_bodyDef = rBodyDef; }
 
     // Add a shape to the object. Only do this before attaching the Entity to the world.
-    void addShapeDef( const boost::shared_ptr<ShapeDef>& pShapeDef );
+    void addShapeDef( boost::shared_ptr<ShapeDef> pShapeDef );
 
-    bool setShapeFriction(const ComponentId& shapeName, float friction);
+    bool setShapeFriction(const ComponentIdType& shapeName, float friction);
     const ShapeInfoVec& getShapeInfos() const { return m_shapeInfos; }
 
     float getMass() const;
@@ -176,7 +176,7 @@ private:
     float m_previousAngle;
 
     ShapeInfoVec m_shapeInfos;
-    typedef std::map<ComponentId, b2Fixture*> FixtureMap;
+    typedef std::map<ComponentIdType, b2Fixture*> FixtureMap;
     FixtureMap m_fixtureMap;
 
 	const CompGravField* m_gravField;

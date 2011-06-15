@@ -9,28 +9,28 @@
 
 #include "CompTrigger_Effects.h"
 #include "CompVisualMessage.h"
-#include "../World.h"
+#include "../ComponentManager.h"
 #include "../Physics.h"
 
 // ========= KillEntity ===========
-EffectKillEntity::EffectKillEntity(GameEvents& gameEvents, std::string entityToKill, const GameWorld& world)
-: m_gameEvents (gameEvents), m_entityToKill ( entityToKill ), m_world ( world )
+EffectKillEntity::EffectKillEntity(GameEvents& gameEvents, std::string entityToKill)
+: m_gameEvents (gameEvents), m_entityToKill ( entityToKill )
 {}
 
 void EffectKillEntity::fire()
 {
-    m_gameEvents.wantToDeleteEntity.fire( *m_world.getEntity(m_entityToKill) );
+    m_gameEvents.wantToDeleteEntity.fire( m_entityToKill );
     return;
 }
 
 // ========= DispMessage ===========
-EffectDispMessage::EffectDispMessage(GameEvents& gameEvents, std::string message, int timeMs, GameWorld& world)
+EffectDispMessage::EffectDispMessage(GameEvents& gameEvents, std::string message, int timeMs, ComponentManager& compManager)
 : m_gameEvents (gameEvents),
   m_message (message),
   m_remainingUpdates ( (int)((float)timeMs*0.001f/cPhysicsTimeStep) ),
   m_fired (false),
-  m_world ( world ),
-  m_pMsgEntity (NULL),
+  m_compManager ( compManager ),
+  m_msgEntityId (),
   m_totalTimeMs ( timeMs )
 {}
 
@@ -38,33 +38,31 @@ EffectDispMessage::EffectDispMessage(GameEvents& gameEvents, std::string message
 void EffectDispMessage::fire()
 {
     m_fired = true;
-    std::string entityName;
+    std::string entityId;
     for ( int i = 0;; ++i )
     {
         std::stringstream ss;
         ss << "_Message" << i;
-        if ( !m_world.getEntity( ss.str() ) )
+        if ( m_compManager.getAllEntities().count(ss.str()) == 0 )
         {
-            entityName = ss.str();
+            entityId = ss.str();
             break;
         }
     }
-    m_msgEntityName = entityName;
-    boost::shared_ptr<Entity> pEntity = boost::make_shared<Entity>(entityName);
-    m_pMsgEntity = pEntity.get();
-    boost::shared_ptr<CompVisualMessage> compMsg = boost::shared_ptr<CompVisualMessage>(new CompVisualMessage(m_gameEvents, m_message));
-    compMsg->setId( "autoname" );
-    pEntity->addComponent( compMsg );
+    ComponentList entity;
+    m_msgEntityId = entityId;
+    boost::shared_ptr<CompVisualMessage> compMsg = boost::shared_ptr<CompVisualMessage>(new CompVisualMessage("EffectDispMessage", m_gameEvents, m_message));
+    entity.push_back(compMsg);
 
-    m_world.addEntity( pEntity );
+    m_compManager.addEntity(entityId, entity);
 }
 
 bool EffectDispMessage::update()
 {
     --m_remainingUpdates;
-    if ( m_remainingUpdates == 0 && m_pMsgEntity != NULL )
+    if ( m_remainingUpdates == 0 )
     {
-        m_gameEvents.wantToDeleteEntity.fire(*m_pMsgEntity);
+        m_gameEvents.wantToDeleteEntity.fire(m_msgEntityId);
         return true;
     }
     else if ( m_remainingUpdates < 0 )
@@ -77,8 +75,8 @@ bool EffectDispMessage::update()
 
 EffectDispMessage::~EffectDispMessage()
 {
-    if ( m_pMsgEntity && m_fired && m_remainingUpdates > 0 && m_world.getEntity(m_msgEntityName) )
-        m_gameEvents.wantToDeleteEntity.fire(*m_pMsgEntity);
+    if ( m_fired && m_remainingUpdates > 0 && m_compManager.getAllEntities().count(m_msgEntityId) != 0 )
+        m_gameEvents.wantToDeleteEntity.fire(m_msgEntityId);
 }
 
 // ========= EndLevel ===========

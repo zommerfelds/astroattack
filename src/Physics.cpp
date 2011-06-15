@@ -11,7 +11,6 @@
 
 #include "Physics.h"
 #include "GameEvents.h"
-#include "Entity.h"
 #include "Vector2D.h"
 
 #include "components/CompPhysics.h"
@@ -37,10 +36,10 @@ PhysicsSubSystem::PhysicsSubSystem( GameEvents& gameEvents)
 // PhysicsSubSystem initialisieren
 void PhysicsSubSystem::init()
 {
-    m_eventConnection1 = m_gameEvents.newEntity.registerListener( boost::bind( &PhysicsSubSystem::onRegisterEntity_phys, this, _1 ) );
-    m_eventConnection2 = m_gameEvents.deleteEntity.registerListener( boost::bind( &PhysicsSubSystem::onUnregisterEntity_phys, this, _1 ) );
-    m_eventConnection3 = m_gameEvents.newEntity.registerListener( boost::bind( &PhysicsSubSystem::onRegisterEntity_grav, this, _1 ) );
-    m_eventConnection4 = m_gameEvents.deleteEntity.registerListener( boost::bind( &PhysicsSubSystem::onUnregisterEntity_grav, this, _1 ) );
+    m_eventConnection1 = m_gameEvents.newComponent.registerListener( boost::bind( &PhysicsSubSystem::onRegisterComp_phys, this, _1 ) );
+    m_eventConnection2 = m_gameEvents.deleteComponent.registerListener( boost::bind( &PhysicsSubSystem::onUnregisterComp_phys, this, _1 ) );
+    m_eventConnection3 = m_gameEvents.newComponent.registerListener( boost::bind( &PhysicsSubSystem::onRegisterComp_grav, this, _1 ) );
+    m_eventConnection4 = m_gameEvents.deleteComponent.registerListener( boost::bind( &PhysicsSubSystem::onUnregisterComp_grav, this, _1 ) );
 
     m_pGlobalGravAcc.x = 0.0f;
     m_pGlobalGravAcc.y = -25.0f;
@@ -73,79 +72,81 @@ boost::shared_ptr<b2BodyDef> convertToB2BodyDef(const BodyDef& bodyDef)
     return pB2BodyDef;
 }
 
-void PhysicsSubSystem::onRegisterEntity_phys(Entity& entity)
+void PhysicsSubSystem::onRegisterComp_phys(Component& component)
 {
-    CompPhysics* compPhys = entity.getComponent<CompPhysics>();
-    if ( compPhys ) // Falls es eine "CompPhysics"-Komponente gibt
+    if (component.getTypeId() != CompPhysics::COMPONENT_TYPE_ID)
+        return;
+
+    CompPhysics& compPhys = static_cast<CompPhysics&>(component);
+
+    // get position from CompPosition, if it exists
+    CompPosition* compPos = component.getSiblingComponent<CompPosition>();
+    if (compPos)
     {
-        // get position from CompPosition, if it exists
-        CompPosition* compPos = entity.getComponent<CompPosition>();
-        if (compPos)
-        {
-            compPhys->m_bodyDef.position = compPos->m_position;
-            compPhys->m_bodyDef.angle = compPos->m_orientation;
-        }
-
-        compPhys->m_body = m_world.CreateBody( convertToB2BodyDef(compPhys->m_bodyDef).get() );
-        compPhys->m_body->SetUserData( compPhys );
-
-		std::vector<CompShape*> compShapes = entity.getComponents<CompShape>();
-
-    	for (size_t i=0; i < compPhys->m_shapeInfos.size(); i++)
-    	{
-    		boost::shared_ptr<b2FixtureDef> fixtureDef = boost::make_shared<b2FixtureDef>();
-
-    		CompShape* pCompShape = NULL;
-    		for (size_t a=0; a < compShapes.size(); a++) // TODO: could use get component by name instead
-    		{
-    			if (compShapes[i]->getId() == compPhys->m_shapeInfos[i]->compName)
-    			{
-    				pCompShape = compShapes[i];
-    				break;
-    			}
-    		}
-    		if (!pCompShape)
-    			continue; // error
-
-    		boost::shared_ptr<b2Shape> pB2Shape = pCompShape->toB2Shape(); // this object has to live till Box2D has made a copy of it in createFixture
-            fixtureDef->shape = pB2Shape.get();
-            fixtureDef->density = compPhys->m_shapeInfos[i]->density;
-            fixtureDef->friction = compPhys->m_shapeInfos[i]->friction;
-            fixtureDef->restitution = compPhys->m_shapeInfos[i]->restitution;
-            fixtureDef->isSensor = compPhys->m_shapeInfos[i]->isSensor;
-    		fixtureDef->filter.maskBits = 1;
-            b2Fixture* pFixture = compPhys->m_body->CreateFixture( fixtureDef.get() );
-            pFixture->SetUserData( compPhys );
-            compPhys->m_fixtureMap.insert( std::make_pair(pCompShape->getId(), pFixture) );
-        }
-
-        compPhys->m_smoothCenterOfMass = compPhys->m_body->GetWorldCenter();
-        compPhys->m_previousCenterOfMass = compPhys->m_smoothCenterOfMass;
-
-        compPhys->m_smoothAngle = compPhys->m_body->GetAngle();
-        compPhys->m_previousAngle = compPhys->m_smoothAngle;
-
-        m_physicsComps.push_back( compPhys );
+        compPhys.m_bodyDef.position = compPos->m_position;
+        compPhys.m_bodyDef.angle = compPos->m_orientation;
     }
-}
 
-void PhysicsSubSystem::onUnregisterEntity_phys( Entity& entity )
-{
-    CompPhysics* compPhysToUnregister = entity.getComponent<CompPhysics>();
-    if ( compPhysToUnregister ) // Falls es eine "CompPhysics"-Komponente gibt
+    compPhys.m_body = m_world.CreateBody( convertToB2BodyDef(compPhys.m_bodyDef).get() );
+    compPhys.m_body->SetUserData( &compPhys );
+
+    std::vector<CompShape*> compShapes = component.getSiblingComponents<CompShape>();
+
+    for (size_t i=0; i < compPhys.m_shapeInfos.size(); i++)
     {
-        if ( compPhysToUnregister->m_body )
+        boost::shared_ptr<b2FixtureDef> fixtureDef = boost::make_shared<b2FixtureDef>();
+
+        CompShape* pCompShape = NULL;
+        for (size_t a=0; a < compShapes.size(); a++) // TODO: could use get component by name instead
         {
-            m_world.DestroyBody( compPhysToUnregister->m_body );
-            compPhysToUnregister->m_body = NULL;
-        }
-        for (size_t i = 0; i < m_physicsComps.size(); i++)
-        {
-            if ( m_physicsComps[i] == compPhysToUnregister )
+            if (compShapes[a]->getId() == compPhys.m_shapeInfos[i]->compId)
             {
-                m_physicsComps.erase( m_physicsComps.begin()+i );
+                pCompShape = compShapes[a];
                 break;
             }
+        }
+        if (!pCompShape)
+            continue; // error
+
+        boost::shared_ptr<b2Shape> pB2Shape = pCompShape->toB2Shape(); // this object has to live till Box2D has made a copy of it in createFixture
+        fixtureDef->shape = pB2Shape.get();
+        fixtureDef->density = compPhys.m_shapeInfos[i]->density;
+        fixtureDef->friction = compPhys.m_shapeInfos[i]->friction;
+        fixtureDef->restitution = compPhys.m_shapeInfos[i]->restitution;
+        fixtureDef->isSensor = compPhys.m_shapeInfos[i]->isSensor;
+        fixtureDef->filter.maskBits = 1;
+        b2Fixture* pFixture = compPhys.m_body->CreateFixture( fixtureDef.get() );
+        pFixture->SetUserData( &compPhys );
+        compPhys.m_fixtureMap.insert( std::make_pair(pCompShape->getId(), pFixture) );
+    }
+
+    compPhys.m_smoothCenterOfMass = compPhys.m_body->GetWorldCenter();
+    compPhys.m_previousCenterOfMass = compPhys.m_smoothCenterOfMass;
+
+    compPhys.m_smoothAngle = compPhys.m_body->GetAngle();
+    compPhys.m_previousAngle = compPhys.m_smoothAngle;
+
+    m_physicsComps.push_back( &compPhys );
+}
+
+void PhysicsSubSystem::onUnregisterComp_phys(Component& component)
+{
+    if (component.getTypeId() != CompPhysics::COMPONENT_TYPE_ID)
+        return;
+
+    CompPhysics& compPhysToUnregister = static_cast<CompPhysics&>(component);
+
+    if ( compPhysToUnregister.m_body )
+    {
+        m_world.DestroyBody( compPhysToUnregister.m_body );
+        compPhysToUnregister.m_body = NULL;
+    }
+    for (size_t i = 0; i < m_physicsComps.size(); i++)
+    {
+        if ( m_physicsComps[i] == &compPhysToUnregister )
+        {
+            m_physicsComps.erase( m_physicsComps.begin()+i );
+            break;
         }
     }
 }
@@ -167,7 +168,7 @@ void PhysicsSubSystem::update()
 	{
 		b2Body* pBody = compPhys->m_body;
 
-		CompPosition* compPos = compPhys->getOwnerEntity()->getComponent<CompPosition>();
+		CompPosition* compPos = compPhys->getSiblingComponent<CompPosition>();
 		if (compPos)
         {
             compPos->m_position = compPhys->getPosition();
@@ -183,7 +184,7 @@ void PhysicsSubSystem::update()
             CompPhysics* compContact = static_cast<CompPhysics*>(body->GetUserData());
             if ( compContact == NULL ) // TODO: should not happen
                 continue;
-            CompGravField* grav = compContact->getOwnerEntity()->getComponent<CompGravField>();
+            CompGravField* grav = compContact->getSiblingComponent<CompGravField>();
             if ( grav == NULL )
                 continue;
             //if ( compContact->GetFixture()->TestPoint( pBody->GetWorldCenter() ) ) // TODO: handle multiple shapes
@@ -242,27 +243,29 @@ void PhysicsSubSystem::calculateSmoothPositions(float accumulator)
     }
 }
 
-void PhysicsSubSystem::onRegisterEntity_grav( Entity& entity )
+void PhysicsSubSystem::onRegisterComp_grav( Component& component )
 {
-    CompGravField* compGrav = entity.getComponent<CompGravField>();
-    if ( compGrav != NULL ) // Falls es eine "CompGravField"-Komponente gibt
-    {
-        m_gravFields.push_back( compGrav );
-    }
+    if (component.getTypeId() != CompGravField::COMPONENT_TYPE_ID)
+            return;
+
+    CompGravField& compGrav = static_cast<CompGravField&>(component);
+
+    m_gravFields.push_back( &compGrav );
 }
 
-void PhysicsSubSystem::onUnregisterEntity_grav( Entity& entity )
+void PhysicsSubSystem::onUnregisterComp_grav( Component& component )
 {
-    CompGravField* compGrav = entity.getComponent<CompGravField>();
-    if ( compGrav != NULL ) // Falls es eine "CompGravField"-Komponente gibt
+    if (component.getTypeId() != CompGravField::COMPONENT_TYPE_ID)
+            return;
+
+    CompGravField& compGrav = static_cast<CompGravField&>(component);
+
+    for ( size_t i = 0; i < m_gravFields.size(); ++i )
     {
-        for ( size_t i = 0; i < m_gravFields.size(); ++i )
+        if ( m_gravFields[i] == &compGrav )
         {
-            if ( m_gravFields[i] == compGrav )
-            {
-                m_gravFields.erase( m_gravFields.begin()+i );
-                break;
-            }
+            m_gravFields.erase( m_gravFields.begin()+i );
+            break;
         }
     }
 }

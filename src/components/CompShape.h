@@ -22,7 +22,7 @@ class b2Shape;
 class CompShape : public Component
 {
 public:
-    CompShape(GameEvents& gameEvents);
+    CompShape(const ComponentIdType& id, GameEvents& gameEvents);
 	virtual ~CompShape() {}
 
     const ComponentTypeId& getTypeId() const { return COMPONENT_TYPE_ID; }
@@ -41,7 +41,7 @@ public:
 class CompShapePolygon : public CompShape
 {
 public:
-    CompShapePolygon(GameEvents& gameEvents);
+    CompShapePolygon(const ComponentIdType& id, GameEvents& gameEvents);
     void loadFromPropertyTree(const boost::property_tree::ptree& propTree);
     void writeToPropertyTree(boost::property_tree::ptree& propTree) const;
 
@@ -66,8 +66,7 @@ private:
 class CompShapeCircle : public CompShape
 {
 public:
-	CompShapeCircle(GameEvents& gameEvents);
-	CompShapeCircle(GameEvents& gameEvents, const Vector2D& center, float radius);
+	CompShapeCircle(const ComponentIdType& id, GameEvents& gameEvents, const Vector2D& center = Vector2D(), float radius = 1.0f);
 
     void loadFromPropertyTree(const boost::property_tree::ptree& propTree);
     void writeToPropertyTree(boost::property_tree::ptree& propTree) const;

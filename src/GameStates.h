@@ -47,8 +47,8 @@ public:
     StateManager();
     ~StateManager();
 
-    void changeState( const boost::shared_ptr<GameState>& pState );
-	void pushState( const boost::shared_ptr<GameState>& pState );
+    void changeState(boost::shared_ptr<GameState> pState);
+	void pushState(boost::shared_ptr<GameState> pState);
 	void popState();
 	void clear();
 

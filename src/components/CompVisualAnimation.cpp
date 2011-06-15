@@ -19,8 +19,8 @@
 // einduetige ID
 const ComponentTypeId CompVisualAnimation::COMPONENT_TYPE_ID = "CompVisualAnimation";
 
-CompVisualAnimation::CompVisualAnimation(GameEvents& gameEvents, const AnimationManager& animManager) :
-  Component(gameEvents),
+CompVisualAnimation::CompVisualAnimation(const ComponentIdType& id, GameEvents& gameEvents, const AnimationManager& animManager) :
+  Component(id, gameEvents),
   m_animManager (animManager),
   m_eventConnection (),
   m_center (),

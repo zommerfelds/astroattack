@@ -10,12 +10,16 @@
 #define COMPONENT_H
 
 #include <string>
+#include <vector>
 
 struct GameEvents;
-class Entity;
+
+struct ComponentManager;
 
 typedef std::string ComponentTypeId;
-typedef std::string ComponentId;
+typedef std::string EntityIdType;
+typedef std::string ComponentIdType;
+
 
 // forward declare ptree (PropertyTree), quite complex but I don't want to include the big header here
 namespace boost { namespace property_tree {
@@ -26,27 +30,73 @@ namespace boost { namespace property_tree {
 class Component {
 public:
 
-    Component(GameEvents& gameEvents) : m_gameEvents(gameEvents), m_pOwnerEntity (NULL), m_id () {} // Konstruktor
+    Component(const ComponentIdType& id, GameEvents& gameEvents);
     virtual ~Component() {} // Destruktor
 
     virtual const ComponentTypeId& getTypeId() const = 0;   // Komponenttyp -> Name des Komponententyps
-    const ComponentId& getId() const { return m_id; } // Eigener Namen (optional)
-    void setId( std::string id ) { m_id = id; }
+    const ComponentIdType& getId() const { return m_id; } // Eigener Namen (optional)
 
-    void setOwnerEntity( Entity* obj ) { m_pOwnerEntity = obj; } // Einheit, die die Komponente besitzt, festlegen
-    Entity* getOwnerEntity() { return m_pOwnerEntity; } // Einheit, die die Komponente besitzt, abfragen
-    const Entity* getOwnerEntity() const { return m_pOwnerEntity; } // Einheit, die die Komponente besitzt, abfragen
+    const EntityIdType& getEntityId() { return m_entityId; }
 
     virtual void loadFromPropertyTree(const boost::property_tree::ptree& propTree) = 0;
     virtual void writeToPropertyTree(boost::property_tree::ptree& propTree) const = 0;
 
+
+    template <typename CompType>       CompType* getSiblingComponent();
+    template <typename CompType> const CompType* getSiblingComponent() const;
+          Component* getSiblingComponent(const ComponentTypeId& compType);
+    const Component* getSiblingComponent(const ComponentTypeId& compType) const;
+
+    template <typename CompType> std::vector<      CompType*> getSiblingComponents();
+    template <typename CompType> std::vector<const CompType*> getSiblingComponents() const;
+    std::vector<      Component*> getSiblingComponents(const ComponentTypeId& compType);
+    std::vector<const Component*> getSiblingComponents(const ComponentTypeId& compType) const;
+
+    static const ComponentIdType DEFAULT_ID;
 protected:
     GameEvents& m_gameEvents;
 
 private:
+    ComponentManager* m_compManager; // XXX is this a good idea?
 
-    Entity* m_pOwnerEntity; // Einheit, die die Komponente besitzt
+    EntityIdType m_entityId;
     std::string m_id;
+
+    friend class ComponentManager; // ComponentManager will set the entity ID and m_compManager
 };
+
+#include "ComponentManager.h"
+
+template <typename CompType>
+CompType* Component::getSiblingComponent()
+{
+    if (m_compManager == NULL)
+        return NULL;
+    return m_compManager->getComponent<CompType>(m_entityId);
+}
+
+template <typename CompType>
+const CompType* Component::getSiblingComponent() const
+{
+    if (m_compManager == NULL)
+        return NULL;
+    return m_compManager->getComponent<CompType>(m_entityId);
+}
+
+template <typename CompType>
+std::vector<CompType*> Component::getSiblingComponents()
+{
+    if (m_compManager == NULL)
+        return std::vector<CompType*>();
+    return m_compManager->getComponents<CompType>(m_entityId);
+}
+
+template <typename CompType>
+std::vector<const CompType*> Component::getSiblingComponents() const
+{
+    if (m_compManager == NULL)
+        return std::vector<const CompType*>();
+    return m_compManager->getComponents<CompType>(m_entityId);
+}
 
 #endif

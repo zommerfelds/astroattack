@@ -14,7 +14,7 @@
 
 #include "Exception.h"
 
-class GameWorld;
+class World;
 struct SubSystems;
 struct SlideShow;
 class TextureManager;
@@ -36,11 +36,11 @@ public:
 class DataLoader
 {
 public:
-    static void loadWorld( const std::string& fileName, GameWorld& gameWorld, SubSystems& subSystems );
+    static void loadWorld( const std::string& fileName, World& gameWorld, SubSystems& subSystems );
     static void loadSlideShow( const std::string& fileName, SlideShow* pSlideShow );
     static ResourceIds loadGraphics( const std::string& fileName, TextureManager* pTextureManager, AnimationManager* pAnimationManager, FontManager* pFontManager );
     static void unLoadGraphics( const ResourceIds& resourcesToUnload, TextureManager* pTextureManager, AnimationManager* pAnimationManager, FontManager* pFontManager );
-    static void saveWorldToXml( const std::string& fileName, const GameWorld& gameWorld );
+    static void saveWorldToXml( const std::string& fileName, const World& gameWorld );
 private:
 };
 

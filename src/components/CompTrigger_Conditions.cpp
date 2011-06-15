@@ -6,7 +6,6 @@
 
 #include "CompTrigger_Conditions.h"
 #include "CompPhysics.h"
-#include "../Entity.h"
 #include "../Logger.h"
 
 // ========== CompareVariable =========
@@ -47,17 +46,17 @@ bool ConditionEntityTouchedThis::isConditionTrue()
     // could use events instead of polling every time
 
     // TODO: all physics components
-    CompPhysics* thisCompPhysics = m_pCompTrigger->getOwnerEntity()->getComponent<CompPhysics>();
+    CompPhysics* thisCompPhysics = m_pCompTrigger->getSiblingComponent<CompPhysics>();
     if ( thisCompPhysics == NULL )
     {
-        gAaLog.write("WARNING entity '%s': testing if 'EntityTouchedThis' condition is true but there is no CompPhysics", m_pCompTrigger->getOwnerEntity()->getId().c_str());
+        gAaLog.write("WARNING entity '%s': testing if 'EntityTouchedThis' condition is true but there is no CompPhysics", m_pCompTrigger->getEntityId().c_str());
         return false;
     }
 
     ContactVector contacts = thisCompPhysics->getContacts(true);
 
     for (size_t i=0; i<contacts.size(); i++)
-        if (contacts[i]->comp.getOwnerEntity()->getId() == m_entityName)
+        if (contacts[i]->comp.getEntityId() == m_entityName)
             return true;
 
     return false;

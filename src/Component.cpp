@@ -6,3 +6,13 @@
 
 #include "Component.h"
 #include "GameEvents.h" // Steuert die Spielerreignisse
+#include "ComponentManager.h"
+
+Component::Component(const ComponentIdType& id, GameEvents& gameEvents)
+: m_gameEvents (gameEvents),
+  m_compManager (NULL),
+  m_entityId (),
+  m_id (id)
+{}
+
+const ComponentIdType Component::DEFAULT_ID = "";

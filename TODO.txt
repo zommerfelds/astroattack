@@ -4,11 +4,11 @@
 
 * High priority *
 
-- test rename introShow.infox
+- Fix round planet gravitation/rotation
 
 * Medium priority *
 
-- Entities as pure aggregation
+- In component INFO files: change 'id' to 'type' and 'name' to 'id'
 - Test Init() => DeInit() => Init() on GameApp and SubSystems
 - improve logger
 - asynchonous fading out music (separate thread)
@@ -50,6 +50,7 @@
 
 
 DONE:
+- Entities as pure aggregation
 - Fixed rotation issue with strange physical behavior (ex. level 2 under "arrow")
 - Fixed strange flickering when rotating around planet (was bad angle interpolation)
 - Fehlerchecking und Beschreibung beim Level Laden

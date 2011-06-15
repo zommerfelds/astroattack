@@ -19,8 +19,8 @@ using boost::property_tree::ptree;
 const ComponentTypeId CompPhysics::COMPONENT_TYPE_ID = "CompPhysics";
 
 // Konstruktor
-CompPhysics::CompPhysics(GameEvents& gameEvents, const BodyDef& rBodyDef) :
-    Component(gameEvents),
+CompPhysics::CompPhysics(const ComponentIdType& id, GameEvents& gameEvents, const BodyDef& rBodyDef) :
+    Component(id, gameEvents),
     m_body (NULL),
     m_bodyDef (rBodyDef),
     m_localGravitationPoint (),
@@ -31,12 +31,12 @@ CompPhysics::CompPhysics(GameEvents& gameEvents, const BodyDef& rBodyDef) :
     m_nUpdatesSinceGravFieldChange (0)
 {}
 
-void CompPhysics::addShapeDef( const boost::shared_ptr<ShapeDef>& pShapeDef )
+void CompPhysics::addShapeDef( boost::shared_ptr<ShapeDef> pShapeDef )
 {
     m_shapeInfos.push_back( pShapeDef );
 }
 
-bool CompPhysics::setShapeFriction(const ComponentId& shapeName, float friction)
+bool CompPhysics::setShapeFriction(const ComponentIdType& shapeName, float friction)
 {
     FixtureMap::const_iterator it = m_fixtureMap.find( shapeName );
     if ( it != m_fixtureMap.end() )
@@ -234,7 +234,7 @@ void CompPhysics::writeToPropertyTree(ptree& propTree) const
     for (ShapeInfoVec::const_iterator it = getShapeInfos().begin(); it != getShapeInfos().end(); ++it)
     {
         ptree shapePropTree;
-        shapePropTree.add("comp_name", (*it)->compName);
+        shapePropTree.add("comp_name", (*it)->compId);
 
         if ((*it)->density != 0)
             shapePropTree.add("density", (*it)->density);

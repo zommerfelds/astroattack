@@ -12,8 +12,8 @@
 const ComponentTypeId CompVisualMessage::COMPONENT_TYPE_ID = "CompVisualMessage";
 
 // Konstruktor
-CompVisualMessage::CompVisualMessage(GameEvents& gameEvents, std::string text) :
-  Component(gameEvents),
+CompVisualMessage::CompVisualMessage(const ComponentIdType& id, GameEvents& gameEvents, std::string text) :
+  Component(id, gameEvents),
   m_text ( text )
 {}
 

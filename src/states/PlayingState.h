@@ -44,12 +44,12 @@ public:
 private:
     static const GameStateId STATE_ID;
     
-    GameWorld m_gameWorld;          // Spielwelt
+    World m_gameWorld;          // Spielwelt
     CameraController m_cameraController;        // Kamera
 
     EventConnection m_eventConnection1;
     EventConnection m_eventConnection2;
-    void onEntityDeleted( Entity& entity );
+    void onEntityDeleted( const EntityIdType& entityId );
     void onLevelEnd(bool win, const std::string& msg);
     std::set< std::string > m_entitiesToDelete1;
     std::set< std::string > m_entitiesToDelete2;

@@ -10,46 +10,34 @@
 #ifndef WORLD_H
 #define WORLD_H
 
-#include <vector>
-#include <map>
 #include <string>
-#include <boost/shared_ptr.hpp>
+#include <map>
 
-#include "Entity.h"
+#include "ComponentManager.h"
 
-class Vector2D;
 struct GameEvents;
-class Logger;
 
 typedef std::string WorldVariableId;
-typedef std::map<const EntityIdType, boost::shared_ptr<Entity> > EntityMap;
 typedef std::map<const WorldVariableId, int> WorldVariablesMap;
 
 /*
     Hier ist die Spielwelt gespeichert.
 */
-class GameWorld
+class World
 {
 public:
-    GameWorld( GameEvents& events );
-    ~GameWorld();
-
-    void addEntity( const boost::shared_ptr<Entity>& pEntity );
-    void removeEntity( const EntityIdType& id );
-    Entity* getEntity( const EntityIdType& id ) const;
-    const EntityMap& getAllEntities() const;
+    World( GameEvents& events );
 
     int getVariable( const WorldVariableId& varName );
     WorldVariablesMap::iterator getItToVariable( const WorldVariableId& varName );
     void setVariable( const WorldVariableId& varName, int value );
 
-    void writeWorldToLogger( Logger& log );
+    ComponentManager& getCompManager() { return m_compManager; }
+    const ComponentManager& getCompManager() const { return m_compManager; }
 
 private:
-    GameEvents& m_gameEvents;
-
-    EntityMap m_entities;
     WorldVariablesMap m_variables;
+    ComponentManager m_compManager;
 };
 
 #endif

@@ -16,7 +16,6 @@
 #include "../Renderer.h"
 #include "../Physics.h"
 #include "../Input.h"
-#include "../Entity.h"
 #include "../Logger.h"
 #include "../GameEvents.h"
 #include "../DataLoader.h"
@@ -40,7 +39,7 @@ const GameStateId PlayingState::STATE_ID = "PlayingState";
 PlayingState::PlayingState( SubSystems& subSystems, std::string levelFileName )
 : GameState( subSystems ),
   m_gameWorld ( getSubSystems().events ),
-  m_cameraController ( getSubSystems().input, getSubSystems().renderer, m_gameWorld ),
+  m_cameraController ( getSubSystems().input, getSubSystems().renderer, m_gameWorld.getCompManager() ),
   m_eventConnection1 (), m_eventConnection2 (),
   m_curentDeleteSet (1), m_wantToEndGame( false ), m_alphaOverlay( 0.0 ),
   m_levelFileName ( levelFileName )
@@ -82,7 +81,7 @@ void PlayingState::init()        // State starten
     // Alle Entities und Komponenten in Text Datei anzeigen
     Logger log ( cWordLogFileName );
     log.write( "World Entities:\n\n" );
-    m_gameWorld.writeWorldToLogger( log );
+    m_gameWorld.getCompManager().writeEntitiesToLogger( log );
     log.closeFile();
 
     getSubSystems().input.putMouseOnCenter();
@@ -137,7 +136,7 @@ void PlayingState::update()      // Spiel aktualisieren
         m_curentDeleteSet = 2;
 
         BOOST_FOREACH(const EntityIdType& id, m_entitiesToDelete1)
-            m_gameWorld.removeEntity(id);
+            m_gameWorld.getCompManager().removeEntity(id);
 
         m_entitiesToDelete1.clear();
     }
@@ -146,7 +145,7 @@ void PlayingState::update()      // Spiel aktualisieren
         m_curentDeleteSet = 1;
 
         BOOST_FOREACH(const EntityIdType& id, m_entitiesToDelete2)
-            m_gameWorld.removeEntity(id);
+            m_gameWorld.getCompManager().removeEntity(id);
 
         m_entitiesToDelete2.clear();
     }
@@ -187,7 +186,7 @@ void PlayingState::draw( float accumulator )        // Spiel zeichnen
     // Draw debug info
 #ifdef DRAW_DEBUG
     // TODO use CompPosition
-    Entity* player = m_gameWorld.getEntity("Player");
+    Entity* player = m_compManager.getEntity("Player");
     if ( player )
     {
         CompPhysics* player_phys = player->getComponent<CompPhysics>();
@@ -268,12 +267,12 @@ void PlayingState::draw( float accumulator )        // Spiel zeichnen
     //renderer.FlipBuffer(); // (vom Backbuffer zum Frontbuffer wechseln)
 }
 
-void PlayingState::onEntityDeleted( Entity& entity )
+void PlayingState::onEntityDeleted( const EntityIdType& entityId )
 {
     if ( m_curentDeleteSet == 1 )
-        m_entitiesToDelete1.insert( entity.getId() );
+        m_entitiesToDelete1.insert( entityId );
     else
-        m_entitiesToDelete2.insert( entity.getId() );
+        m_entitiesToDelete2.insert( entityId );
 }
 
 void PlayingState::onLevelEnd(bool /*win*/, const std::string& msg)

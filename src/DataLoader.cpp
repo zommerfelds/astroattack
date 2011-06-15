@@ -65,7 +65,7 @@ DataLoadException::DataLoadException(const std::string& msg)
 }
 
 // Load Level from XML
-void DataLoader::loadWorld(const std::string& fileName, GameWorld& gameWorld, SubSystems& subSystems)
+void DataLoader::loadWorld(const std::string& fileName, World& gameWorld, SubSystems& subSystems)
 {
     try
     {
@@ -84,9 +84,9 @@ void DataLoader::loadWorld(const std::string& fileName, GameWorld& gameWorld, Su
                 throw DataLoadException(fileName + " - At top level: parse error, expected 'entity', got '" + value1.first + "'"); // TODO: add node path
             const ptree& entityPropTree = value1.second;
 
-            std::string entityName = entityPropTree.get<std::string>("name");
-            shared_ptr<Entity> pEntity = make_shared<Entity>( entityName );
-            gAaLog.write ( "Creating entity \"%s\"\n", entityName.c_str() );
+            std::string entityId = entityPropTree.get<std::string>("name");
+            ComponentList entity;
+            gAaLog.write ( "Creating entity \"%s\"\n", entityId.c_str() );
             gAaLog.increaseIndentationLevel();
 
             BOOST_FOREACH(const ptree::value_type &value2, entityPropTree)
@@ -94,53 +94,51 @@ void DataLoader::loadWorld(const std::string& fileName, GameWorld& gameWorld, Su
                 if (value2.first == "name")
                     continue;
                 if (value2.first != "component")
-                    throw DataLoadException(fileName + " - In entity '" + entityName + "': parse error, expected 'component', got '" + value2.first + "'"); // TODO: add node path
+                    throw DataLoadException(fileName + " - In entity '" + entityId + "': parse error, expected 'component', got '" + value2.first + "'"); // TODO: add node path
                 const ptree& compPropTree = value2.second;
 
-                std::string compId = compPropTree.get<std::string>("id");
-                std::string compName = compPropTree.get("name", "");
-                gAaLog.write ( "Creating component \"%s\"... ", compId.c_str() );
+                std::string compType = compPropTree.get<std::string>("id");
+                std::string compId = compPropTree.get("name", "");
+                gAaLog.write ( "Creating component \"%s\"... ", compType.c_str() );
 
                 shared_ptr<Component> component;
 
-                if ( compId == "CompShape" )
+                if ( compType == "CompShape" )
                 {
                     if (compPropTree.count("polygon"))
-                        component = boost::shared_ptr<CompShapePolygon>(new CompShapePolygon(subSystems.events));
+                        component = boost::shared_ptr<CompShapePolygon>(new CompShapePolygon(compId, subSystems.events));
                     else
-                        component = boost::shared_ptr<CompShapeCircle>(new CompShapeCircle(subSystems.events));
+                        component = boost::shared_ptr<CompShapeCircle>(new CompShapeCircle(compId, subSystems.events));
                 }
-                else if ( compId == "CompPhysics" )
-                    component = boost::shared_ptr<CompPhysics>(new CompPhysics(subSystems.events));
-                else if ( compId == "CompPlayerController" )
-                    component = boost::shared_ptr<CompPlayerController>(new CompPlayerController(subSystems.events, subSystems.input, gameWorld.getItToVariable( "JetpackEnergy" )));
-                else if ( compId == "CompPosition" )
-                    component = boost::shared_ptr<CompPosition>(new CompPosition(subSystems.events));
-                else if ( compId == "CompVisualAnimation" )
-                    component = boost::shared_ptr<CompVisualAnimation>(new CompVisualAnimation(subSystems.events, subSystems.renderer.getAnimationManager()));
-                else if ( compId == "CompVisualTexture" )
-                    component = boost::shared_ptr<CompVisualTexture>(new CompVisualTexture(subSystems.events));
-                else if ( compId == "CompVisualMessage" )
-                    component = boost::shared_ptr<CompVisualMessage>(new CompVisualMessage(subSystems.events));
-                else if ( compId == "CompGravField" )
-                    component = boost::shared_ptr<CompGravField>(new CompGravField(subSystems.events));
-                else if ( compId == "CompTrigger" )
-                    component = boost::shared_ptr<CompTrigger>(new CompTrigger(subSystems.events, gameWorld));
+                else if ( compType == "CompPhysics" )
+                    component = boost::shared_ptr<CompPhysics>(new CompPhysics(compId, subSystems.events));
+                else if ( compType == "CompPlayerController" )
+                    component = boost::shared_ptr<CompPlayerController>(new CompPlayerController(compId, subSystems.events, subSystems.input, gameWorld.getItToVariable( "JetpackEnergy" )));
+                else if ( compType == "CompPosition" )
+                    component = boost::shared_ptr<CompPosition>(new CompPosition(compId, subSystems.events));
+                else if ( compType == "CompVisualAnimation" )
+                    component = boost::shared_ptr<CompVisualAnimation>(new CompVisualAnimation(compId, subSystems.events, subSystems.renderer.getAnimationManager()));
+                else if ( compType == "CompVisualTexture" )
+                    component = boost::shared_ptr<CompVisualTexture>(new CompVisualTexture(compId, subSystems.events));
+                else if ( compType == "CompVisualMessage" )
+                    component = boost::shared_ptr<CompVisualMessage>(new CompVisualMessage(compId, subSystems.events));
+                else if ( compType == "CompGravField" )
+                    component = boost::shared_ptr<CompGravField>(new CompGravField(compId, subSystems.events));
+                else if ( compType == "CompTrigger" )
+                    component = boost::shared_ptr<CompTrigger>(new CompTrigger(compId, gameWorld, subSystems.events));
                 else
-                    throw DataLoadException(fileName + " - In entity '" + entityName + "': invalid component ID (" + compId + ")");
+                    throw DataLoadException(fileName + " - In entity '" + entityId + "' component '" + compId + "': invalid component type '" + compType + "'");
 
                 assert(component);
 
                 component->loadFromPropertyTree(compPropTree);
 
-                if ( !compName.empty() )
-                    component->setId( compName );
-                pEntity->addComponent( component );
+                entity.push_back(component);
 
                 gAaLog.write ( "[ Done ]\n" );
             }
 
-            gameWorld.addEntity( pEntity );
+            gameWorld.getCompManager().addEntity(entityId, entity);
             gAaLog.decreaseIndentationLevel();
         }
 
@@ -347,27 +345,27 @@ void DataLoader::unLoadGraphics( const ResourceIds& resourcesToUnload, TextureMa
     gAaLog.write ( "[ Done ]\n\n" );
 }
 
-void DataLoader::saveWorldToXml(const std::string& fileName, const GameWorld& gameWorld)
+void DataLoader::saveWorldToXml(const std::string& fileName, const World& gameWorld)
 {
     gAaLog.write ( "Saving XML file \"%s\"...\n", fileName.c_str() );
     gAaLog.increaseIndentationLevel();
     
     ptree levelPropTree;
 	
-    const EntityMap& entities = gameWorld.getAllEntities();
+    const EntityMap& entities = gameWorld.getCompManager().getAllEntities();
     BOOST_FOREACH(const EntityMap::value_type& entPair, entities)
     {
         ptree entityPropTree;
-        entityPropTree.add("name", entPair.second->getId());
+        entityPropTree.add("name", entPair.first);
 
-        const ComponentMap& comps = entPair.second->getAllComponents();
+        const ComponentMap& comps = entPair.second;
         BOOST_FOREACH(const ComponentMap::value_type& compPair, comps)
         {
             ptree compPropTree;
             compPropTree.add("id", compPair.second->getTypeId());
-            std::string compName = compPair.second->getId();
-            if (!compName.empty())
-                compPropTree.add("name", compName);
+            std::string compId = compPair.second->getId();
+            if (!compId.empty())
+                compPropTree.add("name", compId);
             compPair.second->writeToPropertyTree(compPropTree);
 
             entityPropTree.add_child("component", compPropTree);

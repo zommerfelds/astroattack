@@ -38,7 +38,7 @@ public:
 private:
     static const GameStateId STATE_ID;
 
-    GameWorld m_gameWorld;          // Spielwelt
+    World m_gameWorld;          // Spielwelt
     CameraController m_cameraController;        // Kamera
 
     Vector2D m_clickedPoints[8];

@@ -30,7 +30,7 @@ const GameStateId EditorState::STATE_ID = "EditorState";
 EditorState::EditorState( SubSystems& subSystems )
 : GameState( subSystems ),
   m_gameWorld ( getSubSystems().events ),
-  m_cameraController ( getSubSystems().input, getSubSystems().renderer, m_gameWorld ),
+  m_cameraController ( getSubSystems().input, getSubSystems().renderer, m_gameWorld.getCompManager() ),
   m_currentPoint ( 0 ),
   m_currentTexture (),
   m_currentTextureNum ( 0 ),
@@ -142,7 +142,7 @@ void EditorState::update()      // Spiel aktualisieren
     {
         if ( m_createEntityKeyDownOld == false && m_currentPoint > 2 )
         {
-            std::string entityName;
+            std::string entityId;
             for ( int i = 0;; ++i )
             {
                 std::stringstream ss;
@@ -150,37 +150,36 @@ void EditorState::update()      // Spiel aktualisieren
                 ss.fill('0');
                 ss.width(5);
                 ss << i;
-                if ( !m_gameWorld.getEntity( ss.str() ) )
+                if ( m_gameWorld.getCompManager().getAllEntities().count(ss.str()) == 0 )
                 {
-                    entityName = ss.str();
+                    entityId = ss.str();
                     break;
                 }
             }
-            boost::shared_ptr<Entity> pEntity = boost::make_shared<Entity>(entityName);
+            ComponentList entity;
 
-            boost::shared_ptr<CompPhysics> compPhysics = boost::shared_ptr<CompPhysics>(new CompPhysics(getSubSystems().events));
+            boost::shared_ptr<CompPhysics> compPhysics = boost::shared_ptr<CompPhysics>(new CompPhysics(Component::DEFAULT_ID, getSubSystems().events));
             boost::shared_ptr<ShapeDef> shapeDef = boost::make_shared<ShapeDef>();
             shapeDef->friction = 0.3f;
-            shapeDef->compName = "shape1";
+            shapeDef->compId = "shape1";
             compPhysics->addShapeDef( shapeDef );
-            pEntity->addComponent( compPhysics );
+            entity.push_back(compPhysics);
 
-            boost::shared_ptr<CompShapePolygon> compShape = boost::shared_ptr<CompShapePolygon>(new CompShapePolygon(getSubSystems().events));
-            compShape->setId("shape1");
+            boost::shared_ptr<CompShapePolygon> compShape = boost::shared_ptr<CompShapePolygon>(new CompShapePolygon("shape", getSubSystems().events));
             for ( int i = 0; i < m_currentPoint; ++i )
             {
             	compShape->setVertex(i, m_clickedPoints[i]);
             }
-            pEntity->addComponent( compShape );
+            entity.push_back(compShape);
 
-            boost::shared_ptr<CompPosition> compPos = boost::shared_ptr<CompPosition>(new CompPosition(getSubSystems().events));
-            pEntity->addComponent( compPos );
+            boost::shared_ptr<CompPosition> compPos = boost::shared_ptr<CompPosition>(new CompPosition(Component::DEFAULT_ID, getSubSystems().events));
+            entity.push_back(compPos);
 
             TextureId textureName = m_currentTexture;
-            boost::shared_ptr<CompVisualTexture> compPolyTex = boost::shared_ptr<CompVisualTexture>(new CompVisualTexture(getSubSystems().events, textureName));
-            pEntity->addComponent( compPolyTex );
+            boost::shared_ptr<CompVisualTexture> compPolyTex = boost::shared_ptr<CompVisualTexture>(new CompVisualTexture(Component::DEFAULT_ID, getSubSystems().events, textureName));
+            entity.push_back(compPolyTex);
 
-            m_gameWorld.addEntity( pEntity );
+            m_gameWorld.getCompManager().addEntity(entityId, entity);
 
             m_currentPoint = 0;
         }

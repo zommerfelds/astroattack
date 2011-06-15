@@ -15,7 +15,7 @@
 
 class InputSubSystem;
 class RenderSubSystem;
-class GameWorld;
+class ComponentManager;
 
 //----------//
 //  Camera  //
@@ -28,7 +28,7 @@ class GameWorld;
 class CameraController
 {
 public:
-    CameraController( const InputSubSystem& inputSubSystem, RenderSubSystem& renderSubSystem, const GameWorld& world );
+    CameraController( const InputSubSystem& inputSubSystem, RenderSubSystem& renderSubSystem, ComponentManager& world );
 
     // Initialisierung
     void init();
@@ -75,7 +75,7 @@ private:
 
     const InputSubSystem& m_inputSubSystem;
     RenderSubSystem& m_renderSubSystem;
-    const GameWorld& m_world;
+    ComponentManager& m_compManager;
 
     bool m_isFollowingPlayer;
 	float m_timeSinceLastSwitchHeading;

@@ -19,7 +19,7 @@
 
 class Condition;
 class Effect;
-class GameWorld;
+class World;
 
 typedef std::string ConditionId;
 typedef std::string EffectId;
@@ -30,13 +30,13 @@ typedef std::string EffectId;
 class CompTrigger : public Component
 {
 public:
-    CompTrigger(GameEvents& gameEvents, GameWorld& gameWorld);
+    CompTrigger(const ComponentIdType& id, World& gameWorld, GameEvents& gameEvents);
 
     const ComponentTypeId& getTypeId() const { return COMPONENT_TYPE_ID; }
 	static const ComponentTypeId COMPONENT_TYPE_ID; // eindeutige ID für diese Komponentenart (gleich wie Klassennamen, siehe CompCollectable.cpp)
 
-    void addCondition( const boost::shared_ptr<Condition>& );
-    void addEffect( const boost::shared_ptr<Effect>& );
+    void addCondition( boost::shared_ptr<Condition> );
+    void addEffect( boost::shared_ptr<Effect> );
 
     const std::vector< boost::shared_ptr<Condition> >& getConditions() const { return m_conditions; }
     const std::vector< boost::shared_ptr<Effect> >& getEffects() const { return m_effects; }
@@ -48,7 +48,7 @@ private:
     std::vector< boost::shared_ptr<Condition> > m_conditions;
     std::vector< boost::shared_ptr<Effect> > m_effects;
 
-    GameWorld& m_gameWorld;
+    World& m_gameWorld;
     EventConnection m_eventConnection;
 
     // Hier werden alle nötigen aktionen Durgeführt pro Aktualisierung

@@ -11,13 +11,14 @@
 
 #include "CompTrigger.h"
 
-class GameWorld;
+class ComponentManager;
+typedef std::string EntityIdType; // TODO
 
 // ========= KillEntity ===========
 class EffectKillEntity : public Effect
 {
 public:
-    EffectKillEntity(GameEvents& gameEvents, std::string entityToKill, const GameWorld& world );
+    EffectKillEntity(GameEvents& gameEvents, std::string entityToKill);
     EffectId getId() const { return "KillEntity"; }
     void fire();
     bool update() { return false; }
@@ -25,14 +26,13 @@ public:
 private:
     GameEvents& m_gameEvents;
     std::string m_entityToKill;
-    const GameWorld& m_world;
 };
 
 // ========= DispMessage ===========
 class EffectDispMessage : public Effect
 {
 public:
-    EffectDispMessage(GameEvents& gameEvents, std::string message, int timeMs, GameWorld& world );
+    EffectDispMessage(GameEvents& gameEvents, std::string message, int timeMs, ComponentManager& compManager);
     ~EffectDispMessage();
     EffectId getId() const { return "DispMessage"; }
     void fire();
@@ -44,9 +44,8 @@ private:
     std::string m_message;
     int m_remainingUpdates;
     bool m_fired;
-    std::string m_msgEntityName;
-    GameWorld& m_world;
-    Entity* m_pMsgEntity;
+    ComponentManager& m_compManager;
+    EntityIdType m_msgEntityId;
     int m_totalTimeMs;
 };
 

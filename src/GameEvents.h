@@ -13,7 +13,9 @@
 
 #include "Event.h"
 
-class Entity;
+typedef std::string EntityIdType;
+
+class Component;
 
 struct GameEvents {
     // -- quitGame --
@@ -23,17 +25,21 @@ struct GameEvents {
     // -- newEntity --
     // A new entity is being created
     // Args: pointer to the entity being created
-    Event1<Entity&> newEntity;
+    Event1<const EntityIdType&> newEntity;
+
+    Event1<Component&> newComponent;
 
     // -- watToDeleteEntity --
     // Somebody wants to delete an entity
     // Args: pointer to the entity that should be deleted
-    Event1<Entity&> wantToDeleteEntity;
+    Event1<const EntityIdType&> wantToDeleteEntity;
 
     // -- deleteEntity --
     // An entity is being deleted
     // Args: pointer to the entity being deleted
-    Event1<Entity&> deleteEntity;
+    Event1<const EntityIdType&> deleteEntity;
+
+    Event1<Component&> deleteComponent;
 
     // -- gameUpdate --
     // The next internal game iteration is being run (not frames)

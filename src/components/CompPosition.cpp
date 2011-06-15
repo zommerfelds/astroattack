@@ -10,14 +10,15 @@
 
 #include "CompPosition.h"
 #include "CompPhysics.h"
-#include "../Entity.h"
 
 // eindeutige ID
 const ComponentTypeId CompPosition::COMPONENT_TYPE_ID = "CompPosition";
 
 // TODO: store CompPhysics pointer for multiple uses (maybe weak_ptr?)
 
-CompPosition::CompPosition(GameEvents& gameEvents) : Component(gameEvents), m_position (), m_orientation ( 0.0f ) {}
+CompPosition::CompPosition(const ComponentIdType& id, GameEvents& gameEvents)
+: Component(id, gameEvents), m_position (), m_orientation ( 0.0f )
+{}
 
 /*void CompPosition::setPosition(const Vector2D& pos)
 {
@@ -27,7 +28,7 @@ CompPosition::CompPosition(GameEvents& gameEvents) : Component(gameEvents), m_po
 
 Vector2D CompPosition::getDrawingPosition() const
 {
-    const CompPhysics* compPhys = getOwnerEntity()->getComponent<CompPhysics>(); // important TODO: this can segfault
+    const CompPhysics* compPhys = getSiblingComponent<CompPhysics>(); // important TODO: this can segfault
     if (compPhys)
         return compPhys->getSmoothPosition();
     return m_position;
@@ -35,7 +36,7 @@ Vector2D CompPosition::getDrawingPosition() const
 
 float CompPosition::getDrawingOrientation() const
 {
-    const CompPhysics* compPhys = getOwnerEntity()->getComponent<CompPhysics>();
+    const CompPhysics* compPhys = getSiblingComponent<CompPhysics>();
     if (compPhys)
         return compPhys->getSmoothAngle();
     return m_orientation;

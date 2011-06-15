@@ -15,7 +15,6 @@
 #include "Font.h"
 #include "Texture.h"
 
-class Entity;
 struct GameEvents;
 class CompVisualTexture;
 class CompVisualAnimation;
@@ -23,6 +22,7 @@ class CompVisualMessage;
 class CompShapePolygon;
 class CompShapeCircle;
 class Vector2D;
+class Component;
 
 // Diese Klasse ist verantwortilch für die Grafik im Spiel.
 // Alle Visuelen Komponenten werden hier gezeichnet.
@@ -120,8 +120,8 @@ private:
     CompVisualAnimationSet m_visualAnimComps;
     CompVisualMessageSet m_visualMsgComps;
 
-    void onRegisterEntity( Entity& entity );
-    void onUnregisterEntity( Entity& entity );
+    void onRegisterComponent(Component& component);
+    void onUnregisterComponent(Component& component);
 
     MatrixId m_currentMatrix;
     float m_matrixGUI[16];

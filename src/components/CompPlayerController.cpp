@@ -16,7 +16,6 @@
 #include "../Logger.h"
 #include "../Physics.h"
 #include "../Input.h"
-#include "../Entity.h"
 #include "../Vector2D.h"
 
 using boost::property_tree::ptree;
@@ -28,8 +27,8 @@ const ComponentTypeId CompPlayerController::COMPONENT_TYPE_ID = "CompPlayerContr
 const int cMaxRecharge = 15;                    // wie wie muss der Spieler warten bis der Racketenrucksack startet?
 
 // Konstruktor der Komponente
-CompPlayerController::CompPlayerController(GameEvents& gameEvents, const InputSubSystem& inputSubSystem, std::map<const std::string, int>::iterator itJetPackVar) :
-     Component(gameEvents),
+CompPlayerController::CompPlayerController(const ComponentIdType& id, GameEvents& gameEvents, const InputSubSystem& inputSubSystem, std::map<const std::string, int>::iterator itJetPackVar) :
+     Component(id, gameEvents),
      m_inputSubSystem ( inputSubSystem ),
      m_currentFrictionIsLow ( false ),
      m_eventConnection (),
@@ -49,10 +48,10 @@ CompPlayerController::CompPlayerController(GameEvents& gameEvents, const InputSu
 void CompPlayerController::onUpdate()
 {
     // Physikkomponente vom Spieler suchen, damit wir Kräfte an ihm ausüben können
-    CompPhysics* playerCompPhysics = getOwnerEntity()->getComponent<CompPhysics>();
+    CompPhysics* playerCompPhysics = getSiblingComponent<CompPhysics>();
     if ( playerCompPhysics == NULL )
     {
-        gAaLog.write("WARNING: entity '%s' has component CompPlayerController but no CompPhysics", getOwnerEntity()->getId().c_str());
+        gAaLog.write("WARNING: entity '%s' has component CompPlayerController but no CompPhysics", getEntityId().c_str());
         return; // keine Physikkomponente, also abbrechen
     }
 
@@ -505,7 +504,7 @@ void CompPlayerController::updateAnims(bool flyingUp, bool movingOnGround, bool 
     // Laufanimation steuern
     CompVisualAnimation* bodyAnim = NULL;
     CompVisualAnimation* jetpackAnim = NULL;
-    std::vector<CompVisualAnimation*> player_anims = getOwnerEntity()->getComponents<CompVisualAnimation>();
+    std::vector<CompVisualAnimation*> player_anims = getSiblingComponents<CompVisualAnimation>();
     for ( size_t i = 0; i < player_anims.size(); ++i )
     {
         if ( player_anims[i]->getId() == "bodyAnim" )
@@ -515,7 +514,7 @@ void CompPlayerController::updateAnims(bool flyingUp, bool movingOnGround, bool 
     }
 
     if (bodyAnim == NULL)
-        gAaLog.write("WARNING: entity '%s' has component CompPlayerController but no 'bodyAnim' shape", getOwnerEntity()->getId().c_str());
+        gAaLog.write("WARNING: entity '%s' has component CompPlayerController but no 'bodyAnim' shape", getEntityId().c_str());
     else
     {
         if (flyingUp)
@@ -548,7 +547,7 @@ void CompPlayerController::updateAnims(bool flyingUp, bool movingOnGround, bool 
     }
     
     if (jetpackAnim == NULL)
-        gAaLog.write("WARNING: entity '%s' has component CompPlayerController but no 'jetpack' shape", getOwnerEntity()->getId().c_str());
+        gAaLog.write("WARNING: entity '%s' has component CompPlayerController but no 'jetpack' shape", getEntityId().c_str());
     else // Raketenrucksack animation
     {
         if ( usingJetpack ) // Spieler benutzt gerade den Jetpack

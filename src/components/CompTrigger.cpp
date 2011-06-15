@@ -20,7 +20,8 @@ using boost::property_tree::ptree;
 // eindeutige ID
 const ComponentTypeId CompTrigger::COMPONENT_TYPE_ID = "CompTrigger";
 
-CompTrigger::CompTrigger(GameEvents& gameEvents, GameWorld& gameWorld) : Component(gameEvents), m_gameWorld (gameWorld), m_fired ( false )
+CompTrigger::CompTrigger(const ComponentIdType& id, World& gameWorld, GameEvents& gameEvents)
+: Component(id, gameEvents), m_gameWorld (gameWorld), m_fired ( false )
 {
     m_eventConnection = gameEvents.gameUpdate.registerListener( boost::bind( &CompTrigger::onUpdate, this ) );
 }
@@ -58,13 +59,13 @@ void CompTrigger::onUpdate()
     }
 }
 
-void CompTrigger::addCondition( const boost::shared_ptr<Condition>& pCond )
+void CompTrigger::addCondition( boost::shared_ptr<Condition> pCond )
 {
     pCond->m_pCompTrigger = this;
     m_conditions.push_back( pCond );
 }
 
-void CompTrigger::addEffect( const boost::shared_ptr<Effect>& pTrig )
+void CompTrigger::addEffect( boost::shared_ptr<Effect> pTrig )
 {
     pTrig->m_pCompTrigger = this;
     m_effects.push_back(pTrig);
@@ -120,13 +121,13 @@ void CompTrigger::loadFromPropertyTree(const ptree& propTree)
             {
                 std::string entityName = subPropTree.get<std::string>("params.entity");
 
-                addEffect(boost::shared_ptr<EffectKillEntity>(new EffectKillEntity(m_gameEvents, entityName, m_gameWorld)));
+                addEffect(boost::shared_ptr<EffectKillEntity>(new EffectKillEntity(m_gameEvents, entityName)));
             }
             else if (effectId == "DispMessage")
             {
                 std::string msg = subPropTree.get<std::string>("params.msg");
                 int timems = subPropTree.get("params.timems", 3000);
-                addEffect(boost::shared_ptr<EffectDispMessage>(new EffectDispMessage(m_gameEvents, msg, timems, m_gameWorld)));
+                addEffect(boost::shared_ptr<EffectDispMessage>(new EffectDispMessage(m_gameEvents, msg, timems, m_gameWorld.getCompManager())));
             }
             else if (effectId == "EndLevel")
             {

@@ -9,7 +9,7 @@
 #include "Sound.h"
 #include "SDL_mixer.h"
 #include "Configuration.h"
-#include "Logger.h"v
+#include "Logger.h"
 #include "Exception.h" // Ausnahmen im Program (werden in main.cpp eingefangen)
 
 /*void Vol(int chan, void *stream, int len, void *udata)
