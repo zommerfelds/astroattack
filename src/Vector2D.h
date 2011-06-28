@@ -143,6 +143,12 @@ public:
         return ( x*rV.x ) + ( y*rV.y );    // dot product
     }
 
+    // Perp Dot Product
+    inline float perpDotProd(const Vector2D &v) const
+    {
+        return x * v.y - y * v.x;
+    }
+
 	// Betrag
     inline float length() const
     {

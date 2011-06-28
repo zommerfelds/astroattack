@@ -12,6 +12,7 @@
 #include "CompVisualAnimation.h"
 #include "CompGravField.h"
 #include "CompPhysics.h"
+#include "CompShape.h"
 
 #include "../Logger.h"
 #include "../Physics.h"
@@ -98,9 +99,7 @@ void CompPlayerController::onUpdate()
 
     // ACHTUNG
 	const CompGravField* grav = playerCompPhysics->getActiveGravField();
-	Vector2D upVector(0.0f,1.0f);
-	if ( grav!=NULL )
-		upVector = grav->getAcceleration( playerCompPhysics->getCenterOfMass() ).getUnitVector()*-1;
+	Vector2D upVector = grav->getAcceleration( playerCompPhysics->getCenterOfMass() ).getUnitVector()*-1;
 
 	const float upAngleAbs = upVector.getAngle(); // [-π,π]
 
@@ -195,6 +194,9 @@ void CompPlayerController::onUpdate()
     // Maximaler Winkel, wo Spieler gerade nach oben Springen kann (zwischen Y-Achse und Wandrichtung)
     const float cJumpAngle = (cPi*0.25f);
 
+    float vVel = playerCompPhysics->getLinearVelocity() * upVector; // vertical velocity
+    float hVel = playerCompPhysics->getLinearVelocity().perpDotProd(upVector); // horizontal velocity
+
     // Springen
     if ( m_inputSubSystem.getKeyState ( Jump ) )
     {
@@ -213,9 +215,9 @@ void CompPlayerController::onUpdate()
             {
                 impulse = (upVector*600).rotated(cPi*0.2f);
 
-                Vector2D vel = playerCompPhysics->getLinearVelocity();
-                vel = upVector * (vel*upVector);
-                playerCompPhysics->setLinearVelocity( vel );
+                // reset horizontal velocity
+                playerCompPhysics->setLinearVelocity( upVector * vVel );
+                hVel = 0.0f;
 
                 //m_bodyAngleAbs = maxAngleRel;
             }
@@ -223,9 +225,9 @@ void CompPlayerController::onUpdate()
             {
                 impulse = (upVector*600).rotated(-cPi*0.2f);
 
-                Vector2D vel = playerCompPhysics->getLinearVelocity();
-                vel = upVector * (vel*upVector);
-                playerCompPhysics->setLinearVelocity( vel );
+                // reset horizontal velocity
+                playerCompPhysics->setLinearVelocity( upVector * vVel );
+                hVel = 0.0f;
 
                 //m_bodyAngleAbs = -maxAngleRel;
             }
@@ -238,7 +240,7 @@ void CompPlayerController::onUpdate()
             for (unsigned int i=0; i<contacts.size(); i++)
             {
                 // Gegenimpuls auf Grundobjekt wirken lassen
-                contacts[i]->comp.applyLinearImpulse( -impulse*cReactionJump*amountPerBody, contacts[i]->point ); // TODO: get middle between 2 points
+                contacts[i]->phys.applyLinearImpulse( -impulse*cReactionJump*amountPerBody, contacts[i]->point ); // TODO: get middle between 2 points
             }
             m_spaceKeyDownLastUpdate = true;
         }
@@ -266,7 +268,7 @@ void CompPlayerController::onUpdate()
             m_itJetPackVar->second = 0;
             m_rechargeTime = 0;
         }
-        if ( playerCompPhysics->getLinearVelocity().y < maxVelYJetpack )
+        if ( vVel < maxVelYJetpack )
 		{
 			Vector2D force (upVector * jetpack_force_magnitude);
             playerCompPhysics->applyForce( force, playerCompPhysics->getCenterOfMass() );
@@ -276,34 +278,40 @@ void CompPlayerController::onUpdate()
     if ( m_inputSubSystem.getKeyState ( Right ) || m_inputSubSystem.getKeyState ( Left ) )
             wantToMoveSidewards = true;
 
+    bool isRadialField = (grav->getGravType() == CompGravField::Radial);
+
     // Falls der Spieler am Boden ist
     if ( canWalkR || canWalkL )
     {
-        const float maxVelXWalk = 13.5f;
+        const float maxWalkHVelNormal = 13.5f; // maximal horizontal velocity that he can achieve with walking
+        const float maxWalkHVelCircle = 7.0f;  // same but on a circle
         const float smallMass = 10.0f;
         // Laufen nach rechts
         if ( canWalkR && m_inputSubSystem.getKeyState ( Right ) )
         {
-            Vector2D force( normalSteepestRight );
-            force.rotate( cPi * 0.5f );      // Nicht mehr die Normale sondern die Wegrichtung (90°)
-            force *= walk_force_magnitude;
-
-            // wenn es steil, ist wird die Kraft verstärkt
-            //float angle = atan2( force.y / fabs(force.x) );
-			float angle = cPi*0.5f-acos( force.getUnitVector() * upVector );
-            force += force.getUnitVector()*angle*steepness_compensation;
-
+            float maxWalkHVel = maxWalkHVelNormal;
+            if (contacts[iContactRight]->otherShape.getType() == CompShape::Circle)
+                maxWalkHVel = maxWalkHVelCircle;
             // Impuls auf Spielerfigur wirken lassen
-            if ( playerCompPhysics->getLinearVelocity().x < maxVelXWalk )
+            if ( hVel < maxWalkHVel )
             {
+                Vector2D force( normalSteepestRight );
+                force.rotate( cPi * 0.5f );      // Nicht mehr die Normale sondern die Wegrichtung (90°)
+                force *= walk_force_magnitude;
+
+                // wenn es steil, ist wird die Kraft verstärkt
+                //float angle = atan2( force.y / fabs(force.x) );
+                float angle = cPi*0.5f-acos( force.getUnitVector() * upVector );
+                force += force.getUnitVector()*angle*steepness_compensation;
+
                 playerCompPhysics->applyForce( force, playerCompPhysics->getCenterOfMass() );
 		        
                 // Gegenimpuls auf Grundobjekt wirken lassen
                 float factor = 1.0f;
-                float mass = contacts[iContactRight]->comp.getMass();
+                float mass = contacts[iContactRight]->phys.getMass();
                 if ( mass < smallMass )
                     factor = mass/smallMass;
-                contacts[iContactRight]->comp.applyForce( -force*cReactionWalk*factor, contacts[iContactRight]->point ); // TODO: get middle between 2 points
+                contacts[iContactRight]->phys.applyForce( -force*cReactionWalk*factor, contacts[iContactRight]->point ); // TODO: get middle between 2 points
             }
             movingOnGround = true;
         }
@@ -311,25 +319,29 @@ void CompPlayerController::onUpdate()
         // Laufen nach links
         if ( canWalkL && m_inputSubSystem.getKeyState ( Left ) )
         {
-            Vector2D force( normalSteepestLeft );
-            force.rotate( -cPi * 0.5f );     // Nicht mehr die Normale sondern die Wegrichtung (90°)
-            force *= walk_force_magnitude;
-
-            // wenn es steil, ist wird die Kraft verstärkt
-            //float angle = atan( force.y / fabs(force.x) );
-			float angle = cPi*0.5f-acos( force.getUnitVector() * upVector );
-            force += force.getUnitVector()*angle*steepness_compensation;
+            float maxVelXWalk = maxWalkHVelNormal;
+            if (contacts[iContactLeft]->otherShape.getType() == CompShape::Circle)
+                maxVelXWalk = maxWalkHVelCircle;
 
             // Impuls auf Spielerfigur wirken lassen
-            if ( playerCompPhysics->getLinearVelocity().x > -maxVelXWalk )
+            if ( hVel > -maxVelXWalk )
             {
+                Vector2D force( normalSteepestLeft );
+                force.rotate( -cPi * 0.5f );     // Nicht mehr die Normale sondern die Wegrichtung (90°)
+                force *= walk_force_magnitude;
+
+                // wenn es steil, ist wird die Kraft verstärkt
+                //float angle = atan( force.y / fabs(force.x) );
+                float angle = cPi*0.5f-acos( force.getUnitVector() * upVector );
+                force += force.getUnitVector()*angle*steepness_compensation;
+
                 playerCompPhysics->applyForce( force, playerCompPhysics->getCenterOfMass() );
 
                 float factor = 1.0f;
-                float mass = contacts[iContactLeft]->comp.getMass();
+                float mass = contacts[iContactLeft]->phys.getMass();
                 if ( mass < smallMass )
                     factor = mass/smallMass;
-                contacts[iContactLeft]->comp.applyForce( -force*cReactionWalk*factor, contacts[iContactLeft]->point ); // TODO: get middle between 2 points
+                contacts[iContactLeft]->phys.applyForce( -force*cReactionWalk*factor, contacts[iContactLeft]->point ); // TODO: get middle between 2 points
             }
             movingOnGround = true;
         }
@@ -345,7 +357,12 @@ void CompPlayerController::onUpdate()
     }
     else // falls er fliegt
     {
-        const float maxVelXFly = 13.5f;
+        const float maxFlyHVelNormal = 13.5f;
+        const float maxFlyHVelRadial = 7.0f;
+        float maxFlyHVel = maxFlyHVelNormal; // maximum horizontal speed he can achieve by accelerating
+        if (isRadialField)
+            maxFlyHVel = maxFlyHVelRadial;
+
         // Jetpack nach rechts
         if ( m_inputSubSystem.getKeyState ( Right ) )
         {
@@ -356,7 +373,7 @@ void CompPlayerController::onUpdate()
             }
             // TODO: think about that
             //if ( (!isTouchingSth || usedJetpack) && playerCompPhysics->GetBody()->GetLinearVelocity().x < maxVelXFly )
-            if ( playerCompPhysics->getLinearVelocity().x < maxVelXFly )
+            if ( hVel < maxFlyHVel )
 			{
 				Vector2D force (upVector * (usingJetpack?fly_jet_force_magnitude:fly_force_magnitude));
 				force.rotate(-cPi*0.5f);
@@ -374,7 +391,7 @@ void CompPlayerController::onUpdate()
             }
             // TODO: same here
             //if ( (!isTouchingSth || usedJetpack) && playerCompPhysics->GetBody()->GetLinearVelocity().x > -maxVelXFly )
-            if ( playerCompPhysics->getLinearVelocity().x > -maxVelXFly )
+            if ( hVel > -maxFlyHVel )
             {
 				Vector2D force (upVector * (usingJetpack?fly_jet_force_magnitude:fly_force_magnitude));
 				force.rotate(cPi*0.5f);
@@ -413,27 +430,29 @@ void CompPlayerController::onUpdate()
     if ( !isIncreasingAngle	|| decrease )
     {
 		if ( diffAngle != 0.0f )
-		{			
-			bool returnClw = diffAngle > 0.0f;
-            
-			float bonusFactor = absDiffAngle*4.0f + 0.1f;
-			if ( absDiffAngle < cMaxAngleRel )
-				bonusFactor = 1.0f;
+		{
+            bool returnClw = diffAngle > 0.0f;
 
-			if ( returnClw )
-			{
-			    if ( absDiffAngle < cDecStep * bonusFactor )
+            float bonusFactor = (absDiffAngle-cMaxAngleRel)*4.0f + 1.0f;
+            if ( absDiffAngle < cMaxAngleRel )
+                bonusFactor = 1.0f;
+            if (isRadialField)
+                bonusFactor *= 2.0f;
+
+            if ( returnClw )
+            {
+                if ( absDiffAngle < cDecStep * bonusFactor )
                     m_bodyAngleAbs = upAngleAbs;
                 else
                     m_bodyAngleAbs -= cDecStep * bonusFactor;
-			}
-			else
-			{
+            }
+            else
+            {
                 if ( absDiffAngle < cDecStep * bonusFactor )
                     m_bodyAngleAbs = upAngleAbs;
                 else
                     m_bodyAngleAbs += cDecStep * bonusFactor;
-			}
+            }
 		}
     }
 
@@ -443,7 +462,7 @@ void CompPlayerController::onUpdate()
 		m_bodyAngleAbs += 2*cPi;
 
 	// 50 is the number of updates after which we assume the body of the player has turned to the new position
-	if (playerCompPhysics->getNumUpdatesSinceGravFieldChange() < 50) // if the player is changing gravity
+	if (playerCompPhysics->getNumUpdatesSinceGravFieldChange() < 50 || isRadialField) // if the player is changing gravity
 	    // rotate around his feet
         playerCompPhysics->rotate( m_bodyAngleAbs - cPi*0.5f - playerCompPhysics->getAngle(), m_rotationPoint );
 	else // (last change is long enough ago)

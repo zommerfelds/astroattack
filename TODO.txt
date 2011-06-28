@@ -4,17 +4,15 @@
 
 * High priority *
 
-- Fix round planet gravitation/rotation
-
 * Medium priority *
 
-- In component INFO files: change 'id' to 'type' and 'name' to 'id'
+- Improve walking animation when player shortly looses contact to the ground
 - Test Init() => DeInit() => Init() on GameApp and SubSystems
 - improve logger
 - asynchonous fading out music (separate thread)
 - Test OpenGL error checking (glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR) did not generate error)
 - Bug in Logger: Loading Texture "(null)"... Done!
-- Kontakt Events nicht für jeden Box2D Kontakt erzeugen, sonders Box2D Kontakte zuerst verarbeiten und zusammenfügen.
+- Kontakt Events nicht für jeden Box2D Kontakt erzeugen, sondern Box2D Kontakte zuerst verarbeiten und zusammenfügen.
 - GUI System
 - Konkave Polygone im Editor
 - Check widescreen mode
@@ -50,6 +48,8 @@
 
 
 DONE:
+- Fix round planet gravitation/rotation
+- In component INFO files: change 'id' to 'type' and 'name' to 'id'
 - Entities as pure aggregation
 - Fixed rotation issue with strange physical behavior (ex. level 2 under "arrow")
 - Fixed strange flickering when rotating around planet (was bad angle interpolation)

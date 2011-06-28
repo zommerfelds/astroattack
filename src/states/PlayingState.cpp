@@ -186,29 +186,25 @@ void PlayingState::draw( float accumulator )        // Spiel zeichnen
     // Draw debug info
 #ifdef DRAW_DEBUG
     // TODO use CompPosition
-    Entity* player = m_compManager.getEntity("Player");
-    if ( player )
+    CompPhysics* player_phys = m_gameWorld.getCompManager().getComponent<CompPhysics>("Player");
+    if ( player_phys )
     {
-        CompPhysics* player_phys = player->getComponent<CompPhysics>();
-        if ( player_phys )
+        const CompGravField* grav = player_phys->getActiveGravField();
+        Vector2D gravPoint = player_phys->getLocalGravitationPoint().rotated( player_phys->getSmoothAngle() ) + player_phys->getSmoothPosition();
+        Vector2D smoothGravPoint = player_phys->getLocalGravitationPoint().rotated( player_phys->getSmoothAngle() ) + player_phys->getSmoothPosition();
+        if ( grav )
         {
-            const CompGravField* grav = player_phys->getActiveGravField();
-            Vector2D gravPoint = player_phys->getLocalGravitationPoint().rotated( player_phys->getSmoothAngle() ) + player_phys->getSmoothPosition();
-            Vector2D smoothGravPoint = player_phys->getLocalGravitationPoint().rotated( player_phys->getSmoothAngle() ) + player_phys->getSmoothPosition();
-            if ( grav )
-            {
-                Vector2D vec = grav->getAcceleration( gravPoint );
-                renderer.drawVector( vec*0.1f, smoothGravPoint );
-            }
-            renderer.drawPoint( smoothGravPoint );
-
-            // draw contacts
-            //ContactVector contacts = player_phys->getContacts();
-            /*BOOST_FOREACH (boost::shared_ptr<ContactInfo> contact, contacts)
-            {
-                renderer.drawPoint( contact->point );
-            }*/
+            Vector2D vec = grav->getAcceleration( gravPoint );
+            renderer.drawVector( vec*0.1f, smoothGravPoint );
         }
+        renderer.drawPoint( smoothGravPoint );
+
+        // draw contacts
+        //ContactVector contacts = player_phys->getContacts();
+        /*BOOST_FOREACH (boost::shared_ptr<ContactInfo> contact, contacts)
+        {
+            renderer.drawPoint( contact->point );
+        }*/
     }
 #endif
     

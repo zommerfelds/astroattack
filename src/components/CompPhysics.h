@@ -25,13 +25,17 @@ class b2Fixture;
 
 class CompGravField;
 class CompPhysics;
+class CompShape;
 
 struct ContactInfo
 {
-    ContactInfo(CompPhysics& comp) : comp (comp) {}
-	CompPhysics& comp; // the component that is touching
-	Vector2D point; // touching point
-	Vector2D normal; // contact normal (pointing away from body)
+    ContactInfo(CompPhysics& phys, CompShape& thisShape, CompShape& otherShape, const Vector2D& point, const Vector2D& normal ) :
+        phys (phys), thisShape (thisShape), otherShape (otherShape), point (point), normal (normal) {}
+	CompPhysics& phys;     // the component that is touching
+	CompShape& thisShape;  // the shape that was touched
+	CompShape& otherShape; // the shape that is touching
+	Vector2D point;        // touching point
+	Vector2D normal;       // contact normal (pointing away from body)
 };
 
 struct BodyDef
@@ -153,7 +157,7 @@ public:
 
     void rotate( float deltaAngle, const Vector2D& localPoint ); // Rotate the body by daltaAngle counterclockwise around a local point
 
-	// Grav
+	// guaranteed to be non null if this component is registered in the Physics system
     const CompGravField* getActiveGravField() const { return m_gravField; }
 
     void loadFromPropertyTree(const boost::property_tree::ptree& propTree);

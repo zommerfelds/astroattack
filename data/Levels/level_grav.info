@@ -284,7 +284,7 @@ entity
 		grav_type radial
 		cx -25
 		cy 0
-		s 40
+		s 30
 	}
 	component
 	{

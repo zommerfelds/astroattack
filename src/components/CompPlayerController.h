@@ -54,7 +54,6 @@ private:
     float m_bodyAngleAbs;             // Neigungswinkel Absolut (0:Kopf nach links,cPi/2:Kopf nach oben,-cPi/2:Kopf nach unten) [-π,π]
                                       // TODO: use rel angle and delete this variable
     int m_walkingTime;                // number of updates the player is walking (pressing walk key on ground)
-
     Vector2D m_rotationPoint;
 };
 

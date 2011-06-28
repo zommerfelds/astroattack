@@ -21,6 +21,7 @@ class CompGravField : public Component
 public:
     enum GravType { Directional, Radial };
 
+    // TODO add more data to constructor
     CompGravField(const ComponentIdType& id, GameEvents& gameEvents);
 
     const ComponentTypeId& getTypeId() const { return COMPONENT_TYPE_ID; }

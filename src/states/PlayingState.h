@@ -19,7 +19,6 @@
 #include "../World.h"
 #include "../CameraController.h"
 
-class Entity;
 class EventConnection;
 
 //--------------------------------------------//

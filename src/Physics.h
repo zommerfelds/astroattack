@@ -13,13 +13,12 @@
 #include <Box2D/Box2D.h>
 
 #include "Event.h"
-#include "Vector2D.h"
+#include "components/CompGravField.h"
 
 struct GameEvents;
 class Component;
 class EventConnection;
 class CompPhysics;
-class CompGravField;
 
 extern const float cPhysicsTimeStep;
 
@@ -34,8 +33,6 @@ public:
     void calculateSmoothPositions(float accumulator);
 
 private:
-    Vector2D m_pGlobalGravAcc; // Fallbeschleunigung [m/s^2]
-
     std::vector< CompPhysics* > m_physicsComps;
 	std::vector< CompGravField* > m_gravFields;
 
@@ -54,6 +51,8 @@ private:
     float m_timeStep;
     int m_velocityIterations;
     int m_positionIterations;
+
+    CompGravField m_rootGravField; // TODO: can we use a component that is not in the manager?
 };
 
 #endif

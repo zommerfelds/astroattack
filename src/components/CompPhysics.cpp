@@ -10,6 +10,7 @@
 #include <boost/make_shared.hpp>
 #include <boost/foreach.hpp>
 #include <boost/property_tree/ptree.hpp>
+#include <climits>
 
 #include "CompPhysics.h"
 
@@ -28,7 +29,7 @@ CompPhysics::CompPhysics(const ComponentIdType& id, GameEvents& gameEvents, cons
     m_smoothAngle (0.0f),
     m_previousAngle (0.0f),
     m_gravField (NULL),
-    m_nUpdatesSinceGravFieldChange (0)
+    m_nUpdatesSinceGravFieldChange (UINT_MAX)
 {}
 
 void CompPhysics::addShapeDef( boost::shared_ptr<ShapeDef> pShapeDef )
@@ -137,15 +138,31 @@ ContactVector CompPhysics::getContacts(bool getSensors) const
              ( !getSensors && ( contactEdge->contact->GetFixtureA()->IsSensor() ||
                contactEdge->contact->GetFixtureB()->IsSensor() ) ) )
             continue;
-        boost::shared_ptr<ContactInfo> touchInfo = boost::shared_ptr<ContactInfo>(
-                new ContactInfo(*static_cast<CompPhysics*>(contactEdge->other->GetUserData())));
         b2WorldManifold worldManifold;
         contactEdge->contact->GetWorldManifold( &worldManifold );
-        touchInfo->normal = worldManifold.normal;
-        if (contactEdge->contact->GetFixtureA()->GetBody() != m_body) // is this needed?
-            touchInfo->normal = -touchInfo->normal;
-        touchInfo->point = worldManifold.points[0]; // TODO: use all points
 
+        float normalFactor = 1.0f; // TODO is this needed?
+        CompShape* thisShape;
+        CompShape* otherShape;
+        if (contactEdge->contact->GetFixtureA()->GetBody() != m_body)
+        {
+            normalFactor = -1.0f;
+            thisShape = static_cast<CompShape*>(contactEdge->contact->GetFixtureB()->GetUserData());
+            otherShape = static_cast<CompShape*>(contactEdge->contact->GetFixtureA()->GetUserData());
+        }
+        else
+        {
+            thisShape = static_cast<CompShape*>(contactEdge->contact->GetFixtureA()->GetUserData());
+            otherShape = static_cast<CompShape*>(contactEdge->contact->GetFixtureB()->GetUserData());
+        }
+
+        boost::shared_ptr<ContactInfo> touchInfo = boost::shared_ptr<ContactInfo>(
+                new ContactInfo(*static_cast<CompPhysics*>(contactEdge->other->GetUserData()),
+                        *thisShape,
+                        *otherShape,
+                        worldManifold.points[0], // TODO: use all points
+                        normalFactor * worldManifold.normal
+                ));
         vecTouchInfo.push_back(touchInfo);
     }
     return vecTouchInfo;

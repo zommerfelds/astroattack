@@ -56,7 +56,7 @@ bool ConditionEntityTouchedThis::isConditionTrue()
     ContactVector contacts = thisCompPhysics->getContacts(true);
 
     for (size_t i=0; i<contacts.size(); i++)
-        if (contacts[i]->comp.getEntityId() == m_entityName)
+        if (contacts[i]->phys.getEntityId() == m_entityName)
             return true;
 
     return false;

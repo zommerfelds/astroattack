@@ -321,7 +321,7 @@ void GameApp::mainLoop()
 
             }
 
-            const float slowMotionDelay = 0.0f;
+            const float slowMotionDelay = 0.0f; // mainly for testing purpose
 
             while ( timeAccumulator >= cPhysicsTimeStep + slowMotionDelay )
             {
