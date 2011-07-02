@@ -13,7 +13,7 @@ template <typename ArgType>
 EventConnection EVENT1::registerListener(Function func)
 {
     EventConnection evCon;
-    typename FunctionList::iterator pos = m_listenerFuncs.insert( m_listenerFuncs.end(), std::make_pair(func,evCon) );
+    m_listenerFuncs.insert( m_listenerFuncs.end(), std::make_pair(func,evCon) );
     return evCon;
 }
 
@@ -43,7 +43,7 @@ template <typename ArgType1, typename ArgType2>
 EventConnection EVENT2::registerListener(Function func)
 {
     EventConnection evCon;
-    typename FunctionList::iterator pos = m_listenerFuncs.insert( m_listenerFuncs.end(), std::make_pair(func,evCon) );
+    m_listenerFuncs.insert( m_listenerFuncs.end(), std::make_pair(func,evCon) );
     return evCon;
 }
 

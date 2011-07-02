@@ -38,8 +38,8 @@ CameraController::CameraController( const InputSubSystem& inputSubSystem, Render
     m_zoom ( 1.0f ),
     m_rotation ( 0.0f ),
     m_rotationVel ( 0.0f ),
-    m_viewWidth ( gAaConfig.getInt("WideScreen")?STDViewWidth_8_5:STDViewWidth_4_3 ),
-    m_viewHeight ( gAaConfig.getInt("WideScreen")?STDViewHeight_8_5:STDViewHeight_4_3 ),
+    m_viewWidth ( gConfig.get<bool>("WideScreen")?STDViewWidth_8_5:STDViewWidth_4_3 ),
+    m_viewHeight ( gConfig.get<bool>("WideScreen")?STDViewHeight_8_5:STDViewHeight_4_3 ),
     m_inputSubSystem ( inputSubSystem ),
     m_renderSubSystem ( renderSubSystem ),
     m_compManager ( world ),
@@ -395,8 +395,8 @@ void CameraController::setZoom( float zoom )
         m_zoom = cMaxZoom;
     else if ( m_zoom < cMinZoom )
         m_zoom = cMinZoom;
-    m_viewWidth = (gAaConfig.getInt("WideScreen")?STDViewWidth_8_5:STDViewWidth_4_3) * 1.0f/m_zoom;
-    m_viewHeight = (gAaConfig.getInt("WideScreen")?STDViewHeight_8_5:STDViewHeight_4_3) * 1.0f/m_zoom;
+    m_viewWidth = (gConfig.get<bool>("WideScreen")?STDViewWidth_8_5:STDViewWidth_4_3) * 1.0f/m_zoom;
+    m_viewHeight = (gConfig.get<bool>("WideScreen")?STDViewHeight_8_5:STDViewHeight_4_3) * 1.0f/m_zoom;
 }
 
 void CameraController::look() const

@@ -64,7 +64,7 @@ void CompPlayerController::onUpdate()
     bool usingJetpack = false;        // ob der Spieler den Jetpack brauchen will
     bool flyingUp = false;            // if the player is trying to go up in the air
     bool wantToMoveSidewards = false; // ob der Spieler sich seitwärts bewegen will
-    bool isPushing = false;           // ob der Spieler einen Gegenstand stosst
+    //bool isPushing = false;           // ob der Spieler einen Gegenstand stosst
 
     bool isIncreasingAngle = false;   // ob die Spielerfigur sich neigt (zum fliegen)
     bool directionClw = false;        // in welche Richtung neigt sich die Figur (true wenn Uhrzeigersinn)
@@ -124,7 +124,7 @@ void CompPlayerController::onUpdate()
 
 				if ( angle > 1.5f*cPi-cMaxWalkAngle-0.1f )
 				{
-					isPushing = true;
+					//isPushing = true;
 					//min_angle = 2*cPi;
 					//break;
 				}
@@ -166,7 +166,7 @@ void CompPlayerController::onUpdate()
 
 				if ( angle > 1.5f*cPi-cMaxWalkAngle-0.1f )
 				{
-					isPushing = true;
+					//isPushing = true;
 					//min_angle = 2*cPi;
 					//break;
 				}

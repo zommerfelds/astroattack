@@ -41,10 +41,10 @@ public:
 
 	void pause();       // State anhalten
 	void resume();      // State wiederaufnehmen
-    void frame( float deltaTime );
+    void frame(float deltaTime);
 
 	void update();      // Spiel aktualisieren
-	void draw( float accumulator ); // Spiel zeichnen
+	void draw(float accumulator); // Spiel zeichnen
 private:
     static const GameStateId STATE_ID;
 
@@ -72,7 +72,8 @@ private:
     bool m_goToPlay;                // ob ein Level gestartet werden soll
     bool m_goToSlideShow;           // ob eine Bildershow gestartet werden soll
     std::string m_fileNameToOpen;   // wie heisst die Datei, die geöffnet werden soll (level oder slide show)
-    bool m_appliedConfig;           // ob Spieler die Einstellungen angenommen hat ()
+    int m_newWidth;
+    int m_newHeight;
 
     ResourceIds m_menuResources;
 };

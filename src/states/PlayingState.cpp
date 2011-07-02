@@ -58,7 +58,7 @@ void PlayingState::init()        // State starten
         DataLoader::loadWorld( "data/player.info", m_gameWorld, getSubSystems() );
         DataLoader::loadWorld( m_levelFileName, m_gameWorld, getSubSystems() );
     }
-    catch (DataLoadException e)
+    catch (DataLoadException& e)
     {
         // TODO is this a good thing to do?
         // TODO show error

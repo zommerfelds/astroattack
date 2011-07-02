@@ -145,7 +145,7 @@ void DataLoader::loadWorld(const std::string& fileName, World& gameWorld, SubSys
         gAaLog.decreaseIndentationLevel();
         gAaLog.write ( "[ Done ]\n\n", fileName.c_str() );
     }
-    catch (boost::property_tree::ptree_error e)
+    catch (boost::property_tree::ptree_error& e)
     {
         throw DataLoadException(std::string("PropertyTree error: ") + e.what());
     }
@@ -191,7 +191,7 @@ void DataLoader::loadSlideShow( const std::string& fileName, SlideShow* pSlideSh
         gAaLog.decreaseIndentationLevel();
         gAaLog.write ( "[ Done ]\n\n", fileName.c_str() );
     }
-    catch (boost::property_tree::ptree_error e)
+    catch (boost::property_tree::ptree_error& e)
     {
         throw DataLoadException(std::string("PropertyTree error: ") + e.what());
     }
@@ -253,7 +253,7 @@ ResourceIds DataLoader::loadGraphics( const std::string& fileName, TextureManage
                 info.wrapModeY = LoadTextureInfo::WrapClamp;
 
             info.scale = scale;
-            info.quality = (LoadTextureInfo::Quality) gAaConfig.getInt("TexQuality");
+            info.quality = (LoadTextureInfo::Quality) gConfig.get<int>("TexQuality");
 
             pTextureManager->loadTexture(name, id, info);
             loadedResources.textures.insert(id);
@@ -293,7 +293,7 @@ ResourceIds DataLoader::loadGraphics( const std::string& fileName, TextureManage
                 info.wrapModeY = LoadTextureInfo::WrapClamp;
 
             info.scale = 1.0f;
-            info.quality = (LoadTextureInfo::Quality) gAaConfig.getInt("TexQuality");
+            info.quality = (LoadTextureInfo::Quality) gConfig.get<int>("TexQuality");
 
             pAnimationManager->loadAnimation(name, id, info);
             loadedResources.animations.insert(id);

@@ -151,10 +151,10 @@ void RenderSubSystem::flipBuffer()
     }
 
     /* the following code takes screenshots of all frames and stores them to video/
-    static unsigned char* data = new unsigned char[gAaConfig.getInt("ScreenWidth")*gAaConfig.getInt("ScreenHeight")*4];
+    static unsigned char* data = new unsigned char[gConfig.get<int>("ScreenWidth")*gConfig.get<int>("ScreenHeight")*4];
     static int frameNum = 0;
 
-    glReadPixels(0, 0, gAaConfig.getInt("ScreenWidth"), gAaConfig.getInt("ScreenHeight"), GL_RGBA, GL_UNSIGNED_BYTE, data);
+    glReadPixels(0, 0, gConfig.get<int>("ScreenWidth"), gConfig.get<int>("ScreenHeight"), GL_RGBA, GL_UNSIGNED_BYTE, data);
     Uint32 rmask, gmask, bmask, amask;
 
     #if SDL_BYTEORDER == SDL_BIG_ENDIAN
@@ -169,7 +169,7 @@ void RenderSubSystem::flipBuffer()
     amask = 0xff000000;
     #endif
 
-    static SDL_Surface* textGFX = SDL_CreateRGBSurfaceFrom( data, gAaConfig.getInt("ScreenWidth"), gAaConfig.getInt("ScreenHeight"), 32, gAaConfig.getInt("ScreenWidth")*4, rmask, gmask, bmask, amask );
+    static SDL_Surface* textGFX = SDL_CreateRGBSurfaceFrom( data, gConfig.get<int>("ScreenWidth"), gConfig.get<int>("ScreenHeight"), 32, gConfig.get<int>("ScreenWidth")*4, rmask, gmask, bmask, amask );
 
     std::ostringstream oss;
     oss << "video/frame" << frameNum << ".bmp";
@@ -667,8 +667,8 @@ void RenderSubSystem::displayLoadingScreen()
     glPushMatrix();
     glLoadIdentity(); //Reset projection matrix
 
-    float w = (float)gAaConfig.getInt("ScreenWidth");
-    float h = (float)gAaConfig.getInt("ScreenHeight");
+    float w = (float)gConfig.get<int>("ScreenWidth");
+    float h = (float)gConfig.get<int>("ScreenHeight");
 
     gluOrtho2D( 0, w, h, 0 ); // orthographic mode (z is not important)
     glMatrixMode ( GL_MODELVIEW );
@@ -679,7 +679,7 @@ void RenderSubSystem::displayLoadingScreen()
     info.wrapModeX = LoadTextureInfo::WrapClamp;
     info.wrapModeY = LoadTextureInfo::WrapClamp;
     info.scale = 1.0;
-    info.quality = (LoadTextureInfo::Quality) gAaConfig.getInt("TexQuality");
+    info.quality = (LoadTextureInfo::Quality) gConfig.get<int>("TexQuality");
     int picw=0,pich=0;
     m_textureManager.loadTexture("data/Loading.png", "loading", info, &picw, &pich);
     m_textureManager.setTexture("loading");

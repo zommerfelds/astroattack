@@ -1,0 +1,13 @@
+AntiAliasing 2
+EditorLevel data/Levels/level_new.info
+FullScreen false
+MouseSensitivity 1.0
+ScreenBpp 32
+ScreenWidth 1280
+ScreenHeight 800
+TexQuality 0
+V-Sync 1
+VolMaster 0.6
+VolMusic 0.0
+VolSound 1.0
+WideScreen true

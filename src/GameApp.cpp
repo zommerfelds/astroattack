@@ -11,6 +11,7 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/bind.hpp>
 #include <boost/make_shared.hpp>
+#include <boost/property_tree/info_parser.hpp>
 
 #include "main.h"
 #include "Configuration.h"
@@ -28,7 +29,7 @@
 #include "Texture.h"
 #include "Exception.h" // Ausnahmen im Program (werden in main.cpp eingefangen)
 
-const char* cMainLogFileName = "data/config.xml";
+const char* cConfigFileName = "data/config.info";
 
 bool gRestart = false; // TODO remove this global
 
@@ -68,7 +69,7 @@ SubSystems::~SubSystems()
 // TODO: handle bad inits
 bool SubSystems::init()
 {
-    renderer.init( gAaConfig.getInt("ScreenWidth"), gAaConfig.getInt("ScreenHeight") );
+    renderer.init( gConfig.get<int>("ScreenWidth"), gConfig.get<int>("ScreenHeight") );
     physics.init();
     sound.init();
     return true;
@@ -94,7 +95,8 @@ void GameApp::init()
     gAaLog.increaseIndentationLevel();                  // Text ab jetzt einrücken
 
     // Einstellung lesen
-    gAaConfig.load(cMainLogFileName);
+    //gAaConfig.load(cMainLogFileName);
+    boost::property_tree::info_parser::read_info(cConfigFileName, gConfig);
 
     //========================= SDL ============================//
     if ( !initSDL() ) // SDL initialisieren
@@ -102,9 +104,9 @@ void GameApp::init()
 
     //======================== Video ===========================//
     if ( !initVideo() ) // Anzeigegeräte bereitstellen
-        throw Exception ( gAaLog.write ( "Error setting up the screen - %ix%i %i Bit\n%s\n", gAaConfig.getInt("ScreenWidth"), gAaConfig.getInt("ScreenHeight"), gAaConfig.getInt("ScreenBpp"), SDL_GetError() ) );
+        throw Exception ( gAaLog.write ( "Error setting up the screen - %ix%i %i Bit\n%s\n", gConfig.get<int>("ScreenWidth"), gConfig.get<int>("ScreenHeight"), gConfig.get<int>("ScreenBpp"), SDL_GetError() ) );
 
-    gAaConfig.applyConfig();
+    //gAaConfig.applyConfig();
 
     //===================== Untersysteme =======================//
     gAaLog.write ( "Initializing sub systems... " );
@@ -163,12 +165,12 @@ bool GameApp::initVideo()
     gAaLog.write ( "Setting up video... " );
 
     // Einige OpenGL Flags festlegen, bevor wir SDL_SetVideoMode() aufrufen
-    SDL_GL_SetAttribute ( SDL_GL_RED_SIZE, gAaConfig.getInt("ScreenBpp")/4 );    // Grösse der Rotkomponente im Framebuffer, in Bits
-    SDL_GL_SetAttribute ( SDL_GL_GREEN_SIZE, gAaConfig.getInt("ScreenBpp")/4 );  // Grösse der Greenkomponente im Framebuffer, in Bits
-    SDL_GL_SetAttribute ( SDL_GL_BLUE_SIZE, gAaConfig.getInt("ScreenBpp")/4 );   // Grösse der Blaukomponente im Framebuffer, in Bits
-    SDL_GL_SetAttribute ( SDL_GL_ALPHA_SIZE, gAaConfig.getInt("ScreenBpp")/4 );  // Grösse der Alphakomponente im Framebuffer, in Bits
+    SDL_GL_SetAttribute ( SDL_GL_RED_SIZE, gConfig.get<int>("ScreenBpp")/4 );    // Grösse der Rotkomponente im Framebuffer, in Bits
+    SDL_GL_SetAttribute ( SDL_GL_GREEN_SIZE, gConfig.get<int>("ScreenBpp")/4 );  // Grösse der Greenkomponente im Framebuffer, in Bits
+    SDL_GL_SetAttribute ( SDL_GL_BLUE_SIZE, gConfig.get<int>("ScreenBpp")/4 );   // Grösse der Blaukomponente im Framebuffer, in Bits
+    SDL_GL_SetAttribute ( SDL_GL_ALPHA_SIZE, gConfig.get<int>("ScreenBpp")/4 );  // Grösse der Alphakomponente im Framebuffer, in Bits
     SDL_GL_SetAttribute ( SDL_GL_DOUBLEBUFFER, 1 );                              // Double Buffering aktivieren
-    int AA = gAaConfig.getInt("AntiAliasing");
+    int AA = gConfig.get<int>("AntiAliasing");
     if (AA!=0)
     {
         SDL_GL_SetAttribute ( SDL_GL_MULTISAMPLEBUFFERS, 1 );               // Full Screen Anti-Aliasing aktivieren und
@@ -176,7 +178,7 @@ bool GameApp::initVideo()
     }
     else
         SDL_GL_SetAttribute ( SDL_GL_MULTISAMPLEBUFFERS, 0 );
-    SDL_GL_SetAttribute( SDL_GL_SWAP_CONTROL, gAaConfig.getInt("V-Sync") );
+    SDL_GL_SetAttribute( SDL_GL_SWAP_CONTROL, gConfig.get<int>("V-Sync") );
 
     // Videomodus einrichten. Überprüfen ob es Fehler gab.
     Uint32 flags = SDL_OPENGL;
@@ -185,11 +187,11 @@ bool GameApp::initVideo()
         if ( m_fullScreen )
             flags |= SDL_FULLSCREEN;
     }
-    else if ( gAaConfig.getInt("FullScreen") )
+    else if ( gConfig.get<bool>("FullScreen") )
         flags |= SDL_FULLSCREEN;
 
     // set up screen
-    if ( !SDL_SetVideoMode ( gAaConfig.getInt("ScreenWidth"), gAaConfig.getInt("ScreenHeight"), gAaConfig.getInt("ScreenBpp"), flags ) )
+    if ( !SDL_SetVideoMode ( gConfig.get<int>("ScreenWidth"), gConfig.get<int>("ScreenHeight"), gConfig.get<int>("ScreenBpp"), flags ) )
         return false;
 
     gAaLog.write ( "[ Done ]\n\n" );
@@ -202,21 +204,21 @@ bool GameApp::initVideo()
 
     int value = 0;
     SDL_GL_GetAttribute ( SDL_GL_BUFFER_SIZE, &value );
-    gAaConfig.setInt( "ScreenBpp", value );
+    gConfig.put("ScreenBpp", value);
     gAaLog.write ( "Resolution: %dx%d\n", vidInfo->current_w, vidInfo->current_h );
-    gAaLog.write ( "Widescreen: %s\n", (gAaConfig.getInt("WideScreen")?"on":"off") );
+    gAaLog.write ( "Widescreen: %s\n", (gConfig.get<bool>("WideScreen")?"on":"off") );
     gAaLog.write ( "Bits per pixel: %d\n", value );
     SDL_GL_GetAttribute ( SDL_GL_DOUBLEBUFFER, &value );
     gAaLog.write ( "Double buffer: %s\n", (value?"on":"off") );
     value = 1;
     SDL_GL_GetAttribute ( SDL_GL_MULTISAMPLESAMPLES, &value );
-    gAaConfig.setInt("AntiAliasing",value);
+    gConfig.put("AntiAliasing", value);
     if (value==1)
         gAaLog.write ( "Anti-aliasing: off\n" );
     else
         gAaLog.write ( "Anti-aliasing: %dx\n", value );
     SDL_GL_GetAttribute ( SDL_GL_SWAP_CONTROL, &value );
-    gAaConfig.setInt("V-Sync",value);
+    gConfig.put("V-Sync", value);
     value = 1;
     gAaLog.write ( "V-Sync: %s\n\n", (value?"on":"off") );
     gAaLog.decreaseIndentationLevel();
@@ -241,8 +243,9 @@ void GameApp::deInit()
         SDL_Quit();
         gAaLog.write ( "[ Done ]\n" );
 
-        gAaConfig.applyConfig();
-        gAaConfig.save(cMainLogFileName);
+        //gAaConfig.applyConfig();
+        //gAaConfig.save(cMainLogFileName);
+        boost::property_tree::info_parser::write_info(cConfigFileName, gConfig);
 
         gAaLog.decreaseIndentationLevel();
         gAaLog.write ( "\n* Finished deinitialization *\n" );   // In Log-Datei schreiben

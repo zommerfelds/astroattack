@@ -67,20 +67,20 @@ void InputSubSystem::update()
             m_pKeysConsumed.erase( it );
     }
 
-    if ( gAaConfig.getInt("FullScreen") == 0 )
+    if ( gConfig.get<bool>("FullScreen") == 0 )
     {
         int mousePosX;
         int mousePosY;
         m_mousestates = SDL_GetMouseState ( &mousePosX, &mousePosY );
-        m_windowMousePos.x = mousePosX / ( float ) gAaConfig.getInt("ScreenWidth");
-        m_windowMousePos.y = mousePosY / ( float ) gAaConfig.getInt("ScreenHeight");
+        m_windowMousePos.x = mousePosX / ( float ) gConfig.get<int>("ScreenWidth");
+        m_windowMousePos.y = mousePosY / ( float ) gConfig.get<int>("ScreenHeight");
     }
     else
     {
         int relMouseX = 0, relMouseY = 0;
         m_mousestates = SDL_GetRelativeMouseState( &relMouseX, &relMouseY );
-        m_windowMousePos.x += relMouseX * cMouseSensivityFactor * gAaConfig.getFloat("MouseSensitivity");
-        m_windowMousePos.y += relMouseY * cMouseSensivityFactor * gAaConfig.getFloat("MouseSensitivity");
+        m_windowMousePos.x += relMouseX * cMouseSensivityFactor * gConfig.get<float>("MouseSensitivity");
+        m_windowMousePos.y += relMouseY * cMouseSensivityFactor * gConfig.get<float>("MouseSensitivity");
         if ( m_windowMousePos.x < 0.0f )
             m_windowMousePos.x = 0.0f;
         if ( m_windowMousePos.x > 1.0f )
@@ -156,7 +156,7 @@ const Vector2D& InputSubSystem::getMousePos() const
 
 void InputSubSystem::putMouseOnCenter()
 {
-    SDL_WarpMouse((Uint16)(gAaConfig.getInt("ScreenWidth")/2), (Uint16)(gAaConfig.getInt("ScreenHeight")/2));
+    SDL_WarpMouse((Uint16)(gConfig.get<int>("ScreenWidth")/2), (Uint16)(gConfig.get<int>("ScreenHeight")/2));
 }
 
 MouseState InputSubSystem::getMouseStateInArea( const Rect& rButtonRect ) const

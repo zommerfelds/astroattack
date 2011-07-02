@@ -21,6 +21,7 @@ class GameState
 {
 public:
     GameState( SubSystems& subSystems );
+    virtual ~GameState() {};
 
     virtual const GameStateId& getId() const = 0; // Komponente ID -> Name der Komponente
 
@@ -33,8 +34,6 @@ public:
 	virtual void update() = 0;                  // Spiel aktualisieren
     virtual void frame( float deltaTime ) = 0;  // pro Frame einmal aufgerufen (am Anfang)
 	virtual void draw( float accumulator ) = 0; // Spiel zeichnen
-
-    virtual ~GameState() {};                    // Destruktor
 
     SubSystems& getSubSystems() { return m_subSystems; }
 private:

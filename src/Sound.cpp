@@ -49,8 +49,8 @@ bool SoundSubSystem::init()
         return false;
     }
     Mix_AllocateChannels(64);
-    Mix_Volume(-1, (int)(MIX_MAX_VOLUME*gAaConfig.getFloat("VolSound")*gAaConfig.getFloat("VolMaster")) );
-    Mix_VolumeMusic( (int)(MIX_MAX_VOLUME*gAaConfig.getFloat("VolMusic")*gAaConfig.getFloat("VolMaster")) );
+    Mix_Volume(-1, (int)(MIX_MAX_VOLUME*gConfig.get<float>("VolSound")*gConfig.get<float>("VolMaster")) );
+    Mix_VolumeMusic( (int)(MIX_MAX_VOLUME*gConfig.get<float>("VolMusic")*gConfig.get<float>("VolMaster")) );
 
     SoundSubSystem::soundSystemToNotifyMusicFinished = this;
     Mix_HookMusicFinished( &SoundSubSystem::musicFinishedCallback );

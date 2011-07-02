@@ -4,7 +4,6 @@
  * Copyright 2011 Christian Zommerfelds
  */
 
-// -> Hauptablauf <-
 // Hier startet und beendet die Anwendung!
 
 #include <vector>
@@ -36,12 +35,12 @@ int main ( int argc, char* argv[] )
 
         gAaLog.writeInfoStart();
 
-        try
+        //try
         {
             GameApp aaApp(args);   // create application object
             aaApp.run();           // run the game!
         }
-        catch ( Exception &e ) // falls es einen Fehler gab (Ausnahmebehandlung)
+        /*catch ( Exception& e ) // falls es einen Fehler gab (Ausnahmebehandlung)
         {
             OsMsgBox( e.getMsg(), "Exception" ); // Diesen anzeigen
         }
@@ -59,7 +58,7 @@ int main ( int argc, char* argv[] )
             char std_err_msg[] = "AstroAttack has encountered an unrecoverable error.\n";
             char std_err_msg2[] = "See the log file \"" LOG_FILE_NAME "\" for more information.";
             OsMsgBox( std::string( gAaLog.write( std_err_msg ) ) + std_err_msg2, "Exception" );
-        }
+        }*/
 
         gAaLog.writeInfoEnd();
         if ( gRestart )

@@ -54,7 +54,8 @@ MainMenuState::MainMenuState( SubSystems& subSystems, SubMenu startingSubMenu )
   m_goToEditor ( false ),
   m_goToPlay ( false ),
   m_goToSlideShow ( false ),
-  m_appliedConfig ( false ),
+  m_newWidth ( -1 ),
+  m_newHeight ( -1 ),
   m_menuResources ()
 {}
 
@@ -195,8 +196,8 @@ void MainMenuState::init()        // State starten
 
 void MainMenuState::cleanup()     // State abbrechen
 {
-    if ( m_appliedConfig == false )
-        gAaConfig.discardConfig();
+    /*if ( m_appliedConfig == false )
+        gAaConfig.discardConfig();*/
     getSubSystems().sound.stopMusic( 300 );
     getSubSystems().sound.freeSound( "mouseover" );
     getSubSystems().sound.freeSound( "mouseclick" );
@@ -382,22 +383,29 @@ void MainMenuState::onPressedSound()
 
 void MainMenuState::onPressedResolution( int w, int h )
 {
-    gAaConfig.setInt("ScreenWidth",w);
-    gAaConfig.setInt("ScreenHeight",h);
+	m_newWidth = w;
+	m_newHeight = h;
+    //gAaConfig.setInt("ScreenWidth",w);
+    //gAaConfig.setInt("ScreenHeight",h);
     getSubSystems().sound.playSound( "mouseclick" );
 }
 
 void MainMenuState::onPressedButApplyConfig()
 {
-    m_appliedConfig = true;
-    gRestart = true;
-    m_wantToQuit = true;
+    //m_appliedConfig = true;
+	if (m_newWidth != -1 && m_newHeight != -1)
+	{
+		gConfig.put("ScreenWidth", m_newWidth);
+		gConfig.put("ScreenHeight", m_newHeight);
+	    gRestart = true;
+	    m_wantToQuit = true;
+	}
     getSubSystems().sound.playSound( "mouseclick" );
 }
 
 void MainMenuState::onPressedButDiscardConfig()
 {
-    gAaConfig.discardConfig();
+    //gAaConfig.discardConfig();
     onPressedButBack();
     getSubSystems().sound.playSound( "mouseclick" );
 }

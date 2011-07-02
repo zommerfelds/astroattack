@@ -53,7 +53,7 @@ EventConnection Event0::registerListener(Function func)
     // Create a new EventConnection
     EventConnection evCon;
     // Put func in our list and store its position. Store also the EventConnection (to be able to know if the connection is still valid).
-    FunctionList::iterator pos = m_listenerFuncs.insert( m_listenerFuncs.end(), std::make_pair(func,evCon) );
+    m_listenerFuncs.insert( m_listenerFuncs.end(), std::make_pair(func,evCon) );
     // Return the connection (listener must keep this object, else it will be unregistered later on)
     return evCon;
 }

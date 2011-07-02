@@ -64,7 +64,7 @@ void SlideShowState::init()        // State starten
         // "Dia-Show" laden
         DataLoader::loadSlideShow( m_slideXmlFile, &m_slideShow );
     }
-    catch (DataLoadException e)
+    catch (DataLoadException& e)
     {
         // TODO is this a good thing to do?
         // TODO show error
@@ -80,7 +80,7 @@ void SlideShowState::init()        // State starten
     info.wrapModeX = LoadTextureInfo::WrapClamp;
     info.wrapModeY = LoadTextureInfo::WrapClamp;
     info.scale = 1.0;
-    info.quality = (LoadTextureInfo::Quality) gAaConfig.getInt("TexQuality");
+    info.quality = (LoadTextureInfo::Quality) gConfig.get<int>("TexQuality");
     for ( size_t i = 0; i < m_slideShow.slides.size(); ++i )
         getSubSystems().renderer.getTextureManager().loadTexture( m_slideShow.slides[i].imageFileName, m_slideShow.slides[i].imageFileName, info );
     

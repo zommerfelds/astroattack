@@ -38,8 +38,10 @@ libftgl-dev
 libsdl-mixer1.2-dev
 libdevil-dev
 libboost1.40-dev
-libtinyxml-dev
 cmake (for Box2D)
+box2d
+
+Possibly
 libxi-dev (for Box2D with examples)
 
 Download Box2D 2.1.x.

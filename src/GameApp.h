@@ -20,7 +20,6 @@
 #include "GameEvents.h"
 union SDL_Event;
 
-
 // Alle wichtigen Untersysteme des Spieles
 struct SubSystems
 {

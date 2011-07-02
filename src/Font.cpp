@@ -44,8 +44,8 @@ void FontManager::drawString(const std::string &str, const FontId &fontId, float
     assert ( font_it != m_fonts.end() );
 
     // convert to FTGL coordinates
-    x = x / 4.0f * gAaConfig.getInt("ScreenWidth");
-    y = (1.0f - y / 3.0f) * gAaConfig.getInt("ScreenHeight");
+    x = x / 4.0f * gConfig.get<int>("ScreenWidth");
+    y = (1.0f - y / 3.0f) * gConfig.get<int>("ScreenHeight");
 
     FTFont* font = font_it->second.get();
 
@@ -100,8 +100,8 @@ void FontManager::getDimensions(const std::string &text, const FontId &fontId, f
         return; // TODO: log error
 
     getDetailedDimensions(text, *font_it->second.get(), &w, &h, NULL, NULL, NULL);
-    w = w/gAaConfig.getInt("ScreenWidth")*4.0f;
-    h = h/gAaConfig.getInt("ScreenHeight")*3.0f;
+    w = w/gConfig.get<int>("ScreenWidth")*4.0f;
+    h = h/gConfig.get<int>("ScreenHeight")*3.0f;
 }
 
 void FontManager::getDetailedDimensions(const std::string &text, FTFont& font, float* totalWidth, float* totalHeight,
