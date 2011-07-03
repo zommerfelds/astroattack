@@ -95,7 +95,6 @@ void GameApp::init()
     gAaLog.increaseIndentationLevel();                  // Text ab jetzt einrücken
 
     // Einstellung lesen
-    //gAaConfig.load(cMainLogFileName);
     boost::property_tree::info_parser::read_info(cConfigFileName, gConfig);
 
     //========================= SDL ============================//
@@ -105,8 +104,6 @@ void GameApp::init()
     //======================== Video ===========================//
     if ( !initVideo() ) // Anzeigegeräte bereitstellen
         throw Exception ( gAaLog.write ( "Error setting up the screen - %ix%i %i Bit\n%s\n", gConfig.get<int>("ScreenWidth"), gConfig.get<int>("ScreenHeight"), gConfig.get<int>("ScreenBpp"), SDL_GetError() ) );
-
-    //gAaConfig.applyConfig();
 
     //===================== Untersysteme =======================//
     gAaLog.write ( "Initializing sub systems... " );
@@ -243,9 +240,7 @@ void GameApp::deInit()
         SDL_Quit();
         gAaLog.write ( "[ Done ]\n" );
 
-        //gAaConfig.applyConfig();
-        //gAaConfig.save(cMainLogFileName);
-        boost::property_tree::info_parser::write_info(cConfigFileName, gConfig);
+        writeConfig(cConfigFileName, gConfig);
 
         gAaLog.decreaseIndentationLevel();
         gAaLog.write ( "\n* Finished deinitialization *\n" );   // In Log-Datei schreiben

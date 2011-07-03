@@ -1,13 +1,39 @@
+; Multisample anti-aliasing - 0: off, 2: 2x, 4: 4x...
 AntiAliasing 2
+
+; The level that will be edited in the level editor
 EditorLevel data/Levels/level_new.info
+
+; true: full screen, false: windowed
 FullScreen false
+
+; Mouse sensitivity - between 0.0 and 1.0
 MouseSensitivity 1.0
+
+; Bits per pixel
 ScreenBpp 32
+
+; Resolution width
 ScreenWidth 1280
+
+; Resolution height
 ScreenHeight 800
+
+; Texture quality from 0 to 4 (0 is best)
 TexQuality 0
+
+; Vertical synchronization (fixed FPS)
 V-Sync 1
+
+; Master volume - between 0.0 and 1.0
 VolMaster 0.6
+
+; Music volume - between 0.0 and 1.0
 VolMusic 0.0
+
+; FX volume - between 0.0 and 1.0
 VolSound 1.0
+
+; Wide screen mode - true: on, false: off
 WideScreen true
+

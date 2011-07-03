@@ -63,9 +63,9 @@ public:
     // -------- nur für MatrixWorld Modus --------   
 
     // Polygon zeichnen
-    void drawTexturedPolygon( const CompShapePolygon& rPoly, const CompVisualTexture& rTex, bool border = false );
+    void drawTexturedPolygon( const CompShapePolygon& poly, const CompVisualTexture& tex, bool border = false );
     // Kreis zeichnen
-    void drawTexturedCircle( const CompShapeCircle& rCircle, const CompVisualTexture& rTex, bool border = false );
+    void drawTexturedCircle( const CompShapeCircle& circle, const CompVisualTexture& tex, bool border = false );
     // Draw an edge effect
     void drawEdge(const Vector2D& vertexA, const Vector2D& vertexB, std::string& tex, float offset = 0.0f, float preCalcEdgeLenght = -1.0f);
     // Zeichnet einen Vector2D (Pfeil) an einer bestimmten Postion

@@ -1866,7 +1866,15 @@ entity
 	component
 	{
 		type CompVisualTexture
-		texture blocks
+		texture "wooden crate"
+        shape shape1
+        mapping
+        {
+            vertex { u 0 v 0 }
+            vertex { u 0 v 1 }
+            vertex { u 1 v 1 }
+            vertex { u 1 v 0 }
+        }
 	}
 }
 entity
@@ -1920,7 +1928,15 @@ entity
 	component
 	{
 		type CompVisualTexture
-		texture blocks
+		texture "wooden crate"
+        shape shape1
+        mapping
+        {
+            vertex { u 0 v 0 }
+            vertex { u 0 v 1 }
+            vertex { u 1 v 1 }
+            vertex { u 1 v 0 }
+        }
 	}
 }
 entity
@@ -1974,7 +1990,15 @@ entity
 	component
 	{
 		type CompVisualTexture
-		texture blocks
+		texture "wooden crate"
+        shape shape1
+        mapping
+        {
+            vertex { u 0 v 0 }
+            vertex { u 0 v 1 }
+            vertex { u 1 v 1 }
+            vertex { u 1 v 0 }
+        }
 	}
 }
 entity
@@ -2028,7 +2052,15 @@ entity
 	component
 	{
 		type CompVisualTexture
-		texture blocks
+		texture "wooden crate"
+        shape shape1
+        mapping
+        {
+            vertex { u 0 v 0 }
+            vertex { u 0 v 1 }
+            vertex { u 1 v 1 }
+            vertex { u 1 v 0 }
+        }
 	}
 }
 entity
@@ -2082,7 +2114,15 @@ entity
 	component
 	{
 		type CompVisualTexture
-		texture blocks
+		texture "wooden crate"
+        shape shape1
+        mapping
+        {
+            vertex { u 0 v 0 }
+            vertex { u 0 v 1 }
+            vertex { u 1 v 1 }
+            vertex { u 1 v 0 }
+        }
 	}
 }
 entity
@@ -2136,7 +2176,15 @@ entity
 	component
 	{
 		type CompVisualTexture
-		texture blocks
+		texture "wooden crate"
+        shape shape1
+        mapping
+        {
+            vertex { u 0 v 0 }
+            vertex { u 0 v 1 }
+            vertex { u 1 v 1 }
+            vertex { u 1 v 0 }
+        }
 	}
 }
 entity
@@ -2190,7 +2238,15 @@ entity
 	component
 	{
 		type CompVisualTexture
-		texture blocks
+		texture "wooden crate"
+        shape shape1
+        mapping
+        {
+            vertex { u 0 v 0 }
+            vertex { u 0 v 1 }
+            vertex { u 1 v 1 }
+            vertex { u 1 v 0 }
+        }
 	}
 }
 entity
@@ -2244,7 +2300,15 @@ entity
 	component
 	{
 		type CompVisualTexture
-		texture blocks
+		texture "wooden crate"
+        shape shape1
+        mapping
+        {
+            vertex { u 0 v 0 }
+            vertex { u 0 v 1 }
+            vertex { u 1 v 1 }
+            vertex { u 1 v 0 }
+        }
 	}
 }
 entity
@@ -2298,7 +2362,15 @@ entity
 	component
 	{
 		type CompVisualTexture
-		texture blocks
+		texture "wooden crate"
+        shape shape1
+        mapping
+        {
+            vertex { u 0 v 0 }
+            vertex { u 0 v 1 }
+            vertex { u 1 v 1 }
+            vertex { u 1 v 0 }
+        }
 	}
 }
 entity

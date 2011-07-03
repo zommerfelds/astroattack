@@ -14,9 +14,11 @@
 #define COMPVISUALTEXTURE_H
 
 #include <map>
+#include <vector>
 
 #include "../Component.h"
 #include "../Texture.h"
+#include "../Vector2D.h"
 
 //--------------------------------------------//
 //-------- CompVisualTexture Klasse ----------//
@@ -35,13 +37,19 @@ public:
     TextureId getTextureId() const { return m_textureId; }
     size_t getNumTexturedEdges() const { return m_edgeTexId.size(); }
     TextureId getEdgeTexture(size_t edgeNum) const;
+    const std::string& getShapeId() const;
+    const std::vector<Vector2D>& getTexMap() const;
 
     void loadFromPropertyTree(const boost::property_tree::ptree& propTree);
     void writeToPropertyTree(boost::property_tree::ptree& propTree) const;
 
+    static const std::string ALL_SHAPES;
+
 private:
     TextureId m_textureId;
     std::map<size_t, TextureId> m_edgeTexId;
+    std::string m_shapeId; // ID of the shape to be textured or ALL_SHAPES
+    std::vector<Vector2D> m_texMap;
 };
 
 #endif

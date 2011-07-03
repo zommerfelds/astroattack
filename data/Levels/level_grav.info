@@ -348,11 +348,11 @@ entity
 	component
 	{
 		type CompVisualTexture
-		texture "Liquid Crystal 2"
-		edge
-		{
-			tex EdgeMud1
-			edges "0 "
-		}
+		texture soccerball
+		;edge
+		;{
+		;	tex EdgeMud1
+		;	edges "0 "
+		;}
 	}
 }

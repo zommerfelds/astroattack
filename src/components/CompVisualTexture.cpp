@@ -15,13 +15,23 @@ using boost::property_tree::ptree;
 
 // eindeutige ID
 const ComponentTypeId CompVisualTexture::COMPONENT_TYPE_ID = "CompVisualTexture";
+const std::string CompVisualTexture::ALL_SHAPES = "ALL_SHAPES";
 
 CompVisualTexture::CompVisualTexture(const ComponentIdType& id, GameEvents& gameEvents, TextureId texId)
-: Component(id, gameEvents), m_textureId (texId) {}
+: Component(id, gameEvents), m_textureId (texId), m_shapeId (ALL_SHAPES) {}
 
 void CompVisualTexture::loadFromPropertyTree(const ptree& propTree)
 {
     m_textureId = propTree.get<std::string>("texture");
+    m_shapeId = propTree.get("shape", ALL_SHAPES);
+
+    BOOST_FOREACH(const ptree::value_type &v, propTree.get_child("mapping", ptree()))
+	{
+		const ptree& vertex = v.second;
+		float x = vertex.get<float>("u");
+		float y = vertex.get<float>("v");
+		m_texMap.push_back( Vector2D(x, y) );
+	}
 
     BOOST_FOREACH(const ptree::value_type &v, propTree)
     {
@@ -51,6 +61,17 @@ void CompVisualTexture::loadFromPropertyTree(const ptree& propTree)
 void CompVisualTexture::writeToPropertyTree(boost::property_tree::ptree& propTree) const
 {
     propTree.add("texture", getTextureId());
+
+    if (m_shapeId != ALL_SHAPES)
+        propTree.add("shape", m_shapeId);
+
+    for (size_t i = 0; i < m_texMap.size(); ++i)
+	{
+		ptree vertexPropTree;
+		vertexPropTree.add("u", m_texMap[i].x);
+		vertexPropTree.add("v", m_texMap[i].y);
+		propTree.add_child("mapping.vertex", vertexPropTree);
+	}
 
     std::map<TextureId, std::set<size_t> > edgeTextures;
     for (size_t i=0; i<CompShapePolygon::cMaxVertices; i++)
@@ -82,4 +103,14 @@ TextureId CompVisualTexture::getEdgeTexture(size_t edgeNum) const
     if (it == m_edgeTexId.end())
         return "";
     return it->second;
+}
+
+const std::string& CompVisualTexture::getShapeId() const
+{
+	return m_shapeId;
+}
+
+const std::vector<Vector2D>& CompVisualTexture::getTexMap() const
+{
+	return m_texMap;
 }

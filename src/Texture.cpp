@@ -205,7 +205,7 @@ void TextureManager::setTexture( const TextureId& id )
         //m_currentTexture = id;
     }
     else
-        gAaLog.write ( "*** SetTexture(): Texture ID not found! ***\n" );
+        gAaLog.write ( "*** SetTexture(): Texture ID '%s' not found! ***\n", id.c_str() );
 }
 
 std::vector<TextureId> TextureManager::getTextureList() const

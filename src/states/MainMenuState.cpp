@@ -166,14 +166,14 @@ void MainMenuState::init()        // State starten
                               "* Libraries *", getSubSystems().renderer.getFontManager() )) );
     y+=0.04f;
     getSubSystems().gui.insertWidget( menuNames[Credits], shared_ptr<Widget>(make_shared<WidgetLabel>( x, y,
-                              " - OpenGL, SDL, DevIL, GLFT, SDL_mixer, Box2D, TinyXML, UTF8-CPP", getSubSystems().renderer.getFontManager() )) );
+                              " - OpenGL, SDL, DevIL, FTGL, SDL_mixer, Box2D, Boost", getSubSystems().renderer.getFontManager() )) );
     y+=0.09f;
     getSubSystems().gui.insertWidget( menuNames[Credits], shared_ptr<Widget>(make_shared<WidgetLabel>( x, y,
                               "Thanks for playing!", getSubSystems().renderer.getFontManager() )) );
 
     // *** Optionen ***
     getSubSystems().gui.insertWidget( menuNames[Options], shared_ptr<Widget>(make_shared<WidgetLabel>(  0.3f, 0.1f, "Screen resolution:", getSubSystems().renderer.getFontManager() )) );
-    getSubSystems().gui.insertWidget( menuNames[Options], shared_ptr<Widget>(make_shared<WidgetLabel>(  0.1f, 0.8f, "Please change \"config.xml\" for more options.", getSubSystems().renderer.getFontManager() )) );
+    getSubSystems().gui.insertWidget( menuNames[Options], shared_ptr<Widget>(make_shared<WidgetLabel>(  0.1f, 0.8f, "Please change \"config.info\" for more options.", getSubSystems().renderer.getFontManager() )) );
     
     x=0.3f;
     y=0.92f;
