@@ -145,7 +145,7 @@ TEST(LevelLoadTest, LoadWriteTest)
 
         cout << "Testing with " << lvlFileName << endl;
         DataLoader::loadWorld(lvlFileName, world, subSystems);
-        DataLoader::saveWorldToXml(lvlFileNameOut, world);
+        DataLoader::saveWorld(lvlFileNameOut, world);
 
         ptree levelPropTreeBefore;
         read_info(lvlFileName, levelPropTreeBefore);

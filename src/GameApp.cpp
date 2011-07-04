@@ -29,7 +29,7 @@
 #include "Texture.h"
 #include "Exception.h" // Ausnahmen im Program (werden in main.cpp eingefangen)
 
-const char* cConfigFileName = "data/config.info";
+const std::string cConfigFileName = "data/config.info";
 
 bool gRestart = false; // TODO remove this global
 

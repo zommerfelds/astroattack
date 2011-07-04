@@ -32,7 +32,7 @@
 #endif
 
 // Alle Entities in der Welt werden in dieser Datei aufgelistet
-const char* cWordLogFileName = "world.txt";
+const std::string cWordLogFileName = "world.txt";
 
 const GameStateId PlayingState::STATE_ID = "PlayingState";
 

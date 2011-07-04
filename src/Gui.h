@@ -86,7 +86,7 @@ typedef boost::function0<void> ButCallbackFunc; // Einen Zeiger zu einer Funktio
 class WidgetButton : public Widget
 {
 public:
-    WidgetButton( Rect area, std::string caption, ButCallbackFunc clickedCallbackFunc, ButCallbackFunc mouseOverCallbackFunc );
+    WidgetButton( Rect area, const std::string& caption, ButCallbackFunc clickedCallbackFunc, ButCallbackFunc mouseOverCallbackFunc );
     ~WidgetButton();
 
     void draw( RenderSubSystem* pRenderer );

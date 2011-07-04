@@ -37,7 +37,6 @@ CompPlayerController::CompPlayerController(const ComponentIdType& id, GameEvents
      m_spaceKeyDownLastUpdate ( false ),
      m_playerCouldWalkLastUpdate ( false ),
      m_rechargeTime ( cMaxRecharge ),
-     m_bodyAngleAbs ( cPi*0.5f ),
      m_walkingTime ( 0 )
 {
     // Update-Methode registrieren, damit sie in jede Aktualisierung (GameUpdate) aufgerufen wird:
@@ -240,7 +239,7 @@ void CompPlayerController::onUpdate()
             for (unsigned int i=0; i<contacts.size(); i++)
             {
                 // Gegenimpuls auf Grundobjekt wirken lassen
-                contacts[i]->phys.applyLinearImpulse( -impulse*cReactionJump*amountPerBody, contacts[i]->point ); // TODO: get middle between 2 points
+                contacts[i]->phys.applyLinearImpulse( -impulse*cReactionJump*amountPerBody, contacts[i]->point );
             }
             m_spaceKeyDownLastUpdate = true;
         }
@@ -311,7 +310,7 @@ void CompPlayerController::onUpdate()
                 float mass = contacts[iContactRight]->phys.getMass();
                 if ( mass < smallMass )
                     factor = mass/smallMass;
-                contacts[iContactRight]->phys.applyForce( -force*cReactionWalk*factor, contacts[iContactRight]->point ); // TODO: get middle between 2 points
+                contacts[iContactRight]->phys.applyForce( -force*cReactionWalk*factor, contacts[iContactRight]->point );
             }
             movingOnGround = true;
         }
@@ -341,7 +340,7 @@ void CompPlayerController::onUpdate()
                 float mass = contacts[iContactLeft]->phys.getMass();
                 if ( mass < smallMass )
                     factor = mass/smallMass;
-                contacts[iContactLeft]->phys.applyForce( -force*cReactionWalk*factor, contacts[iContactLeft]->point ); // TODO: get middle between 2 points
+                contacts[iContactLeft]->phys.applyForce( -force*cReactionWalk*factor, contacts[iContactLeft]->point );
             }
             movingOnGround = true;
         }
@@ -400,7 +399,8 @@ void CompPlayerController::onUpdate()
         }
     }
 
-	float diffAngle = m_bodyAngleAbs - upAngleAbs;
+	float diffAngle = playerCompPhysics->getAngle() + cPi*0.5f - upAngleAbs;
+	float rotAngle = 0.0f;
 	if ( diffAngle < -cPi )
 		diffAngle += 2*cPi;
 	else if ( diffAngle > cPi )
@@ -414,16 +414,16 @@ void CompPlayerController::onUpdate()
         if ( directionClw )
 		{
 			if ( cMaxAngleRel + diffAngle < cIncStep )
-				m_bodyAngleAbs = upAngleAbs - cMaxAngleRel;
+				rotAngle = -(cMaxAngleRel + diffAngle);
 			else
-				m_bodyAngleAbs -= cIncStep;
+				rotAngle = -cIncStep;
 		}
         else
 		{
 			if ( cMaxAngleRel - diffAngle < cIncStep )
-				m_bodyAngleAbs = upAngleAbs + cMaxAngleRel;
+				rotAngle = (cMaxAngleRel - diffAngle);
 			else
-				m_bodyAngleAbs += cIncStep;
+				rotAngle = cIncStep;
 		}
     }
 
@@ -442,32 +442,27 @@ void CompPlayerController::onUpdate()
             if ( returnClw )
             {
                 if ( absDiffAngle < cDecStep * bonusFactor )
-                    m_bodyAngleAbs = upAngleAbs;
+                	rotAngle = -diffAngle;
                 else
-                    m_bodyAngleAbs -= cDecStep * bonusFactor;
+                	rotAngle = -cDecStep * bonusFactor;
             }
             else
             {
                 if ( absDiffAngle < cDecStep * bonusFactor )
-                    m_bodyAngleAbs = upAngleAbs;
+                	rotAngle = -diffAngle;
                 else
-                    m_bodyAngleAbs += cDecStep * bonusFactor;
+                	rotAngle = cDecStep * bonusFactor;
             }
 		}
     }
 
-	if (m_bodyAngleAbs > cPi)
-		m_bodyAngleAbs -= 2*cPi;
-	else if (m_bodyAngleAbs < -cPi)
-		m_bodyAngleAbs += 2*cPi;
-
 	// 50 is the number of updates after which we assume the body of the player has turned to the new position
 	if (playerCompPhysics->getNumUpdatesSinceGravFieldChange() < 50 || isRadialField) // if the player is changing gravity
 	    // rotate around his feet
-        playerCompPhysics->rotate( m_bodyAngleAbs - cPi*0.5f - playerCompPhysics->getAngle(), m_rotationPoint );
+        playerCompPhysics->rotate(rotAngle, m_rotationPoint);
 	else // (last change is long enough ago)
 	    // rotate around the middle
-	    playerCompPhysics->rotate( m_bodyAngleAbs - cPi*0.5f - playerCompPhysics->getAngle(), Vector2D() );
+	    playerCompPhysics->rotate(rotAngle, Vector2D());
     
     if ( !isTouchingSth )
     {

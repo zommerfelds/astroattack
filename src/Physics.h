@@ -25,7 +25,7 @@ extern const float cPhysicsTimeStep;
 class PhysicsSubSystem
 {
 public:
-    PhysicsSubSystem( GameEvents& gameEvents);
+    PhysicsSubSystem(GameEvents& gameEvents);
 
     void init();
     void update();
@@ -52,7 +52,7 @@ private:
     int m_velocityIterations;
     int m_positionIterations;
 
-    CompGravField m_rootGravField; // TODO: can we use a component that is not in the manager?
+    CompGravField m_rootGravField; // TODO: put this component in the manager
 };
 
 #endif

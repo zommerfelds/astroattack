@@ -27,9 +27,8 @@
 #include "../DataLoader.h"
 #include "../main.h"
 
-const char* cIntroFileName   = "data/intro/introShow.xml";
-const char* cLevelSequenceFileName = "data/levelSequence.xml";
-const char* cMenuGraphicsFileName = "data/graphicsMenu.xml"; // hier sind Menügrafiken angegeben
+const std::string cLevelSequenceFileName = "data/levelSequence.xml";
+const std::string cMenuGraphicsFileName = "data/graphicsMenu.info"; // hier sind Menügrafiken angegeben
 
 const GameStateId MainMenuState::STATE_ID = "MainMenuState";
 
@@ -114,10 +113,10 @@ void MainMenuState::init()        // State starten
     getSubSystems().gui.insertWidget( menuNames[Play], shared_ptr<Widget>(make_shared<WidgetLabel>(  0.14f, 0.21f, "Pick a level:", getSubSystems().renderer.getFontManager() )) );
 
     pugi::xml_document doc;
-    pugi::xml_parse_result result = doc.load_file(cLevelSequenceFileName);
+    pugi::xml_parse_result result = doc.load_file(cLevelSequenceFileName.c_str());
     if (!result)
     {
-        gAaLog.write( "[ Error parsing file '%s' at offset %d!\nError description: %s ]\n\n", cLevelSequenceFileName, result.offset, result.description() );
+        gAaLog.write( "[ Error parsing file '%s' at offset %d!\nError description: %s ]\n\n", cLevelSequenceFileName.c_str(), result.offset, result.description() );
         return;
     }
 

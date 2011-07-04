@@ -6,6 +6,7 @@
 
 * Medium priority *
 
+- Fix TODOs
 - Improve walking animation when player shortly looses contact to the ground
 - Test Init() => DeInit() => Init() on GameApp and SubSystems
 - improve logger

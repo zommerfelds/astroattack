@@ -8,6 +8,8 @@
 #include "CompPhysics.h"
 #include "../Logger.h"
 
+#include <boost/foreach.hpp>
+
 // ========== CompareVariable =========
 ConditionCompareVariable::ConditionCompareVariable( std::map<const std::string, int>::iterator itVariable, CompareOperator comp, int numToCompareWith )
 : m_itVariable ( itVariable ),
@@ -45,19 +47,22 @@ bool ConditionEntityTouchedThis::isConditionTrue()
 {
     // could use events instead of polling every time
 
-    // TODO: all physics components
-    CompPhysics* thisCompPhysics = m_pCompTrigger->getSiblingComponent<CompPhysics>();
-    if ( thisCompPhysics == NULL )
+    std::vector<CompPhysics*> thisCompPhysics = m_pCompTrigger->getSiblingComponents<CompPhysics>();
+    if (thisCompPhysics.empty())
     {
-        gAaLog.write("WARNING entity '%s': testing if 'EntityTouchedThis' condition is true but there is no CompPhysics", m_pCompTrigger->getEntityId().c_str());
+        gAaLog.write("WARNING testing if 'EntityTouchedThis' condition is true in entity '%s': there are no CompPhysics", m_pCompTrigger->getEntityId().c_str());
         return false;
     }
 
-    ContactVector contacts = thisCompPhysics->getContacts(true);
+    BOOST_FOREACH(const CompPhysics* compPhys, thisCompPhysics)
+    {
 
-    for (size_t i=0; i<contacts.size(); i++)
-        if (contacts[i]->phys.getEntityId() == m_entityName)
-            return true;
+		ContactVector contacts = compPhys->getContacts(true);
+
+		for (size_t i = 0; i < contacts.size(); i++)
+			if (contacts[i]->phys.getEntityId() == m_entityName)
+				return true;
+    }
 
     return false;
 }

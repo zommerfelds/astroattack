@@ -160,7 +160,7 @@ ContactVector CompPhysics::getContacts(bool getSensors) const
                 new ContactInfo(*static_cast<CompPhysics*>(contactEdge->other->GetUserData()),
                         *thisShape,
                         *otherShape,
-                        worldManifold.points[0], // TODO: use all points
+                        worldManifold.points[0], // TODO: use all points (1 or 2?)
                         normalFactor * worldManifold.normal
                 ));
         vecTouchInfo.push_back(touchInfo);

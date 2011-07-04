@@ -1,0 +1,13 @@
+texture {
+    file "data/GUI/AstroAttackMenu.png"
+    id "menu"
+    mipMaps false
+    texRepeat false
+}
+
+texture {
+    file "data/GUI/AstroAttackTitle.png"
+    id "title"
+    mipMaps false
+    texRepeat false
+}

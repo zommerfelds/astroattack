@@ -68,7 +68,7 @@ void EditorState::init()        // State starten
 void EditorState::cleanup()     // State abbrechen
 {
     // Grafiken aus XML-Datei laden
-    DataLoader::saveWorldToXml( gConfig.get<std::string>("EditorLevel"), m_gameWorld );
+    DataLoader::saveWorld( gConfig.get<std::string>("EditorLevel"), m_gameWorld );
 }
 
 void EditorState::pause()       // State anhalten

@@ -57,7 +57,7 @@ protected:
     GameEvents& m_gameEvents;
 
 private:
-    ComponentManager* m_compManager; // XXX is this a good idea?
+    ComponentManager* m_compManager; // this is used for getting the sibling components
 
     EntityIdType m_entityId;
     std::string m_id;

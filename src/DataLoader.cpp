@@ -35,29 +35,9 @@
 
 #include "states/SlideShowState.h"
 
-#include "contrib/pugixml/pugixml.hpp"
-#include "contrib/pugixml/foreach.hpp"
-
-// TODO: a lot of work to do here (error checking etc..)
+// TODO better checking of input data
 
 using boost::property_tree::ptree;
-
-namespace
-{
-
-void xmlNodeToPropertyTree(const pugi::xml_node& xmlNode, ptree& propertyTree)
-{
-    for(pugi::xml_attribute_iterator ait = xmlNode.attributes_begin(); ait != xmlNode.attributes_end(); ait++) {
-        propertyTree.put(ait->name(), ait->value());
-    }
-    BOOST_FOREACH(const pugi::xml_node& node, xmlNode )
-    {
-        if (!std::string(node.name()).empty())
-            xmlNodeToPropertyTree(node, propertyTree.add_child(node.name(), ptree()));
-    }
-}
-
-} // namespace
 
 DataLoadException::DataLoadException(const std::string& msg)
  : Exception (msg)
@@ -81,7 +61,7 @@ void DataLoader::loadWorld(const std::string& fileName, World& gameWorld, SubSys
         BOOST_FOREACH(const ptree::value_type &value1, levelPropTree)
         {
             if (value1.first != "entity")
-                throw DataLoadException(fileName + " - At top level: parse error, expected 'entity', got '" + value1.first + "'"); // TODO: add node path
+                throw DataLoadException(fileName + " - At top level: parse error, expected 'entity', got '" + value1.first + "'");
             const ptree& entityPropTree = value1.second;
 
             std::string entityId = entityPropTree.get<std::string>("id");
@@ -94,7 +74,7 @@ void DataLoader::loadWorld(const std::string& fileName, World& gameWorld, SubSys
                 if (value2.first == "id")
                     continue;
                 if (value2.first != "component")
-                    throw DataLoadException(fileName + " - In entity '" + entityId + "': parse error, expected 'component', got '" + value2.first + "'"); // TODO: add node path
+                    throw DataLoadException(fileName + " - In entity '" + entityId + "': parse error, expected 'component', got '" + value2.first + "'");
                 const ptree& compPropTree = value2.second;
 
                 std::string compType = compPropTree.get<std::string>("type");
@@ -193,129 +173,142 @@ void DataLoader::loadSlideShow( const std::string& fileName, SlideShow* pSlideSh
     }
     catch (boost::property_tree::ptree_error& e)
     {
-        throw DataLoadException(std::string("PropertyTree error: ") + e.what());
+        throw DataLoadException(std::string("PropertyTree error parsing file '" + fileName + "': ") + e.what());
     }
 }
 
 ResourceIds DataLoader::loadGraphics( const std::string& fileName, TextureManager* pTextureManager, AnimationManager* pAnimationManager, FontManager* pFontManager )
 {
-    gAaLog.write ( "Loading XML file \"%s\"...\n", fileName.c_str() );
-    gAaLog.increaseIndentationLevel();
+	gAaLog.write ( "Loading graphics resource file \"%s\"...\n", fileName.c_str() );
+	gAaLog.increaseIndentationLevel();
 
-    ResourceIds loadedResources;
+	ResourceIds loadedResources;
 
-    pugi::xml_document doc;
-    pugi::xml_parse_result result = doc.load_file(fileName.c_str());
-    if (!result)
-    {
-        gAaLog.write( "[ Error parsing file '%s' at offset %d!\nError description: %s ]\n\n", fileName.c_str(), result.offset, result.description() );
-        return loadedResources;
-    }
+    try
+	{
+		using boost::shared_ptr;
+		using boost::make_shared;
 
-    pugi::xml_node rootElem = doc.first_child();
+		ptree propTree;
+		read_info(fileName, propTree);
 
-    bool noMipmaps = !rootElem.child("noMipmaps").empty();
+		bool noMipmaps = propTree.get("noMipmaps", false);
 
-    // Texturen laden
-    if ( pTextureManager )
-    {
-        for (pugi::xml_node texElement = rootElem.child("Texture"); texElement ; texElement = texElement.next_sibling("Texture"))
-        {
-            const char* name = texElement.attribute("file").value();
-            const char* id = texElement.attribute("id").value();
-            bool mipMaps = texElement.attribute("mipMaps").as_bool();
-            bool texRepeat = texElement.attribute("texRepeat").as_bool(); // deprecated
-            bool texRepeatX = texElement.attribute("texRepeatX").as_bool();
-            bool texRepeatY = texElement.attribute("texRepeatY").as_bool();
-            if (texRepeat)
-            {
-                texRepeatX = true;
-                texRepeatY = true;
-            }
+		// Texturen laden
+		if ( pTextureManager )
+		{
+			BOOST_FOREACH(const ptree::value_type &value, propTree)
+			{
+				if (value.first != "texture")
+					continue;
+				ptree texPropTree = value.second;
 
-            float scale = texElement.attribute("scale").as_float();
-            if (scale == 0.0f)
-                scale = 1.0f;
+				std::string fileName = texPropTree.get<std::string>("file");
+				std::string id = texPropTree.get<std::string>("id");
+				bool mipMaps = texPropTree.get("mipMaps", true);
+				bool texRepeat = texPropTree.get("texRepeat", false); // deprecated (?)
+				bool texRepeatX = texPropTree.get("texRepeatX", false);
+				bool texRepeatY = texPropTree.get("texRepeatY", false);
+				if (texRepeat)
+				{
+					texRepeatX = true;
+					texRepeatY = true;
+				}
 
-            LoadTextureInfo info;
-            if ( mipMaps && !noMipmaps )
-                info.loadMipmaps = true;
-            else
-                info.loadMipmaps = false;
+				float scale = texPropTree.get("scale", 1.0f);
 
-            if ( texRepeatX )
-                info.wrapModeX = LoadTextureInfo::WrapRepeat;
-            else
-                info.wrapModeX = LoadTextureInfo::WrapClamp;
-            if ( texRepeatY )
-                info.wrapModeY = LoadTextureInfo::WrapRepeat;
-            else
-                info.wrapModeY = LoadTextureInfo::WrapClamp;
+				LoadTextureInfo info;
+				if ( mipMaps && !noMipmaps )
+					info.loadMipmaps = true;
+				else
+					info.loadMipmaps = false;
 
-            info.scale = scale;
-            info.quality = (LoadTextureInfo::Quality) gConfig.get<int>("TexQuality");
+				if ( texRepeatX )
+					info.wrapModeX = LoadTextureInfo::WrapRepeat;
+				else
+					info.wrapModeX = LoadTextureInfo::WrapClamp;
+				if ( texRepeatY )
+					info.wrapModeY = LoadTextureInfo::WrapRepeat;
+				else
+					info.wrapModeY = LoadTextureInfo::WrapClamp;
 
-            pTextureManager->loadTexture(name, id, info);
-            loadedResources.textures.insert(id);
-        }
-    }
+				info.scale = scale;
+				info.quality = (LoadTextureInfo::Quality) gConfig.get<int>("TexQuality");
 
-    // Animationen laden
-    if ( pAnimationManager )
-    {
-        for (pugi::xml_node animElement = rootElem.child("Animation"); animElement ; animElement = animElement.next_sibling("Animation"))
-        {
-            const char* name = animElement.attribute("file").value();
-            const char* id = animElement.attribute("id").value();
-            bool mipMaps = animElement.attribute("mipMaps").as_bool();
-            bool texRepeat = animElement.attribute("texRepeat").as_bool(); // deprecated
-            bool texRepeatX = animElement.attribute("texRepeatX").as_bool();
-            bool texRepeatY = animElement.attribute("texRepeatY").as_bool();
-            if (texRepeat)
-            {
-                texRepeatX = true;
-                texRepeatY = true;
-            }
+				pTextureManager->loadTexture(fileName, id, info);
+				loadedResources.textures.insert(id);
+			}
+		}
 
-            LoadTextureInfo info;
-            if ( mipMaps && !noMipmaps )
-                info.loadMipmaps = true;
-            else
-                info.loadMipmaps = false;
+		// Animationen laden
+		if ( pAnimationManager )
+		{
+			BOOST_FOREACH(const ptree::value_type &value, propTree)
+			{
+				if (value.first != "animation")
+					continue;
+				ptree animPropTree = value.second;
 
-            if ( texRepeatX )
-                info.wrapModeX = LoadTextureInfo::WrapRepeat;
-            else
-                info.wrapModeX = LoadTextureInfo::WrapClamp;
-            if ( texRepeatY )
-                info.wrapModeY = LoadTextureInfo::WrapRepeat;
-            else
-                info.wrapModeY = LoadTextureInfo::WrapClamp;
+				std::string fileName = animPropTree.get<std::string>("file");
+				std::string id = animPropTree.get<std::string>("id");
+				bool mipMaps = animPropTree.get("mipMaps", true);
+				bool texRepeat = animPropTree.get("texRepeat", false); // deprecated (?)
+				bool texRepeatX = animPropTree.get("texRepeatX", false);
+				bool texRepeatY = animPropTree.get("texRepeatY", false);
+				if (texRepeat)
+				{
+					texRepeatX = true;
+					texRepeatY = true;
+				}
 
-            info.scale = 1.0f;
-            info.quality = (LoadTextureInfo::Quality) gConfig.get<int>("TexQuality");
+				LoadTextureInfo info;
+				if ( mipMaps && !noMipmaps )
+					info.loadMipmaps = true;
+				else
+					info.loadMipmaps = false;
 
-            pAnimationManager->loadAnimation(name, id, info);
-            loadedResources.animations.insert(id);
-        }
-    }
+				if ( texRepeatX )
+					info.wrapModeX = LoadTextureInfo::WrapRepeat;
+				else
+					info.wrapModeX = LoadTextureInfo::WrapClamp;
+				if ( texRepeatY )
+					info.wrapModeY = LoadTextureInfo::WrapRepeat;
+				else
+					info.wrapModeY = LoadTextureInfo::WrapClamp;
 
-    // Schriften laden
-    if ( pFontManager )
-    {
-        for (pugi::xml_node fontElement = rootElem.child("Font"); fontElement ; fontElement = fontElement.next_sibling("Font"))
-        {
-            const char* name = fontElement.attribute("file").value();
-            const char* id = fontElement.attribute("id").value();
-            int size = fontElement.attribute("size").as_int();
+				info.scale = 1.0f;
+				info.quality = (LoadTextureInfo::Quality) gConfig.get<int>("TexQuality");
 
-            pFontManager->loadFont(name,size,id);
-            loadedResources.fonts.insert(id);
-        }
-    }
-    gAaLog.decreaseIndentationLevel();
-    gAaLog.write ( "[ Done ]\n\n", fileName.c_str() );
-    return loadedResources;
+				pAnimationManager->loadAnimation(fileName, id, info);
+				loadedResources.animations.insert(id);
+			}
+		}
+
+		// Schriften laden
+		if ( pFontManager )
+		{
+			BOOST_FOREACH(const ptree::value_type &value, propTree)
+			{
+				if (value.first != "font")
+					continue;
+				ptree fontPropTree = value.second;
+
+				std::string name = fontPropTree.get<std::string>("file");
+				std::string id = fontPropTree.get<std::string>("id");
+				int size = fontPropTree.get<int>("size");
+
+				pFontManager->loadFont(name, size, id);
+				loadedResources.fonts.insert(id);
+			}
+		}
+	}
+	catch (boost::property_tree::ptree_error& e)
+	{
+        throw DataLoadException(std::string("PropertyTree error parsing file '" + fileName + "': ") + e.what());
+	}
+	gAaLog.decreaseIndentationLevel();
+	gAaLog.write ( "[ Done ]\n\n", fileName.c_str() );
+	return loadedResources;
 }
 
 void DataLoader::unLoadGraphics( const ResourceIds& resourcesToUnload, TextureManager* pTextureManager, AnimationManager* pAnimationManager, FontManager* pFontManager )
@@ -345,7 +338,7 @@ void DataLoader::unLoadGraphics( const ResourceIds& resourcesToUnload, TextureMa
     gAaLog.write ( "[ Done ]\n\n" );
 }
 
-void DataLoader::saveWorldToXml(const std::string& fileName, const World& gameWorld)
+void DataLoader::saveWorld(const std::string& fileName, const World& gameWorld)
 {
     gAaLog.write ( "Saving XML file \"%s\"...\n", fileName.c_str() );
     gAaLog.increaseIndentationLevel();

@@ -52,7 +52,7 @@ class AnimationManager
 public:
     AnimationManager( TextureManager& );
     ~AnimationManager() {}
-    void loadAnimation( const char* name,AnimationId id,const LoadTextureInfo& texInfo );
+    void loadAnimation(const std::string& fileName, AnimationId id, const LoadTextureInfo& texInfo);
     void freeAnimation( AnimationId id );
     const AnimInfo* getAnimInfo( AnimationId animId ) const;
 

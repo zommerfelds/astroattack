@@ -13,19 +13,19 @@
 // global log
 Logger gAaLog( LOG_FILE_NAME );
 
-const char cIdentString[] = "   "; // pro indentation level (Texteinrückung) wird dieser Zeichensatz eingefügt
+const std::string cIdentString[] = "   "; // pro indentation level (Texteinrückung) wird dieser Zeichensatz eingefügt
 
 // Constructor
-Logger::Logger( const char *pFileName )
+Logger::Logger(const std::string& fileName )
 : m_isOpen ( false ),
   m_indentationLevel ( 0 ),
   m_lastCharWasNewline ( false )
 {
-    openFile( pFileName );
+    openFile( fileName );
 }
 
 // Text in Log-Datei schreiben (beleibig viele Parameter nach dem format Parameter, wie printf())
-const char* Logger::write( const char *format, ... )
+const char* Logger::write(const char *format, ...)
 {
     // Parameterliste
     va_list List;
@@ -85,11 +85,11 @@ void Logger::writeCurrentTime()
 #endif
 }
 
-bool Logger::openFile( const char *pFileName )
+bool Logger::openFile(const std::string& fileName)
 {
     if (m_isOpen)
         closeFile();
-    m_LogStreamOut.open( pFileName );
+    m_LogStreamOut.open(fileName.c_str());
 	if( m_LogStreamOut.fail() )
     {
         m_isOpen = false;

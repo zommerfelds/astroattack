@@ -26,7 +26,7 @@
 #include "components/CompVisualAnimation.h"
 #include "components/CompVisualMessage.h"
 
-const char* cGraphisFileName = "data/graphics.xml";
+const std::string cGraphisFileName = "data/graphics.info";
 const unsigned int cCircleSlices = 20; // number of slices for drawing a circle
 
 RenderSubSystem::RenderSubSystem( GameEvents& gameEvents )

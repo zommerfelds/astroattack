@@ -107,7 +107,6 @@ void PhysicsSubSystem::update()
             CompGravField* grav = compContact->getSiblingComponent<CompGravField>();
             if ( grav == NULL )
                 continue;
-            //if ( compContact->GetFixture()->TestPoint( pBody->GetWorldCenter() ) ) // TODO: handle multiple shapes
             Vector2D gravPoint = compPhys->m_localGravitationPoint.rotated(pBody->GetAngle()); //(0.0f,-0.65f);
             if ( compContact->m_body->GetFixtureList()->TestPoint( pBody->GetPosition() + *gravPoint.to_b2Vec2() ) ) // TODO: handle multiple shapes
             {

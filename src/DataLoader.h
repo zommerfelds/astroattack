@@ -40,7 +40,7 @@ public:
     static void loadSlideShow( const std::string& fileName, SlideShow* pSlideShow );
     static ResourceIds loadGraphics( const std::string& fileName, TextureManager* pTextureManager, AnimationManager* pAnimationManager, FontManager* pFontManager );
     static void unLoadGraphics( const ResourceIds& resourcesToUnload, TextureManager* pTextureManager, AnimationManager* pAnimationManager, FontManager* pFontManager );
-    static void saveWorldToXml( const std::string& fileName, const World& gameWorld );
+    static void saveWorld( const std::string& fileName, const World& gameWorld );
 private:
 };
 

@@ -116,6 +116,6 @@ void EffectChangeVariable::fire()
         m_itVariable->second /= m_num;
         break;
     default:
-        break;;
+        break;
     }
 }

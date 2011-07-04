@@ -170,10 +170,10 @@ void TextureManager::loadTexture( const std::string& fileName, TextureId id, con
     catch (...)
     {
         // Error
-        throw Exception ( gAaLog.write ( "Error while loading the texture \"%s\"!\n%s\n", fileName.c_str(), (const char*)iluErrorString(ilGetError()) ) );
+        throw Exception( gAaLog.write( "Error while loading the texture \"%s\"!\n%s\n", fileName.c_str(), iluErrorString(ilGetError()) ) );
     }
     CheckOpenlGlError();
-    //gAaLog.Write ( "IL error: %s\n", (const char*)iluErrorString(ilGetError()) );
+    //gAaLog.Write ( "IL error: %s\n", iluErrorString(ilGetError()) );
 }
 
 void TextureManager::freeTexture( const TextureId& id )
@@ -236,7 +236,7 @@ AnimationManager::AnimationManager( TextureManager& tm )
 }
 
 // Lädt eine Animationsdatei
-void AnimationManager::loadAnimation( const char* name, AnimationId id,const LoadTextureInfo& texInfo )
+void AnimationManager::loadAnimation(const std::string& fileName, AnimationId id,const LoadTextureInfo& texInfo )
 {
     if ( m_animInfoMap.count( id )==1 )
     {
@@ -245,10 +245,10 @@ void AnimationManager::loadAnimation( const char* name, AnimationId id,const Loa
     }
 
     std::ifstream input_stream;
-    input_stream.open( name );
+    input_stream.open(fileName.c_str());
 	if( input_stream.fail() ) // Fehler beim Öffnen
     {
-        throw Exception ( gAaLog.write ( "Animation file \"%s\" could not be opened.\n", name ) );
+        throw Exception( gAaLog.write ( "Animation file \"%s\" could not be opened.\n", fileName.c_str() ) );
     }
 
     boost::shared_ptr<AnimInfo> pAnimInfo = boost::make_shared<AnimInfo>();
@@ -269,7 +269,7 @@ void AnimationManager::loadAnimation( const char* name, AnimationId id,const Loa
         if ( !(input_stream >> suffix ) )
             throw 0;
 
-        std::string str_name ( name );
+        std::string str_name ( fileName );
         std::string path = str_name.substr( 0, str_name.find_last_of('/')+1 );
 
         for ( int i = 0 ; i < num_frames; ++i )
@@ -312,7 +312,7 @@ void AnimationManager::loadAnimation( const char* name, AnimationId id,const Loa
     }
     catch (...)
     {
-        throw Exception ( gAaLog.write ( "Error loading \"%s\". (Bad syntax?)\n", name ) );
+        throw Exception( gAaLog.write ( "Error loading \"%s\". (Bad syntax?)\n", fileName.c_str() ) );
     }
 
     input_stream.close();
