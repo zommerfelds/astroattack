@@ -17,7 +17,7 @@
 // eindeutige ID
 const GameStateId GameOverState::STATE_ID = "GameOverState";
 
-GameOverState::GameOverState( SubSystems& subSystems, std::string stringToShow, std::string levelFileName )
+GameOverState::GameOverState( SubSystems& subSystems, const std::string& stringToShow, const std::string& levelFileName )
 : GameState( subSystems ),
   m_stringToShow ( stringToShow ),
   m_levelFileName ( levelFileName )

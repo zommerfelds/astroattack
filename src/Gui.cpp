@@ -58,7 +58,7 @@ void GuiSubSystem::deleteGroup( GroupId groupId )
 /////////// Widgets /////////////
 
 //** Label
-WidgetLabel::WidgetLabel( float x, float y, std::string text, const FontManager& fontMngr ) : m_text ( text )
+WidgetLabel::WidgetLabel( float x, float y, const std::string& text, const FontManager& fontMngr ) : m_text ( text )
 {
     float w = 0.0f, h = 0.0f;
     fontMngr.getDimensions(text, "FontW_m", w, h);

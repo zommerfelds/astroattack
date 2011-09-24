@@ -4,6 +4,8 @@
 
 * High priority *
 
+- segfault when same entity name (?)
+
 * Medium priority *
 
 - Fix TODOs

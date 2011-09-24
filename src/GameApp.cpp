@@ -408,7 +408,7 @@ void GameApp::calcFPS( unsigned int curTime )
     {
         // m_framesCounter ist jetzt die Anzahl Frames in dieser Sekunde, also die FPS
         m_fps = m_framesCounter;
-        gAaLog.write ( "FPS: %i\n", m_fps );
+        gAaLog.write( "FPS: %i\n", m_fps );
         m_framesCounter = 0;
         m_fpsMeasureStart = SDL_GetTicks();
     }

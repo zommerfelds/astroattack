@@ -6,33 +6,36 @@
 
 // Enizelne Effekte für CompTrigger Komponente
 
+#ifndef COMPTRIGGER_EFFECTS_H
+#define COMPTRIGGER_EFFECTS_H
+
 #include <string>
 #include <map>
 
 #include "CompTrigger.h"
+#include "IdTypes.h"
 
 class ComponentManager;
-typedef std::string EntityIdType; // TODO
 
 // ========= KillEntity ===========
 class EffectKillEntity : public Effect
 {
 public:
-    EffectKillEntity(GameEvents& gameEvents, std::string entityToKill);
+    EffectKillEntity(GameEvents& gameEvents, const std::string& entityToKill);
     EffectId getId() const { return "KillEntity"; }
     void fire();
     bool update() { return false; }
     std::string getEntityName() const { return m_entityToKill; }
 private:
     GameEvents& m_gameEvents;
-    std::string m_entityToKill;
+    EntityIdType m_entityToKill;
 };
 
 // ========= DispMessage ===========
 class EffectDispMessage : public Effect
 {
 public:
-    EffectDispMessage(GameEvents& gameEvents, std::string message, int timeMs, ComponentManager& compManager);
+    EffectDispMessage(GameEvents& gameEvents, const std::string& message, int timeMs, ComponentManager& compManager);
     ~EffectDispMessage();
     EffectId getId() const { return "DispMessage"; }
     void fire();
@@ -53,7 +56,7 @@ private:
 class EffectEndLevel : public Effect
 {
 public:
-    EffectEndLevel(GameEvents& gameEvents, std::string message, bool win);
+    EffectEndLevel(GameEvents& gameEvents, const std::string& message, bool win);
     EffectId getId() const { return "EndLevel"; }
     void fire();
     bool update() { return false; }
@@ -90,3 +93,5 @@ private:
     ChangeType m_changeType;
     int m_num;
 };
+
+#endif /* COMPTRIGGER_EFFECTS_H */

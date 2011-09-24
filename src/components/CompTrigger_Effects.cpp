@@ -13,7 +13,7 @@
 #include "../Physics.h"
 
 // ========= KillEntity ===========
-EffectKillEntity::EffectKillEntity(GameEvents& gameEvents, std::string entityToKill)
+EffectKillEntity::EffectKillEntity(GameEvents& gameEvents, const std::string& entityToKill)
 : m_gameEvents (gameEvents), m_entityToKill ( entityToKill )
 {}
 
@@ -24,7 +24,7 @@ void EffectKillEntity::fire()
 }
 
 // ========= DispMessage ===========
-EffectDispMessage::EffectDispMessage(GameEvents& gameEvents, std::string message, int timeMs, ComponentManager& compManager)
+EffectDispMessage::EffectDispMessage(GameEvents& gameEvents, const std::string& message, int timeMs, ComponentManager& compManager)
 : m_gameEvents (gameEvents),
   m_message (message),
   m_remainingUpdates ( (int)((float)timeMs*0.001f/cPhysicsTimeStep) ),
@@ -80,7 +80,7 @@ EffectDispMessage::~EffectDispMessage()
 }
 
 // ========= EndLevel ===========
-EffectEndLevel::EffectEndLevel(GameEvents& gameEvents, std::string message, bool win ) :
+EffectEndLevel::EffectEndLevel(GameEvents& gameEvents, const std::string& message, bool win ) :
   m_gameEvents (gameEvents),
   m_message( message ),
   m_win ( win )

@@ -12,14 +12,11 @@
 #include <string>
 #include <vector>
 
+#include "IdTypes.h"
+
 struct GameEvents;
 
 struct ComponentManager;
-
-typedef std::string ComponentTypeId;
-typedef std::string EntityIdType;
-typedef std::string ComponentIdType;
-
 
 // forward declare ptree (PropertyTree), quite complex but I don't want to include the big header here
 namespace boost { namespace property_tree {

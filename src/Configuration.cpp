@@ -13,7 +13,7 @@ using boost::property_tree::ptree;
 
 ptree gConfig;
 
-bool writeConfig(std::string fileName, const ptree& config)
+bool writeConfig(const std::string& fileName, const ptree& config)
 {
 	std::ofstream fout (fileName.c_str());
 	if (!fout)

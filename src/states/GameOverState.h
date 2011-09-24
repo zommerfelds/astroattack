@@ -20,7 +20,7 @@ const float cBackgroundColor[3] = { 0.3f, 0.1f, 0.2f };
 class GameOverState : public GameState
 {
 public:
-    GameOverState( SubSystems& subSystems, std::string stringToShow, std::string levelFileName );
+    GameOverState( SubSystems& subSystems, const std::string& stringToShow, const std::string& levelFileName );
 
     const GameStateId& getId() const { return STATE_ID; }
 

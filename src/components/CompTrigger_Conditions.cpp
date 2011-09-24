@@ -39,7 +39,7 @@ bool ConditionCompareVariable::isConditionTrue()
 }
 
 // ========== EntityTouchedThis =========
-ConditionEntityTouchedThis::ConditionEntityTouchedThis( std::string entityName )
+ConditionEntityTouchedThis::ConditionEntityTouchedThis( const std::string& entityName )
 : m_entityName ( entityName )
 {}
 

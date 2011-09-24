@@ -1812,7 +1812,7 @@ entity
 	component
 	{
 		type CompVisualTexture
-		texture "Liquid Crystal 2"
+		texture soccerball
 	}
 }
 entity
@@ -2408,7 +2408,7 @@ entity
 	component
 	{
 		type CompVisualTexture
-		texture "Solar Plate"
+		texture soccerball
 	}
 }
 entity
@@ -2446,7 +2446,7 @@ entity
 	component
 	{
 		type CompVisualTexture
-		texture "Solar Plate"
+		texture soccerball
 	}
 }
 entity
@@ -2484,7 +2484,7 @@ entity
 	component
 	{
 		type CompVisualTexture
-		texture "Solar Plate"
+		texture soccerball
 	}
 }
 entity
@@ -2522,7 +2522,7 @@ entity
 	component
 	{
 		type CompVisualTexture
-		texture "Solar Plate"
+		texture soccerball
 	}
 }
 entity
@@ -2560,7 +2560,7 @@ entity
 	component
 	{
 		type CompVisualTexture
-		texture "Solar Plate"
+		texture soccerball
 	}
 }
 entity
@@ -2598,7 +2598,7 @@ entity
 	component
 	{
 		type CompVisualTexture
-		texture "Solar Plate"
+		texture soccerball
 	}
 }
 entity
@@ -2636,7 +2636,7 @@ entity
 	component
 	{
 		type CompVisualTexture
-		texture "Solar Plate"
+		texture soccerball
 	}
 }
 entity
@@ -2674,7 +2674,7 @@ entity
 	component
 	{
 		type CompVisualTexture
-		texture "Solar Plate"
+		texture soccerball
 	}
 }
 entity

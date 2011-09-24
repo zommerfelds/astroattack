@@ -55,8 +55,8 @@ private:
     void onPressedButOptions();
     void onPressedButExit();
     void onPressedButBack();
-    void onPressedOpenLevel( std::string filename );
-    void onPressedOpenSlideShow( std::string filename );
+    void onPressedOpenLevel( const std::string& filename );
+    void onPressedOpenSlideShow( const std::string& filename );
     void onPressedSound();
     void onPressedResolution( int w, int h );
     void onPressedButApplyConfig();

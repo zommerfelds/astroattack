@@ -2,7 +2,7 @@
 AntiAliasing 2
 
 ; The level that will be edited in the level editor
-EditorLevel data/Levels/level_new.info
+EditorLevel data/Levels/level_editor.info
 
 ; true: full screen, false: windowed
 FullScreen false

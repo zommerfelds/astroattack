@@ -1,0 +1,1289 @@
+entity
+{
+	id Block00000
+	component
+	{
+		type CompPhysics
+		shape
+		{
+			comp_id shape
+			friction 0.3
+		}
+	}
+	component
+	{
+		type CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		type CompShape
+		id shape
+		polygon
+		{
+			vertex
+			{
+				x -8
+				y -2
+			}
+			vertex
+			{
+				x -8
+				y -20.5
+			}
+			vertex
+			{
+				x 17
+				y -20.5
+			}
+			vertex
+			{
+				x 17
+				y -2
+			}
+		}
+	}
+	component
+	{
+		type CompVisualTexture
+		texture canyon
+	}
+}
+entity
+{
+	id Block00001
+	component
+	{
+		type CompPhysics
+		shape
+		{
+			comp_id shape
+			friction 0.3
+		}
+	}
+	component
+	{
+		type CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		type CompShape
+		id shape
+		polygon
+		{
+			vertex
+			{
+				x -11
+				y 1
+			}
+			vertex
+			{
+				x -14
+				y -2
+			}
+			vertex
+			{
+				x -8
+				y -2
+			}
+			vertex
+			{
+				x -8.5
+				y -0.5
+			}
+		}
+	}
+	component
+	{
+		type CompVisualTexture
+		texture canyon
+	}
+}
+entity
+{
+	id Block00002
+	component
+	{
+		type CompPhysics
+		shape
+		{
+			comp_id shape
+			friction 0.3
+		}
+	}
+	component
+	{
+		type CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		type CompShape
+		id shape
+		polygon
+		{
+			vertex
+			{
+				x -13
+				y 7
+			}
+			vertex
+			{
+				x -17
+				y 7
+			}
+			vertex
+			{
+				x -17
+				y -2
+			}
+			vertex
+			{
+				x -14
+				y -2
+			}
+			vertex
+			{
+				x -11
+				y 1
+			}
+		}
+	}
+	component
+	{
+		type CompVisualTexture
+		texture canyon
+	}
+}
+entity
+{
+	id Block00003
+	component
+	{
+		type CompPhysics
+		shape
+		{
+			comp_id shape
+			friction 0.3
+		}
+	}
+	component
+	{
+		type CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		type CompShape
+		id shape
+		polygon
+		{
+			vertex
+			{
+				x -17
+				y -2
+			}
+			vertex
+			{
+				x -17
+				y -20.5
+			}
+			vertex
+			{
+				x -8
+				y -20.5
+			}
+			vertex
+			{
+				x -8
+				y -2
+			}
+		}
+	}
+	component
+	{
+		type CompVisualTexture
+		texture canyon
+	}
+}
+entity
+{
+	id Block00004
+	component
+	{
+		type CompPhysics
+		shape
+		{
+			comp_id shape
+			friction 0.3
+		}
+	}
+	component
+	{
+		type CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		type CompShape
+		id shape
+		polygon
+		{
+			vertex
+			{
+				x 9.5
+				y -1.5
+			}
+			vertex
+			{
+				x 9
+				y -2
+			}
+			vertex
+			{
+				x 13
+				y -2
+			}
+			vertex
+			{
+				x 13
+				y -1
+			}
+		}
+	}
+	component
+	{
+		type CompVisualTexture
+		texture canyon
+	}
+}
+entity
+{
+	id Block00005
+	component
+	{
+		type CompPhysics
+		shape
+		{
+			comp_id shape
+			friction 0.3
+		}
+	}
+	component
+	{
+		type CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		type CompShape
+		id shape
+		polygon
+		{
+			vertex
+			{
+				x 13
+				y -0.5
+			}
+			vertex
+			{
+				x 13
+				y -2
+			}
+			vertex
+			{
+				x 16
+				y -2
+			}
+			vertex
+			{
+				x 14.5
+				y 0
+			}
+		}
+	}
+	component
+	{
+		type CompVisualTexture
+		texture canyon
+	}
+}
+entity
+{
+	id Block00006
+	component
+	{
+		type CompPhysics
+		shape
+		{
+			comp_id shape
+			friction 0.3
+		}
+	}
+	component
+	{
+		type CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		type CompShape
+		id shape
+		polygon
+		{
+			vertex
+			{
+				x 17
+				y -2
+			}
+			vertex
+			{
+				x 17
+				y -20.5
+			}
+			vertex
+			{
+				x 54.5
+				y -20.5
+			}
+			vertex
+			{
+				x 54.5
+				y -2
+			}
+		}
+	}
+	component
+	{
+		type CompVisualTexture
+		texture canyon
+	}
+}
+entity
+{
+	id Block00007
+	component
+	{
+		type CompPhysics
+		shape
+		{
+			comp_id shape
+			friction 0.3
+		}
+	}
+	component
+	{
+		type CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		type CompShape
+		id shape
+		polygon
+		{
+			vertex
+			{
+				x 22
+				y -1
+			}
+			vertex
+			{
+				x 21
+				y -2
+			}
+			vertex
+			{
+				x 25.5
+				y -2
+			}
+		}
+	}
+	component
+	{
+		type CompVisualTexture
+		texture canyon
+	}
+}
+entity
+{
+	id Block00008
+	component
+	{
+		type CompPhysics
+		shape
+		{
+			comp_id shape
+			friction 0.3
+		}
+	}
+	component
+	{
+		type CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		type CompShape
+		id shape
+		polygon
+		{
+			vertex
+			{
+				x 29
+				y -0.5
+			}
+			vertex
+			{
+				x 28
+				y -2
+			}
+			vertex
+			{
+				x 31.5
+				y -2
+			}
+			vertex
+			{
+				x 31.5
+				y -0.5
+			}
+		}
+	}
+	component
+	{
+		type CompVisualTexture
+		texture canyon
+	}
+}
+entity
+{
+	id Block00009
+	component
+	{
+		type CompPhysics
+		shape
+		{
+			comp_id shape
+			friction 0.3
+		}
+	}
+	component
+	{
+		type CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		type CompShape
+		id shape
+		polygon
+		{
+			vertex
+			{
+				x 31.5
+				y 0.5
+			}
+			vertex
+			{
+				x 31.5
+				y -2
+			}
+			vertex
+			{
+				x 36.5
+				y -2
+			}
+			vertex
+			{
+				x 35
+				y 0.5
+			}
+			vertex
+			{
+				x 33
+				y 1
+			}
+		}
+	}
+	component
+	{
+		type CompVisualTexture
+		texture canyon
+	}
+}
+entity
+{
+	id Block00010
+	component
+	{
+		type CompPhysics
+		shape
+		{
+			comp_id shape
+			friction 0.3
+		}
+	}
+	component
+	{
+		type CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		type CompShape
+		id shape
+		polygon
+		{
+			vertex
+			{
+				x 40
+				y -0.5
+			}
+			vertex
+			{
+				x 36.5
+				y -2
+			}
+			vertex
+			{
+				x 47.5
+				y -2
+			}
+			vertex
+			{
+				x 43.5
+				y -1
+			}
+		}
+	}
+	component
+	{
+		type CompVisualTexture
+		texture canyon
+	}
+}
+entity
+{
+	id Block00011
+	component
+	{
+		type CompPhysics
+		shape
+		{
+			comp_id shape
+			friction 0.3
+		}
+	}
+	component
+	{
+		type CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		type CompShape
+		id shape
+		polygon
+		{
+			vertex
+			{
+				x 1.5
+				y -1.5
+			}
+			vertex
+			{
+				x 1
+				y -2
+			}
+			vertex
+			{
+				x 2.5
+				y -2
+			}
+			vertex
+			{
+				x 2.5
+				y -1.5
+			}
+		}
+	}
+	component
+	{
+		type CompVisualTexture
+		texture fissures
+	}
+}
+entity
+{
+	id Block00012
+	component
+	{
+		type CompPhysics
+		shape
+		{
+			comp_id shape
+			friction 0.3
+		}
+	}
+	component
+	{
+		type CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		type CompShape
+		id shape
+		polygon
+		{
+			vertex
+			{
+				x 7
+				y -2
+			}
+			vertex
+			{
+				x 8.5
+				y -2
+			}
+			vertex
+			{
+				x 8
+				y -1.5
+			}
+		}
+	}
+	component
+	{
+		type CompVisualTexture
+		texture fissures
+	}
+}
+entity
+{
+	id Block00013
+	component
+	{
+		type CompPhysics
+		shape
+		{
+			comp_id shape
+			friction 0.3
+		}
+	}
+	component
+	{
+		type CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		type CompShape
+		id shape
+		polygon
+		{
+			vertex
+			{
+				x -8
+				y -2
+			}
+			vertex
+			{
+				x -5
+				y -2
+			}
+			vertex
+			{
+				x -6
+				y -1.5
+			}
+		}
+	}
+	component
+	{
+		type CompVisualTexture
+		texture fault
+	}
+}
+entity
+{
+	id Block00014
+	component
+	{
+		type CompPhysics
+		shape
+		{
+			comp_id shape
+			friction 0.3
+		}
+	}
+	component
+	{
+		type CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		type CompShape
+		id shape
+		polygon
+		{
+			vertex
+			{
+				x -5
+				y -2
+			}
+			vertex
+			{
+				x -2.5
+				y -2
+			}
+			vertex
+			{
+				x -3
+				y -1
+			}
+			vertex
+			{
+				x -4.5
+				y -0.5
+			}
+		}
+	}
+	component
+	{
+		type CompVisualTexture
+		texture canyon
+	}
+}
+entity
+{
+	id Block00015
+	component
+	{
+		type CompPhysics
+		shape
+		{
+			comp_id shape
+			friction 0.3
+		}
+	}
+	component
+	{
+		type CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		type CompShape
+		id shape
+		polygon
+		{
+			vertex
+			{
+				x 20
+				y -1
+			}
+			vertex
+			{
+				x 19
+				y -2
+			}
+			vertex
+			{
+				x 21
+				y -2
+			}
+		}
+	}
+	component
+	{
+		type CompVisualTexture
+		texture fault
+	}
+}
+entity
+{
+	id Block00016
+	component
+	{
+		type CompPhysics
+		shape
+		{
+			comp_id shape
+			friction 0.3
+		}
+	}
+	component
+	{
+		type CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		type CompShape
+		id shape
+		polygon
+		{
+			vertex
+			{
+				x 27
+				y -1.5
+			}
+			vertex
+			{
+				x 26.5
+				y -2
+			}
+			vertex
+			{
+				x 27.5
+				y -2
+			}
+		}
+	}
+	component
+	{
+		type CompVisualTexture
+		texture fault
+	}
+}
+entity
+{
+	id Block00017
+	component
+	{
+		type CompPhysics
+		shape
+		{
+			comp_id shape
+			friction 0.3
+		}
+	}
+	component
+	{
+		type CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		type CompShape
+		id shape
+		polygon
+		{
+			vertex
+			{
+				x 26
+				y -1.5
+			}
+			vertex
+			{
+				x 25.5
+				y -2
+			}
+			vertex
+			{
+				x 26.5
+				y -2
+			}
+			vertex
+			{
+				x 27
+				y -1.5
+			}
+		}
+	}
+	component
+	{
+		type CompVisualTexture
+		texture fissures
+	}
+}
+entity
+{
+	id Block00018
+	component
+	{
+		type CompPhysics
+		shape
+		{
+			comp_id shape
+			friction 0.3
+		}
+	}
+	component
+	{
+		type CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		type CompShape
+		id shape
+		polygon
+		{
+			vertex
+			{
+				x 31.5
+				y 0
+			}
+			vertex
+			{
+				x 30
+				y -0.5
+			}
+			vertex
+			{
+				x 31.5
+				y -0.5
+			}
+		}
+	}
+	component
+	{
+		type CompVisualTexture
+		texture fissures
+	}
+}
+entity
+{
+	id Block00019
+	component
+	{
+		type CompPhysics
+		shape
+		{
+			comp_id shape
+			friction 0.3
+		}
+	}
+	component
+	{
+		type CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		type CompShape
+		id shape
+		polygon
+		{
+			vertex
+			{
+				x 47.5
+				y -2
+			}
+			vertex
+			{
+				x 50.5
+				y -2
+			}
+			vertex
+			{
+				x 50.5
+				y -1
+			}
+		}
+	}
+	component
+	{
+		type CompVisualTexture
+		texture fissures
+	}
+}
+entity
+{
+	id Block00020
+	component
+	{
+		type CompPhysics
+		shape
+		{
+			comp_id shape
+			friction 0.3
+		}
+	}
+	component
+	{
+		type CompPosition
+		x 0
+		y 0
+		a 0
+	}
+	component
+	{
+		type CompShape
+		id shape
+		polygon
+		{
+			vertex
+			{
+				x 50.5
+				y -1
+			}
+			vertex
+			{
+				x 50.5
+				y -2
+			}
+			vertex
+			{
+				x 53
+				y -2
+			}
+			vertex
+			{
+				x 52
+				y -0.5
+			}
+		}
+	}
+	component
+	{
+		type CompVisualTexture
+		texture fault
+	}
+}
+entity
+{
+	id tree1
+	component
+	{
+		type CompPosition
+		x 4
+		y -2.15
+		a 0
+	}
+	component
+	{
+		type CompShape
+		id shape
+		polygon
+		{
+			vertex
+			{
+				x -2
+				y 5
+			}
+			vertex
+			{
+				x -2
+				y 0
+			}
+			vertex
+			{
+				x 2
+				y 0
+			}
+			vertex
+			{
+				x 2
+				y 5
+			}
+		}
+	}
+	component
+	{
+		type CompVisualTexture
+		texture tree
+		mapping
+		{
+			vertex
+			{
+				u 0
+				v 0
+			}
+			vertex
+			{
+				u 0
+				v 1
+			}
+			vertex
+			{
+				u 1
+				v 1
+			}
+			vertex
+			{
+				u 1
+				v 0
+			}
+		}
+	}
+}
+entity
+{
+	id tree2
+	component
+	{
+		type CompPosition
+		x 11
+		y -1.5
+		a 0
+	}
+	component
+	{
+		type CompShape
+		id shape
+		polygon
+		{
+			vertex
+			{
+				x -2
+				y 5
+			}
+			vertex
+			{
+				x -2
+				y 0
+			}
+			vertex
+			{
+				x 2
+				y 0
+			}
+			vertex
+			{
+				x 2
+				y 5
+			}
+		}
+	}
+	component
+	{
+		type CompVisualTexture
+		texture tree
+		mapping
+		{
+			vertex
+			{
+				u 0
+				v 0
+			}
+			vertex
+			{
+				u 0
+				v 1
+			}
+			vertex
+			{
+				u 1
+				v 1
+			}
+			vertex
+			{
+				u 1
+				v 0
+			}
+		}
+	}
+}
+entity
+{
+	id tree3
+	component
+	{
+		type CompPosition
+		x 18
+		y -2.15
+		a 0
+	}
+	component
+	{
+		type CompShape
+		id shape
+		polygon
+		{
+			vertex
+			{
+				x -2
+				y 5
+			}
+			vertex
+			{
+				x -2
+				y 0
+			}
+			vertex
+			{
+				x 2
+				y 0
+			}
+			vertex
+			{
+				x 2
+				y 5
+			}
+		}
+	}
+	component
+	{
+		type CompVisualTexture
+		texture tree
+		mapping
+		{
+			vertex
+			{
+				u 0
+				v 0
+			}
+			vertex
+			{
+				u 0
+				v 1
+			}
+			vertex
+			{
+				u 1
+				v 1
+			}
+			vertex
+			{
+				u 1
+				v 0
+			}
+		}
+	}
+}

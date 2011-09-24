@@ -16,13 +16,11 @@
 
 #include "../Component.h"
 #include "../GameEvents.h"
+#include "../IdTypes.h"
 
 class Condition;
 class Effect;
 class World;
-
-typedef std::string ConditionId;
-typedef std::string EffectId;
 
 //--------------------------------------------//
 //---------- CompTrigger Klasse --------------//

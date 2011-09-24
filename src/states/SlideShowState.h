@@ -36,7 +36,7 @@ struct SlideShow
 class SlideShowState : public GameState
 {
 public:
-    SlideShowState( SubSystems& subSystems, std::string slideXmlFile );
+    SlideShowState( SubSystems& subSystems, const std::string& slideXmlFile );
 
     const GameStateId& getId() const { return STATE_ID; }
 

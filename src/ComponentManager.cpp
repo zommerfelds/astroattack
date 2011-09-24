@@ -78,7 +78,7 @@ void ComponentManager::addEntity(const EntityIdType& id, ComponentList& componen
 
     m_entities[id] = compMap; // if there is an entity with the same ID before, it will get deleted
 
-    // fire events
+    // trigger events
     BOOST_FOREACH(boost::shared_ptr<Component> comp, components)
     {
         m_gameEvents.newComponent.fire(*comp);
@@ -170,7 +170,7 @@ void ComponentManager::writeEntitiesToLogger( Logger& log )
         log.write( "--- Entity name: %s ---\n", it->first.c_str() );
         for ( ComponentMap::iterator it2 = comps.begin(); it2 != comps.end(); ++it2 )
         {
-            log.write( " Component: %s\n" , it2->second->getTypeId().c_str() );
+            log.write( " Component: %s %s\n" , it2->second->getTypeId().c_str(), it2->second->getId().c_str() );
         }
         log.write( "\n" );
     }

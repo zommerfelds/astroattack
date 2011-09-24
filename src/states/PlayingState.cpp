@@ -36,7 +36,7 @@ const std::string cWordLogFileName = "world.txt";
 
 const GameStateId PlayingState::STATE_ID = "PlayingState";
 
-PlayingState::PlayingState( SubSystems& subSystems, std::string levelFileName )
+PlayingState::PlayingState( SubSystems& subSystems, const std::string& levelFileName )
 : GameState( subSystems ),
   m_gameWorld ( getSubSystems().events ),
   m_cameraController ( getSubSystems().input, getSubSystems().renderer, m_gameWorld.getCompManager() ),
@@ -173,7 +173,7 @@ void PlayingState::draw( float accumulator )        // Spiel zeichnen
                                  0.0f, 3.0f,
                                  4.0f, 3.0f,
                                  4.0f, 0.0f };
-        renderer.drawTexturedQuad( texCoord, vertexCoord, "_starfield" );
+        renderer.drawTexturedQuad( texCoord, vertexCoord, "_starfield" ); // sky
     }
     // Weltmodus
     renderer.setMatrix(RenderSubSystem::World);

@@ -12,6 +12,7 @@
 #include <boost/property_tree/ptree.hpp>
 #include <climits>
 
+#include "../Logger.h"
 #include "CompPhysics.h"
 
 using boost::property_tree::ptree;
@@ -40,10 +41,26 @@ void CompPhysics::addShapeDef( boost::shared_ptr<ShapeDef> pShapeDef )
 bool CompPhysics::setShapeFriction(const ComponentIdType& shapeName, float friction)
 {
     FixtureMap::const_iterator it = m_fixtureMap.find( shapeName );
+    b2Fixture* fixture = it->second;
     if ( it != m_fixtureMap.end() )
-        it->second->SetFriction(friction);
+    {
+    	fixture->SetFriction(friction);
+    }
     else
+    {
+    	gAaLog.write("setShapeFriction: bad shapeName '%s'", shapeName.c_str());
         return false;
+    }
+
+    // friction of existing contacts need to be updated because they don't change with b2Fixture::SetFriction
+    for ( b2ContactEdge* contactEdge = m_body->GetContactList();
+    	  contactEdge;
+    	  contactEdge = contactEdge->next )
+    {
+    	if (fixture == contactEdge->contact->GetFixtureA() || fixture == contactEdge->contact->GetFixtureB() )
+    		contactEdge->contact->ResetFriction(); // uses sqrt and multiplication
+    }
+
     return true;
 }
 

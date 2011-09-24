@@ -161,7 +161,7 @@ void EditorState::update()      // Spiel aktualisieren
             boost::shared_ptr<CompPhysics> compPhysics = boost::shared_ptr<CompPhysics>(new CompPhysics(Component::DEFAULT_ID, getSubSystems().events));
             boost::shared_ptr<ShapeDef> shapeDef = boost::make_shared<ShapeDef>();
             shapeDef->friction = 0.3f;
-            shapeDef->compId = "shape1";
+            shapeDef->compId = "shape";
             compPhysics->addShapeDef( shapeDef );
             entity.push_back(compPhysics);
 

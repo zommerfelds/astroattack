@@ -42,7 +42,7 @@ public:
 
     // DrawString
     // x/y: upper left position of text box
-    void drawString(const std::string &str, const FontId &fontId, float x, float y, Align horizAlign, Align vertAlign,
+    void drawString(const std::string& str, const FontId &fontId, float x, float y, Align horizAlign, Align vertAlign,
             float red, float green, float blue, float alpha);
 
     void getDimensions(const std::string &text, const FontId &fontId, float& w, float& h) const;

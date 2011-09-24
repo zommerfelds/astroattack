@@ -14,6 +14,6 @@
 extern boost::property_tree::ptree gConfig;
 
 // write config with comments
-bool writeConfig(std::string fileName, const boost::property_tree::ptree& config);
+bool writeConfig(const std::string& fileName, const boost::property_tree::ptree& config);
 
 #endif

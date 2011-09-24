@@ -218,7 +218,7 @@ void RenderSubSystem::setMatrix(MatrixId matrix)
     }
 }
 
-void RenderSubSystem::drawTexturedQuad( float texCoord[8], float vertexCoord[8], std::string texId, bool border, float alpha )
+void RenderSubSystem::drawTexturedQuad( float texCoord[8], float vertexCoord[8], const std::string& texId, bool border, float alpha )
 {
     m_textureManager.setTexture( texId );
     glColor4f( 1.0f, 1.0f, 1.0f, alpha );
@@ -386,7 +386,7 @@ void RenderSubSystem::drawTexturedCircle(const CompShapeCircle& circle,	const Co
 	glColor4f(255, 255, 255, 255);
 }
 
-void RenderSubSystem::drawEdge(const Vector2D& vertexA, const Vector2D& vertexB, std::string& tex, float offset, float preCalcEdgeLenght)
+void RenderSubSystem::drawEdge(const Vector2D& vertexA, const Vector2D& vertexB, const std::string& tex, float offset, float preCalcEdgeLenght)
 {
     Vector2D edgeNorm = vertexB - vertexA;
     float edgeLenght = preCalcEdgeLenght;
@@ -542,9 +542,10 @@ void RenderSubSystem::drawVisualTextureComps()
             glRotatef( radToDeg(angle), 0.0, 0.0, 1.0f);
 
             const std::string& shapeId = pTexComp->getShapeId();
+            bool allShapes = (shapeId == CompVisualTexture::ALL_SHAPES);
             for (size_t i = 0; i < compShapes.size(); ++i)
             {
-            	if (shapeId != CompVisualTexture::ALL_SHAPES && shapeId != compShapes[i]->getId())
+            	if (!allShapes && shapeId != compShapes[i]->getId())
             		continue;
                 switch (compShapes[i]->getType())
                 {
@@ -561,6 +562,8 @@ void RenderSubSystem::drawVisualTextureComps()
                 default:
                     break;
                 }
+                if (!allShapes)
+                	break;
             }
             glPopMatrix();
         }

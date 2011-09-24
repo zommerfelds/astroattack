@@ -361,14 +361,14 @@ void MainMenuState::onPressedButBack()
     getSubSystems().sound.playSound( "mouseclick" );
 }
 
-void MainMenuState::onPressedOpenLevel( std::string filename )
+void MainMenuState::onPressedOpenLevel( const std::string& filename )
 {
     m_goToPlay = true;
     m_fileNameToOpen = filename;
     getSubSystems().sound.playSound( "mouseclick" );
 }
 
-void MainMenuState::onPressedOpenSlideShow( std::string filename )
+void MainMenuState::onPressedOpenSlideShow( const std::string& filename )
 {
     m_goToSlideShow = true;
     m_fileNameToOpen = filename;

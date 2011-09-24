@@ -27,7 +27,7 @@ const GameStateId SlideShowState::STATE_ID = "SlideShowState";
 
 // Konstruktor
 // slideXmlFile ist der Name der Bildshow-Datei
-SlideShowState::SlideShowState( SubSystems& subSystems, std::string slideXmlFile )
+SlideShowState::SlideShowState( SubSystems& subSystems, const std::string& slideXmlFile )
 : GameState( subSystems ),
   m_slideXmlFile (slideXmlFile),
   m_currentSlide ( 0 ),

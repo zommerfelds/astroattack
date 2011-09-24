@@ -54,7 +54,7 @@ public:
     // ******** Zeichnungsfunktionen ********* //
 
     // einen Texturierten Quadrat zeichnen
-    void drawTexturedQuad( float texCoord[8], float vertexCoord[8], std::string texId, bool border=false, float alpha=1.0f );
+    void drawTexturedQuad( float texCoord[8], float vertexCoord[8], const std::string& texId, bool border=false, float alpha=1.0f );
     // einen Quadrat zeichnen
     void drawColorQuad( float vertexCoord[8], float r, float g, float b, float a, bool border = false );
     // Schreibt Text
@@ -67,7 +67,7 @@ public:
     // Kreis zeichnen
     void drawTexturedCircle( const CompShapeCircle& circle, const CompVisualTexture& tex, bool border = false );
     // Draw an edge effect
-    void drawEdge(const Vector2D& vertexA, const Vector2D& vertexB, std::string& tex, float offset = 0.0f, float preCalcEdgeLenght = -1.0f);
+    void drawEdge(const Vector2D& vertexA, const Vector2D& vertexB, const std::string& tex, float offset = 0.0f, float preCalcEdgeLenght = -1.0f);
     // Zeichnet einen Vector2D (Pfeil) an einer bestimmten Postion
     void drawVector( const Vector2D& rVector, const Vector2D& rPos );
     // Zeichnet einen punkt an einer bestimmten Postion

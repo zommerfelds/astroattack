@@ -13,7 +13,7 @@
 // global log
 Logger gAaLog( LOG_FILE_NAME );
 
-const std::string cIdentString[] = "   "; // pro indentation level (Texteinrückung) wird dieser Zeichensatz eingefügt
+const std::string cIdentString = " "; // pro indentation level (Texteinrückung) wird dieser Zeichensatz eingefügt
 
 // Constructor
 Logger::Logger(const std::string& fileName )
@@ -34,9 +34,9 @@ const char* Logger::write(const char *format, ...)
     int num_chars = 0; // Anzahl Zeichen die in m_buf geschrieben werden
     // Text in m_buf speichern
 #ifdef USE_SAFE_CRT_FUNCTIONS
-    num_chars = vsnprintf_s ( m_buf,sizeof ( m_buf ),_TRUNCATE,format,List );
+    num_chars = vsnprintf_s( m_buf,sizeof ( m_buf ),_TRUNCATE,format,List );
 #else
-    num_chars = vsnprintf ( m_buf,cLogBufSize,format,List );
+    num_chars = vsnprintf( m_buf,cLogBufSize,format,List );
 #endif
 
     va_end ( List );

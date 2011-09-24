@@ -6,6 +6,9 @@
 
 // Enzelne Bedingungen für CompTrigger Komponente
 
+#ifndef COMPTRIGGER_CONDITIONS_H
+#define COMPTRIGGER_CONDITIONS_H
+
 #include <map>
 #include <string>
 
@@ -43,7 +46,7 @@ private:
 class ConditionEntityTouchedThis : public Condition
 {
 public:
-    ConditionEntityTouchedThis( std::string entityName );
+    ConditionEntityTouchedThis( const std::string& entityName );
     bool isConditionTrue();
     ConditionId getId() const { return "EntityTouchedThis"; }
     std::string getEntityName() const { return m_entityName; }
@@ -51,3 +54,5 @@ public:
 private:
     std::string m_entityName;
 };
+
+#endif /* COMPTRIGGER_CONDITIONS_H */

@@ -71,7 +71,7 @@ private:
 class WidgetLabel : public Widget
 {
 public:
-    WidgetLabel( float x, float y, std::string text, const FontManager& fontMngr );
+    WidgetLabel( float x, float y, const std::string& text, const FontManager& fontMngr );
     ~WidgetLabel();
 
     void draw( RenderSubSystem* pRenderer );

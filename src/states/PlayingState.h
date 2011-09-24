@@ -27,7 +27,7 @@ class EventConnection;
 class PlayingState : public GameState
 {
 public:
-    PlayingState( SubSystems& subSystems, std::string levelFileName );
+    PlayingState( SubSystems& subSystems, const std::string& levelFileName );
 
     const GameStateId& getId() const { return STATE_ID; }
 

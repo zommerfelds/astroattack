@@ -221,6 +221,22 @@ texture {
     texRepeat true
     scale 1.0
 }
+texture {
+    file "data/Textures/tree.png"
+    id "tree"
+    mipMaps true
+    texRepeat false
+    scale 1.0
+}
+
+; tmp
+;texture {
+;    file "data/Textures/sky.jpg"
+;    id "sky"
+;    mipMaps false
+;    texRepeat false
+;    scale 1.0
+;}
 
 animation {
     file "data/Animation/4dots/4dots.anim"
