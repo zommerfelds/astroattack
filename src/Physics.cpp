@@ -27,7 +27,7 @@ const unsigned int cUpdatesTillGravFieldChangeIsPossible = 10;
 PhysicsSubSystem::PhysicsSubSystem( GameEvents& gameEvents)
 : m_eventConnection1 (), m_eventConnection2 (),
   m_eventConnection3 (), m_eventConnection4 (), m_gameEvents ( gameEvents ),
-  m_world (b2Vec2(0.0f, 0.0f), true), m_timeStep ( cPhysicsTimeStep ),
+  m_world (b2Vec2(0.0f, 0.0f)), m_timeStep ( cPhysicsTimeStep ),
   m_velocityIterations ( PHYS_ITERATIONS ), m_positionIterations ( PHYS_ITERATIONS ),
   m_rootGravField ("rootGravField", m_gameEvents)
 {
