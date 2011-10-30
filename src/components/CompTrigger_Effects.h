@@ -13,7 +13,7 @@
 #include <map>
 
 #include "CompTrigger.h"
-#include "IdTypes.h"
+#include "../IdTypes.h"
 
 class ComponentManager;
 

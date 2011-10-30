@@ -11,7 +11,7 @@
 
 #include <set>
 #include "../Component.h"
-#include "Vector2D.h"
+#include "../Vector2D.h"
 
 //--------------------------------------------//
 //--------- CompGravField Klasse -------------//

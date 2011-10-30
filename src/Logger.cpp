@@ -9,6 +9,7 @@
 
 #include <cstdarg>
 #include <ctime>
+#include <string>
 
 // global log
 Logger gAaLog( LOG_FILE_NAME );

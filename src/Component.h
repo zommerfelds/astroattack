@@ -16,7 +16,7 @@
 
 struct GameEvents;
 
-struct ComponentManager;
+class ComponentManager;
 
 // forward declare ptree (PropertyTree), quite complex but I don't want to include the big header here
 namespace boost { namespace property_tree {

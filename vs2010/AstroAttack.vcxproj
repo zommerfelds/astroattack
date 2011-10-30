@@ -68,7 +68,7 @@
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>SDLmain.lib;SDL.lib;opengl32.lib;DevIL.lib;ILU.lib;glu32.lib;Box2D_d.lib;msvcrtd.lib;SDL_mixer.lib;ftgl.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDLmain.lib;SDL.lib;opengl32.lib;DevIL.lib;ILU.lib;glu32.lib;Box2D.lib;msvcrtd.lib;SDL_mixer.lib;ftgl.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <IgnoreSpecificDefaultLibraries>libc.lib; libcmt.lib; msvcrt.lib; libcd.lib; libcmtd.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
@@ -109,20 +109,22 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\src\Camera.h" />
+    <ClInclude Include="..\src\CameraController.h" />
     <ClInclude Include="..\src\Component.h" />
+    <ClInclude Include="..\src\ComponentManager.h" />
     <ClInclude Include="..\src\components\CompShape.h" />
     <ClInclude Include="..\src\Configuration.h" />
     <ClInclude Include="..\src\contrib\pugixml\foreach.hpp" />
     <ClInclude Include="..\src\contrib\pugixml\pugiconfig.hpp" />
     <ClInclude Include="..\src\contrib\pugixml\pugixml.hpp" />
-    <ClInclude Include="..\src\Entity.h" />
+    <ClInclude Include="..\src\DataLoader.h" />
     <ClInclude Include="..\src\Event.h" />
     <ClInclude Include="..\src\Font.h" />
     <ClInclude Include="..\src\GameApp.h" />
     <ClInclude Include="..\src\GameEvents.h" />
     <ClInclude Include="..\src\GameStates.h" />
     <ClInclude Include="..\src\GUI.h" />
+    <ClInclude Include="..\src\IdTypes.h" />
     <ClInclude Include="..\src\Input.h" />
     <ClInclude Include="..\src\main.h" />
     <ClInclude Include="..\src\Physics.h" />
@@ -130,7 +132,6 @@
     <ClInclude Include="..\src\Sound.h" />
     <ClInclude Include="..\src\Texture.h" />
     <ClInclude Include="..\src\World.h" />
-    <ClInclude Include="..\src\XmlLoader.h" />
     <ClInclude Include="..\src\components\CompGravField.h" />
     <ClInclude Include="..\src\components\CompPhysics.h" />
     <ClInclude Include="..\src\components\CompPlayerController.h" />
@@ -151,18 +152,21 @@
     <ClInclude Include="..\src\Vector2D.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\Camera.cpp" />
+    <ClCompile Include="..\src\CameraController.cpp" />
     <ClCompile Include="..\src\Component.cpp" />
+    <ClCompile Include="..\src\ComponentManager.cpp" />
     <ClCompile Include="..\src\components\CompShape.cpp" />
     <ClCompile Include="..\src\Configuration.cpp" />
     <ClCompile Include="..\src\contrib\pugixml\pugixml.cpp" />
-    <ClCompile Include="..\src\Entity.cpp" />
+    <ClCompile Include="..\src\DataLoader.cpp" />
     <ClCompile Include="..\src\Event.cpp" />
+    <ClCompile Include="..\src\Event_templ.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\src\Font.cpp" />
     <ClCompile Include="..\src\GameApp.cpp" />
     <ClCompile Include="..\src\GameStates.cpp" />
     <ClCompile Include="..\src\GUI.cpp" />
-    <ClCompile Include="..\src\Init.cpp" />
     <ClCompile Include="..\src\Input.cpp" />
     <ClCompile Include="..\src\main.cpp" />
     <ClCompile Include="..\src\Physics.cpp" />
@@ -170,7 +174,6 @@
     <ClCompile Include="..\src\Sound.cpp" />
     <ClCompile Include="..\src\Texture.cpp" />
     <ClCompile Include="..\src\World.cpp" />
-    <ClCompile Include="..\src\XmlLoader.cpp" />
     <ClCompile Include="..\src\components\CompGravField.cpp" />
     <ClCompile Include="..\src\components\CompPhysics.cpp" />
     <ClCompile Include="..\src\components\CompPlayerController.cpp" />
@@ -191,16 +194,16 @@
     <ClCompile Include="..\src\Vector2D.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\bin\AstroAttack.log" />
-    <None Include="..\data\config.xml" />
+    <None Include="..\AstroAttack.log" />
+    <None Include="..\configure.in" />
+    <None Include="..\data\config.info" />
+    <None Include="..\data\graphics.info" />
+    <None Include="..\data\graphicsMenu.info" />
+    <None Include="..\data\player.info" />
+    <None Include="..\Makefile.am" />
     <None Include="..\src\Events.txt" />
-    <None Include="..\data\graphics.xml" />
-    <None Include="..\data\graphicsMenu.xml" />
     <None Include="..\data\levelSequence.xml" />
-    <None Include="..\data\player.xml" />
     <None Include="..\data\templates.xml" />
-    <None Include="..\src\Makefile.am" />
-    <None Include="..\src\Makefile.in" />
     <None Include="..\TODO.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -7,7 +7,7 @@
 #include <boost/property_tree/ptree.hpp>
 
 #include "CompGravField.h"
-#include "DataLoader.h"
+#include "../DataLoader.h"
 
 // eindeutige ID
 const ComponentTypeId CompGravField::COMPONENT_TYPE_ID = "CompGravField";

@@ -14,7 +14,7 @@
 #include <string>
 
 #include "../GameStates.h"
-#include "DataLoader.h"
+#include "../DataLoader.h"
 
 struct Button;
 
