@@ -45,20 +45,17 @@ ComponentIdType order[] = {
         CompPhysics::COMPONENT_TYPE_ID
 };
 
-int numOrdered = 3;
+const int numOrdered = 3;//sizeof(order) / sizeof (order[0]);
 
 bool compareComps(boost::shared_ptr<Component> first, boost::shared_ptr<Component> second)
 {
-    if (first->getEntityId() == second->getEntityId())
-        return true;
-
     ComponentIdType* pos1 = std::find(order, order+numOrdered, first->getEntityId());
     ComponentIdType* pos2 = std::find(order, order+numOrdered, second->getEntityId());
 
     if (pos1 != pos2)
         return pos1 < pos2;
 
-    return first->getEntityId() < second->getEntityId();
+	return first.get() < second.get();
 }
 
 }

@@ -8,6 +8,7 @@
 
 * Medium priority *
 
+- Set all files to EOL style LF in SVN
 - Fix TODOs
 - Improve walking animation when player shortly looses contact to the ground
 - Test Init() => DeInit() => Init() on GameApp and SubSystems

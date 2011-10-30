@@ -25,7 +25,8 @@ void CompVisualTexture::loadFromPropertyTree(const ptree& propTree)
     m_textureId = propTree.get<std::string>("texture");
     m_shapeId = propTree.get("shape", ALL_SHAPES);
 
-    BOOST_FOREACH(const ptree::value_type &v, propTree.get_child("mapping", ptree()))
+	ptree mappingTree = propTree.get_child("mapping", ptree()); // need to create this variable, else the for loop crashes... (?)
+    BOOST_FOREACH(const ptree::value_type &v, mappingTree)
 	{
 		const ptree& vertex = v.second;
 		float x = vertex.get<float>("u");

@@ -73,7 +73,7 @@
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <IgnoreSpecificDefaultLibraries>libc.lib; libcmt.lib; msvcrt.lib; libcd.lib; libcmtd.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention>
       </DataExecutionPrevention>
@@ -199,6 +199,14 @@
     <None Include="..\data\config.info" />
     <None Include="..\data\graphics.info" />
     <None Include="..\data\graphicsMenu.info" />
+    <None Include="..\data\Levels\adjacent_problem.info" />
+    <None Include="..\data\Levels\level1.info" />
+    <None Include="..\data\Levels\level2.info" />
+    <None Include="..\data\Levels\level3.info" />
+    <None Include="..\data\Levels\level_editor.info" />
+    <None Include="..\data\Levels\level_grav.info" />
+    <None Include="..\data\Levels\level_new.info" />
+    <None Include="..\data\Levels\level_visita.info" />
     <None Include="..\data\player.info" />
     <None Include="..\Makefile.am" />
     <None Include="..\src\Events.txt" />

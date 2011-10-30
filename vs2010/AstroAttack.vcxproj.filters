@@ -30,6 +30,12 @@
     <Filter Include="Source Files\Other">
       <UniqueIdentifier>{a3fc578f-9f66-45f5-a08b-dac4cfdea726}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Data">
+      <UniqueIdentifier>{9fe5a627-577f-4bab-b9c7-f0359854d577}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Data\Levels">
+      <UniqueIdentifier>{c48f1d1b-2a43-4860-855a-8d03d2846ed3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\Component.h">
@@ -284,5 +290,29 @@
     <None Include="..\data\player.info" />
     <None Include="..\configure.in" />
     <None Include="..\AstroAttack.log" />
+    <None Include="..\data\Levels\adjacent_problem.info">
+      <Filter>Data\Levels</Filter>
+    </None>
+    <None Include="..\data\Levels\level_editor.info">
+      <Filter>Data\Levels</Filter>
+    </None>
+    <None Include="..\data\Levels\level_grav.info">
+      <Filter>Data\Levels</Filter>
+    </None>
+    <None Include="..\data\Levels\level_new.info">
+      <Filter>Data\Levels</Filter>
+    </None>
+    <None Include="..\data\Levels\level_visita.info">
+      <Filter>Data\Levels</Filter>
+    </None>
+    <None Include="..\data\Levels\level1.info">
+      <Filter>Data\Levels</Filter>
+    </None>
+    <None Include="..\data\Levels\level2.info">
+      <Filter>Data\Levels</Filter>
+    </None>
+    <None Include="..\data\Levels\level3.info">
+      <Filter>Data\Levels</Filter>
+    </None>
   </ItemGroup>
 </Project>
