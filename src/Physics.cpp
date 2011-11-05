@@ -147,7 +147,7 @@ void PhysicsSubSystem::calculateSmoothPositions(float accumulator)
 
         float curAngle = pBody->GetAngle();
         // make sure angle difference is inside [-π,π]
-        while (curAngle - compPhys->m_previousAngle > cPi)
+        while (curAngle - compPhys->m_previousAngle > +cPi)
             curAngle -= 2*cPi;
         while (curAngle - compPhys->m_previousAngle < -cPi)
             curAngle += 2*cPi;

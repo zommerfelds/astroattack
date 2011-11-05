@@ -27,6 +27,18 @@ const ComponentTypeId CompPlayerController::COMPONENT_TYPE_ID = "CompPlayerContr
 // Constants
 const int cMaxRecharge = 15;                    // wie wie muss der Spieler warten bis der Racketenrucksack startet?
 
+namespace
+{
+    float normalizeAngle(float a)
+    {
+    	while (a < -cPi)
+			a += 2*cPi;
+		while (a > cPi)
+			a -= 2*cPi;
+		return a;
+    }
+}
+
 // Konstruktor der Komponente
 CompPlayerController::CompPlayerController(const ComponentIdType& id, GameEvents& gameEvents, const InputSubSystem& inputSubSystem, std::map<const std::string, int>::iterator itJetPackVar) :
      Component(id, gameEvents),
@@ -65,7 +77,7 @@ void CompPlayerController::onUpdate()
     bool wantToMoveSidewards = false; // ob der Spieler sich seitwärts bewegen will
     //bool isPushing = false;           // ob der Spieler einen Gegenstand stosst
 
-    bool isIncreasingAngle = false;   // ob die Spielerfigur sich neigt (zum fliegen)
+    bool isIncreasingDeclination = false;   // ob die Spielerfigur sich neigt (zum fliegen)
     bool directionClw = false;        // in welche Richtung neigt sich die Figur (true wenn Uhrzeigersinn)
 
     const float cMaxAngleRel = 0.25f;  // maximaler Neigungswinkel +/- (Relativ zu upVector)
@@ -367,7 +379,7 @@ void CompPlayerController::onUpdate()
         {
             if ( usingJetpack && !isTouchingSth )
             {
-                isIncreasingAngle = true;
+                isIncreasingDeclination = true;
                 directionClw = true;
             }
             // TODO: think about that
@@ -385,7 +397,7 @@ void CompPlayerController::onUpdate()
         {
             if ( usingJetpack && !isTouchingSth )
             {
-                isIncreasingAngle = true;
+                isIncreasingDeclination = true;
                 directionClw = false;
             }
             // TODO: same here
@@ -400,17 +412,12 @@ void CompPlayerController::onUpdate()
     }
 
 	float diffAngle = playerCompPhysics->getAngle() + cPi*0.5f - upAngleAbs;
+    diffAngle = normalizeAngle(diffAngle);
 	float rotAngle = 0.0f;
-	if ( diffAngle < -cPi )
-		diffAngle += 2*cPi;
-	else if ( diffAngle > cPi )
-		diffAngle -= 2*cPi;
     float absDiffAngle = fabs(diffAngle);
 
-	bool decrease = true;
-    if ( isIncreasingAngle && !m_playerCouldWalkLastUpdate && (absDiffAngle<cMaxAngleRel) )
+    if ( isIncreasingDeclination && !m_playerCouldWalkLastUpdate && (absDiffAngle<cMaxAngleRel) )
     {
-		decrease = false;
         if ( directionClw )
 		{
 			if ( cMaxAngleRel + diffAngle < cIncStep )
@@ -426,8 +433,7 @@ void CompPlayerController::onUpdate()
 				rotAngle = cIncStep;
 		}
     }
-
-    if ( !isIncreasingAngle	|| decrease )
+    else if ( !isIncreasingDeclination )
     {
 		if ( diffAngle != 0.0f )
 		{
