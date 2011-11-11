@@ -67,6 +67,14 @@ To play the game:
 ./src/AstroAttack
 
 
+SVN
+---
+
+Set the line ending style for all source files:
+find . -name '*.cpp' -not -iwholename '*.svn*' -exec svn ps svn:eol-style LF {} \;
+find . -name '*.h' -not -iwholename '*.svn*' -exec svn ps svn:eol-style LF {} \;
+
+
 Useful commands for development
 --------------------------------
 

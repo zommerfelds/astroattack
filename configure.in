@@ -29,11 +29,27 @@ AC_SEARCH_LIBS(glViewport, GL, [], [AC_MSG_ERROR("OpenGL required!")])
 AC_SEARCH_LIBS(gluBuild2DMipmaps, GLU, [], [AC_MSG_ERROR("OpenGL Utility Library (libGLU) required!")])
 AC_SEARCH_LIBS(ilInit, IL, [], [AC_MSG_ERROR("DevIL (libIL) required!")])
 AC_SEARCH_LIBS(iluInit, ILU, [], [AC_MSG_ERROR("DevIL (libILU) required!")])
+AC_SEARCH_LIBS(iluInit, ILU, [], [AC_MSG_ERROR("DevIL (libILU) required!")])
 AC_CHECK_HEADER(boost/shared_ptr.hpp, [], [AC_MSG_ERROR("boost/shared_ptr.hpp required!")] )
 AC_CHECK_HEADER(boost/make_shared.hpp, [], [AC_MSG_ERROR("boost/make_shared.hpp required!")] )
 AC_CHECK_HEADER(boost/scoped_ptr.hpp, [], [AC_MSG_ERROR("boost/scoped_ptr.hpp required!")] )
 AC_CHECK_HEADER(boost/foreach.hpp, [], [AC_MSG_ERROR("boost/foreach.hpp required!")] )
 AC_CHECK_HEADER(boost/bind.hpp, [], [AC_MSG_ERROR("boost/bind.hpp required!")] )
+
+AM_OPTIONS_WXCONFIG
+reqwx=2.4.0
+AM_PATH_WXCONFIG($reqwx, wxWin=1)
+if test "$wxWin" != 1; then
+    AC_MSG_ERROR([
+        wxWidgets must be installed on your system.
+ 
+        Please check that wx-config is in path, the directory
+        where wxWidgets libraries are installed (returned by
+        'wx-config --libs' or 'wx-config --static --libs' command)
+        is in LD_LIBRARY_PATH or equivalent variable and
+        wxWidgets version is $reqwx or above.
+        ])
+fi
 
 AC_CONFIG_FILES(Makefile)
 AC_OUTPUT

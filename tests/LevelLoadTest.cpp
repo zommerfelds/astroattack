@@ -6,10 +6,10 @@
 #include <set>
 #include <list>
 
-#include "DataLoader.h"
-#include "World.h"
-#include "GameEvents.h"
-#include "GameApp.h"
+#include "common/DataLoader.h"
+#include "common/World.h"
+#include "game/GameEvents.h"
+#include "game/GameApp.h"
 
 using boost::property_tree::ptree;
 
