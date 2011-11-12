@@ -11,7 +11,7 @@ common_src = \
     src/common/GameState.cpp src/game/Gui.cpp src/game/Input.cpp \
     src/game/Logger.cpp src/game/OsMsgBox.cpp src/common/Physics.cpp \
     src/common/Renderer.cpp src/common/Sound.cpp src/common/Texture.cpp src/common/Vector2D.cpp \
-    src/common/World.cpp \
+    src/common/World.cpp src/game/PlayerController.cpp \
     src/common/components/CompGravField.cpp src/common/components/CompPhysics.cpp \
     src/common/components/CompPlayerController.cpp src/common/components/CompPosition.cpp \
     src/common/components/CompShape.cpp src/common/components/CompTrigger_Conditions.cpp \
@@ -34,7 +34,7 @@ AAEditor_CXXFLAGS = `wx-config --cxxflags`
 AAEditor_LDFLAGS = `wx-config --libs --gl-libs`
 
 AAEditor_SOURCES = $(common_src) src/editor/EditorApp.cpp src/editor/EditorFrame.cpp \
-    src/editor/gen/EditorFrameBase.cpp
+    src/editor/GLCanvas.cpp src/editor/gen/EditorFrameBase.cpp
 
 
 # === AATest ===

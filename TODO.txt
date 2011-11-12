@@ -8,7 +8,7 @@
 
 * Medium priority *
 
-- Set all files to EOL style LF in SVN
+- rule of three?
 - Fix TODOs
 - Improve walking animation when player shortly looses contact to the ground
 - Test Init() => DeInit() => Init() on GameApp and SubSystems
@@ -52,6 +52,7 @@
 
 
 DONE:
+- Set all files to EOL style LF in SVN
 - Fix round planet gravitation/rotation
 - In component INFO files: change 'id' to 'type' and 'name' to 'id'
 - Entities as pure aggregation
