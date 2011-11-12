@@ -17,7 +17,7 @@
 #include "common/Physics.h"
 #include "game/Input.h"
 #include "game/Logger.h"
-#include "game/GameEvents.h"
+#include "common/GameEvents.h"
 #include "common/DataLoader.h"
 #include "common/Sound.h"
 #include "common/Vector2D.h"
@@ -55,8 +55,8 @@ void PlayingState::init()        // State starten
     try
     {
         // Welt von XML-Datei laden
-        DataLoader::loadWorld( "data/player.info", m_gameWorld, getSubSystems() );
-        DataLoader::loadWorld( m_levelFileName, m_gameWorld, getSubSystems() );
+        DataLoader::loadWorld( "data/player.info", m_gameWorld, getSubSystems().events );
+        DataLoader::loadWorld( m_levelFileName, m_gameWorld, getSubSystems().events );
     }
     catch (DataLoadException& e)
     {
@@ -128,6 +128,8 @@ void PlayingState::update()      // Spiel aktualisieren
     }
 
     getSubSystems().physics.update();                       // Physik aktualisieren
+    getSubSystems().renderer.update();
+    getSubSystems().playerController.update();
 
     getSubSystems().events.gameUpdate.fire();
 

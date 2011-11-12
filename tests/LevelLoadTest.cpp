@@ -8,8 +8,7 @@
 
 #include "common/DataLoader.h"
 #include "common/World.h"
-#include "game/GameEvents.h"
-#include "game/GameApp.h"
+#include "common/GameEvents.h"
 
 using boost::property_tree::ptree;
 
@@ -127,7 +126,7 @@ TEST(PropTreeEqualsTest, PropTreeEqualsTest)
 
 TEST(LevelLoadTest, LoadWriteTest)
 {
-    SubSystems subSystems;
+    GameEvents events;
 
     string lvlFileNames[] = { "data/Levels/level1.info",
                               "data/Levels/level2.info",
@@ -141,10 +140,10 @@ TEST(LevelLoadTest, LoadWriteTest)
 
     BOOST_FOREACH(string lvlFileName, lvlFileNames)
     {
-        World world (subSystems.events);
+        World world (events);
 
         cout << "Testing with " << lvlFileName << endl;
-        DataLoader::loadWorld(lvlFileName, world, subSystems);
+        DataLoader::loadWorld(lvlFileName, world, events);
         DataLoader::saveWorld(lvlFileNameOut, world);
 
         ptree levelPropTreeBefore;
@@ -153,6 +152,7 @@ TEST(LevelLoadTest, LoadWriteTest)
         read_info(lvlFileNameOut, levelPropTreeAfter);
 
         bool equal = propTreeEquals(levelPropTreeBefore, levelPropTreeAfter);
+        EXPECT_TRUE(equal);
         if (!equal)
         {
             cout << "--- before ---" << endl;
@@ -160,6 +160,5 @@ TEST(LevelLoadTest, LoadWriteTest)
             cout << "--- after ---" << endl;
             dumpPropertyTree(levelPropTreeAfter, cout);
         }
-        EXPECT_TRUE(equal);
     }
 }

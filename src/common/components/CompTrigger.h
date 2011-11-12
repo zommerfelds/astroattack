@@ -15,7 +15,7 @@
 #include <vector>
 
 #include "common/Component.h"
-#include "game/GameEvents.h"
+#include "common/GameEvents.h"
 #include "common/IdTypes.h"
 
 class Condition;

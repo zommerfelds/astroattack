@@ -17,7 +17,7 @@
 #include "Renderer.h"
 #include "DataLoader.h"
 #include "Vector2D.h"
-#include "game/GameEvents.h"
+#include "common/GameEvents.h"
 #include "game/Configuration.h"
 #include "Component.h"
 #include "common/components/CompVisualTexture.h"
@@ -752,4 +752,44 @@ void RenderSubSystem::setViewSize( float width, float height )
     // orthogonalen 2D-Rendermodus
     gluOrtho2D( -width/2, width/2, -height/2, height/2 ); // (z ist nicht wichtig)
     glMatrixMode ( GL_MODELVIEW );
+}
+
+void RenderSubSystem::update()
+{
+	BOOST_FOREACH(CompVisualAnimation* animComp, m_visualAnimComps)
+	{
+		if ( animComp->m_animInfo==NULL )
+		{
+			animComp->m_animInfo = m_animationManager.getAnimInfo(animComp->m_animInfoId);
+			if (animComp->m_animInfo)
+				animComp->m_curState = animComp->m_animInfo->states.begin()->first;
+		}
+
+		if ( !animComp->m_running )
+			continue;
+
+		++animComp->m_updateCounter;
+		StateInfoMap::const_iterator animStateInfoIter = animComp->m_animInfo->states.find(animComp->m_curState);
+		assert (animStateInfoIter != animComp->m_animInfo->states.end());
+		if ( animComp->m_updateCounter > animStateInfoIter->second->speed ) // ein Frame vorbei ist
+		{
+			animComp->m_updateCounter = 0;
+			animComp->m_currentFrame += animComp->m_playDirection; // +1 oder -1 je nach Richtung der Animation
+			if ( animComp->m_playDirection == 1 )
+			{
+				if ( animComp->m_currentFrame > animStateInfoIter->second->end ) // wenn letzter Frame erreicht wurde
+					animComp->m_currentFrame = animStateInfoIter->second->begin; // wieder zum start setzen
+			}
+			else
+			{
+				if ( animComp->m_currentFrame < animStateInfoIter->second->begin ) // wenn letzter Frame erreicht wurde
+					animComp->m_currentFrame = animStateInfoIter->second->end; // wieder zum start setzen
+			}
+			if ( animComp->m_wantToFinish ) // falls man die Animation Stoppen möchte
+			{
+				if ( animStateInfoIter->second->stops.count( animComp->m_currentFrame ) )
+					animComp->m_running = false;
+			}
+		}
+	}
 }

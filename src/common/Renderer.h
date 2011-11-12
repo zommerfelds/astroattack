@@ -39,6 +39,9 @@ public:
     void clearScreen();
     void flipBuffer();
 
+    // update needed data (e.g. animation components)
+    void update();
+
     enum MatrixId
     {
         World, GUI, Text

@@ -62,7 +62,7 @@ void EditorState::init()        // State starten
     m_cameraController.init();
     m_cameraController.setFollowPlayer ( false );
 
-    DataLoader::loadWorld( gConfig.get<std::string>("EditorLevel"), m_gameWorld, getSubSystems() );
+    DataLoader::loadWorld( gConfig.get<std::string>("EditorLevel"), m_gameWorld, getSubSystems().events );
 }
 
 void EditorState::cleanup()     // State abbrechen

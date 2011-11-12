@@ -15,7 +15,7 @@
 #include <string>
 
 #include "common/GameState.h"
-#include "game/GameEvents.h"
+#include "common/GameEvents.h"
 #include "common/World.h"
 #include "game/CameraController.h"
 

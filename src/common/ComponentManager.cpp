@@ -6,7 +6,7 @@
 
 #include "ComponentManager.h"
 
-#include "game/GameEvents.h" // Steuert die Spielerreignisse
+#include "common/GameEvents.h" // Steuert die Spielerreignisse
 #include "Component.h"
 #include "game/Logger.h"
 

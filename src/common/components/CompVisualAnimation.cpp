@@ -13,16 +13,14 @@
 #include <boost/property_tree/ptree.hpp>
 
 #include "CompVisualAnimation.h"
-#include "game/GameEvents.h"
+#include "common/GameEvents.h"
 #include "game/main.h"
 
 // einduetige ID
 const ComponentTypeId CompVisualAnimation::COMPONENT_TYPE_ID = "CompVisualAnimation";
 
-CompVisualAnimation::CompVisualAnimation(const ComponentIdType& id, GameEvents& gameEvents, const AnimationManager& animManager) :
+CompVisualAnimation::CompVisualAnimation(const ComponentIdType& id, GameEvents& gameEvents) :
   Component(id, gameEvents),
-  m_animManager (animManager),
-  m_eventConnection (),
   m_center (),
   m_halfWidth (0.0f),
   m_halfHeight (0.0f),
@@ -36,8 +34,6 @@ CompVisualAnimation::CompVisualAnimation(const ComponentIdType& id, GameEvents& 
   m_flip (false),
   m_playDirection (1)
 {
-    // Update() registrieren. Das hat die Folge, dass Update() pro Aktualisierung (GameUpdate) aufgerufen wird.
-    m_eventConnection = gameEvents.gameUpdate.registerListener( boost::bind( &CompVisualAnimation::onUpdate, this ) );
 }
 
 TextureId CompVisualAnimation::getCurrentTexture() const
@@ -109,45 +105,9 @@ int CompVisualAnimation::isRunning() const
     return m_running;
 }
 
-void CompVisualAnimation::onUpdate()
-{
-    if ( m_animInfo==NULL )
-        return;
-
-    if ( !m_running ) // falls Animation nicht aktiv ist:
-        return;       // abbrechen!
-
-    ++m_updateCounter;
-    StateInfoMap::const_iterator animStateInfoIter = m_animInfo->states.find(m_curState);
-    assert (animStateInfoIter != m_animInfo->states.end());
-    if ( m_updateCounter > animStateInfoIter->second->speed ) // ein Frame vorbei ist
-    {
-        m_updateCounter = 0;
-        m_currentFrame += m_playDirection; // +1 oder -1 je nach Richtung der Animation
-        if ( m_playDirection == 1 )
-        {
-            if ( m_currentFrame > animStateInfoIter->second->end ) // wenn letzter Frame erreicht wurde
-                m_currentFrame = animStateInfoIter->second->begin; // wieder zum start setzen
-        }
-        else
-        {
-            if ( m_currentFrame < animStateInfoIter->second->begin ) // wenn letzter Frame erreicht wurde
-                m_currentFrame = animStateInfoIter->second->end; // wieder zum start setzen
-        }
-        if ( m_wantToFinish ) // falls man die Animation Stoppen möchte
-        {
-            if ( animStateInfoIter->second->stops.count( m_currentFrame ) )
-                m_running = false;
-        }
-    }
-}
-
 void CompVisualAnimation::setAnim(const AnimationId& animInfoId)
 {
     m_animInfoId = animInfoId;
-    m_animInfo = m_animManager.getAnimInfo(animInfoId);
-    if (m_animInfo)
-        m_curState = m_animInfo->states.begin()->first;
 }
 
 void CompVisualAnimation::loadFromPropertyTree(const boost::property_tree::ptree& propTree)

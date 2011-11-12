@@ -10,7 +10,7 @@
 #include <Box2D/Box2D.h>
 
 #include "Physics.h"
-#include "game/GameEvents.h"
+#include "common/GameEvents.h"
 #include "common/Vector2D.h"
 
 #include "common/components/CompPhysics.h"

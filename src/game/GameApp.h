@@ -17,7 +17,8 @@
 #include "common/GameState.h"
 #include "common/Sound.h"
 #include "Gui.h"
-#include "GameEvents.h"
+#include "common/GameEvents.h"
+#include "game/PlayerController.h"
 union SDL_Event;
 
 // Alle wichtigen Untersysteme des Spieles
@@ -34,6 +35,7 @@ struct SubSystems
     RenderSubSystem renderer;    // Ausgabe
     SoundSubSystem sound;        // Sound
     GuiSubSystem gui;            // Grafische Benutzeroberfläche
+    PlayerController playerController;
     bool isLoading; // wenn true: Zeitakkumulator wird neu gestartet, sobald die Hauptschleife einmal durch ist
                     // das verhindert, dass die Zeit währed Ladezeiten gezählt wird (und am Ende des Landens mehrere Updates nachgeholt werden)
 };

@@ -14,17 +14,19 @@
 #include <map>
 
 #include "common/Component.h"
-#include "game/GameEvents.h"
 #include "common/World.h"
 #include "common/Vector2D.h"
 
+class GameEvents;
 class CompPhysics;
-class InputSubSystem; // benötigt Eingabesystem für die Tasten zu lesen
+
+// Constants
+const int cMaxRecharge = 15;                    // wie wie muss der Spieler warten bis der Racketenrucksack startet?
 
 class CompPlayerController : public Component
 {
 public:
-    CompPlayerController(const ComponentIdType& id, GameEvents& gameEvents, const InputSubSystem&, WorldVariablesMap::iterator itJetPackVar);
+    CompPlayerController(const ComponentIdType& id, GameEvents& gameEvents, WorldVariablesMap::iterator itJetPackVar);
 
     const ComponentTypeId& getTypeId() const { return COMPONENT_TYPE_ID; }
     static const ComponentTypeId COMPONENT_TYPE_ID;
@@ -33,10 +35,8 @@ public:
     void writeToPropertyTree(boost::property_tree::ptree& propTree) const;
 
 private:
-    const InputSubSystem& m_inputSubSystem;
 
-    // Hier werden alle nötigen aktionen Durchgeführt pro Aktualisierung
-    void onUpdate();
+    friend class PlayerController;
 
     void setLowFriction( CompPhysics* playerCompPhysics );
     void setHighFriction( CompPhysics* playerCompPhysics );
@@ -44,7 +44,6 @@ private:
 
     void updateAnims(bool flyingUp, bool movingOnGround, bool usingJetpack);
 
-    EventConnection m_eventConnection;
     WorldVariablesMap::iterator m_itJetPackVar;
 
     // Player controller fields

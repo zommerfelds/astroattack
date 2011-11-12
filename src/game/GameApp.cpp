@@ -58,6 +58,7 @@ SubSystems::SubSystems()
         renderer ( events ),
         sound (),
         gui ( renderer, input ),
+        playerController (events, input),
         isLoading ( false )
 {
 }
