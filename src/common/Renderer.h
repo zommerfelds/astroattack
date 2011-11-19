@@ -32,9 +32,11 @@ public:
     RenderSubSystem( GameEvents& gameEvents );
     ~RenderSubSystem();
 
-    void init( int width, int height );
+    void init(int width, int height);
     void deInit();
     bool loadData();
+
+    void resize(int width, int height);
 
     void clearScreen();
     void flipBuffer();

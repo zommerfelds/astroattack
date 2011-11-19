@@ -86,7 +86,6 @@ void PlayingState::init()        // State starten
 
     getSubSystems().input.putMouseOnCenter();
 
-    m_cameraController.init();
     m_cameraController.setFollowPlayer( true );
 
     m_eventConnection1 = getSubSystems().events.wantToDeleteEntity.registerListener( boost::bind( &PlayingState::onEntityDeleted, this, _1 ) );
@@ -211,7 +210,7 @@ void PlayingState::draw( float accumulator )        // Spiel zeichnen
 #endif
     
     // Fadenkreuz zeichnen
-    renderer.drawCrosshairs ( m_cameraController.screenToWorld(getSubSystems().input.getMousePos()) );
+    renderer.drawCrosshairs( m_cameraController.screenToWorld(getSubSystems().input.getMousePos()) );
     // GUI modus (Grafische Benutzeroberfläche)
     renderer.setMatrix(RenderSubSystem::GUI);
 

@@ -49,6 +49,9 @@ RenderSubSystem::RenderSubSystem( GameEvents& gameEvents )
     M[1] = 0; M[5] = 1; M[ 9] = 0; M[13] = 0;
     M[2] = 0; M[6] = 0; M[10] = 1; M[14] = 0;
     M[3] = 0; M[7] = 0; M[11] = 0; M[15] = 1;
+
+    m_eventConnection1 = m_gameEvents.newComponent.registerListener( boost::bind( &RenderSubSystem::onRegisterComponent, this, _1 ) );
+    m_eventConnection2 = m_gameEvents.deleteComponent.registerListener(  boost::bind( &RenderSubSystem::onUnregisterComponent, this, _1 ) );
 }
 
 RenderSubSystem::~RenderSubSystem()
@@ -59,7 +62,7 @@ RenderSubSystem::~RenderSubSystem()
 // RenderSubSystem initialisieren
 void RenderSubSystem::init( int width, int height )
 {
-    initOpenGL ( width, height );
+    initOpenGL( width, height );
 
     GLenum errCode;
     const GLubyte *errString;
@@ -67,11 +70,8 @@ void RenderSubSystem::init( int width, int height )
     if ((errCode = glGetError()) != GL_NO_ERROR)
     {
         errString = gluErrorString(errCode);
-        gAaLog.write ( " OpenGL Error: %s ", errString );
+        gAaLog.write( "RenderSubSystem::init> OpenGL Error: %s\n", errString );
     }
-
-    m_eventConnection1 = m_gameEvents.newComponent.registerListener( boost::bind( &RenderSubSystem::onRegisterComponent, this, _1 ) );
-    m_eventConnection2 = m_gameEvents.deleteComponent.registerListener(  boost::bind( &RenderSubSystem::onUnregisterComponent, this, _1 ) );
 
     m_isInit = true;
 }
@@ -83,7 +83,7 @@ void RenderSubSystem::deInit()
         if (m_currentMatrix != World) {
             glMatrixMode( GL_PROJECTION );
             glPopMatrix();
-            glMatrixMode ( GL_MODELVIEW );
+            glMatrixMode( GL_MODELVIEW );
         }
         m_isInit = false;
     }
@@ -96,10 +96,8 @@ bool RenderSubSystem::loadData()
 }
 
 // OpenGL initialisieren
-void RenderSubSystem::initOpenGL ( int width, int height )
+void RenderSubSystem::initOpenGL(int width, int height)
 {
-    glViewport ( 0,0,width, height );
-
     //glClearColor( 0.0f, 0.0f, 0.2f, 0.0f );                     // leicht blauer Hintergrund
     glClearColor( 0.0f, 0.0f, 0.0f, 0.0f );                       // schwarzer Hintergrund
     glDisable( GL_DEPTH_TEST );                                   // Depth Testing deaktivieren
@@ -124,13 +122,28 @@ void RenderSubSystem::initOpenGL ( int width, int height )
     gluOrtho2D( 0, 4, 3, 0 ); // orthogonalen 2D-Rendermodus
     glGetFloatv(GL_PROJECTION_MATRIX, m_matrixGUI); // Matrix wird gespeichert
 
-    // Text Matrix aufstellen
-    glLoadIdentity(); // Reset
-    gluOrtho2D( 0, width, 0, height ); // orthogonalen 2D-Rendermodus
-    glGetFloatv(GL_PROJECTION_MATRIX, m_matrixText); // Matrix wird gespeichert
-
     glMatrixMode( GL_MODELVIEW );
     glLoadIdentity();
+
+    resize(width, height);
+}
+
+void RenderSubSystem::resize(int width, int height)
+{
+    glViewport(0, 0, width, height);
+
+    setMatrix(Text);
+
+    glMatrixMode ( GL_PROJECTION );
+
+	// Text Matrix aufstellen
+	glLoadIdentity(); // Reset
+	gluOrtho2D( 0, width, 0, height ); // orthogonalen 2D-Rendermodus
+	glGetFloatv(GL_PROJECTION_MATRIX, m_matrixText); // Matrix wird gespeichert
+
+
+	glMatrixMode( GL_MODELVIEW );
+    //glLoadIdentity();
 }
 
 void RenderSubSystem::clearScreen()
@@ -141,6 +154,8 @@ void RenderSubSystem::clearScreen()
 
 void RenderSubSystem::flipBuffer()
 {
+	glFlush();
+
     GLenum errCode;
     const GLubyte *errString;
 
@@ -734,7 +749,7 @@ void RenderSubSystem::displayLoadingScreen()
     m_textureManager.freeTexture("loading");
 }
 
-void RenderSubSystem::setViewPosition( const Vector2D& pos, float scale, float angle)
+void RenderSubSystem::setViewPosition(const Vector2D& pos, float scale, float angle)
 {
     glLoadIdentity();
 

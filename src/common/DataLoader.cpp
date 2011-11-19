@@ -233,7 +233,7 @@ ResourceIds DataLoader::loadGraphics( const std::string& fileName, TextureManage
 					info.wrapModeY = LoadTextureInfo::WrapClamp;
 
 				info.scale = scale;
-				info.quality = (LoadTextureInfo::Quality) gConfig.get<int>("TexQuality");
+				info.quality = LoadTextureInfo::QualityBest; // TODO (LoadTextureInfo::Quality) gConfig.get<int>("TexQuality");
 
 				pTextureManager->loadTexture(fileName, id, info);
 				loadedResources.textures.insert(id);
@@ -277,7 +277,7 @@ ResourceIds DataLoader::loadGraphics( const std::string& fileName, TextureManage
 					info.wrapModeY = LoadTextureInfo::WrapClamp;
 
 				info.scale = 1.0f;
-				info.quality = (LoadTextureInfo::Quality) gConfig.get<int>("TexQuality");
+				info.quality = LoadTextureInfo::QualityBest; // TODO (LoadTextureInfo::Quality) gConfig.get<int>("TexQuality");
 
 				pAnimationManager->loadAnimation(fileName, id, info);
 				loadedResources.animations.insert(id);

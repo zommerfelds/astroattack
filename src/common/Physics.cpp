@@ -25,23 +25,16 @@ const int PHYS_ITERATIONS = 10;
 const unsigned int cUpdatesTillGravFieldChangeIsPossible = 10;
 
 PhysicsSubSystem::PhysicsSubSystem( GameEvents& gameEvents)
-: m_eventConnection1 (), m_eventConnection2 (),
-  m_eventConnection3 (), m_eventConnection4 (), m_gameEvents ( gameEvents ),
+: m_eventConnection1 (), m_eventConnection2 (), m_gameEvents ( gameEvents ),
   m_world (b2Vec2(0.0f, 0.0f)), m_timeStep ( cPhysicsTimeStep ),
   m_velocityIterations ( PHYS_ITERATIONS ), m_positionIterations ( PHYS_ITERATIONS ),
   m_rootGravField ("rootGravField", m_gameEvents)
 {
     m_rootGravField.setGravType(CompGravField::Directional);
     m_rootGravField.setGravDir(Vector2D(0.0f, -25.0f));
-}
 
-// PhysicsSubSystem initialisieren
-void PhysicsSubSystem::init()
-{
-    m_eventConnection1 = m_gameEvents.newComponent.registerListener( boost::bind( &PhysicsSubSystem::onRegisterComp_phys, this, _1 ) );
-    m_eventConnection2 = m_gameEvents.deleteComponent.registerListener( boost::bind( &PhysicsSubSystem::onUnregisterComp_phys, this, _1 ) );
-    m_eventConnection3 = m_gameEvents.newComponent.registerListener( boost::bind( &PhysicsSubSystem::onRegisterComp_grav, this, _1 ) );
-    m_eventConnection4 = m_gameEvents.deleteComponent.registerListener( boost::bind( &PhysicsSubSystem::onUnregisterComp_grav, this, _1 ) );
+    m_eventConnection1 = m_gameEvents.newComponent.registerListener( boost::bind( &PhysicsSubSystem::onRegisterComp, this, _1 ) );
+    m_eventConnection2 = m_gameEvents.deleteComponent.registerListener( boost::bind( &PhysicsSubSystem::onUnregisterComp, this, _1 ) );
 }
 
 // helper function
@@ -158,15 +151,26 @@ void PhysicsSubSystem::calculateSmoothPositions(float accumulator)
     }
 }
 
-void PhysicsSubSystem::onRegisterComp_phys(Component& component)
+void PhysicsSubSystem::onRegisterComp( Component& component )
 {
-    if (component.getTypeId() != CompPhysics::COMPONENT_TYPE_ID)
-        return;
+    if (component.getTypeId() == CompPhysics::COMPONENT_TYPE_ID)
+        onRegisterCompPhys(static_cast<CompPhysics&>(component));
+    else if (component.getTypeId() == CompGravField::COMPONENT_TYPE_ID)
+        onRegisterCompGrav(static_cast<CompGravField&>(component));
+}
 
-    CompPhysics& compPhys = static_cast<CompPhysics&>(component);
+void PhysicsSubSystem::onUnregisterComp( Component& component )
+{
+    if (component.getTypeId() == CompPhysics::COMPONENT_TYPE_ID)
+        onUnregisterCompPhys(static_cast<CompPhysics&>(component));
+    else if (component.getTypeId() == CompGravField::COMPONENT_TYPE_ID)
+        onUnregisterCompGrav(static_cast<CompGravField&>(component));
+}
 
+void PhysicsSubSystem::onRegisterCompPhys(CompPhysics& compPhys)
+{
     // get position from CompPosition, if it exists
-    CompPosition* compPos = component.getSiblingComponent<CompPosition>();
+    CompPosition* compPos = compPhys.getSiblingComponent<CompPosition>();
     if (compPos)
     {
         compPhys.m_bodyDef.position = compPos->m_position;
@@ -178,7 +182,7 @@ void PhysicsSubSystem::onRegisterComp_phys(Component& component)
 
     compPhys.m_gravField = &m_rootGravField;
 
-    std::vector<CompShape*> compShapes = component.getSiblingComponents<CompShape>();
+    std::vector<CompShape*> compShapes = compPhys.getSiblingComponents<CompShape>();
 
     for (size_t i=0; i < compPhys.m_shapeInfos.size(); i++)
     {
@@ -217,21 +221,16 @@ void PhysicsSubSystem::onRegisterComp_phys(Component& component)
     m_physicsComps.push_back( &compPhys );
 }
 
-void PhysicsSubSystem::onUnregisterComp_phys(Component& component)
+void PhysicsSubSystem::onUnregisterCompPhys(CompPhysics& compPhys)
 {
-    if (component.getTypeId() != CompPhysics::COMPONENT_TYPE_ID)
-        return;
-
-    CompPhysics& compPhysToUnregister = static_cast<CompPhysics&>(component);
-
-    if ( compPhysToUnregister.m_body )
+    if ( compPhys.m_body )
     {
-        m_world.DestroyBody( compPhysToUnregister.m_body );
-        compPhysToUnregister.m_body = NULL;
+        m_world.DestroyBody( compPhys.m_body );
+        compPhys.m_body = NULL;
     }
     for (size_t i = 0; i < m_physicsComps.size(); i++)
     {
-        if ( m_physicsComps[i] == &compPhysToUnregister )
+        if ( m_physicsComps[i] == &compPhys )
         {
             m_physicsComps.erase( m_physicsComps.begin()+i );
             break;
@@ -239,23 +238,13 @@ void PhysicsSubSystem::onUnregisterComp_phys(Component& component)
     }
 }
 
-void PhysicsSubSystem::onRegisterComp_grav( Component& component )
+void PhysicsSubSystem::onRegisterCompGrav( CompGravField& compGrav )
 {
-    if (component.getTypeId() != CompGravField::COMPONENT_TYPE_ID)
-            return;
-
-    CompGravField& compGrav = static_cast<CompGravField&>(component);
-
     m_gravFields.push_back( &compGrav );
 }
 
-void PhysicsSubSystem::onUnregisterComp_grav( Component& component )
+void PhysicsSubSystem::onUnregisterCompGrav( CompGravField& compGrav )
 {
-    if (component.getTypeId() != CompGravField::COMPONENT_TYPE_ID)
-            return;
-
-    CompGravField& compGrav = static_cast<CompGravField&>(component);
-
     for ( size_t i = 0; i < m_gravFields.size(); ++i )
     {
         if ( m_gravFields[i] == &compGrav )

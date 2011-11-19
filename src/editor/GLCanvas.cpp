@@ -1,17 +1,80 @@
+/*
+ * GLCanvas.cpp
+ * This file is part of Astro Attack
+ * Copyright 2011 Christian Zommerfelds
+ */
+
 #include "GLCanvas.h"
 #include <wx/frame.h>
 #include <wx/window.h>
 #include <SDL/SDL_opengl.h>
 
+// temp
+//#include "game/Logger.h"
 #include <iostream>
 using namespace std;
 
+#include "Editor.h"
+
+#include "common/GameEvents.h"
+
 BEGIN_EVENT_TABLE(GLCanvas, wxGLCanvas)
-	EVT_PAINT(GLCanvas::render)
+	EVT_SIZE(GLCanvas::onResize)
+	EVT_PAINT(GLCanvas::onPaint)
+	EVT_LEFT_DOWN(GLCanvas::onLMouseDown)
 END_EVENT_TABLE()
 
-GLCanvas::GLCanvas(wxWindow* parent, int* args) :
-    wxGLCanvas(parent, wxID_ANY, args, wxDefaultPosition, wxDefaultSize, wxFULL_REPAINT_ON_RESIZE)
+namespace {
+	int cInitCount = 2;
+}
+
+/*void glErr()
+{
+	GLenum errCode;
+	const GLubyte *errString;
+
+	if ((errCode = glGetError()) != GL_NO_ERROR)
+	{
+		errString = gluErrorString(errCode);
+		cerr << "GLCanvas> OpenGL Error " << errString << endl;
+	}
+}
+
+void proj()
+{
+	float M[16];
+	glMatrixMode ( GL_PROJECTION );
+	glGetFloatv(GL_PROJECTION_MATRIX, M);
+	glMatrixMode( GL_MODELVIEW );
+	cerr << "proj: ";
+	for (int i=0; i<16; i++) cerr << M[i] << " ";
+	cerr << endl;
+}
+
+void test()
+{
+	int i = -1;
+	glMatrixMode ( GL_PROJECTION );
+	while (glGetError() == GL_NO_ERROR)
+	{
+		glPopMatrix();
+		i++;
+	}
+	cerr << "==> Stack depth was " << i << endl;
+	while (i > 0)
+	{
+		glPushMatrix();
+		i--;
+	}
+	glMatrixMode( GL_MODELVIEW );
+}*/
+
+GLCanvas::GLCanvas(Editor& editor, wxWindow* parent, int* args, GameEvents& events) :
+    wxGLCanvas(parent, wxID_ANY, args, wxDefaultPosition, wxDefaultSize, wxFULL_REPAINT_ON_RESIZE),
+    m_editor (editor),
+    m_renderer (events),
+    m_cameraController (m_renderer, 1),
+    m_initCount (0)
 {
 	m_context = new wxGLContext(this);
  
@@ -23,59 +86,83 @@ GLCanvas::~GLCanvas()
 {
 	delete m_context;
 }
- 
-void GLCanvas::render( wxPaintEvent& evt )
+
+void GLCanvas::onLMouseDown(wxMouseEvent& evt)
 {
-	cout << "rendering..." << endl;
+	cerr << "mouse pos: " << evt.GetPosition().x << "/" << evt.GetPosition().y << endl;
+}
+
+void GLCanvas::onResize(wxSizeEvent& evt)
+{
+	if (m_initCount > 0)
+	{
+		m_renderer.resize(evt.GetSize().x, evt.GetSize().y);
+		m_cameraController.setAspectRatio((float(evt.GetSize().x))/evt.GetSize().y);
+		m_cameraController.setZoom(0.08f);
+		Refresh();
+	}
+}
+
+void GLCanvas::onPaint( wxPaintEvent& evt )
+{
     if(!IsShown()) return;
+
+	if (m_initCount < cInitCount)
+	{
+		m_initCount++;
+
+		if (m_initCount == cInitCount)
+		{
+			//gAaLog.write("-->init");
+			cerr << "init" << endl;
+			m_renderer.init(GetSize().x, GetSize().y);
+
+			m_renderer.setMatrix(RenderSubSystem::World);
+
+		    m_renderer.loadData();
+
+			m_cameraController.setAspectRatio((float(GetSize().x))/GetSize().y);
+			m_cameraController.setZoom(0.08f);
+		}
+
+	    wxGLCanvas::SetCurrent(*m_context);
+	    wxPaintDC(this); // only to be used in paint events. use wxClientDC to paint outside the paint event
+	    SwapBuffers();
+
+		return;
+	}
+
+	cerr << "rendering" << endl;
     
     wxGLCanvas::SetCurrent(*m_context);
     wxPaintDC(this); // only to be used in paint events. use wxClientDC to paint outside the paint event
-	
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	
-    // ------------- draw some 2D ----------------
-    
-    int topleft_x = 0;
-    int topleft_y = 0;
-    int bottomrigth_x = GetSize().x;
-    int bottomrigth_y = GetSize().y;
-    
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f); // Black Background
-    glClearDepth(1.0f);	// Depth Buffer Setup
-    glEnable(GL_DEPTH_TEST); // Enables Depth Testing
-    glDepthFunc(GL_LEQUAL); // The Type Of Depth Testing To Do
-    glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
-	
-    glEnable(GL_COLOR_MATERIAL);
-	
-    glViewport(topleft_x, topleft_y, bottomrigth_x-topleft_x, bottomrigth_y-topleft_y);
-    
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    gluOrtho2D( 0, 1, 0, 1 );
-    
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-    
-	
-    glColor4f(1.0f, 0.0f, 0.0f, 1.0f);
-    glBegin(GL_TRIANGLES);
-    glVertex3f(0.1f,0.1f,0.0f);
-    glVertex3f(0.9f,0.1f,0.0f);
-    glVertex3f(0.5f,0.9f,0.0f);
-    glEnd();
-	
-    // red square
-    /*glColor4f(1, 0, 0, 1);
-    glBegin(GL_QUADS);
-    glVertex3f(GetSize().x/8, GetSize().y/3, 0);
-    glVertex3f(GetSize().x*3/8, GetSize().y/3, 0);
-    glVertex3f(GetSize().x*3/8, GetSize().y*2/3, 0);
-    glVertex3f(GetSize().x/8, GetSize().y*2/3, 0);
-    glEnd();*/
-    
+
+    m_renderer.update(); // TODO: shouldn't be here
+
+    m_renderer.clearScreen();
+    m_renderer.setMatrix(RenderSubSystem::GUI);
+    // Hintergrundbild zeichnen
+	{
+		float texCoord[8] = { 0.0f, 0.0f,
+							 0.0f, 1.0f,
+							 1.0f, 1.0f,
+							 1.0f, 0.0f };
+		float vertexCoord[8] = { 0.0f, 0.0f,
+						 	 	 0.0f, 3.0f,
+								 4.0f, 3.0f,
+								 4.0f, 0.0f };
+		m_renderer.drawTexturedQuad( texCoord, vertexCoord, "_starfield" );
+	}
+    // Weltmodus
+    m_renderer.setMatrix(RenderSubSystem::World);
+    m_cameraController.look();
+    // Animationen zeichnen
+	//m_renderer.drawVisualAnimationComps();
+    // Texturen zeichnen
+	m_renderer.drawVisualTextureComps();
+
     glFlush();
+	
+    cerr << "swapping" << endl;
     SwapBuffers();
-    cout << "swapping..." << endl;
 }

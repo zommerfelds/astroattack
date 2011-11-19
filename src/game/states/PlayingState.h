@@ -17,7 +17,7 @@
 #include "common/GameState.h"
 #include "common/GameEvents.h"
 #include "common/World.h"
-#include "game/CameraController.h"
+#include "game/InputCameraController.h"
 
 class EventConnection;
 
@@ -44,7 +44,7 @@ private:
     static const GameStateId STATE_ID;
     
     World m_gameWorld;          // Spielwelt
-    CameraController m_cameraController;        // Kamera
+    InputCameraController m_cameraController;        // Kamera
 
     EventConnection m_eventConnection1;
     EventConnection m_eventConnection2;

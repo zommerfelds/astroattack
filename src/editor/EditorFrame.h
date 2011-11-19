@@ -9,18 +9,34 @@
 
 #include "gen/EditorFrameBase.h"
 
-class UpdateTimer;
-class GLCanvas;
+#include <wx/timer.h>
+#include "GLCanvas.h"
+
+class Editor;
+
+class UpdateTimer : public wxTimer
+{
+    GLCanvas& pane;
+public:
+    UpdateTimer(GLCanvas& pane) : pane (pane) {}
+
+    void Notify()
+	{
+		pane.Refresh();
+	}
+};
+
+class GameEvents;
 
 class EditorFrame : public EditorFrameBase {
 public:
-	EditorFrame();
+	EditorFrame(Editor& editor, GameEvents& events);
 	~EditorFrame();
 	void OnClose(wxCloseEvent& evt);
 	
 private:
-	UpdateTimer* timer;
-	GLCanvas* canvas;
+	GLCanvas m_canvas;
+	UpdateTimer m_timer;
 
 	DECLARE_EVENT_TABLE()
 };

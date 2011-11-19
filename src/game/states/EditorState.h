@@ -13,7 +13,7 @@
 
 #include "common/GameState.h"
 #include "common/World.h"
-#include "game/CameraController.h"
+#include "game/InputCameraController.h"
 #include "common/Vector2D.h"
 
 //--------------------------------------------//
@@ -39,7 +39,7 @@ private:
     static const GameStateId STATE_ID;
 
     World m_gameWorld;          // Spielwelt
-    CameraController m_cameraController;        // Kamera
+    InputCameraController m_cameraController;        // Kamera
 
     Vector2D m_clickedPoints[8];
     int m_currentPoint;

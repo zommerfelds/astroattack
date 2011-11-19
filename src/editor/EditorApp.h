@@ -11,7 +11,7 @@
 
 class EditorApp : public wxApp
 {
-  public:
+public:
     virtual bool OnInit();
 };
 

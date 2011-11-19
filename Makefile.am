@@ -6,9 +6,9 @@ AM_CPPFLAGS = -I $(top_srcdir)/src -I /usr/include/SDL
 bin_PROGRAMS = AstroAttack AAEditor
 
 common_src = \
-    src/game/CameraController.cpp src/common/Component.cpp src/common/ComponentManager.cpp src/game/Configuration.cpp \
+    src/common/CameraController.cpp src/common/Component.cpp src/common/ComponentManager.cpp src/game/Configuration.cpp \
     src/common/DataLoader.cpp src/common/Event.cpp src/common/Font.cpp src/game/GameApp.cpp \
-    src/common/GameState.cpp src/game/Gui.cpp src/game/Input.cpp \
+    src/common/GameState.cpp src/game/Gui.cpp src/game/Input.cpp src/game/InputCameraController.cpp \
     src/game/Logger.cpp src/game/OsMsgBox.cpp src/common/Physics.cpp \
     src/common/Renderer.cpp src/common/Sound.cpp src/common/Texture.cpp src/common/Vector2D.cpp \
     src/common/World.cpp src/game/PlayerController.cpp \
@@ -34,7 +34,7 @@ AAEditor_CXXFLAGS = `wx-config --cxxflags`
 AAEditor_LDFLAGS = `wx-config --libs --gl-libs`
 
 AAEditor_SOURCES = $(common_src) src/editor/EditorApp.cpp src/editor/EditorFrame.cpp \
-    src/editor/GLCanvas.cpp src/editor/gen/EditorFrameBase.cpp
+    src/editor/GLCanvas.cpp src/editor/gen/EditorFrameBase.cpp src/editor/Editor.cpp
 
 
 # === AATest ===

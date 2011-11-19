@@ -71,7 +71,7 @@ EditorFrameBase::EditorFrameBase( wxWindow* parent, wxWindowID id, const wxStrin
 	
 	m_panel2 = new wxPanel( m_panel1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer3;
-	bSizer3 = new wxBoxSizer( wxHORIZONTAL );
+	bSizer3 = new wxBoxSizer( wxVERTICAL );
 	
 	m_listCtrl1 = new wxListCtrl( m_panel2, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_ICON );
 	bSizer3->Add( m_listCtrl1, 1, wxALL|wxEXPAND, 5 );
@@ -106,7 +106,7 @@ EditorFrameBase::EditorFrameBase( wxWindow* parent, wxWindowID id, const wxStrin
 	m_panel1->SetSizer( bSizer2 );
 	m_panel1->Layout();
 	bSizer2->Fit( m_panel1 );
-	bSizer1->Add( m_panel1, 1, wxEXPAND | wxALL, 5 );
+	bSizer1->Add( m_panel1, 0, wxEXPAND | wxALL, 5 );
 	
 	this->SetSizer( bSizer1 );
 	this->Layout();

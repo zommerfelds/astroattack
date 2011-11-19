@@ -71,7 +71,6 @@ SubSystems::~SubSystems()
 bool SubSystems::init()
 {
     renderer.init( gConfig.get<int>("ScreenWidth"), gConfig.get<int>("ScreenHeight") );
-    physics.init();
     sound.init();
     return true;
 }
@@ -313,7 +312,7 @@ void GameApp::mainLoop()
             if ( m_subSystems.isLoading || deltaTime > cMaxTimeAccumulator )
             {
                 if (!m_subSystems.isLoading)
-                    std::cerr << "time accumulator too big, skipping updates" << std::endl;
+                    std::cerr << "time accumulator too big, skipping updates" << std::endl; // TODO: put in log
 
                 timeAccumulator = 0;
                 m_subSystems.isLoading = false;
@@ -331,7 +330,7 @@ void GameApp::mainLoop()
             if (m_quit)
                 break; // don't redraw the screen if we are quitting
 
-            m_subSystems.renderer.clearScreen();
+            //m_subSystems.renderer.clearScreen();
             DRAW( timeAccumulator/(cPhysicsTimeStep + slowMotionDelay)*cPhysicsTimeStep ); // Spiel zeichnen
             m_subSystems.renderer.drawFPS(m_fps);
             m_subSystems.renderer.flipBuffer();

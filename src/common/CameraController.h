@@ -13,7 +13,6 @@
 
 #include "common/Vector2D.h"
 
-class InputSubSystem;
 class RenderSubSystem;
 class ComponentManager;
 
@@ -28,26 +27,30 @@ class ComponentManager;
 class CameraController
 {
 public:
-    CameraController( const InputSubSystem& inputSubSystem, RenderSubSystem& renderSubSystem, ComponentManager& world );
-
-    // Initialisierung
-    void init();
+    CameraController(RenderSubSystem& renderSubSystem, float aspectRatio);
+    virtual ~CameraController() {};
 
     void update( float deltaTime ); // Kamarabewegung aktualisieren und auf Eingabe, die die Kamera beeinflusst, reagieren
     void look() const; // OpenGL-Ansicht aktualisieren (wird von Update() automatisch aufgerufen)
 
+    void setAspectRatio(float);
+
     // Methoden um die Kamera zu bewegen:
     // timeToArrive ist die Zeit, die benötigt werden soll, damit die Kamera den Zielort erreicht
-    void moveRelative( const Vector2D& rMove, float timeToArrive ); // rMove ist Position des Zielortes relativ zur Lage der Kamera
-    void moveAbsolute( const Vector2D& rPos, float timeToArrive ); // rPos ist absolute Position des Zielortes
+    void moveRelative( const Vector2D& rMove, float timeToArrive = 0.0f ); // rMove ist Position des Zielortes relativ zur Lage der Kamera
+    void moveAbsolute( const Vector2D& rPos, float timeToArrive = 0.0f ); // rPos ist absolute Position des Zielortes
 
     // Um heran- oder herauszuzoomen
     void zoom( float zoom ); // zoom ist der Zoomfaktor ( < 1 bedeutet herauszoomen; > 1 bedeutet herazoomen )
     void setZoom( float zoom ); // zoom ist der Zoomfaktor ( < 1 bedeutet herauszoomen; > 1 bedeutet herazoomen )
-    void setFollowPlayer( bool follow ); // soll die Kamera den Spieles folgen oder nicht?
+    float getZoom() const {
+    	return m_zoom;
+    }
 
-    void rotateAbsolute( float angle, float timeToArrive ); // Den Winkel der Kamera setzen. angle als neuer Winkel nehmen.
-    void rotateRelative( float angle, float timeToArrive ); // Den Winkel der Kamera verändern. Um angle drehen. (+:Gegenuhrzegersinn, -:Uhrzeigersinn)
+    void setZoomRange(float min, float max);
+
+    void rotateAbsolute( float angle, float timeToArrive = 0.0f ); // Den Winkel der Kamera setzen. angle als neuer Winkel nehmen.
+    void rotateRelative( float angle, float timeToArrive = 0.0f ); // Den Winkel der Kamera verändern. Um angle drehen. (+:Gegenuhrzegersinn, -:Uhrzeigersinn)
 
     Vector2D screenToWorld( const Vector2D& screenPos );
     Vector2D worldToScreen( const Vector2D& worldPos );
@@ -70,16 +73,15 @@ private:
     float m_rotation;
     float m_rotationVel;
 
+    float m_minZoom;
+    float m_maxZoom;
+
     float m_viewWidth;
     float m_viewHeight;
+    float m_refViewWidth;
+    float m_refViewHeight;
 
-    const InputSubSystem& m_inputSubSystem;
     RenderSubSystem& m_renderSubSystem;
-    ComponentManager& m_compManager;
-
-    bool m_isFollowingPlayer;
-	float m_timeSinceLastSwitchHeading;
-    char m_playerHeading; // -1: left, 0: not yet defined, 1: right
 
     // Kameratranslation
     bool m_isMovingSmoothly;

@@ -19,6 +19,7 @@ struct GameEvents;
 class Component;
 class EventConnection;
 class CompPhysics;
+class CompGravField;
 
 extern const float cPhysicsTimeStep;
 
@@ -27,7 +28,6 @@ class PhysicsSubSystem
 public:
     PhysicsSubSystem(GameEvents& gameEvents);
 
-    void init();
     void update();
 
     void calculateSmoothPositions(float accumulator);
@@ -38,14 +38,14 @@ private:
 
     EventConnection m_eventConnection1;
     EventConnection m_eventConnection2;
-	EventConnection m_eventConnection3;
-    EventConnection m_eventConnection4;
     GameEvents& m_gameEvents;
 
-    void onRegisterComp_phys( Component& entity );
-    void onUnregisterComp_phys( Component& entity );
-	void onRegisterComp_grav( Component& entity );
-    void onUnregisterComp_grav( Component& entity );
+    void onRegisterComp( Component& );
+    void onUnregisterComp( Component& );
+    void onRegisterCompPhys( CompPhysics& );
+    void onUnregisterCompPhys( CompPhysics& );
+	void onRegisterCompGrav( CompGravField& );
+    void onUnregisterCompGrav( CompGravField& );
 
     b2World m_world;
     float m_timeStep;

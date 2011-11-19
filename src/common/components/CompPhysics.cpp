@@ -20,6 +20,8 @@ using boost::property_tree::ptree;
 // eindeutige ID
 const ComponentTypeId CompPhysics::COMPONENT_TYPE_ID = "CompPhysics";
 
+// TODO: don't simply access m_body (and others?) because maybe a PhysicsSubSystem doesn't exist and hasn't set it up
+
 // Konstruktor
 CompPhysics::CompPhysics(const ComponentIdType& id, GameEvents& gameEvents, const BodyDef& rBodyDef) :
     Component(id, gameEvents),

@@ -15,7 +15,6 @@
 #include <boost/shared_ptr.hpp>
 
 struct Box;
-struct Font;
 class FTFont;
 
 enum Align
