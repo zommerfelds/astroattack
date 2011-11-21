@@ -17,7 +17,7 @@
 #include "game/Gui.h"
 #include "common/Sound.h"
 #include "game/Configuration.h"
-#include "game/Logger.h"
+#include "common/Logger.h"
 #include "game/GameApp.h"
 #include "game/Input.h"
 #include "common/Vector2D.h"
@@ -63,7 +63,7 @@ void MainMenuState::init()        // State starten
 	using boost::shared_ptr;
 	using boost::make_shared;
 
-    gAaLog.write ( "Loading menu... " );
+    log(Info) << "Loading menu... ";
     //GetSubSystems().renderer.DisplayLoadingScreen();
     
     // Grafiken aus XML-Datei laden
@@ -116,7 +116,7 @@ void MainMenuState::init()        // State starten
     pugi::xml_parse_result result = doc.load_file(cLevelSequenceFileName.c_str());
     if (!result)
     {
-        gAaLog.write( "[ Error parsing file '%s' at offset %d!\nError description: %s ]\n\n", cLevelSequenceFileName.c_str(), result.offset, result.description() );
+        log(Error) << "[ Error parsing file '" << cLevelSequenceFileName << "' at offset " << result.offset << "!\nError description: " << result.description() << " ]\n\n";
         return;
     }
 
@@ -190,7 +190,7 @@ void MainMenuState::init()        // State starten
     getSubSystems().gui.insertWidget( menuNames[Options], shared_ptr<Widget>(make_shared<WidgetButton>( Rect(x,x+w,y,y+h), "1280x1024", boost::bind( &MainMenuState::onPressedResolution, this, 1280, 1024 ), boost::bind( &MainMenuState::onPressedSound, this ) )) );
 
     
-    gAaLog.write ( "[ Done ]\n" );
+    log(Info) << "[ Done ]\n";
 }
 
 void MainMenuState::cleanup()     // State abbrechen

@@ -9,7 +9,7 @@ common_src = \
     src/common/CameraController.cpp src/common/Component.cpp src/common/ComponentManager.cpp src/game/Configuration.cpp \
     src/common/DataLoader.cpp src/common/Event.cpp src/common/Font.cpp src/game/GameApp.cpp \
     src/common/GameState.cpp src/game/Gui.cpp src/game/Input.cpp src/game/InputCameraController.cpp \
-    src/game/Logger.cpp src/game/OsMsgBox.cpp src/common/Physics.cpp \
+    src/common/Logger.cpp src/game/OsMsgBox.cpp src/common/Physics.cpp \
     src/common/Renderer.cpp src/common/Sound.cpp src/common/Texture.cpp src/common/Vector2D.cpp \
     src/common/World.cpp src/game/PlayerController.cpp \
     src/common/components/CompGravField.cpp src/common/components/CompPhysics.cpp \

@@ -13,7 +13,7 @@
 
 #include "DataLoader.h"
 #include "common/World.h"
-#include "game/Logger.h"
+#include "common/Logger.h"
 #include "game/Configuration.h"
 #include "common/GameEvents.h"
 #include "common/Renderer.h"
@@ -52,8 +52,7 @@ void DataLoader::loadWorld(const std::string& fileName, World& gameWorld, GameEv
         using boost::shared_ptr;
         using boost::make_shared;
 
-        gAaLog.write ( "Loading world file \"%s\"...\n", fileName.c_str() );
-        gAaLog.increaseIndentationLevel();
+        log(Info) << "Loading world file \"" << fileName << "\"...\n";
 
         ptree levelPropTree;
         read_info(fileName, levelPropTree);
@@ -66,8 +65,7 @@ void DataLoader::loadWorld(const std::string& fileName, World& gameWorld, GameEv
 
             std::string entityId = entityPropTree.get<std::string>("id");
             ComponentList entity;
-            gAaLog.write ( "Creating entity \"%s\"\n", entityId.c_str() );
-            gAaLog.increaseIndentationLevel();
+            log(Info) << "  Creating entity \"" << entityId << "\"\n";
 
             BOOST_FOREACH(const ptree::value_type &value2, entityPropTree)
             {
@@ -79,7 +77,7 @@ void DataLoader::loadWorld(const std::string& fileName, World& gameWorld, GameEv
 
                 std::string compType = compPropTree.get<std::string>("type");
                 std::string compId = compPropTree.get("id", "");
-                gAaLog.write ( "Creating component \"%s\"... ", compType.c_str() );
+                log(Info) << "    Creating component \"" << compType << "\"... ";
 
                 shared_ptr<Component> component;
 
@@ -115,15 +113,13 @@ void DataLoader::loadWorld(const std::string& fileName, World& gameWorld, GameEv
 
                 entity.push_back(component);
 
-                gAaLog.write ( "[ Done ]\n" );
+                log(Info) << "  [ Done ]\n";
             }
 
             gameWorld.getCompManager().addEntity(entityId, entity);
-            gAaLog.decreaseIndentationLevel();
         }
 
-        gAaLog.decreaseIndentationLevel();
-        gAaLog.write ( "[ Done ]\n\n", fileName.c_str() );
+        log(Info) << "[ Done ]\n\n";
     }
     catch (boost::property_tree::ptree_error& e)
     {
@@ -138,8 +134,7 @@ void DataLoader::loadSlideShow( const std::string& fileName, SlideShow* pSlideSh
         using boost::shared_ptr;
         using boost::make_shared;
 
-        gAaLog.write ( "Loading slide show file \"%s\"...\n", fileName.c_str() );
-        gAaLog.increaseIndentationLevel();
+        log(Info) << "Loading slide show file \"" << fileName << "\"...\n";
 
         ptree propTree;
         read_info(fileName, propTree);
@@ -168,8 +163,7 @@ void DataLoader::loadSlideShow( const std::string& fileName, SlideShow* pSlideSh
             }
         }
 
-        gAaLog.decreaseIndentationLevel();
-        gAaLog.write ( "[ Done ]\n\n", fileName.c_str() );
+        log(Info) << "[ Done ]\n\n";
     }
     catch (boost::property_tree::ptree_error& e)
     {
@@ -179,8 +173,7 @@ void DataLoader::loadSlideShow( const std::string& fileName, SlideShow* pSlideSh
 
 ResourceIds DataLoader::loadGraphics( const std::string& fileName, TextureManager* pTextureManager, AnimationManager* pAnimationManager, FontManager* pFontManager )
 {
-	gAaLog.write ( "Loading graphics resource file \"%s\"...\n", fileName.c_str() );
-	gAaLog.increaseIndentationLevel();
+	log(Info) << "Loading graphics resource file \"" << fileName << "\"...\n";
 
 	ResourceIds loadedResources;
 
@@ -306,14 +299,13 @@ ResourceIds DataLoader::loadGraphics( const std::string& fileName, TextureManage
 	{
         throw DataLoadException(std::string("PropertyTree error parsing file '" + fileName + "': ") + e.what());
 	}
-	gAaLog.decreaseIndentationLevel();
-	gAaLog.write ( "[ Done ]\n\n", fileName.c_str() );
+	log(Info) << "[ Done ]\n\n";
 	return loadedResources;
 }
 
 void DataLoader::unLoadGraphics( const ResourceIds& resourcesToUnload, TextureManager* pTextureManager, AnimationManager* pAnimationManager, FontManager* pFontManager )
 {
-    gAaLog.write ( "Unloading resources... " );
+    log(Info) << "Unloading resources... ";
 
     // Texturen laden
     if ( pTextureManager )
@@ -335,13 +327,12 @@ void DataLoader::unLoadGraphics( const ResourceIds& resourcesToUnload, TextureMa
         BOOST_FOREACH(const FontId& id, resourcesToUnload.fonts)
             pFontManager->freeFont(id);
     }
-    gAaLog.write ( "[ Done ]\n\n" );
+    log(Info) << "[ Done ]\n\n";
 }
 
 void DataLoader::saveWorld(const std::string& fileName, const World& gameWorld)
 {
-    gAaLog.write ( "Saving XML file \"%s\"...\n", fileName.c_str() );
-    gAaLog.increaseIndentationLevel();
+    log(Info) << "Saving XML file \"" << fileName << "\"...\n";
     
     ptree levelPropTree;
 	
@@ -369,6 +360,5 @@ void DataLoader::saveWorld(const std::string& fileName, const World& gameWorld)
     
     write_info(fileName, levelPropTree, std::locale(), boost::property_tree::info_parser::info_writer_settings<char>('\t',1));
 
-    gAaLog.decreaseIndentationLevel();
-    gAaLog.write ( "[ Done saving XML file \"%s\" ]\n\n", fileName.c_str() );
+    log(Info) << "[ Done saving XML file ]\n\n";
 }

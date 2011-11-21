@@ -13,7 +13,7 @@
 #include "game/GameApp.h"
 #include "common/Renderer.h"
 #include "game/Input.h"
-#include "game/Logger.h"
+#include "common/Logger.h"
 #include "game/Configuration.h"
 #include "common/DataLoader.h"
 #include "common/Physics.h"
@@ -54,7 +54,7 @@ EditorState::EditorState( SubSystems& subSystems )
         }        
     }
     if ( i == texList.size() )
-        gAaLog.write ( "Warning: No textures found for editor!\n" );
+        log(Warning) << "No textures found for editor!\n";
 }
 
 void EditorState::init()        // State starten

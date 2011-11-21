@@ -9,7 +9,7 @@
 #include "Sound.h"
 #include "SDL_mixer.h"
 #include "game/Configuration.h"
-#include "game/Logger.h"
+#include "common/Logger.h"
 #include "Exception.h" // Ausnahmen im Program (werden in main.cpp eingefangen)
 
 /*void Vol(int chan, void *stream, int len, void *udata)
@@ -39,13 +39,13 @@ bool SoundSubSystem::init()
 {
     if ( m_isInit )
     {
-        gAaLog.write ( "Warning in SoundSubSystem::Init(): Sound SubSystem was already initialized!\n" );
+        log(Warning) << "SoundSubSystem::Init(): Sound SubSystem was already initialized!\n";
         return true;
     }
     if( Mix_OpenAudio( MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, 2, 1024 ) == -1 )
     {
-        //throw Exception ( gAaLog.Write ( "Error in Mix_OpenAudio: %s\n", Mix_GetError() ) );
-        gAaLog.write ( "Error in Mix_OpenAudio: %s\n", Mix_GetError() );
+        //throw Exception ( log() << "Error in Mix_OpenAudio: %s\n", Mix_GetError() ) );
+        log(Error) << "Error in Mix_OpenAudio: " << Mix_GetError() << "\n";
         return false;
     }
     Mix_AllocateChannels(64);
@@ -56,7 +56,7 @@ bool SoundSubSystem::init()
     Mix_HookMusicFinished( &SoundSubSystem::musicFinishedCallback );
 
     /*if(!Mix_RegisterEffect(MIX_CHANNEL_POST, Vol, NULL, NULL)) {
-        gAaLog.Write("Mix_RegisterEffect: %s\n", Mix_GetError());
+        log() <<"Mix_RegisterEffect: %s\n", Mix_GetError());
     }*/
 
     m_isInit = true;
@@ -92,18 +92,18 @@ void SoundSubSystem::loadSound( const std::string& name, SoundId id )
 {
     if ( !m_isInit )
     {
-        gAaLog.write ( "Error in SoundSubSystem::LoadSound(): Sound SubSystem is not initialized!\n" );
+        log(Error) << "SoundSubSystem::LoadSound(): Sound SubSystem is not initialized!\n";
         return;
     }
     if ( m_sounds.count( id )==1 )
     {
-        gAaLog.write ( "Warning loading sound: Sound with ID \"%s\" exists already! (new sound was not loaded)\n", id.c_str() );
+        log(Error) << "Loading sound: Sound with ID \"" << id << "\" exists already! (new sound was not loaded)\n";
         return;
     }
     Mix_Chunk *sample = Mix_LoadWAV( name.c_str() );
     if( !sample )
     {
-        gAaLog.write ( "Error loading sound: %s\n", Mix_GetError() );
+        log(Error) << "Loading sound: " << Mix_GetError() << "\n";
         return;
     }
 
@@ -136,7 +136,7 @@ void SoundSubSystem::playSound(const SoundId &id)
     {
         if( Mix_PlayChannel( -1, c_it->second, 0 ) == -1 )
         {
-            gAaLog.write ( "Error in Mix_PlayChannel: %s\n", Mix_GetError() );
+            log(Error) << "Error in Mix_PlayChannel: " << Mix_GetError() << "\n";
         }
     }
 }
@@ -145,19 +145,19 @@ void SoundSubSystem::loadMusic(const std::string& name, MusicId id)
 {
     if ( !m_isInit )
     {
-        gAaLog.write ( "Error in SoundSubSystem::LoadMusic(): Sound SubSystem is not initialized!\n" );
+        log(Error) << "SoundSubSystem::LoadMusic(): Sound SubSystem is not initialized!\n";
         return;
     }
     if ( m_music.count( id )==1 )
     {
-        gAaLog.write ( "Warning loading music: Music with ID \"%s\" exists already! (new music was not loaded)\n", id.c_str() );
+        log(Warning) << "Loading music: Music with ID \"" << id << "\" exists already! (new music was not loaded)\n";
         return;
     }
     Mix_Music *music;
     music=Mix_LoadMUS( name.c_str() );
     if( !music )
     {
-        gAaLog.write ( "Error loading music: %s\n", Mix_GetError() );
+        log(Error) << "Loading music: " << Mix_GetError() << "\n";
         return;
     }
 
@@ -185,7 +185,7 @@ void SoundSubSystem::playMusic(const MusicId &id, bool forever, int fadeInMs)
     {
         if( Mix_FadeInMusic(c_it->second, forever?-1:0, fadeInMs) == -1 )
         {
-            gAaLog.write ( "Error in Mix_FadeInMusic: %s\n", Mix_GetError() );
+            log(Error) << "Mix_FadeInMusic: " << Mix_GetError() << "\n";
         }
         m_currentPlayingMusic = c_it->second;
     }

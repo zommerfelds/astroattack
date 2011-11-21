@@ -52,6 +52,12 @@ bool writeConfig(const std::string& fileName, const ptree& config)
         	comment = "FX volume - between 0.0 and 1.0";
         else if (name == "WideScreen")
         	comment = "Wide screen mode - true: on, false: off";
+        else if (name == "LogConsoleLevel")
+        	comment = "Logging level for stdout - Error, Warning, Info, Detail, Debug or Off";
+        else if (name == "LogFileLevel")
+        	comment = "Logging level for log file - Error, Warning, Info, Detail, Debug or Off";
+        else if (name == "LogFileName")
+        	comment = "Name of the log file";
 
         if (!comment.empty())
         	fout << "; " << comment << std::endl;

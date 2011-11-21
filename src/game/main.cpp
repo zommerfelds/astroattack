@@ -8,12 +8,18 @@
 
 #include <vector>
 #include <string>
+#include <boost/property_tree/info_parser.hpp>
 
 #include "main.h" // wichtige Definitionen und Dateien einbinden
 #include "GameApp.h"
 #include "common/Exception.h" // Ausnahmen im Program
+#include "Configuration.h"
 
-#include "Logger.h"
+#include "common/Logger.h"
+
+namespace {
+const std::string cConfigFileName = "data/config.info";
+}
 
 // Programmstart!
 int main ( int argc, char* argv[] )
@@ -24,16 +30,21 @@ int main ( int argc, char* argv[] )
 
     std::vector<std::string> args (argv+1, argv+argc);
 
-    if ( gAaLog.isOpen()==false ) // Fehler beim Öffnen?
+    // TODO
+    /*if ( gAaLog.isOpen()==false ) // Fehler beim Öffnen?
 	{
         OsMsgBox( "Log file \"" LOG_FILE_NAME "\" could not be opened!\n", "Error" );
-	}
+	}*/
+
+    // Einstellung lesen
+    boost::property_tree::info_parser::read_info(cConfigFileName, gConfig); // TODO: handle fail
+    setUpLoggerFromPropTree(gConfig);
 
     do
     {
         gRestart = false;
 
-        gAaLog.writeInfoStart();
+        //gAaLog.writeInfoStart(); TODO
 
         //try
         {
@@ -46,26 +57,28 @@ int main ( int argc, char* argv[] )
         }
         catch ( std::bad_alloc& ) // Falls nicht genügend Speicherplatz für alle Objekte gefunden wurde wird diese Ausnahme aufgerufen
         {
-            OsMsgBox( gAaLog.write( "Error: Memory could not be allocated!\n" ), "Exception" );
+            OsMsgBox( log() << "Error: Memory could not be allocated!\n" ), "Exception" );
         }
         catch ( std::exception& e ) // Falls eine andere Standart-Ausnahme
         {
             std::string error_msg = std::string("Error: ") + e.what();
-            OsMsgBox( gAaLog.write( error_msg.c_str() ), "Exception" ); // Fehler ausgeben
+            OsMsgBox( log() << error_msg ), "Exception" ); // Fehler ausgeben
         }
         catch (...) // Falls eine unbekannte Ausnahme
         {
             char std_err_msg[] = "AstroAttack has encountered an unrecoverable error.\n";
             char std_err_msg2[] = "See the log file \"" LOG_FILE_NAME "\" for more information.";
-            OsMsgBox( std::string( gAaLog.write( std_err_msg ) ) + std_err_msg2, "Exception" );
+            OsMsgBox( std::string( log() << std_err_msg ) ) + std_err_msg2, "Exception" );
         }*/
 
-        gAaLog.writeInfoEnd();
+        //gAaLog.writeInfoEnd(); TODO
         if ( gRestart )
         {
-            gAaLog.write( "\n\n============= Restarting " GAME_NAME " =============\n\n" );
+            log(Info) << "\n\n============= Restarting " GAME_NAME " =============\n\n";
         }
     } while (gRestart);
+
+    writeConfig(cConfigFileName, gConfig);
 
     return 0; // Programm beenden!
 }

@@ -11,7 +11,7 @@
 
 #include "common/Renderer.h"
 #include "game/Configuration.h"
-#include "game/Logger.h"
+#include "common/Logger.h"
 #include "game/GameApp.h"
 #include "game/Input.h"
 #include "common/Vector2D.h"
@@ -54,10 +54,9 @@ SlideShowState::SlideShowState( SubSystems& subSystems, const std::string& slide
 
 void SlideShowState::init()        // State starten
 {
-    gAaLog.write ( "Loading slide show..." );
+    log(Info) << "Loading slide show...";
     //GetSubSystems().renderer.displayLoadingScreen();
     //GetSubSystems().renderer.displayTextScreen("p l e a s e    w a i t");
-    gAaLog.increaseIndentationLevel();
 
     try
     {
@@ -68,7 +67,7 @@ void SlideShowState::init()        // State starten
     {
         // TODO is this a good thing to do?
         // TODO show error
-        gAaLog.write("Error loading file : %s", e.getMsg().c_str());
+        log(Error) << "Error loading file : " << e.getMsg() << "\n";
         boost::shared_ptr<MainMenuState> menuState (new MainMenuState(getSubSystems()));
         getSubSystems().stateManager.changeState(menuState);
         return;
@@ -96,8 +95,7 @@ void SlideShowState::init()        // State starten
 
     getSubSystems().sound.playMusic( "slideShowMusic", true, 0 );
 
-    gAaLog.decreaseIndentationLevel();
-    gAaLog.write ( "[ Done ]\n" );
+    log(Info) << "[ Done ]\n";
 }
 
 void SlideShowState::cleanup()     // State abbrechen

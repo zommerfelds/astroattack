@@ -6,7 +6,7 @@
 
 #include "CompTrigger_Conditions.h"
 #include "CompPhysics.h"
-#include "game/Logger.h"
+#include "common/Logger.h"
 
 #include <boost/foreach.hpp>
 
@@ -50,7 +50,7 @@ bool ConditionEntityTouchedThis::isConditionTrue()
     std::vector<CompPhysics*> thisCompPhysics = m_pCompTrigger->getSiblingComponents<CompPhysics>();
     if (thisCompPhysics.empty())
     {
-        gAaLog.write("WARNING testing if 'EntityTouchedThis' condition is true in entity '%s': there are no CompPhysics", m_pCompTrigger->getEntityId().c_str());
+        log(Warning) << "while testing if 'EntityTouchedThis' condition is true in entity '" << m_pCompTrigger->getEntityId() << "': there are no CompPhysics\n";
         return false;
     }
 

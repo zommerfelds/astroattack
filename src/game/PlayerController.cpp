@@ -11,7 +11,7 @@
 #include "common/GameEvents.h"
 #include "game/Input.h"
 #include "common/Vector2D.h"
-#include "game/Logger.h"
+#include "common/Logger.h"
 #include "game/Input.h"
 
 #include "common/components/CompPlayerController.h"
@@ -54,7 +54,7 @@ void PlayerController::update()
 	CompPhysics* playerCompPhysics = m_compPlayerContrl->getSiblingComponent<CompPhysics>();
 	if ( playerCompPhysics == NULL )
 	{
-		gAaLog.write("WARNING: entity '%s' has component CompPlayerController but no CompPhysics", m_compPlayerContrl->getEntityId().c_str());
+		log(Warning) << "entity '" << m_compPlayerContrl->getEntityId() << "' has component CompPlayerController but no CompPhysics\n";
 		return; // keine Physikkomponente, also abbrechen
 	}
 

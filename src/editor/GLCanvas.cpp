@@ -10,7 +10,7 @@
 #include <SDL/SDL_opengl.h>
 
 // temp
-//#include "game/Logger.h"
+//#include "common/Logger.h"
 #include <iostream>
 using namespace std;
 
@@ -113,7 +113,7 @@ void GLCanvas::onPaint( wxPaintEvent& evt )
 
 		if (m_initCount == cInitCount)
 		{
-			//gAaLog.write("-->init");
+			//log() <<"-->init");
 			cerr << "init" << endl;
 			m_renderer.init(GetSize().x, GetSize().y);
 

@@ -11,11 +11,10 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/bind.hpp>
 #include <boost/make_shared.hpp>
-#include <boost/property_tree/info_parser.hpp>
 
 #include "main.h"
 #include "Configuration.h"
-#include "Logger.h"
+#include "common/Logger.h"
 #include "GameApp.h"
 #include "Input.h"
 #include "common/Physics.h"
@@ -28,8 +27,6 @@
 #include "states/PlayingState.h"
 #include "common/Texture.h"
 #include "common/Exception.h" // Ausnahmen im Program (werden in main.cpp eingefangen)
-
-const std::string cConfigFileName = "data/config.info";
 
 bool gRestart = false; // TODO remove this global
 
@@ -91,24 +88,20 @@ GameApp::~GameApp()
 // Alle Objekte von GameApp initialisieren
 void GameApp::init()
 {
-    gAaLog.write( "* Started initialization *\n\n" );  // In Log-Datei schreiben
-    gAaLog.increaseIndentationLevel();                  // Text ab jetzt einrücken
-
-    // Einstellung lesen
-    boost::property_tree::info_parser::read_info(cConfigFileName, gConfig);
+    log(Info) << "* Started initialization *\n\n";  // In Log-Datei schreiben
 
     //========================= SDL ============================//
     if ( !initSDL() ) // SDL initialisieren
-        throw Exception ( gAaLog.write ( "Error initializing SDL: %s\n", SDL_GetError() ) );
+        throw Exception(std::string() + "Error initializing SDL: " + SDL_GetError() + "\n" );
 
     //======================== Video ===========================//
     if ( !initVideo() ) // Anzeigegeräte bereitstellen
-        throw Exception ( gAaLog.write ( "Error setting up the screen - %ix%i %i Bit\n%s\n", gConfig.get<int>("ScreenWidth"), gConfig.get<int>("ScreenHeight"), gConfig.get<int>("ScreenBpp"), SDL_GetError() ) );
+        throw Exception(std::string() + "Error setting up the screen - " + gConfig.get<std::string>("ScreenWidth") + "x" + gConfig.get<std::string>("ScreenHeight") + " " + gConfig.get<std::string>("ScreenBpp") + " Bit\n" + SDL_GetError() + "\n");
 
     //===================== Untersysteme =======================//
-    gAaLog.write ( "Initializing sub systems... " );
+    log(Info) << "Initializing sub systems... ";
     m_subSystems.init();
-    gAaLog.write ( "[ Done ]\n" );
+    log(Info) << "[ Done ]\n";
 
     // "Loading..." -> Ladungsanzeige zeichnen
     m_subSystems.renderer.displayLoadingScreen();
@@ -116,8 +109,7 @@ void GameApp::init()
     // Texturen laden
     m_subSystems.renderer.loadData();
 
-    gAaLog.decreaseIndentationLevel(); // Nicht mehr einrücken
-    gAaLog.write ( "\n* Finished initialization *\n" );
+    log(Info) << "\n* Finished initialization *\n";
 
     boost::shared_ptr<GameState> gameState;
     if (m_levelToLoad.empty())
@@ -132,7 +124,7 @@ void GameApp::init()
 // SDL und Fenster initialisieren
 bool GameApp::initSDL()
 {
-    gAaLog.write( "Initializing SDL... " );
+    log(Info) << "Initializing SDL... ";
 
     if ( SDL_Init( SDL_INIT_VIDEO | SDL_INIT_AUDIO ) == -1 )       // SDL initialisieren
         return false;
@@ -151,7 +143,7 @@ bool GameApp::initSDL()
     SDL_EventState(SDL_MOUSEBUTTONDOWN, SDL_IGNORE);
     SDL_EventState(SDL_MOUSEBUTTONUP, SDL_IGNORE);
 
-    gAaLog.write ( "[ Done ]\n" );
+    log(Info) << "[ Done ]\n";
 
     return true;
 }
@@ -159,7 +151,7 @@ bool GameApp::initSDL()
 // Anzeige initialisieren
 bool GameApp::initVideo()
 {
-    gAaLog.write ( "Setting up video... " );
+    log(Info) << "Setting up video... ";
 
     // Einige OpenGL Flags festlegen, bevor wir SDL_SetVideoMode() aufrufen
     SDL_GL_SetAttribute ( SDL_GL_RED_SIZE, gConfig.get<int>("ScreenBpp")/4 );    // Grösse der Rotkomponente im Framebuffer, in Bits
@@ -191,34 +183,32 @@ bool GameApp::initVideo()
     if ( !SDL_SetVideoMode ( gConfig.get<int>("ScreenWidth"), gConfig.get<int>("ScreenHeight"), gConfig.get<int>("ScreenBpp"), flags ) )
         return false;
 
-    gAaLog.write ( "[ Done ]\n\n" );
+    log(Info) << "[ Done ]\n\n";
 
-    gAaLog.increaseIndentationLevel();
-    gAaLog.write ( "Graphic card: %s (%s)\n", glGetString ( GL_RENDERER ), glGetString ( GL_VENDOR ) );
-    gAaLog.write ( "OpenGL version: %s\n", glGetString ( GL_VERSION ) );
+    log(Info) << "Graphic card: " << glGetString(GL_RENDERER) << "(" << glGetString(GL_VENDOR) << ")\n";
+    log(Info) << "OpenGL version: " << glGetString(GL_VERSION) << "\n";
 
     const SDL_VideoInfo* vidInfo = SDL_GetVideoInfo();
 
     int value = 0;
     SDL_GL_GetAttribute ( SDL_GL_BUFFER_SIZE, &value );
     gConfig.put("ScreenBpp", value);
-    gAaLog.write ( "Resolution: %dx%d\n", vidInfo->current_w, vidInfo->current_h );
-    gAaLog.write ( "Widescreen: %s\n", (gConfig.get<bool>("WideScreen")?"on":"off") );
-    gAaLog.write ( "Bits per pixel: %d\n", value );
+    log(Info) << "Resolution: " << vidInfo->current_w << "x" << vidInfo->current_h << "\n";
+    log(Info) << "Widescreen: " << (gConfig.get<bool>("WideScreen")?"on":"off") << "\n";
+    log(Info) << "Bits per pixel: " << value << "\n";
     SDL_GL_GetAttribute ( SDL_GL_DOUBLEBUFFER, &value );
-    gAaLog.write ( "Double buffer: %s\n", (value?"on":"off") );
+    log(Info) << "Double buffer: " << (value?"on":"off") << "\n";
     value = 1;
     SDL_GL_GetAttribute ( SDL_GL_MULTISAMPLESAMPLES, &value );
     gConfig.put("AntiAliasing", value);
     if (value==1)
-        gAaLog.write ( "Anti-aliasing: off\n" );
+        log(Info) << "Anti-aliasing: off\n";
     else
-        gAaLog.write ( "Anti-aliasing: %dx\n", value );
+        log(Info) << "Anti-aliasing: " << value << "x\n";
     SDL_GL_GetAttribute ( SDL_GL_SWAP_CONTROL, &value );
     gConfig.put("V-Sync", value);
     value = 1;
-    gAaLog.write ( "V-Sync: %s\n\n", (value?"on":"off") );
-    gAaLog.decreaseIndentationLevel();
+    log(Info) << "V-Sync: " << (value?"on":"off") << "\n\n";
 
     return true;
 }
@@ -228,22 +218,18 @@ void GameApp::deInit()
 {
     if (m_isInit)
     {
-        gAaLog.write ( "* Started deinitialization *\n\n" );      // In Log-Datei schreiben
-        gAaLog.increaseIndentationLevel();
+        log(Info) << "* Started deinitialization *\n\n";      // In Log-Datei schreiben
 
-        gAaLog.write ( "Cleaning up SubSystems..." );
+        log(Info) << "Cleaning up SubSystems...";
         m_subSystems.deInit();
-        gAaLog.write ( "[ Done ]\n" );
+        log(Info) << "[ Done ]\n";
 
         // SDL beenden
-        gAaLog.write ( "Shuting down SDL..." );
+        log(Info) << "Shuting down SDL...";
         SDL_Quit();
-        gAaLog.write ( "[ Done ]\n" );
+        log(Info) << "[ Done ]\n";
 
-        writeConfig(cConfigFileName, gConfig);
-
-        gAaLog.decreaseIndentationLevel();
-        gAaLog.write ( "\n* Finished deinitialization *\n" );   // In Log-Datei schreiben
+        log(Info) << "\n* Finished deinitialization *\n";   // In Log-Datei schreiben
         m_isInit = false;
     }
 }
@@ -266,7 +252,7 @@ void GameApp::run()
 // Hauptschleife des Spieles
 void GameApp::mainLoop()
 {
-    gAaLog.write ( "Main loop started\n" );
+    log(Info) << "Main loop started\n";
     m_fpsMeasureStart = SDL_GetTicks();
 
     // Variablen um Zeit zu messen
@@ -280,8 +266,6 @@ void GameApp::mainLoop()
 
     SDL_Event sdlWindowEvent; // SDL Eingabe-Ereignisse (nur für den Fall, wann der Benutzer das Fenster schliessen will)
     // Die restlichen Eingaben werden in Input.cpp gemacht.
-
-    gAaLog.increaseIndentationLevel();
 
     ////////////////////////////////////////////////////////
     //                                                    //
@@ -345,13 +329,12 @@ void GameApp::mainLoop()
     //                                                    //
     ////////////////////////////////////////////////////////
 
-    gAaLog.decreaseIndentationLevel();
 }
 
 void GameApp::onQuit()
 {
     m_quit = true;
-    gAaLog.write ( "User requested to quit, quitting...\n" );
+    log(Info) << "User requested to quit, quitting...\n";
     m_subSystems.renderer.displayTextScreen("Closing AstroAttack...");
 }
 
@@ -408,7 +391,7 @@ void GameApp::calcFPS( unsigned int curTime )
     {
         // m_framesCounter ist jetzt die Anzahl Frames in dieser Sekunde, also die FPS
         m_fps = m_framesCounter;
-        gAaLog.write( "FPS: %i\n", m_fps );
+        log(Info) << "FPS: " << m_fps << "\n";
         m_framesCounter = 0;
         m_fpsMeasureStart = SDL_GetTicks();
     }

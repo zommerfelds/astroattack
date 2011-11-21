@@ -8,6 +8,8 @@
 #include <sstream>
 #include <boost/bind.hpp>
 #include <boost/foreach.hpp>
+#include <boost/shared_ptr.hpp>
+#include <boost/make_shared.hpp>
 
 #include "PlayingState.h"
 #include "GameOverState.h"
@@ -16,7 +18,7 @@
 #include "common/Renderer.h"
 #include "common/Physics.h"
 #include "game/Input.h"
-#include "game/Logger.h"
+#include "common/Logger.h"
 #include "common/GameEvents.h"
 #include "common/DataLoader.h"
 #include "common/Sound.h"
@@ -49,8 +51,7 @@ void PlayingState::init()        // State starten
 {
     //GetSubSystems().renderer.displayLoadingScreen();
 
-    gAaLog.write ( "Loading world...\n\n" );
-    gAaLog.increaseIndentationLevel();
+    log(Info) << "Loading world...\n\n";
 
     try
     {
@@ -62,7 +63,7 @@ void PlayingState::init()        // State starten
     {
         // TODO is this a good thing to do?
         // TODO show error
-        gAaLog.write("Error loading file : %s", e.getMsg().c_str());
+        log(Info) << "Error loading file : " << e.getMsg() << "\n";
         boost::shared_ptr<MainMenuState> menuState (new MainMenuState(getSubSystems()));
         getSubSystems().stateManager.changeState(menuState);
         return;
@@ -75,14 +76,14 @@ void PlayingState::init()        // State starten
     getSubSystems().sound.loadMusic( "data/Music/Aerospace.ogg", "music" );
     getSubSystems().sound.playMusic( "music", true, 0 );
 
-    gAaLog.decreaseIndentationLevel();
-    gAaLog.write ( "[ Done loading world ]\n\n" );
+    log(Info) << "[ Done loading world ]\n\n";
 
     // Alle Entities und Komponenten in Text Datei anzeigen
-    Logger log ( cWordLogFileName );
-    log.write( "World Entities:\n\n" );
-    m_gameWorld.getCompManager().writeEntitiesToLogger( log );
-    log.closeFile();
+    Logger logger(true);
+	boost::shared_ptr<FileHandler> fileHandler = boost::make_shared<FileHandler>(cWordLogFileName);
+    logger.addHandler(fileHandler);
+    logger << "World Entities:\n\n";
+    m_gameWorld.getCompManager().writeEntitiesToLogger(logger, Info);
 
     getSubSystems().input.putMouseOnCenter();
 

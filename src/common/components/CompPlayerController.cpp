@@ -12,7 +12,7 @@
 #include "CompVisualAnimation.h"
 #include "CompPhysics.h"
 
-#include "game/Logger.h"
+#include "common/Logger.h"
 
 using boost::property_tree::ptree;
 
@@ -78,7 +78,7 @@ void CompPlayerController::updateAnims(bool flyingUp, bool movingOnGround, bool 
     }
 
     if (bodyAnim == NULL)
-        gAaLog.write("WARNING: entity '%s' has component CompPlayerController but no 'bodyAnim' shape", getEntityId().c_str());
+        log(Warning) << "entity '" << getEntityId() << "' has component CompPlayerController but no 'bodyAnim' shape\n";
     else
     {
         if (flyingUp)
@@ -111,7 +111,7 @@ void CompPlayerController::updateAnims(bool flyingUp, bool movingOnGround, bool 
     }
     
     if (jetpackAnim == NULL)
-        gAaLog.write("WARNING: entity '%s' has component CompPlayerController but no 'jetpack' shape", getEntityId().c_str());
+        log(Warning) << "entity '" << getEntityId() << "' has component CompPlayerController but no 'jetpack' shape\n";
     else // Raketenrucksack animation
     {
         if ( usingJetpack ) // Spieler benutzt gerade den Jetpack

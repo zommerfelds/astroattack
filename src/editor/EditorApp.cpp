@@ -4,6 +4,8 @@
  * Copyright 2011 Christian Zommerfelds
  */
 
+#include <boost/property_tree/info_parser.hpp>
+
 #include "EditorApp.h"
 #include "EditorFrame.h"
 #include "Editor.h"
@@ -15,8 +17,18 @@
 
 IMPLEMENT_APP(EditorApp)
 
+namespace {
+const std::string cConfigFileName = "data/editorConfig.info";
+}
+
+using boost::property_tree::ptree;
+
 bool EditorApp::OnInit()
 {
+	ptree editorConfig;
+    boost::property_tree::info_parser::read_info(cConfigFileName, editorConfig); // TODO: handle fail
+    setUpLoggerFromPropTree(editorConfig);
+
 	GameEvents* events = new GameEvents;
 	World* world = new World(*events);
 	new PhysicsSubSystem(*events); // need physics system?

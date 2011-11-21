@@ -13,6 +13,8 @@
 #include <list>
 #include <boost/shared_ptr.hpp>
 
+#include "Logger.h"
+
 #include "IdTypes.h"
 
 class Component;
@@ -56,7 +58,7 @@ public:
     // Returns all components (regardless of entity)
     const ComponentMap* getComponents(const EntityIdType& id);
 
-    void writeEntitiesToLogger( Logger& log );
+    void writeEntitiesToLogger(Logger& logger, LogLevel level);
 
 private:
     GameEvents& m_gameEvents;

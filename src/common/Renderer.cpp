@@ -13,7 +13,7 @@
 // cross platform OpenGL include (provided by SDL)
 #include <SDL_opengl.h>
 
-#include "game/Logger.h"
+#include "common/Logger.h"
 #include "Renderer.h"
 #include "DataLoader.h"
 #include "Vector2D.h"
@@ -70,7 +70,7 @@ void RenderSubSystem::init( int width, int height )
     if ((errCode = glGetError()) != GL_NO_ERROR)
     {
         errString = gluErrorString(errCode);
-        gAaLog.write( "RenderSubSystem::init> OpenGL Error: %s\n", errString );
+        log(Error) << "RenderSubSystem::init> OpenGL Error: " << errString << "\n";
     }
 
     m_isInit = true;
@@ -162,7 +162,7 @@ void RenderSubSystem::flipBuffer()
     if ((errCode = glGetError()) != GL_NO_ERROR)
     {
         errString = gluErrorString(errCode);
-        gAaLog.write ( "!=========! OpenGL Error %u: %s !=========! \n", errCode, errString );
+        log(Error) << "!=========! OpenGL Error " << errCode << ": " << errString << " !=========! \n";
     }
 
     /* the following code takes screenshots of all frames and stores them to video/

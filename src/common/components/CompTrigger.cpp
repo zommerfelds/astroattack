@@ -13,7 +13,7 @@
 #include "CompTrigger_Effects.h"
 #include "CompTrigger_Conditions.h"
 #include "common/World.h"
-#include "game/Logger.h"
+#include "common/Logger.h"
 
 using boost::property_tree::ptree;
 
@@ -100,7 +100,7 @@ void CompTrigger::loadFromPropertyTree(const ptree& propTree)
                 else if (strCompareType == "net")
                     compareType = NotEqualTo;
                 else
-                    gAaLog.write("WARNING: No compare operation with name \"%s\" found!", strCompareType.c_str());
+                    log(Warning) << "No compare operation with name '" << strCompareType << "' found!\n";
 
                 addCondition(boost::make_shared<ConditionCompareVariable>(m_gameWorld.getItToVariable(varName),
                         compareType, numToCompare));
@@ -111,7 +111,7 @@ void CompTrigger::loadFromPropertyTree(const ptree& propTree)
                 addCondition(boost::make_shared<ConditionEntityTouchedThis>(entityName));
             }
             else
-                gAaLog.write("WARNING: No condition found with id \"%s\"!", condId.c_str());
+                log(Warning) << "No condition found with id '" << condId << "'!\n";
         }
         else if (nodeName == "effect")
         {
@@ -150,12 +150,12 @@ void CompTrigger::loadFromPropertyTree(const ptree& propTree)
                 else if (strChangeType == "divide")
                     changeType = Divide;
                 else
-                    gAaLog.write("WARNING: No change operation with name \"%s\" found!", strChangeType.c_str());
+                    log(Warning) << "No change operation with name '" << strChangeType << "' found!\n";
 
                 addEffect(boost::make_shared<EffectChangeVariable>(m_gameWorld.getItToVariable(varName), changeType, num));
             }
             else
-                gAaLog.write("WARNING: No effect found with id \"%s\"!", effectId.c_str());
+                log(Warning) << "No effect found with id '" << effectId << "'!\n";
         }
     }
 }

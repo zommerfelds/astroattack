@@ -1,0 +1,8 @@
+; Logging level for stdout - Error, Warning, Info, Detail, Debug or Off
+LogConsoleLevel Debug
+
+; Logging level for log file - Error, Warning, Info, Detail, Debug or Off
+LogFileLevel Debug
+
+; Name of the log file
+LogFileName AAEditor.log

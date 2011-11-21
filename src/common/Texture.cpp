@@ -11,9 +11,10 @@
 #include <IL/ilu.h>     // DevILU für das Bearbeiten von Bilddaten
 #include <boost/make_shared.hpp>
 #include <SDL_opengl.h> // cross platform OpenGL include (provided by SDL)
+#include <boost/lexical_cast.hpp>
 
 #include "Texture.h"
-#include "game/Logger.h"
+#include "common/Logger.h"
 #include "Exception.h"  // Exceptions
 
 // Konstruktor
@@ -24,13 +25,13 @@ TextureManager::TextureManager()
     if ( il_dynamic_library_version < IL_VERSION )
     {
         // falsche Version
-        throw Exception( gAaLog.write ( "DevIL (IL) library is too old!\nFound %i, need > %i.", il_dynamic_library_version, IL_VERSION ) );
+        throw Exception(std::string() + "DevIL (IL) library is too old!\nFound " + boost::lexical_cast<std::string>(il_dynamic_library_version) + ", need > " + boost::lexical_cast<std::string>(IL_VERSION) + ".");
     }
     ILint ilu_dynamic_library_version = iluGetInteger(ILU_VERSION_NUM);
     if ( ilu_dynamic_library_version < ILU_VERSION )
     {
         // falsche Version
-        throw Exception( gAaLog.write ( "DevIL (ILU) library is too old!\nFound %i, need > %i.", ilu_dynamic_library_version, ILU_VERSION ) );
+        throw Exception(std::string() + "DevIL (ILU) library is too old!\nFound " + boost::lexical_cast<std::string>(ilu_dynamic_library_version) + ", need > " + boost::lexical_cast<std::string>(ILU_VERSION) + ".");
     }
 
     ilInit(); // Initialization von DevIL (IL)
@@ -55,7 +56,7 @@ void CheckOpenlGlError()
     if ((errCode = glGetError()) != GL_NO_ERROR)
     {
         errString = gluErrorString(errCode);
-        gAaLog.write ( "========= OpenGL Error: %u: %s =========\n", errCode, errString );
+        log(Error) << "========= OpenGL Error: " << errCode << ": " << errString << " =========\n";
     }
 }
 
@@ -75,13 +76,13 @@ void TextureManager::loadTexture( const std::string& fileName, TextureId id, con
 {
     if ( m_textures.count( id )==1 )
     {
-        gAaLog.write( "*** WARNING: Loading texture: Texture with ID \"%s\" already exists! (new texture was not loaded) ***\n", id.c_str() );
+        log(Warning) << "*** Loading texture: Texture with ID \"" << id << "\" already exists! (new texture was not loaded) ***\n";
         return;
     }
     try
     {
         //TODO: check for DevIL errors ilGetError()
-        gAaLog.write( "Loading Texture \"%s\"... ", fileName.c_str() );
+        log(Info) << "Loading Texture \"" << fileName << "\"... ";
 
         ILuint devIl_tex_id;                              // ID des DevIL Bildes
         ILboolean success;                                // Speichert ob die Funktionen erfolgreich sind
@@ -99,7 +100,7 @@ void TextureManager::loadTexture( const std::string& fileName, TextureId id, con
             int width_2pown = getNext2PowN( ilGetInteger(IL_IMAGE_WIDTH) );
             int height_2pown = getNext2PowN( ilGetInteger(IL_IMAGE_HEIGHT) );
             
-            //gAaLog.Write( "GL: w=%i, h=%i\n", width_2pown, height_2pown );
+            //log() << "GL: w=%i, h=%i\n", width_2pown, height_2pown );
 
             // TODO: don't shift small numbers
             if ( loadTexInfo.quality == LoadTextureInfo::QualityBest )
@@ -165,15 +166,15 @@ void TextureManager::loadTexture( const std::string& fileName, TextureId id, con
              throw 0; // Error
 
         ilDeleteImages(1, &devIl_tex_id); // Löschen weil es schon eine kopie in OpenGL gibt
-        gAaLog.write( "Done!\n" );
+        log(Info) << "Done!\n";
     }
     catch (...)
     {
         // Error
-        throw Exception( gAaLog.write( "Error while loading the texture \"%s\"!\n%s\n", fileName.c_str(), iluErrorString(ilGetError()) ) );
+        throw Exception(std::string() + "Error while loading the texture \"" + fileName + "\"!\n" + iluErrorString(ilGetError()) + "\n");
     }
     CheckOpenlGlError();
-    //gAaLog.Write ( "IL error: %s\n", iluErrorString(ilGetError()) );
+    //log() << "IL error: %s\n", iluErrorString(ilGetError()) );
 }
 
 void TextureManager::freeTexture( const TextureId& id )
@@ -205,7 +206,7 @@ void TextureManager::setTexture( const TextureId& id )
         //m_currentTexture = id;
     }
     else
-        gAaLog.write ( "*** SetTexture(): Texture ID '%s' not found! ***\n", id.c_str() );
+        log(Warning) << "*** SetTexture(): Texture ID '" << id << "' not found! ***\n";
 }
 
 std::vector<TextureId> TextureManager::getTextureList() const
@@ -240,7 +241,7 @@ void AnimationManager::loadAnimation(const std::string& fileName, AnimationId id
 {
     if ( m_animInfoMap.count( id )==1 )
     {
-        gAaLog.write ( "Warning loading animation: Animation with ID \"%s\" exists already! (new animation was not loaded)\n", id.c_str() );
+        log(Warning) << "Loading animation: Animation with ID '" << id << "' exists already! (new animation was not loaded)\n";
         return;
     }
 
@@ -248,7 +249,7 @@ void AnimationManager::loadAnimation(const std::string& fileName, AnimationId id
     input_stream.open(fileName.c_str());
 	if( input_stream.fail() ) // Fehler beim Öffnen
     {
-        throw Exception( gAaLog.write ( "Animation file \"%s\" could not be opened.\n", fileName.c_str() ) );
+        throw Exception(std::string() + "Animation file '" + fileName + "' could not be opened.\n");
     }
 
     boost::shared_ptr<AnimInfo> pAnimInfo = boost::make_shared<AnimInfo>();
@@ -312,7 +313,7 @@ void AnimationManager::loadAnimation(const std::string& fileName, AnimationId id
     }
     catch (...)
     {
-        throw Exception( gAaLog.write ( "Error loading \"%s\". (Bad syntax?)\n", fileName.c_str() ) );
+        throw Exception(std::string() + "Error loading '" + fileName + "'. (Bad syntax?)\n");
     }
 
     input_stream.close();

@@ -12,7 +12,7 @@
 #include <boost/property_tree/ptree.hpp>
 #include <climits>
 
-#include "game/Logger.h"
+#include "common/Logger.h"
 #include "CompPhysics.h"
 
 using boost::property_tree::ptree;
@@ -50,7 +50,7 @@ bool CompPhysics::setShapeFriction(const ComponentIdType& shapeName, float frict
     }
     else
     {
-    	gAaLog.write("setShapeFriction: bad shapeName '%s'", shapeName.c_str());
+    	log(Warning) << "setShapeFriction: bad shapeName '" << shapeName << "'\n";
         return false;
     }
 

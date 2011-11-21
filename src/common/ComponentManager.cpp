@@ -8,7 +8,6 @@
 
 #include "common/GameEvents.h" // Steuert die Spielerreignisse
 #include "Component.h"
-#include "game/Logger.h"
 
 #include "common/components/CompPhysics.h"
 #include "common/components/CompShape.h"
@@ -159,16 +158,16 @@ std::vector<const Component*> ComponentManager::getComponents(const EntityIdType
 }
 
 
-void ComponentManager::writeEntitiesToLogger( Logger& log )
+void ComponentManager::writeEntitiesToLogger(Logger& logger, LogLevel level)
 {
     for ( EntityMap::iterator it = m_entities.begin(); it != m_entities.end(); ++it )
     {
         ComponentMap& comps = it->second;
-        log.write( "--- Entity name: %s ---\n", it->first.c_str() );
+        logger << "--- Entity name: " << it->first << " ---\n";
         for ( ComponentMap::iterator it2 = comps.begin(); it2 != comps.end(); ++it2 )
         {
-            log.write( " Component: %s %s\n" , it2->second->getTypeId().c_str(), it2->second->getId().c_str() );
+        	logger << " Component: " << it2->second->getTypeId() << " " << it2->second->getId() << "\n";
         }
-        log.write( "\n" );
+        logger << "\n";
     }
 }

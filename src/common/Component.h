@@ -18,7 +18,7 @@ struct GameEvents;
 
 class ComponentManager;
 
-// forward declare ptree (PropertyTree), quite complex but I don't want to include the big header here
+// forward declare ptree (PropertyTree), quite complex but we don't want to include the big header here
 namespace boost { namespace property_tree {
     template<class Key, class Data, class KeyCompare> class basic_ptree;
     typedef basic_ptree<std::string, std::string, std::less<std::string> > ptree;
