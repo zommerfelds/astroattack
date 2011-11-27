@@ -4,16 +4,16 @@
  * Copyright 2011 Christian Zommerfelds
  */
 
-#include <algorithm>
-
-#include "common/Foreach.h"
-#include "common/GameEvents.h"
+#include "ComponentManager.h"
 
 #include "common/components/CompPhysics.h"
 #include "common/components/CompShape.h"
 #include "common/components/CompPosition.h"
 
-#include "ComponentManager.h"
+#include "common/GameEvents.h"
+#include "common/Foreach.h"
+
+#include <algorithm>
 
 // Konstruktor
 ComponentManager::ComponentManager( GameEvents& events )
@@ -159,6 +159,7 @@ std::vector<const Component*> ComponentManager::getComponents(const EntityIdType
 
 void ComponentManager::writeEntitiesToLogger(Logger& logger, LogLevel level)
 {
+	logger.setLevel(level);
     for ( EntityMap::iterator it = m_entities.begin(); it != m_entities.end(); ++it )
     {
         ComponentMap& comps = it->second;

@@ -7,9 +7,9 @@
 #ifndef EDITOR_FRAME_H
 #define EDITOR_FRAME_H
 
-#include <wx/timer.h>
 #include "GLCanvas.h"
 #include "gen/EditorFrameBase.h"
+#include <wx/timer.h>
 
 class Editor;
 
@@ -25,7 +25,7 @@ public:
 	}
 };
 
-class GameEvents;
+struct GameEvents;
 
 class EditorFrame : public EditorFrameBase {
 public:

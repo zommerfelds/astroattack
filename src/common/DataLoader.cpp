@@ -4,20 +4,7 @@
  * Copyright 2011 Christian Zommerfelds
  */
 
-#include <sstream>
-#include <boost/bind.hpp>
-#include <boost/make_shared.hpp>
-#include <boost/property_tree/ptree.hpp>
-#include <boost/property_tree/info_parser.hpp>
-
-#include "common/Foreach.h"
-#include "common/World.h"
-#include "common/Logger.h"
-#include "common/GameEvents.h"
-#include "common/Renderer.h"
-#include "common/Physics.h"
-#include "common/Font.h"
-#include "common/Texture.h"
+#include "DataLoader.h"
 
 #include "common/components/CompGravField.h"
 #include "common/components/CompVisualTexture.h"
@@ -31,7 +18,20 @@
 #include "common/components/CompVisualMessage.h"
 #include "common/components/CompShape.h"
 
-#include "DataLoader.h"
+#include "common/World.h"
+#include "common/Logger.h"
+#include "common/GameEvents.h"
+#include "common/Renderer.h"
+#include "common/Physics.h"
+#include "common/Font.h"
+#include "common/Texture.h"
+#include "common/Foreach.h"
+
+#include <sstream>
+#include <boost/bind.hpp>
+#include <boost/make_shared.hpp>
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/info_parser.hpp>
 
 // TODO better checking of input data
 

@@ -34,7 +34,6 @@ public:
     }
 
 private:
-
     const InputSubSystem& m_inputSubSystem;
     ComponentManager& m_compManager;
 

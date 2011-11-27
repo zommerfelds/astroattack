@@ -4,9 +4,10 @@
  * Copyright 2011 Christian Zommerfelds
  */
 
-#include "common/GameEvents.h"
 #include "Component.h"
+
 #include "ComponentManager.h"
+#include "common/GameEvents.h"
 
 Component::Component(const ComponentIdType& id, GameEvents& gameEvents)
 : m_gameEvents (gameEvents),

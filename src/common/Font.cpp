@@ -4,13 +4,14 @@
  * Copyright 2011 Christian Zommerfelds
  */
 
-#include <utility>
-#include <SDL_opengl.h>
-#include <FTGL/ftgl.h>
-#include <boost/make_shared.hpp>
-
 #include "Font.h"
+
 #include "Renderer.h"
+
+#include <utility>
+#include <FTGL/ftgl.h>
+#include <SDL_opengl.h>
+#include <boost/make_shared.hpp>
 
 FontManager::FontManager(const RenderSubSystem& renderer)
 : m_renderer (renderer)

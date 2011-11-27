@@ -11,12 +11,12 @@
 #ifndef COMPTRIGGER_H
 #define COMPTRIGGER_H
 
-#include <boost/shared_ptr.hpp>
-#include <vector>
-
 #include "common/Component.h"
 #include "common/GameEvents.h"
 #include "common/IdTypes.h"
+
+#include <vector>
+#include <boost/shared_ptr.hpp>
 
 class Condition;
 class Effect;

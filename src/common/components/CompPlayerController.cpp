@@ -4,15 +4,16 @@
  * Copyright 2011 Christian Zommerfelds
  */
 
-#include <boost/bind.hpp>
-#include <boost/property_tree/ptree.hpp>
+#include "CompPlayerController.h"
+
+#include "CompVisualAnimation.h"
+#include "CompPhysics.h"
 
 #include "common/Foreach.h"
 #include "common/Logger.h"
 
-#include "CompPlayerController.h"
-#include "CompVisualAnimation.h"
-#include "CompPhysics.h"
+#include <boost/bind.hpp>
+#include <boost/property_tree/ptree.hpp>
 
 using boost::property_tree::ptree;
 

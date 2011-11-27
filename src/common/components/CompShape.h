@@ -8,11 +8,11 @@
 #ifndef COMPSHAPE_H
 #define COMPSHAPE_H
 
-#include <boost/shared_ptr.hpp>
-#include <vector>
-
 #include "common/Component.h"
 #include "common/Vector2D.h"
+
+#include <vector>
+#include <boost/shared_ptr.hpp>
 
 class b2Shape;
 

@@ -10,11 +10,10 @@
 #ifndef MAINMENUSTATE_H
 #define MAINMENUSTATE_H
 
+#include "game/GameState.h"
+#include "common/DataLoader.h"
 #include <vector>
 #include <string>
-
-#include "common/DataLoader.h"
-#include "game/GameState.h"
 
 struct Button;
 

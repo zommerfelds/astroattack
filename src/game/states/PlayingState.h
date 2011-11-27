@@ -11,14 +11,14 @@
 #ifndef PLAYINGSTATE_H
 #define PLAYINGSTATE_H
 
-#include <set>
-#include <string>
+#include "game/GameState.h"
+#include "game/InputCameraController.h"
 
 #include "common/GameEvents.h"
 #include "common/World.h"
 
-#include "game/GameState.h"
-#include "game/InputCameraController.h"
+#include <set>
+#include <string>
 
 class EventConnection;
 

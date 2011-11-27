@@ -4,10 +4,16 @@
  * Copyright 2011 Christian Zommerfelds
  */
 
+#include "EditorState.h"
 
-#include <cmath>
-#include <sstream>
-#include <boost/make_shared.hpp>
+#include "game/GameApp.h"
+#include "game/Input.h"
+#include "game/Configuration.h"
+
+#include "common/components/CompVisualTexture.h"
+#include "common/components/CompPhysics.h"
+#include "common/components/CompShape.h"
+#include "common/components/CompPosition.h"
 
 #include "common/Renderer.h"
 #include "common/Logger.h"
@@ -15,16 +21,9 @@
 #include "common/Physics.h"
 #include "common/Texture.h"
 
-#include "common/components/CompVisualTexture.h"
-#include "common/components/CompPhysics.h"
-#include "common/components/CompShape.h"
-#include "common/components/CompPosition.h"
-
-#include "game/GameApp.h"
-#include "game/Input.h"
-#include "game/Configuration.h"
-
-#include "EditorState.h"
+#include <cmath>
+#include <sstream>
+#include <boost/make_shared.hpp>
 
 const GameStateId EditorState::STATE_ID = "EditorState";
 

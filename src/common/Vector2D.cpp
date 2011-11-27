@@ -4,9 +4,10 @@
  * Copyright 2011 Christian Zommerfelds
  */
 
+#include "Vector2D.h"
+
 #include <Box2D/Box2D.h>
 #include <boost/make_shared.hpp>
-#include "Vector2D.h"
 
 const float cPi = 3.141592653589793238462643383279502884f;
 

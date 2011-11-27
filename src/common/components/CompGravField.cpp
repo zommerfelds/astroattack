@@ -4,9 +4,10 @@
  * Copyright 2011 Christian Zommerfelds
  */
 
-#include <boost/property_tree/ptree.hpp>
-#include "common/DataLoader.h"
 #include "CompGravField.h"
+// TODO: find out why you cannot change the order of this #includes
+#include "common/DataLoader.h"
+#include <boost/property_tree/ptree.hpp>
 
 // eindeutige ID
 const ComponentTypeId CompGravField::COMPONENT_TYPE_ID = "CompGravField";

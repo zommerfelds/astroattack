@@ -4,13 +4,15 @@
  * Copyright 2011 Christian Zommerfelds
  */
 
-#include <string>
-#include <iostream>
-#include <SDL.h>
-#include <SDL_opengl.h>
-#include <boost/shared_ptr.hpp>
-#include <boost/bind.hpp>
-#include <boost/make_shared.hpp>
+#include "GameApp.h"
+#include "main.h"
+#include "Configuration.h"
+#include "Input.h"
+#include "Gui.h"
+#include "GameState.h"
+
+#include "states/MainMenuState.h"
+#include "states/PlayingState.h"
 
 #include "common/Logger.h"
 #include "common/Physics.h"
@@ -20,15 +22,13 @@
 #include "common/Texture.h"
 #include "common/Exception.h"
 
-#include "states/MainMenuState.h"
-#include "states/PlayingState.h"
-
-#include "main.h"
-#include "Configuration.h"
-#include "GameApp.h"
-#include "Input.h"
-#include "Gui.h"
-#include "GameState.h"
+#include <string>
+#include <iostream>
+#include <SDL.h>
+#include <SDL_opengl.h>
+#include <boost/bind.hpp>
+#include <boost/shared_ptr.hpp>
+#include <boost/make_shared.hpp>
 
 bool gDoRestart = false; // TODO remove this global
 

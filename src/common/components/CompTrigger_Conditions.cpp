@@ -4,11 +4,12 @@
  * Copyright 2011 Christian Zommerfelds
  */
 
+#include "CompTrigger_Conditions.h"
+
+#include "CompPhysics.h"
+
 #include "common/Logger.h"
 #include "common/Foreach.h"
-
-#include "CompTrigger_Conditions.h"
-#include "CompPhysics.h"
 
 // ========== CompareVariable =========
 ConditionCompareVariable::ConditionCompareVariable( std::map<const std::string, int>::iterator itVariable, CompareOperator comp, int numToCompareWith )

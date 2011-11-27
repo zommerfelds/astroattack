@@ -50,14 +50,14 @@ EditorFrameBase::EditorFrameBase( wxWindow* parent, wxWindowID id, const wxStrin
 	
 	this->SetMenuBar( m_menubar1 );
 	
-	m_toolBar1 = this->CreateToolBar( wxTB_HORIZONTAL, wxID_ANY ); 
+	/*m_toolBar1 = this->CreateToolBar( wxTB_HORIZONTAL, wxID_ANY ); 
 	m_toolBar1->AddTool( wxID_ANY, wxT("Test"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString ); 
 	m_toolBar1->AddTool( wxID_ANY, wxT("tool"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString ); 
 	m_toolBar1->AddTool( wxID_ANY, wxT("tool"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString ); 
 	m_toolBar1->AddSeparator(); 
 	m_toolBar1->AddTool( wxID_ANY, wxT("tool"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString ); 
 	m_toolBar1->AddTool( wxID_ANY, wxT("tool"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString ); 
-	m_toolBar1->Realize();
+	m_toolBar1->Realize();*/
 	
 	wxBoxSizer* bSizer1;
 	bSizer1 = new wxBoxSizer( wxHORIZONTAL );

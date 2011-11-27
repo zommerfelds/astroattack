@@ -4,16 +4,14 @@
  * Copyright 2011 Christian Zommerfelds
  */
 
-// CompVisualAnimation.h für mehr Informationen
+#include "CompVisualAnimation.h"
 
+#include "common/GameEvents.h"
 
 #include <sstream>
 #include <boost/bind.hpp>
 #include <boost/make_shared.hpp>
 #include <boost/property_tree/ptree.hpp>
-
-#include "common/GameEvents.h"
-#include "CompVisualAnimation.h"
 
 // einduetige ID
 const ComponentTypeId CompVisualAnimation::COMPONENT_TYPE_ID = "CompVisualAnimation";

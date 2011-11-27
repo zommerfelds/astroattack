@@ -4,28 +4,26 @@
  * Copyright 2011 Christian Zommerfelds
  */
 
-// SlideShowState.h für mehr Informationen
-
-#include <boost/shared_ptr.hpp>
-#include <boost/make_shared.hpp>
-#include <boost/property_tree/ptree.hpp>
-#include <boost/property_tree/info_parser.hpp>
-
-#include "common/Foreach.h"
-#include "common/Renderer.h"
-#include "common/Logger.h"
-#include "common/Vector2D.h"
-#include "common/Texture.h"
-#include "common/Sound.h"
-#include "common/DataLoader.h"
+#include "SlideShowState.h"
+#include "MainMenuState.h"
 
 #include "game/Configuration.h"
 #include "game/GameApp.h"
 #include "game/Input.h"
 #include "game/Configuration.h"
 
-#include "SlideShowState.h"
-#include "MainMenuState.h"
+#include "common/Renderer.h"
+#include "common/Logger.h"
+#include "common/Vector2D.h"
+#include "common/Texture.h"
+#include "common/Sound.h"
+#include "common/DataLoader.h"
+#include "common/Foreach.h"
+
+#include <boost/shared_ptr.hpp>
+#include <boost/make_shared.hpp>
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/info_parser.hpp>
 
 // eindeutige ID
 const GameStateId SlideShowState::STATE_ID = "SlideShowState";

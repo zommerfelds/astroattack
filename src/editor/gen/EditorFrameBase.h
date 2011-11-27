@@ -41,7 +41,7 @@ class EditorFrameBase : public wxFrame
 		wxMenuBar* m_menubar1;
 		wxMenu* m_menu1;
 		wxMenu* m_menu2;
-		wxToolBar* m_toolBar1;
+		//wxToolBar* m_toolBar1;
 		wxPanel* m_glpanel;
 		wxPanel* m_panel1;
 		wxPanel* m_panel2;

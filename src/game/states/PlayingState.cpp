@@ -4,12 +4,15 @@
  * Copyright 2011 Christian Zommerfelds
  */
 
-#include <sstream>
-#include <boost/bind.hpp>
-#include <boost/shared_ptr.hpp>
-#include <boost/make_shared.hpp>
+#include "PlayingState.h"
 
-#include "common/Foreach.h"
+#include "GameOverState.h"
+#include "MainMenuState.h"
+
+#include "game/GameApp.h"
+#include "game/Input.h"
+#include "game/main.h"
+
 #include "common/Logger.h"
 #include "common/GameEvents.h"
 #include "common/DataLoader.h"
@@ -17,14 +20,12 @@
 #include "common/Vector2D.h"
 #include "common/Renderer.h"
 #include "common/Physics.h"
+#include "common/Foreach.h"
 
-#include "game/GameApp.h"
-#include "game/Input.h"
-#include "game/main.h"
-
-#include "PlayingState.h"
-#include "GameOverState.h"
-#include "MainMenuState.h"
+#include <sstream>
+#include <boost/bind.hpp>
+#include <boost/shared_ptr.hpp>
+#include <boost/make_shared.hpp>
 
 // define this to draw gravitation vector and other
 //#define DRAW_DEBUG
@@ -221,7 +222,7 @@ void PlayingState::draw( float accumulator )        // Spiel zeichnen
 
     // Jetpack %-display
     {
-        float x = 0.45f, y = 0.14;
+        float x = 0.45f, y = 0.14f;
         float r = 0.2f, g = 0.9f, b = 0.3f;
         float jetpackEnergy = m_gameWorld.getVariable("JetpackEnergy")/1000.0f;
         float vertexCoord[8] = { x+0.05f, y-0.06f,
@@ -240,7 +241,7 @@ void PlayingState::draw( float accumulator )        // Spiel zeichnen
 
     // Health %-display
     {
-        float x = 0.45f, y = 0.35;
+        float x = 0.45f, y = 0.35f;
         float r = 0.8f, g = 0.2f, b = 0.3f;
         float health = m_gameWorld.getVariable("Health")/1000.0f;
         float vertexCoord[8] = { x+0.05f, y-0.06f,

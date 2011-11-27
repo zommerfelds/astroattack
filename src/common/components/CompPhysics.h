@@ -12,12 +12,12 @@
 #ifndef COMPPHYSICS_H
 #define COMPPHYSICS_H
 
-#include <vector>
-#include <map>
-#include <boost/shared_ptr.hpp>
-
 #include "common/Component.h"
 #include "common/Vector2D.h"
+
+#include <map>
+#include <vector>
+#include <boost/shared_ptr.hpp>
 
 // Klassen und Strukturen von Box2D
 class b2Body;

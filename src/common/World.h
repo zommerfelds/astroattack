@@ -10,9 +10,9 @@
 #ifndef WORLD_H
 #define WORLD_H
 
-#include <string>
-#include <map>
 #include "common/ComponentManager.h"
+#include <map>
+#include <string>
 
 struct GameEvents;
 

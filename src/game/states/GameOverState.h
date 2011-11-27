@@ -9,8 +9,8 @@
 #ifndef MAINMENUSTATE_H
 #define GAMEOVERSTATE_H
 
-#include <string>
 #include "game/GameState.h"
+#include <string>
 
 const float cBackgroundColor[3] = { 0.3f, 0.1f, 0.2f };
 

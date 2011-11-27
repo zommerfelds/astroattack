@@ -9,13 +9,13 @@
 #ifndef EDITORSTATE_H
 #define EDITORSTATE_H
 
-#include <string>
+#include "game/GameState.h"
+#include "game/InputCameraController.h"
 
 #include "common/World.h"
 #include "common/Vector2D.h"
 
-#include "game/GameState.h"
-#include "game/InputCameraController.h"
+#include <string>
 
 //--------------------------------------------//
 //------------ EditorState Klasse ------------//

@@ -9,8 +9,8 @@
 #ifndef COMPVISUALMESSAGE_H
 #define COMPVISUALMESSAGE_H
 
-#include <string>
 #include "common/Component.h"
+#include <string>
 
 //--------------------------------------------//
 //-------- CompVisualMessage Klasse ----------//

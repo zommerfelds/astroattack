@@ -4,17 +4,18 @@
  * Copyright 2011 Christian Zommerfelds
  */
 
+#include "CompTrigger.h"
+
+#include "CompTrigger_Effects.h"
+#include "CompTrigger_Conditions.h"
+
+#include "common/World.h"
+#include "common/Logger.h"
+#include "common/Foreach.h"
+
 #include <boost/bind.hpp>
 #include <boost/make_shared.hpp>
 #include <boost/property_tree/ptree.hpp>
-
-#include "common/Foreach.h"
-#include "common/World.h"
-#include "common/Logger.h"
-
-#include "CompTrigger.h"
-#include "CompTrigger_Effects.h"
-#include "CompTrigger_Conditions.h"
 
 using boost::property_tree::ptree;
 

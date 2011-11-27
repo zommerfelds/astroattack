@@ -1,0 +1,161 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{2025BE7E-3032-40A1-A8A3-7219E276B3BA}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>AAEditor</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="AstroAttackCommon.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="AstroAttackCommon.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(SolutionDir)\..\build\editor\win32\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)\..\build\editor\win32\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)\..\build\editor\win32\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)\..\build\editor\win32\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup>
+    <LocalDebuggerEnvironment>PATH=%PATH%;$(SolutionDir)\..\bin_win32</LocalDebuggerEnvironment>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+    <LocalDebuggerWorkingDirectory>..</LocalDebuggerWorkingDirectory>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>wxmsw28d_core.lib;wxbase28d.lib;wxtiffd.lib;wxjpegd.lib;wxpngd.lib;wxzlibd.lib;wxregexd.lib;wxexpatd.lib;wxmsw28d_gl.lib;winmm.lib;comctl32.lib;rpcrt4.lib;wsock32.lib;oleacc.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>winmm.lib;comctl32.lib;rpcrt4.lib;wsock32.lib;oleacc.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\common\CameraController.cpp" />
+    <ClCompile Include="..\src\common\Component.cpp" />
+    <ClCompile Include="..\src\common\ComponentManager.cpp" />
+    <ClCompile Include="..\src\common\components\CompGravField.cpp" />
+    <ClCompile Include="..\src\common\components\CompPhysics.cpp" />
+    <ClCompile Include="..\src\common\components\CompPlayerController.cpp" />
+    <ClCompile Include="..\src\common\components\CompPosition.cpp" />
+    <ClCompile Include="..\src\common\components\CompShape.cpp" />
+    <ClCompile Include="..\src\common\components\CompTrigger.cpp" />
+    <ClCompile Include="..\src\common\components\CompTrigger_Conditions.cpp" />
+    <ClCompile Include="..\src\common\components\CompTrigger_Effects.cpp" />
+    <ClCompile Include="..\src\common\components\CompVisualAnimation.cpp" />
+    <ClCompile Include="..\src\common\components\CompVisualMessage.cpp" />
+    <ClCompile Include="..\src\common\components\CompVisualTexture.cpp" />
+    <ClCompile Include="..\src\common\DataLoader.cpp" />
+    <ClCompile Include="..\src\common\Event.cpp" />
+    <ClCompile Include="..\src\common\Event_templ.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\src\common\Font.cpp" />
+    <ClCompile Include="..\src\common\Logger.cpp" />
+    <ClCompile Include="..\src\common\Physics.cpp" />
+    <ClCompile Include="..\src\common\Renderer.cpp" />
+    <ClCompile Include="..\src\common\Sound.cpp" />
+    <ClCompile Include="..\src\common\Texture.cpp" />
+    <ClCompile Include="..\src\common\Vector2D.cpp" />
+    <ClCompile Include="..\src\common\World.cpp" />
+    <ClCompile Include="..\src\editor\Editor.cpp" />
+    <ClCompile Include="..\src\editor\EditorApp.cpp" />
+    <ClCompile Include="..\src\editor\EditorFrame.cpp" />
+    <ClCompile Include="..\src\editor\gen\EditorFrameBase.cpp" />
+    <ClCompile Include="..\src\editor\GLCanvas.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\src\common\CameraController.h" />
+    <ClInclude Include="..\src\common\Component.h" />
+    <ClInclude Include="..\src\common\ComponentManager.h" />
+    <ClInclude Include="..\src\common\components\CompGravField.h" />
+    <ClInclude Include="..\src\common\components\CompPhysics.h" />
+    <ClInclude Include="..\src\common\components\CompPlayerController.h" />
+    <ClInclude Include="..\src\common\components\CompPosition.h" />
+    <ClInclude Include="..\src\common\components\CompShape.h" />
+    <ClInclude Include="..\src\common\components\CompTrigger.h" />
+    <ClInclude Include="..\src\common\components\CompTrigger_Conditions.h" />
+    <ClInclude Include="..\src\common\components\CompTrigger_Effects.h" />
+    <ClInclude Include="..\src\common\components\CompVisualAnimation.h" />
+    <ClInclude Include="..\src\common\components\CompVisualMessage.h" />
+    <ClInclude Include="..\src\common\components\CompVisualTexture.h" />
+    <ClInclude Include="..\src\common\DataLoader.h" />
+    <ClInclude Include="..\src\common\Event.h" />
+    <ClInclude Include="..\src\common\Exception.h" />
+    <ClInclude Include="..\src\common\Font.h" />
+    <ClInclude Include="..\src\common\Foreach.h" />
+    <ClInclude Include="..\src\common\GameEvents.h" />
+    <ClInclude Include="..\src\common\IdTypes.h" />
+    <ClInclude Include="..\src\common\Logger.h" />
+    <ClInclude Include="..\src\common\Physics.h" />
+    <ClInclude Include="..\src\common\Renderer.h" />
+    <ClInclude Include="..\src\common\Sound.h" />
+    <ClInclude Include="..\src\common\Texture.h" />
+    <ClInclude Include="..\src\common\Vector2D.h" />
+    <ClInclude Include="..\src\common\World.h" />
+    <ClInclude Include="..\src\editor\Editor.h" />
+    <ClInclude Include="..\src\editor\EditorApp.h" />
+    <ClInclude Include="..\src\editor\EditorFrame.h" />
+    <ClInclude Include="..\src\editor\gen\EditorFrameBase.h" />
+    <ClInclude Include="..\src\editor\GLCanvas.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

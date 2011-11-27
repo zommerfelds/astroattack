@@ -6,9 +6,10 @@
 
 // CompPosition.h für mehr Informationen
 
-#include <boost/property_tree/ptree.hpp>
 #include "CompPosition.h"
+
 #include "CompPhysics.h"
+#include <boost/property_tree/ptree.hpp>
 
 // eindeutige ID
 const ComponentTypeId CompPosition::COMPONENT_TYPE_ID = "CompPosition";

@@ -4,10 +4,11 @@
  * Copyright 2011 Christian Zommerfelds
  */
 
-#include <fstream>
-#include <map>
-#include "common/Foreach.h"
 #include "Configuration.h"
+
+#include "common/Foreach.h"
+#include <map>
+#include <fstream>
 
 using boost::property_tree::ptree;
 

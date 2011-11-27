@@ -1,142 +1,27 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
-    </Filter>
-    <Filter Include="Header Files\Components">
-      <UniqueIdentifier>{b5188e64-87b3-43da-a080-31b3c2cab23c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\States">
-      <UniqueIdentifier>{e63cfeec-17bc-454b-9d7b-1f180961e67e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Other">
-      <UniqueIdentifier>{c6cc393c-1164-41ae-9417-b5c095d2d00d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="pugixml">
       <UniqueIdentifier>{3d9b5db1-6786-4b46-bc5f-3fc58dfde0f5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    <Filter Include="Common Source">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
-    <Filter Include="Source Files\Components">
-      <UniqueIdentifier>{7b432b2e-623c-4130-af36-afe34c51954a}</UniqueIdentifier>
+    <Filter Include="Common Source\Components">
+      <UniqueIdentifier>{b5188e64-87b3-43da-a080-31b3c2cab23c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\States">
-      <UniqueIdentifier>{07eb11d9-5b4e-4d89-9445-09dbe5f7c8f5}</UniqueIdentifier>
+    <Filter Include="Game Source">
+      <UniqueIdentifier>{49c1f142-656b-4a74-8758-f1d41c0068dc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Other">
-      <UniqueIdentifier>{a3fc578f-9f66-45f5-a08b-dac4cfdea726}</UniqueIdentifier>
+    <Filter Include="Game Source\States">
+      <UniqueIdentifier>{3382528b-9bf8-42dd-ab0e-dbc6180a82cb}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Data">
-      <UniqueIdentifier>{9fe5a627-577f-4bab-b9c7-f0359854d577}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Data\Levels">
+    <Filter Include="Levels">
       <UniqueIdentifier>{c48f1d1b-2a43-4860-855a-8d03d2846ed3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\src\Component.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Configuration.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Event.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Font.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\GameApp.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\GameEvents.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\GameStates.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\GUI.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Input.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\main.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Physics.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Renderer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Sound.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Texture.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\World.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\components\CompGravField.h">
-      <Filter>Header Files\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\components\CompPhysics.h">
-      <Filter>Header Files\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\components\CompPlayerController.h">
-      <Filter>Header Files\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\components\CompPosition.h">
-      <Filter>Header Files\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\components\CompTrigger.h">
-      <Filter>Header Files\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\components\CompTrigger_Conditions.h">
-      <Filter>Header Files\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\components\CompTrigger_Effects.h">
-      <Filter>Header Files\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\components\CompVisualAnimation.h">
-      <Filter>Header Files\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\components\CompVisualMessage.h">
-      <Filter>Header Files\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\components\CompVisualTexture.h">
-      <Filter>Header Files\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\states\EditorState.h">
-      <Filter>Header Files\States</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\states\GameOverState.h">
-      <Filter>Header Files\States</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\states\MainMenuState.h">
-      <Filter>Header Files\States</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\states\PlayingState.h">
-      <Filter>Header Files\States</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\states\SlideShowState.h">
-      <Filter>Header Files\States</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Exception.h">
-      <Filter>Header Files\Other</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Logger.h">
-      <Filter>Header Files\Other</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Vector2D.h">
-      <Filter>Header Files\Other</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\contrib\pugixml\pugixml.hpp">
       <Filter>pugixml</Filter>
     </ClInclude>
@@ -146,136 +31,250 @@
     <ClInclude Include="..\src\contrib\pugixml\foreach.hpp">
       <Filter>pugixml</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\components\CompShape.h">
-      <Filter>Header Files\Components</Filter>
+    <ClInclude Include="..\src\common\CameraController.h">
+      <Filter>Common Source</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\CameraController.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\src\common\Component.h">
+      <Filter>Common Source</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\ComponentManager.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\src\common\ComponentManager.h">
+      <Filter>Common Source</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\DataLoader.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\src\common\DataLoader.h">
+      <Filter>Common Source</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\IdTypes.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\src\common\Event.h">
+      <Filter>Common Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\common\Exception.h">
+      <Filter>Common Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\common\Font.h">
+      <Filter>Common Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\common\Foreach.h">
+      <Filter>Common Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\common\GameEvents.h">
+      <Filter>Common Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\common\IdTypes.h">
+      <Filter>Common Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\common\Logger.h">
+      <Filter>Common Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\common\Physics.h">
+      <Filter>Common Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\common\Renderer.h">
+      <Filter>Common Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\common\Sound.h">
+      <Filter>Common Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\common\Texture.h">
+      <Filter>Common Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\common\Vector2D.h">
+      <Filter>Common Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\common\World.h">
+      <Filter>Common Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\common\components\CompGravField.h">
+      <Filter>Common Source\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\common\components\CompPhysics.h">
+      <Filter>Common Source\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\common\components\CompPlayerController.h">
+      <Filter>Common Source\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\common\components\CompPosition.h">
+      <Filter>Common Source\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\common\components\CompShape.h">
+      <Filter>Common Source\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\common\components\CompTrigger.h">
+      <Filter>Common Source\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\common\components\CompTrigger_Conditions.h">
+      <Filter>Common Source\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\common\components\CompTrigger_Effects.h">
+      <Filter>Common Source\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\common\components\CompVisualAnimation.h">
+      <Filter>Common Source\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\common\components\CompVisualMessage.h">
+      <Filter>Common Source\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\common\components\CompVisualTexture.h">
+      <Filter>Common Source\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\game\Configuration.h">
+      <Filter>Game Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\game\GameApp.h">
+      <Filter>Game Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\game\GameState.h">
+      <Filter>Game Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\game\Gui.h">
+      <Filter>Game Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\game\Input.h">
+      <Filter>Game Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\game\InputCameraController.h">
+      <Filter>Game Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\game\main.h">
+      <Filter>Game Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\game\PlayerController.h">
+      <Filter>Game Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\game\states\EditorState.h">
+      <Filter>Game Source\States</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\game\states\GameOverState.h">
+      <Filter>Game Source\States</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\game\states\MainMenuState.h">
+      <Filter>Game Source\States</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\game\states\PlayingState.h">
+      <Filter>Game Source\States</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\game\states\SlideShowState.h">
+      <Filter>Game Source\States</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\Component.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Configuration.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Font.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\GameApp.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\GameStates.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\GUI.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Input.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Physics.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Renderer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Sound.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Texture.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\World.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\components\CompGravField.cpp">
-      <Filter>Source Files\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\components\CompPhysics.cpp">
-      <Filter>Source Files\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\components\CompPlayerController.cpp">
-      <Filter>Source Files\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\components\CompPosition.cpp">
-      <Filter>Source Files\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\components\CompTrigger.cpp">
-      <Filter>Source Files\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\components\CompTrigger_Conditions.cpp">
-      <Filter>Source Files\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\components\CompTrigger_Effects.cpp">
-      <Filter>Source Files\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\components\CompVisualAnimation.cpp">
-      <Filter>Source Files\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\components\CompVisualMessage.cpp">
-      <Filter>Source Files\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\components\CompVisualTexture.cpp">
-      <Filter>Source Files\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\states\EditorState.cpp">
-      <Filter>Source Files\States</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\states\GameOverState.cpp">
-      <Filter>Source Files\States</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\states\MainMenuState.cpp">
-      <Filter>Source Files\States</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\states\PlayingState.cpp">
-      <Filter>Source Files\States</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\states\SlideShowState.cpp">
-      <Filter>Source Files\States</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Logger.cpp">
-      <Filter>Source Files\Other</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\OsMsgBox.cpp">
-      <Filter>Source Files\Other</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Vector2D.cpp">
-      <Filter>Source Files\Other</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\contrib\pugixml\pugixml.cpp">
       <Filter>pugixml</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Event.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\src\common\CameraController.cpp">
+      <Filter>Common Source</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\components\CompShape.cpp">
-      <Filter>Source Files\Components</Filter>
+    <ClCompile Include="..\src\common\Component.cpp">
+      <Filter>Common Source</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\CameraController.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\src\common\ComponentManager.cpp">
+      <Filter>Common Source</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\ComponentManager.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\src\common\DataLoader.cpp">
+      <Filter>Common Source</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\DataLoader.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\src\common\Event.cpp">
+      <Filter>Common Source</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Event_templ.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\src\common\Font.cpp">
+      <Filter>Common Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\common\Logger.cpp">
+      <Filter>Common Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\common\Physics.cpp">
+      <Filter>Common Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\common\Renderer.cpp">
+      <Filter>Common Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\common\Sound.cpp">
+      <Filter>Common Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\common\Texture.cpp">
+      <Filter>Common Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\common\Vector2D.cpp">
+      <Filter>Common Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\common\World.cpp">
+      <Filter>Common Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\common\components\CompGravField.cpp">
+      <Filter>Common Source\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\common\components\CompPhysics.cpp">
+      <Filter>Common Source\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\common\components\CompPlayerController.cpp">
+      <Filter>Common Source\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\common\components\CompPosition.cpp">
+      <Filter>Common Source\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\common\components\CompShape.cpp">
+      <Filter>Common Source\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\common\components\CompTrigger.cpp">
+      <Filter>Common Source\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\common\components\CompTrigger_Conditions.cpp">
+      <Filter>Common Source\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\common\components\CompTrigger_Effects.cpp">
+      <Filter>Common Source\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\common\components\CompVisualAnimation.cpp">
+      <Filter>Common Source\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\common\components\CompVisualMessage.cpp">
+      <Filter>Common Source\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\common\components\CompVisualTexture.cpp">
+      <Filter>Common Source\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\game\Configuration.cpp">
+      <Filter>Game Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\game\GameApp.cpp">
+      <Filter>Game Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\game\GameState.cpp">
+      <Filter>Game Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\game\Gui.cpp">
+      <Filter>Game Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\game\Input.cpp">
+      <Filter>Game Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\game\InputCameraController.cpp">
+      <Filter>Game Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\game\main.cpp">
+      <Filter>Game Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\game\OsMsgBox.cpp">
+      <Filter>Game Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\game\PlayerController.cpp">
+      <Filter>Game Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\game\states\EditorState.cpp">
+      <Filter>Game Source\States</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\game\states\GameOverState.cpp">
+      <Filter>Game Source\States</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\game\states\MainMenuState.cpp">
+      <Filter>Game Source\States</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\game\states\PlayingState.cpp">
+      <Filter>Game Source\States</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\game\states\SlideShowState.cpp">
+      <Filter>Game Source\States</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\common\Event_templ.cpp">
+      <Filter>Common Source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -291,28 +290,28 @@
     <None Include="..\configure.in" />
     <None Include="..\AstroAttack.log" />
     <None Include="..\data\Levels\adjacent_problem.info">
-      <Filter>Data\Levels</Filter>
+      <Filter>Levels</Filter>
     </None>
     <None Include="..\data\Levels\level_editor.info">
-      <Filter>Data\Levels</Filter>
+      <Filter>Levels</Filter>
     </None>
     <None Include="..\data\Levels\level_grav.info">
-      <Filter>Data\Levels</Filter>
+      <Filter>Levels</Filter>
     </None>
     <None Include="..\data\Levels\level_new.info">
-      <Filter>Data\Levels</Filter>
+      <Filter>Levels</Filter>
     </None>
     <None Include="..\data\Levels\level_visita.info">
-      <Filter>Data\Levels</Filter>
+      <Filter>Levels</Filter>
     </None>
     <None Include="..\data\Levels\level1.info">
-      <Filter>Data\Levels</Filter>
+      <Filter>Levels</Filter>
     </None>
     <None Include="..\data\Levels\level2.info">
-      <Filter>Data\Levels</Filter>
+      <Filter>Levels</Filter>
     </None>
     <None Include="..\data\Levels\level3.info">
-      <Filter>Data\Levels</Filter>
+      <Filter>Levels</Filter>
     </None>
   </ItemGroup>
 </Project>

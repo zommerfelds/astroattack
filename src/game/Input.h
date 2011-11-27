@@ -9,11 +9,11 @@
 #ifndef INPUT_H
 #define INPUT_H
 
+#include "common/Vector2D.h"
+
 #include <map>
 #include <set>
 #include <SDL.h>
-
-#include "common/Vector2D.h"
 
 enum Key
 {

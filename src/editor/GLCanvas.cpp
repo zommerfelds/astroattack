@@ -4,11 +4,11 @@
  * Copyright 2011 Christian Zommerfelds
  */
 
+#include "GLCanvas.h"
+
 #include <wx/frame.h>
 #include <wx/window.h>
-#include <SDL/SDL_opengl.h>
-
-#include "GLCanvas.h"
+#include <SDL_opengl.h>
 
 // temp
 //#include "common/Logger.h"
@@ -129,6 +129,8 @@ void GLCanvas::onPaint( wxPaintEvent& evt )
 	    wxGLCanvas::SetCurrent(*m_context);
 	    wxPaintDC(this); // only to be used in paint events. use wxClientDC to paint outside the paint event
 	    SwapBuffers();
+
+		Refresh();
 
 		return;
 	}

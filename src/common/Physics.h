@@ -9,10 +9,10 @@
 #ifndef PHYSICS_H
 #define PHYSICS_H
 
-#include <vector>
-#include <Box2D/Box2D.h>
 #include "common/Event.h"
 #include "common/components/CompGravField.h"
+#include <vector>
+#include <Box2D/Box2D.h>
 
 struct GameEvents;
 class Component;

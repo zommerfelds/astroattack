@@ -4,13 +4,14 @@
  * Copyright 2011 Christian Zommerfelds
  */
 
-#include <cmath>
-#include <algorithm>
-#include <cfloat>
-#include <boost/make_shared.hpp>
+#include "CameraController.h"
 
 #include "common/Renderer.h"
-#include "CameraController.h"
+
+#include <cmath>
+#include <cfloat>
+#include <algorithm>
+#include <boost/make_shared.hpp>
 
 // Konstruktor
 // w*h = 1

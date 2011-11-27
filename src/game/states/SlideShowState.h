@@ -10,10 +10,10 @@
 #ifndef SLIDESHOWSTATE_H
 #define SLIDESHOWSTATE_H
 
+#include "game/GameState.h"
+
 #include <string>
 #include <vector>
-
-#include "game/GameState.h"
 
 // Ein einzelner "Dia" / Slide
 struct Slide

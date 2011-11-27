@@ -7,19 +7,20 @@
 #ifndef GAMEAPP_H
 #define GAMEAPP_H
 
-#include <vector>
-#include <string>
+#include "Input.h"
+#include "Gui.h"
+#include "PlayerController.h"
+
+#include "game/GameState.h"
 
 #include "common/Event.h"
 #include "common/Physics.h"
 #include "common/Renderer.h"
-#include "game/GameState.h"
 #include "common/Sound.h"
 #include "common/GameEvents.h"
 
-#include "Input.h"
-#include "Gui.h"
-#include "PlayerController.h"
+#include <vector>
+#include <string>
 
 union SDL_Event;
 

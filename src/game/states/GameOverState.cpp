@@ -4,17 +4,16 @@
  * Copyright 2011 Christian Zommerfelds
  */
 
-// GameOverState.h für mehr Informationen
+#include "GameOverState.h"
 
-#include <boost/make_shared.hpp>
-
-#include "common/Renderer.h"
+#include "PlayingState.h"
 
 #include "game/GameApp.h"
 #include "game/Input.h"
 
-#include "GameOverState.h"
-#include "PlayingState.h"
+#include "common/Renderer.h"
+
+#include <boost/make_shared.hpp>
 
 // eindeutige ID
 const GameStateId GameOverState::STATE_ID = "GameOverState";

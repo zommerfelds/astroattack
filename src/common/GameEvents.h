@@ -9,8 +9,8 @@
 #ifndef GAMEEVENTS_H
 #define GAMEEVENTS_H
 
-#include <string>
 #include "common/Event.h"
+#include <string>
 
 typedef std::string EntityIdType;
 

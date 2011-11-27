@@ -9,9 +9,9 @@
 #ifndef COMPONENT_H
 #define COMPONENT_H
 
+#include "IdTypes.h"
 #include <string>
 #include <vector>
-#include "IdTypes.h"
 
 struct GameEvents;
 
@@ -36,7 +36,6 @@ public:
 
     virtual void loadFromPropertyTree(const boost::property_tree::ptree& propTree) = 0;
     virtual void writeToPropertyTree(boost::property_tree::ptree& propTree) const = 0;
-
 
     template <typename CompType>       CompType* getSiblingComponent();
     template <typename CompType> const CompType* getSiblingComponent() const;

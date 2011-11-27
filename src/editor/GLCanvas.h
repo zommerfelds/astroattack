@@ -7,13 +7,13 @@
 #ifndef GLCANVAS_H
 #define GLCANVAS_H
 
-#include <wx/wx.h>
-#include <wx/glcanvas.h>
-
 #include "common/Renderer.h"
 #include "common/CameraController.h"
 
-class GameEvents;
+#include <wx/wx.h>
+#include <wx/glcanvas.h>
+
+struct GameEvents;
 class Editor;
 
 class GLCanvas : public wxGLCanvas

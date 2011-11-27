@@ -4,12 +4,13 @@
  * Copyright 2011 Christian Zommerfelds
  */
 
-#include <boost/bind.hpp>
-#include <SDL_mixer.h>
-
-#include "common/Logger.h"
 #include "Sound.h"
-#include "Exception.h" // Ausnahmen im Program (werden in main.cpp eingefangen)
+
+#include "Logger.h"
+#include "Exception.h"
+
+#include <SDL_mixer.h>
+#include <boost/bind.hpp>
 
 /*void Vol(int chan, void *stream, int len, void *udata)
 {

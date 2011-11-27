@@ -9,9 +9,10 @@
 #ifndef COMPTRIGGER_CONDITIONS_H
 #define COMPTRIGGER_CONDITIONS_H
 
+#include "CompTrigger.h"
+
 #include <map>
 #include <string>
-#include "CompTrigger.h"
 
 // ========== CompareVariable =========
 enum CompareOperator

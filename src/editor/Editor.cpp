@@ -4,10 +4,10 @@
  * Copyright 2011 Christian Zommerfelds
  */
 
+#include "Editor.h"
+
 #include "common/World.h"
 #include "common/Vector2D.h"
-
-#include "Editor.h"
 
 Editor::Editor(World& world)
 : m_world (world)

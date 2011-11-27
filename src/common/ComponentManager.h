@@ -7,13 +7,14 @@
 #ifndef COMPONENTMANAGER_H
 #define COMPONENTMANAGER_H
 
-#include <vector>
-#include <string>
-#include <map>
-#include <list>
-#include <boost/shared_ptr.hpp>
 #include "Logger.h"
 #include "IdTypes.h"
+
+#include <map>
+#include <list>
+#include <vector>
+#include <string>
+#include <boost/shared_ptr.hpp>
 
 class Component;
 struct GameEvents;

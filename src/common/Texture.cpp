@@ -4,18 +4,19 @@
  * Copyright 2011 Christian Zommerfelds
  */
 
+#include "Texture.h"
+
+#include "Logger.h"
+#include "Exception.h"
+
+#include <cmath>
 #include <fstream>
 #include <sstream>
-#include <cmath>
-#include <IL/il.h>      // DevIL für das Laden von Bilddateien
-#include <IL/ilu.h>     // DevILU für das Bearbeiten von Bilddaten
-#include <boost/make_shared.hpp>
+#include <IL/il.h>
+#include <IL/ilu.h>
 #include <SDL_opengl.h> // cross platform OpenGL include (provided by SDL)
+#include <boost/make_shared.hpp>
 #include <boost/lexical_cast.hpp>
-
-#include "common/Logger.h"
-#include "Texture.h"
-#include "Exception.h"  // Exceptions
 
 // Konstruktor
 TextureManager::TextureManager()

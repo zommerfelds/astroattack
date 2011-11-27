@@ -6,13 +6,13 @@
 
 // CompPosition.h für mehr Informationen
 
+#include "CompShape.h"
+
+#include "common/Foreach.h"
 
 #include <Box2D/Box2D.h> // need this for converting to Box2D shapes
 #include <boost/property_tree/ptree.hpp>
 #include <boost/make_shared.hpp>
-
-#include "common/Foreach.h"
-#include "CompShape.h"
 
 using boost::property_tree::ptree;
 

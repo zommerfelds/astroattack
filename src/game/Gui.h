@@ -7,13 +7,13 @@
 #ifndef GUI_H
 #define GUI_H
 
+#include "Input.h"
+
 #include <map>
 #include <set>
 #include <vector>
 #include <string>
 #include <boost/shared_ptr.hpp>
-
-#include "Input.h"
 
 class RenderSubSystem;
 class Widget;

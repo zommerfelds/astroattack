@@ -4,12 +4,14 @@
  * Copyright 2011 Christian Zommerfelds
  */
 
+#include "Logger.h"
+
+#include "common/Foreach.h"
+
 #include <ctime>
 #include <iostream>
-#include <boost/property_tree/ptree.hpp>
 #include <boost/make_shared.hpp>
-#include "common/Foreach.h"
-#include "Logger.h"
+#include <boost/property_tree/ptree.hpp>
 
 namespace {
 LogLevel strToLogLevel(std::string str)
@@ -81,8 +83,7 @@ void Logger::writeHeader(const std::string& str)
 
 Logger::LoggerStringBuf::LoggerStringBuf(const Logger& logger)
 : m_logger (logger)
-{
-}
+{}
 
 // synchronize output
 int Logger::LoggerStringBuf::sync()

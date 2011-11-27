@@ -4,20 +4,12 @@
  * Copyright 2011 Christian Zommerfelds
  */
 
-#include <cmath>
-#include <boost/bind.hpp>
-#include <boost/make_shared.hpp>
 
-#include "contrib/pugixml/pugixml.hpp"
-#include "contrib/pugixml/foreach.hpp"
+#include "MainMenuState.h"
 
-#include "common/Foreach.h"
-#include "common/Renderer.h"
-#include "common/Vector2D.h"
-#include "common/Texture.h"
-#include "common/Sound.h"
-#include "common/Logger.h"
-#include "common/DataLoader.h"
+#include "EditorState.h"
+#include "PlayingState.h"
+#include "SlideShowState.h"
 
 #include "game/Gui.h"
 #include "game/Configuration.h"
@@ -25,10 +17,20 @@
 #include "game/Input.h"
 #include "game/main.h"
 
-#include "MainMenuState.h"
-#include "EditorState.h"
-#include "PlayingState.h"
-#include "SlideShowState.h"
+#include "common/Renderer.h"
+#include "common/Vector2D.h"
+#include "common/Texture.h"
+#include "common/Sound.h"
+#include "common/Logger.h"
+#include "common/DataLoader.h"
+#include "common/Foreach.h"
+
+#include "contrib/pugixml/pugixml.hpp"
+#include "contrib/pugixml/foreach.hpp"
+
+#include <cmath>
+#include <boost/bind.hpp>
+#include <boost/make_shared.hpp>
 
 const std::string cLevelSequenceFileName = "data/levelSequence.xml";
 const std::string cMenuGraphicsFileName = "data/graphicsMenu.info"; // hier sind Menügrafiken angegeben

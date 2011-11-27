@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AstroAttack", "AstroAttack.vcxproj", "{3227BFE5-C873-41E6-A040-35E59D02460E}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AAEditor", "AAEditor.vcxproj", "{2025BE7E-3032-40A1-A8A3-7219E276B3BA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -17,6 +19,12 @@ Global
 		{3227BFE5-C873-41E6-A040-35E59D02460E}.Release|Win32.ActiveCfg = Release|Win32
 		{3227BFE5-C873-41E6-A040-35E59D02460E}.Release|Win32.Build.0 = Release|Win32
 		{3227BFE5-C873-41E6-A040-35E59D02460E}.Release|x64.ActiveCfg = Release|Win32
+		{2025BE7E-3032-40A1-A8A3-7219E276B3BA}.Debug|Win32.ActiveCfg = Debug|Win32
+		{2025BE7E-3032-40A1-A8A3-7219E276B3BA}.Debug|Win32.Build.0 = Debug|Win32
+		{2025BE7E-3032-40A1-A8A3-7219E276B3BA}.Debug|x64.ActiveCfg = Debug|Win32
+		{2025BE7E-3032-40A1-A8A3-7219E276B3BA}.Release|Win32.ActiveCfg = Release|Win32
+		{2025BE7E-3032-40A1-A8A3-7219E276B3BA}.Release|Win32.Build.0 = Release|Win32
+		{2025BE7E-3032-40A1-A8A3-7219E276B3BA}.Release|x64.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -11,12 +11,12 @@
 #ifndef COMPPLAYERCONTROLLER_H
 #define COMPPLAYERCONTROLLER_H
 
-#include <map>
 #include "common/Component.h"
 #include "common/World.h"
 #include "common/Vector2D.h"
+#include <map>
 
-class GameEvents;
+struct GameEvents;
 class CompPhysics;
 
 // Constants

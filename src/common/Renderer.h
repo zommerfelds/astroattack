@@ -9,11 +9,11 @@
 #ifndef RENDERER_H
 #define RENDERER_H
 
-#include <set>
-#include <string>
 #include "common/Event.h"
 #include "common/Font.h"
 #include "common/Texture.h"
+#include <set>
+#include <string>
 
 struct GameEvents;
 class CompVisualTexture;

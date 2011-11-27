@@ -4,20 +4,20 @@
  * Copyright 2011 Christian Zommerfelds
  */
 
-#include <boost/bind.hpp>
-#include <boost/make_shared.hpp>
-#include <Box2D/Box2D.h>
-
-#include "common/Foreach.h"
-#include "common/GameEvents.h"
-#include "common/Vector2D.h"
+#include "Physics.h"
 
 #include "common/components/CompPhysics.h"
 #include "common/components/CompPosition.h"
 #include "common/components/CompPlayerController.h"
 #include "common/components/CompShape.h"
 
-#include "Physics.h"
+#include "common/GameEvents.h"
+#include "common/Vector2D.h"
+#include "common/Foreach.h"
+
+#include <boost/bind.hpp>
+#include <boost/make_shared.hpp>
+#include <Box2D/Box2D.h>
 
 const float cPhysicsTimeStep = 1.0f/60.0f;
 const int PHYS_ITERATIONS = 10;

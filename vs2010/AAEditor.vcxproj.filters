@@ -1,0 +1,210 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Common Source">
+      <UniqueIdentifier>{240cb660-cd25-4ced-a3b6-b00d46b32466}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common Source\Components">
+      <UniqueIdentifier>{c5342e43-6c02-49e6-91a5-fb8caec0deaa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor Source">
+      <UniqueIdentifier>{30610bc7-a52e-4d36-9d0b-622abd87502d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor Source\gen">
+      <UniqueIdentifier>{0ba64128-3617-445f-93a1-17ca42be7801}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\common\CameraController.cpp">
+      <Filter>Common Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\common\Component.cpp">
+      <Filter>Common Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\common\ComponentManager.cpp">
+      <Filter>Common Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\common\DataLoader.cpp">
+      <Filter>Common Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\common\Event.cpp">
+      <Filter>Common Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\common\Event_templ.cpp">
+      <Filter>Common Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\common\Font.cpp">
+      <Filter>Common Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\common\Logger.cpp">
+      <Filter>Common Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\common\Physics.cpp">
+      <Filter>Common Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\common\Renderer.cpp">
+      <Filter>Common Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\common\Sound.cpp">
+      <Filter>Common Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\common\Texture.cpp">
+      <Filter>Common Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\common\Vector2D.cpp">
+      <Filter>Common Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\common\World.cpp">
+      <Filter>Common Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\common\components\CompGravField.cpp">
+      <Filter>Common Source\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\common\components\CompPhysics.cpp">
+      <Filter>Common Source\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\common\components\CompPlayerController.cpp">
+      <Filter>Common Source\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\common\components\CompPosition.cpp">
+      <Filter>Common Source\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\common\components\CompShape.cpp">
+      <Filter>Common Source\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\common\components\CompTrigger.cpp">
+      <Filter>Common Source\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\common\components\CompTrigger_Conditions.cpp">
+      <Filter>Common Source\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\common\components\CompTrigger_Effects.cpp">
+      <Filter>Common Source\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\common\components\CompVisualAnimation.cpp">
+      <Filter>Common Source\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\common\components\CompVisualMessage.cpp">
+      <Filter>Common Source\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\common\components\CompVisualTexture.cpp">
+      <Filter>Common Source\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\editor\Editor.cpp">
+      <Filter>Editor Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\editor\EditorApp.cpp">
+      <Filter>Editor Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\editor\EditorFrame.cpp">
+      <Filter>Editor Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\editor\GLCanvas.cpp">
+      <Filter>Editor Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\editor\gen\EditorFrameBase.cpp">
+      <Filter>Editor Source\gen</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\src\common\CameraController.h">
+      <Filter>Common Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\common\Component.h">
+      <Filter>Common Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\common\ComponentManager.h">
+      <Filter>Common Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\common\DataLoader.h">
+      <Filter>Common Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\common\Event.h">
+      <Filter>Common Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\common\Exception.h">
+      <Filter>Common Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\common\Font.h">
+      <Filter>Common Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\common\Foreach.h">
+      <Filter>Common Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\common\GameEvents.h">
+      <Filter>Common Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\common\IdTypes.h">
+      <Filter>Common Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\common\Logger.h">
+      <Filter>Common Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\common\Physics.h">
+      <Filter>Common Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\common\Renderer.h">
+      <Filter>Common Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\common\Sound.h">
+      <Filter>Common Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\common\Texture.h">
+      <Filter>Common Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\common\Vector2D.h">
+      <Filter>Common Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\common\World.h">
+      <Filter>Common Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\common\components\CompGravField.h">
+      <Filter>Common Source\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\common\components\CompPhysics.h">
+      <Filter>Common Source\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\common\components\CompPlayerController.h">
+      <Filter>Common Source\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\common\components\CompPosition.h">
+      <Filter>Common Source\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\common\components\CompShape.h">
+      <Filter>Common Source\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\common\components\CompTrigger.h">
+      <Filter>Common Source\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\common\components\CompTrigger_Conditions.h">
+      <Filter>Common Source\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\common\components\CompTrigger_Effects.h">
+      <Filter>Common Source\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\common\components\CompVisualAnimation.h">
+      <Filter>Common Source\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\common\components\CompVisualMessage.h">
+      <Filter>Common Source\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\common\components\CompVisualTexture.h">
+      <Filter>Common Source\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\editor\Editor.h">
+      <Filter>Editor Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\editor\EditorApp.h">
+      <Filter>Editor Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\editor\EditorFrame.h">
+      <Filter>Editor Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\editor\GLCanvas.h">
+      <Filter>Editor Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\editor\gen\EditorFrameBase.h">
+      <Filter>Editor Source\gen</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

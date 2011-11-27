@@ -4,14 +4,14 @@
  * Copyright 2011 Christian Zommerfelds
  */
 
-#include <sstream>
-#include <boost/make_shared.hpp>
+#include "CompTrigger_Effects.h"
 
+#include "CompVisualMessage.h"
 #include "common/ComponentManager.h"
 #include "common/Physics.h"
 
-#include "CompTrigger_Effects.h"
-#include "CompVisualMessage.h"
+#include <sstream>
+#include <boost/make_shared.hpp>
 
 // ========= KillEntity ===========
 EffectKillEntity::EffectKillEntity(GameEvents& gameEvents, const std::string& entityToKill)

@@ -9,10 +9,11 @@
 #ifndef COMPTRIGGER_EFFECTS_H
 #define COMPTRIGGER_EFFECTS_H
 
-#include <string>
-#include <map>
-#include "common/IdTypes.h"
 #include "CompTrigger.h"
+#include "common/IdTypes.h"
+
+#include <map>
+#include <string>
 
 class ComponentManager;
 

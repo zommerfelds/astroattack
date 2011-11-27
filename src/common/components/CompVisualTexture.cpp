@@ -4,12 +4,13 @@
  * Copyright 2011 Christian Zommerfelds
  */
 
+#include "CompVisualTexture.h"
+
+#include "CompShape.h"
+#include "common/Foreach.h"
+
 #include <sstream>
 #include <boost/property_tree/ptree.hpp>
-
-#include "common/Foreach.h"
-#include "CompVisualTexture.h"
-#include "CompShape.h"
 
 using boost::property_tree::ptree;
 

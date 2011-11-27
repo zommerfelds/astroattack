@@ -9,9 +9,9 @@
 #ifndef COMPGRAVFIELD_H
 #define COMPGRAVFIELD_H
 
-#include <set>
 #include "common/Component.h"
 #include "common/Vector2D.h"
+#include <set>
 
 //--------------------------------------------//
 //--------- CompGravField Klasse -------------//

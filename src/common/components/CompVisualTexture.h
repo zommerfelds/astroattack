@@ -13,12 +13,12 @@
 #ifndef COMPVISUALTEXTURE_H
 #define COMPVISUALTEXTURE_H
 
-#include <map>
-#include <vector>
-
 #include "common/Component.h"
 #include "common/Texture.h"
 #include "common/Vector2D.h"
+
+#include <map>
+#include <vector>
 
 //--------------------------------------------//
 //-------- CompVisualTexture Klasse ----------//

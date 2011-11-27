@@ -6,16 +6,16 @@
 
 // Hier startet und beendet die Anwendung!
 
-#include <vector>
-#include <string>
-#include <boost/property_tree/info_parser.hpp>
+#include "main.h"
+#include "GameApp.h"
+#include "Configuration.h"
 
 #include "common/Exception.h"
 #include "common/Logger.h"
 
-#include "main.h"
-#include "GameApp.h"
-#include "Configuration.h"
+#include <vector>
+#include <string>
+#include <boost/property_tree/info_parser.hpp>
 
 namespace {
 const std::string cConfigFileName = "data/config.info";

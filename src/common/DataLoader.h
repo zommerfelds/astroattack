@@ -4,20 +4,20 @@
  * Copyright 2011 Christian Zommerfelds
  */
 
-// Lesen von XML-Dateien und übersetzung in Entities
+// Lesen von INFO-Dateien und übersetzung in Entities
 
 #ifndef DATALOADER_H
 #define DATALOADER_H
 
+#include "Exception.h"
 #include <set>
 #include <string>
-#include "Exception.h"
 
 class World;
 class TextureManager;
 class AnimationManager;
 class FontManager;
-class GameEvents;
+struct GameEvents;
 
 struct ResourceIds
 {

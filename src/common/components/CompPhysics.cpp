@@ -4,15 +4,15 @@
  * Copyright 2011 Christian Zommerfelds
  */
 
-#include <Box2D/Box2D.h>
-#include <boost/make_shared.hpp>
-#include <boost/property_tree/ptree.hpp>
-#include <climits>
+#include "CompPhysics.h"
 
 #include "common/Foreach.h"
 #include "common/Logger.h"
 
-#include "CompPhysics.h"
+#include <climits>
+#include <Box2D/Box2D.h>
+#include <boost/make_shared.hpp>
+#include <boost/property_tree/ptree.hpp>
 
 using boost::property_tree::ptree;
 

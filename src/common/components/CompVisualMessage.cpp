@@ -4,8 +4,9 @@
  * Copyright 2011 Christian Zommerfelds
  */
 
-#include <boost/property_tree/ptree.hpp>
 #include "CompVisualMessage.h"
+
+#include <boost/property_tree/ptree.hpp>
 
 // eindeutige ID
 const ComponentTypeId CompVisualMessage::COMPONENT_TYPE_ID = "CompVisualMessage";

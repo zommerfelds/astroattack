@@ -4,16 +4,11 @@
  * Copyright 2011 Christian Zommerfelds
  */
 
-#include <fstream>
-#include <cmath>
-#include <sstream>
-#include <boost/bind.hpp>
-#include <SDL.h>
-#include <SDL_opengl.h>
 
-#include "common/Foreach.h"
-#include "common/Logger.h"
-#include "common/GameEvents.h"
+#include "Renderer.h"
+
+#include "DataLoader.h"
+#include "Vector2D.h"
 
 #include "common/components/CompVisualTexture.h"
 #include "common/components/CompShape.h"
@@ -21,9 +16,16 @@
 #include "common/components/CompVisualAnimation.h"
 #include "common/components/CompVisualMessage.h"
 
-#include "Renderer.h"
-#include "DataLoader.h"
-#include "Vector2D.h"
+#include "common/Logger.h"
+#include "common/GameEvents.h"
+#include "common/Foreach.h"
+
+#include <cmath>
+#include <sstream>
+#include <fstream>
+#include <SDL.h>
+#include <SDL_opengl.h>
+#include <boost/bind.hpp>
 
 const std::string cGraphisFileName = "data/graphics.info";
 const unsigned int cCircleSlices = 20; // number of slices for drawing a circle

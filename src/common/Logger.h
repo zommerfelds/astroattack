@@ -9,11 +9,11 @@
 #ifndef LOGGER_H
 #define LOGGER_H
 
+#include <list>
+#include <string>
 #include <fstream>
 #include <ostream>
 #include <sstream>
-#include <string>
-#include <list>
 #include <boost/shared_ptr.hpp>
 
 // forward declare ptree (Boost PropertyTree), quite complex but we don't want to include the big header here

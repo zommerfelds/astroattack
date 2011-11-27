@@ -10,8 +10,8 @@
 #define FONT_H
 
 #include <map>
-#include <string>
 #include <list>
+#include <string>
 #include <boost/shared_ptr.hpp>
 
 struct Box;
