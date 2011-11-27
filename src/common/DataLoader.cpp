@@ -9,12 +9,10 @@
 #include <boost/make_shared.hpp>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/info_parser.hpp>
-#include <boost/foreach.hpp>
 
-#include "DataLoader.h"
+#include "common/Foreach.h"
 #include "common/World.h"
 #include "common/Logger.h"
-#include "game/Configuration.h"
 #include "common/GameEvents.h"
 #include "common/Renderer.h"
 #include "common/Physics.h"
@@ -33,7 +31,7 @@
 #include "common/components/CompVisualMessage.h"
 #include "common/components/CompShape.h"
 
-#include "game/states/SlideShowState.h"
+#include "DataLoader.h"
 
 // TODO better checking of input data
 
@@ -57,7 +55,7 @@ void DataLoader::loadWorld(const std::string& fileName, World& gameWorld, GameEv
         ptree levelPropTree;
         read_info(fileName, levelPropTree);
 
-        BOOST_FOREACH(const ptree::value_type &value1, levelPropTree)
+        foreach(const ptree::value_type &value1, levelPropTree)
         {
             if (value1.first != "entity")
                 throw DataLoadException(fileName + " - At top level: parse error, expected 'entity', got '" + value1.first + "'");
@@ -67,7 +65,7 @@ void DataLoader::loadWorld(const std::string& fileName, World& gameWorld, GameEv
             ComponentList entity;
             log(Info) << "  Creating entity \"" << entityId << "\"\n";
 
-            BOOST_FOREACH(const ptree::value_type &value2, entityPropTree)
+            foreach(const ptree::value_type &value2, entityPropTree)
             {
                 if (value2.first == "id")
                     continue;
@@ -127,50 +125,6 @@ void DataLoader::loadWorld(const std::string& fileName, World& gameWorld, GameEv
     }
 }
 
-void DataLoader::loadSlideShow( const std::string& fileName, SlideShow* pSlideShow )
-{
-    try
-    {
-        using boost::shared_ptr;
-        using boost::make_shared;
-
-        log(Info) << "Loading slide show file \"" << fileName << "\"...\n";
-
-        ptree propTree;
-        read_info(fileName, propTree);
-
-        pSlideShow->musicFileName = propTree.get<std::string>("music");
-        pSlideShow->timerDelay = 5000;
-
-        BOOST_FOREACH(const ptree::value_type &value, propTree)
-        {
-            if (value.first == "slide")
-            {
-                ptree slidePropTree = value.second;
-                Slide slide;
-                slide.imageFileName = slidePropTree.get<std::string>("image");
-
-                BOOST_FOREACH(const ptree::value_type &value2, slidePropTree)
-                {
-                    if (value2.first == "text")
-                    {
-                        std::string text = value2.second.get_value("");
-                        slide.textPages.push_back(text);
-                    }
-                }
-
-                pSlideShow->slides.push_back( slide );
-            }
-        }
-
-        log(Info) << "[ Done ]\n\n";
-    }
-    catch (boost::property_tree::ptree_error& e)
-    {
-        throw DataLoadException(std::string("PropertyTree error parsing file '" + fileName + "': ") + e.what());
-    }
-}
-
 ResourceIds DataLoader::loadGraphics( const std::string& fileName, TextureManager* pTextureManager, AnimationManager* pAnimationManager, FontManager* pFontManager )
 {
 	log(Info) << "Loading graphics resource file \"" << fileName << "\"...\n";
@@ -190,7 +144,7 @@ ResourceIds DataLoader::loadGraphics( const std::string& fileName, TextureManage
 		// Texturen laden
 		if ( pTextureManager )
 		{
-			BOOST_FOREACH(const ptree::value_type &value, propTree)
+			foreach(const ptree::value_type &value, propTree)
 			{
 				if (value.first != "texture")
 					continue;
@@ -236,7 +190,7 @@ ResourceIds DataLoader::loadGraphics( const std::string& fileName, TextureManage
 		// Animationen laden
 		if ( pAnimationManager )
 		{
-			BOOST_FOREACH(const ptree::value_type &value, propTree)
+			foreach(const ptree::value_type &value, propTree)
 			{
 				if (value.first != "animation")
 					continue;
@@ -280,7 +234,7 @@ ResourceIds DataLoader::loadGraphics( const std::string& fileName, TextureManage
 		// Schriften laden
 		if ( pFontManager )
 		{
-			BOOST_FOREACH(const ptree::value_type &value, propTree)
+			foreach(const ptree::value_type &value, propTree)
 			{
 				if (value.first != "font")
 					continue;
@@ -310,21 +264,21 @@ void DataLoader::unLoadGraphics( const ResourceIds& resourcesToUnload, TextureMa
     // Texturen laden
     if ( pTextureManager )
     {
-        BOOST_FOREACH(const TextureId& id, resourcesToUnload.textures)
+        foreach(const TextureId& id, resourcesToUnload.textures)
             pTextureManager->freeTexture(id);
     }
 
     // Animationen laden
     if ( pAnimationManager )
     {
-        BOOST_FOREACH(const AnimationId& id, resourcesToUnload.animations)
+        foreach(const AnimationId& id, resourcesToUnload.animations)
             pAnimationManager->freeAnimation(id);
     }
 
     // Schriften laden
     if ( pFontManager )
     {
-        BOOST_FOREACH(const FontId& id, resourcesToUnload.fonts)
+        foreach(const FontId& id, resourcesToUnload.fonts)
             pFontManager->freeFont(id);
     }
     log(Info) << "[ Done ]\n\n";
@@ -337,13 +291,13 @@ void DataLoader::saveWorld(const std::string& fileName, const World& gameWorld)
     ptree levelPropTree;
 	
     const EntityMap& entities = gameWorld.getCompManager().getAllEntities();
-    BOOST_FOREACH(const EntityMap::value_type& entPair, entities)
+    foreach(const EntityMap::value_type& entPair, entities)
     {
         ptree entityPropTree;
         entityPropTree.add("id", entPair.first);
 
         const ComponentMap& comps = entPair.second;
-        BOOST_FOREACH(const ComponentMap::value_type& compPair, comps)
+        foreach(const ComponentMap::value_type& compPair, comps)
         {
             ptree compPropTree;
             compPropTree.add("type", compPair.second->getTypeId());

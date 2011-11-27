@@ -7,13 +7,14 @@
 #include <boost/bind.hpp>
 #include <boost/make_shared.hpp>
 #include <boost/property_tree/ptree.hpp>
-#include <boost/foreach.hpp>
+
+#include "common/Foreach.h"
+#include "common/World.h"
+#include "common/Logger.h"
 
 #include "CompTrigger.h"
 #include "CompTrigger_Effects.h"
 #include "CompTrigger_Conditions.h"
-#include "common/World.h"
-#include "common/Logger.h"
 
 using boost::property_tree::ptree;
 
@@ -73,7 +74,7 @@ void CompTrigger::addEffect( boost::shared_ptr<Effect> pTrig )
 
 void CompTrigger::loadFromPropertyTree(const ptree& propTree)
 {
-    BOOST_FOREACH(const ptree::value_type &v, propTree)
+    foreach(const ptree::value_type &v, propTree)
     {
         const std::string& nodeName = v.first;
         const ptree& subPropTree = v.second;

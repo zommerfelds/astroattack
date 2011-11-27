@@ -8,11 +8,13 @@
 
 #include <boost/make_shared.hpp>
 
-#include "GameOverState.h"
-#include "PlayingState.h"
 #include "common/Renderer.h"
+
 #include "game/GameApp.h"
 #include "game/Input.h"
+
+#include "GameOverState.h"
+#include "PlayingState.h"
 
 // eindeutige ID
 const GameStateId GameOverState::STATE_ID = "GameOverState";

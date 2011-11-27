@@ -13,8 +13,8 @@
 #include <vector>
 #include <string>
 
-#include "common/GameState.h"
 #include "common/DataLoader.h"
+#include "game/GameState.h"
 
 struct Button;
 

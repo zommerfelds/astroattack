@@ -13,7 +13,7 @@
 #include <string>
 #include <vector>
 
-#include "common/GameState.h"
+#include "game/GameState.h"
 
 // Ein einzelner "Dia" / Slide
 struct Slide
@@ -50,10 +50,12 @@ public:
 	void update();      // Spiel aktualisieren
 	void draw( float accumulator );        // Spiel zeichnen
 private:
+	void loadSlideShow();
+
     static const GameStateId STATE_ID;
 
     // Slideshow Informationen
-    std::string m_slideXmlFile;
+    const std::string m_slideDataFile;
     unsigned int m_currentSlide;
     unsigned int m_currentTextPage;
     SlideShow m_slideShow;

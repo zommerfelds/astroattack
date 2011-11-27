@@ -11,9 +11,8 @@
 
 #include <string>
 #include <map>
-
-#include "CompTrigger.h"
 #include "common/IdTypes.h"
+#include "CompTrigger.h"
 
 class ComponentManager;
 

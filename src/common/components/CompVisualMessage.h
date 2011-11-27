@@ -10,7 +10,6 @@
 #define COMPVISUALMESSAGE_H
 
 #include <string>
-
 #include "common/Component.h"
 
 //--------------------------------------------//

@@ -11,14 +11,16 @@
 #include <string>
 
 #include "common/Event.h"
-#include "Input.h"
 #include "common/Physics.h"
 #include "common/Renderer.h"
-#include "common/GameState.h"
+#include "game/GameState.h"
 #include "common/Sound.h"
-#include "Gui.h"
 #include "common/GameEvents.h"
-#include "game/PlayerController.h"
+
+#include "Input.h"
+#include "Gui.h"
+#include "PlayerController.h"
+
 union SDL_Event;
 
 // Alle wichtigen Untersysteme des Spieles

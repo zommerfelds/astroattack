@@ -12,7 +12,6 @@
 
 #include <string>
 #include <map>
-
 #include "common/ComponentManager.h"
 
 struct GameEvents;

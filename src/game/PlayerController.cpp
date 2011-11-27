@@ -4,20 +4,21 @@
  * Copyright 2011 Christian Zommerfelds
  */
 
-#include "PlayerController.h"
-
 #include <boost/bind.hpp>
 
 #include "common/GameEvents.h"
-#include "game/Input.h"
 #include "common/Vector2D.h"
 #include "common/Logger.h"
-#include "game/Input.h"
 
 #include "common/components/CompPlayerController.h"
 #include "common/components/CompGravField.h"
 #include "common/components/CompShape.h"
 #include "common/components/CompPhysics.h"
+
+#include "game/Input.h"
+#include "game/Input.h"
+
+#include "PlayerController.h"
 
 namespace
 {

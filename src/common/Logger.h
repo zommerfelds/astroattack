@@ -16,16 +16,13 @@
 #include <list>
 #include <boost/shared_ptr.hpp>
 
-class Logger;
-
 // forward declare ptree (Boost PropertyTree), quite complex but we don't want to include the big header here
 namespace boost { namespace property_tree {
     template<class Key, class Data, class KeyCompare> class basic_ptree;
     typedef basic_ptree<std::string, std::string, std::less<std::string> > ptree;
 }}
 
-// global logger
-//extern Logger gAaLog;
+class Logger;
 
 enum LogLevel { Fatal, Error, Warning, Info, Detail, Debug, Off };
 
@@ -53,6 +50,7 @@ public:
 	Logger(bool buffered=false);
     void addHandler(boost::shared_ptr<LogHandler> handler);
     void setLevel(LogLevel level);
+    void writeHeader(const std::string& str); // writes a formatted header containing str and the current time
 
 private:
 

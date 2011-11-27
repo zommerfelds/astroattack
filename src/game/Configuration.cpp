@@ -4,10 +4,10 @@
  * Copyright 2011 Christian Zommerfelds
  */
 
-#include "Configuration.h"
 #include <fstream>
-#include <boost/foreach.hpp>
 #include <map>
+#include "common/Foreach.h"
+#include "Configuration.h"
 
 using boost::property_tree::ptree;
 
@@ -18,7 +18,7 @@ bool writeConfig(const std::string& fileName, const ptree& config)
 	std::ofstream fout (fileName.c_str());
 	if (!fout)
 		return false;
-	BOOST_FOREACH(const ptree::value_type &v, config)
+	foreach(const ptree::value_type &v, config)
 	{
 		std::string name = v.first;
         std::string data = v.second.data();

@@ -12,9 +12,7 @@
 #include <map>
 #include <list>
 #include <boost/shared_ptr.hpp>
-
 #include "Logger.h"
-
 #include "IdTypes.h"
 
 class Component;

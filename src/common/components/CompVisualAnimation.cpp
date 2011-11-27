@@ -7,14 +7,13 @@
 // CompVisualAnimation.h für mehr Informationen
 
 
-#include <boost/bind.hpp>
 #include <sstream>
+#include <boost/bind.hpp>
 #include <boost/make_shared.hpp>
 #include <boost/property_tree/ptree.hpp>
 
-#include "CompVisualAnimation.h"
 #include "common/GameEvents.h"
-#include "game/main.h"
+#include "CompVisualAnimation.h"
 
 // einduetige ID
 const ComponentTypeId CompVisualAnimation::COMPONENT_TYPE_ID = "CompVisualAnimation";

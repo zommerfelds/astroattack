@@ -5,9 +5,9 @@
  */
 
 #include <sstream>
-#include <boost/foreach.hpp>
 #include <boost/property_tree/ptree.hpp>
 
+#include "common/Foreach.h"
 #include "CompVisualTexture.h"
 #include "CompShape.h"
 
@@ -26,7 +26,7 @@ void CompVisualTexture::loadFromPropertyTree(const ptree& propTree)
     m_shapeId = propTree.get("shape", ALL_SHAPES);
 
 	ptree mappingTree = propTree.get_child("mapping", ptree()); // need to create this variable, else the for loop crashes... (?)
-    BOOST_FOREACH(const ptree::value_type &v, mappingTree)
+    foreach(const ptree::value_type &v, mappingTree)
 	{
 		const ptree& vertex = v.second;
 		float x = vertex.get<float>("u");
@@ -34,7 +34,7 @@ void CompVisualTexture::loadFromPropertyTree(const ptree& propTree)
 		m_texMap.push_back( Vector2D(x, y) );
 	}
 
-    BOOST_FOREACH(const ptree::value_type &v, propTree)
+    foreach(const ptree::value_type &v, propTree)
     {
         if (v.first != "edge")
             continue;
@@ -87,7 +87,7 @@ void CompVisualTexture::writeToPropertyTree(boost::property_tree::ptree& propTre
     {
         ptree edgePropTree;
         std::ostringstream edgeString;
-        BOOST_FOREACH(size_t e, it->second)
+        foreach(size_t e, it->second)
         {
             edgeString << e << " ";
         }

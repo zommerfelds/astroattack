@@ -11,11 +11,9 @@
 
 #include <set>
 #include <string>
-
 #include "Exception.h"
 
 class World;
-struct SlideShow;
 class TextureManager;
 class AnimationManager;
 class FontManager;
@@ -37,7 +35,6 @@ class DataLoader
 {
 public:
     static void loadWorld( const std::string& fileName, World& gameWorld, GameEvents& events );
-    static void loadSlideShow( const std::string& fileName, SlideShow* pSlideShow );
     static ResourceIds loadGraphics( const std::string& fileName, TextureManager* pTextureManager, AnimationManager* pAnimationManager, FontManager* pFontManager );
     static void unLoadGraphics( const ResourceIds& resourcesToUnload, TextureManager* pTextureManager, AnimationManager* pAnimationManager, FontManager* pFontManager );
     static void saveWorld( const std::string& fileName, const World& gameWorld );

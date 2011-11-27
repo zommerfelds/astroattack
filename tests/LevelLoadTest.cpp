@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/info_parser.hpp>
-#include <boost/foreach.hpp>
+#include "common/Foreach.h"
 #include <string>
 #include <set>
 #include <list>
@@ -34,11 +34,11 @@ bool propTreeEquals(const ptree& propTree1, const ptree& propTree2)
     if (propTree1.size() != propTree2.size())
         return false;
 
-    BOOST_FOREACH(const ptree::value_type &v, propTree1)
+    foreach(const ptree::value_type &v, propTree1)
     {
         children1[v.first].push_back(v.second);
     }
-    BOOST_FOREACH(const ptree::value_type &v, propTree2)
+    foreach(const ptree::value_type &v, propTree2)
     {
         children2[v.first].push_back(v.second);
     }
@@ -138,7 +138,7 @@ TEST(LevelLoadTest, LoadWriteTest)
                               "data/player.info" };
     string lvlFileNameOut = "tmp_test_write_lvl.info";
 
-    BOOST_FOREACH(string lvlFileName, lvlFileNames)
+    foreach(string lvlFileName, lvlFileNames)
     {
         World world (events);
 
@@ -161,4 +161,6 @@ TEST(LevelLoadTest, LoadWriteTest)
             dumpPropertyTree(levelPropTreeAfter, cout);
         }
     }
+
+    // could remove the file afterwards, but needs platform independent way...
 }

@@ -11,7 +11,6 @@
 
 #include <map>
 #include <string>
-
 #include "CompTrigger.h"
 
 // ========== CompareVariable =========

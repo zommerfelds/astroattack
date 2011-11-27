@@ -10,12 +10,12 @@
 #include <string>
 #include <boost/property_tree/info_parser.hpp>
 
-#include "main.h" // wichtige Definitionen und Dateien einbinden
-#include "GameApp.h"
-#include "common/Exception.h" // Ausnahmen im Program
-#include "Configuration.h"
-
+#include "common/Exception.h"
 #include "common/Logger.h"
+
+#include "main.h"
+#include "GameApp.h"
+#include "Configuration.h"
 
 namespace {
 const std::string cConfigFileName = "data/config.info";
@@ -42,9 +42,9 @@ int main ( int argc, char* argv[] )
 
     do
     {
-        gRestart = false;
+        gDoRestart = false;
 
-        //gAaLog.writeInfoStart(); TODO
+        log(Info).writeHeader(GAME_NAME " " GAME_VERSION);
 
         //try
         {
@@ -71,12 +71,11 @@ int main ( int argc, char* argv[] )
             OsMsgBox( std::string( log() << std_err_msg ) ) + std_err_msg2, "Exception" );
         }*/
 
-        //gAaLog.writeInfoEnd(); TODO
-        if ( gRestart )
+        if ( gDoRestart )
         {
             log(Info) << "\n\n============= Restarting " GAME_NAME " =============\n\n";
         }
-    } while (gRestart);
+    } while (gDoRestart);
 
     writeConfig(cConfigFileName, gConfig);
 

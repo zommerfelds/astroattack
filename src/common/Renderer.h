@@ -105,6 +105,9 @@ public:
     const FontManager& getFontManager() const { return m_fontManager; }
           FontManager& getFontManager()       { return m_fontManager; }
 
+    int getViewPortWidth()  const { return m_viewPortWidth;  }
+    int getViewPortHeight() const { return m_viewPortHeight; }
+
 private:
     void initOpenGL( int width, int height ); // OpenGL initialisieren
 
@@ -131,6 +134,9 @@ private:
     MatrixId m_currentMatrix;
     float m_matrixGUI[16];
     float m_matrixText[16];
+
+    int m_viewPortWidth;
+    int m_viewPortHeight;
 };
 
 #endif

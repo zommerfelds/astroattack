@@ -5,14 +5,14 @@
  */
 
 #include <boost/bind.hpp>
-#include <boost/foreach.hpp>
 #include <boost/property_tree/ptree.hpp>
+
+#include "common/Foreach.h"
+#include "common/Logger.h"
 
 #include "CompPlayerController.h"
 #include "CompVisualAnimation.h"
 #include "CompPhysics.h"
-
-#include "common/Logger.h"
 
 using boost::property_tree::ptree;
 

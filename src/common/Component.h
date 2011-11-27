@@ -11,7 +11,6 @@
 
 #include <string>
 #include <vector>
-
 #include "IdTypes.h"
 
 struct GameEvents;

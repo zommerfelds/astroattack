@@ -4,9 +4,8 @@
  * Copyright 2011 Christian Zommerfelds
  */
 
-#include "EditorFrame.h"
-
 #include "common/GameEvents.h"
+#include "EditorFrame.h"
 
 namespace {
 int glArgs[] = {WX_GL_RGBA, WX_GL_DOUBLEBUFFER, WX_GL_DEPTH_SIZE, 16, 0};

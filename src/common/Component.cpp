@@ -4,8 +4,8 @@
  * Copyright 2011 Christian Zommerfelds
  */
 
+#include "common/GameEvents.h"
 #include "Component.h"
-#include "common/GameEvents.h" // Steuert die Spielerreignisse
 #include "ComponentManager.h"
 
 Component::Component(const ComponentIdType& id, GameEvents& gameEvents)

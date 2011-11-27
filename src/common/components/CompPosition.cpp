@@ -7,7 +7,6 @@
 // CompPosition.h für mehr Informationen
 
 #include <boost/property_tree/ptree.hpp>
-
 #include "CompPosition.h"
 #include "CompPhysics.h"
 

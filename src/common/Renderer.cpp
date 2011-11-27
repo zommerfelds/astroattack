@@ -8,23 +8,22 @@
 #include <cmath>
 #include <sstream>
 #include <boost/bind.hpp>
-#include <boost/foreach.hpp>
 #include <SDL.h>
-// cross platform OpenGL include (provided by SDL)
 #include <SDL_opengl.h>
 
+#include "common/Foreach.h"
 #include "common/Logger.h"
-#include "Renderer.h"
-#include "DataLoader.h"
-#include "Vector2D.h"
 #include "common/GameEvents.h"
-#include "game/Configuration.h"
-#include "Component.h"
+
 #include "common/components/CompVisualTexture.h"
 #include "common/components/CompShape.h"
 #include "common/components/CompPosition.h"
 #include "common/components/CompVisualAnimation.h"
 #include "common/components/CompVisualMessage.h"
+
+#include "Renderer.h"
+#include "DataLoader.h"
+#include "Vector2D.h"
 
 const std::string cGraphisFileName = "data/graphics.info";
 const unsigned int cCircleSlices = 20; // number of slices for drawing a circle
@@ -32,7 +31,7 @@ const unsigned int cCircleSlices = 20; // number of slices for drawing a circle
 RenderSubSystem::RenderSubSystem( GameEvents& gameEvents )
 : m_isInit (false), m_eventConnection1 (), m_eventConnection2(), m_gameEvents ( gameEvents ),
   m_textureManager (), m_animationManager ( m_textureManager ),
-  m_fontManager (), m_currentMatrix (World)
+  m_fontManager (*this), m_currentMatrix (World), m_viewPortWidth (0), m_viewPortHeight (0)
 {
     float* M;
 
@@ -130,6 +129,8 @@ void RenderSubSystem::initOpenGL(int width, int height)
 
 void RenderSubSystem::resize(int width, int height)
 {
+	m_viewPortWidth = width;
+	m_viewPortHeight = height;
     glViewport(0, 0, width, height);
 
     setMatrix(Text);
@@ -542,7 +543,7 @@ void RenderSubSystem::drawString( const std::string &str, const FontId &fontId, 
 
 void RenderSubSystem::drawVisualTextureComps()
 {
-    BOOST_FOREACH(CompVisualTexture* pTexComp, m_visualTextureComps)
+    foreach(CompVisualTexture* pTexComp, m_visualTextureComps)
     {
         CompPosition* compPos = pTexComp->getSiblingComponent<CompPosition>();
         std::vector<CompShape*> compShapes = pTexComp->getSiblingComponents<CompShape>();
@@ -587,12 +588,14 @@ void RenderSubSystem::drawVisualTextureComps()
 
 void RenderSubSystem::drawVisualAnimationComps()
 {
-    BOOST_FOREACH(CompVisualAnimation* pAnimComp, m_visualAnimComps)
+    foreach(CompVisualAnimation* pAnimComp, m_visualAnimComps)
     {
         CompPosition* compPos = pAnimComp->getSiblingComponent<CompPosition>();
         if (compPos)
         {
-            m_textureManager.setTexture(pAnimComp->getCurrentTexture());
+        	TextureId id = pAnimComp->getCurrentTexture();
+        	if (id != "") // maybe the animation has not been set up yet (update())
+        		m_textureManager.setTexture(id);
 
             glPushMatrix();
 
@@ -652,7 +655,7 @@ void RenderSubSystem::drawVisualMessageComps()
 {
     int y = 0;
     float lineHeight = 0.2f;
-    BOOST_FOREACH(CompVisualMessage* pMsgComp, m_visualMsgComps)
+    foreach(CompVisualMessage* pMsgComp, m_visualMsgComps)
     {
         drawString( std::string("- ")+pMsgComp->getMsg(), "FontW_m", 0.4f, 0.6f + y*lineHeight );
         ++y;
@@ -702,8 +705,8 @@ void RenderSubSystem::displayLoadingScreen()
     glPushMatrix();
     glLoadIdentity(); //Reset projection matrix
 
-    float w = (float)gConfig.get<int>("ScreenWidth");
-    float h = (float)gConfig.get<int>("ScreenHeight");
+    float w = (float)m_viewPortWidth;
+    float h = (float)m_viewPortHeight;
 
     gluOrtho2D( 0, w, h, 0 ); // orthographic mode (z is not important)
     glMatrixMode ( GL_MODELVIEW );
@@ -714,7 +717,7 @@ void RenderSubSystem::displayLoadingScreen()
     info.wrapModeX = LoadTextureInfo::WrapClamp;
     info.wrapModeY = LoadTextureInfo::WrapClamp;
     info.scale = 1.0;
-    info.quality = (LoadTextureInfo::Quality) gConfig.get<int>("TexQuality");
+    info.quality = LoadTextureInfo::QualityBest;
     int picw=0,pich=0;
     m_textureManager.loadTexture("data/Loading.png", "loading", info, &picw, &pich);
     m_textureManager.setTexture("loading");
@@ -771,13 +774,14 @@ void RenderSubSystem::setViewSize( float width, float height )
 
 void RenderSubSystem::update()
 {
-	BOOST_FOREACH(CompVisualAnimation* animComp, m_visualAnimComps)
+	foreach(CompVisualAnimation* animComp, m_visualAnimComps)
 	{
 		if ( animComp->m_animInfo==NULL )
 		{
 			animComp->m_animInfo = m_animationManager.getAnimInfo(animComp->m_animInfoId);
 			if (animComp->m_animInfo)
 				animComp->m_curState = animComp->m_animInfo->states.begin()->first;
+			continue;
 		}
 
 		if ( !animComp->m_running )

@@ -4,21 +4,12 @@
  * Copyright 2011 Christian Zommerfelds
  */
 
-#include "game/main.h" // XXX
-#include "Logger.h"
-
 #include <ctime>
-#include <boost/foreach.hpp>
 #include <iostream>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/make_shared.hpp>
-
-// global log
-//Logger gAaLog( LOG_FILE_NAME );
-
-/*namespace {
-const std::string cIdentString = " "; // pro indentation level (Texteinrückung) wird dieser Zeichensatz eingefügt
-}*/
+#include "common/Foreach.h"
+#include "Logger.h"
 
 namespace {
 LogLevel strToLogLevel(std::string str)
@@ -31,7 +22,13 @@ LogLevel strToLogLevel(std::string str)
 	if (str == "Off") return Off;
 	return Off;
 }
+
+std::string getCurrentTimeStr()
+{
+	time_t t = time(NULL);
+	return ctime(&t);
 }
+} // end namespace
 
 Logger& log(LogLevel level)
 {
@@ -77,6 +74,11 @@ void Logger::setLevel(LogLevel level)
 	m_logLevel = level;
 }
 
+void Logger::writeHeader(const std::string& str)
+{
+    *this << "*** " << str << " ***" << "\nStart: " << getCurrentTimeStr() << "-------------------------------\n\n";
+}
+
 Logger::LoggerStringBuf::LoggerStringBuf(const Logger& logger)
 : m_logger (logger)
 {
@@ -87,7 +89,7 @@ int Logger::LoggerStringBuf::sync()
 {
 	if (!str().empty())
 	{
-		BOOST_FOREACH(boost::shared_ptr<LogHandler> handler, m_logger.m_handlers)
+		foreach(boost::shared_ptr<LogHandler> handler, m_logger.m_handlers)
 		{
 			handler->writeFilter(m_logger.m_logLevel, str());
 		}
@@ -129,37 +131,3 @@ FileHandler::FileHandler(const std::string& fileName)
 : OstreamHandler (m_ofstream),
   m_ofstream (fileName.c_str())
 {}
-
-/*
-void Logger::writeCurrentTime()
-{
-    if ( !m_isOpen )
-        return;
-
-    time_t t = time ( NULL );
-
-#ifdef USE_SAFE_CRT_FUNCTIONS
-    char time_str[30] = {0};
-    ctime_s ( time_str, 30, &t );
-    write ( time_str );
-#else
-    write ( ctime ( &t ) );
-#endif
-}
-
-void Logger::writeInfoStart()
-{
-    write ( "*** " GAME_NAME " %s ***\nStart: ", GAME_VERSION ); // Version in der Log-Datei anzeigen
-    writeCurrentTime(); // Startzeit aufschreiben
-    write ( "-------------------------------\n\n" );
-}
-
-void Logger::writeInfoEnd()
-{
-    // Endinforamtionen in Log-Datei schreiben
-    setIndentationLevel( 0 ); // Keine Texteinrückung
-    write ( "\n-----------------------------\n" );
-    write ( "End: " );
-    writeCurrentTime();
-}
-*/

@@ -4,26 +4,27 @@
  * Copyright 2011 Christian Zommerfelds
  */
 
-
 #include <sstream>
 #include <boost/bind.hpp>
-#include <boost/foreach.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/make_shared.hpp>
 
-#include "PlayingState.h"
-#include "GameOverState.h"
-#include "MainMenuState.h"
-#include "game/GameApp.h"
-#include "common/Renderer.h"
-#include "common/Physics.h"
-#include "game/Input.h"
+#include "common/Foreach.h"
 #include "common/Logger.h"
 #include "common/GameEvents.h"
 #include "common/DataLoader.h"
 #include "common/Sound.h"
 #include "common/Vector2D.h"
+#include "common/Renderer.h"
+#include "common/Physics.h"
+
+#include "game/GameApp.h"
+#include "game/Input.h"
 #include "game/main.h"
+
+#include "PlayingState.h"
+#include "GameOverState.h"
+#include "MainMenuState.h"
 
 // define this to draw gravitation vector and other
 //#define DRAW_DEBUG
@@ -137,7 +138,7 @@ void PlayingState::update()      // Spiel aktualisieren
     {
         m_curentDeleteSet = 2;
 
-        BOOST_FOREACH(const EntityIdType& id, m_entitiesToDelete1)
+        foreach(const EntityIdType& id, m_entitiesToDelete1)
             m_gameWorld.getCompManager().removeEntity(id);
 
         m_entitiesToDelete1.clear();
@@ -146,7 +147,7 @@ void PlayingState::update()      // Spiel aktualisieren
     {
         m_curentDeleteSet = 1;
 
-        BOOST_FOREACH(const EntityIdType& id, m_entitiesToDelete2)
+        foreach(const EntityIdType& id, m_entitiesToDelete2)
             m_gameWorld.getCompManager().removeEntity(id);
 
         m_entitiesToDelete2.clear();
@@ -203,7 +204,7 @@ void PlayingState::draw( float accumulator )        // Spiel zeichnen
 
         // draw contacts
         //ContactVector contacts = player_phys->getContacts();
-        /*BOOST_FOREACH (boost::shared_ptr<ContactInfo> contact, contacts)
+        /*foreach (boost::shared_ptr<ContactInfo> contact, contacts)
         {
             renderer.drawPoint( contact->point );
         }*/

@@ -8,17 +8,22 @@
 
 #include <boost/shared_ptr.hpp>
 #include <boost/make_shared.hpp>
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/info_parser.hpp>
 
+#include "common/Foreach.h"
 #include "common/Renderer.h"
-#include "game/Configuration.h"
 #include "common/Logger.h"
-#include "game/GameApp.h"
-#include "game/Input.h"
 #include "common/Vector2D.h"
 #include "common/Texture.h"
 #include "common/Sound.h"
 #include "common/DataLoader.h"
+
 #include "game/Configuration.h"
+#include "game/GameApp.h"
+#include "game/Input.h"
+#include "game/Configuration.h"
+
 #include "SlideShowState.h"
 #include "MainMenuState.h"
 
@@ -27,9 +32,9 @@ const GameStateId SlideShowState::STATE_ID = "SlideShowState";
 
 // Konstruktor
 // slideXmlFile ist der Name der Bildshow-Datei
-SlideShowState::SlideShowState( SubSystems& subSystems, const std::string& slideXmlFile )
+SlideShowState::SlideShowState( SubSystems& subSystems, const std::string& slideDataFile )
 : GameState( subSystems ),
-  m_slideXmlFile (slideXmlFile),
+  m_slideDataFile (slideDataFile),
   m_currentSlide ( 0 ),
   m_currentTextPage ( 0 ),
   m_overlayAlpha ( 0 ),
@@ -61,7 +66,7 @@ void SlideShowState::init()        // State starten
     try
     {
         // "Dia-Show" laden
-        DataLoader::loadSlideShow( m_slideXmlFile, &m_slideShow );
+        loadSlideShow();
     }
     catch (DataLoadException& e)
     {
@@ -286,6 +291,8 @@ void SlideShowState::draw( float /*accumulator*/ )        // Spiel zeichnen
 {
     RenderSubSystem& renderer = getSubSystems().renderer;
 
+    renderer.clearScreen();
+
     // Bild zeichnen
     {
         float texCoord[8] = { 0.0f, 0.0f,
@@ -331,4 +338,50 @@ void SlideShowState::draw( float /*accumulator*/ )        // Spiel zeichnen
                                  (mousePos->x+0.025f)*4, mousePos->y*3 };
         renderer.DrawTexturedQuad( texCoord, vertexCoord, "_cursor" );
     }*/
+}
+
+void SlideShowState::loadSlideShow()
+{
+	using boost::property_tree::ptree;
+
+    try
+    {
+        using boost::shared_ptr;
+        using boost::make_shared;
+
+        log(Info) << "Loading slide show file \"" << m_slideDataFile << "\"...\n";
+
+        ptree propTree;
+        read_info(m_slideDataFile, propTree);
+
+        m_slideShow.musicFileName = propTree.get<std::string>("music");
+        m_slideShow.timerDelay = 5000;
+
+        foreach(const ptree::value_type &value, propTree)
+        {
+            if (value.first == "slide")
+            {
+                ptree slidePropTree = value.second;
+                Slide slide;
+                slide.imageFileName = slidePropTree.get<std::string>("image");
+
+                foreach(const ptree::value_type &value2, slidePropTree)
+                {
+                    if (value2.first == "text")
+                    {
+                        std::string text = value2.second.get_value("");
+                        slide.textPages.push_back(text);
+                    }
+                }
+
+                m_slideShow.slides.push_back(slide);
+            }
+        }
+
+        log(Info) << "[ Done ]\n\n";
+    }
+    catch (boost::property_tree::ptree_error& e)
+    {
+        throw DataLoadException(std::string("PropertyTree error parsing file '" + m_slideDataFile + "': ") + e.what());
+    }
 }

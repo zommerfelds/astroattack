@@ -7,6 +7,8 @@
 #ifndef IDTYPES_H
 #define IDTYPES_H
 
+#include <string>
+
 typedef std::string ConditionId;
 typedef std::string EffectId;
 

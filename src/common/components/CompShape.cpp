@@ -9,9 +9,9 @@
 
 #include <Box2D/Box2D.h> // need this for converting to Box2D shapes
 #include <boost/property_tree/ptree.hpp>
-#include <boost/foreach.hpp>
 #include <boost/make_shared.hpp>
 
+#include "common/Foreach.h"
 #include "CompShape.h"
 
 using boost::property_tree::ptree;
@@ -29,7 +29,7 @@ CompShapePolygon::CompShapePolygon(const ComponentIdType& id, GameEvents& gameEv
 
 void CompShapePolygon::loadFromPropertyTree(const ptree& propTree)
 {
-    BOOST_FOREACH(const ptree::value_type &v, propTree.get_child("polygon"))
+    foreach(const ptree::value_type &v, propTree.get_child("polygon"))
     {
         const ptree& vertex = v.second;
         float x = vertex.get<float>("x");

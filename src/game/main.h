@@ -28,6 +28,6 @@
 
 //-------------------------------- Globale Variablen --------------------------------//
 
-extern bool gRestart; // Ob AstroAttack neu gestartet werden soll, nochdem es beendet wurde
+extern bool gDoRestart; // Ob AstroAttack neu gestartet werden soll, nochdem es beendet wurde
 
 #endif

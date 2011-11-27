@@ -12,14 +12,11 @@
 - Fix TODOs
 - Improve walking animation when player shortly looses contact to the ground
 - Test Init() => DeInit() => Init() on GameApp and SubSystems
-- improve logger
 - asynchonous fading out music (separate thread)
 - Test OpenGL error checking (glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR) did not generate error)
-- Bug in Logger: Loading Texture "(null)"... Done!
 - Kontakt Events nicht für jeden Box2D Kontakt erzeugen, sondern Box2D Kontakte zuerst verarbeiten und zusammenfügen.
 - GUI System
 - Konkave Polygone im Editor
-- Check widescreen mode
 - Handle UTF-8 symbols in the slide show state (a multi-byte character is treated as single bytes)
 - Migrate XML files to INFO (slide show, config, resource)
 
@@ -52,6 +49,8 @@
 
 
 DONE:
+- Aspect ration instead of wide-screen mode
+- improve logger
 - Set all files to EOL style LF in SVN
 - Fix round planet gravitation/rotation
 - In component INFO files: change 'id' to 'type' and 'name' to 'id'

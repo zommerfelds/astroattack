@@ -4,17 +4,16 @@
  * Copyright 2011 Christian Zommerfelds
  */
 
-#include "ComponentManager.h"
+#include <algorithm>
 
-#include "common/GameEvents.h" // Steuert die Spielerreignisse
-#include "Component.h"
+#include "common/Foreach.h"
+#include "common/GameEvents.h"
 
 #include "common/components/CompPhysics.h"
 #include "common/components/CompShape.h"
 #include "common/components/CompPosition.h"
 
-#include <boost/foreach.hpp>
-#include <algorithm>
+#include "ComponentManager.h"
 
 // Konstruktor
 ComponentManager::ComponentManager( GameEvents& events )
@@ -65,7 +64,7 @@ void ComponentManager::addEntity(const EntityIdType& id, ComponentList& componen
 
     // put components in a map
     ComponentMap compMap;
-    BOOST_FOREACH(boost::shared_ptr<Component> comp, components)
+    foreach(boost::shared_ptr<Component> comp, components)
     {
         comp->m_entityId = id;
         comp->m_compManager = this;
@@ -75,7 +74,7 @@ void ComponentManager::addEntity(const EntityIdType& id, ComponentList& componen
     m_entities[id] = compMap; // if there is an entity with the same ID before, it will get deleted
 
     // trigger events
-    BOOST_FOREACH(boost::shared_ptr<Component> comp, components)
+    foreach(boost::shared_ptr<Component> comp, components)
     {
         m_gameEvents.newComponent.fire(*comp);
     }
@@ -90,7 +89,7 @@ void ComponentManager::removeEntity(const EntityIdType& id)
 
     m_gameEvents.deleteEntity.fire( id );
 
-    BOOST_FOREACH(ComponentMap::value_type& pair, it->second)
+    foreach(ComponentMap::value_type& pair, it->second)
     {
         Component& comp = *pair.second;
         m_gameEvents.deleteComponent.fire(comp);

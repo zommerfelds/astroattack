@@ -7,10 +7,9 @@
 #ifndef EDITOR_FRAME_H
 #define EDITOR_FRAME_H
 
-#include "gen/EditorFrameBase.h"
-
 #include <wx/timer.h>
 #include "GLCanvas.h"
+#include "gen/EditorFrameBase.h"
 
 class Editor;
 

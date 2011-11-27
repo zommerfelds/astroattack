@@ -6,10 +6,9 @@
 
 #include <boost/bind.hpp>
 #include <boost/make_shared.hpp>
-#include <boost/foreach.hpp>
 #include <Box2D/Box2D.h>
 
-#include "Physics.h"
+#include "common/Foreach.h"
 #include "common/GameEvents.h"
 #include "common/Vector2D.h"
 
@@ -17,6 +16,8 @@
 #include "common/components/CompPosition.h"
 #include "common/components/CompPlayerController.h"
 #include "common/components/CompShape.h"
+
+#include "Physics.h"
 
 const float cPhysicsTimeStep = 1.0f/60.0f;
 const int PHYS_ITERATIONS = 10;
@@ -67,7 +68,7 @@ boost::shared_ptr<b2BodyDef> convertToB2BodyDef(const BodyDef& bodyDef)
 // PhysicsSubSystem aktualisieren (ganze Physik wird aktulisiert -> Positionen, Geschwindigkeiten...)
 void PhysicsSubSystem::update()
 {
-    BOOST_FOREACH(CompPhysics* compPhys, m_physicsComps)
+    foreach(CompPhysics* compPhys, m_physicsComps)
     {
         compPhys->m_previousCenterOfMass = compPhys->getCenterOfMass();
         compPhys->m_previousAngle = compPhys->getAngle();
@@ -77,7 +78,7 @@ void PhysicsSubSystem::update()
     m_world.Step(m_timeStep, m_velocityIterations, m_positionIterations);
     //----------------------------//
 
-    BOOST_FOREACH(CompPhysics* compPhys, m_physicsComps)
+    foreach(CompPhysics* compPhys, m_physicsComps)
 	{
 		b2Body* pBody = compPhys->m_body;
 
@@ -132,7 +133,7 @@ void PhysicsSubSystem::update()
 void PhysicsSubSystem::calculateSmoothPositions(float accumulator)
 {
     float ratio = accumulator/cPhysicsTimeStep;
-    BOOST_FOREACH(CompPhysics* compPhys, m_physicsComps)
+    foreach(CompPhysics* compPhys, m_physicsComps)
     {
         b2Body* pBody = compPhys->m_body;
         if (pBody->GetType() == b2_staticBody)

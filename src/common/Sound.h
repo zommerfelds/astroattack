@@ -26,7 +26,7 @@ public:
     SoundSubSystem();
     ~SoundSubSystem();
 
-    bool init();
+    bool init(float volSound, float volMusic, float volMaster);
     void deInit();
 
     void loadSound( const std::string& name, SoundId id );

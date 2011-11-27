@@ -4,16 +4,16 @@
  * Copyright 2011 Christian Zommerfelds
  */
 
-#include "InputCameraController.h"
-
 #include "common/CameraController.h"
 #include "common/ComponentManager.h"
-#include "Input.h"
-#include "Configuration.h"
 
 #include "common/components/CompPhysics.h"
 #include "common/components/CompVisualAnimation.h"
 #include "common/components/CompGravField.h"
+
+#include "Input.h"
+#include "Configuration.h"
+#include "InputCameraController.h"
 
 namespace {
 

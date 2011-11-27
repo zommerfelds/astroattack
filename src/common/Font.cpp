@@ -10,7 +10,11 @@
 #include <boost/make_shared.hpp>
 
 #include "Font.h"
-#include "game/Configuration.h"
+#include "Renderer.h"
+
+FontManager::FontManager(const RenderSubSystem& renderer)
+: m_renderer (renderer)
+{}
 
 // .ttf Datei in in OpenGL Texturen laden laden
 void FontManager::loadFont( const std::string& fileName, int size, FontId id )
@@ -44,8 +48,8 @@ void FontManager::drawString(const std::string &str, const FontId &fontId, float
     assert ( font_it != m_fonts.end() );
 
     // convert to FTGL coordinates
-    x = x / 4.0f * gConfig.get<int>("ScreenWidth");
-    y = (1.0f - y / 3.0f) * gConfig.get<int>("ScreenHeight");
+    x = x / 4.0f * m_renderer.getViewPortWidth();
+    y = (1.0f - y / 3.0f) * m_renderer.getViewPortHeight();
 
     FTFont* font = font_it->second.get();
 
@@ -100,8 +104,8 @@ void FontManager::getDimensions(const std::string &text, const FontId &fontId, f
         return; // TODO: log error
 
     getDetailedDimensions(text, *font_it->second.get(), &w, &h, NULL, NULL, NULL);
-    w = w/gConfig.get<int>("ScreenWidth")*4.0f;
-    h = h/gConfig.get<int>("ScreenHeight")*3.0f;
+    w = w/m_renderer.getViewPortWidth()*4.0f;
+    h = h/m_renderer.getViewPortHeight()*3.0f;
 }
 
 void FontManager::getDetailedDimensions(const std::string &text, FTFont& font, float* totalWidth, float* totalHeight,

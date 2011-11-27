@@ -9,23 +9,25 @@
 #include <sstream>
 #include <boost/make_shared.hpp>
 
-#include "EditorState.h"
-#include "game/GameApp.h"
 #include "common/Renderer.h"
-#include "game/Input.h"
 #include "common/Logger.h"
-#include "game/Configuration.h"
 #include "common/DataLoader.h"
 #include "common/Physics.h"
+#include "common/Texture.h"
 
 #include "common/components/CompVisualTexture.h"
 #include "common/components/CompPhysics.h"
 #include "common/components/CompShape.h"
 #include "common/components/CompPosition.h"
 
+#include "game/GameApp.h"
+#include "game/Input.h"
+#include "game/Configuration.h"
+
+#include "EditorState.h"
+
 const GameStateId EditorState::STATE_ID = "EditorState";
 
-#include "common/Texture.h"
 
 EditorState::EditorState( SubSystems& subSystems )
 : GameState( subSystems ),

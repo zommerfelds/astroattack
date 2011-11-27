@@ -14,9 +14,10 @@
 #include <set>
 #include <string>
 
-#include "common/GameState.h"
 #include "common/GameEvents.h"
 #include "common/World.h"
+
+#include "game/GameState.h"
 #include "game/InputCameraController.h"
 
 class EventConnection;

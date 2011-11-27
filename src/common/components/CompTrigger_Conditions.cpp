@@ -4,11 +4,11 @@
  * Copyright 2011 Christian Zommerfelds
  */
 
+#include "common/Logger.h"
+#include "common/Foreach.h"
+
 #include "CompTrigger_Conditions.h"
 #include "CompPhysics.h"
-#include "common/Logger.h"
-
-#include <boost/foreach.hpp>
 
 // ========== CompareVariable =========
 ConditionCompareVariable::ConditionCompareVariable( std::map<const std::string, int>::iterator itVariable, CompareOperator comp, int numToCompareWith )
@@ -54,7 +54,7 @@ bool ConditionEntityTouchedThis::isConditionTrue()
         return false;
     }
 
-    BOOST_FOREACH(const CompPhysics* compPhys, thisCompPhysics)
+    foreach(const CompPhysics* compPhys, thisCompPhysics)
     {
 
 		ContactVector contacts = compPhys->getContacts(true);

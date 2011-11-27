@@ -6,14 +6,14 @@
 
 #include <boost/property_tree/info_parser.hpp>
 
-#include "EditorApp.h"
-#include "EditorFrame.h"
-#include "Editor.h"
-
 #include "common/GameEvents.h"
 #include "common/World.h"
 #include "common/DataLoader.h"
 #include "common/Physics.h"
+
+#include "EditorApp.h"
+#include "EditorFrame.h"
+#include "Editor.h"
 
 IMPLEMENT_APP(EditorApp)
 

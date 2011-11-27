@@ -7,25 +7,28 @@
 #include <cmath>
 #include <boost/bind.hpp>
 #include <boost/make_shared.hpp>
-#include <boost/foreach.hpp>
+
+#include "contrib/pugixml/pugixml.hpp"
+#include "contrib/pugixml/foreach.hpp"
+
+#include "common/Foreach.h"
+#include "common/Renderer.h"
+#include "common/Vector2D.h"
+#include "common/Texture.h"
+#include "common/Sound.h"
+#include "common/Logger.h"
+#include "common/DataLoader.h"
+
+#include "game/Gui.h"
+#include "game/Configuration.h"
+#include "game/GameApp.h"
+#include "game/Input.h"
+#include "game/main.h"
 
 #include "MainMenuState.h"
 #include "EditorState.h"
 #include "PlayingState.h"
 #include "SlideShowState.h"
-#include "common/Renderer.h"
-#include "game/Gui.h"
-#include "common/Sound.h"
-#include "game/Configuration.h"
-#include "common/Logger.h"
-#include "game/GameApp.h"
-#include "game/Input.h"
-#include "common/Vector2D.h"
-#include "common/Texture.h"
-#include "contrib/pugixml/pugixml.hpp"
-#include "contrib/pugixml/foreach.hpp"
-#include "common/DataLoader.h"
-#include "game/main.h"
 
 const std::string cLevelSequenceFileName = "data/levelSequence.xml";
 const std::string cMenuGraphicsFileName = "data/graphicsMenu.info"; // hier sind Menügrafiken angegeben
@@ -122,7 +125,7 @@ void MainMenuState::init()        // State starten
 
     x=0.35f;
     y=0.2f;
-    BOOST_FOREACH(pugi::xml_node node, doc.first_child())
+    foreach(pugi::xml_node node, doc.first_child())
     {
         std::string caption = node.attribute("name").value();
         std::string value = node.name();
@@ -396,7 +399,7 @@ void MainMenuState::onPressedButApplyConfig()
 	{
 		gConfig.put("ScreenWidth", m_newWidth);
 		gConfig.put("ScreenHeight", m_newHeight);
-	    gRestart = true;
+	    gDoRestart = true;
 	    m_wantToQuit = true;
 	}
     getSubSystems().sound.playSound( "mouseclick" );

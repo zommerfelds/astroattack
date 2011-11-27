@@ -10,7 +10,6 @@
 #define GAMEEVENTS_H
 
 #include <string>
-
 #include "common/Event.h"
 
 typedef std::string EntityIdType;

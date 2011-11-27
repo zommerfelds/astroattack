@@ -4,7 +4,7 @@
  * Copyright 2011 Christian Zommerfelds
  */
 
-#include "common/GameState.h"
+#include "GameState.h"
 #include "common/Logger.h"
 #include "game/GameApp.h"
 

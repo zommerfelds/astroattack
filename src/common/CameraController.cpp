@@ -6,11 +6,11 @@
 
 #include <cmath>
 #include <algorithm>
-#include <boost/make_shared.hpp>
 #include <cfloat>
+#include <boost/make_shared.hpp>
 
-#include "CameraController.h"
 #include "common/Renderer.h"
+#include "CameraController.h"
 
 // Konstruktor
 // w*h = 1

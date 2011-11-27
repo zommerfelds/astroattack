@@ -5,7 +5,6 @@
  */
 
 #include <boost/property_tree/ptree.hpp>
-
 #include "CompVisualMessage.h"
 
 // eindeutige ID

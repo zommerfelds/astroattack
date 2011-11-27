@@ -11,10 +11,11 @@
 
 #include <string>
 
-#include "common/GameState.h"
 #include "common/World.h"
-#include "game/InputCameraController.h"
 #include "common/Vector2D.h"
+
+#include "game/GameState.h"
+#include "game/InputCameraController.h"
 
 //--------------------------------------------//
 //------------ EditorState Klasse ------------//

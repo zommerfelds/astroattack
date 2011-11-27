@@ -12,7 +12,6 @@
 #define COMPPLAYERCONTROLLER_H
 
 #include <map>
-
 #include "common/Component.h"
 #include "common/World.h"
 #include "common/Vector2D.h"

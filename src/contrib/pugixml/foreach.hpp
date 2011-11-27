@@ -10,9 +10,9 @@
 #include "pugixml.hpp"
 
 /*
- * These types add support for BOOST_FOREACH macro to xml_node and xml_document classes (child iteration only).
+ * These types add support for foreach macro to xml_node and xml_document classes (child iteration only).
  * Example usage:
- * BOOST_FOREACH(xml_node n, doc) {}
+ * foreach(xml_node n, doc) {}
  */
 
 namespace boost
@@ -42,10 +42,10 @@ namespace boost
 }
 
 /*
- * These types add support for BOOST_FOREACH macro to xml_node and xml_document classes (child/attribute iteration).
+ * These types add support for foreach macro to xml_node and xml_document classes (child/attribute iteration).
  * Example usage:
- * BOOST_FOREACH(xml_node n, children(doc)) {}
- * BOOST_FOREACH(xml_node n, attributes(doc)) {}
+ * foreach(xml_node n, children(doc)) {}
+ * foreach(xml_node n, attributes(doc)) {}
  */
 
 namespace pugi

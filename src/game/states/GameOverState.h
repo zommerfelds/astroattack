@@ -10,7 +10,7 @@
 #define GAMEOVERSTATE_H
 
 #include <string>
-#include "common/GameState.h"
+#include "game/GameState.h"
 
 const float cBackgroundColor[3] = { 0.3f, 0.1f, 0.2f };
 

@@ -4,10 +4,11 @@
  * Copyright 2011 Christian Zommerfelds
  */
 
-#include "GLCanvas.h"
 #include <wx/frame.h>
 #include <wx/window.h>
 #include <SDL/SDL_opengl.h>
+
+#include "GLCanvas.h"
 
 // temp
 //#include "common/Logger.h"

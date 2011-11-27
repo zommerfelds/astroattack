@@ -13,8 +13,8 @@
 #include <SDL_opengl.h> // cross platform OpenGL include (provided by SDL)
 #include <boost/lexical_cast.hpp>
 
-#include "Texture.h"
 #include "common/Logger.h"
+#include "Texture.h"
 #include "Exception.h"  // Exceptions
 
 // Konstruktor

@@ -5,11 +5,10 @@
  */
 
 #include <boost/bind.hpp>
+#include <SDL_mixer.h>
 
-#include "Sound.h"
-#include "SDL_mixer.h"
-#include "game/Configuration.h"
 #include "common/Logger.h"
+#include "Sound.h"
 #include "Exception.h" // Ausnahmen im Program (werden in main.cpp eingefangen)
 
 /*void Vol(int chan, void *stream, int len, void *udata)
@@ -35,7 +34,7 @@ SoundSubSystem::~SoundSubSystem()
     deInit();
 }
 
-bool SoundSubSystem::init()
+bool SoundSubSystem::init(float volSound, float volMusic, float volMaster)
 {
     if ( m_isInit )
     {
@@ -49,8 +48,8 @@ bool SoundSubSystem::init()
         return false;
     }
     Mix_AllocateChannels(64);
-    Mix_Volume(-1, (int)(MIX_MAX_VOLUME*gConfig.get<float>("VolSound")*gConfig.get<float>("VolMaster")) );
-    Mix_VolumeMusic( (int)(MIX_MAX_VOLUME*gConfig.get<float>("VolMusic")*gConfig.get<float>("VolMaster")) );
+    Mix_Volume(-1, (int)(MIX_MAX_VOLUME * volSound * volMaster));
+    Mix_VolumeMusic((int)(MIX_MAX_VOLUME * volMusic * volMaster));
 
     SoundSubSystem::soundSystemToNotifyMusicFinished = this;
     Mix_HookMusicFinished( &SoundSubSystem::musicFinishedCallback );

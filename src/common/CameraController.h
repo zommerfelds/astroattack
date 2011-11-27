@@ -10,7 +10,6 @@
 #define CAMERACONTROLLER_H
 
 #include <boost/shared_ptr.hpp>
-
 #include "common/Vector2D.h"
 
 class RenderSubSystem;

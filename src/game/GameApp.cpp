@@ -12,23 +12,25 @@
 #include <boost/bind.hpp>
 #include <boost/make_shared.hpp>
 
-#include "main.h"
-#include "Configuration.h"
 #include "common/Logger.h"
-#include "GameApp.h"
-#include "Input.h"
 #include "common/Physics.h"
 #include "common/Sound.h"
 #include "common/Renderer.h"
-#include "Gui.h"
-#include "common/GameState.h"
-#include "states/MainMenuState.h"
 #include "common/Component.h"
-#include "states/PlayingState.h"
 #include "common/Texture.h"
-#include "common/Exception.h" // Ausnahmen im Program (werden in main.cpp eingefangen)
+#include "common/Exception.h"
 
-bool gRestart = false; // TODO remove this global
+#include "states/MainMenuState.h"
+#include "states/PlayingState.h"
+
+#include "main.h"
+#include "Configuration.h"
+#include "GameApp.h"
+#include "Input.h"
+#include "Gui.h"
+#include "GameState.h"
+
+bool gDoRestart = false; // TODO remove this global
 
 // Konstruktor
 GameApp::GameApp(const std::vector<std::string>& args) :
@@ -68,7 +70,7 @@ SubSystems::~SubSystems()
 bool SubSystems::init()
 {
     renderer.init( gConfig.get<int>("ScreenWidth"), gConfig.get<int>("ScreenHeight") );
-    sound.init();
+    sound.init(gConfig.get<float>("VolSound"), gConfig.get<float>("VolMusic"), gConfig.get<float>("VolMaster"));
     return true;
 }
 

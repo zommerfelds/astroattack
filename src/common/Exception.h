@@ -16,9 +16,7 @@
    Diese Klasse speichert eine Zeichenkette wenn fehler geschehen.
 
    So wird mit fatalen Fehlern umgegengen:
-   throw Exception ( "Fehlertext" );
-   Oder wenn man auch in der Log-Datei schreiben möchte:
-   throw Exception ( log() << "Fehlertext" ) );
+   throw Exception( "Fehlertext" );
 */
 class Exception : public std::exception
 {

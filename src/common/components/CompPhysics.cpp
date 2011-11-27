@@ -4,15 +4,14 @@
  * Copyright 2011 Christian Zommerfelds
  */
 
-// CompPhysics.h für mehr Informationen
-
-#include <Box2D/Box2D.h>       // extere Physikbibliothek
+#include <Box2D/Box2D.h>
 #include <boost/make_shared.hpp>
-#include <boost/foreach.hpp>
 #include <boost/property_tree/ptree.hpp>
 #include <climits>
 
+#include "common/Foreach.h"
 #include "common/Logger.h"
+
 #include "CompPhysics.h"
 
 using boost::property_tree::ptree;
@@ -218,7 +217,7 @@ void CompPhysics::loadFromPropertyTree(const ptree& propTree)
 
     setLocalGravitationPoint(gravitationPoint);
 
-    BOOST_FOREACH(const ptree::value_type &v, propTree)
+    foreach(const ptree::value_type &v, propTree)
     {
         if (v.first != "shape")
             continue;
