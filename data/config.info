@@ -14,10 +14,10 @@ MouseSensitivity 1.0
 ScreenBpp 32
 
 ; Resolution width
-ScreenWidth 1280
+ScreenWidth 1024
 
 ; Resolution height
-ScreenHeight 800
+ScreenHeight 768
 
 ; Texture quality from 0 to 4 (0 is best)
 TexQuality 0
@@ -33,9 +33,6 @@ VolMusic 0.0
 
 ; FX volume - between 0.0 and 1.0
 VolSound 1.0
-
-; Wide screen mode - true: on, false: off
-WideScreen true
 
 ; Logging level for stdout - Error, Warning, Info, Detail, Debug or Off
 LogConsoleLevel Warning

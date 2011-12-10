@@ -28,11 +28,12 @@
 #include <boost/make_shared.hpp>
 
 // define this to draw gravitation vector and other
-//#define DRAW_DEBUG
+#define DRAW_DEBUG
 
 #ifdef DRAW_DEBUG
 #include "common/components/CompPhysics.h"
 #include "common/components/CompGravField.h"
+#include "common/components/CompPosition.h"
 #endif
 
 // Alle Entities in der Welt werden in dieser Datei aufgelistet
@@ -58,8 +59,8 @@ void PlayingState::init()        // State starten
     try
     {
         // Welt von XML-Datei laden
-        DataLoader::loadWorld( "data/player.info", m_gameWorld, getSubSystems().events );
-        DataLoader::loadWorld( m_levelFileName, m_gameWorld, getSubSystems().events );
+        DataLoader::loadToWorld( "data/player.info", m_gameWorld, getSubSystems().events );
+        DataLoader::loadToWorld( m_levelFileName, m_gameWorld, getSubSystems().events );
     }
     catch (DataLoadException& e)
     {
@@ -82,7 +83,7 @@ void PlayingState::init()        // State starten
 
     // Alle Entities und Komponenten in Text Datei anzeigen
     Logger logger(true);
-	boost::shared_ptr<FileHandler> fileHandler = boost::make_shared<FileHandler>(cWordLogFileName);
+    boost::shared_ptr<FileHandler> fileHandler = boost::make_shared<FileHandler>(cWordLogFileName);
     logger.addHandler(fileHandler);
     logger << "World Entities:\n\n";
     m_gameWorld.getCompManager().writeEntitiesToLogger(logger, Info);
@@ -157,8 +158,8 @@ void PlayingState::update()      // Spiel aktualisieren
 
 void PlayingState::draw( float accumulator )        // Spiel zeichnen
 {
-	// maybe put this in PhysicsSubSystem::Update
-	// (then the physics subsystem would need an accumulator for itself)
+    // maybe put this in PhysicsSubSystem::Update
+    // (then the physics subsystem would need an accumulator for itself)
     getSubSystems().physics.calculateSmoothPositions(accumulator);
 
     RenderSubSystem& renderer = getSubSystems().renderer;
@@ -189,13 +190,13 @@ void PlayingState::draw( float accumulator )        // Spiel zeichnen
 
     // Draw debug info
 #ifdef DRAW_DEBUG
-    // TODO use CompPosition
-    CompPhysics* player_phys = m_gameWorld.getCompManager().getComponent<CompPhysics>("Player");
-    if ( player_phys )
+    CompPhysics* playerPhys = m_gameWorld.getCompManager().getComponent<CompPhysics>("Player");
+    CompPosition* playerPos = m_gameWorld.getCompManager().getComponent<CompPosition>("Player");
+    if ( playerPhys && playerPos )
     {
-        const CompGravField* grav = player_phys->getActiveGravField();
-        Vector2D gravPoint = player_phys->getLocalGravitationPoint().rotated( player_phys->getSmoothAngle() ) + player_phys->getSmoothPosition();
-        Vector2D smoothGravPoint = player_phys->getLocalGravitationPoint().rotated( player_phys->getSmoothAngle() ) + player_phys->getSmoothPosition();
+        const CompGravField* grav = playerPhys->getActiveGravField();
+        Vector2D gravPoint = playerPhys->getLocalGravitationPoint().rotated( playerPos->getOrientation() ) + playerPos->getPosition();
+        Vector2D smoothGravPoint = playerPhys->getLocalGravitationPoint().rotated( playerPos->getDrawingOrientation() ) + playerPos->getDrawingPosition();
         if ( grav )
         {
             Vector2D vec = grav->getAcceleration( gravPoint );
@@ -204,11 +205,11 @@ void PlayingState::draw( float accumulator )        // Spiel zeichnen
         renderer.drawPoint( smoothGravPoint );
 
         // draw contacts
-        //ContactVector contacts = player_phys->getContacts();
-        /*foreach (boost::shared_ptr<ContactInfo> contact, contacts)
+        ContactVector contacts = playerPhys->getContacts();
+        foreach (boost::shared_ptr<ContactInfo> contact, contacts)
         {
             renderer.drawPoint( contact->point );
-        }*/
+        }
     }
 #endif
     

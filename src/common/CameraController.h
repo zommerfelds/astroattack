@@ -43,7 +43,7 @@ public:
     void zoom( float zoom ); // zoom ist der Zoomfaktor ( < 1 bedeutet herauszoomen; > 1 bedeutet herazoomen )
     void setZoom( float zoom ); // zoom ist der Zoomfaktor ( < 1 bedeutet herauszoomen; > 1 bedeutet herazoomen )
     float getZoom() const {
-    	return m_zoom;
+        return m_zoom;
     }
 
     void setZoomRange(float min, float max);

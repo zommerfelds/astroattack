@@ -61,7 +61,7 @@ RenderSubSystem::~RenderSubSystem()
 }
 
 // RenderSubSystem initialisieren
-void RenderSubSystem::init( int width, int height )
+void RenderSubSystem::init(int width, int height)
 {
     initOpenGL( width, height );
 
@@ -90,9 +90,9 @@ void RenderSubSystem::deInit()
     }
 }
 
-bool RenderSubSystem::loadData()
+bool RenderSubSystem::loadData(TexQuality quality)
 {
-    DataLoader::loadGraphics( cGraphisFileName, &m_textureManager, &m_animationManager, &m_fontManager );
+    DataLoader::loadGraphics(cGraphisFileName, &m_textureManager, &m_animationManager, &m_fontManager, quality);
     return true;
 }
 
@@ -131,21 +131,21 @@ void RenderSubSystem::initOpenGL(int width, int height)
 
 void RenderSubSystem::resize(int width, int height)
 {
-	m_viewPortWidth = width;
-	m_viewPortHeight = height;
+    m_viewPortWidth = width;
+    m_viewPortHeight = height;
     glViewport(0, 0, width, height);
 
     setMatrix(Text);
 
     glMatrixMode ( GL_PROJECTION );
 
-	// Text Matrix aufstellen
-	glLoadIdentity(); // Reset
-	gluOrtho2D( 0, width, 0, height ); // orthogonalen 2D-Rendermodus
-	glGetFloatv(GL_PROJECTION_MATRIX, m_matrixText); // Matrix wird gespeichert
+    // Text Matrix aufstellen
+    glLoadIdentity(); // Reset
+    gluOrtho2D( 0, width, 0, height ); // orthogonalen 2D-Rendermodus
+    glGetFloatv(GL_PROJECTION_MATRIX, m_matrixText); // Matrix wird gespeichert
 
 
-	glMatrixMode( GL_MODELVIEW );
+    glMatrixMode( GL_MODELVIEW );
     //glLoadIdentity();
 }
 
@@ -157,7 +157,7 @@ void RenderSubSystem::clearScreen()
 
 void RenderSubSystem::flipBuffer()
 {
-	glFlush();
+    glFlush();
 
     GLenum errCode;
     const GLubyte *errString;
@@ -311,97 +311,97 @@ void RenderSubSystem::drawOverlay( float r, float g, float b, float a )
     glColor4f( 255, 255, 255, 255 );
 }
 
-void RenderSubSystem::drawTexturedPolygon(const CompShapePolygon& poly,	const CompVisualTexture& tex, bool border)
+void RenderSubSystem::drawTexturedPolygon(const CompShapePolygon& poly,    const CompVisualTexture& tex, bool border)
 {
-	bool useTexMap = (poly.getVertexCount() == tex.getTexMap().size());
+    bool useTexMap = (poly.getVertexCount() == tex.getTexMap().size());
 
-	m_textureManager.setTexture(tex.getTextureId());
-	glBegin(GL_POLYGON);
-	for (size_t i = 0; i < poly.getVertexCount(); ++i)
-	{
-		if (useTexMap)
-			glTexCoord2f(tex.getTexMap()[i].x, tex.getTexMap()[i].y);
-		else
-			glTexCoord2f(poly.getVertex(i)->x, -poly.getVertex(i)->y);
-		glVertex2f(poly.getVertex(i)->x, poly.getVertex(i)->y);
-	}
-	glEnd();
+    m_textureManager.setTexture(tex.getTextureId());
+    glBegin(GL_POLYGON);
+    for (size_t i = 0; i < poly.getVertexCount(); ++i)
+    {
+        if (useTexMap)
+            glTexCoord2f(tex.getTexMap()[i].x, tex.getTexMap()[i].y);
+        else
+            glTexCoord2f(poly.getVertex(i)->x, -poly.getVertex(i)->y);
+        glVertex2f(poly.getVertex(i)->x, poly.getVertex(i)->y);
+    }
+    glEnd();
 
-	for (size_t i = 0; i < poly.getVertexCount(); ++i)
-	{
-		std::string edgeTex = tex.getEdgeTexture(i);
-		if (edgeTex == "")
-			continue;
+    for (size_t i = 0; i < poly.getVertexCount(); ++i)
+    {
+        std::string edgeTex = tex.getEdgeTexture(i);
+        if (edgeTex == "")
+            continue;
 
-		size_t vetex2Index = (i == poly.getVertexCount() - 1) ? (0) : (i + 1);
-		drawEdge(*poly.getVertex(i), *poly.getVertex(vetex2Index), edgeTex);
-	}
+        size_t vetex2Index = (i == poly.getVertexCount() - 1) ? (0) : (i + 1);
+        drawEdge(*poly.getVertex(i), *poly.getVertex(vetex2Index), edgeTex);
+    }
 
-	if (border)
-	{
-		m_textureManager.clear();
-		glColor3ub(220, 220, 220);
-		glBegin(GL_LINE_LOOP);
-		for (size_t i = 0; i < poly.getVertexCount(); ++i)
-			glVertex2f(poly.getVertex(i)->x, poly.getVertex(i)->y);
-		glEnd();
-		/*glBegin( GL_POINTS );
-		 for ( size_t iCountVertices = 0; iCountVertices < rPoly.GetVertexCount(); ++iCountVertices )
-		 glVertex2f ( rPoly.GetVertex( iCountVertices )->x, rPoly.GetVertex( iCountVertices )->y );
-		 glEnd();*/
-	}
+    if (border)
+    {
+        m_textureManager.clear();
+        glColor3ub(220, 220, 220);
+        glBegin(GL_LINE_LOOP);
+        for (size_t i = 0; i < poly.getVertexCount(); ++i)
+            glVertex2f(poly.getVertex(i)->x, poly.getVertex(i)->y);
+        glEnd();
+        /*glBegin( GL_POINTS );
+         for ( size_t iCountVertices = 0; iCountVertices < rPoly.GetVertexCount(); ++iCountVertices )
+         glVertex2f ( rPoly.GetVertex( iCountVertices )->x, rPoly.GetVertex( iCountVertices )->y );
+         glEnd();*/
+    }
 
-	glColor4f(255, 255, 255, 255);
+    glColor4f(255, 255, 255, 255);
 }
 
-void RenderSubSystem::drawTexturedCircle(const CompShapeCircle& circle,	const CompVisualTexture& tex, bool border)
+void RenderSubSystem::drawTexturedCircle(const CompShapeCircle& circle,    const CompVisualTexture& tex, bool border)
 {
-	m_textureManager.setTexture(tex.getTextureId());
-	GLUquadricObj *pQuacric = gluNewQuadric();
-	gluQuadricTexture(pQuacric, true);
-	gluQuadricDrawStyle(pQuacric, GLU_FILL);
+    m_textureManager.setTexture(tex.getTextureId());
+    GLUquadricObj *pQuacric = gluNewQuadric();
+    gluQuadricTexture(pQuacric, true);
+    gluQuadricDrawStyle(pQuacric, GLU_FILL);
 
-	glPushMatrix();
-	glTranslatef(circle.getCenter().x, circle.getCenter().y, 0.0f);
+    glPushMatrix();
+    glTranslatef(circle.getCenter().x, circle.getCenter().y, 0.0f);
 
-	// flip Y coordinates because gluDisk draws texture upside down
+    // flip Y coordinates because gluDisk draws texture upside down
     glMatrixMode( GL_TEXTURE );
     glPushMatrix();
     glScalef(1.0f, -1.0f, 1.0f);
 
-	gluDisk(pQuacric, 0.0f, circle.getRadius(), cCircleSlices, 1); // draw circle
+    gluDisk(pQuacric, 0.0f, circle.getRadius(), cCircleSlices, 1); // draw circle
 
-	glPopMatrix();
+    glPopMatrix();
     glMatrixMode( GL_MODELVIEW );
 
-	std::string edgeTex = tex.getEdgeTexture(0);
-	if (edgeTex != "")
-	{
-		float angle = cPi * 2 / cCircleSlices;
-		float edgeLenght = tan(angle / 2) * 2.0f * circle.getRadius();
-		float textureCut = fmod(edgeLenght, 1.0f);
+    std::string edgeTex = tex.getEdgeTexture(0);
+    if (edgeTex != "")
+    {
+        float angle = cPi * 2 / cCircleSlices;
+        float edgeLenght = tan(angle / 2) * 2.0f * circle.getRadius();
+        float textureCut = fmod(edgeLenght, 1.0f);
 
-		for (size_t i = 0; i < cCircleSlices; ++i)
-		{
-			Vector2D cross(circle.getRadius(), 0.0f);
+        for (size_t i = 0; i < cCircleSlices; ++i)
+        {
+            Vector2D cross(circle.getRadius(), 0.0f);
 
-			drawEdge(cross.rotated(angle * i), cross.rotated(angle * (i + 1)),
-					edgeTex, textureCut * i, edgeLenght);
-		}
-	}
+            drawEdge(cross.rotated(angle * i), cross.rotated(angle * (i + 1)),
+                    edgeTex, textureCut * i, edgeLenght);
+        }
+    }
 
-	if (border)
-	{
-		m_textureManager.clear();
-		glColor3ub(220, 220, 220);
-		gluQuadricDrawStyle(pQuacric, GLU_SILHOUETTE);
-		gluDisk(pQuacric, 0.0f, circle.getRadius(), cCircleSlices, 1);
-	}
+    if (border)
+    {
+        m_textureManager.clear();
+        glColor3ub(220, 220, 220);
+        gluQuadricDrawStyle(pQuacric, GLU_SILHOUETTE);
+        gluDisk(pQuacric, 0.0f, circle.getRadius(), cCircleSlices, 1);
+    }
 
-	glPopMatrix();
-	gluDeleteQuadric(pQuacric);
+    glPopMatrix();
+    gluDeleteQuadric(pQuacric);
 
-	glColor4f(255, 255, 255, 255);
+    glColor4f(255, 255, 255, 255);
 }
 
 void RenderSubSystem::drawEdge(const Vector2D& vertexA, const Vector2D& vertexB, const std::string& tex, float offset, float preCalcEdgeLenght)
@@ -563,8 +563,8 @@ void RenderSubSystem::drawVisualTextureComps()
             bool allShapes = (shapeId == CompVisualTexture::ALL_SHAPES);
             for (size_t i = 0; i < compShapes.size(); ++i)
             {
-            	if (!allShapes && shapeId != compShapes[i]->getId())
-            		continue;
+                if (!allShapes && shapeId != compShapes[i]->getId())
+                    continue;
                 switch (compShapes[i]->getType())
                 {
                 case CompShape::Polygon:
@@ -581,7 +581,7 @@ void RenderSubSystem::drawVisualTextureComps()
                     break;
                 }
                 if (!allShapes)
-                	break;
+                    break;
             }
             glPopMatrix();
         }
@@ -595,9 +595,9 @@ void RenderSubSystem::drawVisualAnimationComps()
         CompPosition* compPos = pAnimComp->getSiblingComponent<CompPosition>();
         if (compPos)
         {
-        	TextureId id = pAnimComp->getCurrentTexture();
-        	if (id != "") // maybe the animation has not been set up yet (update())
-        		m_textureManager.setTexture(id);
+            TextureId id = pAnimComp->getCurrentTexture();
+            if (id != "") // maybe the animation has not been set up yet (update())
+                m_textureManager.setTexture(id);
 
             glPushMatrix();
 
@@ -623,29 +623,29 @@ void RenderSubSystem::drawVisualAnimationComps()
                 if ( isFlipped )
                     glTexCoord2f(1.0f, 0.0f);
                 else
-		            glTexCoord2f(0.0f, 0.0f);
-		        glVertex2f(-hw, hh);
+                    glTexCoord2f(0.0f, 0.0f);
+                glVertex2f(-hw, hh);
 
-		        // Unten links
-		        if ( isFlipped )
+                // Unten links
+                if ( isFlipped )
                     glTexCoord2f(1.0f, 1.0f);
                 else
-		            glTexCoord2f(0.0f, 1.0f);
-		        glVertex2f(-hw, -hh);
+                    glTexCoord2f(0.0f, 1.0f);
+                glVertex2f(-hw, -hh);
 
-		        // Unten rechts
-		        if ( isFlipped )
+                // Unten rechts
+                if ( isFlipped )
                     glTexCoord2f(0.0f, 1.0f);
                 else
-		            glTexCoord2f(1.0f, 1.0f);
-		        glVertex2f(hw, -hh);
+                    glTexCoord2f(1.0f, 1.0f);
+                glVertex2f(hw, -hh);
 
-		        // Oben rechts
-		        if ( isFlipped )
+                // Oben rechts
+                if ( isFlipped )
                     glTexCoord2f(0.0f, 0.0f);
                 else
-		            glTexCoord2f(1.0f, 0.0f);
-		        glVertex2f(hw, hh);
+                    glTexCoord2f(1.0f, 0.0f);
+                glVertex2f(hw, hh);
                 glEnd();
             }
             glPopMatrix();
@@ -716,10 +716,10 @@ void RenderSubSystem::displayLoadingScreen()
 
     LoadTextureInfo info;
     info.loadMipmaps = false;
-    info.wrapModeX = LoadTextureInfo::WrapClamp;
-    info.wrapModeY = LoadTextureInfo::WrapClamp;
+    info.wrapModeX = WrapClamp;
+    info.wrapModeY = WrapClamp;
     info.scale = 1.0;
-    info.quality = LoadTextureInfo::QualityBest;
+    info.quality = QualityBest;
     int picw=0,pich=0;
     m_textureManager.loadTexture("data/Loading.png", "loading", info, &picw, &pich);
     m_textureManager.setTexture("loading");
@@ -776,41 +776,41 @@ void RenderSubSystem::setViewSize( float width, float height )
 
 void RenderSubSystem::update()
 {
-	foreach(CompVisualAnimation* animComp, m_visualAnimComps)
-	{
-		if ( animComp->m_animInfo==NULL )
-		{
-			animComp->m_animInfo = m_animationManager.getAnimInfo(animComp->m_animInfoId);
-			if (animComp->m_animInfo)
-				animComp->m_curState = animComp->m_animInfo->states.begin()->first;
-			continue;
-		}
+    foreach(CompVisualAnimation* animComp, m_visualAnimComps)
+    {
+        if ( animComp->m_animInfo==NULL )
+        {
+            animComp->m_animInfo = m_animationManager.getAnimInfo(animComp->m_animInfoId);
+            if (animComp->m_animInfo)
+                animComp->m_curState = animComp->m_animInfo->states.begin()->first;
+            continue;
+        }
 
-		if ( !animComp->m_running )
-			continue;
+        if ( !animComp->m_running )
+            continue;
 
-		++animComp->m_updateCounter;
-		StateInfoMap::const_iterator animStateInfoIter = animComp->m_animInfo->states.find(animComp->m_curState);
-		assert (animStateInfoIter != animComp->m_animInfo->states.end());
-		if ( animComp->m_updateCounter > animStateInfoIter->second->speed ) // ein Frame vorbei ist
-		{
-			animComp->m_updateCounter = 0;
-			animComp->m_currentFrame += animComp->m_playDirection; // +1 oder -1 je nach Richtung der Animation
-			if ( animComp->m_playDirection == 1 )
-			{
-				if ( animComp->m_currentFrame > animStateInfoIter->second->end ) // wenn letzter Frame erreicht wurde
-					animComp->m_currentFrame = animStateInfoIter->second->begin; // wieder zum start setzen
-			}
-			else
-			{
-				if ( animComp->m_currentFrame < animStateInfoIter->second->begin ) // wenn letzter Frame erreicht wurde
-					animComp->m_currentFrame = animStateInfoIter->second->end; // wieder zum start setzen
-			}
-			if ( animComp->m_wantToFinish ) // falls man die Animation Stoppen möchte
-			{
-				if ( animStateInfoIter->second->stops.count( animComp->m_currentFrame ) )
-					animComp->m_running = false;
-			}
-		}
-	}
+        ++animComp->m_updateCounter;
+        StateInfoMap::const_iterator animStateInfoIter = animComp->m_animInfo->states.find(animComp->m_curState);
+        assert (animStateInfoIter != animComp->m_animInfo->states.end());
+        if ( animComp->m_updateCounter > animStateInfoIter->second->speed ) // ein Frame vorbei ist
+        {
+            animComp->m_updateCounter = 0;
+            animComp->m_currentFrame += animComp->m_playDirection; // +1 oder -1 je nach Richtung der Animation
+            if ( animComp->m_playDirection == 1 )
+            {
+                if ( animComp->m_currentFrame > animStateInfoIter->second->end ) // wenn letzter Frame erreicht wurde
+                    animComp->m_currentFrame = animStateInfoIter->second->begin; // wieder zum start setzen
+            }
+            else
+            {
+                if ( animComp->m_currentFrame < animStateInfoIter->second->begin ) // wenn letzter Frame erreicht wurde
+                    animComp->m_currentFrame = animStateInfoIter->second->end; // wieder zum start setzen
+            }
+            if ( animComp->m_wantToFinish ) // falls man die Animation Stoppen möchte
+            {
+                if ( animStateInfoIter->second->stops.count( animComp->m_currentFrame ) )
+                    animComp->m_running = false;
+            }
+        }
+    }
 }

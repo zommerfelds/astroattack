@@ -35,7 +35,7 @@ typedef std::string FontId;
 class FontManager
 {
 public:
-	FontManager(const RenderSubSystem& renderer);
+    FontManager(const RenderSubSystem& renderer);
 
     typedef std::map< FontId,boost::shared_ptr<FTFont> > FontMap;
 

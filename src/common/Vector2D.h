@@ -21,7 +21,7 @@ struct b2Vec2;
 
 /*
     Diese Klasse speichert Daten von einem zweidimensinaler Vektor.
-	Einige Operationen für Vektoren sind auch implementiert.
+    Einige Operationen für Vektoren sind auch implementiert.
 */
 class Vector2D
 {
@@ -55,49 +55,49 @@ public:
         y = lenght * sin(angle);
     }
 
-	// Skalarmultiplikation
+    // Skalarmultiplikation
     inline Vector2D operator * ( const float  s ) const
     {
         return Vector2D ( x*s, y*s );
     }
 
-	// "Skalardivision"
-    inline Vector2D operator / ( const float  s )			const
+    // "Skalardivision"
+    inline Vector2D operator / ( const float  s )            const
     {
         return Vector2D ( x/s, y/s );
     }
 
-	// Vektoraddition
-    inline Vector2D operator + ( const Vector2D &rV )	const
+    // Vektoraddition
+    inline Vector2D operator + ( const Vector2D &rV )    const
     {
         return Vector2D ( x+rV.x, y+rV.y );
     }
 
-	// Vektorsubtraktion
-    inline Vector2D operator - ( const Vector2D &rV )	const
+    // Vektorsubtraktion
+    inline Vector2D operator - ( const Vector2D &rV )    const
     {
         return Vector2D ( x-rV.x, y-rV.y );
     }
 
-	// Negativer Vektor
-    inline Vector2D operator - ()	const
+    // Negativer Vektor
+    inline Vector2D operator - ()    const
     {
         return Vector2D ( -x, -y );
     }
 
-	// ==
-    inline bool operator == ( const Vector2D &rV )	const
+    // ==
+    inline bool operator == ( const Vector2D &rV )    const
     {
         return ( x==rV.x && y==rV.y );
     }
 
-	// !=
-    inline bool operator != ( const Vector2D &rV )	const
+    // !=
+    inline bool operator != ( const Vector2D &rV )    const
     {
         return ( x!=rV.x || y!=rV.y );
     }
 
-	// durch einen Skalar dividieren
+    // durch einen Skalar dividieren
     inline Vector2D &operator /= ( const float scalar )
     {
         x /= scalar;
@@ -105,7 +105,7 @@ public:
         return *this;
     }
 
-	// mit einem Skalar multiplizieren
+    // mit einem Skalar multiplizieren
     inline Vector2D &operator *= ( const float scalar )
     {
         x *= scalar;
@@ -113,7 +113,7 @@ public:
         return *this;
     }
 
-	// um rOther vergrössern
+    // um rOther vergrössern
     inline Vector2D &operator += ( const Vector2D &rOther )
     {
         x += rOther.x;
@@ -121,7 +121,7 @@ public:
         return *this;
     }
 
-	// um rOther verkleinern
+    // um rOther verkleinern
     inline Vector2D &operator -= ( const Vector2D &rOther )
     {
         x -= rOther.x;
@@ -129,7 +129,7 @@ public:
         return *this;
     }
 
-	// Vektor festlegen
+    // Vektor festlegen
     inline Vector2D &operator = ( const Vector2D &rV )
     {
         x = rV.x;
@@ -137,8 +137,8 @@ public:
         return *this;
     }
 
-	// Skalarprodukt
-    inline float operator * ( const Vector2D &rV )	const
+    // Skalarprodukt
+    inline float operator * ( const Vector2D &rV )    const
     {
         return ( x*rV.x ) + ( y*rV.y );    // dot product
     }
@@ -149,13 +149,13 @@ public:
         return x * v.y - y * v.x;
     }
 
-	// Betrag
+    // Betrag
     inline float length() const
     {
         return sqrt ( x*x + y*y );
     }
 
-	// Betrag im Quadrat (is schneller als Lenght())
+    // Betrag im Quadrat (is schneller als Lenght())
     inline float lengthSquared() const
     {
         return x*x + y*y ;
@@ -164,12 +164,12 @@ public:
     // Skaliert den Vektor auf Länge 1
     void normalize();
 
-	// Gibt zurück ob rV sich Rechts von diesem Vektor befindet (=kleinster Winkel ist im Uhrzeigersinn)
-	bool isRight( const Vector2D &rV ) const;
+    // Gibt zurück ob rV sich Rechts von diesem Vektor befindet (=kleinster Winkel ist im Uhrzeigersinn)
+    bool isRight( const Vector2D &rV ) const;
 
-	// Winkel herausfinden, dass der Vektor mit der X-Achse schliesst ( [1,0] hat Winkel 0, im Gegenuhrzeigersinn +, im Uhrzeigersinn - )
-	// Der erhaltene Winkel ist in Radian (zwischen -pi und +pi)
-	float getAngle() const;
+    // Winkel herausfinden, dass der Vektor mit der X-Achse schliesst ( [1,0] hat Winkel 0, im Gegenuhrzeigersinn +, im Uhrzeigersinn - )
+    // Der erhaltene Winkel ist in Radian (zwischen -pi und +pi)
+    float getAngle() const;
 
     // Vektor um Winkel angle (in Bogenmass) drehen im Gegenuhrzeigersinn
     void rotate( float angle );

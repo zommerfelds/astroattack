@@ -16,13 +16,13 @@ EditorFrame::EditorFrame(Editor& editor, GameEvents& events)
   m_canvas(editor, m_glpanel, glArgs, events),
   m_timer(m_canvas)
 {
-	wxBoxSizer* sizer;
-	sizer = new wxBoxSizer( wxVERTICAL );
-	m_glpanel->SetSizer( sizer );
+    wxBoxSizer* sizer;
+    sizer = new wxBoxSizer( wxVERTICAL );
+    m_glpanel->SetSizer( sizer );
 
-	sizer->Add(&m_canvas, 1, wxEXPAND);
+    sizer->Add(&m_canvas, 1, wxEXPAND);
 
-	//timer->Start(100);
+    //timer->Start(100);
 }
 
 EditorFrame::~EditorFrame()
@@ -36,5 +36,5 @@ void EditorFrame::OnClose(wxCloseEvent& evt)
 }
 
 BEGIN_EVENT_TABLE(EditorFrame, wxFrame)
-	EVT_CLOSE(EditorFrame::OnClose)
+    EVT_CLOSE(EditorFrame::OnClose)
 END_EVENT_TABLE()

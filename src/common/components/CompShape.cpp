@@ -55,7 +55,7 @@ boost::shared_ptr<b2Shape> CompShapePolygon::toB2Shape() const
     b2Vec2 vertices[b2_maxPolygonVertices];
     for (size_t i=0; i<m_vertices.size() && i<b2_maxPolygonVertices; i++)
     {
-    	vertices[i].Set(m_vertices[i].x, m_vertices[i].y);
+        vertices[i].Set(m_vertices[i].x, m_vertices[i].y);
     }
     poly_shape->Set(vertices, m_vertices.size());
     return poly_shape;
@@ -63,28 +63,28 @@ boost::shared_ptr<b2Shape> CompShapePolygon::toB2Shape() const
 
 void CompShapePolygon::setVertex(size_t i, const Vector2D& v)
 {
-	if (i==getVertexCount())
-	{
-		m_vertices.push_back(v);
-	}
-	else if (i<getVertexCount())
-	{
-		m_vertices[i]=v;
-	}
-	// out of range
+    if (i==getVertexCount())
+    {
+        m_vertices.push_back(v);
+    }
+    else if (i<getVertexCount())
+    {
+        m_vertices[i]=v;
+    }
+    // out of range
 }
 
 const Vector2D* CompShapePolygon::getVertex(size_t i) const
 {
-	if (i>=getVertexCount())
-		return NULL;
-	return &m_vertices[i];
+    if (i>=getVertexCount())
+        return NULL;
+    return &m_vertices[i];
 }
 
 CompShapeCircle::CompShapeCircle(const ComponentIdType& id, GameEvents& gameEvents, const Vector2D& center, float radius) :
         CompShape(id, gameEvents),
-		m_center (center),
-		m_radius (radius)
+        m_center (center),
+        m_radius (radius)
 {}
 
 void CompShapeCircle::loadFromPropertyTree(const boost::property_tree::ptree& propTree)

@@ -51,28 +51,29 @@ const float cTitleVertexCoord[8] = { 0.3f, 0.2f,
                                      3.5f, 0.2f };
 
 MainMenuState::MainMenuState( SubSystems& subSystems, SubMenu startingSubMenu )
-: GameState( subSystems ),
-  m_titleIntensityPhase ( 0.0f ),
-  m_subMenu ( startingSubMenu ),
-  m_wantToQuit ( false ),
-  m_goToEditor ( false ),
-  m_goToPlay ( false ),
-  m_goToSlideShow ( false ),
-  m_newWidth ( -1 ),
-  m_newHeight ( -1 ),
+: GameState(subSystems),
+  m_titleIntensityPhase (0.0f),
+  m_subMenu (startingSubMenu),
+  m_wantToQuit (false),
+  m_restart (false),
+  m_goToEditor (false),
+  m_goToPlay (false),
+  m_goToSlideShow (false),
+  m_newWidth (-1),
+  m_newHeight (-1),
   m_menuResources ()
 {}
 
 void MainMenuState::init()        // State starten
-{	
-	using boost::shared_ptr;
-	using boost::make_shared;
+{    
+    using boost::shared_ptr;
+    using boost::make_shared;
 
     log(Info) << "Loading menu... ";
     //GetSubSystems().renderer.DisplayLoadingScreen();
     
     // Grafiken aus XML-Datei laden
-    m_menuResources = DataLoader::loadGraphics( cMenuGraphicsFileName, &getSubSystems().renderer.getTextureManager(), NULL, NULL );
+    m_menuResources = DataLoader::loadGraphics(cMenuGraphicsFileName, &getSubSystems().renderer.getTextureManager(), NULL, NULL, (TexQuality) gConfig.get<int>("TexQuality"));
 
     getSubSystems().sound.loadMusic( "data/Music/ParagonX9___Chaoz_C.ogg", "menuMusic" );
     getSubSystems().sound.loadSound( "data/Sounds/Single click stab with delay_Nightingale Music Productions_12046.wav", "mouseclick" );
@@ -226,7 +227,7 @@ void MainMenuState::update()      // Spiel aktualisieren
 {
     if ( m_wantToQuit )
     {
-        getSubSystems().events.quitGame.fire();
+        getSubSystems().events.quitGame.fire(m_restart);
         return;
     }
     if ( m_goToEditor || getSubSystems().input.getKeyState( EnterEditor ) )
@@ -387,8 +388,8 @@ void MainMenuState::onPressedSound()
 
 void MainMenuState::onPressedResolution( int w, int h )
 {
-	m_newWidth = w;
-	m_newHeight = h;
+    m_newWidth = w;
+    m_newHeight = h;
     //gAaConfig.setInt("ScreenWidth",w);
     //gAaConfig.setInt("ScreenHeight",h);
     getSubSystems().sound.playSound( "mouseclick" );
@@ -397,13 +398,13 @@ void MainMenuState::onPressedResolution( int w, int h )
 void MainMenuState::onPressedButApplyConfig()
 {
     //m_appliedConfig = true;
-	if (m_newWidth != -1 && m_newHeight != -1)
-	{
-		gConfig.put("ScreenWidth", m_newWidth);
-		gConfig.put("ScreenHeight", m_newHeight);
-	    gDoRestart = true;
-	    m_wantToQuit = true;
-	}
+    if (m_newWidth != -1 && m_newHeight != -1)
+    {
+        gConfig.put("ScreenWidth", m_newWidth);
+        gConfig.put("ScreenHeight", m_newHeight);
+        m_restart = true;
+        m_wantToQuit = true;
+    }
     getSubSystems().sound.playSound( "mouseclick" );
 }
 

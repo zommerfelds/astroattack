@@ -143,7 +143,7 @@ TEST(LevelLoadTest, LoadWriteTest)
         World world (events);
 
         cout << "Testing with " << lvlFileName << endl;
-        DataLoader::loadWorld(lvlFileName, world, events);
+        DataLoader::loadToWorld(lvlFileName, world, events);
         DataLoader::saveWorld(lvlFileNameOut, world);
 
         ptree levelPropTreeBefore;

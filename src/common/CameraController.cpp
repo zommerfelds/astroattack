@@ -39,7 +39,7 @@ CameraController::CameraController(RenderSubSystem& renderSubSystem, float aspec
     m_rotateTimeElapsed ( 0.0f ),
     m_rotateTotalTimeToArrive ( 0.0f )
 {
-	setAspectRatio(aspectRatio);
+    setAspectRatio(aspectRatio);
 }
 
 namespace
@@ -56,8 +56,8 @@ namespace
 void CameraController::setAspectRatio(float ar) {
     m_viewWidth = sqrt(ar);
     m_viewHeight = 1/m_viewWidth;
-	m_refViewWidth  = m_viewWidth;
-	m_refViewHeight = m_viewHeight;
+    m_refViewWidth  = m_viewWidth;
+    m_refViewHeight = m_viewHeight;
     m_renderSubSystem.setViewSize( m_viewWidth, m_viewHeight );
 }
 
@@ -173,9 +173,9 @@ void CameraController::moveRelative( const Vector2D& rMove, float timeToArrive )
         m_moveTimeElapsed = 0.0;
     }
     else
-	{
+    {
         m_position += rMove;
-	}
+    }
 }
 
 void CameraController::moveAbsolute( const Vector2D& rPos, float timeToArrive )
@@ -189,9 +189,9 @@ void CameraController::moveAbsolute( const Vector2D& rPos, float timeToArrive )
         m_moveTimeElapsed = 0.0;
     }
     else
-	{
+    {
         m_position = rPos;
-	}
+    }
 }
 
 void CameraController::rotateAbsolute( float angle, float timeToArrive )
@@ -246,8 +246,8 @@ void CameraController::setZoom( float zoom )
 
 void CameraController::setZoomRange(float min, float max)
 {
-	m_minZoom = min;
-	m_maxZoom = max;
+    m_minZoom = min;
+    m_maxZoom = max;
 }
 
 void CameraController::look() const

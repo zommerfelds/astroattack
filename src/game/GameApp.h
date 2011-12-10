@@ -55,6 +55,8 @@ public:
 
     void run();     // Spiel starten (nach der Initialisierung ), d.h. Hauptschleife starten
 
+    bool doRestart(); // tells whether the app wants to be should be re-run after destruction
+
 private:
     void init();    // Astro Attack initialisieren
     void deInit();  // Speicher wieder freigeben
@@ -66,7 +68,7 @@ private:
     SubSystems m_subSystems; // Untersysteme
 
     bool m_quit; // Ob Programm beenden werden soll
-    void onQuit(); // Spiel beenden (Wird von einem Event aufgerufen)
+    void onQuit(bool restart = false); // Spiel beenden (Wird von einem Event aufgerufen)
 
     EventConnection m_eventConnection; // TODO: scoped_ptr
 
@@ -83,6 +85,8 @@ private:
 
     bool m_fullScreen;         // if the game should be started in full screen mode
     bool m_overRideFullScreen; // if the variable above should override the full screen option in the configuration file
+
+    bool m_doRestart;
 
     // Initialisationsfunktionen in Init.cpp
     bool initSDL();

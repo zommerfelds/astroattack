@@ -35,15 +35,15 @@ public:
 
     const GameStateId& getId() const { return STATE_ID; }
 
-	void init();        // State starten
-	void cleanup();     // State abbrechen
+    void init();        // State starten
+    void cleanup();     // State abbrechen
 
-	void pause();       // State anhalten
-	void resume();      // State wiederaufnehmen
+    void pause();       // State anhalten
+    void resume();      // State wiederaufnehmen
     void frame(float deltaTime);
 
-	void update();      // Spiel aktualisieren
-	void draw(float accumulator); // Spiel zeichnen
+    void update();      // Spiel aktualisieren
+    void draw(float accumulator); // Spiel zeichnen
 private:
     static const GameStateId STATE_ID;
 
@@ -67,6 +67,7 @@ private:
     SubMenu m_subMenu;
 
     bool m_wantToQuit;              // ob Spiel beendet werden soll
+    bool m_restart;
     bool m_goToEditor;              // ob der Editor geöffnet werden soll
     bool m_goToPlay;                // ob ein Level gestartet werden soll
     bool m_goToSlideShow;           // ob eine Bildershow gestartet werden soll

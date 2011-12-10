@@ -42,19 +42,19 @@ void Vector2D::normalize()
 // Ob rV sich Rechts von diesem Vektor befindet (=kleinster Winkel ist im Uhrzeigersinn)
 bool Vector2D::isRight( const Vector2D &rV ) const
 {
-	if ( x * rV.y - y * rV.x < 0.0f )
-		return true;
-	else
-		return false;
+    if ( x * rV.y - y * rV.x < 0.0f )
+        return true;
+    else
+        return false;
 }
 
 // Winkel herausfinden, dass der Vektor mit der X-Achse schliesst ( [1,0] hat Winkel 0, im Gegenuhrzeigersinn +, im Uhrzeigersinn - )
 // Der erhaltene Winkel ist in Radian (zwischen -pi und +pi)
 float Vector2D::getAngle() const
 {
-	if ( x == 0 && y == 0 )
-		return 0;
-	return atan2( y, x );
+    if ( x == 0 && y == 0 )
+        return 0;
+    return atan2( y, x );
 }
 
 // Vektor um Winkel angle drehen (in Bogenmass) im Gegenuhrzeigersinn

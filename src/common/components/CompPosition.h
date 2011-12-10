@@ -13,6 +13,8 @@
 #include "common/Component.h"
 #include "common/Vector2D.h"
 
+class CompPhysics;
+
 //--------------------------------------------//
 //----------- CompPosition Klasse ------------//
 //--------------------------------------------//
@@ -23,14 +25,15 @@ public:
 
     // Base component methods
     const ComponentTypeId& getTypeId() const { return COMPONENT_TYPE_ID; }
-	static const ComponentTypeId COMPONENT_TYPE_ID;
+    static const ComponentTypeId COMPONENT_TYPE_ID;
 
     // =========== Getters ==========
     Vector2D getDrawingPosition() const; // get current drawing (smooth) position. If a CampPhysics exist, it gets the position from there.
     float getDrawingOrientation() const;
 
-    // NOTE
-    // probably a getPosition() and a getOrientation() should come here, but for the moment nobody needs them
+
+    Vector2D getPosition() const;
+    float getOrientation() const;
 
     // =========== Setters ===========
     // (no setters currently available because not needed)
@@ -45,6 +48,8 @@ private:
 
     Vector2D m_position;
     float m_orientation;
+
+    CompPhysics* m_compPhysics;
 
     friend class PhysicsSubSystem; // Physics sub-system is allowed to change the position
 };

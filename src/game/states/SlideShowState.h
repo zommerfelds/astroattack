@@ -40,17 +40,17 @@ public:
 
     const GameStateId& getId() const { return STATE_ID; }
 
-	void init();        // State starten
-	void cleanup();     // State abbrechen
+    void init();        // State starten
+    void cleanup();     // State abbrechen
 
-	void pause();       // State anhalten
-	void resume();      // State wiederaufnehmen
+    void pause();       // State anhalten
+    void resume();      // State wiederaufnehmen
     void frame( float deltaTime );
 
-	void update();      // Spiel aktualisieren
-	void draw( float accumulator );        // Spiel zeichnen
+    void update();      // Spiel aktualisieren
+    void draw( float accumulator );        // Spiel zeichnen
 private:
-	void loadSlideShow();
+    void loadSlideShow();
 
     static const GameStateId STATE_ID;
 

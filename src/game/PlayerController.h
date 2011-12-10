@@ -17,8 +17,8 @@ class InputSubSystem;
 class PlayerController {
 
 public:
-	PlayerController(GameEvents&, const InputSubSystem&);
-	void update();
+    PlayerController(GameEvents&, const InputSubSystem&);
+    void update();
 
 private:
     void onRegisterComponent(Component& component);

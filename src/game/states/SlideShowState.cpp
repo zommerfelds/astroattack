@@ -79,10 +79,10 @@ void SlideShowState::init()        // State starten
     // Dazugehörende Bilder laden
     LoadTextureInfo info;
     info.loadMipmaps = false;
-    info.wrapModeX = LoadTextureInfo::WrapClamp;
-    info.wrapModeY = LoadTextureInfo::WrapClamp;
+    info.wrapModeX = WrapClamp;
+    info.wrapModeY = WrapClamp;
     info.scale = 1.0;
-    info.quality = (LoadTextureInfo::Quality) gConfig.get<int>("TexQuality");
+    info.quality = (TexQuality) gConfig.get<int>("TexQuality");
     for ( size_t i = 0; i < m_slideShow.slides.size(); ++i )
         getSubSystems().renderer.getTextureManager().loadTexture( m_slideShow.slides[i].imageFileName, m_slideShow.slides[i].imageFileName, info );
     
@@ -340,7 +340,7 @@ void SlideShowState::draw( float /*accumulator*/ )        // Spiel zeichnen
 
 void SlideShowState::loadSlideShow()
 {
-	using boost::property_tree::ptree;
+    using boost::property_tree::ptree;
 
     try
     {

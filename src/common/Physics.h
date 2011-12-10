@@ -33,18 +33,18 @@ public:
 
 private:
     std::vector< CompPhysics* > m_physicsComps;
-	std::vector< CompGravField* > m_gravFields;
+    std::vector< CompGravField* > m_gravFields;
 
     EventConnection m_eventConnection1;
     EventConnection m_eventConnection2;
     GameEvents& m_gameEvents;
 
-    void onRegisterComp( Component& );
-    void onUnregisterComp( Component& );
-    void onRegisterCompPhys( CompPhysics& );
-    void onUnregisterCompPhys( CompPhysics& );
-	void onRegisterCompGrav( CompGravField& );
-    void onUnregisterCompGrav( CompGravField& );
+    void onRegisterComp(Component&);
+    void onUnregisterComp(Component&);
+    void onRegisterCompPhys(CompPhysics&);
+    void onUnregisterCompPhys(CompPhysics&);
+    void onRegisterCompGrav(CompGravField&);
+    void onUnregisterCompGrav(CompGravField&);
 
     b2World m_world;
     float m_timeStep;

@@ -19,22 +19,22 @@ class Editor;
 class GLCanvas : public wxGLCanvas
 {
 public:
-	GLCanvas(Editor& editor, wxWindow* parent, int* args, GameEvents& events);
-	virtual ~GLCanvas();
-	
-	void onPaint(wxPaintEvent& evt);
-	void onResize(wxSizeEvent& evt);
-	void onLMouseDown(wxMouseEvent& evt);
+    GLCanvas(Editor& editor, wxWindow* parent, int* args, GameEvents& events);
+    virtual ~GLCanvas();
+    
+    void onPaint(wxPaintEvent& evt);
+    void onResize(wxSizeEvent& evt);
+    void onLMouseDown(wxMouseEvent& evt);
 
 private:
-	Editor& m_editor;
+    Editor& m_editor;
     wxGLContext* m_context;
     RenderSubSystem m_renderer;
     CameraController m_cameraController;
 
     int m_initCount;
 
-	DECLARE_EVENT_TABLE()
+    DECLARE_EVENT_TABLE()
 };
 
 #endif

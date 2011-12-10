@@ -14,6 +14,7 @@
 #include "common/DataLoader.h"
 #include "common/Physics.h"
 
+#include <iostream>
 #include <boost/property_tree/info_parser.hpp>
 
 IMPLEMENT_APP(EditorApp)
@@ -26,27 +27,40 @@ using boost::property_tree::ptree;
 
 bool EditorApp::OnInit()
 {
-	ptree editorConfig;
-    boost::property_tree::info_parser::read_info(cConfigFileName, editorConfig); // TODO: handle fail
+    ptree editorConfig;
+    try
+    {
+        boost::property_tree::info_parser::read_info(cConfigFileName, editorConfig);
+    }
+    catch ( boost::property_tree::info_parser::info_parser_error& e )
+    {
+        std::cerr << "Could not load editor configuration file. Loading default." << std::endl;
+        editorConfig.clear();
+        editorConfig.put("LogConsoleLevel", "Debug");
+        editorConfig.put("LogFileLevel", "Debug");
+        editorConfig.put("LogFileName", "AAEditor.log");
+    }
     setUpLoggerFromPropTree(editorConfig);
 
-	GameEvents* events = new GameEvents;
-	World* world = new World(*events);
-	new PhysicsSubSystem(*events); // need physics system?
+    GameEvents* events = new GameEvents;
+    World* world = new World(*events);
+    new PhysicsSubSystem(*events); // need physics system?
 
-	Editor* editor = new Editor(*world);
+    Editor* editor = new Editor(*world);
 
-	EditorFrame* frame = new EditorFrame(*editor, *events);
+    EditorFrame* frame = new EditorFrame(*editor, *events);
     frame->Show(true);
 
-	// TODO catch exception
-    DataLoader::loadWorld( "data/player.info", *world, *events );
-    DataLoader::loadWorld( "data/Levels/level_editor.info", *world, *events );
-
-    // TODO: need this?
-    world->setVariable( "Collected", 0 );
-    world->setVariable( "JetpackEnergy", 1000 );
-    world->setVariable( "Health", 1000 );
+    try
+    {
+        DataLoader::loadToWorld( "data/player.info", *world, *events );
+        DataLoader::loadToWorld( "data/Levels/level_editor.info", *world, *events );
+    }
+    catch (DataLoadException& e)
+    {
+        std::cerr << "Could not read level: " << e.getMsg() << std::endl;
+        return false;
+    }
 
     return true;
 }

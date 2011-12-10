@@ -66,10 +66,10 @@ struct Rect
 };
 
 /*
-	Diese Klasse misst die Eingaben des Benutzers. (Maus und Tastatur)
-	Sie verarbeitet oder tut nichts mit den eingelesenen informationen.
-	Jedesmal wenn Update() aufgerufen wird, werden die Informationen aktualisiert.
-	Die Eigabe-Informationen können mit den Mathoden gelesen werden.
+    Diese Klasse misst die Eingaben des Benutzers. (Maus und Tastatur)
+    Sie verarbeitet oder tut nichts mit den eingelesenen informationen.
+    Jedesmal wenn Update() aufgerufen wird, werden die Informationen aktualisiert.
+    Die Eigabe-Informationen können mit den Mathoden gelesen werden.
 */
 
 class InputSubSystem

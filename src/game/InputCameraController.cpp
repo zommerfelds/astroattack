@@ -42,8 +42,8 @@ InputCameraController::InputCameraController(const InputSubSystem& inputSubSyste
    m_timeSinceLastSwitchHeading ( 0 ),
    m_playerHeading ( 0 )
 {
-	setZoomRange(cMinZoom, cMaxZoom);
-	setZoom(0.08f);
+    setZoomRange(cMinZoom, cMaxZoom);
+    setZoom(0.08f);
 }
 
 // Kamarabewegung aktualisieren und auf Eingabe, die die Kamera beeinflusst, reagieren
@@ -84,94 +84,94 @@ void InputCameraController::update( float deltaTime ) // time_span in seconds
 
     m_timeSinceLastSwitchHeading += deltaTime;
 
-	// Zuerst checken ob es einen Spielerobjekt überhaupt gibt.
-	CompPhysics* playerPhys = m_compManager.getComponent<CompPhysics>("Player");
-	if ( playerPhys )
-	{
-		const Vector2D& playerPos = playerPhys->getSmoothCenterOfMass(); // Position des Spielers
+    // Zuerst checken ob es einen Spielerobjekt überhaupt gibt.
+    CompPhysics* playerPhys = m_compManager.getComponent<CompPhysics>("Player");
+    if ( playerPhys )
+    {
+        const Vector2D& playerPos = playerPhys->getSmoothCenterOfMass(); // Position des Spielers
 
-		if ( m_isFollowingPlayer )
-		{
-			// calculate cursor position relative to the middle of the screen
-			Vector2D cursorPos = m_inputSubSystem.getMousePos();
-			cursorPos.x = cursorPos.x - 0.5f;
-			cursorPos.y = (cursorPos.y - 0.5f) * -1;
-			cursorPos.rotate(getCameraAngle());
+        if ( m_isFollowingPlayer )
+        {
+            // calculate cursor position relative to the middle of the screen
+            Vector2D cursorPos = m_inputSubSystem.getMousePos();
+            cursorPos.x = cursorPos.x - 0.5f;
+            cursorPos.y = (cursorPos.y - 0.5f) * -1;
+            cursorPos.rotate(getCameraAngle());
 
-			const float cRangeOfSightFactor = 6.0f; // how far the mouse can move the camera away from the player
-			Vector2D target = playerPos + cursorPos * cRangeOfSightFactor;
+            const float cRangeOfSightFactor = 6.0f; // how far the mouse can move the camera away from the player
+            Vector2D target = playerPos + cursorPos * cRangeOfSightFactor;
 
-			// to integrate over the full deltaTime step (which can be big) we split it into smaller steps
-			// this prevents explosive behavior when deltaTime is very big
-			// all sub-steps will be the same size except for the last one that will be just the remainder time (smaller than the others)
-			const float cCameraTimeStep = 0.015f;
-			float timeStep = cCameraTimeStep;
-			float remainingTime = deltaTime;
-			while (remainingTime > 0.0f)
-			{
-				if (remainingTime < cCameraTimeStep) // in the last step pick the remaining time
-					timeStep = remainingTime;
-				remainingTime -= cCameraTimeStep;
+            // to integrate over the full deltaTime step (which can be big) we split it into smaller steps
+            // this prevents explosive behavior when deltaTime is very big
+            // all sub-steps will be the same size except for the last one that will be just the remainder time (smaller than the others)
+            const float cCameraTimeStep = 0.015f;
+            float timeStep = cCameraTimeStep;
+            float remainingTime = deltaTime;
+            while (remainingTime > 0.0f)
+            {
+                if (remainingTime < cCameraTimeStep) // in the last step pick the remaining time
+                    timeStep = remainingTime;
+                remainingTime -= cCameraTimeStep;
 
-				// calculate new camera position
-				// the position depends on the player position and on the mouse cursor position
-				const float cPosFollowQuicknessFactor = 15.0f; // how fast the camera moves to the new position
+                // calculate new camera position
+                // the position depends on the player position and on the mouse cursor position
+                const float cPosFollowQuicknessFactor = 15.0f; // how fast the camera moves to the new position
 
-				Vector2D velocity = (target - getCameraPos()) * cPosFollowQuicknessFactor;
-				moveRelative(velocity * timeStep);
+                Vector2D velocity = (target - getCameraPos()) * cPosFollowQuicknessFactor;
+                moveRelative(velocity * timeStep);
 
-				// calculate new camera zoom
-				// the zoom depends on the mouse cursor position and on the players velocity
-				const float cZoomFollowQuicknessFactor = 1.5f;
-				const float cMaxFollowZoom = 0.13f;
-				const float cMinFollowZoom = 0.05f;
-				const float cCursorFactor = 0.65f;
-				const float cGradientStart = 0.1f;
-				const float cGradientEnd = 1.0f;
-				const float cPlayerMaxVel = 5.0f;
+                // calculate new camera zoom
+                // the zoom depends on the mouse cursor position and on the players velocity
+                const float cZoomFollowQuicknessFactor = 1.5f;
+                const float cMaxFollowZoom = 0.13f;
+                const float cMinFollowZoom = 0.05f;
+                const float cCursorFactor = 0.65f;
+                const float cGradientStart = 0.1f;
+                const float cGradientEnd = 1.0f;
+                const float cPlayerMaxVel = 5.0f;
 
-				float zoomGradient = (cMaxFollowZoom - cMinFollowZoom) / (cGradientEnd - cGradientStart);
-				float velFraction = playerPhys->getLinearVelocity().length() / cPlayerMaxVel;
-				if (velFraction > 1.0f || playerPhys->getContacts().empty())
-					velFraction = 1.0f;
-				float zoomParameter = (cursorPos.length() * 2.0f) * (cCursorFactor) + velFraction * (1.0f - cCursorFactor);
-				float zoomTarget = 0.0f;
-				if (zoomParameter < cGradientStart)
-					zoomTarget = cMaxFollowZoom;
-				else if (zoomParameter > cGradientEnd)
-					zoomTarget = cMinFollowZoom; // cMaxFollowZoom - (cGradientEnd - cGradientStart) * cZoomGradient;
-				else
-					zoomTarget = cMaxFollowZoom - (zoomParameter - cGradientStart) * zoomGradient;
+                float zoomGradient = (cMaxFollowZoom - cMinFollowZoom) / (cGradientEnd - cGradientStart);
+                float velFraction = playerPhys->getLinearVelocity().length() / cPlayerMaxVel;
+                if (velFraction > 1.0f || playerPhys->getContacts().empty())
+                    velFraction = 1.0f;
+                float zoomParameter = (cursorPos.length() * 2.0f) * (cCursorFactor) + velFraction * (1.0f - cCursorFactor);
+                float zoomTarget = 0.0f;
+                if (zoomParameter < cGradientStart)
+                    zoomTarget = cMaxFollowZoom;
+                else if (zoomParameter > cGradientEnd)
+                    zoomTarget = cMinFollowZoom; // cMaxFollowZoom - (cGradientEnd - cGradientStart) * cZoomGradient;
+                else
+                    zoomTarget = cMaxFollowZoom - (zoomParameter - cGradientStart) * zoomGradient;
 
-				float zoomVelocity = (zoomTarget - getZoom()) * cZoomFollowQuicknessFactor;
-				setZoom(getZoom() + zoomVelocity * timeStep);
-			}
-		}
+                float zoomVelocity = (zoomTarget - getZoom()) * cZoomFollowQuicknessFactor;
+                setZoom(getZoom() + zoomVelocity * timeStep);
+            }
+        }
 
-		// flip player's heading according to cursor
-		{
-			std::vector<CompVisualAnimation*> player_anims = m_compManager.getComponents<CompVisualAnimation>("Player");
-			const CompGravField* grav = playerPhys->getActiveGravField();
-			Vector2D upVector(0.0f,1.0f);
-			if ( grav )
-				upVector = grav->getAcceleration( playerPhys->getCenterOfMass() ).getUnitVector()*-1;
-			bool right = upVector.isRight( screenToWorld(m_inputSubSystem.getMousePos()) - playerPhys->getCenterOfMass() );
-			if ( m_playerHeading == 0 || right != (m_playerHeading==1) )
-			{
-				if ( m_timeSinceLastSwitchHeading > cTimeTillAnimSwitchHeadingIsPossible )
-				{
-					m_playerHeading = right ? 1 : -1;
-					m_timeSinceLastSwitchHeading = 0;
+        // flip player's heading according to cursor
+        {
+            std::vector<CompVisualAnimation*> player_anims = m_compManager.getComponents<CompVisualAnimation>("Player");
+            const CompGravField* grav = playerPhys->getActiveGravField();
+            Vector2D upVector(0.0f,1.0f);
+            if ( grav )
+                upVector = grav->getAcceleration( playerPhys->getCenterOfMass() ).getUnitVector()*-1;
+            bool right = upVector.isRight( screenToWorld(m_inputSubSystem.getMousePos()) - playerPhys->getCenterOfMass() );
+            if ( m_playerHeading == 0 || right != (m_playerHeading==1) )
+            {
+                if ( m_timeSinceLastSwitchHeading > cTimeTillAnimSwitchHeadingIsPossible )
+                {
+                    m_playerHeading = right ? 1 : -1;
+                    m_timeSinceLastSwitchHeading = 0;
 
-					for ( size_t i = 0; i < player_anims.size(); ++i )
-					{
-						CompVisualAnimation* anim = player_anims[i];
-						anim->setFlip( !right );
-					}
-				}
-			}
-		}
-	}
+                    for ( size_t i = 0; i < player_anims.size(); ++i )
+                    {
+                        CompVisualAnimation* anim = player_anims[i];
+                        anim->setFlip( !right );
+                    }
+                }
+            }
+        }
+    }
 
     const float cRotVelocity = 2.0f;
     if ( m_inputSubSystem.getKeyState ( CameraRotateCw ) )

@@ -37,15 +37,15 @@ public:
     virtual void loadFromPropertyTree(const boost::property_tree::ptree& propTree) = 0;
     virtual void writeToPropertyTree(boost::property_tree::ptree& propTree) const = 0;
 
-    template <typename CompType>       CompType* getSiblingComponent();
-    template <typename CompType> const CompType* getSiblingComponent() const;
-          Component* getSiblingComponent(const ComponentTypeId& compType);
-    const Component* getSiblingComponent(const ComponentTypeId& compType) const;
+    template <typename CompType>       CompType* getSiblingComponent(const ComponentIdType& compId="");
+    template <typename CompType> const CompType* getSiblingComponent(const ComponentIdType& compId="") const;
+    //      Component* getSiblingComponent(const ComponentTypeId& compType);
+    //const Component* getSiblingComponent(const ComponentTypeId& compType) const;
 
     template <typename CompType> std::vector<      CompType*> getSiblingComponents();
     template <typename CompType> std::vector<const CompType*> getSiblingComponents() const;
-    std::vector<      Component*> getSiblingComponents(const ComponentTypeId& compType);
-    std::vector<const Component*> getSiblingComponents(const ComponentTypeId& compType) const;
+    //std::vector<      Component*> getSiblingComponents(const ComponentTypeId& compType);
+    //std::vector<const Component*> getSiblingComponents(const ComponentTypeId& compType) const;
 
     static const ComponentIdType DEFAULT_ID;
 protected:
@@ -63,19 +63,19 @@ private:
 #include "ComponentManager.h"
 
 template <typename CompType>
-CompType* Component::getSiblingComponent()
+CompType* Component::getSiblingComponent(const ComponentIdType& compId)
 {
     if (m_compManager == NULL)
         return NULL;
-    return m_compManager->getComponent<CompType>(m_entityId);
+    return m_compManager->getComponent<CompType>(m_entityId, compId);
 }
 
 template <typename CompType>
-const CompType* Component::getSiblingComponent() const
+const CompType* Component::getSiblingComponent(const ComponentIdType& compId) const
 {
     if (m_compManager == NULL)
         return NULL;
-    return m_compManager->getComponent<CompType>(m_entityId);
+    return m_compManager->getComponent<CompType>(m_entityId, compId);
 }
 
 template <typename CompType>

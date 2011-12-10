@@ -26,14 +26,14 @@ void CompVisualTexture::loadFromPropertyTree(const ptree& propTree)
     m_textureId = propTree.get<std::string>("texture");
     m_shapeId = propTree.get("shape", ALL_SHAPES);
 
-	ptree mappingTree = propTree.get_child("mapping", ptree()); // need to create this variable, else the for loop crashes... (?)
+    ptree mappingTree = propTree.get_child("mapping", ptree()); // need to create this variable, else the for loop crashes... (?)
     foreach(const ptree::value_type &v, mappingTree)
-	{
-		const ptree& vertex = v.second;
-		float x = vertex.get<float>("u");
-		float y = vertex.get<float>("v");
-		m_texMap.push_back( Vector2D(x, y) );
-	}
+    {
+        const ptree& vertex = v.second;
+        float x = vertex.get<float>("u");
+        float y = vertex.get<float>("v");
+        m_texMap.push_back( Vector2D(x, y) );
+    }
 
     foreach(const ptree::value_type &v, propTree)
     {
@@ -68,12 +68,12 @@ void CompVisualTexture::writeToPropertyTree(boost::property_tree::ptree& propTre
         propTree.add("shape", m_shapeId);
 
     for (size_t i = 0; i < m_texMap.size(); ++i)
-	{
-		ptree vertexPropTree;
-		vertexPropTree.add("u", m_texMap[i].x);
-		vertexPropTree.add("v", m_texMap[i].y);
-		propTree.add_child("mapping.vertex", vertexPropTree);
-	}
+    {
+        ptree vertexPropTree;
+        vertexPropTree.add("u", m_texMap[i].x);
+        vertexPropTree.add("v", m_texMap[i].y);
+        propTree.add_child("mapping.vertex", vertexPropTree);
+    }
 
     std::map<TextureId, std::set<size_t> > edgeTextures;
     for (size_t i=0; i<CompShapePolygon::cMaxVertices; i++)
@@ -109,10 +109,10 @@ TextureId CompVisualTexture::getEdgeTexture(size_t edgeNum) const
 
 const std::string& CompVisualTexture::getShapeId() const
 {
-	return m_shapeId;
+    return m_shapeId;
 }
 
 const std::vector<Vector2D>& CompVisualTexture::getTexMap() const
 {
-	return m_texMap;
+    return m_texMap;
 }

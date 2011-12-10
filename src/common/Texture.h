@@ -65,25 +65,25 @@ private:
 // --- STRUKTUREN ---
 
 // Informationen für das Laden einer Textur
+enum TexWrapMode {
+    WrapClamp,
+    WrapRepeat
+};
+
+enum TexQuality {
+    QualityBest = 0,
+    QualityGood = 1,
+    QualityMiddle = 2,
+    QualityLow = 3,
+    QualityLowest = 4
+};
+
 struct LoadTextureInfo
 {
-    enum WrapMode {
-        WrapClamp,
-        WrapRepeat
-    };
-
-    enum Quality {
-        QualityBest = 0,
-        QualityGood = 1,
-        QualityMiddle = 2,
-        QualityLow = 3,
-        QualityLowest = 4
-    };
-
     bool loadMipmaps;
-    WrapMode wrapModeX; // GL_CLAMP oder GL_REPEAT
-    WrapMode wrapModeY; // GL_CLAMP oder GL_REPEAT
-    Quality quality;
+    TexWrapMode wrapModeX; // GL_CLAMP oder GL_REPEAT
+    TexWrapMode wrapModeY; // GL_CLAMP oder GL_REPEAT
+    TexQuality quality;
     float scale;
 };
 

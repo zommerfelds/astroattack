@@ -34,7 +34,7 @@ public:
 
     void init(int width, int height);
     void deInit();
-    bool loadData();
+    bool loadData(TexQuality quality);
 
     void resize(int width, int height);
 

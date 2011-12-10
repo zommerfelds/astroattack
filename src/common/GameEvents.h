@@ -19,23 +19,24 @@ class Component;
 struct GameEvents {
     // -- quitGame --
     // Das ganze Spiel wird beendet
-    Event0 quitGame;
+    // Arg: restart?
+    Event1<bool> quitGame;
 
     // -- newEntity --
     // A new entity is being created
-    // Args: pointer to the entity being created
+    // Arg: entity being created
     Event1<const EntityIdType&> newEntity;
 
     Event1<Component&> newComponent;
 
     // -- watToDeleteEntity --
     // Somebody wants to delete an entity
-    // Args: pointer to the entity that should be deleted
+    // Arg: entity that should be deleted
     Event1<const EntityIdType&> wantToDeleteEntity;
 
     // -- deleteEntity --
     // An entity is being deleted
-    // Args: pointer to the entity being deleted
+    // Arg: entity being deleted
     Event1<const EntityIdType&> deleteEntity;
 
     Event1<Component&> deleteComponent;
@@ -46,7 +47,7 @@ struct GameEvents {
 
     // -- levelEnd --
     // The player finished the current level
-    // Args: bool: has the player won?, string: level end message       // Level wird beended
+    // Args: has the player won?, level end message
     Event2<bool, const std::string&> levelEnd;
 };
 

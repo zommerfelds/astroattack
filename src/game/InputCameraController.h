@@ -24,13 +24,13 @@ class ComponentManager;
 class InputCameraController : public CameraController
 {
 public:
-	InputCameraController(const InputSubSystem& inputSubSystem, RenderSubSystem& renderSubSystem, ComponentManager& compMgr);
+    InputCameraController(const InputSubSystem& inputSubSystem, RenderSubSystem& renderSubSystem, ComponentManager& compMgr);
 
     void update( float deltaTime ); // Kamarabewegung aktualisieren und auf Eingabe, die die Kamera beeinflusst, reagieren
 
     void setFollowPlayer( bool follow ); // soll die Kamera den Spieles folgen oder nicht?
     bool isFollowingPlayer() const {
-    	return m_isFollowingPlayer;
+        return m_isFollowingPlayer;
     }
 
 private:
@@ -38,7 +38,7 @@ private:
     ComponentManager& m_compManager;
 
     bool m_isFollowingPlayer;
-	float m_timeSinceLastSwitchHeading;
+    float m_timeSinceLastSwitchHeading;
     char m_playerHeading; // -1: left, 0: not yet defined, 1: right
 };
 

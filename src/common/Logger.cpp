@@ -16,64 +16,75 @@
 namespace {
 LogLevel strToLogLevel(std::string str)
 {
-	if (str == "Fatal") return Fatal;
-	if (str == "Warning") return Warning;
-	if (str == "Info") return Info;
-	if (str == "Detail") return Detail;
-	if (str == "Debug") return Debug;
-	if (str == "Off") return Off;
-	return Off;
+    if (str == "Fatal") return Fatal;
+    if (str == "Warning") return Warning;
+    if (str == "Info") return Info;
+    if (str == "Detail") return Detail;
+    if (str == "Debug") return Debug;
+    if (str == "Off") return Off;
+    return Off;
 }
 
 std::string getCurrentTimeStr()
 {
-	time_t t = time(NULL);
-	return ctime(&t);
+    time_t t = time(NULL);
+    return ctime(&t);
 }
 } // end namespace
 
 Logger& log(LogLevel level)
 {
-	static Logger log;
-	log.setLevel(level);
-	return log;
+    static Logger log;
+    log.setLevel(level);
+    return log;
 }
 
 void setUpLoggerFromPropTree(boost::property_tree::ptree& ptree)
 {
-	LogLevel consoleLevel = strToLogLevel(ptree.get<std::string>("LogConsoleLevel"));
-	LogLevel fileLevel    = strToLogLevel(ptree.get<std::string>("LogFileLevel"));
-	std::string fileName  = ptree.get<std::string>("LogFileName");
+    LogLevel consoleLevel = Warning;
+    LogLevel fileLevel = Off;
+    std::string fileName;
 
-	if (consoleLevel != Off)
-	{
-		boost::shared_ptr<ConsoleHandler> console = boost::make_shared<ConsoleHandler>();
-		log(consoleLevel).addHandler(console);
-	}
-	if (fileLevel != Off)
-	{
-		boost::shared_ptr<FileHandler> file = boost::make_shared<FileHandler>(fileName);
-		log(fileLevel).addHandler(file);
-	}
+    try
+    {
+        consoleLevel = strToLogLevel(ptree.get<std::string>("LogConsoleLevel"));
+        fileLevel    = strToLogLevel(ptree.get<std::string>("LogFileLevel"));
+        fileName     = ptree.get<std::string>("LogFileName");
+    }
+    catch (boost::property_tree::ptree_error& e)
+    {
+        std::cerr << "Bad logger config file format. " << e.what() << std::endl;
+    }
+
+    if (consoleLevel != Off)
+    {
+        boost::shared_ptr<ConsoleHandler> console = boost::make_shared<ConsoleHandler>();
+        log(consoleLevel).addHandler(console);
+    }
+    if (fileLevel != Off)
+    {
+        boost::shared_ptr<FileHandler> file = boost::make_shared<FileHandler>(fileName);
+        log(fileLevel).addHandler(file);
+    }
 }
 
 Logger::Logger(bool buffered)
 : std::ostream (&m_stringBuf),
   m_stringBuf (*this)
 {
-	if (!buffered)
-		setf(std::ios::unitbuf); // set to unbuffered
+    if (!buffered)
+        setf(std::ios::unitbuf); // set to unbuffered
 }
 
 void Logger::addHandler(boost::shared_ptr<LogHandler> handler)
 {
-	handler->setLevel(m_logLevel);
-	m_handlers.push_back(handler);
+    handler->setLevel(m_logLevel);
+    m_handlers.push_back(handler);
 }
 
 void Logger::setLevel(LogLevel level)
 {
-	m_logLevel = level;
+    m_logLevel = level;
 }
 
 void Logger::writeHeader(const std::string& str)
@@ -88,15 +99,15 @@ Logger::LoggerStringBuf::LoggerStringBuf(const Logger& logger)
 // synchronize output
 int Logger::LoggerStringBuf::sync()
 {
-	if (!str().empty())
-	{
-		foreach(boost::shared_ptr<LogHandler> handler, m_logger.m_handlers)
-		{
-			handler->writeFilter(m_logger.m_logLevel, str());
-		}
-		str("");
-	}
-	return 0;
+    if (!str().empty())
+    {
+        foreach(boost::shared_ptr<LogHandler> handler, m_logger.m_handlers)
+        {
+            handler->writeFilter(m_logger.m_logLevel, str());
+        }
+        str("");
+    }
+    return 0;
 }
 
 LogHandler::LogHandler()
@@ -105,13 +116,13 @@ LogHandler::LogHandler()
 
 void LogHandler::setLevel(LogLevel level)
 {
-	m_filterLevel = level;
+    m_filterLevel = level;
 }
 
 void LogHandler::writeFilter(LogLevel level, const std::string& str)
 {
-	if (level <= m_filterLevel)
-		write(str);
+    if (level <= m_filterLevel)
+        write(str);
 }
 
 OstreamHandler::OstreamHandler(std::ostream& ostream)
@@ -120,8 +131,8 @@ OstreamHandler::OstreamHandler(std::ostream& ostream)
 
 void OstreamHandler::write(const std::string& str)
 {
-	m_ostream << str;
-	m_ostream.flush();
+    m_ostream << str;
+    m_ostream.flush();
 }
 
 ConsoleHandler::ConsoleHandler()
@@ -131,4 +142,7 @@ ConsoleHandler::ConsoleHandler()
 FileHandler::FileHandler(const std::string& fileName)
 : OstreamHandler (m_ofstream),
   m_ofstream (fileName.c_str())
-{}
+{
+    if (!m_ofstream)
+        std::cerr << "Error, could not open file '" << fileName << "' for writing" << std::endl;
+}

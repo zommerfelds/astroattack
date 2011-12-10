@@ -4,8 +4,6 @@
  * Copyright 2011 Christian Zommerfelds
  */
 
-// Hier startet und beendet die Anwendung!
-
 #include "main.h"
 #include "GameApp.h"
 #include "Configuration.h"
@@ -15,67 +13,63 @@
 
 #include <vector>
 #include <string>
-#include <boost/property_tree/info_parser.hpp>
 
 namespace {
 const std::string cConfigFileName = "data/config.info";
 }
 
+#define DONT_CATCH_EXCEPTION
+
 // Programmstart!
 int main ( int argc, char* argv[] )
 {
-    //_CrtSetDbgFlag(_CrtSetDbgFlag(0)|_CRTDBG_CHECK_ALWAYS_DF);
-    //_crtBreakAlloc = 0x0108D008;
-    //_ASSERTE( _CrtCheckMemory( ) );
-
     std::vector<std::string> args (argv+1, argv+argc);
 
-    // TODO
-    /*if ( gAaLog.isOpen()==false ) // Fehler beim Öffnen?
-	{
-        OsMsgBox( "Log file \"" LOG_FILE_NAME "\" could not be opened!\n", "Error" );
-	}*/
-
-    // Einstellung lesen
-    boost::property_tree::info_parser::read_info(cConfigFileName, gConfig); // TODO: handle fail
+    loadConfig(cConfigFileName, gConfig);
     setUpLoggerFromPropTree(gConfig);
 
-    do
+    char centeredStr[] = "SDL_VIDEO_CENTERED=1";
+    putenv(centeredStr);
+
+    try
     {
-        gDoRestart = false;
-
-        log(Info).writeHeader(GAME_NAME " " GAME_VERSION);
-
-        //try
+        bool restart;
+        do
         {
+            restart = false;
+            log(Info).writeHeader(GAME_NAME " " GAME_VERSION);
+
             GameApp aaApp(args);   // create application object
             aaApp.run();           // run the game!
-        }
-        /*catch ( Exception& e ) // falls es einen Fehler gab (Ausnahmebehandlung)
-        {
-            OsMsgBox( e.getMsg(), "Exception" ); // Diesen anzeigen
-        }
-        catch ( std::bad_alloc& ) // Falls nicht genügend Speicherplatz für alle Objekte gefunden wurde wird diese Ausnahme aufgerufen
-        {
-            OsMsgBox( log() << "Error: Memory could not be allocated!\n" ), "Exception" );
-        }
-        catch ( std::exception& e ) // Falls eine andere Standart-Ausnahme
-        {
-            std::string error_msg = std::string("Error: ") + e.what();
-            OsMsgBox( log() << error_msg ), "Exception" ); // Fehler ausgeben
-        }
-        catch (...) // Falls eine unbekannte Ausnahme
-        {
-            char std_err_msg[] = "AstroAttack has encountered an unrecoverable error.\n";
-            char std_err_msg2[] = "See the log file \"" LOG_FILE_NAME "\" for more information.";
-            OsMsgBox( std::string( log() << std_err_msg ) ) + std_err_msg2, "Exception" );
-        }*/
 
-        if ( gDoRestart )
-        {
-            log(Info) << "\n\n============= Restarting " GAME_NAME " =============\n\n";
+            if ( aaApp.doRestart() )
+            {
+                log(Info) << "\n\n============= Restarting " GAME_NAME " =============\n\n";
+                restart = true;
+            }
+
+            // args.clear(); ??
         }
-    } while (gDoRestart);
+        while (restart);
+    }
+#ifndef DONT_CATCH_EXCEPTION
+    catch ( Exception& e )
+    {
+        log(Fatal) << e.getMsg() << "\n"; // Diesen anzeigen
+    }
+    catch ( std::bad_alloc& )
+    {
+        log(Fatal) << "Error: Memory could not be allocated!\n";
+    }
+    catch ( std::exception& e )
+    {
+        log(Fatal) << e.what() << "\n"; // Fehler ausgeben
+    }
+#endif
+    catch (...)
+    {
+        assert(false);
+    }
 
     writeConfig(cConfigFileName, gConfig);
 

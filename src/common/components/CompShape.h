@@ -23,7 +23,7 @@ class CompShape : public Component
 {
 public:
     CompShape(const ComponentIdType& id, GameEvents& gameEvents);
-	virtual ~CompShape() {}
+    virtual ~CompShape() {}
 
     const ComponentTypeId& getTypeId() const { return COMPONENT_TYPE_ID; }
 
@@ -32,7 +32,7 @@ public:
     enum Type { Polygon, Circle };
     virtual Type getType() const = 0;
 
-	static const ComponentTypeId COMPONENT_TYPE_ID;
+    static const ComponentTypeId COMPONENT_TYPE_ID;
 };
 
 //--------------------------------------------//
@@ -66,7 +66,7 @@ private:
 class CompShapeCircle : public CompShape
 {
 public:
-	CompShapeCircle(const ComponentIdType& id, GameEvents& gameEvents, const Vector2D& center = Vector2D(), float radius = 1.0f);
+    CompShapeCircle(const ComponentIdType& id, GameEvents& gameEvents, const Vector2D& center = Vector2D(), float radius = 1.0f);
 
     void loadFromPropertyTree(const boost::property_tree::ptree& propTree);
     void writeToPropertyTree(boost::property_tree::ptree& propTree) const;

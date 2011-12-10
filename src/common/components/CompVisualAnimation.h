@@ -25,7 +25,7 @@ public:
     CompVisualAnimation(const ComponentIdType& id, GameEvents& gameEvents);
 
     const ComponentTypeId& getTypeId() const { return COMPONENT_TYPE_ID; }
-	static const ComponentTypeId COMPONENT_TYPE_ID;
+    static const ComponentTypeId COMPONENT_TYPE_ID;
 
     // Welche Textur muss rerade gezeichnet werden? (Eine Animation besteht aus mehreren Texturen)
     TextureId getCurrentTexture() const;
@@ -45,7 +45,7 @@ public:
     void setReverse(bool reverse);
     int isRunning() const;         // ob die Animation gerade läuft
 
-	void setAnim(const AnimationId& animInfoId);
+    void setAnim(const AnimationId& animInfoId);
 
     // Animationsstand (z.B. Rennen, Springen, Reden )
     void setState( AnimStateId new_state );

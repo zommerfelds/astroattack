@@ -19,8 +19,6 @@ using boost::property_tree::ptree;
 // eindeutige ID
 const ComponentTypeId CompPhysics::COMPONENT_TYPE_ID = "CompPhysics";
 
-// TODO: don't simply access m_body (and others?) because maybe a PhysicsSubSystem doesn't exist and hasn't set it up
-
 // Konstruktor
 CompPhysics::CompPhysics(const ComponentIdType& id, GameEvents& gameEvents, const BodyDef& rBodyDef) :
     Component(id, gameEvents),
@@ -41,25 +39,31 @@ void CompPhysics::addShapeDef( boost::shared_ptr<ShapeDef> pShapeDef )
 
 bool CompPhysics::setShapeFriction(const ComponentIdType& shapeName, float friction)
 {
+    if (m_body==NULL)
+    {
+        log(Warning) << "setShapeFriction: component was not yet initialized by physics system\n";
+        return false;
+    }
+
     FixtureMap::const_iterator it = m_fixtureMap.find( shapeName );
     b2Fixture* fixture = it->second;
     if ( it != m_fixtureMap.end() )
     {
-    	fixture->SetFriction(friction);
+        fixture->SetFriction(friction);
     }
     else
     {
-    	log(Warning) << "setShapeFriction: bad shapeName '" << shapeName << "'\n";
+        log(Warning) << "setShapeFriction: fixture for shape '" << shapeName << "' does not exist\n";
         return false;
     }
 
     // friction of existing contacts need to be updated because they don't change with b2Fixture::SetFriction
     for ( b2ContactEdge* contactEdge = m_body->GetContactList();
-    	  contactEdge;
-    	  contactEdge = contactEdge->next )
+          contactEdge;
+          contactEdge = contactEdge->next )
     {
-    	if (fixture == contactEdge->contact->GetFixtureA() || fixture == contactEdge->contact->GetFixtureB() )
-    		contactEdge->contact->ResetFriction(); // uses sqrt and multiplication
+        if (fixture == contactEdge->contact->GetFixtureA() || fixture == contactEdge->contact->GetFixtureB() )
+            contactEdge->contact->ResetFriction(); // uses sqrt and multiplication
     }
 
     return true;
@@ -67,11 +71,21 @@ bool CompPhysics::setShapeFriction(const ComponentIdType& shapeName, float frict
 
 float CompPhysics::getMass() const
 {
+    if (m_body==NULL)
+    {
+        log(Warning) << "getMass: component was not yet initialized by physics system\n";
+        return -1.0f;
+    }
     return m_body->GetMass();
 }
 
 float CompPhysics::getAngle() const
 {
+    if (m_body==NULL)
+    {
+        log(Warning) << "getAngle: component was not yet initialized by physics system\n";
+        return 0.0f;
+    }
     return m_body->GetAngle();
 }
 
@@ -105,26 +119,52 @@ bool CompPhysics::isBullet() const
 
 Vector2D CompPhysics::getLinearVelocity() const
 {
+    if (m_body==NULL)
+    {
+        log(Warning) << "getLinearVelocity: component was not yet initialized by physics system\n";
+        return Vector2D();
+    }
     return Vector2D( m_body->GetLinearVelocity() );
 }
 
 void CompPhysics::setLinearVelocity(const Vector2D& vel)
 {
+    if (m_body==NULL)
+    {
+        log(Warning) << "setLinearVelocity: component was not yet initialized by physics system\n";
+        return;
+    }
     m_body->SetLinearVelocity( *vel.to_b2Vec2() );
 }
 
 void CompPhysics::applyLinearImpulse(const Vector2D& impulse, const Vector2D& point)
 {
+    if (m_body==NULL)
+    {
+        log(Warning) << "applyLinearImpulse: component was not yet initialized by physics system\n";
+        return;
+    }
     m_body->ApplyLinearImpulse(*impulse.to_b2Vec2(), *point.to_b2Vec2());
 }
 
 void CompPhysics::applyForce(const Vector2D& impulse, const Vector2D& point)
 {
+    if (m_body==NULL)
+    {
+        log(Warning) << "applyForce: component was not yet initialized by physics system\n";
+        return;
+    }
     m_body->ApplyForce(*impulse.to_b2Vec2(), *point.to_b2Vec2());
 }
 
 void CompPhysics::rotate( float deltaAngle, const Vector2D& localPoint )
 {
+    if (m_body==NULL)
+    {
+        log(Warning) << "rotate: component was not yet initialized by physics system\n";
+        return;
+    }
+
     float newAngle = m_body->GetAngle() + deltaAngle;
 
     Vector2D worldRotationCenter( Vector2D(m_body->GetPosition()) + localPoint.rotated(m_body->GetAngle()) );
@@ -137,16 +177,32 @@ void CompPhysics::rotate( float deltaAngle, const Vector2D& localPoint )
 
 Vector2D CompPhysics::getPosition() const
 {
+    if (m_body==NULL)
+    {
+        log(Warning) << "getPosition: component was not yet initialized by physics system\n";
+        return Vector2D();
+    }
     return m_body->GetPosition();
 }
 
 Vector2D CompPhysics::getSmoothPosition() const
 {
+    if (m_body==NULL)
+    {
+        log(Warning) << "getSmoothPosition: component was not yet initialized by physics system\n";
+        return Vector2D();
+    }
     return m_smoothCenterOfMass - Vector2D(m_body->GetLocalCenter()).rotated(m_smoothAngle);
 }
 
 ContactVector CompPhysics::getContacts(bool getSensors) const
 {
+    if (m_body==NULL)
+    {
+        log(Warning) << "getContacts: component was not yet initialized by physics system\n";
+        return ContactVector();
+    }
+
     std::vector<boost::shared_ptr<ContactInfo> > vecTouchInfo;
     for ( b2ContactEdge* contactEdge = m_body->GetContactList();
           contactEdge;
@@ -193,6 +249,11 @@ const Vector2D& CompPhysics::getSmoothCenterOfMass() const
 
 Vector2D CompPhysics::getCenterOfMass() const
 {
+    if (m_body==NULL)
+    {
+        log(Warning) << "getCenterOfMass: component was not yet initialized by physics system\n";
+        return Vector2D();
+    }
     return Vector2D( m_body->GetWorldCenter() );
 }
 
@@ -286,5 +347,10 @@ void CompPhysics::writeToPropertyTree(ptree& propTree) const
 
 Vector2D CompPhysics::globalToLocal(const Vector2D& global) const
 {
+    if (m_body==NULL)
+    {
+        log(Warning) << "globalToLocal: component was not yet initialized by physics system\n";
+        return Vector2D();
+    }
     return m_body->GetWorldVector(*global.to_b2Vec2());
 }

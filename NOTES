@@ -1,0 +1,6 @@
+
+Visual C++ Memory Debugging:
+
+_CrtSetDbgFlag(_CrtSetDbgFlag(0)|_CRTDBG_CHECK_ALWAYS_DF);
+_crtBreakAlloc = 0x0108D008;
+_ASSERTE( _CrtCheckMemory( ) );

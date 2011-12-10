@@ -21,9 +21,9 @@ public:
     CompVisualMessage(const ComponentIdType& id, GameEvents& gameEvents, const std::string& text="");
 
     const ComponentTypeId& getTypeId() const { return COMPONENT_TYPE_ID; }
-	static const ComponentTypeId COMPONENT_TYPE_ID; // eindeutige ID für diese Komponentenart (gleich wie Klassennamen, siehe CompCollectable.cpp)
+    static const ComponentTypeId COMPONENT_TYPE_ID; // eindeutige ID für diese Komponentenart (gleich wie Klassennamen, siehe CompCollectable.cpp)
 
-	void setMsg(const std::string&);
+    void setMsg(const std::string&);
     const std::string& getMsg() const { return m_text; }
 
     void loadFromPropertyTree(const boost::property_tree::ptree& propTree);

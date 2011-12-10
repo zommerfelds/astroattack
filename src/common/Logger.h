@@ -47,7 +47,7 @@ class LogHandler;
 class Logger : public std::ostream
 {
 public:
-	Logger(bool buffered=false);
+    Logger(bool buffered=false);
     void addHandler(boost::shared_ptr<LogHandler> handler);
     void setLevel(LogLevel level);
     void writeHeader(const std::string& str); // writes a formatted header containing str and the current time
@@ -57,46 +57,46 @@ private:
     std::list<boost::shared_ptr<LogHandler> > m_handlers;
 
     class LoggerStringBuf : public std::stringbuf {
-	public:
-    	LoggerStringBuf(const Logger& logger);
-		int sync();
-	private:
-		const Logger& m_logger;
-	};
+    public:
+        LoggerStringBuf(const Logger& logger);
+        int sync();
+    private:
+        const Logger& m_logger;
+    };
     LoggerStringBuf m_stringBuf;
     LogLevel m_logLevel;
 };
 
 class LogHandler {
 public:
-	LogHandler();
-	virtual ~LogHandler() {}
-	void setLevel(LogLevel);
-	void writeFilter(LogLevel, const std::string&);
+    LogHandler();
+    virtual ~LogHandler() {}
+    void setLevel(LogLevel);
+    void writeFilter(LogLevel, const std::string&);
 protected:
-	virtual void write(const std::string&) = 0;
+    virtual void write(const std::string&) = 0;
 private:
-	LogLevel m_filterLevel;
+    LogLevel m_filterLevel;
 };
 
 class OstreamHandler : public LogHandler {
 public:
-	OstreamHandler(std::ostream& ostream);
-	void write(const std::string&);
+    OstreamHandler(std::ostream& ostream);
+    void write(const std::string&);
 private:
-	std::ostream& m_ostream;
+    std::ostream& m_ostream;
 };
 
 class ConsoleHandler : public OstreamHandler {
 public:
-	ConsoleHandler();
+    ConsoleHandler();
 };
 
 class FileHandler : public OstreamHandler {
 public:
-	FileHandler(const std::string& fileName);
+    FileHandler(const std::string& fileName);
 private:
-	std::ofstream m_ofstream;
+    std::ofstream m_ofstream;
 };
 
 #endif

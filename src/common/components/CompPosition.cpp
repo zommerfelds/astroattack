@@ -14,39 +14,49 @@
 // eindeutige ID
 const ComponentTypeId CompPosition::COMPONENT_TYPE_ID = "CompPosition";
 
-// TODO: store CompPhysics pointer for multiple uses (maybe weak_ptr?)
-
 CompPosition::CompPosition(const ComponentIdType& id, GameEvents& gameEvents)
-: Component(id, gameEvents), m_position (), m_orientation ( 0.0f )
+: Component(id, gameEvents),
+  m_position (),
+  m_orientation ( 0.0f ),
+  m_compPhysics (NULL)
 {}
 
 /*void CompPosition::setPosition(const Vector2D& pos)
 {
-    // TODO: set Box2D pos
+    // set Box2D pos
     m_position = pos;
+}*/
+
+/*void CompPosition::setOrientation(float orientation)
+{
+    // set Box2D angle
+    m_orientation = orientation;
 }*/
 
 Vector2D CompPosition::getDrawingPosition() const
 {
-    const CompPhysics* compPhys = getSiblingComponent<CompPhysics>(); // important TODO: this can segfault
-    if (compPhys)
-        return compPhys->getSmoothPosition();
+    //const CompPhysics* compPhys = getSiblingComponent<CompPhysics>();
+    if (m_compPhysics)
+        return m_compPhysics->getSmoothPosition();
     return m_position;
 }
 
 float CompPosition::getDrawingOrientation() const
 {
-    const CompPhysics* compPhys = getSiblingComponent<CompPhysics>();
-    if (compPhys)
-        return compPhys->getSmoothAngle();
+    if (m_compPhysics)
+        return m_compPhysics->getSmoothAngle();
     return m_orientation;
 }
 
-/*void CompPosition::setOrientation(float orientation)
+Vector2D CompPosition::getPosition() const
 {
-    // TODO: set Box2D angle
-    m_orientation = orientation;
-}*/
+    return m_position;
+}
+
+float CompPosition::getOrientation() const
+{
+    return m_orientation;
+}
 
 void CompPosition::loadFromPropertyTree(const boost::property_tree::ptree& propTree)
 {

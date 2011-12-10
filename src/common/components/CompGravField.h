@@ -27,30 +27,30 @@ public:
     static const ComponentTypeId COMPONENT_TYPE_ID; // eindeutige ID für diese Komponentenart (gleich wie Klassennamen, siehe CompGravField.cpp)
 
     // Setters
-	void setGravType( GravType t ) { m_gravType = t; }
-	void setGravDir( const Vector2D& dir );
-	void setGravCenter( const Vector2D& center, float strenght );
+    void setGravType( GravType t ) { m_gravType = t; }
+    void setGravDir( const Vector2D& dir );
+    void setGravCenter( const Vector2D& center, float strenght );
     void setPriority( int priority );
 
     // Getters
-	GravType getGravType() const { return m_gravType; }
-	const Vector2D& getGravDir() const { return m_gravitationDir; }
-	const Vector2D& getGravCenter() const { return m_gravitationCenter; }
-	float getStrenght() const { return m_strenght; }
-	int getPriority() const { return m_priority; }
+    GravType getGravType() const { return m_gravType; }
+    const Vector2D& getGravDir() const { return m_gravitationDir; }
+    const Vector2D& getGravCenter() const { return m_gravitationCenter; }
+    float getStrenght() const { return m_strenght; }
+    int getPriority() const { return m_priority; }
 
-	// Get the acceleration of a body with center of mass "centerOfMass"
-	Vector2D getAcceleration(const Vector2D& centerOfMass) const;
+    // Get the acceleration of a body with center of mass "centerOfMass"
+    Vector2D getAcceleration(const Vector2D& centerOfMass) const;
 
     void loadFromPropertyTree(const boost::property_tree::ptree& propTree);
     void writeToPropertyTree(boost::property_tree::ptree& propTree) const;
 
 private:
 
-	GravType m_gravType;
-	Vector2D m_gravitationDir;
-	Vector2D m_gravitationCenter;
-	float m_strenght; // only with Radial
+    GravType m_gravType;
+    Vector2D m_gravitationDir;
+    Vector2D m_gravitationCenter;
+    float m_strenght; // only with Radial
     int m_priority; // Gravitationsfeld-priorität: wenn sich 2 felder überlappen, gilt der mit der grössten priorität (0-100 is gültig)
 
 };

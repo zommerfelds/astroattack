@@ -13,6 +13,9 @@
 // the global configuration property tree
 extern boost::property_tree::ptree gConfig;
 
+void loadConfig(const std::string& fileName, boost::property_tree::ptree& config);
+void loadDefaultConfig(boost::property_tree::ptree& config);
+
 // write config with comments
 bool writeConfig(const std::string& fileName, const boost::property_tree::ptree& config);
 

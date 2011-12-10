@@ -8,10 +8,8 @@
 
 #include <wx/frame.h>
 #include <wx/window.h>
-#include <SDL_opengl.h>
+//#include <SDL_opengl.h>
 
-// temp
-//#include "common/Logger.h"
 #include <iostream>
 using namespace std;
 
@@ -20,54 +18,54 @@ using namespace std;
 #include "common/GameEvents.h"
 
 BEGIN_EVENT_TABLE(GLCanvas, wxGLCanvas)
-	EVT_SIZE(GLCanvas::onResize)
-	EVT_PAINT(GLCanvas::onPaint)
-	EVT_LEFT_DOWN(GLCanvas::onLMouseDown)
+    EVT_SIZE(GLCanvas::onResize)
+    EVT_PAINT(GLCanvas::onPaint)
+    EVT_LEFT_DOWN(GLCanvas::onLMouseDown)
 END_EVENT_TABLE()
 
 namespace {
-	int cInitCount = 2;
+    int cInitCount = 2;
 }
 
 /*void glErr()
 {
-	GLenum errCode;
-	const GLubyte *errString;
+    GLenum errCode;
+    const GLubyte *errString;
 
-	if ((errCode = glGetError()) != GL_NO_ERROR)
-	{
-		errString = gluErrorString(errCode);
-		cerr << "GLCanvas> OpenGL Error " << errString << endl;
-	}
+    if ((errCode = glGetError()) != GL_NO_ERROR)
+    {
+        errString = gluErrorString(errCode);
+        cerr << "GLCanvas> OpenGL Error " << errString << endl;
+    }
 }
 
 void proj()
 {
-	float M[16];
-	glMatrixMode ( GL_PROJECTION );
-	glGetFloatv(GL_PROJECTION_MATRIX, M);
-	glMatrixMode( GL_MODELVIEW );
-	cerr << "proj: ";
-	for (int i=0; i<16; i++) cerr << M[i] << " ";
-	cerr << endl;
+    float M[16];
+    glMatrixMode ( GL_PROJECTION );
+    glGetFloatv(GL_PROJECTION_MATRIX, M);
+    glMatrixMode( GL_MODELVIEW );
+    cerr << "proj: ";
+    for (int i=0; i<16; i++) cerr << M[i] << " ";
+    cerr << endl;
 }
 
 void test()
 {
-	int i = -1;
-	glMatrixMode ( GL_PROJECTION );
-	while (glGetError() == GL_NO_ERROR)
-	{
-		glPopMatrix();
-		i++;
-	}
-	cerr << "==> Stack depth was " << i << endl;
-	while (i > 0)
-	{
-		glPushMatrix();
-		i--;
-	}
-	glMatrixMode( GL_MODELVIEW );
+    int i = -1;
+    glMatrixMode ( GL_PROJECTION );
+    while (glGetError() == GL_NO_ERROR)
+    {
+        glPopMatrix();
+        i++;
+    }
+    cerr << "==> Stack depth was " << i << endl;
+    while (i > 0)
+    {
+        glPushMatrix();
+        i--;
+    }
+    glMatrixMode( GL_MODELVIEW );
 }*/
 
 GLCanvas::GLCanvas(Editor& editor, wxWindow* parent, int* args, GameEvents& events) :
@@ -77,7 +75,7 @@ GLCanvas::GLCanvas(Editor& editor, wxWindow* parent, int* args, GameEvents& even
     m_cameraController (m_renderer, 1),
     m_initCount (0)
 {
-	m_context = new wxGLContext(this);
+    m_context = new wxGLContext(this);
  
     // To avoid flashing on MSW
     SetBackgroundStyle(wxBG_STYLE_CUSTOM);
@@ -85,57 +83,57 @@ GLCanvas::GLCanvas(Editor& editor, wxWindow* parent, int* args, GameEvents& even
  
 GLCanvas::~GLCanvas()
 {
-	delete m_context;
+    delete m_context;
 }
 
 void GLCanvas::onLMouseDown(wxMouseEvent& evt)
 {
-	cerr << "mouse pos: " << evt.GetPosition().x << "/" << evt.GetPosition().y << endl;
+    cerr << "mouse pos: " << evt.GetPosition().x << "/" << evt.GetPosition().y << endl;
 }
 
 void GLCanvas::onResize(wxSizeEvent& evt)
 {
-	if (m_initCount > 0)
-	{
-		m_renderer.resize(evt.GetSize().x, evt.GetSize().y);
-		m_cameraController.setAspectRatio((float(evt.GetSize().x))/evt.GetSize().y);
-		m_cameraController.setZoom(0.08f);
-		Refresh();
-	}
+    if (m_initCount > 0)
+    {
+        m_renderer.resize(evt.GetSize().x, evt.GetSize().y);
+        m_cameraController.setAspectRatio((float(evt.GetSize().x))/evt.GetSize().y);
+        m_cameraController.setZoom(0.08f);
+        Refresh();
+    }
 }
 
 void GLCanvas::onPaint( wxPaintEvent& evt )
 {
     if(!IsShown()) return;
 
-	if (m_initCount < cInitCount)
-	{
-		m_initCount++;
+    if (m_initCount < cInitCount)
+    {
+        m_initCount++;
 
-		if (m_initCount == cInitCount)
-		{
-			//log() <<"-->init");
-			cerr << "init" << endl;
-			m_renderer.init(GetSize().x, GetSize().y);
+        if (m_initCount == cInitCount)
+        {
+            //log() <<"-->init");
+            cerr << "init" << endl;
+            m_renderer.init(GetSize().x, GetSize().y);
 
-			m_renderer.setMatrix(RenderSubSystem::World);
+            m_renderer.setMatrix(RenderSubSystem::World);
 
-		    m_renderer.loadData();
+            m_renderer.loadData(QualityBest);
 
-			m_cameraController.setAspectRatio((float(GetSize().x))/GetSize().y);
-			m_cameraController.setZoom(0.08f);
-		}
+            m_cameraController.setAspectRatio((float(GetSize().x))/GetSize().y);
+            m_cameraController.setZoom(0.08f);
+        }
 
-	    wxGLCanvas::SetCurrent(*m_context);
-	    wxPaintDC(this); // only to be used in paint events. use wxClientDC to paint outside the paint event
-	    SwapBuffers();
+        wxGLCanvas::SetCurrent(*m_context);
+        wxPaintDC(this); // only to be used in paint events. use wxClientDC to paint outside the paint event
+        SwapBuffers();
 
-		Refresh();
+        Refresh();
 
-		return;
-	}
+        return;
+    }
 
-	cerr << "rendering" << endl;
+    cerr << "rendering" << endl;
     
     wxGLCanvas::SetCurrent(*m_context);
     wxPaintDC(this); // only to be used in paint events. use wxClientDC to paint outside the paint event
@@ -145,27 +143,27 @@ void GLCanvas::onPaint( wxPaintEvent& evt )
     m_renderer.clearScreen();
     m_renderer.setMatrix(RenderSubSystem::GUI);
     // Hintergrundbild zeichnen
-	{
-		float texCoord[8] = { 0.0f, 0.0f,
-							 0.0f, 1.0f,
-							 1.0f, 1.0f,
-							 1.0f, 0.0f };
-		float vertexCoord[8] = { 0.0f, 0.0f,
-						 	 	 0.0f, 3.0f,
-								 4.0f, 3.0f,
-								 4.0f, 0.0f };
-		m_renderer.drawTexturedQuad( texCoord, vertexCoord, "_starfield" );
-	}
+    {
+        float texCoord[8] = { 0.0f, 0.0f,
+                             0.0f, 1.0f,
+                             1.0f, 1.0f,
+                             1.0f, 0.0f };
+        float vertexCoord[8] = { 0.0f, 0.0f,
+                                   0.0f, 3.0f,
+                                 4.0f, 3.0f,
+                                 4.0f, 0.0f };
+        m_renderer.drawTexturedQuad( texCoord, vertexCoord, "_starfield" );
+    }
     // Weltmodus
     m_renderer.setMatrix(RenderSubSystem::World);
     m_cameraController.look();
     // Animationen zeichnen
-	//m_renderer.drawVisualAnimationComps();
+    //m_renderer.drawVisualAnimationComps();
     // Texturen zeichnen
-	m_renderer.drawVisualTextureComps();
+    m_renderer.drawVisualTextureComps();
 
     glFlush();
-	
+    
     cerr << "swapping" << endl;
     SwapBuffers();
 }

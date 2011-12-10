@@ -53,7 +53,7 @@ bool compareComps(boost::shared_ptr<Component> first, boost::shared_ptr<Componen
     if (pos1 != pos2)
         return pos1 < pos2;
 
-	return first.get() < second.get();
+    return first.get() < second.get();
 }
 
 }
@@ -104,9 +104,23 @@ const EntityMap& ComponentManager::getAllEntities() const
     return m_entities;
 }
 
-Component* ComponentManager::getComponent(const EntityIdType& id, const ComponentTypeId& compType)
+Component* ComponentManager::getComponent(const EntityIdType& entId, const ComponentTypeId& compType, const ComponentIdType& compId)
 {
-    EntityMap::const_iterator eit = m_entities.find(id);
+    EntityMap::const_iterator eit = m_entities.find(entId);
+    if ( eit == m_entities.end() )
+        return NULL;
+    std::pair<ComponentMap::const_iterator,ComponentMap::const_iterator> eqRange = eit->second.equal_range(compType);
+    for (ComponentMap::const_iterator it = eqRange.first; it != eqRange.second; ++it)
+    {
+        if (compId == "" || compId == it->second->getId())
+            return it->second.get();
+    }
+    return NULL;
+}
+/*
+Component* ComponentManager::getComponent(const EntityIdType& entId, const ComponentTypeId& compType)
+{
+    EntityMap::const_iterator eit = m_entities.find(entId);
     if ( eit == m_entities.end() )
         return NULL;
     ComponentMap::const_iterator cit = eit->second.find( compType );
@@ -115,10 +129,9 @@ Component* ComponentManager::getComponent(const EntityIdType& id, const Componen
     else
         return cit->second.get();
 }
-
-const Component* ComponentManager::getComponent(const EntityIdType& id, const ComponentTypeId& compType ) const
+const Component* ComponentManager::getComponent(const EntityIdType& entId, const ComponentTypeId& compType) const
 {
-    EntityMap::const_iterator eit = m_entities.find(id);
+    EntityMap::const_iterator eit = m_entities.find(entId);
     if ( eit == m_entities.end() )
         return NULL;
     ComponentMap::const_iterator cit = eit->second.find( compType );
@@ -127,7 +140,19 @@ const Component* ComponentManager::getComponent(const EntityIdType& id, const Co
     else
         return cit->second.get();
 }
+*/
+/*
+Component* ComponentManager::getComponentById(const EntityIdType& id, const ComponentIdType& compId)
+{
 
+}
+
+const Component* ComponentManager::getComponentById(const EntityIdType& id, const ComponentIdType& compId) const
+{
+
+}
+*/
+/*
 std::vector<Component*> ComponentManager::getComponents(const EntityIdType& id, const ComponentTypeId& compType )
 {
     std::vector<Component*> ret;
@@ -155,18 +180,18 @@ std::vector<const Component*> ComponentManager::getComponents(const EntityIdType
         ret.push_back(it->second.get());
     return ret;
 }
-
+*/
 
 void ComponentManager::writeEntitiesToLogger(Logger& logger, LogLevel level)
 {
-	logger.setLevel(level);
+    logger.setLevel(level);
     for ( EntityMap::iterator it = m_entities.begin(); it != m_entities.end(); ++it )
     {
         ComponentMap& comps = it->second;
         logger << "--- Entity name: " << it->first << " ---\n";
         for ( ComponentMap::iterator it2 = comps.begin(); it2 != comps.end(); ++it2 )
         {
-        	logger << " Component: " << it2->second->getTypeId() << " " << it2->second->getId() << "\n";
+            logger << " Component: " << it2->second->getTypeId() << " " << it2->second->getId() << "\n";
         }
         logger << "\n";
     }

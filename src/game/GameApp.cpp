@@ -30,8 +30,6 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/make_shared.hpp>
 
-bool gDoRestart = false; // TODO remove this global
-
 // Konstruktor
 GameApp::GameApp(const std::vector<std::string>& args) :
         m_isInit (false),
@@ -43,9 +41,10 @@ GameApp::GameApp(const std::vector<std::string>& args) :
         m_fps ( 0 ),
         m_startGame ( true ),
         m_fullScreen ( false ),
-        m_overRideFullScreen ( false )
+        m_overRideFullScreen ( false ),
+        m_doRestart (false)
 {
-    m_eventConnection = m_subSystems.events.quitGame.registerListener( boost::bind( &GameApp::onQuit, this ) );
+    m_eventConnection = m_subSystems.events.quitGame.registerListener( boost::bind( &GameApp::onQuit, this, _1 ) );
 
     parseArguments(args);
 }
@@ -87,6 +86,11 @@ GameApp::~GameApp()
     deInit();
 }
 
+bool GameApp::doRestart()
+{
+    return m_doRestart;
+}
+
 // Alle Objekte von GameApp initialisieren
 void GameApp::init()
 {
@@ -109,7 +113,7 @@ void GameApp::init()
     m_subSystems.renderer.displayLoadingScreen();
 
     // Texturen laden
-    m_subSystems.renderer.loadData();
+    m_subSystems.renderer.loadData((TexQuality) gConfig.get<int>("TexQuality"));
 
     log(Info) << "\n* Finished initialization *\n";
 
@@ -196,7 +200,7 @@ bool GameApp::initVideo()
     SDL_GL_GetAttribute ( SDL_GL_BUFFER_SIZE, &value );
     gConfig.put("ScreenBpp", value);
     log(Info) << "Resolution: " << vidInfo->current_w << "x" << vidInfo->current_h << "\n";
-    log(Info) << "Widescreen: " << (gConfig.get<bool>("WideScreen")?"on":"off") << "\n";
+    //log(Info) << "Widescreen: " << (gConfig.get<bool>("WideScreen")?"on":"off") << "\n";
     log(Info) << "Bits per pixel: " << value << "\n";
     SDL_GL_GetAttribute ( SDL_GL_DOUBLEBUFFER, &value );
     log(Info) << "Double buffer: " << (value?"on":"off") << "\n";
@@ -333,9 +337,10 @@ void GameApp::mainLoop()
 
 }
 
-void GameApp::onQuit()
+void GameApp::onQuit(bool restart)
 {
     m_quit = true;
+    m_doRestart = restart;
     log(Info) << "User requested to quit, quitting...\n";
     m_subSystems.renderer.displayTextScreen("Closing AstroAttack...");
 }

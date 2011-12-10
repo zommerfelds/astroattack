@@ -20,24 +20,24 @@ public:
     UpdateTimer(GLCanvas& pane) : pane (pane) {}
 
     void Notify()
-	{
-		pane.Refresh();
-	}
+    {
+        pane.Refresh();
+    }
 };
 
 struct GameEvents;
 
 class EditorFrame : public EditorFrameBase {
 public:
-	EditorFrame(Editor& editor, GameEvents& events);
-	~EditorFrame();
-	void OnClose(wxCloseEvent& evt);
-	
+    EditorFrame(Editor& editor, GameEvents& events);
+    ~EditorFrame();
+    void OnClose(wxCloseEvent& evt);
+    
 private:
-	GLCanvas m_canvas;
-	UpdateTimer m_timer;
+    GLCanvas m_canvas;
+    UpdateTimer m_timer;
 
-	DECLARE_EVENT_TABLE()
+    DECLARE_EVENT_TABLE()
 };
 
 #endif

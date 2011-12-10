@@ -24,7 +24,7 @@ public:
     Exception ( const std::string &msg ) // std::string als Parameter
     : m_msg ( msg )
     {
-    	log(Error) << msg;
+        log(Error) << msg;
     }
 
     ~Exception() throw() {};
@@ -44,7 +44,7 @@ private:
 };
 
 //-------------------------------- Funktionen --------------------------------//
-// TODO: restructure place
+// TODO: refactor place
 
 // Plattform-übergreifende Dialog-Box Funktion
 // Nur benutzen in schweren Fällen wann die GUI noch nicht bereit ist.

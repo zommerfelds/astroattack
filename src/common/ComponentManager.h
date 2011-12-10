@@ -42,18 +42,20 @@ public:
     //   e.g. Component x = GetComponent("CompX");
     // Prefer using the first one (no need to cast)
     // Use the second version if you can only get the component ID at runtime (as a string)
-    template <typename CompType>       CompType* getComponent(const EntityIdType& id);
-    template <typename CompType> const CompType* getComponent(const EntityIdType& id) const;
-          Component* getComponent(const EntityIdType& id, const ComponentTypeId& compType);
-    const Component* getComponent(const EntityIdType& id, const ComponentTypeId& compType) const;
+    template <typename CompType>       CompType* getComponent(const EntityIdType& entId, const ComponentIdType& compId="");
+    template <typename CompType> const CompType* getComponent(const EntityIdType& entId, const ComponentIdType& compId="") const;
+    //      Component* getComponent(const EntityIdType& entId, const ComponentTypeId& compType);
+    //const Component* getComponent(const EntityIdType& entId, const ComponentTypeId& compType) const;
+    //      Component* getComponentById(const EntityIdType& entId, const ComponentIdType& compId);
+    //const Component* getComponentById(const EntityIdType& entId, const ComponentIdType& compId) const;
 
     // === GetComponents ===
     // Returns a vector of all matching components in an entity
     // As GetComponent, this method has multiple versions (see above)
     template <typename CompType> std::vector<      CompType*> getComponents(const EntityIdType& id);
     template <typename CompType> std::vector<const CompType*> getComponents(const EntityIdType& id) const;
-    std::vector<      Component*> getComponents(const EntityIdType& id, const ComponentTypeId& compType);
-    std::vector<const Component*> getComponents(const EntityIdType& id, const ComponentTypeId& compType) const;
+    //std::vector<      Component*> getComponents(const EntityIdType& id, const ComponentTypeId& compType);
+    //std::vector<const Component*> getComponents(const EntityIdType& id, const ComponentTypeId& compType) const;
     // Returns all components (regardless of entity)
     const ComponentMap* getComponents(const EntityIdType& id);
 
@@ -63,19 +65,21 @@ private:
     GameEvents& m_gameEvents;
 
     EntityMap m_entities;
+
+    Component* getComponent(const EntityIdType& entId, const ComponentTypeId& compType, const ComponentIdType& compId);
 };
 
 // needs to be implemented here because of templates
 template <typename CompType>
-CompType* ComponentManager::getComponent(const EntityIdType& id)
+CompType* ComponentManager::getComponent(const EntityIdType& entId, const ComponentIdType& compId)
 {
-   return static_cast<CompType*>( getComponent(id, CompType::COMPONENT_TYPE_ID) );
+   return static_cast<CompType*>(getComponent(entId, CompType::COMPONENT_TYPE_ID, compId));
 }
 
 template <typename CompType>
-const CompType* ComponentManager::getComponent(const EntityIdType& id) const
+const CompType* ComponentManager::getComponent(const EntityIdType& entId, const ComponentIdType& compId) const
 {
-   return static_cast<const CompType*>( getComponent(id, CompType::COMPONENT_TYPE_ID) );
+   return static_cast<const CompType*>(getComponent(entId, CompType::COMPONENT_TYPE_ID, compId));
 }
 
 template <typename CompType>
@@ -84,7 +88,7 @@ std::vector<CompType*> ComponentManager::getComponents(const EntityIdType& id)
     std::vector<CompType*> ret;
 
     EntityMap::iterator eit = m_entities.find(id);
-    if ( eit == m_entities.end() )
+    if (eit == m_entities.end())
         return ret;
     std::pair<ComponentMap::iterator, ComponentMap::iterator> equalRange = eit->second.equal_range(CompType::COMPONENT_TYPE_ID);
 
@@ -99,7 +103,7 @@ std::vector<const CompType*> ComponentManager::getComponents(const EntityIdType&
     std::vector<const CompType*> ret;
 
     EntityMap::const_iterator eit = m_entities.find(id);
-    if ( eit == m_entities.end() )
+    if (eit == m_entities.end())
         return ret;
     std::pair<ComponentMap::const_iterator, ComponentMap::const_iterator> equalRange = eit->second.equal_range(CompType::COMPONENT_TYPE_ID);
 

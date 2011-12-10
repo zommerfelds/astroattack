@@ -31,11 +31,11 @@ struct ContactInfo
 {
     ContactInfo(CompPhysics& phys, CompShape& thisShape, CompShape& otherShape, const Vector2D& point, const Vector2D& normal ) :
         phys (phys), thisShape (thisShape), otherShape (otherShape), point (point), normal (normal) {}
-	CompPhysics& phys;     // the component that is touching
-	CompShape& thisShape;  // the shape that was touched
-	CompShape& otherShape; // the shape that is touching
-	Vector2D point;        // touching point
-	Vector2D normal;       // contact normal (pointing away from body)
+    CompPhysics& phys;     // the component that is touching
+    CompShape& thisShape;  // the shape that was touched
+    CompShape& otherShape; // the shape that is touching
+    Vector2D point;        // touching point
+    Vector2D normal;       // contact normal (pointing away from body)
 };
 
 struct BodyDef
@@ -157,13 +157,13 @@ public:
 
     void rotate( float deltaAngle, const Vector2D& localPoint ); // Rotate the body by daltaAngle counterclockwise around a local point
 
-	// guaranteed to be non null if this component is registered in the Physics system
+    // guaranteed to be non null if this component is registered in the Physics system
     const CompGravField* getActiveGravField() const { return m_gravField; }
 
     void loadFromPropertyTree(const boost::property_tree::ptree& propTree);
     void writeToPropertyTree(boost::property_tree::ptree& propTree) const;
 
-	static const ComponentTypeId COMPONENT_TYPE_ID; // eindeutige ID für diese Komponentenart (gleich wie Klassennamen, siehe CompPhysics.cpp)
+    static const ComponentTypeId COMPONENT_TYPE_ID; // eindeutige ID für diese Komponentenart (gleich wie Klassennamen, siehe CompPhysics.cpp)
 
 private:
 
@@ -183,7 +183,7 @@ private:
     typedef std::map<ComponentIdType, b2Fixture*> FixtureMap;
     FixtureMap m_fixtureMap;
 
-	const CompGravField* m_gravField;
+    const CompGravField* m_gravField;
     unsigned int m_nUpdatesSinceGravFieldChange;
 
     friend class PhysicsSubSystem; // Das Physik-System darf auf alles hier zugreifen!

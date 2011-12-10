@@ -10,12 +10,14 @@
 #define DATALOADER_H
 
 #include "Exception.h"
+#include "Texture.h"
 #include <set>
 #include <string>
 
 class World;
 class TextureManager;
 class AnimationManager;
+class FontManager;
 class FontManager;
 struct GameEvents;
 
@@ -34,10 +36,10 @@ public:
 class DataLoader
 {
 public:
-    static void loadWorld( const std::string& fileName, World& gameWorld, GameEvents& events );
-    static ResourceIds loadGraphics( const std::string& fileName, TextureManager* pTextureManager, AnimationManager* pAnimationManager, FontManager* pFontManager );
-    static void unLoadGraphics( const ResourceIds& resourcesToUnload, TextureManager* pTextureManager, AnimationManager* pAnimationManager, FontManager* pFontManager );
-    static void saveWorld( const std::string& fileName, const World& gameWorld );
+    static void loadToWorld(const std::string& fileName, World& gameWorld, GameEvents& events);
+    static ResourceIds loadGraphics(const std::string& fileName, TextureManager*, AnimationManager*, FontManager*, TexQuality);
+    static void unLoadGraphics(const ResourceIds& resourcesToUnload, TextureManager*, AnimationManager*, FontManager*);
+    static void saveWorld(const std::string& fileName, const World& gameWorld);
 private:
 };
 

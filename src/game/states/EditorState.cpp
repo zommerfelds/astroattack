@@ -62,7 +62,7 @@ void EditorState::init()        // State starten
 {
     m_cameraController.setFollowPlayer ( false );
 
-    DataLoader::loadWorld( gConfig.get<std::string>("EditorLevel"), m_gameWorld, getSubSystems().events );
+    DataLoader::loadToWorld( gConfig.get<std::string>("EditorLevel"), m_gameWorld, getSubSystems().events );
 }
 
 void EditorState::cleanup()     // State abbrechen
@@ -168,7 +168,7 @@ void EditorState::update()      // Spiel aktualisieren
             boost::shared_ptr<CompShapePolygon> compShape = boost::shared_ptr<CompShapePolygon>(new CompShapePolygon("shape", getSubSystems().events));
             for ( int i = 0; i < m_currentPoint; ++i )
             {
-            	compShape->setVertex(i, m_clickedPoints[i]);
+                compShape->setVertex(i, m_clickedPoints[i]);
             }
             entity.push_back(compShape);
 

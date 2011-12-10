@@ -82,7 +82,6 @@ void TextureManager::loadTexture( const std::string& fileName, TextureId id, con
     }
     try
     {
-        //TODO: check for DevIL errors ilGetError()
         log(Info) << "Loading Texture \"" << fileName << "\"... ";
 
         ILuint devIl_tex_id;                              // ID des DevIL Bildes
@@ -98,26 +97,37 @@ void TextureManager::loadTexture( const std::string& fileName, TextureId id, con
                 *pH = ilGetInteger(IL_IMAGE_HEIGHT);
             // Breite und Höhe müssen in der Form 2^n darstellbar sein. (n ist eine natürliche Zahl)
             // Hier erhalten sie den nächsthöheren Wert der 2^n erfüllt.
-            int width_2pown = getNext2PowN( ilGetInteger(IL_IMAGE_WIDTH) );
-            int height_2pown = getNext2PowN( ilGetInteger(IL_IMAGE_HEIGHT) );
-            
+            int width = ilGetInteger(IL_IMAGE_WIDTH);
+            int height = ilGetInteger(IL_IMAGE_HEIGHT);
+            int depht = ilGetInteger(IL_IMAGE_DEPTH);
+            int width_2pown = getNext2PowN(width);
+            int height_2pown = getNext2PowN(height);
+
             //log() << "GL: w=%i, h=%i\n", width_2pown, height_2pown );
 
             // TODO: don't shift small numbers
-            if ( loadTexInfo.quality == LoadTextureInfo::QualityBest )
-                iluScale( width_2pown, height_2pown, ilGetInteger(IL_IMAGE_DEPTH));
-            // Bild verkleinern, falls man eine schlechtere Qualität wünscht.
-            else if ( loadTexInfo.quality == LoadTextureInfo::QualityGood )
-                iluScale( width_2pown>>1, height_2pown>>1, ilGetInteger(IL_IMAGE_DEPTH));
-            else if ( loadTexInfo.quality == LoadTextureInfo::QualityMiddle )
-                iluScale( width_2pown>>2, height_2pown>>2, ilGetInteger(IL_IMAGE_DEPTH));
-            else if ( loadTexInfo.quality == LoadTextureInfo::QualityLow )
-                iluScale( width_2pown>>3, height_2pown>>3, ilGetInteger(IL_IMAGE_DEPTH));
-            else if ( loadTexInfo.quality == LoadTextureInfo::QualityLowest )
-                iluScale( width_2pown>>4, height_2pown>>4, ilGetInteger(IL_IMAGE_DEPTH));
+            switch (loadTexInfo.quality)
+            {
+            case QualityBest:
+                if (width != width_2pown || height != height_2pown)
+                    iluScale( width_2pown, height_2pown, depht);
+                break;
+            case QualityGood:
+                iluScale( width_2pown>>1, height_2pown>>1, depht);
+                break;
+            case QualityMiddle:
+                iluScale( width_2pown>>2, height_2pown>>2, depht);
+                break;
+            case QualityLow:
+                iluScale( width_2pown>>3, height_2pown>>3, depht);
+                break;
+            case QualityLowest:
+                iluScale( width_2pown>>4, height_2pown>>4, depht);
+                break;
+            }
 
             success = ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE); // Farbkomponente in unsigned byte konvertieren
-            if (!success) 
+            if (!success)
                 throw 0; // Error
 
             GLuint openGl_tex_id;
@@ -125,8 +135,8 @@ void TextureManager::loadTexture( const std::string& fileName, TextureId id, con
             glGenTextures(1, &openGl_tex_id); // OpenGL Texture generieren
             glBindTexture(GL_TEXTURE_2D, openGl_tex_id); // binden
 
-            GLint texWrapModeX = (loadTexInfo.wrapModeX == LoadTextureInfo::WrapClamp) ? GL_CLAMP : GL_REPEAT;
-            GLint texWrapModeY = (loadTexInfo.wrapModeY == LoadTextureInfo::WrapClamp) ? GL_CLAMP : GL_REPEAT;
+            GLint texWrapModeX = (loadTexInfo.wrapModeX == WrapClamp) ? GL_CLAMP : GL_REPEAT;
+            GLint texWrapModeY = (loadTexInfo.wrapModeY == WrapClamp) ? GL_CLAMP : GL_REPEAT;
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, texWrapModeX);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, texWrapModeY);
 
@@ -175,7 +185,8 @@ void TextureManager::loadTexture( const std::string& fileName, TextureId id, con
         throw Exception(std::string() + "Error while loading the texture \"" + fileName + "\"!\n" + iluErrorString(ilGetError()) + "\n");
     }
     CheckOpenlGlError();
-    //log() << "IL error: %s\n", iluErrorString(ilGetError()) );
+    if (ilGetError())
+        log(Warning) << "DevIL error: " << iluErrorString(ilGetError()) << "\n";
 }
 
 void TextureManager::freeTexture( const TextureId& id )
@@ -248,7 +259,7 @@ void AnimationManager::loadAnimation(const std::string& fileName, AnimationId id
 
     std::ifstream input_stream;
     input_stream.open(fileName.c_str());
-	if( input_stream.fail() ) // Fehler beim Öffnen
+    if( input_stream.fail() ) // Fehler beim Öffnen
     {
         throw Exception(std::string() + "Animation file '" + fileName + "' could not be opened.\n");
     }

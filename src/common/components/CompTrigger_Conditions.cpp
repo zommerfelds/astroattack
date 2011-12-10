@@ -58,11 +58,11 @@ bool ConditionEntityTouchedThis::isConditionTrue()
     foreach(const CompPhysics* compPhys, thisCompPhysics)
     {
 
-		ContactVector contacts = compPhys->getContacts(true);
+        ContactVector contacts = compPhys->getContacts(true);
 
-		for (size_t i = 0; i < contacts.size(); i++)
-			if (contacts[i]->phys.getEntityId() == m_entityName)
-				return true;
+        for (size_t i = 0; i < contacts.size(); i++)
+            if (contacts[i]->phys.getEntityId() == m_entityName)
+                return true;
     }
 
     return false;
