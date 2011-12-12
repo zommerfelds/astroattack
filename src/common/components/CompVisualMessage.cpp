@@ -9,7 +9,11 @@
 #include <boost/property_tree/ptree.hpp>
 
 // eindeutige ID
-const ComponentTypeId CompVisualMessage::COMPONENT_TYPE_ID = "CompVisualMessage";
+const ComponentTypeId& CompVisualMessage::getTypeIdStatic()
+{
+    static ComponentTypeId* typeId = new ComponentTypeId("CompVisualMessage");
+    return *typeId;
+}
 
 // Konstruktor
 CompVisualMessage::CompVisualMessage(const ComponentIdType& id, GameEvents& gameEvents, const std::string& text) :

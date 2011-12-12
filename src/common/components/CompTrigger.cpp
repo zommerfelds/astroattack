@@ -20,7 +20,11 @@
 using boost::property_tree::ptree;
 
 // eindeutige ID
-const ComponentTypeId CompTrigger::COMPONENT_TYPE_ID = "CompTrigger";
+const ComponentTypeId& CompTrigger::getTypeIdStatic()
+{
+    static ComponentTypeId* typeId = new ComponentTypeId("CompTrigger");
+    return *typeId;
+}
 
 CompTrigger::CompTrigger(const ComponentIdType& id, World& gameWorld, GameEvents& gameEvents)
 : Component(id, gameEvents), m_gameWorld (gameWorld), m_fired ( false )

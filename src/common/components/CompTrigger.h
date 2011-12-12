@@ -30,8 +30,8 @@ class CompTrigger : public Component
 public:
     CompTrigger(const ComponentIdType& id, World& gameWorld, GameEvents& gameEvents);
 
-    const ComponentTypeId& getTypeId() const { return COMPONENT_TYPE_ID; }
-    static const ComponentTypeId COMPONENT_TYPE_ID; // eindeutige ID für diese Komponentenart (gleich wie Klassennamen, siehe CompCollectable.cpp)
+    const ComponentTypeId& getTypeId() const { return getTypeIdStatic(); }
+    static const ComponentTypeId& getTypeIdStatic(); // eindeutige ID für diese Komponentenart (gleich wie Klassennamen, siehe CompCollectable.cpp)
 
     void addCondition( boost::shared_ptr<Condition> );
     void addEffect( boost::shared_ptr<Effect> );

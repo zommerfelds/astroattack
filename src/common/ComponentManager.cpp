@@ -38,9 +38,9 @@ namespace
 
 // components that have to to be ordered must be placed here
 ComponentIdType order[] = {
-        CompShape::COMPONENT_TYPE_ID,
-        CompPosition::COMPONENT_TYPE_ID,
-        CompPhysics::COMPONENT_TYPE_ID
+    CompShape::getTypeIdStatic(),
+    CompPosition::getTypeIdStatic(),
+    CompPhysics::getTypeIdStatic()
 };
 
 const int numOrdered = 3;//sizeof(order) / sizeof (order[0]);

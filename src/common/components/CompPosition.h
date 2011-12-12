@@ -24,8 +24,8 @@ public:
     CompPosition(const ComponentIdType& id, GameEvents& gameEvents);
 
     // Base component methods
-    const ComponentTypeId& getTypeId() const { return COMPONENT_TYPE_ID; }
-    static const ComponentTypeId COMPONENT_TYPE_ID;
+    const ComponentTypeId& getTypeId() const { return getTypeIdStatic(); }
+    static const ComponentTypeId& getTypeIdStatic();
 
     // =========== Getters ==========
     Vector2D getDrawingPosition() const; // get current drawing (smooth) position. If a CampPhysics exist, it gets the position from there.

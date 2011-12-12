@@ -246,6 +246,8 @@ void GameApp::run()
     if (!m_startGame)
         return;
     init();
+    //deInit();
+    //init(); // TODO this doesn't work, is it supposed to work?
     mainLoop();
     deInit();
 }

@@ -73,13 +73,13 @@ private:
 template <typename CompType>
 CompType* ComponentManager::getComponent(const EntityIdType& entId, const ComponentIdType& compId)
 {
-   return static_cast<CompType*>(getComponent(entId, CompType::COMPONENT_TYPE_ID, compId));
+   return static_cast<CompType*>(getComponent(entId, CompType::getTypeIdStatic(), compId));
 }
 
 template <typename CompType>
 const CompType* ComponentManager::getComponent(const EntityIdType& entId, const ComponentIdType& compId) const
 {
-   return static_cast<const CompType*>(getComponent(entId, CompType::COMPONENT_TYPE_ID, compId));
+   return static_cast<const CompType*>(getComponent(entId, CompType::getTypeIdStatic(), compId));
 }
 
 template <typename CompType>
@@ -90,7 +90,7 @@ std::vector<CompType*> ComponentManager::getComponents(const EntityIdType& id)
     EntityMap::iterator eit = m_entities.find(id);
     if (eit == m_entities.end())
         return ret;
-    std::pair<ComponentMap::iterator, ComponentMap::iterator> equalRange = eit->second.equal_range(CompType::COMPONENT_TYPE_ID);
+    std::pair<ComponentMap::iterator, ComponentMap::iterator> equalRange = eit->second.equal_range(CompType::getTypeIdStatic());
 
     for (ComponentMap::iterator it = equalRange.first; it != equalRange.second; ++it )
         ret.push_back( static_cast<CompType*>(it->second.get()) );
@@ -105,7 +105,7 @@ std::vector<const CompType*> ComponentManager::getComponents(const EntityIdType&
     EntityMap::const_iterator eit = m_entities.find(id);
     if (eit == m_entities.end())
         return ret;
-    std::pair<ComponentMap::const_iterator, ComponentMap::const_iterator> equalRange = eit->second.equal_range(CompType::COMPONENT_TYPE_ID);
+    std::pair<ComponentMap::const_iterator, ComponentMap::const_iterator> equalRange = eit->second.equal_range(CompType::getTypeIdStatic());
 
     for (ComponentMap::const_iterator it = equalRange.first; it != equalRange.second; ++it )
         ret.push_back( static_cast<CompType*>(it->second.get()) );

@@ -25,14 +25,14 @@ public:
     CompShape(const ComponentIdType& id, GameEvents& gameEvents);
     virtual ~CompShape() {}
 
-    const ComponentTypeId& getTypeId() const { return COMPONENT_TYPE_ID; }
+    const ComponentTypeId& getTypeId() const { return getTypeIdStatic(); }
 
     virtual boost::shared_ptr<b2Shape> toB2Shape() const = 0;
 
     enum Type { Polygon, Circle };
     virtual Type getType() const = 0;
 
-    static const ComponentTypeId COMPONENT_TYPE_ID;
+    static const ComponentTypeId& getTypeIdStatic();
 };
 
 //--------------------------------------------//

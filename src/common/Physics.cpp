@@ -154,17 +154,17 @@ void PhysicsSubSystem::calculateSmoothPositions(float accumulator)
 
 void PhysicsSubSystem::onRegisterComp(Component& component)
 {
-    if (component.getTypeId() == CompPhysics::COMPONENT_TYPE_ID)
+    if (component.getTypeId() == CompPhysics::getTypeIdStatic())
         onRegisterCompPhys(static_cast<CompPhysics&>(component));
-    else if (component.getTypeId() == CompGravField::COMPONENT_TYPE_ID)
+    else if (component.getTypeId() == CompGravField::getTypeIdStatic())
         onRegisterCompGrav(static_cast<CompGravField&>(component));
 }
 
 void PhysicsSubSystem::onUnregisterComp(Component& component)
 {
-    if (component.getTypeId() == CompPhysics::COMPONENT_TYPE_ID)
+    if (component.getTypeId() == CompPhysics::getTypeIdStatic())
         onUnregisterCompPhys(static_cast<CompPhysics&>(component));
-    else if (component.getTypeId() == CompGravField::COMPONENT_TYPE_ID)
+    else if (component.getTypeId() == CompGravField::getTypeIdStatic())
         onUnregisterCompGrav(static_cast<CompGravField&>(component));
 }
 

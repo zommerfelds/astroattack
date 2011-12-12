@@ -24,8 +24,8 @@ class CompVisualAnimation : public Component
 public:
     CompVisualAnimation(const ComponentIdType& id, GameEvents& gameEvents);
 
-    const ComponentTypeId& getTypeId() const { return COMPONENT_TYPE_ID; }
-    static const ComponentTypeId COMPONENT_TYPE_ID;
+    const ComponentTypeId& getTypeId() const { return getTypeIdStatic(); }
+    static const ComponentTypeId& getTypeIdStatic();
 
     // Welche Textur muss rerade gezeichnet werden? (Eine Animation besteht aus mehreren Texturen)
     TextureId getCurrentTexture() const;

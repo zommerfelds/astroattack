@@ -41,7 +41,7 @@ PlayerController::PlayerController(GameEvents& gameEvents, const InputSubSystem&
 
 void PlayerController::onRegisterComponent(Component& component)
 {
-    if (component.getTypeId() == CompPlayerController::COMPONENT_TYPE_ID)
+    if (component.getTypeId() == CompPlayerController::getTypeIdStatic())
         m_compPlayerContrl = static_cast<CompPlayerController*>(&component);
 }
 

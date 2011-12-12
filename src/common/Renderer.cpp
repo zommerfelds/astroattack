@@ -674,21 +674,21 @@ void RenderSubSystem::drawFPS(int fps)
 
 void RenderSubSystem::onRegisterComponent(Component& component)
 {
-    if (component.getTypeId() == CompVisualTexture::COMPONENT_TYPE_ID)
+    if (component.getTypeId() == CompVisualTexture::getTypeIdStatic())
         m_visualTextureComps.insert(&static_cast<CompVisualTexture&>(component));
-    else if (component.getTypeId() == CompVisualAnimation::COMPONENT_TYPE_ID)
+    else if (component.getTypeId() == CompVisualAnimation::getTypeIdStatic())
         m_visualAnimComps.insert(&static_cast<CompVisualAnimation&>(component));
-    else if (component.getTypeId() == CompVisualMessage::COMPONENT_TYPE_ID)
+    else if (component.getTypeId() == CompVisualMessage::getTypeIdStatic())
         m_visualMsgComps.insert(&static_cast<CompVisualMessage&>(component));
 }
 
 void RenderSubSystem::onUnregisterComponent(Component& component)
 {
-    if (component.getTypeId() == CompVisualTexture::COMPONENT_TYPE_ID)
+    if (component.getTypeId() == CompVisualTexture::getTypeIdStatic())
         m_visualTextureComps.erase(&static_cast<CompVisualTexture&>(component));
-    else if (component.getTypeId() == CompVisualAnimation::COMPONENT_TYPE_ID)
+    else if (component.getTypeId() == CompVisualAnimation::getTypeIdStatic())
         m_visualAnimComps.erase(&static_cast<CompVisualAnimation&>(component));
-    else if (component.getTypeId() == CompVisualMessage::COMPONENT_TYPE_ID)
+    else if (component.getTypeId() == CompVisualMessage::getTypeIdStatic())
         m_visualMsgComps.erase(&static_cast<CompVisualMessage&>(component));
 }
 

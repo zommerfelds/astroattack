@@ -12,7 +12,11 @@
 #include <boost/property_tree/ptree.hpp>
 
 // eindeutige ID
-const ComponentTypeId CompPosition::COMPONENT_TYPE_ID = "CompPosition";
+const ComponentTypeId& CompPosition::getTypeIdStatic()
+{
+    static ComponentTypeId* typeId = new ComponentTypeId("CompPosition");
+    return *typeId;
+}
 
 CompPosition::CompPosition(const ComponentIdType& id, GameEvents& gameEvents)
 : Component(id, gameEvents),

@@ -10,7 +10,11 @@
 #include <boost/property_tree/ptree.hpp>
 
 // eindeutige ID
-const ComponentTypeId CompGravField::COMPONENT_TYPE_ID = "CompGravField";
+const ComponentTypeId& CompGravField::getTypeIdStatic()
+{
+    static ComponentTypeId* typeId = new ComponentTypeId("CompGravField");
+    return *typeId;
+}
 
 // Konstruktor
 CompGravField::CompGravField(const ComponentIdType& id, GameEvents& gameEvents)

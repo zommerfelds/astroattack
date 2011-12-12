@@ -28,8 +28,8 @@ class CompVisualTexture : public Component
 public:
     CompVisualTexture(const ComponentIdType& id, GameEvents& gameEvents, TextureId texId="");
 
-    const ComponentTypeId& getTypeId() const { return COMPONENT_TYPE_ID; }
-    static const ComponentTypeId COMPONENT_TYPE_ID;
+    const ComponentTypeId& getTypeId() const { return getTypeIdStatic(); }
+    static const ComponentTypeId& getTypeIdStatic();
 
     // Textur setzen
     void setTexture( TextureId texId ) { m_textureId = texId; }

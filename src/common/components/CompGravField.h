@@ -23,8 +23,8 @@ public:
 
     CompGravField(const ComponentIdType& id, GameEvents& gameEvents);
 
-    const ComponentTypeId& getTypeId() const { return COMPONENT_TYPE_ID; }
-    static const ComponentTypeId COMPONENT_TYPE_ID; // eindeutige ID für diese Komponentenart (gleich wie Klassennamen, siehe CompGravField.cpp)
+    const ComponentTypeId& getTypeId() const { return getTypeIdStatic(); }
+    static const ComponentTypeId& getTypeIdStatic(); // eindeutige ID für diese Komponentenart (gleich wie Klassennamen, siehe CompGravField.cpp)
 
     // Setters
     void setGravType( GravType t ) { m_gravType = t; }

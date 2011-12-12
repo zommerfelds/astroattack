@@ -17,7 +17,11 @@
 using boost::property_tree::ptree;
 
 // eindeutige ID
-const ComponentTypeId CompShape::COMPONENT_TYPE_ID = "CompShape";
+const ComponentTypeId& CompShape::getTypeIdStatic()
+{
+    static ComponentTypeId* typeId = new ComponentTypeId("CompShape");
+    return *typeId;
+}
 
 CompShape::CompShape(const ComponentIdType& id, GameEvents& gameEvents)
 : Component(id, gameEvents)

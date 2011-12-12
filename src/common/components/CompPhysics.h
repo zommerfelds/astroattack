@@ -115,7 +115,7 @@ class CompPhysics : public Component
 public:
     CompPhysics(const ComponentIdType& id, GameEvents& gameEvents, const BodyDef& rBodyDef = BodyDef());
 
-    const ComponentTypeId& getTypeId() const { return COMPONENT_TYPE_ID; }
+    const ComponentTypeId& getTypeId() const { return getTypeIdStatic(); }
 
     void setBodyDef(const BodyDef& rBodyDef) { m_bodyDef = rBodyDef; }
 
@@ -163,7 +163,7 @@ public:
     void loadFromPropertyTree(const boost::property_tree::ptree& propTree);
     void writeToPropertyTree(boost::property_tree::ptree& propTree) const;
 
-    static const ComponentTypeId COMPONENT_TYPE_ID; // eindeutige ID für diese Komponentenart (gleich wie Klassennamen, siehe CompPhysics.cpp)
+    static const ComponentTypeId& getTypeIdStatic(); // eindeutige ID für diese Komponentenart (gleich wie Klassennamen, siehe CompPhysics.cpp)
 
 private:
 

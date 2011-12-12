@@ -64,9 +64,8 @@ void PlayingState::init()        // State starten
     }
     catch (DataLoadException& e)
     {
-        // TODO is this a good thing to do?
-        // TODO show error
-        log(Info) << "Error loading file : " << e.getMsg() << "\n";
+        // TODO show error in game
+        log(Error) << "Error loading file : " << e.getMsg() << "\n";
         boost::shared_ptr<MainMenuState> menuState (new MainMenuState(getSubSystems()));
         getSubSystems().stateManager.changeState(menuState);
         return;

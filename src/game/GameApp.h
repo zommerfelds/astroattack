@@ -70,7 +70,7 @@ private:
     bool m_quit; // Ob Programm beenden werden soll
     void onQuit(bool restart = false); // Spiel beenden (Wird von einem Event aufgerufen)
 
-    EventConnection m_eventConnection; // TODO: scoped_ptr
+    EventConnection m_eventConnection;
 
     void updateGame();
     void handleSdlQuitEvents( SDL_Event& );

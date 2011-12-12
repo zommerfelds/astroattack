@@ -18,7 +18,11 @@
 using boost::property_tree::ptree;
 
 // ID of this component
-const ComponentTypeId CompPlayerController::COMPONENT_TYPE_ID = "CompPlayerController";
+const ComponentTypeId& CompPlayerController::getTypeIdStatic()
+{
+    static ComponentTypeId* typeId = new ComponentTypeId("CompPlayerController");
+    return *typeId;
+}
 
 // Konstruktor der Komponente
 CompPlayerController::CompPlayerController(const ComponentIdType& id, GameEvents& gameEvents, std::map<const std::string, int>::iterator itJetPackVar) :

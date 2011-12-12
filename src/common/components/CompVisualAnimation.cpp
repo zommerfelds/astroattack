@@ -14,7 +14,11 @@
 #include <boost/property_tree/ptree.hpp>
 
 // einduetige ID
-const ComponentTypeId CompVisualAnimation::COMPONENT_TYPE_ID = "CompVisualAnimation";
+const ComponentTypeId& CompVisualAnimation::getTypeIdStatic()
+{
+    static ComponentTypeId* typeId = new ComponentTypeId("CompVisualAnimation");
+    return *typeId;
+}
 
 CompVisualAnimation::CompVisualAnimation(const ComponentIdType& id, GameEvents& gameEvents) :
   Component(id, gameEvents),

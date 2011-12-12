@@ -20,8 +20,8 @@ class CompVisualMessage : public Component
 public:
     CompVisualMessage(const ComponentIdType& id, GameEvents& gameEvents, const std::string& text="");
 
-    const ComponentTypeId& getTypeId() const { return COMPONENT_TYPE_ID; }
-    static const ComponentTypeId COMPONENT_TYPE_ID; // eindeutige ID für diese Komponentenart (gleich wie Klassennamen, siehe CompCollectable.cpp)
+    const ComponentTypeId& getTypeId() const { return getTypeIdStatic(); }
+    static const ComponentTypeId& getTypeIdStatic(); // eindeutige ID für diese Komponentenart (gleich wie Klassennamen, siehe CompCollectable.cpp)
 
     void setMsg(const std::string&);
     const std::string& getMsg() const { return m_text; }

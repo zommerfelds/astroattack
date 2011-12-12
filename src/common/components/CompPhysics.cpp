@@ -17,7 +17,11 @@
 using boost::property_tree::ptree;
 
 // eindeutige ID
-const ComponentTypeId CompPhysics::COMPONENT_TYPE_ID = "CompPhysics";
+const ComponentTypeId& CompPhysics::getTypeIdStatic()
+{
+    static ComponentTypeId* typeId = new ComponentTypeId("CompPhysics");
+    return *typeId;
+}
 
 // Konstruktor
 CompPhysics::CompPhysics(const ComponentIdType& id, GameEvents& gameEvents, const BodyDef& rBodyDef) :

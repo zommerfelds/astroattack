@@ -63,14 +63,14 @@ test_src = \
 AstroAttack_SOURCES = $(common_src) $(game_src) $(pugi_src)
 
 # === AAEditor ===
-AAEditor_CXXFLAGS = `wx-config --cxxflags`
-AAEditor_LDFLAGS = `wx-config --libs --gl-libs`
+AAEditor_CXXFLAGS = @WX_CXXFLAGS@
+AAEditor_LDADD = @WX_LIBS@ @WX_GL_LIBS@
 AAEditor_SOURCES = $(common_src) $(editor_src)
 
 # === AATest ===
 if ENABLETEST
 bin_PROGRAMS += AATest
 AATest_SOURCES = $(common_src) $(test_src)
-#AATest_LDFLAGS = `gtest-config --libs`
-AATest_LDFLAGS = -lpthread -lgtest
+#AATest_LDADD = `gtest-config --libs`
+AATest_LDADD = -lpthread -lgtest
 endif
