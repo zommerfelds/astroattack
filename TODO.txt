@@ -22,6 +22,7 @@
 
 * Low priority *
 
+- Think about fonts (FontW_b?)
 - Use boost::signals instead of Event.h (really?)
 - Don't use GL_RGBA if not needed (Texture.cpp)
 - Main menu performance is lower than game?
@@ -49,6 +50,8 @@
 
 
 DONE:
+# this is history, see version system #
+- Font resolution independent
 - Aspect ration instead of wide-screen mode
 - improve logger
 - Set all files to EOL style LF in SVN

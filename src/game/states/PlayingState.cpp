@@ -65,7 +65,7 @@ void PlayingState::init()        // State starten
     catch (DataLoadException& e)
     {
         // TODO show error in game
-        log(Error) << "Error loading file : " << e.getMsg() << "\n";
+        log(Error) << e.getMsg() << "\n";
         boost::shared_ptr<MainMenuState> menuState (new MainMenuState(getSubSystems()));
         getSubSystems().stateManager.changeState(menuState);
         return;

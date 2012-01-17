@@ -301,7 +301,7 @@ void MainMenuState::draw( float /*accumulator*/ )        // Spiel zeichnen
     }
 
     // testing
-    //pRenderer->DrawString( "Hallo", "FontW_b", 0.0f, 1.0f/*, AlignLeft, AlignTop*/ );
+    //renderer.drawString("Hallo", "FontW_b", 0.0f, 3.0f, AlignLeft, AlignBottom);
 
     getSubSystems().gui.draw();
 

@@ -77,7 +77,7 @@ void TextureManager::loadTexture( const std::string& fileName, TextureId id, con
 {
     if ( m_textures.count( id )==1 )
     {
-        log(Warning) << "*** Loading texture: Texture with ID \"" << id << "\" already exists! (new texture was not loaded) ***\n";
+        log(Warning) << "Loading texture: ID \"" << id << "\" already exists, new texture was not loaded\n";
         return;
     }
     try
@@ -253,7 +253,7 @@ void AnimationManager::loadAnimation(const std::string& fileName, AnimationId id
 {
     if ( m_animInfoMap.count( id )==1 )
     {
-        log(Warning) << "Loading animation: Animation with ID '" << id << "' exists already! (new animation was not loaded)\n";
+        log(Warning) << "Loading animation: ID '" << id << "' exists already, new animation was not loaded\n";
         return;
     }
 

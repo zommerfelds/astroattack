@@ -100,10 +100,10 @@ void WidgetButton::onMouseStateChanged( MouseState newState )
 
 void WidgetButton::draw( RenderSubSystem* pRenderer )
 {
-    /*float vertexCoord[8] = { GetArea().x1*4.0f, GetArea().y1*3.0f,
-                             GetArea().x1*4.0f, GetArea().y2*3.0f,
-                             GetArea().x2*4.0f, GetArea().y2*3.0f,
-                             GetArea().x2*4.0f, GetArea().y1*3.0f };
-    pRenderer->DrawColorQuad( vertexCoord, 0.1f, 0.9f, 0.3f, (GetMouseState()==MouseOver||GetMouseState()==PressedL)?0.3f:0.0f, true );*/
+    float vertexCoord[8] = { getArea().x1*4.0f, getArea().y1*3.0f,
+                             getArea().x1*4.0f, getArea().y2*3.0f,
+                             getArea().x2*4.0f, getArea().y2*3.0f,
+                             getArea().x2*4.0f, getArea().y1*3.0f };
+    pRenderer->drawColorQuad( vertexCoord, 0.1f, 0.9f, 0.3f, (getMouseState()==MouseOver||getMouseState()==PressedL)?0.3f:0.0f, true );
     pRenderer->drawString( m_caption, "FontW_m", (getArea().x1+getArea().x2)*2.0f /* /2*4 */, (getArea().y1+getArea().y2)*1.5f /* /2*3 */, AlignCenter, AlignCenter, 1.0f, 1.0f, 1.0f, (getMouseState()==MouseOver||getMouseState()==PressedL)?1.0f:0.5f );
 }

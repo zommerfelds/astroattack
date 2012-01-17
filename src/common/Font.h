@@ -39,8 +39,18 @@ public:
 
     typedef std::map< FontId,boost::shared_ptr<FTFont> > FontMap;
 
-    void loadFont( const std::string& fileName, int size, FontId id );
-    void freeFont( FontId id );
+    /**
+     * This method loads a font at a fix pixel size. (appears smaller in bigger resolutions)
+     * @param size Size of the font in pixels
+     */
+    void loadFontFix(const std::string& fileName, unsigned int size, const FontId& id);
+    /**
+     * This method loads a font which size is independent of screen resolution
+     * @param size Size of the font in GUI coordinates
+     */
+    void loadFont(const std::string& fileName, float size, const FontId& id);
+
+    void freeFont(const FontId&);
 
     // DrawString
     // x/y: upper left position of text box
@@ -50,6 +60,7 @@ public:
     void getDimensions(const std::string &text, const FontId &fontId, float& w, float& h) const;
 
 private:
+
     void getDetailedDimensions(const std::string &text, FTFont& font, float* totalWidth, float* totalHeight, std::list<std::string>* lines,
             std::list<float>* lineWidths, float* lineSpacing) const;
     FontMap m_fonts; // Texturen

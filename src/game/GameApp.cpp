@@ -285,23 +285,23 @@ void GameApp::mainLoop()
     while ( m_quit == false )
     {
         currentTimeMsecs = SDL_GetTicks();  // Aktualisieren der Zeit
-        calcFPS( currentTimeMsecs );        // Berechnet die Aktualisierungsrate
+        calcFPS(currentTimeMsecs);        // Berechnet die Aktualisierungsrate
 
         // Zeiten berechnen
-        deltaTime = ( currentTimeMsecs-lastTimeMsecs ) * 0.001f; // Zeit seit letztem Frame in Sekunden berechnen
+        deltaTime = (currentTimeMsecs - lastTimeMsecs) * 0.001f; // Zeit seit letztem Frame in Sekunden berechnen
         lastTimeMsecs = currentTimeMsecs; // Die momentane Zeit in last_time_msecs speichern
         
         bool hasFocus = ((SDL_GetAppState() & SDL_APPINPUTFOCUS) != 0);
         if (hasFocus)
         {
-            FRAME( deltaTime ); // Frameabhängige Arbeiten hier durchführen
+            FRAME(deltaTime); // Frameabhängige Arbeiten hier durchführen
 
             timeAccumulator += deltaTime; // time accumulator
 
             const float cMaxTimeAccumulator = 0.5f;
 
             // If the game was in a loading state, the accumulator is too big or the windows hanst focus, reset the accumulator
-            if ( m_subSystems.isLoading || deltaTime > cMaxTimeAccumulator )
+            if (m_subSystems.isLoading || deltaTime > cMaxTimeAccumulator)
             {
                 if (!m_subSystems.isLoading)
                     std::cerr << "time accumulator too big, skipping updates" << std::endl; // TODO: put in log
@@ -313,7 +313,7 @@ void GameApp::mainLoop()
 
             const float slowMotionDelay = 0.0f; // mainly for testing purpose
 
-            while ( timeAccumulator >= cPhysicsTimeStep + slowMotionDelay )
+            while (timeAccumulator >= cPhysicsTimeStep + slowMotionDelay)
             {
                 UPDATE(); // Hier wird das gesammte Spiel aktualisiert (Physik und Spiellogik)
                 timeAccumulator -= cPhysicsTimeStep + slowMotionDelay;
@@ -323,12 +323,12 @@ void GameApp::mainLoop()
                 break; // don't redraw the screen if we are quitting
 
             //m_subSystems.renderer.clearScreen();
-            DRAW( timeAccumulator/(cPhysicsTimeStep + slowMotionDelay)*cPhysicsTimeStep ); // Spiel zeichnen
+            DRAW(timeAccumulator/(cPhysicsTimeStep + slowMotionDelay) * cPhysicsTimeStep); // Spiel zeichnen
             m_subSystems.renderer.drawFPS(m_fps);
             m_subSystems.renderer.flipBuffer();
         }
 
-        handleSdlQuitEvents( sdlWindowEvent ); // Sehen ob der Benutzer das fenster schliessen will.
+        handleSdlQuitEvents(sdlWindowEvent); // Sehen ob der Benutzer das fenster schliessen will.
     }
 
     ////////////////////////////////////////////////////////
@@ -356,28 +356,26 @@ void GameApp::handleSdlQuitEvents(SDL_Event& sdlEvent)
         {
         // Wenn eine Taste gedrück wurde
         case SDL_KEYDOWN:
+            switch (sdlEvent.key.keysym.sym)
             {
-                switch (sdlEvent.key.keysym.sym)
+            case SDLK_ESCAPE: // ESC gedrückt, quit -> true
+                if (m_subSystems.stateManager.getCurrentState()->getId() == "MainMenuState")
                 {
-                case SDLK_ESCAPE: // ESC gedrückt, quit -> true
-                    if (m_subSystems.stateManager.getCurrentState()->getId() == "MainMenuState")
-                    {
-                        onQuit();
-                    }
-                    else
-                    {
-                        boost::shared_ptr<MainMenuState> menuState = boost::shared_ptr<MainMenuState>(new MainMenuState(m_subSystems));
-                        m_subSystems.stateManager.changeState(menuState);
-                    }
-                    break;
-                case SDLK_F4:
-                    if (sdlEvent.key.keysym.mod & KMOD_LALT) // ALT-F4
-                        onQuit();
-                    break;
-
-                default:
-                    break;
+                    onQuit();
                 }
+                else
+                {
+                    boost::shared_ptr<MainMenuState> menuState = boost::shared_ptr<MainMenuState>(new MainMenuState(m_subSystems));
+                    m_subSystems.stateManager.changeState(menuState);
+                }
+                break;
+            case SDLK_F4:
+                if (sdlEvent.key.keysym.mod & KMOD_LALT) // ALT-F4
+                    onQuit();
+                break;
+
+            default:
+                break;
             }
             break;
 
@@ -439,11 +437,11 @@ void GameApp::parseArguments( const std::vector<std::string>& args )
             if ( !(args[i]=="-h" || args[i]=="--help") )
                 outputStr = "Argument not recognized: " + args[i] + "\n";
             outputStr += "Usage: " GAME_NAME " [options]\n"
-                        " -v, --version          :  show version\n"
-                        " -h, --help             :  show help\n"
-                        " -l, --level LEVELFILE  :  directly load a level file at startup\n"
-                        " -f, --full-screen      :  start in full screen mode\n"
-                        "See README.txt for more info.\n";
+                         " -v, --version          :  show version\n"
+                         " -h, --help             :  show help\n"
+                         " -l, --level LEVELFILE  :  directly load a level file at startup\n"
+                         " -f, --full-screen      :  start in full screen mode\n"
+                         "See README.txt for more info.\n";
             m_startGame = false;
             break;
         }

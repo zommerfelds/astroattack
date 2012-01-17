@@ -304,7 +304,7 @@ void SlideShowState::draw( float /*accumulator*/ )        // Spiel zeichnen
         renderer.drawTexturedQuad( texCoord, vertexCoord, m_slideShow.slides[m_currentSlide].imageFileName, true );
     }
     // Text zeichnen
-    renderer.drawString( m_slideShow.slides[m_currentSlide].textPages[m_currentTextPage].substr(0,m_dispCharCount), "FontW_b", 0.3f, 2.55f );
+    renderer.drawString( m_slideShow.slides[m_currentSlide].textPages[m_currentTextPage].substr(0,m_dispCharCount), "FontW_m", 0.3f, 2.55f );
     
     // Farbe über dem Text (nur Test)
     /*{

@@ -59,7 +59,6 @@ void CompVisualTexture::loadFromPropertyTree(const ptree& propTree)
             }
             //if (edgeNum >= 0 && edgeNum < CompShapePolygon::cMaxVertices)
             m_edgeTexId[edgeNum] = texName;
-            // TODO: disp error
         }
     }
 }

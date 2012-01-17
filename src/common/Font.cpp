@@ -6,6 +6,7 @@
 
 #include "Font.h"
 
+#include "Logger.h"
 #include "Renderer.h"
 
 #include <utility>
@@ -17,26 +18,34 @@ FontManager::FontManager(const RenderSubSystem& renderer)
 : m_renderer (renderer)
 {}
 
-// .ttf Datei in in OpenGL Texturen laden laden
-void FontManager::loadFont( const std::string& fileName, int size, FontId id )
+void FontManager::loadFont(const std::string& fileName, float size, const FontId& id)
 {
-    if ( m_fonts.find(id) != m_fonts.end() )
+    loadFontFix(fileName, (unsigned int)(size / 3.0f * m_renderer.getViewPortHeight()), id);
+}
+
+// .ttf Datei in OpenGL Texturen laden
+void FontManager::loadFontFix(const std::string& fileName, unsigned int size, const FontId& id)
+{
+    if ( m_fonts.count( id )==1 )
+    {
+        log(Warning) << "Loading font: ID '" << id << "' exists already, new font was not loaded\n";
         return;
+    }
 
     // Create a pixmap font from a TrueType file.
-    boost::shared_ptr<FTTextureFont> font(boost::make_shared<FTTextureFont>(fileName.c_str()) );
+    boost::shared_ptr<FTTextureFont> font = boost::make_shared<FTTextureFont>(fileName.c_str());
 
     // If something went wrong, return
     if(font->Error())
         return;
 
-    // Set the font size and render a small text.
+    // textures are generated now
     font->FaceSize(size);
 
     m_fonts.insert( std::make_pair(id, font) );
 }
 
-void FontManager::freeFont( FontId id )
+void FontManager::freeFont(const FontId& id)
 {
     FontMap::iterator c_it = m_fonts.find( id );
     if ( c_it != m_fonts.end() )
@@ -48,7 +57,7 @@ void FontManager::drawString(const std::string &str, const FontId &fontId, float
     FontMap::iterator font_it = m_fonts.find( fontId );
     assert ( font_it != m_fonts.end() );
 
-    // convert to FTGL coordinates
+    // convert GUI to FTGL coordinates
     x = x / 4.0f * m_renderer.getViewPortWidth();
     y = (1.0f - y / 3.0f) * m_renderer.getViewPortHeight();
 

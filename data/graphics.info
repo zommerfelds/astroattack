@@ -278,15 +278,15 @@ animation {
 font {
     file "data/Fonts/font.ttf"
     id "FontW_b"
-    size 35
+    size 0.18
 }
 font {
     file "data/Fonts/font.ttf"
     id "FontW_m"
-    size 25
+    size 0.09
 }
 font {
     file "data/Fonts/font.ttf"
     id "FontW_s"
-    size 18
+    size 0.07
 }

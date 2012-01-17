@@ -81,11 +81,12 @@ void RenderSubSystem::deInit()
 {
     if (m_isInit)
     {
-        if (m_currentMatrix != World) {
+        /*if (m_currentMatrix != World) {
             glMatrixMode( GL_PROJECTION );
             glPopMatrix();
             glMatrixMode( GL_MODELVIEW );
-        }
+        }*/
+        setMatrix(World);
         m_isInit = false;
     }
 }

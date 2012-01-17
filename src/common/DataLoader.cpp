@@ -121,7 +121,7 @@ void DataLoader::loadToWorld(const std::string& fileName, World& gameWorld, Game
     }
     catch (boost::property_tree::ptree_error& e)
     {
-        throw DataLoadException(std::string("PropertyTree error: ") + e.what());
+        throw DataLoadException(std::string("reading file '" + fileName + "': ") + e.what());
     }
 }
 
@@ -242,7 +242,7 @@ ResourceIds DataLoader::loadGraphics(const std::string& fileName, TextureManager
 
                 std::string name = fontPropTree.get<std::string>("file");
                 std::string id = fontPropTree.get<std::string>("id");
-                int size = fontPropTree.get<int>("size");
+                float size = fontPropTree.get<float>("size");
 
                 pFontManager->loadFont(name, size, id);
                 loadedResources.fonts.insert(id);
@@ -251,7 +251,7 @@ ResourceIds DataLoader::loadGraphics(const std::string& fileName, TextureManager
     }
     catch (boost::property_tree::ptree_error& e)
     {
-        throw DataLoadException(std::string("PropertyTree error parsing file '" + fileName + "': ") + e.what());
+        throw DataLoadException(std::string("reading file '" + fileName + "': ") + e.what());
     }
     log(Info) << "[ Done ]\n\n";
     return loadedResources;
