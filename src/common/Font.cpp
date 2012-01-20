@@ -108,10 +108,12 @@ void FontManager::drawString(const std::string &str, const FontId &fontId, float
 
 void FontManager::getDimensions(const std::string &text, const FontId &fontId, float& w, float& h) const
 {
-
     FontMap::const_iterator font_it = m_fonts.find( fontId );
     if ( font_it == m_fonts.end() )
-        return; // TODO: log error
+    {
+        log(Warning) << "FontManager::getDimension: font '" << fontId << "'\n";
+        return;
+    }
 
     getDetailedDimensions(text, *font_it->second.get(), &w, &h, NULL, NULL, NULL);
     w = w/m_renderer.getViewPortWidth()*4.0f;

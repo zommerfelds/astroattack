@@ -34,7 +34,6 @@ public:
     void writeToPropertyTree(boost::property_tree::ptree& propTree) const;
 
 private:
-
     friend class PlayerController;
 
     void setLowFriction( CompPhysics* playerCompPhysics );
@@ -50,6 +49,7 @@ private:
     bool m_playerCouldWalkLastUpdate; // ob der Spieler in der letzte überprüfung laufen konnte
     int m_rechargeTime;               // wie lange hat der Spieler schon den Racketenrucksack aufgeladen?
     int m_walkingTime;                // number of updates the player is walking (pressing walk key on ground)
+    int m_nonWalkingTime;             // number of updates since the player stopped to walk
     Vector2D m_rotationPoint;
 };
 

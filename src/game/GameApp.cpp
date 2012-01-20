@@ -304,7 +304,7 @@ void GameApp::mainLoop()
             if (m_subSystems.isLoading || deltaTime > cMaxTimeAccumulator)
             {
                 if (!m_subSystems.isLoading)
-                    std::cerr << "time accumulator too big, skipping updates" << std::endl; // TODO: put in log
+                    log(Warning) << "Time accumulator too big, skipping updates\n";
 
                 timeAccumulator = 0;
                 m_subSystems.isLoading = false;

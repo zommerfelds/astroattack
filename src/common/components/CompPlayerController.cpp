@@ -98,9 +98,9 @@ void CompPlayerController::updateAnims(bool flyingUp, bool movingOnGround, bool 
             bodyAnim->setState( "Running" );
             bodyAnim->carryOn(); // Wenn Spieler läuft (Laufanimation starten)
         }
-        else if (m_walkingTime!=0)
+        else if (m_walkingTime != 0)
         {
-            if (m_walkingTime<12)
+            if (m_walkingTime < 12) // TODO: magic num
             {
                 bodyAnim->setReverse(true); // jack will take his legs back (not finish his current step)
                 bodyAnim->finish();

@@ -29,6 +29,9 @@ namespace
             a -= 2*cPi;
         return a;
     }
+
+    const int cContinueMovingDelay = 10; // how much time the walking animation will continue normally
+                                         // after the player loses contact to the ground
 }
 
 PlayerController::PlayerController(GameEvents& gameEvents, const InputSubSystem& inputSubSystem)
@@ -200,7 +203,7 @@ void PlayerController::update()
     float hVel = playerCompPhysics->getLinearVelocity().perpDotProd(upVector); // horizontal velocity
 
     // Springen
-    if ( m_inputSubSystem.getKeyState ( Jump ) )
+    if ( m_inputSubSystem.getKeyState( Jump ) )
     {
         // Taste muss erst gerade gedrück werden und nicht schon gedrück sein (und Spielerfigur muss ein Block berühren)
         if ( !m_compPlayerContrl->m_spaceKeyDownLastUpdate && isTouchingSth )
@@ -213,7 +216,7 @@ void PlayerController::update()
             {
                 impulse = upVector*500;
             }
-            else if ( m_inputSubSystem.getKeyState ( Right ) && minAngleR > cPi*2 - cJumpAngle*2 ) // Von Wand rechts abstossen
+            else if ( m_inputSubSystem.getKeyState( Right ) && minAngleR > cPi*2 - cJumpAngle*2 ) // Von Wand rechts abstossen
             {
                 impulse = (upVector*600).rotated(cPi*0.2f);
 
@@ -259,7 +262,7 @@ void PlayerController::update()
                                           // und desto langsamer abhänge hinunterlaufen
 
     // Jetpack nach oben
-    if ( m_inputSubSystem.getKeyState ( Up ) && m_compPlayerContrl->m_itJetPackVar->second > 0 && (m_compPlayerContrl->m_rechargeTime==cMaxRecharge || !isTouchingSth ) )
+    if ( m_inputSubSystem.getKeyState( Up ) && m_compPlayerContrl->m_itJetPackVar->second > 0 && (m_compPlayerContrl->m_rechargeTime==cMaxRecharge || !isTouchingSth ) )
     {
         const float maxVelYJetpack = 12.0f;
         flyingUp = true;
@@ -277,10 +280,12 @@ void PlayerController::update()
         }
     }
 
-    if ( m_inputSubSystem.getKeyState ( Right ) || m_inputSubSystem.getKeyState ( Left ) )
+    if ( m_inputSubSystem.getKeyState( Right ) || m_inputSubSystem.getKeyState( Left ) )
             wantToMoveSidewards = true;
 
     bool isRadialField = (grav->getGravType() == CompGravField::Radial);
+
+    m_compPlayerContrl->m_nonWalkingTime++;
 
     // Falls der Spieler am Boden ist
     if ( canWalkR || canWalkL )
@@ -289,7 +294,7 @@ void PlayerController::update()
         const float maxWalkHVelCircle = 7.0f;  // same but on a circle
         const float smallMass = 10.0f;
         // Laufen nach rechts
-        if ( canWalkR && m_inputSubSystem.getKeyState ( Right ) )
+        if ( canWalkR && m_inputSubSystem.getKeyState( Right ) )
         {
             float maxWalkHVel = maxWalkHVelNormal;
             if (contacts[iContactRight]->otherShape.getType() == CompShape::Circle)
@@ -316,10 +321,11 @@ void PlayerController::update()
                 contacts[iContactRight]->phys.applyForce( -force*cReactionWalk*factor, contacts[iContactRight]->point );
             }
             movingOnGround = true;
+            m_compPlayerContrl->m_nonWalkingTime = 0;
         }
 
         // Laufen nach links
-        if ( canWalkL && m_inputSubSystem.getKeyState ( Left ) )
+        if ( canWalkL && m_inputSubSystem.getKeyState( Left ) )
         {
             float maxVelXWalk = maxWalkHVelNormal;
             if (contacts[iContactLeft]->otherShape.getType() == CompShape::Circle)
@@ -366,7 +372,7 @@ void PlayerController::update()
             maxFlyHVel = maxFlyHVelRadial;
 
         // Jetpack nach rechts
-        if ( m_inputSubSystem.getKeyState ( Right ) )
+        if ( m_inputSubSystem.getKeyState( Right ) )
         {
             if ( usingJetpack && !isTouchingSth )
             {
@@ -384,7 +390,7 @@ void PlayerController::update()
         }
 
         // Jetpack nach links
-        else if ( m_inputSubSystem.getKeyState ( Left ) )
+        else if ( m_inputSubSystem.getKeyState( Left ) )
         {
             if ( usingJetpack && !isTouchingSth )
             {
@@ -401,6 +407,13 @@ void PlayerController::update()
             }
         }
     }
+
+    // this prevents the player to abruptly stop the walking
+    // animation when he lifts off the ground for a short time
+    if (!m_inputSubSystem.getKeyState( Up ) &&
+            (m_inputSubSystem.getKeyState( Left ) || m_inputSubSystem.getKeyState( Right )) &&
+            m_compPlayerContrl->m_nonWalkingTime < cContinueMovingDelay)
+        movingOnGround = true;
 
     float diffAngle = playerCompPhysics->getAngle() + cPi*0.5f - upAngleAbs;
     diffAngle = normalizeAngle(diffAngle);

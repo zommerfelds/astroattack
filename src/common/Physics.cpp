@@ -102,13 +102,19 @@ void PhysicsSubSystem::update()
             if (grav == NULL)
                 continue;
             Vector2D gravPoint = compPhys->m_localGravitationPoint.rotated(pBody->GetAngle());
-            if ( compContact->m_body->GetFixtureList()->TestPoint( pBody->GetPosition() + *gravPoint.to_b2Vec2() ) ) // TODO: handle multiple shapes
+
+            for (b2Fixture* fixture = compContact->m_body->GetFixtureList();
+                 fixture != NULL;
+                 fixture = fixture->GetNext())
             {
-                int pri = grav->getPriority();
-                if ( pri > highestPriority )
+                if ( fixture->TestPoint( pBody->GetPosition() + *gravPoint.to_b2Vec2() ) )
                 {
-                    highestPriority = pri;
-                    gravWithHighestPriority = grav;
+                    int pri = grav->getPriority();
+                    if ( pri > highestPriority )
+                    {
+                        highestPriority = pri;
+                        gravWithHighestPriority = grav;
+                    }
                 }
             }
         }
@@ -190,7 +196,10 @@ void PhysicsSubSystem::onRegisterCompPhys(CompPhysics& compPhys)
 
         CompShape* pCompShape = compPhys.getSiblingComponent<CompShape>(shapeInfo->compId);
         if (!pCompShape)
-            continue; // TODO error
+        {
+            log(Warning) << "Shape component '" << shapeInfo->compId << "' not found. Ignoring shape.\n";
+            continue;
+        }
 
         boost::shared_ptr<b2Shape> pB2Shape = pCompShape->toB2Shape(); // this object has to live till Box2D has made a copy of it in createFixture
         fixtureDef->shape = pB2Shape.get();

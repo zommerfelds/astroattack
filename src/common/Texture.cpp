@@ -155,7 +155,7 @@ void TextureManager::loadTexture( const std::string& fileName, TextureId id, con
                                   GL_UNSIGNED_BYTE,                 // Wie Daten aufgeschriben sind
                                   ilGetData());                     // Die Bilddaten überhaupt (Pixels)
 
-                // TODO: GL_RGBA is not necessarily needed
+                // TODO: GL_RGBA is not necessarily
             }
             else
             {
