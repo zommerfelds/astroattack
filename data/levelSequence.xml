@@ -1,12 +1,12 @@
 <?info version="1.0" encoding="UTF-8"?>
 <root>
-  <slides file="data/Intro/introShow.info" name="Intro">Spielintro</slides>
-  <level file="data/Levels/level1.info" name="Level #1">Das erste Level</level>
-  <level file="data/Levels/level2.info" name="Level #2">Das zweite Level</level>
-  <level file="data/Levels/level3.info" name="Level #3">Das dritte Level</level>
-  <level file="data/Levels/level_visita.info" name="Visita">Bla bla</level>
-  <level file="data/Levels/level_grav.info" name="Grav Test"/>
-  <level file="data/Levels/adjacent_problem.info" name="Adjacent Problem">bla bla</level>
-  <level file="data/Levels/level_new.info" name="level_new">keine Ahnung</level>
-  <level file="data/Levels/level_editor.info" name="editor"/>
+  <slides file="data/Intro/introShow.lvl" name="Intro">Spielintro</slides>
+  <level file="data/Levels/level1.lvl" name="Level #1">Das erste Level</level>
+  <level file="data/Levels/level2.lvl" name="Level #2">Das zweite Level</level>
+  <level file="data/Levels/level3.lvl" name="Level #3">Das dritte Level</level>
+  <level file="data/Levels/level_visita.lvl" name="Visita">Bla bla</level>
+  <level file="data/Levels/level_grav.lvl" name="Grav Test"/>
+  <level file="data/Levels/adjacent_problem.lvl" name="Adjacent Problem">bla bla</level>
+  <level file="data/Levels/level_new.lvl" name="level_new">keine Ahnung</level>
+  <level file="data/Levels/level_editor.lvl" name="editor"/>
 </root>

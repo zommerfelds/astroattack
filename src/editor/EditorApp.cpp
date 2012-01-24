@@ -10,11 +10,8 @@
 #include "Editor.h"
 
 #include "common/GameEvents.h"
-#include "common/World.h"
-#include "common/DataLoader.h"
 #include "common/Physics.h"
 
-#include <iostream>
 #include <boost/property_tree/info_parser.hpp>
 
 IMPLEMENT_APP(EditorApp)
@@ -43,24 +40,14 @@ bool EditorApp::OnInit()
     setUpLoggerFromPropTree(editorConfig);
 
     GameEvents* events = new GameEvents;
-    World* world = new World(*events);
     new PhysicsSubSystem(*events); // need physics system?
 
-    Editor* editor = new Editor(*world);
+    Editor* editor = new Editor(*events);
 
     EditorFrame* frame = new EditorFrame(*editor, *events);
     frame->Show(true);
 
-    try
-    {
-        DataLoader::loadToWorld( "data/player.info", *world, *events );
-        DataLoader::loadToWorld( "data/Levels/level_editor.info", *world, *events );
-    }
-    catch (DataLoadException& e)
-    {
-        std::cerr << "Could not read level: " << e.getMsg() << std::endl;
-        return false;
-    }
+    //editor->loadLevel("data/Levels/level_editor.lvl");
 
     return true;
 }

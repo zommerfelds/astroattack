@@ -49,7 +49,7 @@
 
 
 DONE:
-# this is history, see version system #
+# this is history now, see version system #
 - Font resolution independent
 - Aspect ration instead of wide-screen mode
 - improve logger

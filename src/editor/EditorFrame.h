@@ -31,9 +31,12 @@ class EditorFrame : public EditorFrameBase {
 public:
     EditorFrame(Editor& editor, GameEvents& events);
     ~EditorFrame();
-    void OnClose(wxCloseEvent& evt);
+    void OnClose(wxCloseEvent&);
+    void OnMenuOpen(wxCommandEvent&);
+    void OnMenuExit(wxCommandEvent&);
     
 private:
+    Editor& m_editor;
     GLCanvas m_canvas;
     UpdateTimer m_timer;
 

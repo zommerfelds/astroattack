@@ -39,9 +39,9 @@ class EditorFrameBase : public wxFrame
 	protected:
 		wxStatusBar* m_statusBar1;
 		wxMenuBar* m_menubar1;
-		wxMenu* m_menu1;
-		wxMenu* m_menu2;
-		//wxToolBar* m_toolBar1;
+		wxMenu* m_menuFile;
+		wxMenu* m_menuHelp;
+		wxToolBar* m_toolBar1;
 		wxPanel* m_glpanel;
 		wxPanel* m_panel1;
 		wxPanel* m_panel2;

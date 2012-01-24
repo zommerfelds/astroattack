@@ -7,18 +7,23 @@
 #ifndef EDITOR_H
 #define EDITOR_H
 
+#include <string>
+#include <boost/scoped_ptr.hpp>
+
 class World;
+class GameEvents;
 class Vector2D;
 
 class Editor
 {
 public:
-    Editor(World&);
+    Editor(GameEvents&);
+    void loadLevel(const std::string& fileName);
 
-    void render();
 private:
 
-    World& m_world;
+    GameEvents& m_events;
+    boost::scoped_ptr<World> m_world;
 
     void onLMouseClick(const Vector2D& worldPos);
 

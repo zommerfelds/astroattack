@@ -15,49 +15,49 @@ EditorFrameBase::EditorFrameBase( wxWindow* parent, wxWindowID id, const wxStrin
 	
 	m_statusBar1 = this->CreateStatusBar( 1, wxST_SIZEGRIP, wxID_ANY );
 	m_menubar1 = new wxMenuBar( 0 );
-	m_menu1 = new wxMenu();
-	wxMenuItem* m_menuItem3;
-	m_menuItem3 = new wxMenuItem( m_menu1, wxID_ANY, wxString( wxT("New Level") ) , wxEmptyString, wxITEM_NORMAL );
-	m_menu1->Append( m_menuItem3 );
+	m_menuFile = new wxMenu();
+	wxMenuItem* m_menuItemNew;
+	m_menuItemNew = new wxMenuItem( m_menuFile, wxID_NEW, wxString( wxT("New Level") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menuFile->Append( m_menuItemNew );
 	
-	wxMenuItem* m_menuItem2;
-	m_menuItem2 = new wxMenuItem( m_menu1, wxID_ANY, wxString( wxT("Open") ) , wxEmptyString, wxITEM_NORMAL );
-	m_menu1->Append( m_menuItem2 );
+	wxMenuItem* m_menuItemOpen;
+	m_menuItemOpen = new wxMenuItem( m_menuFile, wxID_OPEN, wxString( wxT("Open") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menuFile->Append( m_menuItemOpen );
 	
-	wxMenuItem* m_menuItem6;
-	m_menuItem6 = new wxMenuItem( m_menu1, wxID_ANY, wxString( wxT("Save") ) , wxEmptyString, wxITEM_NORMAL );
-	m_menu1->Append( m_menuItem6 );
+	wxMenuItem* m_menuItemSave;
+	m_menuItemSave = new wxMenuItem( m_menuFile, wxID_SAVE, wxString( wxT("Save") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menuFile->Append( m_menuItemSave );
 	
-	wxMenuItem* m_menuItem7;
-	m_menuItem7 = new wxMenuItem( m_menu1, wxID_ANY, wxString( wxT("Save As") ) , wxEmptyString, wxITEM_NORMAL );
-	m_menu1->Append( m_menuItem7 );
+	wxMenuItem* m_menuItemSaveAs;
+	m_menuItemSaveAs = new wxMenuItem( m_menuFile, wxID_SAVEAS, wxString( wxT("Save As") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menuFile->Append( m_menuItemSaveAs );
 	
 	wxMenuItem* m_separator1;
-	m_separator1 = m_menu1->AppendSeparator();
+	m_separator1 = m_menuFile->AppendSeparator();
 	
-	wxMenuItem* m_menuItem8;
-	m_menuItem8 = new wxMenuItem( m_menu1, wxID_ANY, wxString( wxT("Exit") ) , wxEmptyString, wxITEM_NORMAL );
-	m_menu1->Append( m_menuItem8 );
+	wxMenuItem* m_menuItemExit;
+	m_menuItemExit = new wxMenuItem( m_menuFile, wxID_EXIT, wxString( wxT("Exit") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menuFile->Append( m_menuItemExit );
 	
-	m_menubar1->Append( m_menu1, wxT("File") ); 
+	m_menubar1->Append( m_menuFile, wxT("File") ); 
 	
-	m_menu2 = new wxMenu();
-	wxMenuItem* m_menuItem1;
-	m_menuItem1 = new wxMenuItem( m_menu2, wxID_ANY, wxString( wxT("About") ) , wxEmptyString, wxITEM_NORMAL );
-	m_menu2->Append( m_menuItem1 );
+	m_menuHelp = new wxMenu();
+	wxMenuItem* m_menuItemAbout;
+	m_menuItemAbout = new wxMenuItem( m_menuHelp, wxID_ABOUT, wxString( wxT("About") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menuHelp->Append( m_menuItemAbout );
 	
-	m_menubar1->Append( m_menu2, wxT("Help") ); 
+	m_menubar1->Append( m_menuHelp, wxT("Help") ); 
 	
 	this->SetMenuBar( m_menubar1 );
 	
-	/*m_toolBar1 = this->CreateToolBar( wxTB_HORIZONTAL, wxID_ANY ); 
+	m_toolBar1 = this->CreateToolBar( wxTB_HORIZONTAL, wxID_ANY ); 
 	m_toolBar1->AddTool( wxID_ANY, wxT("Test"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString ); 
 	m_toolBar1->AddTool( wxID_ANY, wxT("tool"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString ); 
 	m_toolBar1->AddTool( wxID_ANY, wxT("tool"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString ); 
 	m_toolBar1->AddSeparator(); 
 	m_toolBar1->AddTool( wxID_ANY, wxT("tool"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString ); 
 	m_toolBar1->AddTool( wxID_ANY, wxT("tool"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString ); 
-	m_toolBar1->Realize();*/
+	m_toolBar1->Realize();
 	
 	wxBoxSizer* bSizer1;
 	bSizer1 = new wxBoxSizer( wxHORIZONTAL );
