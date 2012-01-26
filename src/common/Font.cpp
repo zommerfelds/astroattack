@@ -1,7 +1,7 @@
 /*
  * Font.cpp
  * This file is part of Astro Attack
- * Copyright 2011 Christian Zommerfelds
+ * Copyright 2012 Christian Zommerfelds
  */
 
 #include "Font.h"
@@ -56,10 +56,6 @@ void FontManager::drawString(const std::string &str, const FontId &fontId, float
 {
     FontMap::iterator font_it = m_fonts.find( fontId );
     assert ( font_it != m_fonts.end() );
-
-    // convert GUI to FTGL coordinates
-    x = x / 4.0f * m_renderer.getViewPortWidth();
-    y = (1.0f - y / 3.0f) * m_renderer.getViewPortHeight();
 
     FTFont* font = font_it->second.get();
 

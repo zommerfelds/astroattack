@@ -1,7 +1,7 @@
 /*
  * Renderer.h
  * This file is part of Astro Attack
- * Copyright 2011 Christian Zommerfelds
+ * Copyright 2012 Christian Zommerfelds
  */
 
 // Rendering Funktionen
@@ -87,7 +87,7 @@ public:
     // -------- nur für MatrixGUI Modus --------   
 
     // Zeichnet den Mauszeiger für den Editor
-    void drawEditorCursor ( const Vector2D& rPos );
+    void drawEditorCursor( const Vector2D& rPos );
     // das ganze Bildschirm mit einer Farbe überdecken
     void drawOverlay( float r, float g, float b, float a );
 

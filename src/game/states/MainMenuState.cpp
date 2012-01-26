@@ -1,13 +1,12 @@
 /*
  * MainMenuState.cpp
  * This file is part of Astro Attack
- * Copyright 2011 Christian Zommerfelds
+ * Copyright 2012 Christian Zommerfelds
  */
 
 
 #include "MainMenuState.h"
 
-#include "EditorState.h"
 #include "PlayingState.h"
 #include "SlideShowState.h"
 
@@ -56,7 +55,6 @@ MainMenuState::MainMenuState( SubSystems& subSystems, SubMenu startingSubMenu )
   m_subMenu (startingSubMenu),
   m_wantToQuit (false),
   m_restart (false),
-  m_goToEditor (false),
   m_goToPlay (false),
   m_goToSlideShow (false),
   m_newWidth (-1),
@@ -99,8 +97,6 @@ void MainMenuState::init()        // State starten
     float w=0.18f,h=0.05f;
 
     getSubSystems().gui.insertWidget( menuNames[Main], shared_ptr<Widget>(make_shared<WidgetButton>( Rect(x,x+w,y,y+h), "Play", boost::bind( &MainMenuState::onPressedButPlay, this ), boost::bind( &MainMenuState::onPressedSound, this ) )) );
-    y += 0.07f;
-    getSubSystems().gui.insertWidget( menuNames[Main], shared_ptr<Widget>(make_shared<WidgetButton>( Rect(x,x+w,y,y+h), "Editor", boost::bind( &MainMenuState::onPressedButEditor, this ), boost::bind( &MainMenuState::onPressedSound, this ) )) );
     y += 0.07f;
     getSubSystems().gui.insertWidget( menuNames[Main], shared_ptr<Widget>(make_shared<WidgetButton>( Rect(x,x+w,y,y+h), "About", boost::bind( &MainMenuState::onPressedButCredits, this ), boost::bind( &MainMenuState::onPressedSound, this ) )) );
     y += 0.07f;
@@ -230,12 +226,6 @@ void MainMenuState::update()      // Spiel aktualisieren
         getSubSystems().events.quitGame.fire(m_restart);
         return;
     }
-    if ( m_goToEditor || getSubSystems().input.getKeyState( EnterEditor ) )
-    {
-        boost::shared_ptr<EditorState> editorState ( new EditorState( getSubSystems() ) );
-        getSubSystems().stateManager.changeState( editorState );
-        return;
-    }
     if ( m_goToPlay )
     {
         boost::shared_ptr<PlayingState> playingState ( new PlayingState(getSubSystems(), m_fileNameToOpen) );
@@ -332,13 +322,6 @@ void MainMenuState::onPressedButPlay()
 void MainMenuState::onPressedButExit()
 {
     m_wantToQuit = true;
-    getSubSystems().sound.playSound( "mouseclick" );
-}
-
-
-void MainMenuState::onPressedButEditor()
-{
-    m_goToEditor = true;
     getSubSystems().sound.playSound( "mouseclick" );
 }
 

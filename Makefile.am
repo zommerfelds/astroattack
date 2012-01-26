@@ -44,7 +44,6 @@ game_src = \
     src/game/InputCameraController.cpp \
     src/game/OsMsgBox.cpp \
     src/game/PlayerController.cpp \
-    src/game/states/EditorState.cpp \
     src/game/states/GameOverState.cpp src/game/states/MainMenuState.cpp \
     src/game/states/PlayingState.cpp src/game/states/SlideShowState.cpp
 
@@ -52,8 +51,8 @@ editor_src = \
     src/editor/Editor.cpp \
     src/editor/EditorApp.cpp \
     src/editor/EditorFrame.cpp \
-    src/editor/GLCanvas.cpp \
-    src/editor/gen/EditorFrameBase.cpp
+    src/editor/GlCanvasController.cpp \
+    src/editor/gen/EditorGuiBase.cpp
     
 test_src = \
     tests/testmain.cpp \

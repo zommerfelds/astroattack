@@ -5,7 +5,7 @@
 // PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#include "EditorFrameBase.h"
+#include "EditorGuiBase.h"
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -97,11 +97,11 @@ EditorFrameBase::EditorFrameBase( wxWindow* parent, wxWindowID id, const wxStrin
 	m_panel2->SetSizer( bSizer3 );
 	m_panel2->Layout();
 	bSizer3->Fit( m_panel2 );
-	bSizer2->Add( m_panel2, 1, wxEXPAND | wxALL, 5 );
+	bSizer2->Add( m_panel2, 0, wxEXPAND | wxALL, 5 );
 	
 	m_staticText3 = new wxStaticText( m_panel1, wxID_ANY, wxT("Property grid"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText3->Wrap( -1 );
-	bSizer2->Add( m_staticText3, 1, wxALL|wxEXPAND, 5 );
+	bSizer2->Add( m_staticText3, 0, wxALL|wxEXPAND, 5 );
 	
 	m_panel1->SetSizer( bSizer2 );
 	m_panel1->Layout();
@@ -113,5 +113,30 @@ EditorFrameBase::EditorFrameBase( wxWindow* parent, wxWindowID id, const wxStrin
 }
 
 EditorFrameBase::~EditorFrameBase()
+{
+}
+
+AboutDialog::AboutDialog( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
+{
+	this->SetSizeHints( wxSize( 250,-1 ), wxDefaultSize );
+	
+	wxBoxSizer* bSizer5;
+	bSizer5 = new wxBoxSizer( wxVERTICAL );
+	
+	m_staticText2 = new wxStaticText( this, wxID_ANY, wxT("AAEditor v###\n\nBy Christian Zommerfelds\nCopyright (c) 2012"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText2->Wrap( -1 );
+	bSizer5->Add( m_staticText2, 0, wxALL, 5 );
+	
+	m_butOk = new wxButton( this, wxID_OK, wxT("Close"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer5->Add( m_butOk, 0, wxALL, 5 );
+	
+	this->SetSizer( bSizer5 );
+	this->Layout();
+	bSizer5->Fit( this );
+	
+	this->Centre( wxBOTH );
+}
+
+AboutDialog::~AboutDialog()
 {
 }

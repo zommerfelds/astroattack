@@ -1,7 +1,7 @@
 /*
  * EditorApp.h
  * This file is part of Astro Attack
- * Copyright 2011 Christian Zommerfelds
+ * Copyright 2012 Christian Zommerfelds
  */
 
 #include "EditorApp.h"
@@ -11,6 +11,7 @@
 
 #include "common/GameEvents.h"
 #include "common/Physics.h"
+#include "common/Renderer.h"
 
 #include <boost/property_tree/info_parser.hpp>
 
@@ -39,15 +40,22 @@ bool EditorApp::OnInit()
     }
     setUpLoggerFromPropTree(editorConfig);
 
-    GameEvents* events = new GameEvents;
-    new PhysicsSubSystem(*events); // need physics system?
+    m_events.reset(new GameEvents);
+    m_physics.reset(new PhysicsSubSystem(*m_events)); // need physics system?
+    m_renderer.reset(new RenderSubSystem(*m_events));
 
-    Editor* editor = new Editor(*events);
+    Editor* editor = new Editor(*m_events);
 
-    EditorFrame* frame = new EditorFrame(*editor, *events);
+    EditorFrame* frame = new EditorFrame(*editor, *m_renderer);
     frame->Show(true);
 
-    //editor->loadLevel("data/Levels/level_editor.lvl");
+    editor->loadLevel("data/Levels/level_editor.lvl");
 
     return true;
 }
+
+void EditorApp::CleanUp()
+{
+    m_renderer->deInit();
+}
+

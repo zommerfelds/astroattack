@@ -5,8 +5,8 @@
 // PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __EditorFrameBase__
-#define __EditorFrameBase__
+#ifndef __EditorGuiBase__
+#define __EditorGuiBase__
 
 #include <wx/statusbr.h>
 #include <wx/gdicmn.h>
@@ -25,6 +25,7 @@
 #include <wx/sizer.h>
 #include <wx/stattext.h>
 #include <wx/frame.h>
+#include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -54,9 +55,27 @@ class EditorFrameBase : public wxFrame
 	
 	public:
 		
-		EditorFrameBase( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("AstroAttack Editor"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 816,526 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
+		EditorFrameBase( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("AstroAttack Editor"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 700,526 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
 		~EditorFrameBase();
 	
 };
 
-#endif //__EditorFrameBase__
+///////////////////////////////////////////////////////////////////////////////
+/// Class AboutDialog
+///////////////////////////////////////////////////////////////////////////////
+class AboutDialog : public wxDialog 
+{
+	private:
+	
+	protected:
+		wxStaticText* m_staticText2;
+		wxButton* m_butOk;
+	
+	public:
+		
+		AboutDialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("About AAEditor"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE );
+		~AboutDialog();
+	
+};
+
+#endif //__EditorGuiBase__

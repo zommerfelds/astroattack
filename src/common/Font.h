@@ -1,7 +1,7 @@
 /*
  * Font.h
  * This file is part of Astro Attack
- * Copyright 2011 Christian Zommerfelds
+ * Copyright 2012 Christian Zommerfelds
  */
 
 // Verwaltung von Schriften
@@ -53,7 +53,7 @@ public:
     void freeFont(const FontId&);
 
     // DrawString
-    // x/y: upper left position of text box
+    // x/y: upper left position of text box in text coordinates (0/0 is lower left, 1 pixel per unit)
     void drawString(const std::string& str, const FontId &fontId, float x, float y, Align horizAlign, Align vertAlign,
             float red, float green, float blue, float alpha);
 

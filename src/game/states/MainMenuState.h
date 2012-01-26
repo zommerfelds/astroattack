@@ -1,7 +1,7 @@
 /*
  * MainMenuState.h
  * This file is part of Astro Attack
- * Copyright 2011 Christian Zommerfelds
+ * Copyright 2012 Christian Zommerfelds
  */
 
 // Das MainMenuState ist aktiv wenn der Spieler sich beim Hauptmenü befindet.
@@ -49,7 +49,6 @@ private:
 
     // --- Callbacks für GUI ---
     void onPressedButPlay();
-    void onPressedButEditor();
     void onPressedButCredits();
     void onPressedButOptions();
     void onPressedButExit();
@@ -68,7 +67,6 @@ private:
 
     bool m_wantToQuit;              // ob Spiel beendet werden soll
     bool m_restart;
-    bool m_goToEditor;              // ob der Editor geöffnet werden soll
     bool m_goToPlay;                // ob ein Level gestartet werden soll
     bool m_goToSlideShow;           // ob eine Bildershow gestartet werden soll
     std::string m_fileNameToOpen;   // wie heisst die Datei, die geöffnet werden soll (level oder slide show)

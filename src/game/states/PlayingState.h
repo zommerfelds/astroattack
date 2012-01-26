@@ -1,7 +1,7 @@
 /*
  * PlayingState.h
  * This file is part of Astro Attack
- * Copyright 2011 Christian Zommerfelds
+ * Copyright 2012 Christian Zommerfelds
  */
 
 // PlayingState ist das häufigste State.

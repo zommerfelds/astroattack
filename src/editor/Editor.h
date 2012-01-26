@@ -1,44 +1,63 @@
 /*
  * Editor.h
  * This file is part of Astro Attack
- * Copyright 2011 Christian Zommerfelds
+ * Copyright 2012 Christian Zommerfelds
  */
 
 #ifndef EDITOR_H
 #define EDITOR_H
 
+#include "common/Vector2D.h"
+//#include "common/"
+
 #include <string>
+#include <vector>
 #include <boost/scoped_ptr.hpp>
 
 class World;
 class GameEvents;
-class Vector2D;
+
+struct EditorGuiData
+{
+    EditorGuiData() { reset(); }
+    void reset()
+    {
+        indexCurVertex = 0;
+        currentTexture = "";
+    }
+
+    Vector2D createdVertices[8];
+    int indexCurVertex;
+    std::string currentTexture;
+};
 
 class Editor
 {
 public:
     Editor(GameEvents&);
+    void setTextureList(const std::vector<std::string>& textureList);
+    void clearLevel();
     void loadLevel(const std::string& fileName);
+    void saveLevel(const std::string& fileName);
+
+    void cmdAddVertex(const Vector2D& worldPos);
+    void cmdCreateBlock();
+    void cmdCancelBlock();
+    void cmdCancelVertex();
+    void cmdNextTexture();
+    void cmdPrevTexture();
+
+    const EditorGuiData& getGuiData();
 
 private:
 
     GameEvents& m_events;
     boost::scoped_ptr<World> m_world;
 
-    void onLMouseClick(const Vector2D& worldPos);
+    std::vector<std::string> m_textureList;
+    std::vector<std::string>::iterator m_currentTextureIt;
 
-    /*Vector2D m_clickedPoints[8];
-    int m_currentPoint;
-    std::string m_currentTexture;
-    unsigned int m_currentTextureNum;
-    bool m_helpTextOn;
-
-    bool m_mouseButDownOld;
-    bool m_cancelVertexKeyDownOld;
-    bool m_createEntityKeyDownOld;
-    bool m_nextTextureKeyDownOld;
-    bool m_prevTextureKeyDownOld;
-    bool m_helpKeyDownOld;*/
+    EditorGuiData m_guiData;
 };
 
 #endif /* EDITOR_H */

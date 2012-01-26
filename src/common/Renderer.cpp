@@ -1,7 +1,7 @@
 /*
  * Renderer.cpp
  * This file is part of Astro Attack
- * Copyright 2011 Christian Zommerfelds
+ * Copyright 2012 Christian Zommerfelds
  */
 
 
@@ -539,6 +539,16 @@ void RenderSubSystem::drawEditorCursor ( const Vector2D& rPos )
 void RenderSubSystem::drawString( const std::string &str, const FontId &fontId, float x, float y, Align horizAlign, Align vertAlign, float red, float green, float blue, float alpha )
 {
     MatrixId stored_matrix = m_currentMatrix;
+    if (m_currentMatrix == World)
+    {
+        // TODO
+    }
+    else if (m_currentMatrix == GUI)
+    {
+        // convert GUI to FTGL coordinates
+        x = x / 4.0f * getViewPortWidth();
+        y = (1.0f - y / 3.0f) * getViewPortHeight();
+    }
     setMatrix(Text);
     m_fontManager.drawString(str, fontId, x, y, horizAlign, vertAlign, red, green, blue, alpha);
     setMatrix(stored_matrix);
