@@ -28,8 +28,7 @@ int main ( int argc, char* argv[] )
     loadConfig(cConfigFileName, gConfig);
     setUpLoggerFromPropTree(gConfig);
 
-    char centeredStr[] = "SDL_VIDEO_CENTERED=1";
-    putenv(centeredStr);
+    putenv("SDL_VIDEO_CENTERED=1");
 
     try
     {

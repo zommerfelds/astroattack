@@ -32,7 +32,8 @@ bool EditorApp::OnInit()
     }
     catch ( boost::property_tree::info_parser::info_parser_error& e )
     {
-        std::cerr << "Could not load editor configuration file. Loading default." << std::endl;
+		std::cerr << "Could not load editor configuration file. " << e.what() << std::endl
+			      << "Loading default configuration." << std::endl;
         editorConfig.clear();
         editorConfig.put("LogConsoleLevel", "Debug");
         editorConfig.put("LogFileLevel", "Debug");
@@ -44,12 +45,12 @@ bool EditorApp::OnInit()
     m_physics.reset(new PhysicsSubSystem(*m_events)); // need physics system?
     m_renderer.reset(new RenderSubSystem(*m_events));
 
-    Editor* editor = new Editor(*m_events);
+    m_editor.reset(new Editor(*m_events));
 
-    EditorFrame* frame = new EditorFrame(*editor, *m_renderer);
+    EditorFrame* frame = new EditorFrame(*m_editor, *m_renderer);
     frame->Show(true);
 
-    editor->loadLevel("data/Levels/level_editor.lvl");
+    m_editor->loadLevel("data/Levels/level_editor.lvl");
 
     return true;
 }

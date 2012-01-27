@@ -293,7 +293,7 @@ void GlCanvasController::onPaint(wxPaintEvent& evt)
     }
 
     glFlush();
-    
+
     cerr << "swapping" << endl;
     SwapBuffers();
 }

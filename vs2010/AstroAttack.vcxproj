@@ -158,7 +158,6 @@ SDL_VIDEO_CENTERED=1</LocalDebuggerEnvironment>
     <ClInclude Include="..\src\game\InputCameraController.h" />
     <ClInclude Include="..\src\game\main.h" />
     <ClInclude Include="..\src\game\PlayerController.h" />
-    <ClInclude Include="..\src\game\states\EditorState.h" />
     <ClInclude Include="..\src\game\states\GameOverState.h" />
     <ClInclude Include="..\src\game\states\MainMenuState.h" />
     <ClInclude Include="..\src\game\states\PlayingState.h" />
@@ -202,13 +201,13 @@ SDL_VIDEO_CENTERED=1</LocalDebuggerEnvironment>
     <ClCompile Include="..\src\game\main.cpp" />
     <ClCompile Include="..\src\game\OsMsgBox.cpp" />
     <ClCompile Include="..\src\game\PlayerController.cpp" />
-    <ClCompile Include="..\src\game\states\EditorState.cpp" />
     <ClCompile Include="..\src\game\states\GameOverState.cpp" />
     <ClCompile Include="..\src\game\states\MainMenuState.cpp" />
     <ClCompile Include="..\src\game\states\PlayingState.cpp" />
     <ClCompile Include="..\src\game\states\SlideShowState.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\AAEditor.log" />
     <None Include="..\AstroAttack.log" />
     <None Include="..\configure.in" />
     <None Include="..\data\config.info" />

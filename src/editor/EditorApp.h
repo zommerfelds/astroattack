@@ -13,6 +13,7 @@
 struct GameEvents;
 class RenderSubSystem;
 class PhysicsSubSystem;
+class Editor;
 
 class EditorApp : public wxApp
 {
@@ -24,6 +25,7 @@ private:
     boost::scoped_ptr<GameEvents> m_events;
     boost::scoped_ptr<RenderSubSystem> m_renderer;
     boost::scoped_ptr<PhysicsSubSystem> m_physics;
+    boost::scoped_ptr<Editor> m_editor;
 };
 
 #endif

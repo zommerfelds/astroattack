@@ -15,7 +15,7 @@
 #include <boost/scoped_ptr.hpp>
 
 class World;
-class GameEvents;
+struct GameEvents;
 
 struct EditorGuiData
 {
@@ -35,6 +35,7 @@ class Editor
 {
 public:
     Editor(GameEvents&);
+	~Editor();
     void setTextureList(const std::vector<std::string>& textureList);
     void clearLevel();
     void loadLevel(const std::string& fileName);

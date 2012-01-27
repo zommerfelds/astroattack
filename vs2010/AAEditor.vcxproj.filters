@@ -99,11 +99,11 @@
     <ClCompile Include="..\src\editor\EditorFrame.cpp">
       <Filter>Editor Source</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\editor\GLCanvas.cpp">
-      <Filter>Editor Source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\editor\gen\EditorFrameBase.cpp">
+    <ClCompile Include="..\src\editor\gen\EditorGuiBase.cpp">
       <Filter>Editor Source\gen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\editor\GlCanvasController.cpp">
+      <Filter>Editor Source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -200,11 +200,11 @@
     <ClInclude Include="..\src\editor\EditorFrame.h">
       <Filter>Editor Source</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\editor\GLCanvas.h">
-      <Filter>Editor Source</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\editor\gen\EditorFrameBase.h">
+    <ClInclude Include="..\src\editor\gen\EditorGuiBase.h">
       <Filter>Editor Source\gen</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\editor\GlCanvasController.h">
+      <Filter>Editor Source</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

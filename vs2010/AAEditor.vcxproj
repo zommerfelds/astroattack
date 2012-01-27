@@ -117,8 +117,8 @@
     <ClCompile Include="..\src\editor\Editor.cpp" />
     <ClCompile Include="..\src\editor\EditorApp.cpp" />
     <ClCompile Include="..\src\editor\EditorFrame.cpp" />
-    <ClCompile Include="..\src\editor\gen\EditorFrameBase.cpp" />
-    <ClCompile Include="..\src\editor\GLCanvas.cpp" />
+    <ClCompile Include="..\src\editor\gen\EditorGuiBase.cpp" />
+    <ClCompile Include="..\src\editor\GlCanvasController.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\common\CameraController.h" />
@@ -152,8 +152,8 @@
     <ClInclude Include="..\src\editor\Editor.h" />
     <ClInclude Include="..\src\editor\EditorApp.h" />
     <ClInclude Include="..\src\editor\EditorFrame.h" />
-    <ClInclude Include="..\src\editor\gen\EditorFrameBase.h" />
-    <ClInclude Include="..\src\editor\GLCanvas.h" />
+    <ClInclude Include="..\src\editor\gen\EditorGuiBase.h" />
+    <ClInclude Include="..\src\editor\GlCanvasController.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

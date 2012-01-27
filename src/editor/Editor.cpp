@@ -29,6 +29,8 @@ Editor::Editor(GameEvents& events)
 {
 }
 
+Editor::~Editor() {}
+
 void Editor::setTextureList(const std::vector<std::string>& textureList)
 {
     foreach(const std::string& tex, textureList)

@@ -139,9 +139,6 @@
     <ClInclude Include="..\src\game\PlayerController.h">
       <Filter>Game Source</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\game\states\EditorState.h">
-      <Filter>Game Source\States</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\game\states\GameOverState.h">
       <Filter>Game Source\States</Filter>
     </ClInclude>
@@ -258,9 +255,6 @@
     <ClCompile Include="..\src\game\PlayerController.cpp">
       <Filter>Game Source</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\game\states\EditorState.cpp">
-      <Filter>Game Source\States</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\game\states\GameOverState.cpp">
       <Filter>Game Source\States</Filter>
     </ClCompile>
@@ -313,5 +307,6 @@
     <None Include="..\data\Levels\level3.info">
       <Filter>Levels</Filter>
     </None>
+    <None Include="..\AAEditor.log" />
   </ItemGroup>
 </Project>
