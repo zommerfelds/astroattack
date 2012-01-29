@@ -7,12 +7,13 @@
 #include "CompGravField.h"
 // TODO: find out why you cannot change the order of this #includes
 #include "common/DataLoader.h"
+#include <boost/scoped_ptr.hpp>
 #include <boost/property_tree/ptree.hpp>
 
 // eindeutige ID
 const ComponentTypeId& CompGravField::getTypeIdStatic()
 {
-    static ComponentTypeId* typeId = new ComponentTypeId("CompGravField");
+    static boost::scoped_ptr<ComponentTypeId> typeId (new ComponentTypeId("CompGravField"));
     return *typeId;
 }
 

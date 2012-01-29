@@ -13,6 +13,7 @@
 #include "common/Logger.h"
 
 #include <boost/bind.hpp>
+#include <boost/scoped_ptr.hpp>
 #include <boost/property_tree/ptree.hpp>
 
 using boost::property_tree::ptree;
@@ -20,7 +21,7 @@ using boost::property_tree::ptree;
 // ID of this component
 const ComponentTypeId& CompPlayerController::getTypeIdStatic()
 {
-    static ComponentTypeId* typeId = new ComponentTypeId("CompPlayerController");
+    static boost::scoped_ptr<ComponentTypeId> typeId (new ComponentTypeId("CompPlayerController"));
     return *typeId;
 }
 

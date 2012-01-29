@@ -11,13 +11,14 @@
 
 #include <sstream>
 #include <boost/property_tree/ptree.hpp>
+#include <boost/scoped_ptr.hpp>
 
 using boost::property_tree::ptree;
 
 // eindeutige ID
 const ComponentTypeId& CompVisualTexture::getTypeIdStatic()
 {
-    static ComponentTypeId* typeId = new ComponentTypeId("CompVisualTexture");
+    static boost::scoped_ptr<ComponentTypeId> typeId (new ComponentTypeId("CompVisualTexture"));
     return *typeId;
 }
 const std::string CompVisualTexture::ALL_SHAPES = "ALL_SHAPES";

@@ -11,15 +11,16 @@
 #include "common/Foreach.h"
 
 #include <Box2D/Box2D.h> // need this for converting to Box2D shapes
-#include <boost/property_tree/ptree.hpp>
+#include <boost/scoped_ptr.hpp>
 #include <boost/make_shared.hpp>
+#include <boost/property_tree/ptree.hpp>
 
 using boost::property_tree::ptree;
 
 // eindeutige ID
 const ComponentTypeId& CompShape::getTypeIdStatic()
 {
-    static ComponentTypeId* typeId = new ComponentTypeId("CompShape");
+    static boost::scoped_ptr<ComponentTypeId> typeId (new ComponentTypeId("CompShape"));
     return *typeId;
 }
 

@@ -103,6 +103,7 @@ GlCanvasController::GlCanvasController(Editor& editor, wxWindow* parent, int* ar
     m_editor (editor),
     m_renderer (renderer),
     m_cameraController (m_renderer, 1),
+	m_lastCursorPos (-1.0f, -1.0f),
     m_initCount (0)
 {
     m_context = new wxGLContext(this);
@@ -265,14 +266,17 @@ void GlCanvasController::onPaint(wxPaintEvent& evt)
     for ( int i = 0; i < editorData.indexCurVertex; ++i )
         m_renderer.drawPoint(editorData.createdVertices[i]);
 
-    m_renderer.setMatrix(RenderSubSystem::GUI);
-    // draw editor cursor
-    Vector2D mousePos = m_cameraController.screenToWorld(m_lastCursorPos);
-    mousePos = snapToGrid(mousePos);
-    mousePos = m_cameraController.worldToScreen(mousePos);
-    mousePos.x = mousePos.x * 4.0f;
-    mousePos.y = mousePos.y * 3.0f;
-    m_renderer.drawEditorCursor(mousePos);
+	if (m_lastCursorPos.x >= 0.0f && m_lastCursorPos.y >= 0.0f)
+	{
+		m_renderer.setMatrix(RenderSubSystem::GUI);
+		// draw editor cursor
+		Vector2D mousePos = m_cameraController.screenToWorld(m_lastCursorPos);
+		mousePos = snapToGrid(mousePos);
+		mousePos = m_cameraController.worldToScreen(mousePos);
+		mousePos.x = mousePos.x * 4.0f;
+		mousePos.y = mousePos.y * 3.0f;
+		m_renderer.drawEditorCursor(mousePos);
+	}
 
     //m_renderer.drawVisualMessageComps();
 

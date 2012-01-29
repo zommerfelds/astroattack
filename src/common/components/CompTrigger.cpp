@@ -14,6 +14,7 @@
 #include "common/Foreach.h"
 
 #include <boost/bind.hpp>
+#include <boost/scoped_ptr.hpp>
 #include <boost/make_shared.hpp>
 #include <boost/property_tree/ptree.hpp>
 
@@ -22,7 +23,7 @@ using boost::property_tree::ptree;
 // eindeutige ID
 const ComponentTypeId& CompTrigger::getTypeIdStatic()
 {
-    static ComponentTypeId* typeId = new ComponentTypeId("CompTrigger");
+    static boost::scoped_ptr<ComponentTypeId> typeId (new ComponentTypeId("CompTrigger"));
     return *typeId;
 }
 

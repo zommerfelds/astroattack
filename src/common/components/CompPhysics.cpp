@@ -11,6 +11,7 @@
 
 #include <climits>
 #include <Box2D/Box2D.h>
+#include <boost/scoped_ptr.hpp>
 #include <boost/make_shared.hpp>
 #include <boost/property_tree/ptree.hpp>
 
@@ -19,7 +20,7 @@ using boost::property_tree::ptree;
 // eindeutige ID
 const ComponentTypeId& CompPhysics::getTypeIdStatic()
 {
-    static ComponentTypeId* typeId = new ComponentTypeId("CompPhysics");
+    static boost::scoped_ptr<ComponentTypeId> typeId (new ComponentTypeId("CompPhysics"));
     return *typeId;
 }
 

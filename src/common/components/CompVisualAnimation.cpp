@@ -10,13 +10,14 @@
 
 #include <sstream>
 #include <boost/bind.hpp>
+#include <boost/scoped_ptr.hpp>
 #include <boost/make_shared.hpp>
 #include <boost/property_tree/ptree.hpp>
 
 // einduetige ID
 const ComponentTypeId& CompVisualAnimation::getTypeIdStatic()
 {
-    static ComponentTypeId* typeId = new ComponentTypeId("CompVisualAnimation");
+    static boost::scoped_ptr<ComponentTypeId> typeId (new ComponentTypeId("CompVisualAnimation"));
     return *typeId;
 }
 

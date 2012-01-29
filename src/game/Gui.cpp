@@ -41,7 +41,7 @@ void GuiSubSystem::draw()
     }
 }
 
-void GuiSubSystem::insertWidget( GroupId groupId, boost::shared_ptr<Widget> pWidget )
+void GuiSubSystem::insertWidget(const GroupId& groupId, boost::shared_ptr<Widget> pWidget)
 {
     WidgetMap::iterator it = m_widgets.find( groupId );
     if ( it == m_widgets.end() )
@@ -50,7 +50,7 @@ void GuiSubSystem::insertWidget( GroupId groupId, boost::shared_ptr<Widget> pWid
         it->second.push_back( pWidget );
 }
 
-void GuiSubSystem::deleteGroup( GroupId groupId )
+void GuiSubSystem::deleteGroup(const GroupId& groupId)
 {
     m_widgets.erase( groupId );
 }
@@ -78,7 +78,7 @@ void WidgetLabel::draw( RenderSubSystem* pRenderer )
 WidgetLabel::~WidgetLabel() {}
 
 //** Button
-WidgetButton::WidgetButton( Rect area, const std::string& caption, ButCallbackFunc clickedCallbackFunc, ButCallbackFunc mouseOverCallbackFunc )
+WidgetButton::WidgetButton(const Rect& area, const std::string& caption, ButCallbackFunc clickedCallbackFunc, ButCallbackFunc mouseOverCallbackFunc)
 : Widget( area ),
   m_caption (caption),
   m_butCallbackFunc ( clickedCallbackFunc ),

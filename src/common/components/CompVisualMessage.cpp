@@ -7,11 +7,12 @@
 #include "CompVisualMessage.h"
 
 #include <boost/property_tree/ptree.hpp>
+#include <boost/scoped_ptr.hpp>
 
 // eindeutige ID
 const ComponentTypeId& CompVisualMessage::getTypeIdStatic()
 {
-    static ComponentTypeId* typeId = new ComponentTypeId("CompVisualMessage");
+	static boost::scoped_ptr<ComponentTypeId> typeId (new ComponentTypeId("CompVisualMessage"));
     return *typeId;
 }
 

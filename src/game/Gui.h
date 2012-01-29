@@ -31,10 +31,10 @@ public:
     void update();
     void draw();
 
-    void insertWidget( GroupId groupId, boost::shared_ptr<Widget> pWidget );
-    void deleteGroup( GroupId groupId );
-    void hideGroup( GroupId groupId ) { m_groupsToHide.insert( groupId ); }
-    void showGroup( GroupId groupId ) { m_groupsToHide.erase( groupId ); }
+    void insertWidget(const GroupId& groupId, boost::shared_ptr<Widget> pWidget);
+    void deleteGroup(const GroupId& groupId);
+    void hideGroup(const GroupId& groupId) { m_groupsToHide.insert( groupId ); }
+    void showGroup(const GroupId& groupId) { m_groupsToHide.erase( groupId ); }
     void clear() { if (m_isUpdating) m_clear = true; else clearContainers(); }
 private:
     RenderSubSystem& m_renderer;
@@ -51,7 +51,7 @@ private:
 class Widget
 {
 public:
-    Widget( Rect area ) : m_area( area ), m_mouseState ( Away ) {}
+    Widget(const Rect& area) : m_area (area), m_mouseState (Away) {}
     Widget() : m_area(), m_mouseState ( Away ) {}
 
     virtual ~Widget() {};
@@ -59,7 +59,7 @@ public:
     virtual void draw( RenderSubSystem* ) {};
     virtual void onMouseStateChanged( MouseState ) {};
 
-    void setArea( Rect area ) { m_area = area; }
+    void setArea(const Rect& area) { m_area = area; }
     const Rect& getArea() const { return m_area; }
     const MouseState getMouseState() const { return m_mouseState; }
 private:
@@ -71,7 +71,7 @@ private:
 class WidgetLabel : public Widget
 {
 public:
-    WidgetLabel( float x, float y, const std::string& text, const FontManager& fontMngr );
+    WidgetLabel(float x, float y, const std::string& text, const FontManager& fontMngr);
     ~WidgetLabel();
 
     void draw( RenderSubSystem* pRenderer );
@@ -86,7 +86,8 @@ typedef boost::function0<void> ButCallbackFunc; // Einen Zeiger zu einer Funktio
 class WidgetButton : public Widget
 {
 public:
-    WidgetButton( Rect area, const std::string& caption, ButCallbackFunc clickedCallbackFunc, ButCallbackFunc mouseOverCallbackFunc );
+	// TODO: by reference
+    WidgetButton(const Rect& area, const std::string& caption, ButCallbackFunc clickedCallbackFunc, ButCallbackFunc mouseOverCallbackFunc);
     ~WidgetButton();
 
     void draw( RenderSubSystem* pRenderer );

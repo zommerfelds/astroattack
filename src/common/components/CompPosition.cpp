@@ -9,12 +9,13 @@
 #include "CompPosition.h"
 
 #include "CompPhysics.h"
+#include <boost/scoped_ptr.hpp>
 #include <boost/property_tree/ptree.hpp>
 
 // eindeutige ID
 const ComponentTypeId& CompPosition::getTypeIdStatic()
 {
-    static ComponentTypeId* typeId = new ComponentTypeId("CompPosition");
+    static boost::scoped_ptr<ComponentTypeId> typeId (new ComponentTypeId("CompPosition"));
     return *typeId;
 }
 
