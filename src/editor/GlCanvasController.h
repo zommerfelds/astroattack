@@ -22,6 +22,7 @@ class GlCanvasController : public wxGLCanvas
 public:
     GlCanvasController(Editor& editor, wxWindow* parent, int* args, RenderSubSystem& renderer);
     virtual ~GlCanvasController();
+    void resetCamera();
 
 private:
     void onPaint(wxPaintEvent& evt);
@@ -32,6 +33,7 @@ private:
     void onRMouseUp(wxMouseEvent& evt);
     void onMouseMotion(wxMouseEvent& evt);
     void onMouseLeaveWindow(wxMouseEvent& evt);
+    void onMouseEnterWindow(wxMouseEvent& evt);
     void onKeyDown(wxKeyEvent& evt);
 
     Editor& m_editor;
@@ -40,6 +42,8 @@ private:
     CameraController m_cameraController;
 
     Vector2D m_lastCursorPos;
+    bool m_lMouseIsDown;  // whether the left mouse button is pressed and we have input focus
+    bool m_mouseInWindow; // whether the mouse is inside the canvas area
 
     int m_initCount;
 

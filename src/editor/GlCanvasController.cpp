@@ -10,9 +10,6 @@
 #include <wx/window.h>
 //#include <SDL_opengl.h>
 
-#include <iostream>
-using namespace std;
-
 #include "Editor.h"
 
 #include "common/GameEvents.h"
@@ -26,53 +23,14 @@ BEGIN_EVENT_TABLE(GlCanvasController, wxGLCanvas)
     EVT_RIGHT_UP(GlCanvasController::onRMouseUp)
     EVT_MOTION(GlCanvasController::onMouseMotion)
     EVT_LEAVE_WINDOW(GlCanvasController::onMouseLeaveWindow)
+    EVT_ENTER_WINDOW(GlCanvasController::onMouseEnterWindow)
     EVT_KEY_DOWN(GlCanvasController::onKeyDown)
 END_EVENT_TABLE()
 
 namespace {
     int cInitCount = 2;
+    float cDefaultZoom = 0.08f;
 }
-
-/*void glErr()
-{
-    GLenum errCode;
-    const GLubyte *errString;
-
-    if ((errCode = glGetError()) != GL_NO_ERROR)
-    {
-        errString = gluErrorString(errCode);
-        cerr << "GLCanvas> OpenGL Error " << errString << endl;
-    }
-}
-
-void proj()
-{
-    float M[16];
-    glMatrixMode ( GL_PROJECTION );
-    glGetFloatv(GL_PROJECTION_MATRIX, M);
-    glMatrixMode( GL_MODELVIEW );
-    cerr << "proj: ";
-    for (int i=0; i<16; i++) cerr << M[i] << " ";
-    cerr << endl;
-}
-
-void test()
-{
-    int i = -1;
-    glMatrixMode ( GL_PROJECTION );
-    while (glGetError() == GL_NO_ERROR)
-    {
-        glPopMatrix();
-        i++;
-    }
-    cerr << "==> Stack depth was " << i << endl;
-    while (i > 0)
-    {
-        glPushMatrix();
-        i--;
-    }
-    glMatrixMode( GL_MODELVIEW );
-}*/
 
 namespace
 {
@@ -103,7 +61,8 @@ GlCanvasController::GlCanvasController(Editor& editor, wxWindow* parent, int* ar
     m_editor (editor),
     m_renderer (renderer),
     m_cameraController (m_renderer, 1),
-	m_lastCursorPos (-1.0f, -1.0f),
+    m_lMouseIsDown (false),
+    m_mouseInWindow (false),
     m_initCount (0)
 {
     m_context = new wxGLContext(this);
@@ -119,15 +78,24 @@ GlCanvasController::~GlCanvasController()
     delete m_context;
 }
 
+void GlCanvasController::resetCamera()
+{
+    m_cameraController.moveAbsolute(Vector2D(0.0f,0.0f));
+    m_cameraController.setZoom(cDefaultZoom);
+}
+
 void GlCanvasController::onLMouseDown(wxMouseEvent& evt)
 {
     /*cerr << "mouse pos: " << evt.GetPosition().x << "/" << evt.GetPosition().y << endl;
     Vector2D worldPos = m_cameraController.screenToWorld(Vector2D(((float)evt.GetX())/GetSize().x, ((float)evt.GetY())/GetSize().y));
     m_editor.onLMouseClick(worldPos);*/
+    m_lMouseIsDown = true;
 }
 
 void GlCanvasController::onLMouseUp(wxMouseEvent& evt)
 {
+    m_lMouseIsDown = false;
+    Refresh();
 }
 
 void GlCanvasController::onRMouseDown(wxMouseEvent& evt)
@@ -160,14 +128,18 @@ void GlCanvasController::onMouseMotion(wxMouseEvent& evt)
 
 void GlCanvasController::onMouseLeaveWindow(wxMouseEvent& evt)
 {
-    m_lastCursorPos.set(-1, -1);
+    m_mouseInWindow = false;
     Refresh();
+}
+
+void GlCanvasController::onMouseEnterWindow(wxMouseEvent& evt)
+{
+    m_mouseInWindow = true;
+    // Refresh() is done by onMouseMotion()
 }
 
 void GlCanvasController::onKeyDown(wxKeyEvent& evt)
 {
-    cerr << "key code: " << evt.GetKeyCode() << endl;
-
     if (evt.GetKeyCode() == WXK_RETURN)
         m_editor.cmdCreateBlock();
     if (evt.GetKeyCode() == WXK_ESCAPE)
@@ -188,7 +160,7 @@ void GlCanvasController::onResize(wxSizeEvent& evt)
     {
         m_renderer.resize(evt.GetSize().x, evt.GetSize().y);
         m_cameraController.setAspectRatio((float(evt.GetSize().x))/evt.GetSize().y);
-        m_cameraController.setZoom(0.08f);
+        m_cameraController.setZoom(cDefaultZoom);
         Refresh();
     }
 }
@@ -203,8 +175,6 @@ void GlCanvasController::onPaint(wxPaintEvent& evt)
 
         if (m_initCount == cInitCount)
         {
-            //log() <<"-->init");
-            cerr << "init" << endl;
             m_renderer.init(GetSize().x, GetSize().y);
 
             m_renderer.setMatrix(RenderSubSystem::World);
@@ -214,7 +184,7 @@ void GlCanvasController::onPaint(wxPaintEvent& evt)
             m_editor.setTextureList(m_renderer.getTextureManager().getTextureList());
 
             m_cameraController.setAspectRatio((float(GetSize().x))/GetSize().y);
-            m_cameraController.setZoom(0.08f);
+            m_cameraController.setZoom(cDefaultZoom);
         }
 
         wxGLCanvas::SetCurrent(*m_context);
@@ -225,8 +195,6 @@ void GlCanvasController::onPaint(wxPaintEvent& evt)
 
         return;
     }
-
-    cerr << "rendering" << endl;
     
     wxGLCanvas::SetCurrent(*m_context);
     wxPaintDC(this); // only to be used in paint events. use wxClientDC to paint outside the paint event
@@ -266,17 +234,17 @@ void GlCanvasController::onPaint(wxPaintEvent& evt)
     for ( int i = 0; i < editorData.indexCurVertex; ++i )
         m_renderer.drawPoint(editorData.createdVertices[i]);
 
-	if (m_lastCursorPos.x >= 0.0f && m_lastCursorPos.y >= 0.0f)
-	{
-		m_renderer.setMatrix(RenderSubSystem::GUI);
-		// draw editor cursor
-		Vector2D mousePos = m_cameraController.screenToWorld(m_lastCursorPos);
-		mousePos = snapToGrid(mousePos);
-		mousePos = m_cameraController.worldToScreen(mousePos);
-		mousePos.x = mousePos.x * 4.0f;
-		mousePos.y = mousePos.y * 3.0f;
-		m_renderer.drawEditorCursor(mousePos);
-	}
+    if (m_mouseInWindow || m_lMouseIsDown)
+    {
+        m_renderer.setMatrix(RenderSubSystem::GUI);
+        // draw editor cursor
+        Vector2D mousePos = m_cameraController.screenToWorld(m_lastCursorPos);
+        mousePos = snapToGrid(mousePos);
+        mousePos = m_cameraController.worldToScreen(mousePos);
+        mousePos.x = mousePos.x * 4.0f;
+        mousePos.y = mousePos.y * 3.0f;
+        m_renderer.drawEditorCursor(mousePos);
+    }
 
     //m_renderer.drawVisualMessageComps();
 
@@ -298,6 +266,5 @@ void GlCanvasController::onPaint(wxPaintEvent& evt)
 
     glFlush();
 
-    cerr << "swapping" << endl;
     SwapBuffers();
 }

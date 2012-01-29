@@ -88,30 +88,30 @@ void MainMenuState::init()        // State starten
     getSubSystems().gui.showGroup( menuNames[m_subMenu] );
 
     // *** Hauptbildschirm ***
-    getSubSystems().gui.insertWidget( menuNames[Main], make_shared<WidgetLabel>( 0.1f, 0.9f, "Welcome to AstroAttack! [v" GAME_VERSION "]", getSubSystems().renderer.getFontManager() ) );
+    getSubSystems().gui.addWidget( menuNames[Main], make_shared<WidgetLabel>( 0.1f, 0.9f, "Welcome to AstroAttack! [v" GAME_VERSION "]", getSubSystems().renderer.getFontManager() ) );
 
 
     float x = 0.35f;
     float y = 0.36f;
     float w=0.18f,h=0.05f;
 
-    getSubSystems().gui.insertWidget( menuNames[Main], make_shared<WidgetButton>( Rect(x,x+w,y,y+h), "Play", boost::bind( &MainMenuState::onPressedButPlay, this ), boost::bind( &MainMenuState::onPressedSound, this ) ) );
+    getSubSystems().gui.addWidget( menuNames[Main], make_shared<WidgetButton>( Rect(x,x+w,y,y+h), "Play", boost::bind( &MainMenuState::onPressedButPlay, this ), boost::bind( &MainMenuState::onPressedSound, this ) ) );
     y += 0.07f;
-    getSubSystems().gui.insertWidget( menuNames[Main], make_shared<WidgetButton>( Rect(x,x+w,y,y+h), "About", boost::bind( &MainMenuState::onPressedButCredits, this ), boost::bind( &MainMenuState::onPressedSound, this ) ) );
+    getSubSystems().gui.addWidget( menuNames[Main], make_shared<WidgetButton>( Rect(x,x+w,y,y+h), "About", boost::bind( &MainMenuState::onPressedButCredits, this ), boost::bind( &MainMenuState::onPressedSound, this ) ) );
     y += 0.07f;
-    getSubSystems().gui.insertWidget( menuNames[Main], make_shared<WidgetButton>( Rect(x,x+w,y,y+h), "Options", boost::bind( &MainMenuState::onPressedButOptions, this ), boost::bind( &MainMenuState::onPressedSound, this ) ) );
+    getSubSystems().gui.addWidget( menuNames[Main], make_shared<WidgetButton>( Rect(x,x+w,y,y+h), "Options", boost::bind( &MainMenuState::onPressedButOptions, this ), boost::bind( &MainMenuState::onPressedSound, this ) ) );
     y += 0.07f;
-    getSubSystems().gui.insertWidget( menuNames[Main], make_shared<WidgetButton>( Rect(x,x+w,y,y+h), "Quit", boost::bind( &MainMenuState::onPressedButExit, this ), boost::bind( &MainMenuState::onPressedSound, this ) ) );
+    getSubSystems().gui.addWidget( menuNames[Main], make_shared<WidgetButton>( Rect(x,x+w,y,y+h), "Quit", boost::bind( &MainMenuState::onPressedButExit, this ), boost::bind( &MainMenuState::onPressedSound, this ) ) );
 
     // *** Zurückknöpfe für Untermenüs ***
     const float back_x=0.03f;
     const float back_y=0.92f;
-    getSubSystems().gui.insertWidget( menuNames[1], make_shared<WidgetButton>( Rect(back_x,back_x+w,back_y,back_y+h), "Back", boost::bind( &MainMenuState::onPressedButBack, this ), boost::bind( &MainMenuState::onPressedSound, this ) ) );
-    getSubSystems().gui.insertWidget( menuNames[2], make_shared<WidgetButton>( Rect(back_x,back_x+w,back_y,back_y+h), "Back", boost::bind( &MainMenuState::onPressedButBack, this ), boost::bind( &MainMenuState::onPressedSound, this ) ) );
+    getSubSystems().gui.addWidget( menuNames[1], make_shared<WidgetButton>( Rect(back_x,back_x+w,back_y,back_y+h), "Back", boost::bind( &MainMenuState::onPressedButBack, this ), boost::bind( &MainMenuState::onPressedSound, this ) ) );
+    getSubSystems().gui.addWidget( menuNames[2], make_shared<WidgetButton>( Rect(back_x,back_x+w,back_y,back_y+h), "Back", boost::bind( &MainMenuState::onPressedButBack, this ), boost::bind( &MainMenuState::onPressedSound, this ) ) );
     //GetSubSystems().gui.InsertWidget( menuNames[3], boost::shared_ptr<Widget>(new WidgetButton( Rect(back_x,back_x+w,back_y,back_y+h), "Back", boost::bind( &MainMenuState::CallbackButBack, this ), boost::bind( &MainMenuState::CallbackSound, this ) )) );
 
     // *** Spielen Menü ***
-    getSubSystems().gui.insertWidget( menuNames[Play], make_shared<WidgetLabel>(  0.14f, 0.21f, "Pick a level:", getSubSystems().renderer.getFontManager() ) );
+    getSubSystems().gui.addWidget( menuNames[Play], make_shared<WidgetLabel>(  0.14f, 0.21f, "Pick a level:", getSubSystems().renderer.getFontManager() ) );
 
     pugi::xml_document doc;
     pugi::xml_parse_result result = doc.load_file(cLevelSequenceFileName.c_str());
@@ -129,9 +129,9 @@ void MainMenuState::init()        // State starten
         std::string value = node.name();
         std::string file = node.attribute("file").value();
         if ( value == "level" )
-            getSubSystems().gui.insertWidget( menuNames[Play], boost::make_shared<WidgetButton>( Rect(x,x+w,y,y+h), caption, boost::bind( &MainMenuState::onPressedOpenLevel, this, file ), boost::bind( &MainMenuState::onPressedSound, this ) ) );
+            getSubSystems().gui.addWidget( menuNames[Play], make_shared<WidgetButton>( Rect(x,x+w,y,y+h), caption, boost::bind( &MainMenuState::onPressedOpenLevel, this, file ), boost::bind( &MainMenuState::onPressedSound, this ) ) );
         else if ( value == "slides" )
-            getSubSystems().gui.insertWidget( menuNames[Play], boost::make_shared<WidgetButton>( Rect(x,x+w,y,y+h), caption, boost::bind( &MainMenuState::onPressedOpenSlideShow, this, file ), boost::bind( &MainMenuState::onPressedSound, this ) ) );
+            getSubSystems().gui.addWidget( menuNames[Play], make_shared<WidgetButton>( Rect(x,x+w,y,y+h), caption, boost::bind( &MainMenuState::onPressedOpenSlideShow, this, file ), boost::bind( &MainMenuState::onPressedSound, this ) ) );
 		// NOTE: needs to specify boost:: because of ADL (see http://www.gamedev.net/topic/619313-visual-studio-namespace-problem-ambiguous-call-to-boostmake-shared/)
         y += 0.07f;
     }
@@ -139,57 +139,57 @@ void MainMenuState::init()        // State starten
     // *** Über ***
     x=0.2f;
     y=0.25f;
-    getSubSystems().gui.insertWidget( menuNames[Credits], make_shared<WidgetLabel>( x, y,
+    getSubSystems().gui.addWidget( menuNames[Credits], make_shared<WidgetLabel>( x, y,
                               "== AstroAttack " GAME_VERSION " ==", getSubSystems().renderer.getFontManager() ) );
     y+=0.05f;
-    getSubSystems().gui.insertWidget( menuNames[Credits], make_shared<WidgetLabel>( x, y,
+    getSubSystems().gui.addWidget( menuNames[Credits], make_shared<WidgetLabel>( x, y,
                               "by Christian Zommerfelds", getSubSystems().renderer.getFontManager() ) );
     y+=0.09f;
-    getSubSystems().gui.insertWidget( menuNames[Credits], make_shared<WidgetLabel>( x, y,
+    getSubSystems().gui.addWidget( menuNames[Credits], make_shared<WidgetLabel>( x, y,
                               "* Music *", getSubSystems().renderer.getFontManager() ) );
     y+=0.04f;
-    getSubSystems().gui.insertWidget( menuNames[Credits], make_shared<WidgetLabel>( x, y,
+    getSubSystems().gui.addWidget( menuNames[Credits], make_shared<WidgetLabel>( x, y,
                               " - Dj Mitch (SRT-M1tch) -> Menu", getSubSystems().renderer.getFontManager() ) );
     y+=0.04f;
-    getSubSystems().gui.insertWidget( menuNames[Credits], make_shared<WidgetLabel>( x, y,
+    getSubSystems().gui.addWidget( menuNames[Credits], make_shared<WidgetLabel>( x, y,
                               " - Sir LardyLarLar AKA Robin (FattysLoyalKnight) -> Intro", getSubSystems().renderer.getFontManager() ) );
     y+=0.04f;
-    getSubSystems().gui.insertWidget( menuNames[Credits], make_shared<WidgetLabel>( x, y,
+    getSubSystems().gui.addWidget( menuNames[Credits], make_shared<WidgetLabel>( x, y,
                               " - sr4cld - 4clD -> Spiel", getSubSystems().renderer.getFontManager() ) );
     y+=0.09f;
-    getSubSystems().gui.insertWidget( menuNames[Credits], make_shared<WidgetLabel>( x, y,
+    getSubSystems().gui.addWidget( menuNames[Credits], make_shared<WidgetLabel>( x, y,
                               "* Sound *", getSubSystems().renderer.getFontManager() ) );
     y+=0.04f;
-    getSubSystems().gui.insertWidget( menuNames[Credits], make_shared<WidgetLabel>( x, y,
+    getSubSystems().gui.addWidget( menuNames[Credits], make_shared<WidgetLabel>( x, y,
                               " - soundsnap.com", getSubSystems().renderer.getFontManager() ) );
     y+=0.09f;
-    getSubSystems().gui.insertWidget( menuNames[Credits], make_shared<WidgetLabel>( x, y,
+    getSubSystems().gui.addWidget( menuNames[Credits], make_shared<WidgetLabel>( x, y,
                               "* Libraries *", getSubSystems().renderer.getFontManager() ) );
     y+=0.04f;
-    getSubSystems().gui.insertWidget( menuNames[Credits], make_shared<WidgetLabel>( x, y,
+    getSubSystems().gui.addWidget( menuNames[Credits], make_shared<WidgetLabel>( x, y,
                               " - OpenGL, SDL, DevIL, FTGL, SDL_mixer, Box2D, Boost", getSubSystems().renderer.getFontManager() ) );
     y+=0.09f;
-    getSubSystems().gui.insertWidget( menuNames[Credits], make_shared<WidgetLabel>( x, y,
+    getSubSystems().gui.addWidget( menuNames[Credits], make_shared<WidgetLabel>( x, y,
                               "Thanks for playing!", getSubSystems().renderer.getFontManager() ) );
 
     // *** Optionen ***
-    getSubSystems().gui.insertWidget( menuNames[Options], make_shared<WidgetLabel>(  0.3f, 0.1f, "Screen resolution:", getSubSystems().renderer.getFontManager() ) );
-    getSubSystems().gui.insertWidget( menuNames[Options], make_shared<WidgetLabel>(  0.1f, 0.8f, "Please change \"config.info\" for more options.", getSubSystems().renderer.getFontManager() ) );
+    getSubSystems().gui.addWidget( menuNames[Options], make_shared<WidgetLabel>(  0.3f, 0.1f, "Screen resolution:", getSubSystems().renderer.getFontManager() ) );
+    getSubSystems().gui.addWidget( menuNames[Options], make_shared<WidgetLabel>(  0.1f, 0.8f, "Please change \"config.info\" for more options.", getSubSystems().renderer.getFontManager() ) );
     
     x=0.3f;
     y=0.92f;
-    getSubSystems().gui.insertWidget( menuNames[Options], make_shared<WidgetButton>( Rect(x,x+w,y,y+h), "Cancel", boost::bind( &MainMenuState::onPressedButDiscardConfig, this ), boost::bind( &MainMenuState::onPressedSound, this ) ) );
+    getSubSystems().gui.addWidget( menuNames[Options], make_shared<WidgetButton>( Rect(x,x+w,y,y+h), "Cancel", boost::bind( &MainMenuState::onPressedButDiscardConfig, this ), boost::bind( &MainMenuState::onPressedSound, this ) ) );
     x=0.5f;
-    getSubSystems().gui.insertWidget( menuNames[Options], make_shared<WidgetButton>( Rect(x,x+w,y,y+h), "Apply", boost::bind( &MainMenuState::onPressedButApplyConfig, this ), boost::bind( &MainMenuState::onPressedSound, this ) ) );
+    getSubSystems().gui.addWidget( menuNames[Options], make_shared<WidgetButton>( Rect(x,x+w,y,y+h), "Apply", boost::bind( &MainMenuState::onPressedButApplyConfig, this ), boost::bind( &MainMenuState::onPressedSound, this ) ) );
     
     // Auflösungen
     x=0.03f;
     y=0.15f;
-    getSubSystems().gui.insertWidget( menuNames[Options], make_shared<WidgetButton>( Rect(x,x+w,y,y+h), "800x600", boost::bind( &MainMenuState::onPressedResolution, this, 800, 600 ), boost::bind( &MainMenuState::onPressedSound, this ) ) );
+    getSubSystems().gui.addWidget( menuNames[Options], make_shared<WidgetButton>( Rect(x,x+w,y,y+h), "800x600", boost::bind( &MainMenuState::onPressedResolution, this, 800, 600 ), boost::bind( &MainMenuState::onPressedSound, this ) ) );
     x += w+0.05f;
-    getSubSystems().gui.insertWidget( menuNames[Options], make_shared<WidgetButton>( Rect(x,x+w,y,y+h), "1024x768", boost::bind( &MainMenuState::onPressedResolution, this, 1024, 768 ), boost::bind( &MainMenuState::onPressedSound, this ) ) );
+    getSubSystems().gui.addWidget( menuNames[Options], make_shared<WidgetButton>( Rect(x,x+w,y,y+h), "1024x768", boost::bind( &MainMenuState::onPressedResolution, this, 1024, 768 ), boost::bind( &MainMenuState::onPressedSound, this ) ) );
     x += w+0.05f;
-    getSubSystems().gui.insertWidget( menuNames[Options], make_shared<WidgetButton>( Rect(x,x+w,y,y+h), "1280x1024", boost::bind( &MainMenuState::onPressedResolution, this, 1280, 1024 ), boost::bind( &MainMenuState::onPressedSound, this ) ) );
+    getSubSystems().gui.addWidget( menuNames[Options], make_shared<WidgetButton>( Rect(x,x+w,y,y+h), "1280x1024", boost::bind( &MainMenuState::onPressedResolution, this, 1280, 1024 ), boost::bind( &MainMenuState::onPressedSound, this ) ) );
 
     
     log(Info) << "[ Done ]\n";

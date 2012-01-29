@@ -31,7 +31,7 @@ public:
     void update();
     void draw();
 
-    void insertWidget(const GroupId& groupId, boost::shared_ptr<Widget> pWidget);
+    void addWidget(const GroupId& groupId, boost::shared_ptr<Widget> pWidget);
     void deleteGroup(const GroupId& groupId);
     void hideGroup(const GroupId& groupId) { m_groupsToHide.insert( groupId ); }
     void showGroup(const GroupId& groupId) { m_groupsToHide.erase( groupId ); }

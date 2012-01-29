@@ -41,7 +41,7 @@ void GuiSubSystem::draw()
     }
 }
 
-void GuiSubSystem::insertWidget(const GroupId& groupId, boost::shared_ptr<Widget> pWidget)
+void GuiSubSystem::addWidget(const GroupId& groupId, boost::shared_ptr<Widget> pWidget)
 {
     WidgetMap::iterator it = m_widgets.find( groupId );
     if ( it == m_widgets.end() )

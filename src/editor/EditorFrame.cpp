@@ -8,10 +8,6 @@
 #include "Editor.h"
 #include "common/GameEvents.h"
 
-// TEMP
-#include <iostream>
-using namespace std;
-
 namespace {
 int glArgs[] = {WX_GL_RGBA, WX_GL_DOUBLEBUFFER, WX_GL_DEPTH_SIZE, 16, 0};
 }
@@ -57,6 +53,8 @@ void EditorFrame::onMenuNew(wxCommandEvent&)
 {
     m_editor.clearLevel();
     m_fileName = "";
+    m_canvas.resetCamera();
+
     Refresh();
 }
 
@@ -71,6 +69,7 @@ void EditorFrame::onMenuOpen(wxCommandEvent&)
 
     m_fileName = (const char*)openFileDialog.GetPath().mb_str(wxConvUTF8);
     m_editor.loadLevel(m_fileName);
+    m_canvas.resetCamera();
 
     Refresh();
 }
