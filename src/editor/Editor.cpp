@@ -6,23 +6,24 @@
 
 #include "Editor.h"
 
-#include "common/components/CompVisualTexture.h"
-#include "common/components/CompPhysics.h"
 #include "common/components/CompShape.h"
+#include "common/components/CompPhysics.h"
 #include "common/components/CompPosition.h"
+#include "common/components/CompVisualTexture.h"
 
 #include "common/World.h"
 #include "common/Vector2D.h"
 #include "common/DataLoader.h"
 #include "common/Foreach.h"
+#include "common/Physics.h"
 
-#include <iostream>
-#include <boost/property_tree/info_parser.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/make_shared.hpp>
+#include <boost/property_tree/info_parser.hpp>
 
-Editor::Editor(GameEvents& events)
+Editor::Editor(GameEvents& events, PhysicsSubSystem& physics)
 : m_events (events),
+  m_physics (physics),
   m_world (new World(m_events)),
   m_textureList (),
   m_currentTextureIt ()
@@ -49,6 +50,7 @@ void Editor::clearLevel()
 {
     m_guiData.indexCurVertex = 0;
     m_world.reset(new World(m_events));
+    m_guiData.world = m_world.get();
 }
 
 void Editor::loadLevel(const std::string& fileName)
@@ -58,6 +60,7 @@ void Editor::loadLevel(const std::string& fileName)
     {
         //DataLoader::loadToWorld( "data/player.info", *m_world, m_events );
         DataLoader::loadToWorld( fileName, *m_world, m_events );
+        m_guiData.world = m_world.get();
     }
     catch (DataLoadException& e)
     {
@@ -73,8 +76,6 @@ void Editor::saveLevel(const std::string& fileName)
 
 void Editor::cmdAddVertex(const Vector2D& worldPos)
 {
-    std::cerr << "worldPos: " << worldPos.x << " " << worldPos.y << std::endl;
-
     if (m_guiData.indexCurVertex < 8)
     {
         m_guiData.createdVertices[m_guiData.indexCurVertex] = worldPos;
@@ -84,7 +85,6 @@ void Editor::cmdAddVertex(const Vector2D& worldPos)
 
 void Editor::cmdCreateBlock()
 {
-    std::cerr << "Creating block" << std::endl;
     if (m_guiData.indexCurVertex > 2)
     {
         std::string entityId;
@@ -155,6 +155,12 @@ void Editor::cmdPrevTexture()
     if (m_currentTextureIt == m_textureList.begin())
         m_currentTextureIt = --m_textureList.end();
     m_guiData.currentTexture = *m_currentTextureIt;
+}
+
+void Editor::cmdSelect(const Vector2D& pos)
+{
+    m_guiData.selectedEntity = m_physics.selectEntity(pos);
+    std::cerr << m_guiData.selectedEntity << std::endl;
 }
 
 const EditorGuiData& Editor::getGuiData()

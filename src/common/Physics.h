@@ -13,6 +13,7 @@
 #include "common/components/CompGravField.h"
 #include <vector>
 #include <Box2D/Box2D.h>
+#include <boost/optional.hpp>
 
 struct GameEvents;
 class Component;
@@ -28,6 +29,7 @@ public:
     PhysicsSubSystem(GameEvents& gameEvents);
 
     void update();
+    boost::optional<EntityIdType> selectEntity(const Vector2D& pos);
 
     void calculateSmoothPositions(float accumulator);
 

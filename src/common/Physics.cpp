@@ -260,3 +260,44 @@ void PhysicsSubSystem::onUnregisterCompGrav( CompGravField& compGrav )
         }
     }
 }
+
+class QueryCallback: public b2QueryCallback
+{
+public:
+    CompPhysics* query(const b2World& world, const b2Vec2& point)
+    {
+        comp = NULL;
+        testPoint = point;
+        b2AABB aabb = { point, point };
+        world.QueryAABB(this, aabb);
+        return comp;
+    }
+
+    bool ReportFixture(b2Fixture* fixture)
+    {
+        if (fixture->TestPoint(testPoint))
+        {
+            b2Body* body = fixture->GetBody();
+            comp = static_cast<CompPhysics*>(body->GetUserData());
+            return false;
+        }
+        else
+            return true; // continue the query?
+    }
+private:
+    CompPhysics* comp;
+    b2Vec2 testPoint;
+};
+
+namespace {
+QueryCallback queryCallback;
+}
+
+boost::optional<EntityIdType> PhysicsSubSystem::selectEntity(const Vector2D& pos)
+{
+    CompPhysics* comp = queryCallback.query(m_world, *pos.to_b2Vec2());
+    if (comp == NULL)
+        return boost::optional<EntityIdType>();
+    else
+        return boost::optional<EntityIdType>(comp->getEntityId());
+}

@@ -28,7 +28,7 @@
 #include <boost/make_shared.hpp>
 
 // define this to draw gravitation vector and other
-#define DRAW_DEBUG
+//#define DRAW_DEBUG
 
 #ifdef DRAW_DEBUG
 #include "common/components/CompPhysics.h"

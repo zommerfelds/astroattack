@@ -66,7 +66,7 @@ private:
 
     EntityMap m_entities;
 
-    Component* getComponent(const EntityIdType& entId, const ComponentTypeId& compType, const ComponentIdType& compId);
+    Component* getComponent(const EntityIdType& entId, const ComponentTypeId& compType, const ComponentIdType& compId) const;
 };
 
 // needs to be implemented here because of templates

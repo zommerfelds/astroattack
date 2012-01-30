@@ -104,7 +104,7 @@ const EntityMap& ComponentManager::getAllEntities() const
     return m_entities;
 }
 
-Component* ComponentManager::getComponent(const EntityIdType& entId, const ComponentTypeId& compType, const ComponentIdType& compId)
+Component* ComponentManager::getComponent(const EntityIdType& entId, const ComponentTypeId& compType, const ComponentIdType& compId) const
 {
     EntityMap::const_iterator eit = m_entities.find(entId);
     if ( eit == m_entities.end() )

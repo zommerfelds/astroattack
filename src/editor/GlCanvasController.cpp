@@ -6,13 +6,15 @@
 
 #include "GlCanvasController.h"
 
+#include "Editor.h"
+
+#include "common/components/CompShape.h"
+#include "common/World.h"
+#include "common/GameEvents.h"
+
 #include <wx/frame.h>
 #include <wx/window.h>
 //#include <SDL_opengl.h>
-
-#include "Editor.h"
-
-#include "common/GameEvents.h"
 
 BEGIN_EVENT_TABLE(GlCanvasController, wxGLCanvas)
     EVT_SIZE(GlCanvasController::onResize)
@@ -39,6 +41,9 @@ const float gridCellWidth = 0.5f;
 
 Vector2D snapToGrid(const Vector2D& worldCoordinates)
 {
+    if (wxGetKeyState(WXK_ALT))
+        return worldCoordinates;
+
     float cellsX = worldCoordinates.x/gridCellWidth;
     if ( cellsX > 0 )
         cellsX += 0.5;
@@ -100,8 +105,12 @@ void GlCanvasController::onLMouseUp(wxMouseEvent& evt)
 
 void GlCanvasController::onRMouseDown(wxMouseEvent& evt)
 {
-    Vector2D cursorPos(((float)evt.GetX())/GetSize().x, ((float)evt.GetY())/GetSize().y);
-    m_editor.cmdAddVertex(snapToGrid(m_cameraController.screenToWorld(cursorPos)));
+    Vector2D cursorPos = m_cameraController.screenToWorld(
+            Vector2D(((float)evt.GetX())/GetSize().x, ((float)evt.GetY())/GetSize().y));
+    if (wxGetKeyState(WXK_CONTROL))
+        m_editor.cmdAddVertex(snapToGrid(cursorPos));
+    else
+        m_editor.cmdSelect(cursorPos);
     Refresh();
 }
 
@@ -224,6 +233,14 @@ void GlCanvasController::onPaint(wxPaintEvent& evt)
     m_renderer.drawVisualAnimationComps();
     // Texturen zeichnen
     m_renderer.drawVisualTextureComps();
+
+    assert(m_editor.getGuiData().world != NULL);
+    if (m_editor.getGuiData().selectedEntity)
+    {
+        const CompShape* compShape = m_editor.getGuiData().world->getCompManager().getComponent<CompShape>(*m_editor.getGuiData().selectedEntity);
+        assert(compShape != NULL);
+        m_renderer.drawShape(*compShape, Color(1.0f, 0.0f, 0.0f, 0.3f), true);
+    }
 
     m_renderer.getTextureManager().clear();
     const EditorGuiData& editorData = m_editor.getGuiData();

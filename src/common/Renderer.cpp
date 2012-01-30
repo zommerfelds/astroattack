@@ -312,31 +312,36 @@ void RenderSubSystem::drawOverlay( float r, float g, float b, float a )
     glColor4f( 255, 255, 255, 255 );
 }
 
-void RenderSubSystem::drawTexturedPolygon(const CompShapePolygon& poly,    const CompVisualTexture& tex, bool border)
+void RenderSubSystem::drawPolygon(const CompShapePolygon& poly, const CompVisualTexture* tex, bool border)
 {
-    bool useTexMap = (poly.getVertexCount() == tex.getTexMap().size());
+    bool useTexMap = tex && (poly.getVertexCount() == tex->getTexMap().size());
 
-    m_textureManager.setTexture(tex.getTextureId());
+    if (tex)
+        m_textureManager.setTexture(tex->getTextureId());
     glBegin(GL_POLYGON);
     for (size_t i = 0; i < poly.getVertexCount(); ++i)
     {
-        if (useTexMap)
-            glTexCoord2f(tex.getTexMap()[i].x, tex.getTexMap()[i].y);
-        else
-            glTexCoord2f(poly.getVertex(i)->x, -poly.getVertex(i)->y);
+        if (tex)
+        {
+            if (useTexMap)
+                glTexCoord2f(tex->getTexMap()[i].x, tex->getTexMap()[i].y);
+            else
+                glTexCoord2f(poly.getVertex(i)->x, -poly.getVertex(i)->y);
+        }
         glVertex2f(poly.getVertex(i)->x, poly.getVertex(i)->y);
     }
     glEnd();
 
-    for (size_t i = 0; i < poly.getVertexCount(); ++i)
-    {
-        std::string edgeTex = tex.getEdgeTexture(i);
-        if (edgeTex == "")
-            continue;
+    if (tex)
+        for (size_t i = 0; i < poly.getVertexCount(); ++i)
+        {
+            std::string edgeTex = tex->getEdgeTexture(i);
+            if (edgeTex == "")
+                continue;
 
-        size_t vetex2Index = (i == poly.getVertexCount() - 1) ? (0) : (i + 1);
-        drawEdge(*poly.getVertex(i), *poly.getVertex(vetex2Index), edgeTex);
-    }
+            size_t vetex2Index = (i == poly.getVertexCount() - 1) ? (0) : (i + 1);
+            drawEdge(*poly.getVertex(i), *poly.getVertex(vetex2Index), edgeTex);
+        }
 
     if (border)
     {
@@ -352,12 +357,13 @@ void RenderSubSystem::drawTexturedPolygon(const CompShapePolygon& poly,    const
          glEnd();*/
     }
 
-    glColor4f(255, 255, 255, 255);
+    glColor4ub(255, 255, 255, 255);
 }
 
-void RenderSubSystem::drawTexturedCircle(const CompShapeCircle& circle,    const CompVisualTexture& tex, bool border)
+void RenderSubSystem::drawCircle(const CompShapeCircle& circle, const CompVisualTexture* tex, bool border)
 {
-    m_textureManager.setTexture(tex.getTextureId());
+    if (tex)
+        m_textureManager.setTexture(tex->getTextureId());
     GLUquadricObj *pQuacric = gluNewQuadric();
     gluQuadricTexture(pQuacric, true);
     gluQuadricDrawStyle(pQuacric, GLU_FILL);
@@ -375,19 +381,22 @@ void RenderSubSystem::drawTexturedCircle(const CompShapeCircle& circle,    const
     glPopMatrix();
     glMatrixMode( GL_MODELVIEW );
 
-    std::string edgeTex = tex.getEdgeTexture(0);
-    if (edgeTex != "")
+    if (tex)
     {
-        float angle = cPi * 2 / cCircleSlices;
-        float edgeLenght = tan(angle / 2) * 2.0f * circle.getRadius();
-        float textureCut = fmod(edgeLenght, 1.0f);
-
-        for (size_t i = 0; i < cCircleSlices; ++i)
+        std::string edgeTex = tex->getEdgeTexture(0);
+        if (edgeTex != "")
         {
-            Vector2D cross(circle.getRadius(), 0.0f);
+            float angle = cPi * 2 / cCircleSlices;
+            float edgeLenght = tan(angle / 2) * 2.0f * circle.getRadius();
+            float textureCut = fmod(edgeLenght, 1.0f);
 
-            drawEdge(cross.rotated(angle * i), cross.rotated(angle * (i + 1)),
-                    edgeTex, textureCut * i, edgeLenght);
+            for (size_t i = 0; i < cCircleSlices; ++i)
+            {
+                Vector2D cross(circle.getRadius(), 0.0f);
+
+                drawEdge(cross.rotated(angle * i), cross.rotated(angle * (i + 1)),
+                        edgeTex, textureCut * i, edgeLenght);
+            }
         }
     }
 
@@ -402,7 +411,41 @@ void RenderSubSystem::drawTexturedCircle(const CompShapeCircle& circle,    const
     glPopMatrix();
     gluDeleteQuadric(pQuacric);
 
-    glColor4f(255, 255, 255, 255);
+    glColor4ub(255, 255, 255, 255);
+}
+
+void RenderSubSystem::drawShape(const CompShape& shape, const CompVisualTexture& tex, bool border)
+{
+    drawShape(shape, &tex, NULL, border);
+}
+
+void RenderSubSystem::drawShape(const CompShape& shape, const Color& color, bool border)
+{
+    drawShape(shape, NULL, &color, border);
+}
+
+void RenderSubSystem::drawShape(const CompShape& shape, const CompVisualTexture* tex, const Color* color, bool border)
+{
+    m_textureManager.clear();
+    if (color)
+        glColor4f(color->r, color->g, color->b, color->a);
+
+    switch (shape.getType())
+    {
+    case CompShape::Polygon:
+    {
+        drawPolygon(static_cast<const CompShapePolygon&>(shape), tex, border);
+        break;
+    }
+    case CompShape::Circle:
+    {
+        drawCircle(static_cast<const CompShapeCircle&>(shape), tex, border);
+        break;
+    }
+    default:
+        assert(false);
+        break;
+    }
 }
 
 void RenderSubSystem::drawEdge(const Vector2D& vertexA, const Vector2D& vertexB, const std::string& tex, float offset, float preCalcEdgeLenght)
@@ -556,10 +599,10 @@ void RenderSubSystem::drawString( const std::string &str, const FontId &fontId, 
 
 void RenderSubSystem::drawVisualTextureComps()
 {
-    foreach(CompVisualTexture* pTexComp, m_visualTextureComps)
+    foreach(CompVisualTexture* texComp, m_visualTextureComps)
     {
-        CompPosition* compPos = pTexComp->getSiblingComponent<CompPosition>();
-        std::vector<CompShape*> compShapes = pTexComp->getSiblingComponents<CompShape>();
+        CompPosition* compPos = texComp->getSiblingComponent<CompPosition>();
+        std::vector<CompShape*> compShapes = texComp->getSiblingComponents<CompShape>();
         if ( compPos )
         {
             glPushMatrix();
@@ -570,27 +613,13 @@ void RenderSubSystem::drawVisualTextureComps()
             glTranslatef(position.x, position.y, 0.0f);
             glRotatef( radToDeg(angle), 0.0, 0.0, 1.0f);
 
-            const std::string& shapeId = pTexComp->getShapeId();
+            const std::string& shapeId = texComp->getShapeId();
             bool allShapes = (shapeId == CompVisualTexture::ALL_SHAPES);
             for (size_t i = 0; i < compShapes.size(); ++i)
             {
                 if (!allShapes && shapeId != compShapes[i]->getId())
                     continue;
-                switch (compShapes[i]->getType())
-                {
-                case CompShape::Polygon:
-                {
-                    drawTexturedPolygon(*static_cast<const CompShapePolygon*>(compShapes[i]), *pTexComp);
-                    break;
-                }
-                case CompShape::Circle:
-                {
-                    drawTexturedCircle(*static_cast<const CompShapeCircle*>(compShapes[i]), *pTexComp);
-                    break;
-                }
-                default:
-                    break;
-                }
+                drawShape(*compShapes[i], *texComp);
                 if (!allShapes)
                     break;
             }

@@ -42,10 +42,10 @@ bool EditorApp::OnInit()
     setUpLoggerFromPropTree(editorConfig);
 
     m_events.reset(new GameEvents);
-    m_physics.reset(new PhysicsSubSystem(*m_events)); // need physics system?
+    m_physics.reset(new PhysicsSubSystem(*m_events));
     m_renderer.reset(new RenderSubSystem(*m_events));
 
-    m_editor.reset(new Editor(*m_events));
+    m_editor.reset(new Editor(*m_events, *m_physics));
 
     EditorFrame* frame = new EditorFrame(*m_editor, *m_renderer);
     frame->Show(true);
