@@ -4,7 +4,7 @@
  * Copyright 2012 Christian Zommerfelds
  */
 
-#ifndef GLCANVAS_H
+#ifndef GLCANVASCONTROLLER_H
 #define GLCANVASCONTROLLER_H
 
 #include "common/Vector2D.h"
@@ -16,11 +16,12 @@
 
 struct GameEvents;
 class Editor;
+class EditorFrame;
 
 class GlCanvasController : public wxGLCanvas
 {
 public:
-    GlCanvasController(Editor& editor, wxWindow* parent, int* args, RenderSubSystem& renderer);
+    GlCanvasController(Editor& editor, wxWindow* parent, EditorFrame& editorFrame, int* args, RenderSubSystem& renderer);
     virtual ~GlCanvasController();
     void resetCamera();
 
@@ -34,9 +35,9 @@ private:
     void onMouseMotion(wxMouseEvent& evt);
     void onMouseLeaveWindow(wxMouseEvent& evt);
     void onMouseEnterWindow(wxMouseEvent& evt);
-    void onKeyDown(wxKeyEvent& evt);
 
     Editor& m_editor;
+    EditorFrame& m_editorFrame;
     wxGLContext* m_context;
     RenderSubSystem& m_renderer;
     CameraController m_cameraController;

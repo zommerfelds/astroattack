@@ -16,7 +16,9 @@
 #include "common/DataLoader.h"
 #include "common/Foreach.h"
 #include "common/Physics.h"
+#include "common/GameEvents.h"
 
+#include <boost/bind.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/make_shared.hpp>
 #include <boost/property_tree/info_parser.hpp>
@@ -28,6 +30,8 @@ Editor::Editor(GameEvents& events, PhysicsSubSystem& physics)
   m_textureList (),
   m_currentTextureIt ()
 {
+    //m_eventConnection1 = m_events.newEntity.registerListener( boost::bind( &Editor::onNewEntity, this, _1 ) );
+    //m_eventConnection2 = m_events.deleteEntity.registerListener( boost::bind( &Editor::onRemoveEntity, this, _1 ) );
 }
 
 Editor::~Editor() {}
@@ -50,7 +54,7 @@ void Editor::clearLevel()
 {
     m_guiData.indexCurVertex = 0;
     m_world.reset(new World(m_events));
-    m_guiData.world = m_world.get();
+    //m_guiData.world = m_world.get();
 }
 
 void Editor::loadLevel(const std::string& fileName)
@@ -60,7 +64,7 @@ void Editor::loadLevel(const std::string& fileName)
     {
         //DataLoader::loadToWorld( "data/player.info", *m_world, m_events );
         DataLoader::loadToWorld( fileName, *m_world, m_events );
-        m_guiData.world = m_world.get();
+        //m_guiData.world = m_world.get();
     }
     catch (DataLoadException& e)
     {
@@ -160,7 +164,6 @@ void Editor::cmdPrevTexture()
 void Editor::cmdSelect(const Vector2D& pos)
 {
     m_guiData.selectedEntity = m_physics.selectEntity(pos);
-    std::cerr << m_guiData.selectedEntity << std::endl;
 }
 
 const EditorGuiData& Editor::getGuiData()
@@ -168,3 +171,16 @@ const EditorGuiData& Editor::getGuiData()
     return m_guiData;
 }
 
+/*void Editor::onNewEntity(const EntityIdType& id)
+{
+    CompPhysics* compPhys = m_world->getCompManager().getComponent<CompPhysics>(id);
+    CompShape* compShape = m_world->getCompManager().getComponent<CompShape>(id);
+    if (!compPhys && compShape)
+    {
+    }
+}
+
+void Editor::onRemoveEntity(const EntityIdType& id)
+{
+}
+*/

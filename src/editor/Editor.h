@@ -8,15 +8,20 @@
 #define EDITOR_H
 
 #include "common/Vector2D.h"
+#include "common/IdTypes.h"
+//#include "common/Event.h"
 
 #include <string>
 #include <vector>
-#include <boost/scoped_ptr.hpp>
 #include <boost/optional.hpp>
+#include <boost/scoped_ptr.hpp>
 
-class World;
 struct GameEvents;
+class World;
 class PhysicsSubSystem;
+class Component;
+
+typedef boost::optional<std::pair<EntityIdType, std::vector<Component*> > > OptEntity;
 
 struct EditorGuiData
 {
@@ -25,15 +30,13 @@ struct EditorGuiData
     {
         indexCurVertex = 0;
         currentTexture = "";
-        selectedEntity = boost::optional<std::string>();
-        world = NULL;
+        selectedEntity = OptEntity();
     }
 
     Vector2D createdVertices[8];
     int indexCurVertex;
     std::string currentTexture;
-    boost::optional<std::string> selectedEntity;
-    const World* world;
+    OptEntity selectedEntity;
 };
 
 class Editor
@@ -58,6 +61,9 @@ public:
 
 private:
 
+    //void onNewEntity(const EntityIdType& id);
+    //void onRemoveEntity(const EntityIdType& id);
+
     GameEvents& m_events;
     PhysicsSubSystem& m_physics;
     boost::scoped_ptr<World> m_world;
@@ -66,6 +72,9 @@ private:
     std::vector<std::string>::iterator m_currentTextureIt;
 
     EditorGuiData m_guiData;
+
+    //EventConnection m_eventConnection1;
+    //EventConnection m_eventConnection2;
 };
 
 #endif /* EDITOR_H */

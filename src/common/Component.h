@@ -29,6 +29,7 @@ public:
     Component(const ComponentIdType& id, GameEvents& gameEvents);
     virtual ~Component() {} // Destruktor
 
+    static const ComponentTypeId& getTypeIdStatic();
     virtual const ComponentTypeId& getTypeId() const = 0;   // Komponenttyp -> Name des Komponententyps
     const ComponentIdType& getId() const { return m_id; } // Eigener Namen (optional)
 

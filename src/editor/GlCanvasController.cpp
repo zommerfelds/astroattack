@@ -7,10 +7,13 @@
 #include "GlCanvasController.h"
 
 #include "Editor.h"
+#include "EditorFrame.h"
 
 #include "common/components/CompShape.h"
+
 #include "common/World.h"
 #include "common/GameEvents.h"
+#include "common/Foreach.h"
 
 #include <wx/frame.h>
 #include <wx/window.h>
@@ -26,7 +29,6 @@ BEGIN_EVENT_TABLE(GlCanvasController, wxGLCanvas)
     EVT_MOTION(GlCanvasController::onMouseMotion)
     EVT_LEAVE_WINDOW(GlCanvasController::onMouseLeaveWindow)
     EVT_ENTER_WINDOW(GlCanvasController::onMouseEnterWindow)
-    EVT_KEY_DOWN(GlCanvasController::onKeyDown)
 END_EVENT_TABLE()
 
 namespace {
@@ -41,7 +43,7 @@ const float gridCellWidth = 0.5f;
 
 Vector2D snapToGrid(const Vector2D& worldCoordinates)
 {
-    if (wxGetKeyState(WXK_ALT))
+    if (!wxGetKeyState(WXK_ALT))
         return worldCoordinates;
 
     float cellsX = worldCoordinates.x/gridCellWidth;
@@ -61,18 +63,21 @@ Vector2D snapToGrid(const Vector2D& worldCoordinates)
 
 }
 
-GlCanvasController::GlCanvasController(Editor& editor, wxWindow* parent, int* args, RenderSubSystem& renderer) :
+GlCanvasController::GlCanvasController(Editor& editor, wxWindow* parent, EditorFrame& editorFrame, int* args, RenderSubSystem& renderer) :
     wxGLCanvas(parent, wxID_ANY, args, wxDefaultPosition, wxDefaultSize, wxFULL_REPAINT_ON_RESIZE),
     m_editor (editor),
+    m_editorFrame (editorFrame),
     m_renderer (renderer),
     m_cameraController (m_renderer, 1),
     m_lMouseIsDown (false),
-    m_mouseInWindow (false),
+    m_mouseInWindow (true), // so that the cursor is displayed
     m_initCount (0)
 {
     m_context = new wxGLContext(this);
 
-    SetFocus();
+    SetCursor( wxCursor( wxCURSOR_BLANK ) );
+
+    SetFocus(); // need this, else the global accelerators do not work...
  
     // To avoid flashing on MSW
     SetBackgroundStyle(wxBG_STYLE_CUSTOM);
@@ -111,6 +116,7 @@ void GlCanvasController::onRMouseDown(wxMouseEvent& evt)
         m_editor.cmdAddVertex(snapToGrid(cursorPos));
     else
         m_editor.cmdSelect(cursorPos);
+    m_editorFrame.update();
     Refresh();
 }
 
@@ -145,22 +151,6 @@ void GlCanvasController::onMouseEnterWindow(wxMouseEvent& evt)
 {
     m_mouseInWindow = true;
     // Refresh() is done by onMouseMotion()
-}
-
-void GlCanvasController::onKeyDown(wxKeyEvent& evt)
-{
-    if (evt.GetKeyCode() == WXK_RETURN)
-        m_editor.cmdCreateBlock();
-    if (evt.GetKeyCode() == WXK_ESCAPE)
-        m_editor.cmdCancelBlock();
-    if (evt.GetKeyCode() == WXK_BACK)
-        m_editor.cmdCancelVertex();
-    if (evt.GetKeyCode() == WXK_PAGEUP)
-        m_editor.cmdNextTexture();
-    if (evt.GetKeyCode() == WXK_PAGEDOWN)
-        m_editor.cmdPrevTexture();
-
-    Refresh();
 }
 
 void GlCanvasController::onResize(wxSizeEvent& evt)
@@ -234,12 +224,17 @@ void GlCanvasController::onPaint(wxPaintEvent& evt)
     // Texturen zeichnen
     m_renderer.drawVisualTextureComps();
 
-    assert(m_editor.getGuiData().world != NULL);
     if (m_editor.getGuiData().selectedEntity)
     {
-        const CompShape* compShape = m_editor.getGuiData().world->getCompManager().getComponent<CompShape>(*m_editor.getGuiData().selectedEntity);
-        assert(compShape != NULL);
-        m_renderer.drawShape(*compShape, Color(1.0f, 0.0f, 0.0f, 0.3f), true);
+        foreach(Component* component, m_editor.getGuiData().selectedEntity->second)
+        {
+            if (component->getTypeId() == CompShape::getTypeIdStatic())
+            {
+                const CompShape* compShape = static_cast<CompShape*>(component);
+                m_renderer.drawShape(*compShape, Color(1.0f, 0.0f, 0.0f, 0.3f), true);
+                break;
+            }
+        }
     }
 
     m_renderer.getTextureManager().clear();

@@ -9,11 +9,19 @@
 #include "ComponentManager.h"
 #include "common/GameEvents.h"
 
+#include <boost/scoped_ptr.hpp>
+
 Component::Component(const ComponentIdType& id, GameEvents& gameEvents)
 : m_gameEvents (gameEvents),
   m_compManager (NULL),
   m_entityId (),
   m_id (id)
 {}
+
+const ComponentTypeId& Component::getTypeIdStatic()
+{
+    static boost::scoped_ptr<ComponentTypeId> typeId (new ComponentTypeId("Component"));
+    return *typeId;
+}
 
 const ComponentIdType Component::DEFAULT_ID = "";

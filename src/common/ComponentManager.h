@@ -21,8 +21,14 @@ struct GameEvents;
 class Logger;
 
 typedef std::list< boost::shared_ptr<Component> > ComponentList;
-typedef std::multimap< const ComponentTypeId, boost::shared_ptr<Component> > ComponentMap;
-typedef std::map< const EntityIdType, ComponentMap > EntityMap;
+typedef std::multimap< ComponentTypeId, boost::shared_ptr<Component> > ComponentMap;
+typedef std::map< EntityIdType, ComponentMap > EntityMap;
+
+struct Entity
+{
+    EntityIdType id;
+    ComponentList components;
+};
 
 class ComponentManager
 {
@@ -90,9 +96,22 @@ std::vector<CompType*> ComponentManager::getComponents(const EntityIdType& id)
     EntityMap::iterator eit = m_entities.find(id);
     if (eit == m_entities.end())
         return ret;
-    std::pair<ComponentMap::iterator, ComponentMap::iterator> equalRange = eit->second.equal_range(CompType::getTypeIdStatic());
 
-    for (ComponentMap::iterator it = equalRange.first; it != equalRange.second; ++it )
+    ComponentMap::iterator begin;
+    ComponentMap::iterator end;
+    if (CompType::getTypeIdStatic() == "Component")
+    {
+        begin = eit->second.begin();
+        end = eit->second.end();
+    }
+    else
+    {
+        std::pair<ComponentMap::iterator, ComponentMap::iterator> equalRange = eit->second.equal_range(CompType::getTypeIdStatic());
+        begin = equalRange.first;
+        end = equalRange.second;
+    }
+
+    for (ComponentMap::iterator it = begin; it != end; ++it )
         ret.push_back( static_cast<CompType*>(it->second.get()) );
     return ret;
 }
@@ -105,9 +124,22 @@ std::vector<const CompType*> ComponentManager::getComponents(const EntityIdType&
     EntityMap::const_iterator eit = m_entities.find(id);
     if (eit == m_entities.end())
         return ret;
-    std::pair<ComponentMap::const_iterator, ComponentMap::const_iterator> equalRange = eit->second.equal_range(CompType::getTypeIdStatic());
 
-    for (ComponentMap::const_iterator it = equalRange.first; it != equalRange.second; ++it )
+    ComponentMap::iterator begin;
+    ComponentMap::iterator end;
+    if (CompType::getTypeIdStatic() == "Component")
+    {
+        begin = eit->second.begin();
+        end = eit->second.end();
+    }
+    else
+    {
+        std::pair<ComponentMap::iterator, ComponentMap::iterator> equalRange = eit->second.equal_range(CompType::getTypeIdStatic());
+        begin = equalRange.first;
+        end = equalRange.second;
+    }
+
+    for (ComponentMap::const_iterator it = begin; it != end; ++it )
         ret.push_back( static_cast<CompType*>(it->second.get()) );
     return ret;
 }

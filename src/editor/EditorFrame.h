@@ -11,6 +11,19 @@
 #include "gen/EditorGuiBase.h"
 #include <wx/timer.h>
 
+enum ACC_IDs
+{
+    ACC_ID_lowest = wxID_HIGHEST+100,
+
+    ACC_ID_ENTER = ACC_ID_lowest,
+    ACC_ID_ESCAPE,
+    ACC_ID_BACKSPACE,
+    ACC_ID_NEXTTEXTURE,
+    ACC_ID_PREVTEXTURE,
+
+    ACC_ID_highest
+};
+
 class Editor;
 class RenderSubSystem;
 
@@ -35,7 +48,12 @@ public:
      */
     EditorFrame(Editor& editor, RenderSubSystem& renderer);
     ~EditorFrame();
+
+    void update();
+
     void onClose(wxCloseEvent&);
+    void onCustomAccelerator(wxCommandEvent&);
+    void onComponentActivated(wxListEvent&);
     void onMenuNew(wxCommandEvent&);
     void onMenuOpen(wxCommandEvent&);
     void onMenuSave(wxCommandEvent&);
