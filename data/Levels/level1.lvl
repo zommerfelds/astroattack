@@ -53,7 +53,8 @@ entity
 			id CompareVariable
 			params
 			{
-				var Collected
+                entity GlobalVariables
+                var Collected
 				compare gtoet
 				num 3
 			}
@@ -3754,10 +3755,11 @@ entity
 		type CompTrigger
 		condition
 		{
-			id EntityTouchedThis
+			id ConditionContact
 			params
 			{
-				entity Player
+                entity1 Player
+                entity2 Killerentity
 			}
 		}
 		effect

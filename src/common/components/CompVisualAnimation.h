@@ -22,10 +22,10 @@
 class CompVisualAnimation : public Component
 {
 public:
-    CompVisualAnimation(const ComponentIdType& id, GameEvents& gameEvents);
+    CompVisualAnimation(const ComponentId& id, GameEvents& gameEvents);
 
-    const ComponentTypeId& getTypeId() const { return getTypeIdStatic(); }
-    static const ComponentTypeId& getTypeIdStatic();
+    const ComponentType& getTypeId() const { return getTypeIdStatic(); }
+    static const ComponentType& getTypeIdStatic();
 
     // Welche Textur muss rerade gezeichnet werden? (Eine Animation besteht aus mehreren Texturen)
     TextureId getCurrentTexture() const;
@@ -62,7 +62,7 @@ public:
 
 private:
 
-    friend class RenderSubSystem;
+    friend class RenderSystem;
 
     // für Anzeige
     Vector2D m_center;

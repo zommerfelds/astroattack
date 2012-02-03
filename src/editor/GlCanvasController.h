@@ -21,7 +21,7 @@ class EditorFrame;
 class GlCanvasController : public wxGLCanvas
 {
 public:
-    GlCanvasController(Editor& editor, wxWindow* parent, EditorFrame& editorFrame, int* args, RenderSubSystem& renderer);
+    GlCanvasController(Editor& editor, wxWindow* parent, EditorFrame& editorFrame, int* args, RenderSystem& renderer);
     virtual ~GlCanvasController();
     void resetCamera();
 
@@ -39,7 +39,7 @@ private:
     Editor& m_editor;
     EditorFrame& m_editorFrame;
     wxGLContext* m_context;
-    RenderSubSystem& m_renderer;
+    RenderSystem& m_renderer;
     CameraController m_cameraController;
 
     Vector2D m_lastCursorPos;

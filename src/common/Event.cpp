@@ -48,6 +48,11 @@ bool EventConnection::isValid() const
     return true;
 }
 
+void EventConnections::add(const EventConnection& eventCon)
+{
+    m_connections.push_back(eventCon);
+}
+
 EventConnection Event0::registerListener(Function func)
 {
     // Create a new EventConnection

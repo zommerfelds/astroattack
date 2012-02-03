@@ -20,11 +20,11 @@ typedef struct _Mix_Music Mix_Music;
 typedef std::string SoundId;
 typedef std::string MusicId;
 
-class SoundSubSystem
+class SoundSystem
 {
 public:
-    SoundSubSystem();
-    ~SoundSubSystem();
+    SoundSystem();
+    ~SoundSystem();
 
     bool init(float volSound, float volMusic, float volMaster);
     void deInit();
@@ -55,7 +55,7 @@ private:
 
     // does this really has to be static?
     static void musicFinishedCallback();
-    static SoundSubSystem* soundSystemToNotifyMusicFinished;
+    static SoundSystem* soundSystemToNotifyMusicFinished;
     void onMusicFinished();
 };
 

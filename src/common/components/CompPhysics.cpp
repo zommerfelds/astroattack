@@ -18,14 +18,14 @@
 using boost::property_tree::ptree;
 
 // eindeutige ID
-const ComponentTypeId& CompPhysics::getTypeIdStatic()
+const ComponentType& CompPhysics::getTypeIdStatic()
 {
-    static boost::scoped_ptr<ComponentTypeId> typeId (new ComponentTypeId("CompPhysics"));
+    static boost::scoped_ptr<ComponentType> typeId (new ComponentType("CompPhysics"));
     return *typeId;
 }
 
 // Konstruktor
-CompPhysics::CompPhysics(const ComponentIdType& id, GameEvents& gameEvents, const BodyDef& rBodyDef) :
+CompPhysics::CompPhysics(const ComponentId& id, GameEvents& gameEvents, const BodyDef& rBodyDef) :
     Component(id, gameEvents),
     m_body (NULL),
     m_bodyDef (rBodyDef),
@@ -42,7 +42,7 @@ void CompPhysics::addShapeDef( boost::shared_ptr<ShapeDef> pShapeDef )
     m_shapeInfos.push_back( pShapeDef );
 }
 
-bool CompPhysics::setShapeFriction(const ComponentIdType& shapeName, float friction)
+bool CompPhysics::setShapeFriction(const ComponentId& shapeName, float friction)
 {
     if (m_body==NULL)
     {

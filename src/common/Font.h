@@ -16,7 +16,7 @@
 
 struct Box;
 class FTFont;
-class RenderSubSystem;
+class RenderSystem;
 
 enum Align
 {
@@ -35,7 +35,7 @@ typedef std::string FontId;
 class FontManager
 {
 public:
-    FontManager(const RenderSubSystem& renderer);
+    FontManager(const RenderSystem& renderer);
 
     typedef std::map< FontId,boost::shared_ptr<FTFont> > FontMap;
 
@@ -64,7 +64,7 @@ private:
     void getDetailedDimensions(const std::string &text, FTFont& font, float* totalWidth, float* totalHeight, std::list<std::string>* lines,
             std::list<float>* lineWidths, float* lineSpacing) const;
     FontMap m_fonts; // Texturen
-    const RenderSubSystem& m_renderer;
+    const RenderSystem& m_renderer;
 };
 
 #endif

@@ -16,7 +16,7 @@
 // Konstruktor
 // w*h = 1
 // w/h = AR
-CameraController::CameraController(RenderSubSystem& renderSubSystem, float aspectRatio)
+CameraController::CameraController(RenderSystem& renderSubSystem, float aspectRatio)
   : m_position (),
     m_zoom ( 1.0f ),
     m_rotation ( 0.0f ),

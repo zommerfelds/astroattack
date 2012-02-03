@@ -19,17 +19,16 @@
 using boost::property_tree::ptree;
 
 // ID of this component
-const ComponentTypeId& CompPlayerController::getTypeIdStatic()
+const ComponentType& CompPlayerController::getTypeIdStatic()
 {
-    static boost::scoped_ptr<ComponentTypeId> typeId (new ComponentTypeId("CompPlayerController"));
+    static boost::scoped_ptr<ComponentType> typeId (new ComponentType("CompPlayerController"));
     return *typeId;
 }
 
 // Konstruktor der Komponente
-CompPlayerController::CompPlayerController(const ComponentIdType& id, GameEvents& gameEvents, std::map<const std::string, int>::iterator itJetPackVar) :
+CompPlayerController::CompPlayerController(const ComponentId& id, GameEvents& gameEvents) :
      Component(id, gameEvents),
      m_currentFrictionIsLow ( false ),
-     m_itJetPackVar ( itJetPackVar ),
      m_spaceKeyDownLastUpdate ( false ),
      m_playerCouldWalkLastUpdate ( false ),
      m_rechargeTime ( cMaxRecharge ),

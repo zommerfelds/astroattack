@@ -27,7 +27,7 @@ BEGIN_EVENT_TABLE(EditorFrame, wxFrame)
     EVT_LIST_ITEM_ACTIVATED  (wxID_ANY, EditorFrame::onComponentActivated)
 END_EVENT_TABLE()
 
-EditorFrame::EditorFrame(Editor& editor, RenderSubSystem& renderer)
+EditorFrame::EditorFrame(Editor& editor, RenderSystem& renderer)
 : EditorFrameBase (NULL),
   m_editor (editor),
   m_canvas (editor, m_glpanel, *this, glArgs, renderer),
@@ -82,7 +82,7 @@ void EditorFrame::update()
 
     if (m_editor.getGuiData().selectedEntity)
     {
-        EntityIdType id = m_editor.getGuiData().selectedEntity->first;
+        EntityId id = m_editor.getGuiData().selectedEntity->first;
         std::vector<Component*> components = m_editor.getGuiData().selectedEntity->second;
 
         label.Append(wxString(id.c_str(), wxConvUTF8));

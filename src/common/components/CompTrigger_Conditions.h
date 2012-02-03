@@ -9,10 +9,12 @@
 #ifndef COMPTRIGGER_CONDITIONS_H
 #define COMPTRIGGER_CONDITIONS_H
 
-#include "CompTrigger.h"
+#include "common/Event.h"
 
 #include <map>
 #include <string>
+
+class CompShape;
 
 // ========== CompareVariable =========
 enum CompareOperator
@@ -28,31 +30,39 @@ enum CompareOperator
 class ConditionCompareVariable : public Condition
 {
 public:
-    ConditionCompareVariable( std::map<const std::string, int>::iterator itVariable, CompareOperator comp, int numToCompareWith );
-    bool isConditionTrue();
-    ConditionId getId() const { return "CompareVariable"; }
+    ConditionCompareVariable(GameEvents& gameEvents, const EntityId& entity, const ComponentId& var, CompareOperator comp, int numToCompareWith);
+
+    ConditionId     getId()          const { return "CompareVariable"; }
     CompareOperator getCompareType() const { return m_compareType; }
-    int getNum() const { return m_numToCompareWith; }
-    std::string getVariable() const { return m_itVariable->first; }
+    int             getNum()         const { return m_numToCompareWith; }
+    EntityId    getEntity()      const { return m_entity; }
+    ComponentId getVariable()    const { return m_var; }
     
 private:
-    std::map<const std::string, int>::iterator m_itVariable;
+    void onVariableUpdate(const EntityId& entity, const ComponentId& var, int val);
 
+    EntityId m_entity;
+    ComponentId m_var;
     CompareOperator m_compareType;
     int m_numToCompareWith;
+    EventConnection m_eventConnection1;
 };
 
-// ========== EntityTouchedThis =========
-class ConditionEntityTouchedThis : public Condition
+class ConditionContact : public Condition
 {
 public:
-    ConditionEntityTouchedThis( const std::string& entityName );
-    bool isConditionTrue();
-    ConditionId getId() const { return "EntityTouchedThis"; }
-    std::string getEntityName() const { return m_entityName; }
+    ConditionContact(GameEvents& gameEvents, const EntityId& entityId1, const EntityId& entityId2);
+
+    ConditionId  getId()      const { return "ConditionContact"; }
+    EntityId getEntity1() const { return m_entity1; }
+    EntityId getEntity2() const { return m_entity2; }
 
 private:
-    std::string m_entityName;
+    void onNewContact(CompShape& shape1, CompShape& shape2);
+
+    EntityId m_entity1;
+    EntityId m_entity2;
+    EventConnection m_eventConnection1;
 };
 
 #endif /* COMPTRIGGER_CONDITIONS_H */

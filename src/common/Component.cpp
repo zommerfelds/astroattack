@@ -11,17 +11,17 @@
 
 #include <boost/scoped_ptr.hpp>
 
-Component::Component(const ComponentIdType& id, GameEvents& gameEvents)
+Component::Component(const ComponentId& id, GameEvents& gameEvents)
 : m_gameEvents (gameEvents),
   m_compManager (NULL),
   m_entityId (),
   m_id (id)
 {}
 
-const ComponentTypeId& Component::getTypeIdStatic()
+const ComponentType& Component::getTypeIdStatic()
 {
-    static boost::scoped_ptr<ComponentTypeId> typeId (new ComponentTypeId("Component"));
+    static boost::scoped_ptr<ComponentType> typeId (new ComponentType("Component"));
     return *typeId;
 }
 
-const ComponentIdType Component::DEFAULT_ID = "";
+const ComponentId Component::DEFAULT_ID = "";

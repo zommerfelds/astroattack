@@ -16,14 +16,14 @@
 using boost::property_tree::ptree;
 
 // eindeutige ID
-const ComponentTypeId& CompVisualTexture::getTypeIdStatic()
+const ComponentType& CompVisualTexture::getTypeIdStatic()
 {
-    static boost::scoped_ptr<ComponentTypeId> typeId (new ComponentTypeId("CompVisualTexture"));
+    static boost::scoped_ptr<ComponentType> typeId (new ComponentType("CompVisualTexture"));
     return *typeId;
 }
 const std::string CompVisualTexture::ALL_SHAPES = "ALL_SHAPES";
 
-CompVisualTexture::CompVisualTexture(const ComponentIdType& id, GameEvents& gameEvents, TextureId texId)
+CompVisualTexture::CompVisualTexture(const ComponentId& id, GameEvents& gameEvents, TextureId texId)
 : Component(id, gameEvents), m_textureId (texId), m_shapeId (ALL_SHAPES) {}
 
 void CompVisualTexture::loadFromPropertyTree(const ptree& propTree)

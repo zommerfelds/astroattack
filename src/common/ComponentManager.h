@@ -21,12 +21,12 @@ struct GameEvents;
 class Logger;
 
 typedef std::list< boost::shared_ptr<Component> > ComponentList;
-typedef std::multimap< ComponentTypeId, boost::shared_ptr<Component> > ComponentMap;
-typedef std::map< EntityIdType, ComponentMap > EntityMap;
+typedef std::multimap< ComponentType, boost::shared_ptr<Component> > ComponentMap;
+typedef std::map< EntityId, ComponentMap > EntityMap;
 
 struct Entity
 {
-    EntityIdType id;
+    EntityId id;
     ComponentList components;
 };
 
@@ -36,34 +36,20 @@ public:
     ComponentManager(GameEvents& events);
     ~ComponentManager();
 
-    void addEntity(const EntityIdType& id, ComponentList& components);
-    void removeEntity(const EntityIdType& id);
+    void addEntity(const EntityId& id, ComponentList& components);
+    void removeEntity(const EntityId& id);
     const EntityMap& getAllEntities() const;
 
-    // === GetComponent ===
-    // There are 2 version of this method:
-    // One that returns the component as its specific type using templates
-    //   e.g. CompX x = GetComponent<CompX>();
-    // And one that returns the component as a base Component type
-    //   e.g. Component x = GetComponent("CompX");
-    // Prefer using the first one (no need to cast)
-    // Use the second version if you can only get the component ID at runtime (as a string)
-    template <typename CompType>       CompType* getComponent(const EntityIdType& entId, const ComponentIdType& compId="");
-    template <typename CompType> const CompType* getComponent(const EntityIdType& entId, const ComponentIdType& compId="") const;
-    //      Component* getComponent(const EntityIdType& entId, const ComponentTypeId& compType);
-    //const Component* getComponent(const EntityIdType& entId, const ComponentTypeId& compType) const;
-    //      Component* getComponentById(const EntityIdType& entId, const ComponentIdType& compId);
-    //const Component* getComponentById(const EntityIdType& entId, const ComponentIdType& compId) const;
+    // use <Component> as template if you don't have the static type
+    template <typename CompType>       CompType* getComponent(const EntityId& entId, const ComponentId& compId="");
+    template <typename CompType> const CompType* getComponent(const EntityId& entId, const ComponentId& compId="") const;
 
-    // === GetComponents ===
     // Returns a vector of all matching components in an entity
-    // As GetComponent, this method has multiple versions (see above)
-    template <typename CompType> std::vector<      CompType*> getComponents(const EntityIdType& id);
-    template <typename CompType> std::vector<const CompType*> getComponents(const EntityIdType& id) const;
-    //std::vector<      Component*> getComponents(const EntityIdType& id, const ComponentTypeId& compType);
-    //std::vector<const Component*> getComponents(const EntityIdType& id, const ComponentTypeId& compType) const;
+    template <typename CompType> std::vector<      CompType*> getComponents(const EntityId& id);
+    template <typename CompType> std::vector<const CompType*> getComponents(const EntityId& id) const;
+
     // Returns all components (regardless of entity)
-    const ComponentMap* getComponents(const EntityIdType& id);
+    const ComponentMap* getComponents(const EntityId& id);
 
     void writeEntitiesToLogger(Logger& logger, LogLevel level);
 
@@ -72,24 +58,24 @@ private:
 
     EntityMap m_entities;
 
-    Component* getComponent(const EntityIdType& entId, const ComponentTypeId& compType, const ComponentIdType& compId) const;
+    Component* getComponent(const EntityId& entId, const ComponentType& compType, const ComponentId& compId) const;
 };
 
 // needs to be implemented here because of templates
 template <typename CompType>
-CompType* ComponentManager::getComponent(const EntityIdType& entId, const ComponentIdType& compId)
+CompType* ComponentManager::getComponent(const EntityId& entId, const ComponentId& compId)
 {
    return static_cast<CompType*>(getComponent(entId, CompType::getTypeIdStatic(), compId));
 }
 
 template <typename CompType>
-const CompType* ComponentManager::getComponent(const EntityIdType& entId, const ComponentIdType& compId) const
+const CompType* ComponentManager::getComponent(const EntityId& entId, const ComponentId& compId) const
 {
    return static_cast<const CompType*>(getComponent(entId, CompType::getTypeIdStatic(), compId));
 }
 
 template <typename CompType>
-std::vector<CompType*> ComponentManager::getComponents(const EntityIdType& id)
+std::vector<CompType*> ComponentManager::getComponents(const EntityId& id)
 {
     std::vector<CompType*> ret;
 
@@ -117,7 +103,7 @@ std::vector<CompType*> ComponentManager::getComponents(const EntityIdType& id)
 }
 
 template <typename CompType>
-std::vector<const CompType*> ComponentManager::getComponents(const EntityIdType& id) const
+std::vector<const CompType*> ComponentManager::getComponents(const EntityId& id) const
 {
     std::vector<const CompType*> ret;
 

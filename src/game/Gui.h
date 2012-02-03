@@ -15,7 +15,7 @@
 #include <string>
 #include <boost/shared_ptr.hpp>
 
-class RenderSubSystem;
+class RenderSystem;
 class Widget;
 class WidgetLabel;
 class WidgetButton;
@@ -23,10 +23,10 @@ class FontManager;
 
 typedef std::string GroupId;
 
-class GuiSubSystem
+class GuiSystem
 {
 public:
-    GuiSubSystem( RenderSubSystem& renderer, InputSubSystem& input );
+    GuiSystem( RenderSystem& renderer, InputSubSystem& input );
 
     void update();
     void draw();
@@ -37,7 +37,7 @@ public:
     void showGroup(const GroupId& groupId) { m_groupsToHide.erase( groupId ); }
     void clear() { if (m_isUpdating) m_clear = true; else clearContainers(); }
 private:
-    RenderSubSystem& m_renderer;
+    RenderSystem& m_renderer;
     InputSubSystem& m_input;
     void clearContainers() { m_widgets.clear(); m_groupsToHide.clear(); m_clear = false; }
 
@@ -56,14 +56,14 @@ public:
 
     virtual ~Widget() {};
 
-    virtual void draw( RenderSubSystem* ) {};
+    virtual void draw( RenderSystem* ) {};
     virtual void onMouseStateChanged( MouseState ) {};
 
     void setArea(const Rect& area) { m_area = area; }
     const Rect& getArea() const { return m_area; }
     const MouseState getMouseState() const { return m_mouseState; }
 private:
-    friend class GuiSubSystem;
+    friend class GuiSystem;
     Rect m_area;
     MouseState m_mouseState;
 };
@@ -74,7 +74,7 @@ public:
     WidgetLabel(float x, float y, const std::string& text, const FontManager& fontMngr);
     ~WidgetLabel();
 
-    void draw( RenderSubSystem* pRenderer );
+    void draw( RenderSystem* pRenderer );
     void onMouseStateChanged( MouseState ) {}
 private:
     std::string m_text;
@@ -90,7 +90,7 @@ public:
     WidgetButton(const Rect& area, const std::string& caption, ButCallbackFunc clickedCallbackFunc, ButCallbackFunc mouseOverCallbackFunc);
     ~WidgetButton();
 
-    void draw( RenderSubSystem* pRenderer );
+    void draw( RenderSystem* pRenderer );
     void onMouseStateChanged( MouseState newState );
 private:
     std::string m_caption;

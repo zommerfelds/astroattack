@@ -2783,10 +2783,11 @@ entity
 		type CompTrigger
 		condition
 		{
-			id EntityTouchedThis
+			id ConditionContact
 			params
 			{
-				entity Player
+				entity1 Player
+				entity2 finish
 			}
 		}
 		effect
@@ -2872,10 +2873,11 @@ entity
 		type CompTrigger
 		condition
 		{
-			id EntityTouchedThis
+			id ConditionContact
 			params
 			{
-				entity Player
+				entity1 Player
+				entity2 key1
 			}
 		}
 		effect

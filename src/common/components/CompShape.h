@@ -22,17 +22,17 @@ class b2Shape;
 class CompShape : public Component
 {
 public:
-    CompShape(const ComponentIdType& id, GameEvents& gameEvents);
+    CompShape(const ComponentId& id, GameEvents& gameEvents);
     virtual ~CompShape() {}
 
-    const ComponentTypeId& getTypeId() const { return getTypeIdStatic(); }
+    const ComponentType& getTypeId() const { return getTypeIdStatic(); }
 
     virtual boost::shared_ptr<b2Shape> toB2Shape() const = 0;
 
     enum Type { Polygon, Circle };
     virtual Type getType() const = 0;
 
-    static const ComponentTypeId& getTypeIdStatic();
+    static const ComponentType& getTypeIdStatic();
 };
 
 //--------------------------------------------//
@@ -41,7 +41,7 @@ public:
 class CompShapePolygon : public CompShape
 {
 public:
-    CompShapePolygon(const ComponentIdType& id, GameEvents& gameEvents);
+    CompShapePolygon(const ComponentId& id, GameEvents& gameEvents);
     void loadFromPropertyTree(const boost::property_tree::ptree& propTree);
     void writeToPropertyTree(boost::property_tree::ptree& propTree) const;
 
@@ -66,7 +66,7 @@ private:
 class CompShapeCircle : public CompShape
 {
 public:
-    CompShapeCircle(const ComponentIdType& id, GameEvents& gameEvents, const Vector2D& center = Vector2D(), float radius = 1.0f);
+    CompShapeCircle(const ComponentId& id, GameEvents& gameEvents, const Vector2D& center = Vector2D(), float radius = 1.0f);
 
     void loadFromPropertyTree(const boost::property_tree::ptree& propTree);
     void writeToPropertyTree(boost::property_tree::ptree& propTree) const;

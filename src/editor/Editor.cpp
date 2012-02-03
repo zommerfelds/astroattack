@@ -11,7 +11,7 @@
 #include "common/components/CompPosition.h"
 #include "common/components/CompVisualTexture.h"
 
-#include "common/World.h"
+#include "common/ComponentManager.h"
 #include "common/Vector2D.h"
 #include "common/DataLoader.h"
 #include "common/Foreach.h"
@@ -23,10 +23,10 @@
 #include <boost/make_shared.hpp>
 #include <boost/property_tree/info_parser.hpp>
 
-Editor::Editor(GameEvents& events, PhysicsSubSystem& physics)
+Editor::Editor(GameEvents& events, PhysicsSystem& physics)
 : m_events (events),
   m_physics (physics),
-  m_world (new World(m_events)),
+  m_compMgr (new ComponentManager(m_events)),
   m_textureList (),
   m_currentTextureIt ()
 {
@@ -53,7 +53,7 @@ void Editor::setTextureList(const std::vector<std::string>& textureList)
 void Editor::clearLevel()
 {
     m_guiData.indexCurVertex = 0;
-    m_world.reset(new World(m_events));
+    m_compMgr.reset(new ComponentManager(m_events));
     //m_guiData.world = m_world.get();
 }
 
@@ -63,7 +63,7 @@ void Editor::loadLevel(const std::string& fileName)
     try
     {
         //DataLoader::loadToWorld( "data/player.info", *m_world, m_events );
-        DataLoader::loadToWorld( fileName, *m_world, m_events );
+        DataLoader::loadToWorld( fileName, *m_compMgr, m_events );
         //m_guiData.world = m_world.get();
     }
     catch (DataLoadException& e)
@@ -75,7 +75,7 @@ void Editor::loadLevel(const std::string& fileName)
 
 void Editor::saveLevel(const std::string& fileName)
 {
-    DataLoader::saveWorld(fileName, *m_world);
+    DataLoader::saveWorld(fileName, *m_compMgr);
 }
 
 void Editor::cmdAddVertex(const Vector2D& worldPos)
@@ -99,7 +99,7 @@ void Editor::cmdCreateBlock()
             ss.fill('0');
             ss.width(5);
             ss << i;
-            if ( m_world->getCompManager().getAllEntities().count(ss.str()) == 0 )
+            if ( m_compMgr->getAllEntities().count(ss.str()) == 0 )
             {
                 entityId = ss.str();
                 break;
@@ -128,7 +128,7 @@ void Editor::cmdCreateBlock()
         boost::shared_ptr<CompVisualTexture> compPolyTex = boost::shared_ptr<CompVisualTexture>(new CompVisualTexture(Component::DEFAULT_ID, m_events, textureName));
         entity.push_back(compPolyTex);
 
-        m_world->getCompManager().addEntity(entityId, entity);
+        m_compMgr->addEntity(entityId, entity);
 
         m_guiData.indexCurVertex = 0;
     }

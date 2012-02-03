@@ -18,17 +18,17 @@
 using boost::property_tree::ptree;
 
 // eindeutige ID
-const ComponentTypeId& CompShape::getTypeIdStatic()
+const ComponentType& CompShape::getTypeIdStatic()
 {
-    static boost::scoped_ptr<ComponentTypeId> typeId (new ComponentTypeId("CompShape"));
+    static boost::scoped_ptr<ComponentType> typeId (new ComponentType("CompShape"));
     return *typeId;
 }
 
-CompShape::CompShape(const ComponentIdType& id, GameEvents& gameEvents)
+CompShape::CompShape(const ComponentId& id, GameEvents& gameEvents)
 : Component(id, gameEvents)
 {}
 
-CompShapePolygon::CompShapePolygon(const ComponentIdType& id, GameEvents& gameEvents)
+CompShapePolygon::CompShapePolygon(const ComponentId& id, GameEvents& gameEvents)
 : CompShape(id, gameEvents)
 {}
 
@@ -86,7 +86,7 @@ const Vector2D* CompShapePolygon::getVertex(size_t i) const
     return &m_vertices[i];
 }
 
-CompShapeCircle::CompShapeCircle(const ComponentIdType& id, GameEvents& gameEvents, const Vector2D& center, float radius) :
+CompShapeCircle::CompShapeCircle(const ComponentId& id, GameEvents& gameEvents, const Vector2D& center, float radius) :
         CompShape(id, gameEvents),
         m_center (center),
         m_radius (radius)

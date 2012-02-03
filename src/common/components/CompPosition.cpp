@@ -13,13 +13,13 @@
 #include <boost/property_tree/ptree.hpp>
 
 // eindeutige ID
-const ComponentTypeId& CompPosition::getTypeIdStatic()
+const ComponentType& CompPosition::getTypeIdStatic()
 {
-    static boost::scoped_ptr<ComponentTypeId> typeId (new ComponentTypeId("CompPosition"));
+    static boost::scoped_ptr<ComponentType> typeId (new ComponentType("CompPosition"));
     return *typeId;
 }
 
-CompPosition::CompPosition(const ComponentIdType& id, GameEvents& gameEvents)
+CompPosition::CompPosition(const ComponentId& id, GameEvents& gameEvents)
 : Component(id, gameEvents),
   m_position (),
   m_orientation ( 0.0f ),

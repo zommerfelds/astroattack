@@ -26,12 +26,16 @@
 #include <SDL.h>
 #include <SDL_opengl.h>
 #include <boost/bind.hpp>
+#include <boost/make_shared.hpp>
 
+namespace {
 const std::string cGraphisFileName = "data/graphics.info";
 const unsigned int cCircleSlices = 20; // number of slices for drawing a circle
+const int cDefaultMessageTime = 300;
+}
 
-RenderSubSystem::RenderSubSystem( GameEvents& gameEvents )
-: m_isInit (false), m_eventConnection1 (), m_eventConnection2(), m_gameEvents ( gameEvents ),
+RenderSystem::RenderSystem( GameEvents& gameEvents )
+: m_isInit (false), m_eventCons(), m_gameEvents ( gameEvents ),
   m_textureManager (), m_animationManager ( m_textureManager ),
   m_fontManager (*this), m_currentMatrix (World), m_viewPortWidth (0), m_viewPortHeight (0)
 {
@@ -51,17 +55,18 @@ RenderSubSystem::RenderSubSystem( GameEvents& gameEvents )
     M[2] = 0; M[6] = 0; M[10] = 1; M[14] = 0;
     M[3] = 0; M[7] = 0; M[11] = 0; M[15] = 1;
 
-    m_eventConnection1 = m_gameEvents.newComponent.registerListener( boost::bind( &RenderSubSystem::onRegisterComponent, this, _1 ) );
-    m_eventConnection2 = m_gameEvents.deleteComponent.registerListener(  boost::bind( &RenderSubSystem::onUnregisterComponent, this, _1 ) );
+    m_eventCons.add(m_gameEvents.newComponent.registerListener( boost::bind(&RenderSystem::onRegisterComponent, this, _1) ));
+    m_eventCons.add(m_gameEvents.deleteComponent.registerListener( boost::bind(&RenderSystem::onUnregisterComponent, this, _1) ));
+    m_eventCons.add(m_gameEvents.dispMessage.registerListener( boost::bind(&RenderSystem::onDispMessage, this, _1, _2) ));
 }
 
-RenderSubSystem::~RenderSubSystem()
+RenderSystem::~RenderSystem()
 {
     deInit();
 }
 
 // RenderSubSystem initialisieren
-void RenderSubSystem::init(int width, int height)
+void RenderSystem::init(int width, int height)
 {
     initOpenGL( width, height );
 
@@ -77,7 +82,7 @@ void RenderSubSystem::init(int width, int height)
     m_isInit = true;
 }
 
-void RenderSubSystem::deInit()
+void RenderSystem::deInit()
 {
     if (m_isInit)
     {
@@ -91,14 +96,14 @@ void RenderSubSystem::deInit()
     }
 }
 
-bool RenderSubSystem::loadData(TexQuality quality)
+bool RenderSystem::loadData(TexQuality quality)
 {
     DataLoader::loadGraphics(cGraphisFileName, &m_textureManager, &m_animationManager, &m_fontManager, quality);
     return true;
 }
 
 // OpenGL initialisieren
-void RenderSubSystem::initOpenGL(int width, int height)
+void RenderSystem::initOpenGL(int width, int height)
 {
     //glClearColor( 0.0f, 0.0f, 0.2f, 0.0f );                     // leicht blauer Hintergrund
     glClearColor( 0.0f, 0.0f, 0.0f, 0.0f );                       // schwarzer Hintergrund
@@ -130,7 +135,7 @@ void RenderSubSystem::initOpenGL(int width, int height)
     resize(width, height);
 }
 
-void RenderSubSystem::resize(int width, int height)
+void RenderSystem::resize(int width, int height)
 {
     m_viewPortWidth = width;
     m_viewPortHeight = height;
@@ -150,13 +155,13 @@ void RenderSubSystem::resize(int width, int height)
     //glLoadIdentity();
 }
 
-void RenderSubSystem::clearScreen()
+void RenderSystem::clearScreen()
 {
     // Bildschirm leeren
     glClear ( GL_COLOR_BUFFER_BIT );
 }
 
-void RenderSubSystem::flipBuffer()
+void RenderSystem::flipBuffer()
 {
     glFlush();
 
@@ -198,7 +203,7 @@ void RenderSubSystem::flipBuffer()
     SDL_GL_SwapBuffers(); // vom Backbuffer zum Frontbuffer wechseln (neues Bild zeigen)
 }
 
-void RenderSubSystem::setMatrix(MatrixId matrix)
+void RenderSystem::setMatrix(MatrixId matrix)
 {
     if (m_currentMatrix == matrix)
         return;
@@ -237,7 +242,7 @@ void RenderSubSystem::setMatrix(MatrixId matrix)
     }
 }
 
-void RenderSubSystem::drawTexturedQuad( float texCoord[8], float vertexCoord[8], const std::string& texId, bool border, float alpha )
+void RenderSystem::drawTexturedQuad( float texCoord[8], float vertexCoord[8], const std::string& texId, bool border, float alpha )
 {
     m_textureManager.setTexture( texId );
     glColor4f( 1.0f, 1.0f, 1.0f, alpha );
@@ -268,7 +273,7 @@ void RenderSubSystem::drawTexturedQuad( float texCoord[8], float vertexCoord[8],
     glColor4f( 255, 255, 255, 255 );
 }
 
-void RenderSubSystem::drawColorQuad( float vertexCoord[8], float r, float g, float b, float a, bool border )
+void RenderSystem::drawColorQuad( float vertexCoord[8], float r, float g, float b, float a, bool border )
 {
     m_textureManager.clear();
     if ( a > 0.01f ) // Falls eine Füllung vorhanden ist
@@ -292,7 +297,7 @@ void RenderSubSystem::drawColorQuad( float vertexCoord[8], float r, float g, flo
     glColor4f( 255, 255, 255, 255 );
 }
 
-void RenderSubSystem::drawOverlay( float r, float g, float b, float a )
+void RenderSystem::drawOverlay( float r, float g, float b, float a )
 {
     m_textureManager.clear();
     glColor4f ( r, g, b, a );
@@ -312,7 +317,7 @@ void RenderSubSystem::drawOverlay( float r, float g, float b, float a )
     glColor4f( 255, 255, 255, 255 );
 }
 
-void RenderSubSystem::drawPolygon(const CompShapePolygon& poly, const CompVisualTexture* tex, bool border)
+void RenderSystem::drawPolygon(const CompShapePolygon& poly, const CompVisualTexture* tex, bool border)
 {
     bool useTexMap = tex && (poly.getVertexCount() == tex->getTexMap().size());
 
@@ -360,7 +365,7 @@ void RenderSubSystem::drawPolygon(const CompShapePolygon& poly, const CompVisual
     glColor4ub(255, 255, 255, 255);
 }
 
-void RenderSubSystem::drawCircle(const CompShapeCircle& circle, const CompVisualTexture* tex, bool border)
+void RenderSystem::drawCircle(const CompShapeCircle& circle, const CompVisualTexture* tex, bool border)
 {
     if (tex)
         m_textureManager.setTexture(tex->getTextureId());
@@ -414,17 +419,17 @@ void RenderSubSystem::drawCircle(const CompShapeCircle& circle, const CompVisual
     glColor4ub(255, 255, 255, 255);
 }
 
-void RenderSubSystem::drawShape(const CompShape& shape, const CompVisualTexture& tex, bool border)
+void RenderSystem::drawShape(const CompShape& shape, const CompVisualTexture& tex, bool border)
 {
     drawShape(shape, &tex, NULL, border);
 }
 
-void RenderSubSystem::drawShape(const CompShape& shape, const Color& color, bool border)
+void RenderSystem::drawShape(const CompShape& shape, const Color& color, bool border)
 {
     drawShape(shape, NULL, &color, border);
 }
 
-void RenderSubSystem::drawShape(const CompShape& shape, const CompVisualTexture* tex, const Color* color, bool border)
+void RenderSystem::drawShape(const CompShape& shape, const CompVisualTexture* tex, const Color* color, bool border)
 {
     m_textureManager.clear();
     if (color)
@@ -448,7 +453,7 @@ void RenderSubSystem::drawShape(const CompShape& shape, const CompVisualTexture*
     }
 }
 
-void RenderSubSystem::drawEdge(const Vector2D& vertexA, const Vector2D& vertexB, const std::string& tex, float offset, float preCalcEdgeLenght)
+void RenderSystem::drawEdge(const Vector2D& vertexA, const Vector2D& vertexB, const std::string& tex, float offset, float preCalcEdgeLenght)
 {
     Vector2D edgeNorm = vertexB - vertexA;
     float edgeLenght = preCalcEdgeLenght;
@@ -473,7 +478,7 @@ void RenderSubSystem::drawEdge(const Vector2D& vertexA, const Vector2D& vertexB,
 }
 
 // Zeichnet einen Vector2D (Pfeil) in einer bestimmten Postion
-void RenderSubSystem::drawVector ( const Vector2D& rVector, const Vector2D& rPos )
+void RenderSystem::drawVector ( const Vector2D& rVector, const Vector2D& rPos )
 {
     m_textureManager.clear();
     glColor4ub ( 0, 0, 255, 150 );
@@ -503,7 +508,7 @@ void RenderSubSystem::drawVector ( const Vector2D& rVector, const Vector2D& rPos
 }
 
 // Zeichnet einen punkt an einer bestimmten Postion
-void RenderSubSystem::drawPoint ( const Vector2D& rPos )
+void RenderSystem::drawPoint ( const Vector2D& rPos )
 {
     m_textureManager.clear();
     glColor4ub ( 255, 0, 0, 150 );
@@ -527,7 +532,7 @@ void RenderSubSystem::drawPoint ( const Vector2D& rPos )
 }
 
 // Zeichnet den Fadenkreuz
-void RenderSubSystem::drawCrosshairs ( const Vector2D& rCrosshairsPos )
+void RenderSystem::drawCrosshairs ( const Vector2D& rCrosshairsPos )
 {
     m_textureManager.clear();
     glColor4ub ( 0, 255, 0, 150 );
@@ -564,7 +569,7 @@ void RenderSubSystem::drawCrosshairs ( const Vector2D& rCrosshairsPos )
 }
 
 // Zeichnet den Fadenkreuz
-void RenderSubSystem::drawEditorCursor ( const Vector2D& rPos )
+void RenderSystem::drawEditorCursor ( const Vector2D& rPos )
 {
     m_textureManager.clear();
 
@@ -579,7 +584,7 @@ void RenderSubSystem::drawEditorCursor ( const Vector2D& rPos )
     glColor4f( 255, 255, 255, 255 );
 }
 
-void RenderSubSystem::drawString( const std::string &str, const FontId &fontId, float x, float y, Align horizAlign, Align vertAlign, float red, float green, float blue, float alpha )
+void RenderSystem::drawString( const std::string &str, const FontId &fontId, float x, float y, Align horizAlign, Align vertAlign, float red, float green, float blue, float alpha )
 {
     MatrixId stored_matrix = m_currentMatrix;
     if (m_currentMatrix == World)
@@ -597,9 +602,9 @@ void RenderSubSystem::drawString( const std::string &str, const FontId &fontId, 
     setMatrix(stored_matrix);
 }
 
-void RenderSubSystem::drawVisualTextureComps()
+void RenderSystem::drawVisualTextureComps()
 {
-    foreach(CompVisualTexture* texComp, m_visualTextureComps)
+    foreach(CompVisualTexture* texComp, m_textureComps)
     {
         CompPosition* compPos = texComp->getSiblingComponent<CompPosition>();
         std::vector<CompShape*> compShapes = texComp->getSiblingComponents<CompShape>();
@@ -628,9 +633,9 @@ void RenderSubSystem::drawVisualTextureComps()
     }
 }
 
-void RenderSubSystem::drawVisualAnimationComps()
+void RenderSystem::drawVisualAnimationComps()
 {
-    foreach(CompVisualAnimation* pAnimComp, m_visualAnimComps)
+    foreach(CompVisualAnimation* pAnimComp, m_animComps)
     {
         CompPosition* compPos = pAnimComp->getSiblingComponent<CompPosition>();
         if (compPos)
@@ -693,18 +698,23 @@ void RenderSubSystem::drawVisualAnimationComps()
     }
 }
 
-void RenderSubSystem::drawVisualMessageComps()
+void RenderSystem::drawVisualMessageComps()
 {
     int y = 0;
     float lineHeight = 0.2f;
-    foreach(CompVisualMessage* pMsgComp, m_visualMsgComps)
+    foreach(CompVisualMessage* pMsgComp, m_msgComps)
     {
         drawString( std::string("- ")+pMsgComp->getMsg(), "FontW_m", 0.4f, 0.6f + y*lineHeight );
         ++y;
     }
+    foreach(const MessageAndTimeOut& mt, m_msgCompsManaged)
+    {
+        drawString( std::string("- ")+mt.first->getMsg(), "FontW_m", 0.4f, 0.6f + y*lineHeight );
+        ++y;
+    }
 }
 
-void RenderSubSystem::drawFPS(int fps)
+void RenderSystem::drawFPS(int fps)
 {
     std::ostringstream oss;
     oss << fps;
@@ -712,27 +722,27 @@ void RenderSubSystem::drawFPS(int fps)
     drawString( oss.str(), "FontW_s", 3.95f, 0.03f, AlignRight, AlignTop );
 }
 
-void RenderSubSystem::onRegisterComponent(Component& component)
+void RenderSystem::onRegisterComponent(Component& component)
 {
     if (component.getTypeId() == CompVisualTexture::getTypeIdStatic())
-        m_visualTextureComps.insert(&static_cast<CompVisualTexture&>(component));
+        m_textureComps.insert(&static_cast<CompVisualTexture&>(component));
     else if (component.getTypeId() == CompVisualAnimation::getTypeIdStatic())
-        m_visualAnimComps.insert(&static_cast<CompVisualAnimation&>(component));
+        m_animComps.insert(&static_cast<CompVisualAnimation&>(component));
     else if (component.getTypeId() == CompVisualMessage::getTypeIdStatic())
-        m_visualMsgComps.insert(&static_cast<CompVisualMessage&>(component));
+        m_msgComps.insert(&static_cast<CompVisualMessage&>(component));
 }
 
-void RenderSubSystem::onUnregisterComponent(Component& component)
+void RenderSystem::onUnregisterComponent(Component& component)
 {
     if (component.getTypeId() == CompVisualTexture::getTypeIdStatic())
-        m_visualTextureComps.erase(&static_cast<CompVisualTexture&>(component));
+        m_textureComps.erase(&static_cast<CompVisualTexture&>(component));
     else if (component.getTypeId() == CompVisualAnimation::getTypeIdStatic())
-        m_visualAnimComps.erase(&static_cast<CompVisualAnimation&>(component));
+        m_animComps.erase(&static_cast<CompVisualAnimation&>(component));
     else if (component.getTypeId() == CompVisualMessage::getTypeIdStatic())
-        m_visualMsgComps.erase(&static_cast<CompVisualMessage&>(component));
+        m_msgComps.erase(&static_cast<CompVisualMessage&>(component));
 }
 
-void RenderSubSystem::displayTextScreen( const std::string& text )
+void RenderSystem::displayTextScreen( const std::string& text )
 {
     setMatrix(GUI);
     drawOverlay( 0.0f, 0.0f, 0.0f, 1.0f );
@@ -741,7 +751,7 @@ void RenderSubSystem::displayTextScreen( const std::string& text )
     SDL_GL_SwapBuffers();
 }
 
-void RenderSubSystem::displayLoadingScreen()
+void RenderSystem::displayLoadingScreen()
 {
     glMatrixMode ( GL_PROJECTION );
     glPushMatrix();
@@ -794,7 +804,7 @@ void RenderSubSystem::displayLoadingScreen()
     m_textureManager.freeTexture("loading");
 }
 
-void RenderSubSystem::setViewPosition(const Vector2D& pos, float scale, float angle)
+void RenderSystem::setViewPosition(const Vector2D& pos, float scale, float angle)
 {
     glLoadIdentity();
 
@@ -803,9 +813,9 @@ void RenderSubSystem::setViewPosition(const Vector2D& pos, float scale, float an
     glTranslatef( pos.x * -1, pos.y * -1, 0.0f);
 }
 
-void RenderSubSystem::setViewSize( float width, float height )
+void RenderSystem::setViewSize( float width, float height )
 {
-    setMatrix(RenderSubSystem::World);
+    setMatrix(RenderSystem::World);
     glMatrixMode ( GL_PROJECTION );
     glLoadIdentity(); //Reset projection matrix
 
@@ -814,9 +824,9 @@ void RenderSubSystem::setViewSize( float width, float height )
     glMatrixMode ( GL_MODELVIEW );
 }
 
-void RenderSubSystem::update()
+void RenderSystem::update()
 {
-    foreach(CompVisualAnimation* animComp, m_visualAnimComps)
+    foreach(CompVisualAnimation* animComp, m_animComps)
     {
         if ( animComp->m_animInfo==NULL )
         {
@@ -853,4 +863,21 @@ void RenderSubSystem::update()
             }
         }
     }
+
+
+    for (CompMessageSetManaged::iterator it = m_msgCompsManaged.begin(); it != m_msgCompsManaged.end();)
+    {
+        CompMessageSetManaged::iterator next = it; next++;
+        if (it->second < 0)
+            m_msgCompsManaged.erase(it); // delete component
+        else
+            it->second--; // reduce time to live
+        it = next;
+    }
 }
+
+void RenderSystem::onDispMessage(const std::string& message, int time)
+{
+    m_msgCompsManaged.push_back(std::make_pair(boost::make_shared<CompVisualMessage>("_generated_msg", boost::ref(m_gameEvents), message), cDefaultMessageTime));
+}
+

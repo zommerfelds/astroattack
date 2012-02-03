@@ -37,7 +37,7 @@ namespace
 {
 
 // components that have to to be ordered must be placed here
-ComponentIdType order[] = {
+ComponentId order[] = {
     CompShape::getTypeIdStatic(),
     CompPosition::getTypeIdStatic(),
     CompPhysics::getTypeIdStatic()
@@ -47,8 +47,8 @@ const int numOrdered = 3;//sizeof(order) / sizeof (order[0]);
 
 bool compareComps(boost::shared_ptr<Component> first, boost::shared_ptr<Component> second)
 {
-    ComponentIdType* pos1 = std::find(order, order+numOrdered, first->getEntityId());
-    ComponentIdType* pos2 = std::find(order, order+numOrdered, second->getEntityId());
+    ComponentId* pos1 = std::find(order, order+numOrdered, first->getEntityId());
+    ComponentId* pos2 = std::find(order, order+numOrdered, second->getEntityId());
 
     if (pos1 != pos2)
         return pos1 < pos2;
@@ -58,7 +58,7 @@ bool compareComps(boost::shared_ptr<Component> first, boost::shared_ptr<Componen
 
 }
 
-void ComponentManager::addEntity(const EntityIdType& id, ComponentList& components)
+void ComponentManager::addEntity(const EntityId& id, ComponentList& components)
 {
     components.sort(compareComps);
 
@@ -81,7 +81,7 @@ void ComponentManager::addEntity(const EntityIdType& id, ComponentList& componen
     m_gameEvents.newEntity.fire(id);
 }
 
-void ComponentManager::removeEntity(const EntityIdType& id)
+void ComponentManager::removeEntity(const EntityId& id)
 {
     EntityMap::iterator it = m_entities.find(id);
     if (it == m_entities.end())
@@ -104,7 +104,7 @@ const EntityMap& ComponentManager::getAllEntities() const
     return m_entities;
 }
 
-Component* ComponentManager::getComponent(const EntityIdType& entId, const ComponentTypeId& compType, const ComponentIdType& compId) const
+Component* ComponentManager::getComponent(const EntityId& entId, const ComponentType& compType, const ComponentId& compId) const
 {
     EntityMap::const_iterator eit = m_entities.find(entId);
     if ( eit == m_entities.end() )

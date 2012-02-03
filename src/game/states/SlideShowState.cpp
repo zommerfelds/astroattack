@@ -87,7 +87,7 @@ void SlideShowState::init()        // State starten
         getSubSystems().renderer.getTextureManager().loadTexture( m_slideShow.slides[i].imageFileName, m_slideShow.slides[i].imageFileName, info );
     
     // GUI modus
-    getSubSystems().renderer.setMatrix(RenderSubSystem::GUI);
+    getSubSystems().renderer.setMatrix(RenderSystem::GUI);
 
     // TEST
     getSubSystems().sound.loadSound( "data/Sounds/scifi01.wav", "sound" );
@@ -287,7 +287,7 @@ void SlideShowState::frame( float /*deltaTime*/ )
 
 void SlideShowState::draw( float /*accumulator*/ )        // Spiel zeichnen
 {
-    RenderSubSystem& renderer = getSubSystems().renderer;
+    RenderSystem& renderer = getSubSystems().renderer;
 
     renderer.clearScreen();
 

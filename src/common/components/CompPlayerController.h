@@ -12,7 +12,6 @@
 #define COMPPLAYERCONTROLLER_H
 
 #include "common/Component.h"
-#include "common/World.h"
 #include "common/Vector2D.h"
 #include <map>
 
@@ -25,10 +24,10 @@ const int cMaxRecharge = 15;                    // wie wie muss der Spieler wart
 class CompPlayerController : public Component
 {
 public:
-    CompPlayerController(const ComponentIdType& id, GameEvents& gameEvents, WorldVariablesMap::iterator itJetPackVar);
+    CompPlayerController(const ComponentId& id, GameEvents& gameEvents);
 
-    const ComponentTypeId& getTypeId() const { return getTypeIdStatic(); }
-    static const ComponentTypeId& getTypeIdStatic();
+    const ComponentType& getTypeId() const { return getTypeIdStatic(); }
+    static const ComponentType& getTypeIdStatic();
 
     void loadFromPropertyTree(const boost::property_tree::ptree& propTree);
     void writeToPropertyTree(boost::property_tree::ptree& propTree) const;
@@ -41,8 +40,6 @@ private:
     bool m_currentFrictionIsLow;
 
     void updateAnims(bool flyingUp, bool movingOnGround, bool usingJetpack);
-
-    WorldVariablesMap::iterator m_itJetPackVar;
 
     // Player controller fields
     bool m_spaceKeyDownLastUpdate;    // ob die Leerschlagtaste letztes Frame gerade gedrückt wurde

@@ -25,7 +25,7 @@ enum ACC_IDs
 };
 
 class Editor;
-class RenderSubSystem;
+class RenderSystem;
 
 class UpdateTimer : public wxTimer
 {
@@ -46,7 +46,7 @@ public:
     /**
      * renderer: uninitialized renderer
      */
-    EditorFrame(Editor& editor, RenderSubSystem& renderer);
+    EditorFrame(Editor& editor, RenderSystem& renderer);
     ~EditorFrame();
 
     void update();

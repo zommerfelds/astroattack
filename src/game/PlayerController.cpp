@@ -14,6 +14,7 @@
 #include "common/components/CompGravField.h"
 #include "common/components/CompShape.h"
 #include "common/components/CompPhysics.h"
+#include "common/components/CompVariable.h"
 
 #include "common/GameEvents.h"
 #include "common/Vector2D.h"
@@ -261,16 +262,17 @@ void PlayerController::update()
     const float steepness_compensation = 800.0f; // je grösser, desto besser kann der Astronaut steile hänge laufen
                                           // und desto langsamer abhänge hinunterlaufen
 
+    CompVariable* jetpackVar = m_compPlayerContrl->getSiblingComponent<CompVariable>("JetpackEnergy");
     // Jetpack nach oben
-    if ( m_inputSubSystem.getKeyState( Up ) && m_compPlayerContrl->m_itJetPackVar->second > 0 && (m_compPlayerContrl->m_rechargeTime==cMaxRecharge || !isTouchingSth ) )
+    if ( m_inputSubSystem.getKeyState( Up ) && jetpackVar->getValue() > 0 && (m_compPlayerContrl->m_rechargeTime==cMaxRecharge || !isTouchingSth ) )
     {
         const float maxVelYJetpack = 12.0f;
         flyingUp = true;
         usingJetpack = true;
-        m_compPlayerContrl->m_itJetPackVar->second -= 21;
-        if (m_compPlayerContrl->m_itJetPackVar->second < 0)
+        jetpackVar->setValue(jetpackVar->getValue() - 21);
+        if (jetpackVar->getValue() < 0)
         {
-            m_compPlayerContrl->m_itJetPackVar->second = 0;
+            jetpackVar->setValue(0);
             m_compPlayerContrl->m_rechargeTime = 0;
         }
         if ( vVel < maxVelYJetpack )
@@ -359,9 +361,9 @@ void PlayerController::update()
             m_compPlayerContrl->m_rechargeTime = cMaxRecharge;
 
         if ( !usingJetpack )
-            m_compPlayerContrl->m_itJetPackVar->second += 13;
-        if ( m_compPlayerContrl->m_itJetPackVar->second > 1000 )
-            m_compPlayerContrl->m_itJetPackVar->second = 1000;
+            jetpackVar->setValue(jetpackVar->getValue()+13);
+        if ( jetpackVar->getValue() > 1000 )
+            jetpackVar->setValue(1000);
     }
     else // falls er fliegt
     {

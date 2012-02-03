@@ -7,7 +7,7 @@
 #include <list>
 
 #include "common/DataLoader.h"
-#include "common/World.h"
+#include "common/ComponentManager.h"
 #include "common/GameEvents.h"
 
 using boost::property_tree::ptree;
@@ -128,23 +128,23 @@ TEST(LevelLoadTest, LoadWriteTest)
 {
     GameEvents events;
 
-    string lvlFileNames[] = { "data/Levels/level1.info",
-                              "data/Levels/level2.info",
-                              "data/Levels/level3.info",
-                              "data/Levels/level_grav.info",
-                              "data/Levels/level_visita.info",
-                              "data/Levels/level_new.info",
-                              "data/Levels/adjacent_problem.info",
+    string lvlFileNames[] = { "data/Levels/level1.lvl",
+                              "data/Levels/level2.lvl",
+                              "data/Levels/level3.lvl",
+                              "data/Levels/level_grav.lvl",
+                              "data/Levels/level_visita.lvl",
+                              "data/Levels/level_new.lvl",
+                              "data/Levels/adjacent_problem.lvl",
                               "data/player.info" };
-    string lvlFileNameOut = "tmp_test_write_lvl.info";
+    string lvlFileNameOut = "tmp_test_write_lvl.lvl";
 
     foreach(string lvlFileName, lvlFileNames)
     {
-        World world (events);
+        ComponentManager compMgr (events);
 
         cout << "Testing with " << lvlFileName << endl;
-        DataLoader::loadToWorld(lvlFileName, world, events);
-        DataLoader::saveWorld(lvlFileNameOut, world);
+        DataLoader::loadToWorld(lvlFileName, compMgr, events);
+        DataLoader::saveWorld(lvlFileNameOut, compMgr);
 
         ptree levelPropTreeBefore;
         read_info(lvlFileName, levelPropTreeBefore);

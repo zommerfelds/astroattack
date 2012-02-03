@@ -1,6 +1,18 @@
 entity
 {
 	id Player
+	component
+    {
+        type CompVariable
+        id JetpackEnergy
+        value 0
+    }
+    component
+    {
+        type CompVariable
+        id Health
+        value 0
+    }
     component
     {
         type CompPhysics

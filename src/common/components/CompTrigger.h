@@ -12,15 +12,18 @@
 #define COMPTRIGGER_H
 
 #include "common/Component.h"
-#include "common/GameEvents.h"
 #include "common/IdTypes.h"
 
 #include <vector>
+#include <boost/function.hpp>
 #include <boost/shared_ptr.hpp>
 
+struct GameEvents;
 class Condition;
 class Effect;
-class World;
+
+typedef std::vector< boost::shared_ptr<Condition> > ConditionVector;
+typedef std::vector< boost::shared_ptr<Effect> > EffectVector;
 
 //--------------------------------------------//
 //---------- CompTrigger Klasse --------------//
@@ -28,44 +31,53 @@ class World;
 class CompTrigger : public Component
 {
 public:
-    CompTrigger(const ComponentIdType& id, World& gameWorld, GameEvents& gameEvents);
+    CompTrigger(const ComponentId& id, GameEvents& gameEvents);
 
-    const ComponentTypeId& getTypeId() const { return getTypeIdStatic(); }
-    static const ComponentTypeId& getTypeIdStatic(); // eindeutige ID für diese Komponentenart (gleich wie Klassennamen, siehe CompCollectable.cpp)
+    const ComponentType& getTypeId() const { return getTypeIdStatic(); }
+    static const ComponentType& getTypeIdStatic(); // eindeutige ID für diese Komponentenart (gleich wie Klassennamen, siehe CompCollectable.cpp)
 
     void addCondition( boost::shared_ptr<Condition> );
     void addEffect( boost::shared_ptr<Effect> );
 
-    const std::vector< boost::shared_ptr<Condition> >& getConditions() const { return m_conditions; }
-    const std::vector< boost::shared_ptr<Effect> >& getEffects() const { return m_effects; }
+    ConditionVector& getConditions() { return m_conditions; }
+    EffectVector& getEffects() { return m_effects; }
 
     void loadFromPropertyTree(const boost::property_tree::ptree& propTree);
     void writeToPropertyTree(boost::property_tree::ptree& propTree) const;
 
 private:
-    std::vector< boost::shared_ptr<Condition> > m_conditions;
-    std::vector< boost::shared_ptr<Effect> > m_effects;
+    ConditionVector m_conditions;
+    EffectVector m_effects;
 
-    World& m_gameWorld;
-    EventConnection m_eventConnection;
-
-    // Hier werden alle nötigen aktionen Durgeführt pro Aktualisierung
-    void onUpdate();
+    void onConditionUpdate();
 
     bool m_fired;
 };
+
+typedef boost::function<void ()> UpdateHandler;
 
 // Basisklasse Bedingung
 class Condition
 {
 public:
+    Condition();
     virtual ~Condition() {}
+
+    void setUpdateHandler(const UpdateHandler& updateHandler);
 
     virtual ConditionId getId() const = 0;
 
-    virtual bool isConditionTrue() = 0;
+    bool getConditionState() const;
 
-    CompTrigger* m_pCompTrigger;
+    /*virtual void loadFromPropertyTree(const boost::property_tree::ptree& propTree) = 0;
+    virtual void writeToPropertyTree(boost::property_tree::ptree& propTree) const = 0;*/
+
+protected:
+    void setConditionState(bool);
+
+private:
+    bool m_state;
+    UpdateHandler m_updateHandler;
 };
 
 // Basisklasse Effekt
@@ -77,7 +89,6 @@ public:
     virtual EffectId getId() const = 0;
 
     virtual void fire() = 0;
-    virtual bool update() = 0; // true zurückgeben wenn der Effekt vollstänkdig ausgeführt wurde
 
     CompTrigger* m_pCompTrigger;
 };

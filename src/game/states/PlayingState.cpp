@@ -13,6 +13,7 @@
 #include "game/Input.h"
 #include "game/main.h"
 
+#include "common/components/CompVariable.h"
 #include "common/Logger.h"
 #include "common/GameEvents.h"
 #include "common/DataLoader.h"
@@ -43,8 +44,8 @@ const GameStateId PlayingState::STATE_ID = "PlayingState";
 
 PlayingState::PlayingState( SubSystems& subSystems, const std::string& levelFileName )
 : GameState( subSystems ),
-  m_gameWorld ( getSubSystems().events ),
-  m_cameraController ( getSubSystems().input, getSubSystems().renderer, m_gameWorld.getCompManager() ),
+  m_components ( getSubSystems().events ),
+  m_cameraController ( getSubSystems().input, getSubSystems().renderer, m_components ),
   m_eventConnection1 (), m_eventConnection2 (),
   m_curentDeleteSet (1), m_wantToEndGame( false ), m_alphaOverlay( 0.0 ),
   m_levelFileName ( levelFileName )
@@ -59,8 +60,8 @@ void PlayingState::init()        // State starten
     try
     {
         // Welt von XML-Datei laden
-        DataLoader::loadToWorld( "data/player.info", m_gameWorld, getSubSystems().events );
-        DataLoader::loadToWorld( m_levelFileName, m_gameWorld, getSubSystems().events );
+        DataLoader::loadToWorld( "data/player.info", m_components, getSubSystems().events );
+        DataLoader::loadToWorld( m_levelFileName, m_components, getSubSystems().events );
     }
     catch (DataLoadException& e)
     {
@@ -71,9 +72,8 @@ void PlayingState::init()        // State starten
         return;
     }
 
-    m_gameWorld.setVariable( "Collected", 0 );
-    m_gameWorld.setVariable( "JetpackEnergy", 1000 );
-    m_gameWorld.setVariable( "Health", 1000 );
+    m_components.getComponent<CompVariable>("Player", "JetpackEnergy")->setValue(1000); // TODO: possible segfault
+    m_components.getComponent<CompVariable>("Player", "Health")->setValue(1000); // TODO: possible segfault
 
     getSubSystems().sound.loadMusic( "data/Music/Aerospace.ogg", "music" );
     getSubSystems().sound.playMusic( "music", true, 0 );
@@ -85,7 +85,7 @@ void PlayingState::init()        // State starten
     boost::shared_ptr<FileHandler> fileHandler = boost::make_shared<FileHandler>(cWordLogFileName);
     logger.addHandler(fileHandler);
     logger << "World Entities:\n\n";
-    m_gameWorld.getCompManager().writeEntitiesToLogger(logger, Info);
+    m_components.writeEntitiesToLogger(logger, Info);
 
     getSubSystems().input.putMouseOnCenter();
 
@@ -133,14 +133,14 @@ void PlayingState::update()      // Spiel aktualisieren
     getSubSystems().renderer.update();
     getSubSystems().playerController.update();
 
-    getSubSystems().events.gameUpdate.fire();
+    //getSubSystems().events.gameUpdate.fire();
 
     if ( m_curentDeleteSet == 1 )
     {
         m_curentDeleteSet = 2;
 
-        foreach(const EntityIdType& id, m_entitiesToDelete1)
-            m_gameWorld.getCompManager().removeEntity(id);
+        foreach(const EntityId& id, m_entitiesToDelete1)
+            m_components.removeEntity(id);
 
         m_entitiesToDelete1.clear();
     }
@@ -148,8 +148,8 @@ void PlayingState::update()      // Spiel aktualisieren
     {
         m_curentDeleteSet = 1;
 
-        foreach(const EntityIdType& id, m_entitiesToDelete2)
-            m_gameWorld.getCompManager().removeEntity(id);
+        foreach(const EntityId& id, m_entitiesToDelete2)
+            m_components.removeEntity(id);
 
         m_entitiesToDelete2.clear();
     }
@@ -161,12 +161,12 @@ void PlayingState::draw( float accumulator )        // Spiel zeichnen
     // (then the physics subsystem would need an accumulator for itself)
     getSubSystems().physics.calculateSmoothPositions(accumulator);
 
-    RenderSubSystem& renderer = getSubSystems().renderer;
+    RenderSystem& renderer = getSubSystems().renderer;
 
     // Bildschirm leeren
     //renderer.ClearScreen();
     // GUI modus (Grafische Benutzeroberfläche)
-    renderer.setMatrix(RenderSubSystem::GUI);
+    renderer.setMatrix(RenderSystem::GUI);
     // Hintergrundbild zeichnen
     {
         float texCoord[8] = { 0.0f, 0.0f,
@@ -180,7 +180,7 @@ void PlayingState::draw( float accumulator )        // Spiel zeichnen
         renderer.drawTexturedQuad( texCoord, vertexCoord, "_starfield" ); // sky
     }
     // Weltmodus
-    renderer.setMatrix(RenderSubSystem::World);
+    renderer.setMatrix(RenderSystem::World);
     m_cameraController.look();
     // Animationen zeichnen
     renderer.drawVisualAnimationComps();
@@ -189,8 +189,8 @@ void PlayingState::draw( float accumulator )        // Spiel zeichnen
 
     // Draw debug info
 #ifdef DRAW_DEBUG
-    CompPhysics* playerPhys = m_gameWorld.getCompManager().getComponent<CompPhysics>("Player");
-    CompPosition* playerPos = m_gameWorld.getCompManager().getComponent<CompPosition>("Player");
+    CompPhysics* playerPhys = m_components.getComponent<CompPhysics>("Player");
+    CompPosition* playerPos = m_components.getComponent<CompPosition>("Player");
     if ( playerPhys && playerPos )
     {
         const CompGravField* grav = playerPhys->getActiveGravField();
@@ -215,7 +215,7 @@ void PlayingState::draw( float accumulator )        // Spiel zeichnen
     // Fadenkreuz zeichnen
     renderer.drawCrosshairs( m_cameraController.screenToWorld(getSubSystems().input.getMousePos()) );
     // GUI modus (Grafische Benutzeroberfläche)
-    renderer.setMatrix(RenderSubSystem::GUI);
+    renderer.setMatrix(RenderSystem::GUI);
 
     // Texte zeichnen
     renderer.drawVisualMessageComps();
@@ -224,7 +224,7 @@ void PlayingState::draw( float accumulator )        // Spiel zeichnen
     {
         float x = 0.45f, y = 0.14f;
         float r = 0.2f, g = 0.9f, b = 0.3f;
-        float jetpackEnergy = m_gameWorld.getVariable("JetpackEnergy")/1000.0f;
+        float jetpackEnergy = m_components.getComponent<CompVariable>("Player", "JetpackEnergy")->getValue()/1000.0f;
         float vertexCoord[8] = { x+0.05f, y-0.06f,
                                  x+0.05f, y+0.06f,
                                  x+0.05f + jetpackEnergy, y+0.06f,
@@ -243,7 +243,7 @@ void PlayingState::draw( float accumulator )        // Spiel zeichnen
     {
         float x = 0.45f, y = 0.35f;
         float r = 0.8f, g = 0.2f, b = 0.3f;
-        float health = m_gameWorld.getVariable("Health")/1000.0f;
+        float health = m_components.getComponent<CompVariable>("Player", "Health")->getValue()/1000.0f;
         float vertexCoord[8] = { x+0.05f, y-0.06f,
                                  x+0.05f, y+0.06f,
                                  x+0.05f + health, y+0.06f,
@@ -267,7 +267,7 @@ void PlayingState::draw( float accumulator )        // Spiel zeichnen
     //renderer.FlipBuffer(); // (vom Backbuffer zum Frontbuffer wechseln)
 }
 
-void PlayingState::onEntityDeleted( const EntityIdType& entityId )
+void PlayingState::onEntityDeleted( const EntityId& entityId )
 {
     if ( m_curentDeleteSet == 1 )
         m_entitiesToDelete1.insert( entityId );

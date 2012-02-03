@@ -14,7 +14,7 @@
 #include <SDL_opengl.h>
 #include <boost/make_shared.hpp>
 
-FontManager::FontManager(const RenderSubSystem& renderer)
+FontManager::FontManager(const RenderSystem& renderer)
 : m_renderer (renderer)
 {}
 

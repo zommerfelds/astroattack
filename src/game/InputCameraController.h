@@ -10,7 +10,7 @@
 #include "common/CameraController.h"
 
 class InputSubSystem;
-class RenderSubSystem;
+class RenderSystem;
 class ComponentManager;
 
 //----------//
@@ -24,7 +24,7 @@ class ComponentManager;
 class InputCameraController : public CameraController
 {
 public:
-    InputCameraController(const InputSubSystem& inputSubSystem, RenderSubSystem& renderSubSystem, ComponentManager& compMgr);
+    InputCameraController(const InputSubSystem& inputSubSystem, RenderSystem& renderSubSystem, ComponentManager& compMgr);
 
     void update( float deltaTime ); // Kamarabewegung aktualisieren und auf Eingabe, die die Kamera beeinflusst, reagieren
 

@@ -95,9 +95,9 @@ struct BodyDef
 
 struct ShapeDef {
     ShapeDef() : density (0.0f), friction (0.0f), restitution (0.0f), isSensor (false) {}
-    ShapeDef(ComponentIdType n, float d, float f, float r, bool s) : compId (n), density (d), friction (f), restitution (r), isSensor (s) {}
+    ShapeDef(ComponentId n, float d, float f, float r, bool s) : compId (n), density (d), friction (f), restitution (r), isSensor (s) {}
 
-    ComponentIdType compId; // the name of the CompShape component
+    ComponentId compId; // the name of the CompShape component
     float density;
     float friction;
     float restitution;
@@ -113,16 +113,16 @@ typedef std::vector< boost::shared_ptr<ShapeDef> > ShapeInfoVec;
 class CompPhysics : public Component
 {
 public:
-    CompPhysics(const ComponentIdType& id, GameEvents& gameEvents, const BodyDef& rBodyDef = BodyDef());
+    CompPhysics(const ComponentId& id, GameEvents& gameEvents, const BodyDef& rBodyDef = BodyDef());
 
-    const ComponentTypeId& getTypeId() const { return getTypeIdStatic(); }
+    const ComponentType& getTypeId() const { return getTypeIdStatic(); }
 
     void setBodyDef(const BodyDef& rBodyDef) { m_bodyDef = rBodyDef; }
 
     // Add a shape to the object. Only do this before attaching the Entity to the world.
     void addShapeDef( boost::shared_ptr<ShapeDef> pShapeDef );
 
-    bool setShapeFriction(const ComponentIdType& shapeName, float friction);
+    bool setShapeFriction(const ComponentId& shapeName, float friction);
     const ShapeInfoVec& getShapeInfos() const { return m_shapeInfos; }
 
     float getMass() const;
@@ -163,7 +163,7 @@ public:
     void loadFromPropertyTree(const boost::property_tree::ptree& propTree);
     void writeToPropertyTree(boost::property_tree::ptree& propTree) const;
 
-    static const ComponentTypeId& getTypeIdStatic(); // eindeutige ID für diese Komponentenart (gleich wie Klassennamen, siehe CompPhysics.cpp)
+    static const ComponentType& getTypeIdStatic(); // eindeutige ID für diese Komponentenart (gleich wie Klassennamen, siehe CompPhysics.cpp)
 
 private:
 
@@ -180,13 +180,13 @@ private:
     float m_previousAngle;
 
     ShapeInfoVec m_shapeInfos;
-    typedef std::map<ComponentIdType, b2Fixture*> FixtureMap;
+    typedef std::map<ComponentId, b2Fixture*> FixtureMap;
     FixtureMap m_fixtureMap;
 
     const CompGravField* m_gravField;
     unsigned int m_nUpdatesSinceGravFieldChange;
 
-    friend class PhysicsSubSystem; // Das Physik-System darf auf alles hier zugreifen!
+    friend class PhysicsSystem; // Das Physik-System darf auf alles hier zugreifen!
 };
 
 #endif

@@ -78,7 +78,7 @@ void MainMenuState::init()        // State starten
     getSubSystems().sound.playMusic( "menuMusic", true, 0 );
 
     // GUI modus (Graphical User Interface)
-    getSubSystems().renderer.setMatrix(RenderSubSystem::GUI);
+    getSubSystems().renderer.setMatrix(RenderSystem::GUI);
 
     ///////////// GUI ////////////
     getSubSystems().gui.hideGroup( menuNames[0] );
@@ -253,7 +253,7 @@ void MainMenuState::frame( float /*deltaTime*/ )
 
 void MainMenuState::draw( float /*accumulator*/ )        // Spiel zeichnen
 {
-    RenderSubSystem& renderer = getSubSystems().renderer;
+    RenderSystem& renderer = getSubSystems().renderer;
     const Vector2D& mousePos = getSubSystems().input.getMousePos();
 
     // Menühintergrund zeichnen

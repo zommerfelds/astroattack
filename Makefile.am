@@ -20,8 +20,8 @@ common_src = \
     src/common/Renderer.cpp \
     src/common/Sound.cpp \
     src/common/Texture.cpp \
+    src/common/TriggerSystem.cpp \
     src/common/Vector2D.cpp \
-    src/common/World.cpp \
     src/common/components/CompGravField.cpp \
     src/common/components/CompPhysics.cpp \
     src/common/components/CompPlayerController.cpp \
@@ -30,6 +30,7 @@ common_src = \
     src/common/components/CompTrigger_Conditions.cpp \
     src/common/components/CompTrigger.cpp \
     src/common/components/CompTrigger_Effects.cpp \
+    src/common/components/CompVariable.cpp \
     src/common/components/CompVisualAnimation.cpp \
     src/common/components/CompVisualMessage.cpp \
     src/common/components/CompVisualTexture.cpp

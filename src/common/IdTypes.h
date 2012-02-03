@@ -12,9 +12,9 @@
 typedef std::string ConditionId;
 typedef std::string EffectId;
 
-typedef std::string ComponentTypeId;
+typedef std::string ComponentType;
 
-typedef std::string EntityIdType;
-typedef std::string ComponentIdType;
+typedef std::string EntityId;
+typedef std::string ComponentId;
 
 #endif /* IDTYPES_H */

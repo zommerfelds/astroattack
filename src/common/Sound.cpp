@@ -24,18 +24,18 @@
     }
 }*/
 
-SoundSubSystem* SoundSubSystem::soundSystemToNotifyMusicFinished = NULL;
+SoundSystem* SoundSystem::soundSystemToNotifyMusicFinished = NULL;
 
-SoundSubSystem::SoundSubSystem() : m_isInit ( false ), m_currentPlayingMusic (), m_deletePlayingMusicAtEnd ( false )
+SoundSystem::SoundSystem() : m_isInit ( false ), m_currentPlayingMusic (), m_deletePlayingMusicAtEnd ( false )
 {
 }
 
-SoundSubSystem::~SoundSubSystem()
+SoundSystem::~SoundSystem()
 {
     deInit();
 }
 
-bool SoundSubSystem::init(float volSound, float volMusic, float volMaster)
+bool SoundSystem::init(float volSound, float volMusic, float volMaster)
 {
     if ( m_isInit )
     {
@@ -52,8 +52,8 @@ bool SoundSubSystem::init(float volSound, float volMusic, float volMaster)
     Mix_Volume(-1, (int)(MIX_MAX_VOLUME * volSound * volMaster));
     Mix_VolumeMusic((int)(MIX_MAX_VOLUME * volMusic * volMaster));
 
-    SoundSubSystem::soundSystemToNotifyMusicFinished = this;
-    Mix_HookMusicFinished( &SoundSubSystem::musicFinishedCallback );
+    SoundSystem::soundSystemToNotifyMusicFinished = this;
+    Mix_HookMusicFinished( &SoundSystem::musicFinishedCallback );
 
     /*if(!Mix_RegisterEffect(MIX_CHANNEL_POST, Vol, NULL, NULL)) {
         log() <<"Mix_RegisterEffect: %s\n", Mix_GetError());
@@ -63,7 +63,7 @@ bool SoundSubSystem::init(float volSound, float volMusic, float volMaster)
     return true;
 }
 
-void SoundSubSystem::deInit()
+void SoundSystem::deInit()
 {
     if (m_isInit)
     {
@@ -83,12 +83,12 @@ void SoundSubSystem::deInit()
     }
 }
 
-void SoundSubSystem::musicFinishedCallback()
+void SoundSystem::musicFinishedCallback()
 {
     soundSystemToNotifyMusicFinished->onMusicFinished();
 }
 
-void SoundSubSystem::loadSound( const std::string& name, SoundId id )
+void SoundSystem::loadSound( const std::string& name, SoundId id )
 {
     if ( !m_isInit )
     {
@@ -110,7 +110,7 @@ void SoundSubSystem::loadSound( const std::string& name, SoundId id )
     m_sounds.insert( std::make_pair(id,sample) );
 }
 
-void SoundSubSystem::freeSound(const SoundId &id)
+void SoundSystem::freeSound(const SoundId &id)
 {
     SoundMap::iterator c_it = m_sounds.find( id );
     if ( c_it != m_sounds.end() )
@@ -129,7 +129,7 @@ void SoundSubSystem::freeSound(const SoundId &id)
     }
 }
 
-void SoundSubSystem::playSound(const SoundId &id)
+void SoundSystem::playSound(const SoundId &id)
 {
     SoundMap::iterator c_it = m_sounds.find( id );
     if ( c_it != m_sounds.end() )
@@ -141,7 +141,7 @@ void SoundSubSystem::playSound(const SoundId &id)
     }
 }
 
-void SoundSubSystem::loadMusic(const std::string& name, MusicId id)
+void SoundSystem::loadMusic(const std::string& name, MusicId id)
 {
     if ( !m_isInit )
     {
@@ -164,7 +164,7 @@ void SoundSubSystem::loadMusic(const std::string& name, MusicId id)
     m_music.insert( std::make_pair(id,music) );
 }
 
-void SoundSubSystem::freeMusic(const MusicId &id)
+void SoundSystem::freeMusic(const MusicId &id)
 {
     MusicMap::iterator c_it = m_music.find( id );
     if ( c_it != m_music.end() )
@@ -176,7 +176,7 @@ void SoundSubSystem::freeMusic(const MusicId &id)
     }
 }
 
-void SoundSubSystem::playMusic(const MusicId &id, bool forever, int fadeInMs)
+void SoundSystem::playMusic(const MusicId &id, bool forever, int fadeInMs)
 {
     if (Mix_VolumeMusic(-1) == 0)
         return; // dont do anything if volume is 0, since you cant change the volume while playing. (tmp for saving fading out time)
@@ -191,23 +191,23 @@ void SoundSubSystem::playMusic(const MusicId &id, bool forever, int fadeInMs)
     }
 }
 
-void SoundSubSystem::stopMusic(int fadeOutMs)
+void SoundSystem::stopMusic(int fadeOutMs)
 {
     Mix_FadeOutMusic( fadeOutMs );
 }
 
-void SoundSubSystem::pauseMusic()
+void SoundSystem::pauseMusic()
 {
     if ( Mix_PlayingMusic() )
         Mix_PauseMusic();
 }
 
-void SoundSubSystem::continueMusic()
+void SoundSystem::continueMusic()
 {
     Mix_ResumeMusic();
 }
 
-void SoundSubSystem::onMusicFinished()
+void SoundSystem::onMusicFinished()
 {
     m_currentPlayingMusic = NULL;
     //if ( m_deletePlayingMusicAtEnd )

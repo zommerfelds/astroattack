@@ -8,62 +8,64 @@
 
 #include "CompPhysics.h"
 
+#include "common/components/CompShape.h"
+
 #include "common/Logger.h"
 #include "common/Foreach.h"
+#include "common/GameEvents.h"
 
-// ========== CompareVariable =========
-ConditionCompareVariable::ConditionCompareVariable( std::map<const std::string, int>::iterator itVariable, CompareOperator comp, int numToCompareWith )
-: m_itVariable ( itVariable ),
-  m_compareType ( comp ),
-  m_numToCompareWith ( numToCompareWith )
-{}
-
-bool ConditionCompareVariable::isConditionTrue()
+ConditionCompareVariable::ConditionCompareVariable(GameEvents& gameEvents, const EntityId& entity, const ComponentId& var, CompareOperator comp, int numToCompareWith)
+: m_entity (entity),
+  m_var (var),
+  m_compareType (comp),
+  m_numToCompareWith (numToCompareWith)
 {
-    switch ( m_compareType )
+    m_eventConnection1 = gameEvents.variableUpdate.registerListener(boost::bind(&ConditionCompareVariable::onVariableUpdate, this, _1, _2, _3));
+}
+
+void ConditionCompareVariable::onVariableUpdate(const EntityId& entity, const ComponentId& var, int val)
+{
+    if (m_entity == entity && m_var == var)
     {
-    case GreaterThan:
-        return m_itVariable->second > m_numToCompareWith;
-    case GreaterThanOrEqualTo:
-        return m_itVariable->second >= m_numToCompareWith;
-    case LessThan:
-        return m_itVariable->second < m_numToCompareWith;
-    case LessThanOrEqualTo:
-        return m_itVariable->second <= m_numToCompareWith;
-    case EqualTo:
-        return m_itVariable->second == m_numToCompareWith;
-    case NotEqualTo:
-        return m_itVariable->second != m_numToCompareWith;
-    default:
-        return false;
+        switch ( m_compareType )
+        {
+        case GreaterThan:
+            setConditionState(val > m_numToCompareWith);
+            break;
+        case GreaterThanOrEqualTo:
+            setConditionState(val >= m_numToCompareWith);
+            break;
+        case LessThan:
+            setConditionState(val < m_numToCompareWith);
+            break;
+        case LessThanOrEqualTo:
+            setConditionState(val <= m_numToCompareWith);
+            break;
+        case EqualTo:
+            setConditionState(val == m_numToCompareWith);
+            break;
+        case NotEqualTo:
+            setConditionState(val != m_numToCompareWith);
+            break;
+        default:
+            setConditionState(false);
+            break;
+        }
     }
 }
 
-// ========== EntityTouchedThis =========
-ConditionEntityTouchedThis::ConditionEntityTouchedThis( const std::string& entityName )
-: m_entityName ( entityName )
-{}
-
-bool ConditionEntityTouchedThis::isConditionTrue()
+ConditionContact::ConditionContact(GameEvents& gameEvents, const EntityId& entityId1, const EntityId& entityId2)
+: m_entity1 (entityId1),
+  m_entity2 (entityId2)
 {
-    // could use events instead of polling every time
+    m_eventConnection1 = gameEvents.newContact.registerListener(boost::bind(&ConditionContact::onNewContact, this, _1, _2));
+}
 
-    std::vector<CompPhysics*> thisCompPhysics = m_pCompTrigger->getSiblingComponents<CompPhysics>();
-    if (thisCompPhysics.empty())
+void ConditionContact::onNewContact(CompShape& shape1, CompShape& shape2)
+{
+    if (   (shape1.getEntityId() == m_entity1 && shape2.getEntityId() == m_entity2)
+        || (shape2.getEntityId() == m_entity1 && shape1.getEntityId() == m_entity2))
     {
-        log(Warning) << "while testing if 'EntityTouchedThis' condition is true in entity '" << m_pCompTrigger->getEntityId() << "': there are no CompPhysics\n";
-        return false;
+        setConditionState(true);
     }
-
-    foreach(const CompPhysics* compPhys, thisCompPhysics)
-    {
-
-        ContactVector contacts = compPhys->getContacts(true);
-
-        for (size_t i = 0; i < contacts.size(); i++)
-            if (contacts[i]->phys.getEntityId() == m_entityName)
-                return true;
-    }
-
-    return false;
 }

@@ -11,7 +11,7 @@
 
 #include "common/components/CompShape.h"
 
-#include "common/World.h"
+#include "common/ComponentManager.h"
 #include "common/GameEvents.h"
 #include "common/Foreach.h"
 
@@ -63,7 +63,7 @@ Vector2D snapToGrid(const Vector2D& worldCoordinates)
 
 }
 
-GlCanvasController::GlCanvasController(Editor& editor, wxWindow* parent, EditorFrame& editorFrame, int* args, RenderSubSystem& renderer) :
+GlCanvasController::GlCanvasController(Editor& editor, wxWindow* parent, EditorFrame& editorFrame, int* args, RenderSystem& renderer) :
     wxGLCanvas(parent, wxID_ANY, args, wxDefaultPosition, wxDefaultSize, wxFULL_REPAINT_ON_RESIZE),
     m_editor (editor),
     m_editorFrame (editorFrame),
@@ -176,7 +176,7 @@ void GlCanvasController::onPaint(wxPaintEvent& evt)
         {
             m_renderer.init(GetSize().x, GetSize().y);
 
-            m_renderer.setMatrix(RenderSubSystem::World);
+            m_renderer.setMatrix(RenderSystem::World);
 
             m_renderer.loadData(QualityBest);
 
@@ -203,7 +203,7 @@ void GlCanvasController::onPaint(wxPaintEvent& evt)
     m_renderer.update(); // TODO: shouldn't be here, because it should be frame rate independent
 
     m_renderer.clearScreen();
-    m_renderer.setMatrix(RenderSubSystem::GUI);
+    m_renderer.setMatrix(RenderSystem::GUI);
     // Hintergrundbild zeichnen
     {
         float texCoord[8] = { 0.0f, 0.0f,
@@ -217,7 +217,7 @@ void GlCanvasController::onPaint(wxPaintEvent& evt)
         m_renderer.drawTexturedQuad( texCoord, vertexCoord, "_starfield" );
     }
     // Weltmodus
-    m_renderer.setMatrix(RenderSubSystem::World);
+    m_renderer.setMatrix(RenderSystem::World);
     m_cameraController.look();
     // Animationen zeichnen
     m_renderer.drawVisualAnimationComps();
@@ -248,7 +248,7 @@ void GlCanvasController::onPaint(wxPaintEvent& evt)
 
     if (m_mouseInWindow || m_lMouseIsDown)
     {
-        m_renderer.setMatrix(RenderSubSystem::GUI);
+        m_renderer.setMatrix(RenderSystem::GUI);
         // draw editor cursor
         Vector2D mousePos = m_cameraController.screenToWorld(m_lastCursorPos);
         mousePos = snapToGrid(mousePos);
@@ -260,7 +260,7 @@ void GlCanvasController::onPaint(wxPaintEvent& evt)
 
     //m_renderer.drawVisualMessageComps();
 
-    m_renderer.setMatrix(RenderSubSystem::Text);
+    m_renderer.setMatrix(RenderSystem::Text);
     // draw selected texture
     {
         float texCoord[8] = { 0.0f, 0.0f,

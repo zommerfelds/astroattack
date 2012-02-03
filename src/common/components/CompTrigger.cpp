@@ -9,10 +9,11 @@
 #include "CompTrigger_Effects.h"
 #include "CompTrigger_Conditions.h"
 
-#include "common/World.h"
+#include "common/GameEvents.h"
 #include "common/Logger.h"
 #include "common/Foreach.h"
 
+#include <boost/ref.hpp>
 #include <boost/bind.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <boost/make_shared.hpp>
@@ -21,19 +22,17 @@
 using boost::property_tree::ptree;
 
 // eindeutige ID
-const ComponentTypeId& CompTrigger::getTypeIdStatic()
+const ComponentType& CompTrigger::getTypeIdStatic()
 {
-    static boost::scoped_ptr<ComponentTypeId> typeId (new ComponentTypeId("CompTrigger"));
+    static boost::scoped_ptr<ComponentType> typeId (new ComponentType("CompTrigger"));
     return *typeId;
 }
 
-CompTrigger::CompTrigger(const ComponentIdType& id, World& gameWorld, GameEvents& gameEvents)
-: Component(id, gameEvents), m_gameWorld (gameWorld), m_fired ( false )
-{
-    m_eventConnection = gameEvents.gameUpdate.registerListener( boost::bind( &CompTrigger::onUpdate, this ) );
-}
+CompTrigger::CompTrigger(const ComponentId& id, GameEvents& gameEvents)
+: Component(id, gameEvents), m_fired ( false )
+{}
 
-void CompTrigger::onUpdate()
+void CompTrigger::onConditionUpdate()
 {
     if ( !m_fired )
     {
@@ -41,7 +40,7 @@ void CompTrigger::onUpdate()
 
         for ( size_t i = 0; i < m_conditions.size(); ++i )
         {
-            if ( !m_conditions[i]->isConditionTrue() )
+            if ( !m_conditions[i]->getConditionState() )
             {
                 conditionsAreTrue = false;
                 break;
@@ -57,25 +56,25 @@ void CompTrigger::onUpdate()
             m_fired = true;
         }
     }
-    else
+    /*else
     {
         for ( size_t i = 0; i < m_effects.size(); ++i )
         {
             m_effects[i]->update();
         }
-    }
+    }*/
 }
 
-void CompTrigger::addCondition( boost::shared_ptr<Condition> pCond )
+void CompTrigger::addCondition( boost::shared_ptr<Condition> cond )
 {
-    pCond->m_pCompTrigger = this;
-    m_conditions.push_back( pCond );
+    cond->setUpdateHandler(boost::bind(&CompTrigger::onConditionUpdate, this));
+    m_conditions.push_back(cond);
 }
 
-void CompTrigger::addEffect( boost::shared_ptr<Effect> pTrig )
+void CompTrigger::addEffect( boost::shared_ptr<Effect> trig )
 {
-    pTrig->m_pCompTrigger = this;
-    m_effects.push_back(pTrig);
+    trig->m_pCompTrigger = this;
+    m_effects.push_back(trig);
 }
 
 void CompTrigger::loadFromPropertyTree(const ptree& propTree)
@@ -90,7 +89,8 @@ void CompTrigger::loadFromPropertyTree(const ptree& propTree)
 
             if (condId == "CompareVariable")
             {
-                std::string varName = subPropTree.get<std::string>("params.var");
+                EntityId entityId = subPropTree.get<std::string>("params.entity");
+                ComponentId varName = subPropTree.get<std::string>("params.var");
                 int numToCompare = subPropTree.get<int>("params.num");
                 std::string strCompareType = subPropTree.get<std::string>("params.compare");
                 CompareOperator compareType = EqualTo;
@@ -109,13 +109,13 @@ void CompTrigger::loadFromPropertyTree(const ptree& propTree)
                 else
                     log(Warning) << "No compare operation with name '" << strCompareType << "' found!\n";
 
-                addCondition(boost::make_shared<ConditionCompareVariable>(m_gameWorld.getItToVariable(varName),
-                        compareType, numToCompare));
+                addCondition(boost::make_shared<ConditionCompareVariable>(boost::ref(m_gameEvents), entityId, varName, compareType, numToCompare));
             }
-            else if (condId == "EntityTouchedThis")
+            else if (condId == "ConditionContact")
             {
-                std::string entityName = subPropTree.get<std::string>("params.entity");
-                addCondition(boost::make_shared<ConditionEntityTouchedThis>(entityName));
+                EntityId entity1 = subPropTree.get<std::string>("params.entity1");
+                EntityId entity2 = subPropTree.get<std::string>("params.entity2");
+                addCondition(boost::make_shared<ConditionContact>(boost::ref(m_gameEvents), entity1, entity2));
             }
             else
                 log(Warning) << "No condition found with id '" << condId << "'!\n";
@@ -133,21 +133,22 @@ void CompTrigger::loadFromPropertyTree(const ptree& propTree)
             else if (effectId == "DispMessage")
             {
                 std::string msg = subPropTree.get<std::string>("params.msg");
-                int timems = subPropTree.get("params.timems", 3000);
-                addEffect(boost::shared_ptr<EffectDispMessage>(new EffectDispMessage(m_gameEvents, msg, timems, m_gameWorld.getCompManager())));
+                int timems = subPropTree.get("params.timems", -1);
+                addEffect(boost::make_shared<EffectDispMessage>(boost::ref(m_gameEvents), msg, timems));
             }
             else if (effectId == "EndLevel")
             {
                 std::string msg = subPropTree.get<std::string>("params.msg");
                 bool win = subPropTree.get<bool>("params.win");
-                addEffect(boost::shared_ptr<EffectEndLevel>(new EffectEndLevel(m_gameEvents, msg, win)));
+                addEffect(boost::make_shared<EffectEndLevel>(boost::ref(m_gameEvents), msg, win));
             }
-            else if (effectId == "ChangeVariable")
+            else if (effectId == "ModifyVariable")
             {
-                std::string varName = subPropTree.get<std::string>("params.var");
+                EntityId entityId = subPropTree.get<std::string>("params.entity");
+                ComponentId varName = subPropTree.get<std::string>("params.var");
                 int num = subPropTree.get<int>("params.num");
                 std::string strChangeType = subPropTree.get<std::string>("params.change");
-                ChangeType changeType = Set;
+                ModifyId changeType = Set;
                 if (strChangeType == "set")
                     changeType = Set;
                 else if (strChangeType == "increase")
@@ -159,7 +160,7 @@ void CompTrigger::loadFromPropertyTree(const ptree& propTree)
                 else
                     log(Warning) << "No change operation with name '" << strChangeType << "' found!\n";
 
-                addEffect(boost::make_shared<EffectChangeVariable>(m_gameWorld.getItToVariable(varName), changeType, num));
+                addEffect(boost::make_shared<EffectModifyVariable>(boost::ref(m_gameEvents), entityId, varName, changeType, num));
             }
             else
                 log(Warning) << "No effect found with id '" << effectId << "'!\n";
@@ -169,19 +170,17 @@ void CompTrigger::loadFromPropertyTree(const ptree& propTree)
 
 void CompTrigger::writeToPropertyTree(ptree& propTree) const
 {
-    // Alle Kontidionen
-    for (size_t i = 0; i < getConditions().size(); ++i)
+    foreach (boost::shared_ptr<Condition> cond, m_conditions)
     {
-        Condition* pCond = getConditions()[i].get();
-
         ptree condPropTree;
-        condPropTree.add("id", pCond->getId());
+        condPropTree.add("id", cond->getId());
 
-        if (pCond->getId() == "CompareVariable")
+        if (cond->getId() == "CompareVariable")
         {
-            ConditionCompareVariable* condComp = static_cast<ConditionCompareVariable*> (pCond);
-            condPropTree.add("params.var", condComp->getVariable());
-            switch (condComp->getCompareType())
+            ConditionCompareVariable& condComp = static_cast<ConditionCompareVariable&>(*cond);
+            condPropTree.add("params.entity", condComp.getEntity());
+            condPropTree.add("params.var", condComp.getVariable());
+            switch (condComp.getCompareType())
             {
             case GreaterThan:
                 condPropTree.add("params.compare", "gt");
@@ -202,47 +201,47 @@ void CompTrigger::writeToPropertyTree(ptree& propTree) const
                 condPropTree.add("params.compare", "net");
                 break;
             }
-            condPropTree.add("params.num", condComp->getNum());
+            condPropTree.add("params.num", condComp.getNum());
         }
-        else if (pCond->getId() == "EntityTouchedThis")
+        else if (cond->getId() == "ConditionContact")
         {
-            ConditionEntityTouchedThis* condTouched = static_cast<ConditionEntityTouchedThis*> (pCond);
-            condPropTree.add("params.entity", condTouched->getEntityName());
+            ConditionContact& condTouched = static_cast<ConditionContact&>(*cond);
+            condPropTree.add("params.entity1", condTouched.getEntity1());
+            condPropTree.add("params.entity2", condTouched.getEntity2());
         }
 
         propTree.add_child("condition", condPropTree);
     }
 
-    // Alle Effekt
-    for (size_t i = 0; i < getEffects().size(); ++i)
+    foreach (boost::shared_ptr<Effect> effect, m_effects)
     {
-        Effect* pEffect = getEffects()[i].get();
-
         ptree effectPropTree;
-        effectPropTree.add("id", pEffect->getId());
+        effectPropTree.add("id", effect->getId());
 
-        if (pEffect->getId() == "KillEntity")
+        if (effect->getId() == "KillEntity")
         {
-            EffectKillEntity* effctKill = static_cast<EffectKillEntity*> (pEffect);
-            effectPropTree.add("params.entity", effctKill->getEntityName());
+            EffectKillEntity& effctKill = static_cast<EffectKillEntity&>(*effect);
+            effectPropTree.add("params.entity", effctKill.getEntityId());
         }
-        else if (pEffect->getId() == "DispMessage")
+        else if (effect->getId() == "DispMessage")
         {
-            EffectDispMessage* effctMsg = static_cast<EffectDispMessage*> (pEffect);
-            effectPropTree.add("params.msg", effctMsg->getMessage());
-            effectPropTree.add("params.timems", effctMsg->getTotalTime());
+            EffectDispMessage& effctMsg = static_cast<EffectDispMessage&>(*effect);
+            effectPropTree.add("params.msg", effctMsg.getMessage());
+            if (effctMsg.getTotalTime() != -1)
+                effectPropTree.add("params.timems", effctMsg.getTotalTime());
         }
-        else if (pEffect->getId() == "EndLevel")
+        else if (effect->getId() == "EndLevel")
         {
-            EffectEndLevel* effctWin = static_cast<EffectEndLevel*> (pEffect);
-            effectPropTree.add("params.msg", effctWin->getMessage());
-            effectPropTree.add("params.win", effctWin->isWin());
+            EffectEndLevel& effctWin = static_cast<EffectEndLevel&>(*effect);
+            effectPropTree.add("params.msg", effctWin.getMessage());
+            effectPropTree.add("params.win", effctWin.isWin());
         }
-        else if (pEffect->getId() == "ChangeVariable")
+        else if (effect->getId() == "ModifyVariable")
         {
-            EffectChangeVariable* effctChange = static_cast<EffectChangeVariable*> (pEffect);
-            effectPropTree.add("params.var", effctChange->getVariable());
-            switch (effctChange->getChangeType())
+            EffectModifyVariable& effctChange = static_cast<EffectModifyVariable&>(*effect);
+            effectPropTree.add("params.entity", effctChange.getEntity());
+            effectPropTree.add("params.var", effctChange.getVariable());
+            switch (effctChange.getModId())
             {
             case Set:
                 effectPropTree.add("params.change", "set");
@@ -257,10 +256,32 @@ void CompTrigger::writeToPropertyTree(ptree& propTree) const
                 effectPropTree.add("params.change", "divide");
                 break;
             }
-            effectPropTree.add("params.num", effctChange->getNum());
+            effectPropTree.add("params.num", effctChange.getNum());
         }
 
         propTree.add_child("effect", effectPropTree);
     }
+}
+
+Condition::Condition()
+: m_state (false),
+  m_updateHandler ()
+{}
+
+void Condition::setUpdateHandler(const UpdateHandler& updateHandler)
+{
+    m_updateHandler = updateHandler;
+}
+
+bool Condition::getConditionState() const
+{
+    return m_state;
+}
+
+void Condition::setConditionState(bool state)
+{
+    m_state = state;
+    if (!m_updateHandler.empty())
+        m_updateHandler();
 }
 

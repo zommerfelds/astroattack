@@ -17,11 +17,11 @@
 #include <boost/scoped_ptr.hpp>
 
 struct GameEvents;
-class World;
-class PhysicsSubSystem;
+class ComponentManager;
+class PhysicsSystem;
 class Component;
 
-typedef boost::optional<std::pair<EntityIdType, std::vector<Component*> > > OptEntity;
+typedef boost::optional<std::pair<EntityId, std::vector<Component*> > > OptEntity;
 
 struct EditorGuiData
 {
@@ -42,7 +42,7 @@ struct EditorGuiData
 class Editor
 {
 public:
-    Editor(GameEvents&, PhysicsSubSystem&);
+    Editor(GameEvents&, PhysicsSystem&);
 	~Editor();
     void setTextureList(const std::vector<std::string>& textureList);
     void clearLevel();
@@ -65,8 +65,8 @@ private:
     //void onRemoveEntity(const EntityIdType& id);
 
     GameEvents& m_events;
-    PhysicsSubSystem& m_physics;
-    boost::scoped_ptr<World> m_world;
+    PhysicsSystem& m_physics;
+    boost::scoped_ptr<ComponentManager> m_compMgr;
 
     std::vector<std::string> m_textureList;
     std::vector<std::string>::iterator m_currentTextureIt;

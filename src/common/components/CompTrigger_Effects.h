@@ -17,42 +17,32 @@
 
 class ComponentManager;
 
-// ========= KillEntity ===========
 class EffectKillEntity : public Effect
 {
 public:
-    EffectKillEntity(GameEvents& gameEvents, const std::string& entityToKill);
+    EffectKillEntity(GameEvents& gameEvents, const EntityId& entityToKill);
     EffectId getId() const { return "KillEntity"; }
     void fire();
-    bool update() { return false; }
-    std::string getEntityName() const { return m_entityToKill; }
+    std::string getEntityId() const { return m_entityToKill; }
 private:
     GameEvents& m_gameEvents;
-    EntityIdType m_entityToKill;
+    EntityId m_entityToKill;
 };
 
-// ========= DispMessage ===========
 class EffectDispMessage : public Effect
 {
 public:
-    EffectDispMessage(GameEvents& gameEvents, const std::string& message, int timeMs, ComponentManager& compManager);
-    ~EffectDispMessage();
+    EffectDispMessage(GameEvents& gameEvents, const std::string& message, int timeMs);
     EffectId getId() const { return "DispMessage"; }
     void fire();
-    bool update();
     std::string getMessage() const { return m_message; }
     int getTotalTime() const { return m_totalTimeMs; }
 private:
     GameEvents& m_gameEvents;
     std::string m_message;
-    int m_remainingUpdates;
-    bool m_fired;
-    ComponentManager& m_compManager;
-    EntityIdType m_msgEntityId;
     int m_totalTimeMs;
 };
 
-// ========= EndLevel ===========
 class EffectEndLevel : public Effect
 {
 public:
@@ -68,8 +58,7 @@ private:
     bool m_win;
 };
 
-// ========= ChangeVariable ===========
-enum ChangeType
+enum ModifyId
 {
     Set,
     Add,
@@ -77,20 +66,22 @@ enum ChangeType
     Divide
 };
 
-class EffectChangeVariable : public Effect
+class EffectModifyVariable : public Effect
 {
 public:
-    EffectChangeVariable( std::map<const std::string, int>::iterator itVariable, const ChangeType& changeType, int num );
-    EffectId getId() const { return "ChangeVariable"; }
+    EffectModifyVariable(GameEvents& gameEvents, const EntityId& entity, const ComponentId& var, const ModifyId& changeType, int num);
+    EffectId getId() const { return "ModifyVariable"; }
     void fire();
-    bool update() { return true; }
     int getNum() const { return m_num; }
-    std::string getVariable() const { return m_itVariable->first; }
-    ChangeType getChangeType() const { return m_changeType; }
+    EntityId getEntity() const { return m_entity; }
+    ComponentId getVariable() const { return m_var; }
+    ModifyId getModId() const { return m_modId; }
 private:
-    std::map<const std::string, int>::iterator m_itVariable;
-
-    ChangeType m_changeType;
+    int modifyVar(int);
+    GameEvents& m_gameEvents;
+    EntityId m_entity;
+    ComponentId m_var;
+    ModifyId m_modId;
     int m_num;
 };
 

@@ -7,10 +7,10 @@
 #include "Gui.h"
 #include "common/Renderer.h"
 
-GuiSubSystem::GuiSubSystem( RenderSubSystem& renderer, InputSubSystem& input ) : m_renderer (renderer), m_input (input), m_clear(false), m_isUpdating ( false )
+GuiSystem::GuiSystem( RenderSystem& renderer, InputSubSystem& input ) : m_renderer (renderer), m_input (input), m_clear(false), m_isUpdating ( false )
 {}
 
-void GuiSubSystem::update()
+void GuiSystem::update()
 {
     m_isUpdating = true;
     for ( WidgetMap::iterator it = m_widgets.begin(); it != m_widgets.end(); ++it )
@@ -29,7 +29,7 @@ void GuiSubSystem::update()
     m_isUpdating = false;
 }
 
-void GuiSubSystem::draw()
+void GuiSystem::draw()
 {
     for ( WidgetMap::iterator it = m_widgets.begin(); it != m_widgets.end(); ++it )
     {
@@ -41,7 +41,7 @@ void GuiSubSystem::draw()
     }
 }
 
-void GuiSubSystem::addWidget(const GroupId& groupId, boost::shared_ptr<Widget> pWidget)
+void GuiSystem::addWidget(const GroupId& groupId, boost::shared_ptr<Widget> pWidget)
 {
     WidgetMap::iterator it = m_widgets.find( groupId );
     if ( it == m_widgets.end() )
@@ -50,7 +50,7 @@ void GuiSubSystem::addWidget(const GroupId& groupId, boost::shared_ptr<Widget> p
         it->second.push_back( pWidget );
 }
 
-void GuiSubSystem::deleteGroup(const GroupId& groupId)
+void GuiSystem::deleteGroup(const GroupId& groupId)
 {
     m_widgets.erase( groupId );
 }
@@ -65,7 +65,7 @@ WidgetLabel::WidgetLabel( float x, float y, const std::string& text, const FontM
     setArea( Rect( x, x+w/4.0f, y, y+h/3.0f ) );
 }
 
-void WidgetLabel::draw( RenderSubSystem* pRenderer )
+void WidgetLabel::draw( RenderSystem* pRenderer )
 {
     /*float vertexCoord[8] = { GetArea().x1*4.0f, GetArea().y1*3.0f,
                              GetArea().x1*4.0f, GetArea().y2*3.0f,
@@ -98,7 +98,7 @@ void WidgetButton::onMouseStateChanged( MouseState newState )
     m_oldMouseState = newState;
 }
 
-void WidgetButton::draw( RenderSubSystem* pRenderer )
+void WidgetButton::draw( RenderSystem* pRenderer )
 {
     float vertexCoord[8] = { getArea().x1*4.0f, getArea().y1*3.0f,
                              getArea().x1*4.0f, getArea().y2*3.0f,

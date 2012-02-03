@@ -50,14 +50,30 @@ entity
 	{
 		type CompVisualTexture
 		texture "wooden crate"
-        shape shape1
-        mapping
-        {
-            vertex { u 0 v 0 }
-            vertex { u 0 v 1 }
-            vertex { u 1 v 1 }
-            vertex { u 1 v 0 }
-        }
+		shape shape1
+		mapping
+		{
+			vertex
+			{
+				u 0
+				v 0
+			}
+			vertex
+			{
+				u 0
+				v 1
+			}
+			vertex
+			{
+				u 1
+				v 1
+			}
+			vertex
+			{
+				u 1
+				v 0
+			}
+		}
 	}
 }
 entity
@@ -112,14 +128,30 @@ entity
 	{
 		type CompVisualTexture
 		texture "wooden crate"
-        shape shape1
-        mapping
-        {
-            vertex { u 0 v 0 }
-            vertex { u 0 v 1 }
-            vertex { u 1 v 1 }
-            vertex { u 1 v 0 }
-        }
+		shape shape1
+		mapping
+		{
+			vertex
+			{
+				u 0
+				v 0
+			}
+			vertex
+			{
+				u 0
+				v 1
+			}
+			vertex
+			{
+				u 1
+				v 1
+			}
+			vertex
+			{
+				u 1
+				v 0
+			}
+		}
 	}
 }
 entity
@@ -174,14 +206,30 @@ entity
 	{
 		type CompVisualTexture
 		texture "wooden crate"
-        shape shape1
-        mapping
-        {
-            vertex { u 0 v 0 }
-            vertex { u 0 v 1 }
-            vertex { u 1 v 1 }
-            vertex { u 1 v 0 }
-        }
+		shape shape1
+		mapping
+		{
+			vertex
+			{
+				u 0
+				v 0
+			}
+			vertex
+			{
+				u 0
+				v 1
+			}
+			vertex
+			{
+				u 1
+				v 1
+			}
+			vertex
+			{
+				u 1
+				v 0
+			}
+		}
 	}
 }
 entity
@@ -236,14 +284,30 @@ entity
 	{
 		type CompVisualTexture
 		texture "wooden crate"
-        shape shape1
-        mapping
-        {
-            vertex { u 0 v 0 }
-            vertex { u 0 v 1 }
-            vertex { u 1 v 1 }
-            vertex { u 1 v 0 }
-        }
+		shape shape1
+		mapping
+		{
+			vertex
+			{
+				u 0
+				v 0
+			}
+			vertex
+			{
+				u 0
+				v 1
+			}
+			vertex
+			{
+				u 1
+				v 1
+			}
+			vertex
+			{
+				u 1
+				v 0
+			}
+		}
 	}
 }
 entity
@@ -1354,34 +1418,38 @@ entity
 		type CompTrigger
 		condition
 		{
-			id EntityTouchedThis
+			id ConditionContact
 			params
 			{
-				entity Box1
+				entity1 Box1
+				entity2 Zone1
 			}
 		}
 		condition
 		{
-			id EntityTouchedThis
+			id ConditionContact
 			params
 			{
-				entity Box2
+				entity1 Box2
+				entity2 Zone1
 			}
 		}
 		condition
 		{
-			id EntityTouchedThis
+			id ConditionContact
 			params
 			{
-				entity Box3
+				entity1 Box3
+				entity2 Zone1
 			}
 		}
 		condition
 		{
-			id EntityTouchedThis
+			id ConditionContact
 			params
 			{
-				entity Box4
+				entity1 Box4
+				entity2 Zone1
 			}
 		}
 		effect
@@ -1391,6 +1459,27 @@ entity
 			{
 				msg "The End!"
 				win true
+			}
+		}
+	}
+	component
+	{
+		type CompTrigger
+		condition
+		{
+			id ConditionContact
+			params
+			{
+				entity1 Player
+				entity2 Zone1
+			}
+		}
+		effect
+		{
+			id DispMessage
+			params
+			{
+				msg "Put 4 boxes in here!"
 			}
 		}
 	}

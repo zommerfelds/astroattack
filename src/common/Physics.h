@@ -23,13 +23,13 @@ class CompGravField;
 
 extern const float cPhysicsTimeStep;
 
-class PhysicsSubSystem
+class PhysicsSystem
 {
 public:
-    PhysicsSubSystem(GameEvents& gameEvents);
+    PhysicsSystem(GameEvents& gameEvents);
 
     void update();
-    boost::optional<std::pair<EntityIdType, std::vector<Component*> > > selectEntity(const Vector2D& pos);
+    boost::optional<std::pair<EntityId, std::vector<Component*> > > selectEntity(const Vector2D& pos);
 
     void calculateSmoothPositions(float accumulator);
 

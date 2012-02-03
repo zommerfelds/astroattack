@@ -42,8 +42,8 @@ bool EditorApp::OnInit()
     setUpLoggerFromPropTree(editorConfig);
 
     m_events.reset(new GameEvents);
-    m_physics.reset(new PhysicsSubSystem(*m_events));
-    m_renderer.reset(new RenderSubSystem(*m_events));
+    m_physics.reset(new PhysicsSystem(*m_events));
+    m_renderer.reset(new RenderSystem(*m_events));
 
     m_editor.reset(new Editor(*m_events, *m_physics));
 

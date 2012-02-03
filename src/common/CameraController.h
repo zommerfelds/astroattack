@@ -12,7 +12,7 @@
 #include "common/Vector2D.h"
 #include <boost/shared_ptr.hpp>
 
-class RenderSubSystem;
+class RenderSystem;
 class ComponentManager;
 
 //----------//
@@ -26,7 +26,7 @@ class ComponentManager;
 class CameraController
 {
 public:
-    CameraController(RenderSubSystem& renderSubSystem, float aspectRatio);
+    CameraController(RenderSystem& renderSubSystem, float aspectRatio);
     virtual ~CameraController() {};
 
     void update( float deltaTime ); // Kamarabewegung aktualisieren und auf Eingabe, die die Kamera beeinflusst, reagieren
@@ -80,7 +80,7 @@ private:
     float m_refViewWidth;
     float m_refViewHeight;
 
-    RenderSubSystem& m_renderSubSystem;
+    RenderSystem& m_renderSubSystem;
 
     // Kameratranslation
     bool m_isMovingSmoothly;

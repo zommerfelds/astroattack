@@ -16,9 +16,10 @@
 #include "common/components/CompTrigger_Effects.h"
 #include "common/components/CompTrigger_Conditions.h"
 #include "common/components/CompVisualMessage.h"
+#include "common/components/CompVariable.h"
 #include "common/components/CompShape.h"
 
-#include "common/World.h"
+#include "common/ComponentManager.h"
 #include "common/Logger.h"
 #include "common/GameEvents.h"
 #include "common/Renderer.h"
@@ -43,7 +44,7 @@ DataLoadException::DataLoadException(const std::string& msg)
 }
 
 // Load Level from XML
-void DataLoader::loadToWorld(const std::string& fileName, World& gameWorld, GameEvents& events)
+void DataLoader::loadToWorld(const std::string& fileName, ComponentManager& compMgr, GameEvents& events)
 {
     try
     {
@@ -89,7 +90,7 @@ void DataLoader::loadToWorld(const std::string& fileName, World& gameWorld, Game
                 else if ( compType == "CompPhysics" )
                     component = boost::shared_ptr<CompPhysics>(new CompPhysics(compId, events));
                 else if ( compType == "CompPlayerController" )
-                    component = boost::shared_ptr<CompPlayerController>(new CompPlayerController(compId, events, gameWorld.getItToVariable( "JetpackEnergy" )));
+                    component = boost::shared_ptr<CompPlayerController>(new CompPlayerController(compId, events));
                 else if ( compType == "CompPosition" )
                     component = boost::shared_ptr<CompPosition>(new CompPosition(compId, events));
                 else if ( compType == "CompVisualAnimation" )
@@ -101,7 +102,9 @@ void DataLoader::loadToWorld(const std::string& fileName, World& gameWorld, Game
                 else if ( compType == "CompGravField" )
                     component = boost::shared_ptr<CompGravField>(new CompGravField(compId, events));
                 else if ( compType == "CompTrigger" )
-                    component = boost::shared_ptr<CompTrigger>(new CompTrigger(compId, gameWorld, events));
+                    component = boost::shared_ptr<CompTrigger>(new CompTrigger(compId, events));
+                else if ( compType == "CompVariable" )
+                    component = boost::shared_ptr<CompVariable>(new CompVariable(compId, events));
                 else
                     throw DataLoadException(fileName + " - In entity '" + entityId + "' component '" + compId + "': invalid component type '" + compType + "'");
 
@@ -114,7 +117,7 @@ void DataLoader::loadToWorld(const std::string& fileName, World& gameWorld, Game
                 log(Info) << "  [ Done ]\n";
             }
 
-            gameWorld.getCompManager().addEntity(entityId, entity);
+            compMgr.addEntity(entityId, entity);
         }
 
         log(Info) << "[ Done ]\n\n";
@@ -284,13 +287,13 @@ void DataLoader::unLoadGraphics( const ResourceIds& resourcesToUnload, TextureMa
     log(Info) << "[ Done ]\n\n";
 }
 
-void DataLoader::saveWorld(const std::string& fileName, const World& gameWorld)
+void DataLoader::saveWorld(const std::string& fileName, const ComponentManager& compMgr)
 {
     log(Info) << "Saving XML file \"" << fileName << "\"...\n";
     
     ptree levelPropTree;
     
-    const EntityMap& entities = gameWorld.getCompManager().getAllEntities();
+    const EntityMap& entities = compMgr.getAllEntities();
     foreach(const EntityMap::value_type& entPair, entities)
     {
         ptree entityPropTree;

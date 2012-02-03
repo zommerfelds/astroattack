@@ -11,14 +11,14 @@
 #include <boost/property_tree/ptree.hpp>
 
 // eindeutige ID
-const ComponentTypeId& CompGravField::getTypeIdStatic()
+const ComponentType& CompGravField::getTypeIdStatic()
 {
-    static boost::scoped_ptr<ComponentTypeId> typeId (new ComponentTypeId("CompGravField"));
+    static boost::scoped_ptr<ComponentType> typeId (new ComponentType("CompGravField"));
     return *typeId;
 }
 
 // Konstruktor
-CompGravField::CompGravField(const ComponentIdType& id, GameEvents& gameEvents)
+CompGravField::CompGravField(const ComponentId& id, GameEvents& gameEvents)
 : Component(id, gameEvents), m_gravType ( Directional ), m_priority( 50 )
 {
     m_gravitationDir.set( 0.0, 1.0 );

@@ -54,6 +54,7 @@ SubSystems::SubSystems()
         input (),
         physics( events ),
         renderer ( events ),
+        triggerSys ( events ),
         sound (),
         gui ( renderer, input ),
         playerController (events, input),
@@ -284,19 +285,18 @@ void GameApp::mainLoop()
     // Solange der benutzer noch nicht abgebrochen hat
     while ( m_quit == false )
     {
-        currentTimeMsecs = SDL_GetTicks();  // Aktualisieren der Zeit
-        calcFPS(currentTimeMsecs);        // Berechnet die Aktualisierungsrate
+        currentTimeMsecs = SDL_GetTicks();
+        deltaTime = (currentTimeMsecs - lastTimeMsecs) * 0.001f;
+        lastTimeMsecs = currentTimeMsecs;
 
-        // Zeiten berechnen
-        deltaTime = (currentTimeMsecs - lastTimeMsecs) * 0.001f; // Zeit seit letztem Frame in Sekunden berechnen
-        lastTimeMsecs = currentTimeMsecs; // Die momentane Zeit in last_time_msecs speichern
-        
-        bool hasFocus = ((SDL_GetAppState() & SDL_APPINPUTFOCUS) != 0);
+        bool hasFocus = ((SDL_GetAppState() & SDL_APPACTIVE) != 0);
         if (hasFocus)
         {
-            FRAME(deltaTime); // Frameabhängige Arbeiten hier durchführen
+            calcFPS(currentTimeMsecs);
 
-            timeAccumulator += deltaTime; // time accumulator
+            FRAME(deltaTime);
+
+            timeAccumulator += deltaTime;
 
             const float cMaxTimeAccumulator = 0.5f;
 
@@ -315,7 +315,7 @@ void GameApp::mainLoop()
 
             while (timeAccumulator >= cPhysicsTimeStep + slowMotionDelay)
             {
-                UPDATE(); // Hier wird das gesammte Spiel aktualisiert (Physik und Spiellogik)
+                UPDATE();
                 timeAccumulator -= cPhysicsTimeStep + slowMotionDelay;
             }
 
@@ -328,7 +328,7 @@ void GameApp::mainLoop()
             m_subSystems.renderer.flipBuffer();
         }
 
-        handleSdlQuitEvents(sdlWindowEvent); // Sehen ob der Benutzer das fenster schliessen will.
+        handleSdlQuitEvents(sdlWindowEvent); // check if user wants to close window
     }
 
     ////////////////////////////////////////////////////////

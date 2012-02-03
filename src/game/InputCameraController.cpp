@@ -34,7 +34,7 @@ const float cMaxZoom = 90000.0f;
 }
 
 // Konstruktor
-InputCameraController::InputCameraController(const InputSubSystem& inputSubSystem, RenderSubSystem& renderSubSystem, ComponentManager& compMgr)
+InputCameraController::InputCameraController(const InputSubSystem& inputSubSystem, RenderSystem& renderSubSystem, ComponentManager& compMgr)
  : CameraController(renderSubSystem, (float(gConfig.get<int>("ScreenWidth")))/gConfig.get<int>("ScreenHeight")),
    m_inputSubSystem (inputSubSystem),
    m_compManager (compMgr),
@@ -98,7 +98,7 @@ void InputCameraController::update( float deltaTime ) // time_span in seconds
             cursorPos.y = (cursorPos.y - 0.5f) * -1;
             cursorPos.rotate(getCameraAngle());
 
-            const float cRangeOfSightFactor = 6.0f; // how far the mouse can move the camera away from the player
+            const float cRangeOfSightFactor = 10.0f; // how far the mouse can move the camera away from the player
             Vector2D target = playerPos + cursorPos * cRangeOfSightFactor;
 
             // to integrate over the full deltaTime step (which can be big) we split it into smaller steps

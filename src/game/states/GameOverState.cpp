@@ -28,7 +28,7 @@ GameOverState::GameOverState( SubSystems& subSystems, const std::string& stringT
 void GameOverState::init()        // State starten
 {
     // GUI modus (Graphical User Interface)
-    getSubSystems().renderer.setMatrix(RenderSubSystem::GUI);
+    getSubSystems().renderer.setMatrix(RenderSystem::GUI);
 }
 
 void GameOverState::cleanup()     // State abbrechen
@@ -60,7 +60,7 @@ void GameOverState::frame( float /*deltaTime*/ )
 
 void GameOverState::draw( float /*accumulator*/ )        // Spiel zeichnen
 {
-    RenderSubSystem& renderer = getSubSystems().renderer;
+    RenderSystem& renderer = getSubSystems().renderer;
 
     renderer.drawOverlay( cBackgroundColor[0], cBackgroundColor[1], cBackgroundColor[2], 1.0f );
     renderer.drawString( m_stringToShow, "FontW_b", 2.0f, 1.5f, AlignCenter, AlignCenter );

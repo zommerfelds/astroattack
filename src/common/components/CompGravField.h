@@ -21,10 +21,10 @@ class CompGravField : public Component
 public:
     enum GravType { Directional, Radial };
 
-    CompGravField(const ComponentIdType& id, GameEvents& gameEvents);
+    CompGravField(const ComponentId& id, GameEvents& gameEvents);
 
-    const ComponentTypeId& getTypeId() const { return getTypeIdStatic(); }
-    static const ComponentTypeId& getTypeIdStatic(); // eindeutige ID für diese Komponentenart (gleich wie Klassennamen, siehe CompGravField.cpp)
+    const ComponentType& getTypeId() const { return getTypeIdStatic(); }
+    static const ComponentType& getTypeIdStatic(); // eindeutige ID für diese Komponentenart (gleich wie Klassennamen, siehe CompGravField.cpp)
 
     // Setters
     void setGravType( GravType t ) { m_gravType = t; }

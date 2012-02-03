@@ -15,7 +15,7 @@
 #include "game/InputCameraController.h"
 
 #include "common/GameEvents.h"
-#include "common/World.h"
+#include "common/ComponentManager.h"
 
 #include <set>
 #include <string>
@@ -44,12 +44,12 @@ public:
 private:
     static const GameStateId STATE_ID;
     
-    World m_gameWorld;          // Spielwelt
+    ComponentManager m_components;
     InputCameraController m_cameraController;        // Kamera
 
     EventConnection m_eventConnection1;
     EventConnection m_eventConnection2;
-    void onEntityDeleted( const EntityIdType& entityId );
+    void onEntityDeleted( const EntityId& entityId );
     void onLevelEnd(bool win, const std::string& msg);
     std::set< std::string > m_entitiesToDelete1;
     std::set< std::string > m_entitiesToDelete2;

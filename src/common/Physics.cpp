@@ -20,12 +20,30 @@
 #include <Box2D/Box2D.h>
 
 const float cPhysicsTimeStep = 1.0f/60.0f;
+
+namespace {
 const int PHYS_ITERATIONS = 10;
 
 // Number of game updates a CompPhysics has to wait till it can change to an other GravField
 const unsigned int cUpdatesTillGravFieldChangeIsPossible = 10;
 
-PhysicsSubSystem::PhysicsSubSystem(GameEvents& gameEvents)
+class ContactListener : public b2ContactListener
+{
+public:
+  void BeginContact(b2Contact* contact)
+  {
+      CompShape* shape1 = static_cast<CompShape*>(contact->GetFixtureA()->GetUserData());
+      CompShape* shape2 = static_cast<CompShape*>(contact->GetFixtureB()->GetUserData());
+      contacts.push_back(std::make_pair(shape1, shape2));
+  }
+
+  std::list<std::pair<CompShape*, CompShape*> > contacts;
+};
+
+ContactListener contactListener;
+}
+
+PhysicsSystem::PhysicsSystem(GameEvents& gameEvents)
 : m_eventConnection1 (), m_eventConnection2 (), m_gameEvents ( gameEvents ),
   m_world (b2Vec2(0.0f, 0.0f)), m_timeStep ( cPhysicsTimeStep ),
   m_velocityIterations ( PHYS_ITERATIONS ), m_positionIterations ( PHYS_ITERATIONS ),
@@ -34,8 +52,10 @@ PhysicsSubSystem::PhysicsSubSystem(GameEvents& gameEvents)
     m_rootGravField.setGravType(CompGravField::Directional);
     m_rootGravField.setGravDir(Vector2D(0.0f, -25.0f));
 
-    m_eventConnection1 = m_gameEvents.newComponent.registerListener( boost::bind( &PhysicsSubSystem::onRegisterComp, this, _1 ) );
-    m_eventConnection2 = m_gameEvents.deleteComponent.registerListener( boost::bind( &PhysicsSubSystem::onUnregisterComp, this, _1 ) );
+    m_eventConnection1 = m_gameEvents.newComponent.registerListener( boost::bind( &PhysicsSystem::onRegisterComp, this, _1 ) );
+    m_eventConnection2 = m_gameEvents.deleteComponent.registerListener( boost::bind( &PhysicsSystem::onUnregisterComp, this, _1 ) );
+
+    m_world.SetContactListener(&contactListener);
 }
 
 // helper function
@@ -66,7 +86,7 @@ boost::shared_ptr<b2BodyDef> convertToB2BodyDef(const BodyDef& bodyDef)
 }
 
 // PhysicsSubSystem aktualisieren (ganze Physik wird aktulisiert -> Positionen, Geschwindigkeiten...)
-void PhysicsSubSystem::update()
+void PhysicsSystem::update()
 {
     foreach(CompPhysics* compPhys, m_physicsComps)
     {
@@ -74,9 +94,11 @@ void PhysicsSubSystem::update()
         compPhys->m_previousAngle = compPhys->getAngle();
     }
 
+    contactListener.contacts.clear();
     //----Box2D Aktualisieren!----//
     m_world.Step(m_timeStep, m_velocityIterations, m_positionIterations);
     //----------------------------//
+
 
     foreach(CompPhysics* compPhys, m_physicsComps)
     {
@@ -134,9 +156,15 @@ void PhysicsSubSystem::update()
 
         compPhys->m_nUpdatesSinceGravFieldChange++;
     }
+
+    std::pair<CompShape*,CompShape*> contact;
+    foreach(contact, contactListener.contacts)
+    {
+        m_gameEvents.newContact.fire(*contact.first, *contact.second);
+    }
 }
 
-void PhysicsSubSystem::calculateSmoothPositions(float accumulator)
+void PhysicsSystem::calculateSmoothPositions(float accumulator)
 {
     float ratio = accumulator/cPhysicsTimeStep;
     foreach(CompPhysics* compPhys, m_physicsComps)
@@ -158,7 +186,7 @@ void PhysicsSubSystem::calculateSmoothPositions(float accumulator)
     }
 }
 
-void PhysicsSubSystem::onRegisterComp(Component& component)
+void PhysicsSystem::onRegisterComp(Component& component)
 {
     if (component.getTypeId() == CompPhysics::getTypeIdStatic())
         onRegisterCompPhys(static_cast<CompPhysics&>(component));
@@ -166,7 +194,7 @@ void PhysicsSubSystem::onRegisterComp(Component& component)
         onRegisterCompGrav(static_cast<CompGravField&>(component));
 }
 
-void PhysicsSubSystem::onUnregisterComp(Component& component)
+void PhysicsSystem::onUnregisterComp(Component& component)
 {
     if (component.getTypeId() == CompPhysics::getTypeIdStatic())
         onUnregisterCompPhys(static_cast<CompPhysics&>(component));
@@ -174,7 +202,7 @@ void PhysicsSubSystem::onUnregisterComp(Component& component)
         onUnregisterCompGrav(static_cast<CompGravField&>(component));
 }
 
-void PhysicsSubSystem::onRegisterCompPhys(CompPhysics& compPhys)
+void PhysicsSystem::onRegisterCompPhys(CompPhysics& compPhys)
 {
     // get position from CompPosition, if it exists
     CompPosition* compPos = compPhys.getSiblingComponent<CompPosition>();
@@ -222,7 +250,7 @@ void PhysicsSubSystem::onRegisterCompPhys(CompPhysics& compPhys)
     m_physicsComps.push_back( &compPhys );
 }
 
-void PhysicsSubSystem::onUnregisterCompPhys(CompPhysics& compPhys)
+void PhysicsSystem::onUnregisterCompPhys(CompPhysics& compPhys)
 {
     if ( compPhys.m_body )
     {
@@ -244,12 +272,12 @@ void PhysicsSubSystem::onUnregisterCompPhys(CompPhysics& compPhys)
     }
 }
 
-void PhysicsSubSystem::onRegisterCompGrav( CompGravField& compGrav )
+void PhysicsSystem::onRegisterCompGrav( CompGravField& compGrav )
 {
     m_gravFields.push_back( &compGrav );
 }
 
-void PhysicsSubSystem::onUnregisterCompGrav( CompGravField& compGrav )
+void PhysicsSystem::onUnregisterCompGrav( CompGravField& compGrav )
 {
     for ( size_t i = 0; i < m_gravFields.size(); ++i )
     {
@@ -261,6 +289,7 @@ void PhysicsSubSystem::onUnregisterCompGrav( CompGravField& compGrav )
     }
 }
 
+namespace {
 class QueryCallback: public b2QueryCallback
 {
 public:
@@ -288,15 +317,14 @@ private:
     b2Vec2 testPoint;
 };
 
-namespace {
 QueryCallback queryCallback;
 }
 
-boost::optional<std::pair<EntityIdType, std::vector<Component*> > > PhysicsSubSystem::selectEntity(const Vector2D& pos)
+boost::optional<std::pair<EntityId, std::vector<Component*> > > PhysicsSystem::selectEntity(const Vector2D& pos)
 {
     CompShape* comp = queryCallback.query(m_world, *pos.to_b2Vec2());
     if (comp == NULL)
-        return boost::optional<std::pair<EntityIdType, std::vector<Component*> > >();
+        return boost::optional<std::pair<EntityId, std::vector<Component*> > >();
     else
-        return boost::optional<std::pair<EntityIdType, std::vector<Component*> > >(std::make_pair(comp->getEntityId(), comp->getSiblingComponents<Component>()));
+        return boost::optional<std::pair<EntityId, std::vector<Component*> > >(std::make_pair(comp->getEntityId(), comp->getSiblingComponents<Component>()));
 }

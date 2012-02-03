@@ -32,6 +32,14 @@ private:
     void release(); // release the current counter
 };
 
+class EventConnections
+{
+public:
+    void add(const EventConnection& eventCon);
+private:
+    std::list<EventConnection> m_connections;
+};
+
 // template <typename ArgType1, typename ArgType2, ..., typename ArgTypeN>
 // EventN
 // -----
@@ -82,6 +90,19 @@ public:
     typedef std::list< std::pair< Function, EventConnection > > FunctionList;
     EventConnection registerListener(Function func);
     void fire(ArgType1 arg1,ArgType2 arg2);
+private:
+    FunctionList m_listenerFuncs;
+    void unregisterListener(typename FunctionList::iterator pos);
+};
+
+// same thing for 3 arguments
+template <typename ArgType1, typename ArgType2, typename ArgType3>
+class Event3 {
+public:
+    typedef boost::function<void (ArgType1,ArgType2,ArgType3)> Function;
+    typedef std::list< std::pair< Function, EventConnection > > FunctionList;
+    EventConnection registerListener(Function func);
+    void fire(ArgType1 arg1,ArgType2 arg2,ArgType3 arg3);
 private:
     FunctionList m_listenerFuncs;
     void unregisterListener(typename FunctionList::iterator pos);

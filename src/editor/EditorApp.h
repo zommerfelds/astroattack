@@ -11,8 +11,8 @@
 #include <boost/scoped_ptr.hpp>
 
 struct GameEvents;
-class RenderSubSystem;
-class PhysicsSubSystem;
+class RenderSystem;
+class PhysicsSystem;
 class Editor;
 
 class EditorApp : public wxApp
@@ -23,8 +23,8 @@ public:
 
 private:
     boost::scoped_ptr<GameEvents> m_events;
-    boost::scoped_ptr<RenderSubSystem> m_renderer;
-    boost::scoped_ptr<PhysicsSubSystem> m_physics;
+    boost::scoped_ptr<RenderSystem> m_renderer;
+    boost::scoped_ptr<PhysicsSystem> m_physics;
     boost::scoped_ptr<Editor> m_editor;
 };
 

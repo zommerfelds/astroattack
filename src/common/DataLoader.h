@@ -14,7 +14,7 @@
 #include <set>
 #include <string>
 
-class World;
+class ComponentManager;
 class TextureManager;
 class AnimationManager;
 class FontManager;
@@ -36,10 +36,10 @@ public:
 class DataLoader
 {
 public:
-    static void loadToWorld(const std::string& fileName, World& gameWorld, GameEvents& events);
+    static void loadToWorld(const std::string& fileName, ComponentManager&, GameEvents& events);
     static ResourceIds loadGraphics(const std::string& fileName, TextureManager*, AnimationManager*, FontManager*, TexQuality);
     static void unLoadGraphics(const ResourceIds& resourcesToUnload, TextureManager*, AnimationManager*, FontManager*);
-    static void saveWorld(const std::string& fileName, const World& gameWorld);
+    static void saveWorld(const std::string& fileName, const ComponentManager&);
 private:
 };
 

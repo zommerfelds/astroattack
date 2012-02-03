@@ -17,6 +17,7 @@
 #include "common/Physics.h"
 #include "common/Renderer.h"
 #include "common/Sound.h"
+#include "common/TriggerSystem.h"
 #include "common/GameEvents.h"
 
 #include <vector>
@@ -34,10 +35,11 @@ struct SubSystems
     StateManager stateManager;   // States
     GameEvents events;           // Spielereignisse
     InputSubSystem input;        // Eingabe
-    PhysicsSubSystem physics;    // Physik
-    RenderSubSystem renderer;    // Ausgabe
-    SoundSubSystem sound;        // Sound
-    GuiSubSystem gui;            // Grafische Benutzeroberfläche
+    PhysicsSystem physics;       // Physik
+    RenderSystem renderer;       // Ausgabe
+    TriggerSystem triggerSys;
+    SoundSystem sound;           // Sound
+    GuiSystem gui;               // Grafische Benutzeroberfläche
     PlayerController playerController;
     bool isLoading; // wenn true: Zeitakkumulator wird neu gestartet, sobald die Hauptschleife einmal durch ist
                     // das verhindert, dass die Zeit währed Ladezeiten gezählt wird (und am Ende des Landens mehrere Updates nachgeholt werden)

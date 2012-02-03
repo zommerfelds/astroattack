@@ -15,13 +15,13 @@
 #include <boost/property_tree/ptree.hpp>
 
 // einduetige ID
-const ComponentTypeId& CompVisualAnimation::getTypeIdStatic()
+const ComponentType& CompVisualAnimation::getTypeIdStatic()
 {
-    static boost::scoped_ptr<ComponentTypeId> typeId (new ComponentTypeId("CompVisualAnimation"));
+    static boost::scoped_ptr<ComponentType> typeId (new ComponentType("CompVisualAnimation"));
     return *typeId;
 }
 
-CompVisualAnimation::CompVisualAnimation(const ComponentIdType& id, GameEvents& gameEvents) :
+CompVisualAnimation::CompVisualAnimation(const ComponentId& id, GameEvents& gameEvents) :
   Component(id, gameEvents),
   m_center (),
   m_halfWidth (0.0f),

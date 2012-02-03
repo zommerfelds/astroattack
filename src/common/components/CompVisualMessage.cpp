@@ -10,14 +10,14 @@
 #include <boost/scoped_ptr.hpp>
 
 // eindeutige ID
-const ComponentTypeId& CompVisualMessage::getTypeIdStatic()
+const ComponentType& CompVisualMessage::getTypeIdStatic()
 {
-	static boost::scoped_ptr<ComponentTypeId> typeId (new ComponentTypeId("CompVisualMessage"));
+	static boost::scoped_ptr<ComponentType> typeId (new ComponentType("CompVisualMessage"));
     return *typeId;
 }
 
 // Konstruktor
-CompVisualMessage::CompVisualMessage(const ComponentIdType& id, GameEvents& gameEvents, const std::string& text) :
+CompVisualMessage::CompVisualMessage(const ComponentId& id, GameEvents& gameEvents, const std::string& text) :
   Component(id, gameEvents),
   m_text ( text )
 {}
