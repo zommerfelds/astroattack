@@ -13,7 +13,7 @@
 #include <string>
 #include <vector>
 
-struct GameEvents;
+class GameEvents;
 
 class ComponentManager;
 

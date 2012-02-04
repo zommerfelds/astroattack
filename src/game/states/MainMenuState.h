@@ -15,7 +15,7 @@
 #include <vector>
 #include <string>
 
-struct Button;
+class Button;
 
 enum SubMenu 
 {

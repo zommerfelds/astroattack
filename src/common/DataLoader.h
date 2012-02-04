@@ -19,10 +19,11 @@ class TextureManager;
 class AnimationManager;
 class FontManager;
 class FontManager;
-struct GameEvents;
+class GameEvents;
 
-struct ResourceIds
+class ResourceIds
 {
+public:
     std::set<std::string> textures;
     std::set<std::string> animations;
     std::set<std::string> fonts;

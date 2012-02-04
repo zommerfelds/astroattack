@@ -9,6 +9,7 @@
 #include "common/Foreach.h"
 #include <map>
 #include <fstream>
+#include <iostream>
 #include <boost/property_tree/info_parser.hpp>
 
 using boost::property_tree::ptree;

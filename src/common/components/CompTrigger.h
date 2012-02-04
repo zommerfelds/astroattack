@@ -18,7 +18,7 @@
 #include <boost/function.hpp>
 #include <boost/shared_ptr.hpp>
 
-struct GameEvents;
+class GameEvents;
 class Condition;
 class Effect;
 

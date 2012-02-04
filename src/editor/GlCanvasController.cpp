@@ -17,7 +17,7 @@
 
 #include <wx/frame.h>
 #include <wx/window.h>
-//#include <SDL_opengl.h>
+#include <SDL_opengl.h>
 
 BEGIN_EVENT_TABLE(GlCanvasController, wxGLCanvas)
     EVT_SIZE(GlCanvasController::onResize)
@@ -59,6 +59,14 @@ Vector2D snapToGrid(const Vector2D& worldCoordinates)
         cellsY -= 0.5;
 
     return Vector2D(((int)(cellsX))*gridCellWidth, ((int)(cellsY))*gridCellWidth);
+}
+
+void testGlErr(const std::string& d)
+{
+	log(Info) << "Testing for OpenGL error at '" << d << "'\n";
+	GLenum err = glGetError();
+    if (err != GL_NO_ERROR)
+        log(Error) << "OpenGL Error: " << gluErrorString(err) << "\n";
 }
 
 }
@@ -184,6 +192,8 @@ void GlCanvasController::onPaint(wxPaintEvent& evt)
 
             m_cameraController.setAspectRatio((float(GetSize().x))/GetSize().y);
             m_cameraController.setZoom(cDefaultZoom);
+
+			testGlErr("init");
         }
 
         wxGLCanvas::SetCurrent(*m_context);
@@ -199,6 +209,8 @@ void GlCanvasController::onPaint(wxPaintEvent& evt)
     wxPaintDC(this); // only to be used in paint events. use wxClientDC to paint outside the paint event
 
     // in the future we might need to do physics.calculateSmoothPositions(accumulator);
+
+	testGlErr("b");
 
     m_renderer.update(); // TODO: shouldn't be here, because it should be frame rate independent
 
@@ -216,6 +228,13 @@ void GlCanvasController::onPaint(wxPaintEvent& evt)
                                  4.0f, 0.0f };
         m_renderer.drawTexturedQuad( texCoord, vertexCoord, "_starfield" );
     }
+
+	testGlErr("c");
+	
+    m_renderer.drawString("hoi", "FontW_m", 1.0f, 1.0f);
+
+	testGlErr("d");
+
     // Weltmodus
     m_renderer.setMatrix(RenderSystem::World);
     m_cameraController.look();
@@ -223,6 +242,8 @@ void GlCanvasController::onPaint(wxPaintEvent& evt)
     m_renderer.drawVisualAnimationComps();
     // Texturen zeichnen
     m_renderer.drawVisualTextureComps();
+
+	testGlErr("e");
 
     if (m_editor.getGuiData().selectedEntity)
     {

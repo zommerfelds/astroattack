@@ -14,7 +14,7 @@
 #include <wx/wx.h>
 #include <wx/glcanvas.h>
 
-struct GameEvents;
+class GameEvents;
 class Editor;
 class EditorFrame;
 

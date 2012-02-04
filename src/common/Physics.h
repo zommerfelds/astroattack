@@ -15,7 +15,7 @@
 #include <Box2D/Box2D.h>
 #include <boost/optional.hpp>
 
-struct GameEvents;
+class GameEvents;
 class Component;
 class EventConnection;
 class CompPhysics;

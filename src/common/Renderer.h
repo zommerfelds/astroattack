@@ -17,7 +17,7 @@
 #include <string>
 #include <boost/shared_ptr.hpp>
 
-struct GameEvents;
+class GameEvents;
 class CompVisualTexture;
 class CompVisualAnimation;
 class CompVisualMessage;
@@ -27,8 +27,9 @@ class CompShape;
 class Vector2D;
 class Component;
 
-struct Color
+class Color
 {
+public:
     Color(float r, float g, float b, float a) : r (r), g (g), b(b), a(a) {}
     float r,g,b,a;
 };

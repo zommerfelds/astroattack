@@ -52,8 +52,18 @@ void FontManager::freeFont(const FontId& id)
         m_fonts.erase( c_it ); 
 }
 
+void testGlErr(const std::string& d)
+{
+	log(Info) << "Testing for OpenGL error at '" << d << "'\n";
+	GLenum err = glGetError();
+    if (err != GL_NO_ERROR)
+        log(Error) << "OpenGL Error: " << gluErrorString(err) << "\n";
+}
+
 void FontManager::drawString(const std::string &str, const FontId &fontId, float x, float y, Align horizAlign, Align vertAlign, float red, float green, float blue, float alpha )
 {
+	testGlErr("begin drawString");
+
     FontMap::iterator font_it = m_fonts.find( fontId );
     assert ( font_it != m_fonts.end() );
 
@@ -100,6 +110,8 @@ void FontManager::drawString(const std::string &str, const FontId &fontId, float
         lineY -= lineSpacing;
     }
     glColor4f( 255, 255, 255, 255 );
+
+	testGlErr("end drawString");
 }
 
 void FontManager::getDimensions(const std::string &text, const FontId &fontId, float& w, float& h) const

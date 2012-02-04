@@ -129,9 +129,9 @@ void MainMenuState::init()        // State starten
         std::string value = node.name();
         std::string file = node.attribute("file").value();
         if ( value == "level" )
-            getSubSystems().gui.addWidget( menuNames[Play], make_shared<WidgetButton>( Rect(x,x+w,y,y+h), caption, boost::bind( &MainMenuState::onPressedOpenLevel, this, file ), boost::bind( &MainMenuState::onPressedSound, this ) ) );
+            getSubSystems().gui.addWidget( menuNames[Play], boost::make_shared<WidgetButton>( Rect(x,x+w,y,y+h), caption, boost::bind( &MainMenuState::onPressedOpenLevel, this, file ), boost::bind( &MainMenuState::onPressedSound, this ) ) );
         else if ( value == "slides" )
-            getSubSystems().gui.addWidget( menuNames[Play], make_shared<WidgetButton>( Rect(x,x+w,y,y+h), caption, boost::bind( &MainMenuState::onPressedOpenSlideShow, this, file ), boost::bind( &MainMenuState::onPressedSound, this ) ) );
+            getSubSystems().gui.addWidget( menuNames[Play], boost::make_shared<WidgetButton>( Rect(x,x+w,y,y+h), caption, boost::bind( &MainMenuState::onPressedOpenSlideShow, this, file ), boost::bind( &MainMenuState::onPressedSound, this ) ) );
 		// NOTE: needs to specify boost:: because of ADL (see http://www.gamedev.net/topic/619313-visual-studio-namespace-problem-ambiguous-call-to-boostmake-shared/)
         y += 0.07f;
     }

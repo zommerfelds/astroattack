@@ -10,7 +10,7 @@
 #include <wx/wx.h>
 #include <boost/scoped_ptr.hpp>
 
-struct GameEvents;
+class GameEvents;
 class RenderSystem;
 class PhysicsSystem;
 class Editor;

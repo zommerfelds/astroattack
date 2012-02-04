@@ -57,8 +57,9 @@ enum MouseState
 
 // Bildschirmrechteck (um Fläche eines Knopfes darzustellen)
 // x1 < x2; y1 < y2 (0/0 ist oben links, 1/1 ist unten rechts)
-struct Rect
+class Rect
 {
+public:
     Rect() : x1(0.0f),x2(1.0f),y1(0.0f),y2(1.0f) {}
     Rect(float x_1,float x_2,float y_1,float y_2) : x1(x_1),x2(x_2),y1(y_1),y2(y_2) {}
     float x1,x2;

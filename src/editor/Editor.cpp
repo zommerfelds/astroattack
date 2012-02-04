@@ -68,7 +68,7 @@ void Editor::loadLevel(const std::string& fileName)
     }
     catch (DataLoadException& e)
     {
-        std::cerr << "Could not read level: " << e.getMsg() << std::endl;
+        log(Error) << "Could not read level: " << e.getMsg() << "\n";
         return;
     }
 }

@@ -15,7 +15,7 @@
 #include "common/Vector2D.h"
 #include <map>
 
-struct GameEvents;
+class GameEvents;
 class CompPhysics;
 
 // Constants

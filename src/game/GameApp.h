@@ -26,8 +26,9 @@
 union SDL_Event;
 
 // Alle wichtigen Untersysteme des Spieles
-struct SubSystems
+class SubSystems
 {
+public:
     SubSystems();
     ~SubSystems();
     bool init();

@@ -16,15 +16,17 @@
 #include <vector>
 
 // Ein einzelner "Dia" / Slide
-struct Slide
+class Slide
 {
+public:
     std::vector<std::string> textPages;
     std::string imageFileName;
 };
 
 // Eine ganze "Dia-Show"
-struct SlideShow
+class SlideShow
 {
+public:
     int timerDelay; // 0 = kein Timer
     std::string musicFileName;
     std::vector<Slide> slides;

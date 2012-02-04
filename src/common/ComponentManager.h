@@ -17,15 +17,16 @@
 #include <boost/shared_ptr.hpp>
 
 class Component;
-struct GameEvents;
+class GameEvents;
 class Logger;
 
 typedef std::list< boost::shared_ptr<Component> > ComponentList;
 typedef std::multimap< ComponentType, boost::shared_ptr<Component> > ComponentMap;
 typedef std::map< EntityId, ComponentMap > EntityMap;
 
-struct Entity
+class Entity
 {
+public:
     EntityId id;
     ComponentList components;
 };

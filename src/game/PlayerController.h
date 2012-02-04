@@ -10,7 +10,7 @@
 #include "common/Event.h"
 
 class Component;
-struct GameEvents;
+class GameEvents;
 class CompPlayerController;
 class InputSubSystem;
 

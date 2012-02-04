@@ -27,8 +27,9 @@ class CompGravField;
 class CompPhysics;
 class CompShape;
 
-struct ContactInfo
+class ContactInfo
 {
+public:
     ContactInfo(CompPhysics& phys, CompShape& thisShape, CompShape& otherShape, const Vector2D& point, const Vector2D& normal ) :
         phys (phys), thisShape (thisShape), otherShape (otherShape), point (point), normal (normal) {}
     CompPhysics& phys;     // the component that is touching
@@ -38,8 +39,9 @@ struct ContactInfo
     Vector2D normal;       // contact normal (pointing away from body)
 };
 
-struct BodyDef
+class BodyDef
 {
+public:
     BodyDef() :
         angle ( 0.0f ),
         angularVelocity ( 0.0f ),
@@ -50,7 +52,7 @@ struct BodyDef
         type ( staticBody )
     {}
 
-    // NOTE: the comments in this struct are taken directly from Box2D b2BodyDef structure
+    // NOTE: the comments in this class are taken directly from Box2D b2BodyDef structure
 
     // The world position of the body. Avoid creating bodies at the origin
     // since this can lead to many overlapping shapes.
@@ -93,7 +95,8 @@ struct BodyDef
     BodyType type;
 };
 
-struct ShapeDef {
+class ShapeDef {
+public:
     ShapeDef() : density (0.0f), friction (0.0f), restitution (0.0f), isSensor (false) {}
     ShapeDef(ComponentId n, float d, float f, float r, bool s) : compId (n), density (d), friction (f), restitution (r), isSensor (s) {}
 

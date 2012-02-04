@@ -17,8 +17,8 @@
 class Component;
 class CompShape;
 
-struct GameEvents {
-
+class GameEvents {
+public:
     // A new entity is being created
     // Arg: entity being created
     Event1<const EntityId&> newEntity;

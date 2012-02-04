@@ -39,7 +39,7 @@ public:
     }
 };
 
-struct GameEvents;
+class GameEvents;
 
 class EditorFrame : public EditorFrameBase {
 public:

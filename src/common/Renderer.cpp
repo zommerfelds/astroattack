@@ -878,6 +878,8 @@ void RenderSystem::update()
 
 void RenderSystem::onDispMessage(const std::string& message, int time)
 {
-    m_msgCompsManaged.push_back(std::make_pair(boost::make_shared<CompVisualMessage>("_generated_msg", boost::ref(m_gameEvents), message), cDefaultMessageTime));
+	if (time == -1)
+		time = cDefaultMessageTime;
+    m_msgCompsManaged.push_back(std::make_pair(boost::make_shared<CompVisualMessage>("_generated_msg", boost::ref(m_gameEvents), message), time));
 }
 

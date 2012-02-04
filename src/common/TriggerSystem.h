@@ -11,7 +11,7 @@
 
 #include <set>
 
-struct GameEvents;
+class GameEvents;
 class CompTrigger;
 class Component;
 

@@ -54,9 +54,6 @@
     <ClCompile Include="..\src\common\Vector2D.cpp">
       <Filter>Common Source</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\common\World.cpp">
-      <Filter>Common Source</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\common\components\CompGravField.cpp">
       <Filter>Common Source\Components</Filter>
     </ClCompile>
@@ -104,6 +101,12 @@
     </ClCompile>
     <ClCompile Include="..\src\editor\GlCanvasController.cpp">
       <Filter>Editor Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\common\components\CompVariable.cpp">
+      <Filter>Common Source\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\common\TriggerSystem.cpp">
+      <Filter>Common Source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -155,9 +158,6 @@
     <ClInclude Include="..\src\common\Vector2D.h">
       <Filter>Common Source</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\common\World.h">
-      <Filter>Common Source</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\common\components\CompGravField.h">
       <Filter>Common Source\Components</Filter>
     </ClInclude>
@@ -206,5 +206,15 @@
     <ClInclude Include="..\src\editor\GlCanvasController.h">
       <Filter>Editor Source</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\common\components\CompVariable.h">
+      <Filter>Common Source\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\common\TriggerSystem.h">
+      <Filter>Common Source</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\AAEditor.log" />
+    <None Include="..\data\editorConfig.info" />
   </ItemGroup>
 </Project>

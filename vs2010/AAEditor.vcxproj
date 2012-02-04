@@ -41,13 +41,13 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>$(SolutionDir)\..\build\editor\win32\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)\..\build\editor\win32\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)\..\build\win32_$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)\..\build\win32_$(Configuration)\intermediate\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(SolutionDir)\..\build\editor\win32\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)\..\build\editor\win32\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)\..\build\win32_$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)\..\build\win32_$(Configuration)\intermediate\</IntDir>
   </PropertyGroup>
   <PropertyGroup>
     <LocalDebuggerEnvironment>PATH=%PATH%;$(SolutionDir)\..\bin_win32</LocalDebuggerEnvironment>
@@ -98,6 +98,7 @@
     <ClCompile Include="..\src\common\components\CompTrigger.cpp" />
     <ClCompile Include="..\src\common\components\CompTrigger_Conditions.cpp" />
     <ClCompile Include="..\src\common\components\CompTrigger_Effects.cpp" />
+    <ClCompile Include="..\src\common\components\CompVariable.cpp" />
     <ClCompile Include="..\src\common\components\CompVisualAnimation.cpp" />
     <ClCompile Include="..\src\common\components\CompVisualMessage.cpp" />
     <ClCompile Include="..\src\common\components\CompVisualTexture.cpp" />
@@ -105,6 +106,7 @@
     <ClCompile Include="..\src\common\Event.cpp" />
     <ClCompile Include="..\src\common\Event_templ.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\src\common\Font.cpp" />
     <ClCompile Include="..\src\common\Logger.cpp" />
@@ -112,8 +114,8 @@
     <ClCompile Include="..\src\common\Renderer.cpp" />
     <ClCompile Include="..\src\common\Sound.cpp" />
     <ClCompile Include="..\src\common\Texture.cpp" />
+    <ClCompile Include="..\src\common\TriggerSystem.cpp" />
     <ClCompile Include="..\src\common\Vector2D.cpp" />
-    <ClCompile Include="..\src\common\World.cpp" />
     <ClCompile Include="..\src\editor\Editor.cpp" />
     <ClCompile Include="..\src\editor\EditorApp.cpp" />
     <ClCompile Include="..\src\editor\EditorFrame.cpp" />
@@ -132,6 +134,7 @@
     <ClInclude Include="..\src\common\components\CompTrigger.h" />
     <ClInclude Include="..\src\common\components\CompTrigger_Conditions.h" />
     <ClInclude Include="..\src\common\components\CompTrigger_Effects.h" />
+    <ClInclude Include="..\src\common\components\CompVariable.h" />
     <ClInclude Include="..\src\common\components\CompVisualAnimation.h" />
     <ClInclude Include="..\src\common\components\CompVisualMessage.h" />
     <ClInclude Include="..\src\common\components\CompVisualTexture.h" />
@@ -147,13 +150,17 @@
     <ClInclude Include="..\src\common\Renderer.h" />
     <ClInclude Include="..\src\common\Sound.h" />
     <ClInclude Include="..\src\common\Texture.h" />
+    <ClInclude Include="..\src\common\TriggerSystem.h" />
     <ClInclude Include="..\src\common\Vector2D.h" />
-    <ClInclude Include="..\src\common\World.h" />
     <ClInclude Include="..\src\editor\Editor.h" />
     <ClInclude Include="..\src\editor\EditorApp.h" />
     <ClInclude Include="..\src\editor\EditorFrame.h" />
     <ClInclude Include="..\src\editor\gen\EditorGuiBase.h" />
     <ClInclude Include="..\src\editor\GlCanvasController.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\AAEditor.log" />
+    <None Include="..\data\editorConfig.info" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -15,8 +15,8 @@
 #include <vector>
 #include <boost/shared_ptr.hpp>
 
-struct LoadTextureInfo;
-struct TexInfo;
+class LoadTextureInfo;
+class TexInfo;
 
 typedef std::string TextureId;
 typedef std::string AnimationId;
@@ -40,8 +40,8 @@ private:
 };
 
 typedef std::string AnimStateId;
-struct StateInfo;
-struct AnimInfo;
+class StateInfo;
+class AnimInfo;
 typedef std::map< AnimStateId, boost::shared_ptr<StateInfo> > StateInfoMap;
 
 //------------------------------------------//
@@ -78,8 +78,9 @@ enum TexQuality {
     QualityLowest = 4
 };
 
-struct LoadTextureInfo
+class LoadTextureInfo
 {
+public:
     bool loadMipmaps;
     TexWrapMode wrapModeX; // GL_CLAMP oder GL_REPEAT
     TexWrapMode wrapModeY; // GL_CLAMP oder GL_REPEAT
@@ -87,15 +88,17 @@ struct LoadTextureInfo
     float scale;
 };
 
-struct TexInfo
+class TexInfo
 {
+public:
     unsigned int texAddress;
     float scale;
 };
 
 // Information eines Animationszustands (eine Aktion wie z.B. Rennen, Springen...)
-struct StateInfo
+class StateInfo
 {
+public:
     int begin;
     int end;
     int speed;
@@ -103,8 +106,9 @@ struct StateInfo
 };
 
 // Informationen einer Animation
-struct AnimInfo
+class AnimInfo
 {
+public:
     AnimationId name;
     int totalFrames;
     int numDigits;

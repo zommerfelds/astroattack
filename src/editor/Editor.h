@@ -16,7 +16,7 @@
 #include <boost/optional.hpp>
 #include <boost/scoped_ptr.hpp>
 
-struct GameEvents;
+class GameEvents;
 class ComponentManager;
 class PhysicsSystem;
 class Component;

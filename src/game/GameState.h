@@ -13,7 +13,7 @@
 #include <string>
 #include <boost/shared_ptr.hpp>
 
-struct SubSystems;
+class SubSystems;
 
 typedef std::string GameStateId;
 

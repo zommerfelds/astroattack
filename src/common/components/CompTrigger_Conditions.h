@@ -9,14 +9,15 @@
 #ifndef COMPTRIGGER_CONDITIONS_H
 #define COMPTRIGGER_CONDITIONS_H
 
+#include "CompTrigger.h"
 #include "common/Event.h"
-
+#include "common/IdTypes.h"
 #include <map>
 #include <string>
 
 class CompShape;
+class GameEvents;
 
-// ========== CompareVariable =========
 enum CompareOperator
 {
     GreaterThan,

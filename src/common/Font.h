@@ -14,7 +14,7 @@
 #include <string>
 #include <boost/shared_ptr.hpp>
 
-struct Box;
+class Box;
 class FTFont;
 class RenderSystem;
 
