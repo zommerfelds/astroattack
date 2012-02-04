@@ -12,6 +12,8 @@
 #include "common/Event.h"
 #include "common/Font.h"
 #include "common/Texture.h"
+#include "common/DataLoader.h"
+
 #include <set>
 #include <list>
 #include <string>
@@ -66,8 +68,6 @@ public:
     void drawVisualAnimationComps();
     void drawVisualMessageComps();
 
-    // ******** Zeichnungsfunktionen ********* //
-
     // einen Texturierten Quadrat zeichnen
     void drawTexturedQuad(float texCoord[8], float vertexCoord[8], const std::string& texId, bool border=false, float alpha=1.0f);
     // einen Quadrat zeichnen
@@ -89,7 +89,7 @@ public:
     void drawCrosshairs( const Vector2D& rCrosshairsPos );
 
     // Camera control
-    void setViewPosition( const Vector2D& pos, float scale, float angle);
+    void setView( const Vector2D& pos, float scale, float angle);
     void setViewSize( float width, float height );
 
     // -------- nur für MatrixGUI Modus --------   
@@ -98,8 +98,6 @@ public:
     void drawEditorCursor( const Vector2D& rPos );
     // das ganze Bildschirm mit einer Farbe überdecken
     void drawOverlay( float r, float g, float b, float a );
-
-    // ****************************************//
 
     void drawFPS(int fps);
 
@@ -153,6 +151,8 @@ private:
 
     int m_viewPortWidth;
     int m_viewPortHeight;
+
+    ResourceIds m_loadedResources;
 };
 
 #endif

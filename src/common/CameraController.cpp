@@ -252,7 +252,7 @@ void CameraController::setZoomRange(float min, float max)
 
 void CameraController::look() const
 {
-    m_renderSubSystem.setViewPosition(m_position, m_zoom, m_rotation);
+    m_renderSubSystem.setView(m_position, m_zoom, m_rotation);
 }
 
 const Vector2D& CameraController::getCameraPos() const

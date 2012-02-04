@@ -4,10 +4,9 @@
 
 * High priority *
 
-- segfault when same entity name (?)
-
 * Medium priority *
 
+- do some file input testing
 - rule of three?
 - Fix TODOs
 - Test Init() => DeInit() => Init() on GameApp and SubSystems

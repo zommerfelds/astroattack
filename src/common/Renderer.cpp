@@ -84,13 +84,11 @@ void RenderSystem::init(int width, int height)
 
 void RenderSystem::deInit()
 {
+    DataLoader::unLoadGraphics(m_loadedResources, &m_textureManager, &m_animationManager, &m_fontManager);
+    m_loadedResources = ResourceIds();
+
     if (m_isInit)
     {
-        /*if (m_currentMatrix != World) {
-            glMatrixMode( GL_PROJECTION );
-            glPopMatrix();
-            glMatrixMode( GL_MODELVIEW );
-        }*/
         setMatrix(World);
         m_isInit = false;
     }
@@ -98,7 +96,8 @@ void RenderSystem::deInit()
 
 bool RenderSystem::loadData(TexQuality quality)
 {
-    DataLoader::loadGraphics(cGraphisFileName, &m_textureManager, &m_animationManager, &m_fontManager, quality);
+    assert (m_loadedResources.isEmpty()); // only call load once
+    m_loadedResources = DataLoader::loadGraphics(cGraphisFileName, &m_textureManager, &m_animationManager, &m_fontManager, quality);
     return true;
 }
 
@@ -589,7 +588,7 @@ void RenderSystem::drawString( const std::string &str, const FontId &fontId, flo
     MatrixId stored_matrix = m_currentMatrix;
     if (m_currentMatrix == World)
     {
-        // TODO
+        // TODO convert world to text coordinates
     }
     else if (m_currentMatrix == GUI)
     {
@@ -745,8 +744,8 @@ void RenderSystem::onUnregisterComponent(Component& component)
 void RenderSystem::displayTextScreen( const std::string& text )
 {
     setMatrix(GUI);
-    drawOverlay( 0.0f, 0.0f, 0.0f, 1.0f );
-    drawString( text, "FontW_m", 2.0f, 1.5f, AlignCenter, AlignCenter );
+    drawOverlay(0.0f, 0.0f, 0.0f, 1.0f);
+    drawString(text, "FontW_m", 2.0f, 1.5f, AlignCenter, AlignCenter);
 
     SDL_GL_SwapBuffers();
 }
@@ -804,13 +803,13 @@ void RenderSystem::displayLoadingScreen()
     m_textureManager.freeTexture("loading");
 }
 
-void RenderSystem::setViewPosition(const Vector2D& pos, float scale, float angle)
+void RenderSystem::setView(const Vector2D& pos, float scale, float angle)
 {
     glLoadIdentity();
 
-    glRotatef( radToDeg(angle), 0.0, 0.0, -1.0f);
-    glScalef( scale, scale, 1 ); // x und y zoomen
-    glTranslatef( pos.x * -1, pos.y * -1, 0.0f);
+    glRotatef(radToDeg(angle), 0.0, 0.0, -1.0f);
+    glScalef(scale, scale, 1); // x und y zoomen
+    glTranslatef(pos.x * -1, pos.y * -1, 0.0f);
 }
 
 void RenderSystem::setViewSize( float width, float height )

@@ -8,6 +8,7 @@
 
 #include "Logger.h"
 #include "Exception.h"
+#include "Foreach.h"
 
 #include <cmath>
 #include <fstream>
@@ -42,9 +43,9 @@ TextureManager::TextureManager()
 // Destruktor
 TextureManager::~TextureManager()
 {
-    for ( TextureMap::iterator it = m_textures.begin(); it != m_textures.end(); ++it )
+    foreach (const TextureMap::value_type& t, m_textures)
     {
-        glDeleteTextures(1, &it->second.texAddress);
+        freeTextureMemory(t.second);
     }
 }
 
@@ -61,19 +62,16 @@ void CheckOpenlGlError()
     }
 }
 
-// Returns the smallest number N so that 2^N >= x
-int getNext2PowN( int x )
+// Returns the smallest N such that 2^N >= x
+int getNext2PowN(int x)
 {
-    int r1 = (int)pow(2.0f,(int)(log((float)x)/log(2.0f)+0.0001f));
-    int r2 = (int)pow(2.0f,(int)(log((float)x)/log(2.0f)-0.0001f));
-    if (r2 != r1 )
-        return r1;
-    else
-        return r2*2;
+    int p = 1;
+    while (p < x) p <<= 1;
+    return p;
 }
 
 // Textur laden
-void TextureManager::loadTexture( const std::string& fileName, TextureId id, const LoadTextureInfo& loadTexInfo, int* pW, int* pH )
+void TextureManager::loadTexture(const std::string& fileName, TextureId id, const LoadTextureInfo& loadTexInfo, int* w, int* pH)
 {
     if ( m_textures.count( id )==1 )
     {
@@ -91,8 +89,8 @@ void TextureManager::loadTexture( const std::string& fileName, TextureId id, con
         success = ilLoadImage( (ILstring)fileName.c_str() );  // bild laden
         if (success)                                      // Falls keine Fehler
         {
-            if ( pW != NULL )
-                *pW = ilGetInteger(IL_IMAGE_WIDTH);
+            if ( w != NULL )
+                *w = ilGetInteger(IL_IMAGE_WIDTH);
             if ( pH != NULL )
                 *pH = ilGetInteger(IL_IMAGE_HEIGHT);
             // Breite und Höhe müssen in der Form 2^n darstellbar sein. (n ist eine natürliche Zahl)
@@ -154,7 +152,6 @@ void TextureManager::loadTexture( const std::string& fileName, TextureId id, con
                                   GL_RGBA,                          // Format
                                   GL_UNSIGNED_BYTE,                 // Wie Daten aufgeschriben sind
                                   ilGetData());                     // Die Bilddaten überhaupt (Pixels)
-
                 // TODO: GL_RGBA is not necessarily
             }
             else
@@ -169,7 +166,7 @@ void TextureManager::loadTexture( const std::string& fileName, TextureId id, con
                     ilGetData());
             }
             TexInfo texInfo;
-            texInfo.texAddress = openGl_tex_id;
+            texInfo.glTexId = openGl_tex_id;
             texInfo.scale = loadTexInfo.scale;
             m_textures.insert( std::make_pair(id,texInfo) ); // Textur in m_textures eintragen
         }
@@ -189,19 +186,23 @@ void TextureManager::loadTexture( const std::string& fileName, TextureId id, con
         log(Warning) << "DevIL error: " << iluErrorString(ilGetError()) << "\n";
 }
 
-void TextureManager::freeTexture( const TextureId& id )
+void TextureManager::freeTexture(const TextureId& id)
 {
-    TextureMap::iterator c_it = m_textures.find( id );
-    if ( c_it != m_textures.end() )
-    {
-        GLint curTexId = 0;
-        glGetIntegerv( GL_TEXTURE_BINDING_2D, &curTexId );
+    TextureMap::iterator it = m_textures.find(id);
+    assert (it != m_textures.end());
 
-        if ( curTexId == (GLint)c_it->second.texAddress )
-            glDisable( GL_TEXTURE_2D );
-        glDeleteTextures(1, &c_it->second.texAddress );
-        m_textures.erase( c_it ); 
-    }
+    freeTextureMemory(it->second);
+    m_textures.erase(it);
+}
+
+void TextureManager::freeTextureMemory(const TexInfo& tex)
+{
+    GLint curTexId = 0;
+    glGetIntegerv( GL_TEXTURE_BINDING_2D, &curTexId );
+
+    if ( (unsigned)curTexId == tex.glTexId )
+        glDisable( GL_TEXTURE_2D );
+    glDeleteTextures(1, &tex.glTexId );
 }
 
 void TextureManager::setTexture( const TextureId& id )
@@ -210,12 +211,11 @@ void TextureManager::setTexture( const TextureId& id )
     if ( i != m_textures.end() )
     {
         glEnable(GL_TEXTURE_2D);
-        glBindTexture(GL_TEXTURE_2D, m_textures[id].texAddress );
+        glBindTexture(GL_TEXTURE_2D, m_textures[id].glTexId );
         glMatrixMode(GL_TEXTURE);
         glLoadIdentity();
         glScalef(m_textures[id].scale, m_textures[id].scale, 0.0f);
         glMatrixMode(GL_MODELVIEW);
-        //m_currentTexture = id;
     }
     else
         log(Warning) << "*** SetTexture(): Texture ID '" << id << "' not found! ***\n";
@@ -243,13 +243,21 @@ void TextureManager::clear()
     glDisable(GL_TEXTURE_2D);
 }
 
-AnimationManager::AnimationManager( TextureManager& tm )
+AnimationManager::AnimationManager(TextureManager& tm)
 : m_texManager( tm )
+{}
+
+// Destruktor
+AnimationManager::~AnimationManager()
 {
+    foreach (const AnimInfoMap::value_type& a, m_animInfoMap)
+    {
+        freeAnimationMemory(*a.second);
+    }
 }
 
 // Lädt eine Animationsdatei
-void AnimationManager::loadAnimation(const std::string& fileName, AnimationId id,const LoadTextureInfo& texInfo )
+void AnimationManager::loadAnimation(const std::string& fileName, AnimationId id, const LoadTextureInfo& texInfo)
 {
     if ( m_animInfoMap.count( id )==1 )
     {
@@ -331,7 +339,7 @@ void AnimationManager::loadAnimation(const std::string& fileName, AnimationId id
     input_stream.close();
 }
 
-const AnimInfo* AnimationManager::getAnimInfo( AnimationId animId ) const
+const AnimInfo* AnimationManager::getAnimInfo(AnimationId animId) const
 {
     AnimInfoMap::const_iterator cit = m_animInfoMap.find( animId );
     if (cit!=m_animInfoMap.end())
@@ -340,15 +348,24 @@ const AnimInfo* AnimationManager::getAnimInfo( AnimationId animId ) const
         return NULL;
 }
 
-void AnimationManager::freeAnimation( AnimationId id )
+void AnimationManager::freeAnimation(AnimationId id)
 {
-    AnimInfo* animInfo = m_animInfoMap[id].get();
-    for ( int i = 0; i < animInfo->totalFrames; ++i )
+    AnimInfoMap::iterator it = m_animInfoMap.find(id);
+    assert (it != m_animInfoMap.end());
+
+    freeAnimationMemory(*it->second);
+    m_animInfoMap.erase(it);
+}
+
+void AnimationManager::freeAnimationMemory(const AnimInfo& animInfo)
+{
+    for (int i = 0; i < animInfo.totalFrames; ++i)
     {
-        std::stringstream digits_str;
-        digits_str.fill('0');
-        digits_str.width(animInfo->numDigits);
-        digits_str << i;
-        m_texManager.freeTexture( animInfo->name + digits_str.str() );
+        std::stringstream frameNum;
+        frameNum.fill('0');
+        frameNum.width(animInfo.numDigits);
+        frameNum << i;
+        m_texManager.freeTexture(std::string("_") + animInfo.name + frameNum.str());
     }
 }
+

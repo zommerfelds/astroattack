@@ -24,6 +24,7 @@ class GameEvents;
 class ResourceIds
 {
 public:
+    bool isEmpty() { return textures.empty() && animations.empty() && fonts.empty(); }
     std::set<std::string> textures;
     std::set<std::string> animations;
     std::set<std::string> fonts;

@@ -128,7 +128,7 @@ void DataLoader::loadToWorld(const std::string& fileName, ComponentManager& comp
     }
 }
 
-ResourceIds DataLoader::loadGraphics(const std::string& fileName, TextureManager* pTextureManager, AnimationManager* pAnimationManager, FontManager* pFontManager, TexQuality quality)
+ResourceIds DataLoader::loadGraphics(const std::string& fileName, TextureManager* textureManager, AnimationManager* animationManager, FontManager* fontManager, TexQuality quality)
 {
     log(Info) << "Loading graphics resource file \"" << fileName << "\"...\n";
 
@@ -145,7 +145,7 @@ ResourceIds DataLoader::loadGraphics(const std::string& fileName, TextureManager
         bool noMipmaps = propTree.get("noMipmaps", false);
 
         // Texturen laden
-        if ( pTextureManager )
+        if (textureManager)
         {
             foreach(const ptree::value_type &value, propTree)
             {
@@ -185,13 +185,13 @@ ResourceIds DataLoader::loadGraphics(const std::string& fileName, TextureManager
                 info.scale = scale;
                 info.quality = quality;
 
-                pTextureManager->loadTexture(fileName, id, info);
+                textureManager->loadTexture(fileName, id, info);
                 loadedResources.textures.insert(id);
             }
         }
 
         // Animationen laden
-        if ( pAnimationManager )
+        if (animationManager)
         {
             foreach(const ptree::value_type &value, propTree)
             {
@@ -229,13 +229,13 @@ ResourceIds DataLoader::loadGraphics(const std::string& fileName, TextureManager
                 info.scale = 1.0f;
                 info.quality = quality;
 
-                pAnimationManager->loadAnimation(fileName, id, info);
+                animationManager->loadAnimation(fileName, id, info);
                 loadedResources.animations.insert(id);
             }
         }
 
         // Schriften laden
-        if ( pFontManager )
+        if (fontManager)
         {
             foreach(const ptree::value_type &value, propTree)
             {
@@ -247,7 +247,7 @@ ResourceIds DataLoader::loadGraphics(const std::string& fileName, TextureManager
                 std::string id = fontPropTree.get<std::string>("id");
                 float size = fontPropTree.get<float>("size");
 
-                pFontManager->loadFont(name, size, id);
+                fontManager->loadFont(name, size, id);
                 loadedResources.fonts.insert(id);
             }
         }
@@ -260,30 +260,31 @@ ResourceIds DataLoader::loadGraphics(const std::string& fileName, TextureManager
     return loadedResources;
 }
 
-void DataLoader::unLoadGraphics( const ResourceIds& resourcesToUnload, TextureManager* pTextureManager, AnimationManager* pAnimationManager, FontManager* pFontManager )
+void DataLoader::unLoadGraphics( const ResourceIds& resourcesToUnload, TextureManager* textureManager, AnimationManager* animationManager, FontManager* fontManager )
 {
     log(Info) << "Unloading resources... ";
 
     // Texturen laden
-    if ( pTextureManager )
+    if (textureManager)
     {
         foreach(const TextureId& id, resourcesToUnload.textures)
-            pTextureManager->freeTexture(id);
+            textureManager->freeTexture(id);
     }
 
     // Animationen laden
-    if ( pAnimationManager )
+    if (animationManager)
     {
         foreach(const AnimationId& id, resourcesToUnload.animations)
-            pAnimationManager->freeAnimation(id);
+            animationManager->freeAnimation(id);
     }
 
     // Schriften laden
-    if ( pFontManager )
+    if (fontManager)
     {
         foreach(const FontId& id, resourcesToUnload.fonts)
-            pFontManager->freeFont(id);
+            fontManager->freeFont(id);
     }
+
     log(Info) << "[ Done ]\n\n";
 }
 

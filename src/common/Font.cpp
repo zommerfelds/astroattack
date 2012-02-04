@@ -47,22 +47,22 @@ void FontManager::loadFontFix(const std::string& fileName, unsigned int size, co
 
 void FontManager::freeFont(const FontId& id)
 {
-    FontMap::iterator c_it = m_fonts.find( id );
-    if ( c_it != m_fonts.end() )
-        m_fonts.erase( c_it ); 
+    FontMap::iterator it = m_fonts.find(id);
+    if (it != m_fonts.end())
+        m_fonts.erase(it);
 }
 
-void testGlErr(const std::string& d)
+void testGlErr(const std::string& d) // XXX
 {
-	log(Info) << "Testing for OpenGL error at '" << d << "'\n";
-	GLenum err = glGetError();
+    log(Info) << "Testing for OpenGL error at '" << d << "'\n";
+    GLenum err = glGetError();
     if (err != GL_NO_ERROR)
         log(Error) << "OpenGL Error: " << gluErrorString(err) << "\n";
 }
 
 void FontManager::drawString(const std::string &str, const FontId &fontId, float x, float y, Align horizAlign, Align vertAlign, float red, float green, float blue, float alpha )
 {
-	testGlErr("begin drawString");
+    testGlErr("begin drawString");
 
     FontMap::iterator font_it = m_fonts.find( fontId );
     assert ( font_it != m_fonts.end() );
@@ -111,7 +111,7 @@ void FontManager::drawString(const std::string &str, const FontId &fontId, float
     }
     glColor4f( 255, 255, 255, 255 );
 
-	testGlErr("end drawString");
+    testGlErr("end drawString");
 }
 
 void FontManager::getDimensions(const std::string &text, const FontId &fontId, float& w, float& h) const

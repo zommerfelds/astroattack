@@ -81,21 +81,20 @@ private:
 };
 
 #include <boost/function.hpp>
-typedef boost::function0<void> ButCallbackFunc; // Einen Zeiger zu einer Funktion (boost bibliothek).
+typedef boost::function0<void> ButCallback; // Einen Zeiger zu einer Funktion (boost bibliothek).
 
 class WidgetButton : public Widget
 {
 public:
-	// TODO: by reference
-    WidgetButton(const Rect& area, const std::string& caption, ButCallbackFunc clickedCallbackFunc, ButCallbackFunc mouseOverCallbackFunc);
+    WidgetButton(const Rect& area, const std::string& caption, const ButCallback& clickedCallbackFunc, const ButCallback& mouseOverCallbackFunc);
     ~WidgetButton();
 
     void draw( RenderSystem* pRenderer );
     void onMouseStateChanged( MouseState newState );
 private:
     std::string m_caption;
-    ButCallbackFunc m_butCallbackFunc;
-    ButCallbackFunc m_mouseOverCallbackFunc;
+    ButCallback m_butCallbackFunc;
+    ButCallback m_mouseOverCallbackFunc;
     MouseState m_oldMouseState;
 };
 

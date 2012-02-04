@@ -78,7 +78,7 @@ void WidgetLabel::draw( RenderSystem* pRenderer )
 WidgetLabel::~WidgetLabel() {}
 
 //** Button
-WidgetButton::WidgetButton(const Rect& area, const std::string& caption, ButCallbackFunc clickedCallbackFunc, ButCallbackFunc mouseOverCallbackFunc)
+WidgetButton::WidgetButton(const Rect& area, const std::string& caption, const ButCallback& clickedCallbackFunc, const ButCallback& mouseOverCallbackFunc)
 : Widget( area ),
   m_caption (caption),
   m_butCallbackFunc ( clickedCallbackFunc ),
