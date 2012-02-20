@@ -42,12 +42,12 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)\..\build\win32_$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)\..\build\win32_$(Configuration)\intermediate\</IntDir>
+    <IntDir>$(SolutionDir)\..\build\win32_$(Configuration)\objs_editor\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)\..\build\win32_$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)\..\build\win32_$(Configuration)\intermediate\</IntDir>
+    <IntDir>$(SolutionDir)\..\build\win32_$(Configuration)\objs_editor\</IntDir>
   </PropertyGroup>
   <PropertyGroup>
     <LocalDebuggerEnvironment>PATH=%PATH%;$(SolutionDir)\..\bin_win32</LocalDebuggerEnvironment>
@@ -66,6 +66,8 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>wxmsw28d_core.lib;wxbase28d.lib;wxtiffd.lib;wxjpegd.lib;wxpngd.lib;wxzlibd.lib;wxregexd.lib;wxexpatd.lib;wxmsw28d_gl.lib;winmm.lib;comctl32.lib;rpcrt4.lib;wsock32.lib;oleacc.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <EmbedManagedResourceFile>
+      </EmbedManagedResourceFile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -112,7 +114,6 @@
     <ClCompile Include="..\src\common\Logger.cpp" />
     <ClCompile Include="..\src\common\Physics.cpp" />
     <ClCompile Include="..\src\common\Renderer.cpp" />
-    <ClCompile Include="..\src\common\Sound.cpp" />
     <ClCompile Include="..\src\common\Texture.cpp" />
     <ClCompile Include="..\src\common\TriggerSystem.cpp" />
     <ClCompile Include="..\src\common\Vector2D.cpp" />
@@ -148,7 +149,6 @@
     <ClInclude Include="..\src\common\Logger.h" />
     <ClInclude Include="..\src\common\Physics.h" />
     <ClInclude Include="..\src\common\Renderer.h" />
-    <ClInclude Include="..\src\common\Sound.h" />
     <ClInclude Include="..\src\common\Texture.h" />
     <ClInclude Include="..\src\common\TriggerSystem.h" />
     <ClInclude Include="..\src\common\Vector2D.h" />
@@ -157,10 +157,14 @@
     <ClInclude Include="..\src\editor\EditorFrame.h" />
     <ClInclude Include="..\src\editor\gen\EditorGuiBase.h" />
     <ClInclude Include="..\src\editor\GlCanvasController.h" />
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\AAEditor.log" />
     <None Include="..\data\editorConfig.info" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="AAEditor.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

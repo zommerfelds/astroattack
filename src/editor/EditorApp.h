@@ -19,7 +19,7 @@ class EditorApp : public wxApp
 {
 public:
     virtual bool OnInit();
-    virtual void CleanUp();
+    virtual int OnExit();
 
 private:
     boost::scoped_ptr<GameEvents> m_events;

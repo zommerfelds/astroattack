@@ -106,7 +106,7 @@ void FontManager::drawString(const std::string &str, const FontId &fontId, float
             lineX = x-*lineWidthsIt;
             break;
         }
-        font->Render(lineIt->c_str(),-1,FTPoint(lineX, lineY));
+        font->Render(lineIt->c_str(), -1, FTPoint(lineX, lineY));
         lineY -= lineSpacing;
     }
     glColor4f( 255, 255, 255, 255 );
@@ -142,7 +142,9 @@ void FontManager::getDetailedDimensions(const std::string &text, FTFont& font, f
 
         std::string line = text.substr(last_pos,cur_pos-last_pos); // extract the next line
 
+		log(Error) << "AAA\n";
         cur_width = font.BBox(line.c_str(), -1).Upper().Xf(); // get line size
+		log(Error) << "BBB\n";
 
         max_width = std::max(cur_width, max_width);
 

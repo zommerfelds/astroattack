@@ -262,7 +262,8 @@ ResourceIds DataLoader::loadGraphics(const std::string& fileName, TextureManager
 
 void DataLoader::unLoadGraphics( const ResourceIds& resourcesToUnload, TextureManager* textureManager, AnimationManager* animationManager, FontManager* fontManager )
 {
-    log(Info) << "Unloading resources... ";
+    if (!resourcesToUnload.isEmpty())
+        log(Info) << "Unloading resources... ";
 
     // Texturen laden
     if (textureManager)

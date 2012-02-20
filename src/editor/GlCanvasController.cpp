@@ -15,6 +15,9 @@
 #include "common/GameEvents.h"
 #include "common/Foreach.h"
 
+// XXX
+#include <FTGL/ftgl.h>
+
 #include <wx/frame.h>
 #include <wx/window.h>
 #include <SDL_opengl.h>
@@ -32,7 +35,7 @@ BEGIN_EVENT_TABLE(GlCanvasController, wxGLCanvas)
 END_EVENT_TABLE()
 
 namespace {
-    int cInitCount = 2;
+    int cInitCount = 1;
     float cDefaultZoom = 0.08f;
 }
 
@@ -72,7 +75,7 @@ void testGlErr(const std::string& d)
 }
 
 GlCanvasController::GlCanvasController(Editor& editor, wxWindow* parent, EditorFrame& editorFrame, int* args, RenderSystem& renderer) :
-    wxGLCanvas(parent, wxID_ANY, args, wxDefaultPosition, wxDefaultSize, wxFULL_REPAINT_ON_RESIZE),
+    wxGLCanvas(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxFULL_REPAINT_ON_RESIZE),
     m_editor (editor),
     m_editorFrame (editorFrame),
     m_renderer (renderer),
@@ -81,7 +84,7 @@ GlCanvasController::GlCanvasController(Editor& editor, wxWindow* parent, EditorF
     m_mouseInWindow (true), // so that the cursor is displayed
     m_initCount (0)
 {
-    m_context = new wxGLContext(this);
+    //m_context = new wxGLContext(this);
 
     SetCursor( wxCursor( wxCURSOR_BLANK ) );
 
@@ -93,7 +96,7 @@ GlCanvasController::GlCanvasController(Editor& editor, wxWindow* parent, EditorF
  
 GlCanvasController::~GlCanvasController()
 {
-    delete m_context;
+    //delete m_context;
 }
 
 void GlCanvasController::resetCamera()
@@ -163,12 +166,21 @@ void GlCanvasController::onMouseEnterWindow(wxMouseEvent& evt)
 
 void GlCanvasController::onResize(wxSizeEvent& evt)
 {
-    if (m_initCount > 0)
+    // this is also necessary to update the context on some platforms
+    wxGLCanvas::OnSize(evt);
+
+#ifndef __WXMOTIF__
+    if (GetContext())
+#endif
     {
-        m_renderer.resize(evt.GetSize().x, evt.GetSize().y);
-        m_cameraController.setAspectRatio((float(evt.GetSize().x))/evt.GetSize().y);
-        m_cameraController.setZoom(cDefaultZoom);
-        Refresh();
+        SetCurrent();
+        if (m_initCount > 0)
+        {
+            m_renderer.resize(evt.GetSize().x, evt.GetSize().y);
+            m_cameraController.setAspectRatio((float(evt.GetSize().x))/evt.GetSize().y);
+            m_cameraController.setZoom(cDefaultZoom);
+            //Refresh();
+        }
     }
 }
 
@@ -176,12 +188,18 @@ void GlCanvasController::onPaint(wxPaintEvent& evt)
 {
     if(!IsShown()) return;
 
+    wxPaintDC(this); // only to be used in paint events. use wxClientDC to paint outside the paint event
+    //wxGLCanvas::SetCurrent(*m_context);
+	wxGLCanvas::SetCurrent();
+
     if (m_initCount < cInitCount)
     {
         m_initCount++;
 
         if (m_initCount == cInitCount)
         {
+            wxGLCanvas::SetCurrent();
+
             m_renderer.init(GetSize().x, GetSize().y);
 
             m_renderer.setMatrix(RenderSystem::World);
@@ -196,17 +214,15 @@ void GlCanvasController::onPaint(wxPaintEvent& evt)
 			testGlErr("init");
         }
 
-        wxGLCanvas::SetCurrent(*m_context);
+        //wxGLCanvas::SetCurrent(*m_context);
+		/*wxGLCanvas::SetCurrent();
         wxPaintDC(this); // only to be used in paint events. use wxClientDC to paint outside the paint event
         SwapBuffers();
 
         Refresh();
 
-        return;
+        return;*/
     }
-    
-    wxGLCanvas::SetCurrent(*m_context);
-    wxPaintDC(this); // only to be used in paint events. use wxClientDC to paint outside the paint event
 
     // in the future we might need to do physics.calculateSmoothPositions(accumulator);
 
@@ -296,6 +312,20 @@ void GlCanvasController::onPaint(wxPaintEvent& evt)
         m_renderer.drawTexturedQuad(texCoord, vertexCoord, m_editor.getGuiData().currentTexture, true);
         m_renderer.drawString(m_editor.getGuiData().currentTexture, "FontW_m", 10.0f, 138.0f, AlignLeft, AlignBottom);
     }
+
+    
+    m_renderer.drawString("hallo", "FontW_m", 1.0f, 1.0f);
+
+    // Create a pixmap font from a TrueType file.
+	FTGLPixmapFont font("data/Fonts/font.ttf");
+
+	// If something went wrong, bail out.
+	if(font.Error())
+		std::cerr << "err\n";
+
+	// Set the font size and render a small text.
+	font.FaceSize(72);
+	font.Render("Hoi!");
 
     glFlush();
 

@@ -45,9 +45,6 @@
     <ClCompile Include="..\src\common\Renderer.cpp">
       <Filter>Common Source</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\common\Sound.cpp">
-      <Filter>Common Source</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\common\Texture.cpp">
       <Filter>Common Source</Filter>
     </ClCompile>
@@ -149,9 +146,6 @@
     <ClInclude Include="..\src\common\Renderer.h">
       <Filter>Common Source</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\common\Sound.h">
-      <Filter>Common Source</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\common\Texture.h">
       <Filter>Common Source</Filter>
     </ClInclude>
@@ -212,9 +206,13 @@
     <ClInclude Include="..\src\common\TriggerSystem.h">
       <Filter>Common Source</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\AAEditor.log" />
     <None Include="..\data\editorConfig.info" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="AAEditor.rc" />
   </ItemGroup>
 </Project>

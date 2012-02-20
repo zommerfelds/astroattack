@@ -70,9 +70,6 @@
     <ClInclude Include="..\src\common\Renderer.h">
       <Filter>Common Source</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\common\Sound.h">
-      <Filter>Common Source</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\common\Texture.h">
       <Filter>Common Source</Filter>
     </ClInclude>
@@ -154,6 +151,9 @@
     <ClInclude Include="..\src\common\TriggerSystem.h">
       <Filter>Common Source</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\common\Sound.h">
+      <Filter>Game Source</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\contrib\pugixml\pugixml.cpp">
@@ -184,9 +184,6 @@
       <Filter>Common Source</Filter>
     </ClCompile>
     <ClCompile Include="..\src\common\Renderer.cpp">
-      <Filter>Common Source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\common\Sound.cpp">
       <Filter>Common Source</Filter>
     </ClCompile>
     <ClCompile Include="..\src\common\Texture.cpp">
@@ -275,6 +272,9 @@
     </ClCompile>
     <ClCompile Include="..\src\common\Event_templ.cpp">
       <Filter>Common Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\common\Sound.cpp">
+      <Filter>Game Source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

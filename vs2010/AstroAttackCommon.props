@@ -16,7 +16,7 @@
       <PreprocessorDefinitions>_CRT_SECURE_CPP_OVERLOAD_STANDARD_NAMES=1;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>SDL.lib;opengl32.lib;DevIL.lib;ILU.lib;glu32.lib;Box2D.lib;msvcrtd.lib;SDL_mixer.lib;ftgl.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;DevIL.lib;ILU.lib;glu32.lib;Box2D.lib;msvcrtd.lib;ftgl.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup />

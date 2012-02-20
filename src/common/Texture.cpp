@@ -80,7 +80,7 @@ void TextureManager::loadTexture(const std::string& fileName, TextureId id, cons
     }
     try
     {
-        log(Info) << "Loading Texture \"" << fileName << "\"... ";
+        log(Info) << "Loading texture \"" << fileName << "\"... ";
 
         ILuint devIl_tex_id;                              // ID des DevIL Bildes
         ILboolean success;                                // Speichert ob die Funktionen erfolgreich sind
@@ -132,6 +132,8 @@ void TextureManager::loadTexture(const std::string& fileName, TextureId id, cons
 
             glGenTextures(1, &openGl_tex_id); // OpenGL Texture generieren
             glBindTexture(GL_TEXTURE_2D, openGl_tex_id); // binden
+
+            log(Detail) << "OpenGL ID: " << openGl_tex_id << " ";
 
             GLint texWrapModeX = (loadTexInfo.wrapModeX == WrapClamp) ? GL_CLAMP : GL_REPEAT;
             GLint texWrapModeY = (loadTexInfo.wrapModeY == WrapClamp) ? GL_CLAMP : GL_REPEAT;
@@ -202,7 +204,8 @@ void TextureManager::freeTextureMemory(const TexInfo& tex)
 
     if ( (unsigned)curTexId == tex.glTexId )
         glDisable( GL_TEXTURE_2D );
-    glDeleteTextures(1, &tex.glTexId );
+    log(Detail) << "Deleting OpenGL texture " << tex.glTexId << "\n";
+    glDeleteTextures(1, &tex.glTexId);
 }
 
 void TextureManager::setTexture( const TextureId& id )

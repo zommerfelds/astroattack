@@ -23,7 +23,9 @@
 #include <cmath>
 #include <sstream>
 #include <fstream>
+#ifdef SDL_SWAP_BUF
 #include <SDL.h>
+#endif
 #include <SDL_opengl.h>
 #include <boost/bind.hpp>
 #include <boost/make_shared.hpp>
@@ -199,7 +201,10 @@ void RenderSystem::flipBuffer()
     SDL_SaveBMP(textGFX, oss.str().c_str());
     frameNum++;*/
 
+	// TODO refactor
+#ifdef SDL_SWAP_BUF
     SDL_GL_SwapBuffers(); // vom Backbuffer zum Frontbuffer wechseln (neues Bild zeigen)
+#endif
 }
 
 void RenderSystem::setMatrix(MatrixId matrix)
@@ -747,7 +752,7 @@ void RenderSystem::displayTextScreen( const std::string& text )
     drawOverlay(0.0f, 0.0f, 0.0f, 1.0f);
     drawString(text, "FontW_m", 2.0f, 1.5f, AlignCenter, AlignCenter);
 
-    SDL_GL_SwapBuffers();
+    flipBuffer();
 }
 
 void RenderSystem::displayLoadingScreen()
@@ -798,7 +803,7 @@ void RenderSystem::displayLoadingScreen()
     glMatrixMode ( GL_MODELVIEW );
     glPopMatrix();
 
-    SDL_GL_SwapBuffers();
+    flipBuffer();
 
     m_textureManager.freeTexture("loading");
 }
