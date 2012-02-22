@@ -38,7 +38,6 @@ private:
 
     Editor& m_editor;
     EditorFrame& m_editorFrame;
-    //wxGLContext* m_context;
     RenderSystem& m_renderer;
     CameraController m_cameraController;
 

@@ -17,7 +17,7 @@
 
 #include <wx/frame.h>
 #include <wx/window.h>
-#include <SDL_opengl.h>
+//#include <SDL_opengl.h>
 
 BEGIN_EVENT_TABLE(GlCanvasController, wxGLCanvas)
     EVT_SIZE(GlCanvasController::onResize)
@@ -63,7 +63,7 @@ Vector2D snapToGrid(const Vector2D& worldCoordinates)
 }
 
 GlCanvasController::GlCanvasController(Editor& editor, wxWindow* parent, EditorFrame& editorFrame, int* args, RenderSystem& renderer) :
-    wxGLCanvas(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxFULL_REPAINT_ON_RESIZE),
+    wxGLCanvas(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxFULL_REPAINT_ON_RESIZE, wxGLCanvasName, args),
     m_editor (editor),
     m_editorFrame (editorFrame),
     m_renderer (renderer),
@@ -72,8 +72,6 @@ GlCanvasController::GlCanvasController(Editor& editor, wxWindow* parent, EditorF
     m_mouseInWindow (true), // so that the cursor is displayed
     m_isInit (false)
 {
-    //m_context = new wxGLContext(this);
-
     SetCursor( wxCursor( wxCURSOR_BLANK ) );
 
     SetFocus(); // need this, else the global accelerators do not work...
@@ -83,9 +81,7 @@ GlCanvasController::GlCanvasController(Editor& editor, wxWindow* parent, EditorF
 }
  
 GlCanvasController::~GlCanvasController()
-{
-    //delete m_context;
-}
+{}
 
 void GlCanvasController::resetCamera()
 {
@@ -176,14 +172,11 @@ void GlCanvasController::onPaint(wxPaintEvent& evt)
     if(!IsShown()) return;
 
     wxPaintDC(this); // only to be used in paint events. use wxClientDC to paint outside the paint event
-    //wxGLCanvas::SetCurrent(*m_context);
-	wxGLCanvas::SetCurrent();
+    wxGLCanvas::SetCurrent();
 
     if (!m_isInit)
     {
-        wxGLCanvas::SetCurrent();
-
-        m_renderer.init(/*200, 6000);//*/GetSize().x, GetSize().y);
+        m_renderer.init(GetSize().x, GetSize().y);
 
         m_renderer.setMatrix(RenderSystem::World);
 
@@ -195,15 +188,6 @@ void GlCanvasController::onPaint(wxPaintEvent& evt)
         m_cameraController.setZoom(cDefaultZoom);
 
         m_isInit = true;
-
-        //wxGLCanvas::SetCurrent(*m_context);
-		/*wxGLCanvas::SetCurrent();
-        wxPaintDC(this); // only to be used in paint events. use wxClientDC to paint outside the paint event
-        SwapBuffers();
-
-        Refresh();
-
-        return;*/
     }
 
     // in the future we might need to do physics.calculateSmoothPositions(accumulator);
@@ -287,5 +271,5 @@ void GlCanvasController::onPaint(wxPaintEvent& evt)
 
     glFlush();
 
-    SwapBuffers();
+    wxGLCanvas::SwapBuffers();
 }

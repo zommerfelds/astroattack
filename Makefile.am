@@ -61,6 +61,7 @@ test_src = \
     
 # === AstroAttack ===
 AstroAttack_SOURCES = $(common_src) $(game_src) $(pugi_src)
+AstroAttack_CPPFLAGS = $(AM_CPPFLAGS) -DSDL_SWAP_BUF
 
 # === AAEditor ===
 AAEditor_CXXFLAGS = @WX_CXXFLAGS@

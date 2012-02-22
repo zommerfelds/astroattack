@@ -23,7 +23,7 @@ void FontManager::reloadFonts()
 {
     foreach (FontMap::value_type& v, m_fonts)
     {
-        Font& font = v.second;
+        FontData& font = v.second;
         if (!font.fix)
             loadFontRel(font.fileName, font.sizeF, v.first);
     }
@@ -66,10 +66,10 @@ void FontManager::loadFont(const std::string& fileName, float sizeF, unsigned in
     ftglFont->FaceSize(ftglSize);
 
     if (fix)
-        m_fonts[id] = Font(ftglFont, fileName, sizeI, fix);
+        m_fonts[id] = FontData(ftglFont, fileName, sizeI, fix);
         //m_fonts.insert( std::make_pair(id, Font(ftglFont, fileName, sizeI, fix)) );
     else
-        m_fonts[id] = Font(ftglFont, fileName, sizeF, fix);
+        m_fonts[id] = FontData(ftglFont, fileName, sizeF, fix);
 }
 
 void FontManager::freeFont(const FontId& id)
@@ -84,7 +84,7 @@ void FontManager::drawString(const std::string &str, const FontId &fontId, float
     FontMap::iterator font_it = m_fonts.find( fontId );
     assert ( font_it != m_fonts.end() );
 
-    FTFont* font = font_it->second.font.get();
+    FTFont* font = font_it->second.ftFont.get();
 
     glColor4f( red, green, blue, alpha );
 
@@ -138,7 +138,7 @@ void FontManager::getDimensions(const std::string &text, const FontId &fontId, f
         return;
     }
 
-    getDetailedDimensions(text, *font_it->second.font.get(), &w, &h, NULL, NULL, NULL);
+    getDetailedDimensions(text, *font_it->second.ftFont.get(), &w, &h, NULL, NULL, NULL);
     w = w/m_renderer.getViewPortWidth()*4.0f;
     h = h/m_renderer.getViewPortHeight()*3.0f;
 }
@@ -157,9 +157,7 @@ void FontManager::getDetailedDimensions(const std::string &text, FTFont& font, f
 
         std::string line = text.substr(last_pos,cur_pos-last_pos); // extract the next line
 
-		log(Error) << "AAA\n";
         cur_width = font.BBox(line.c_str(), -1).Upper().Xf(); // get line size
-		log(Error) << "BBB\n";
 
         max_width = std::max(cur_width, max_width);
 

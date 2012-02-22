@@ -29,15 +29,15 @@ enum Align
 
 typedef std::string FontId;
 
-class Font {
+class FontData {
 public:
-    Font() : fix (false), sizeF (0.0f) {}
-    Font(boost::shared_ptr<FTFont> font, const std::string fileName, float size, bool fix)
-        : font (font), fileName (fileName), fix (fix), sizeF (size) {}
-    Font(boost::shared_ptr<FTFont> font, const std::string fileName, unsigned int size, bool fix)
-        : font (font), fileName (fileName), fix (fix), sizeI (size) {}
+    FontData() : fix (false), sizeF (0.0f) {}
+    FontData(boost::shared_ptr<FTFont> font, const std::string fileName, float size, bool fix)
+        : ftFont (font), fileName (fileName), fix (fix), sizeF (size) {}
+    FontData(boost::shared_ptr<FTFont> font, const std::string fileName, unsigned int size, bool fix)
+        : ftFont (font), fileName (fileName), fix (fix), sizeI (size) {}
 
-    boost::shared_ptr<FTFont> font;
+    boost::shared_ptr<FTFont> ftFont;
     std::string fileName;
     bool fix;
     union {
@@ -54,7 +54,7 @@ class FontManager
 public:
     FontManager(const RenderSystem& renderer);
 
-    typedef std::map<FontId, Font> FontMap;
+    typedef std::map<FontId, FontData> FontMap;
 
     /**
      * This method loads a font at a fix pixel size. (appears smaller in bigger resolutions)
