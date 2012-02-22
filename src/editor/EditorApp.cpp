@@ -48,6 +48,7 @@ bool EditorApp::OnInit()
     m_editor.reset(new Editor(*m_events, *m_physics));
 
     EditorFrame* frame = new EditorFrame(*m_editor, *m_renderer); // will be deleted by wxWidgets
+    frame->Layout();
     frame->Show(true);
 
     m_editor->loadLevel("data/Levels/level_editor.lvl");
@@ -57,7 +58,6 @@ bool EditorApp::OnInit()
 
 int EditorApp::OnExit()
 {
-    // XXX
     m_renderer->deInit();
     return 0;
 }

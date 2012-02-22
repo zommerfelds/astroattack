@@ -46,7 +46,7 @@ private:
     bool m_lMouseIsDown;  // whether the left mouse button is pressed and we have input focus
     bool m_mouseInWindow; // whether the mouse is inside the canvas area
 
-    int m_initCount;
+    bool m_isInit;
 
     DECLARE_EVENT_TABLE()
 };

@@ -245,9 +245,14 @@ ResourceIds DataLoader::loadGraphics(const std::string& fileName, TextureManager
 
                 std::string name = fontPropTree.get<std::string>("file");
                 std::string id = fontPropTree.get<std::string>("id");
-                float size = fontPropTree.get<float>("size");
+                float sizeF = fontPropTree.get<float>("size");
+                int sizeI = fontPropTree.get("size", 0);
+                bool fix = fontPropTree.get("fix", false);
 
-                fontManager->loadFont(name, size, id);
+                if (fix)
+                    fontManager->loadFontFix(name, sizeI, id);
+                else
+                    fontManager->loadFontRel(name, sizeF, id);
                 loadedResources.fonts.insert(id);
             }
         }

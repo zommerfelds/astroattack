@@ -29,6 +29,23 @@ enum Align
 
 typedef std::string FontId;
 
+class Font {
+public:
+    Font() : fix (false), sizeF (0.0f) {}
+    Font(boost::shared_ptr<FTFont> font, const std::string fileName, float size, bool fix)
+        : font (font), fileName (fileName), fix (fix), sizeF (size) {}
+    Font(boost::shared_ptr<FTFont> font, const std::string fileName, unsigned int size, bool fix)
+        : font (font), fileName (fileName), fix (fix), sizeI (size) {}
+
+    boost::shared_ptr<FTFont> font;
+    std::string fileName;
+    bool fix;
+    union {
+        float sizeF;
+        unsigned int sizeI;
+    };
+};
+
 //----------------------------------------//
 // Klasse für das Verwalten von Schriften //
 //----------------------------------------//
@@ -37,7 +54,7 @@ class FontManager
 public:
     FontManager(const RenderSystem& renderer);
 
-    typedef std::map< FontId,boost::shared_ptr<FTFont> > FontMap;
+    typedef std::map<FontId, Font> FontMap;
 
     /**
      * This method loads a font at a fix pixel size. (appears smaller in bigger resolutions)
@@ -48,9 +65,11 @@ public:
      * This method loads a font which size is independent of screen resolution
      * @param size Size of the font in GUI coordinates
      */
-    void loadFont(const std::string& fileName, float size, const FontId& id);
+    void loadFontRel(const std::string& fileName, float size, const FontId& id);
 
     void freeFont(const FontId&);
+
+    void reloadFonts();
 
     // DrawString
     // x/y: upper left position of text box in text coordinates (0/0 is lower left, 1 pixel per unit)
@@ -61,9 +80,11 @@ public:
 
 private:
 
+    void loadFont(const std::string& fileName, float sizeF, unsigned int sizeI, const FontId& id, bool fix);
+
     void getDetailedDimensions(const std::string &text, FTFont& font, float* totalWidth, float* totalHeight, std::list<std::string>* lines,
             std::list<float>* lineWidths, float* lineSpacing) const;
-    FontMap m_fonts; // Texturen
+    FontMap m_fonts; // FTGL Fonts - are unloaded automatically upon destruction
     const RenderSystem& m_renderer;
 };
 

@@ -144,16 +144,17 @@ void RenderSystem::resize(int width, int height)
 
     setMatrix(Text);
 
-    glMatrixMode ( GL_PROJECTION );
+    glMatrixMode(GL_PROJECTION);
 
     // Text Matrix aufstellen
     glLoadIdentity(); // Reset
-    gluOrtho2D( 0, width, 0, height ); // orthogonalen 2D-Rendermodus
+    gluOrtho2D(0, width, 0, height); // orthogonalen 2D-Rendermodus
     glGetFloatv(GL_PROJECTION_MATRIX, m_matrixText); // Matrix wird gespeichert
-
 
     glMatrixMode( GL_MODELVIEW );
     //glLoadIdentity();
+
+    m_fontManager.reloadFonts();
 }
 
 void RenderSystem::clearScreen()

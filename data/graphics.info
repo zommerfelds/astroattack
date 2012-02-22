@@ -290,3 +290,9 @@ font {
     id "FontW_s"
     size 0.07
 }
+font {
+    file "data/Fonts/font.ttf"
+	id "FontFix"	
+	size 16
+	fix true
+}

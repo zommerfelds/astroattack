@@ -15,9 +15,6 @@
 #include "common/GameEvents.h"
 #include "common/Foreach.h"
 
-// XXX
-#include <FTGL/ftgl.h>
-
 #include <wx/frame.h>
 #include <wx/window.h>
 #include <SDL_opengl.h>
@@ -35,7 +32,6 @@ BEGIN_EVENT_TABLE(GlCanvasController, wxGLCanvas)
 END_EVENT_TABLE()
 
 namespace {
-    int cInitCount = 1;
     float cDefaultZoom = 0.08f;
 }
 
@@ -64,14 +60,6 @@ Vector2D snapToGrid(const Vector2D& worldCoordinates)
     return Vector2D(((int)(cellsX))*gridCellWidth, ((int)(cellsY))*gridCellWidth);
 }
 
-void testGlErr(const std::string& d)
-{
-	log(Info) << "Testing for OpenGL error at '" << d << "'\n";
-	GLenum err = glGetError();
-    if (err != GL_NO_ERROR)
-        log(Error) << "OpenGL Error: " << gluErrorString(err) << "\n";
-}
-
 }
 
 GlCanvasController::GlCanvasController(Editor& editor, wxWindow* parent, EditorFrame& editorFrame, int* args, RenderSystem& renderer) :
@@ -82,7 +70,7 @@ GlCanvasController::GlCanvasController(Editor& editor, wxWindow* parent, EditorF
     m_cameraController (m_renderer, 1),
     m_lMouseIsDown (false),
     m_mouseInWindow (true), // so that the cursor is displayed
-    m_initCount (0)
+    m_isInit (false)
 {
     //m_context = new wxGLContext(this);
 
@@ -174,12 +162,11 @@ void GlCanvasController::onResize(wxSizeEvent& evt)
 #endif
     {
         SetCurrent();
-        if (m_initCount > 0)
+        if (m_isInit)
         {
             m_renderer.resize(evt.GetSize().x, evt.GetSize().y);
             m_cameraController.setAspectRatio((float(evt.GetSize().x))/evt.GetSize().y);
             m_cameraController.setZoom(cDefaultZoom);
-            //Refresh();
         }
     }
 }
@@ -192,27 +179,22 @@ void GlCanvasController::onPaint(wxPaintEvent& evt)
     //wxGLCanvas::SetCurrent(*m_context);
 	wxGLCanvas::SetCurrent();
 
-    if (m_initCount < cInitCount)
+    if (!m_isInit)
     {
-        m_initCount++;
+        wxGLCanvas::SetCurrent();
 
-        if (m_initCount == cInitCount)
-        {
-            wxGLCanvas::SetCurrent();
+        m_renderer.init(/*200, 6000);//*/GetSize().x, GetSize().y);
 
-            m_renderer.init(GetSize().x, GetSize().y);
+        m_renderer.setMatrix(RenderSystem::World);
 
-            m_renderer.setMatrix(RenderSystem::World);
+        m_renderer.loadData(QualityBest);
 
-            m_renderer.loadData(QualityBest);
+        m_editor.setTextureList(m_renderer.getTextureManager().getTextureList());
 
-            m_editor.setTextureList(m_renderer.getTextureManager().getTextureList());
+        m_cameraController.setAspectRatio((float(GetSize().x))/GetSize().y);
+        m_cameraController.setZoom(cDefaultZoom);
 
-            m_cameraController.setAspectRatio((float(GetSize().x))/GetSize().y);
-            m_cameraController.setZoom(cDefaultZoom);
-
-			testGlErr("init");
-        }
+        m_isInit = true;
 
         //wxGLCanvas::SetCurrent(*m_context);
 		/*wxGLCanvas::SetCurrent();
@@ -225,8 +207,6 @@ void GlCanvasController::onPaint(wxPaintEvent& evt)
     }
 
     // in the future we might need to do physics.calculateSmoothPositions(accumulator);
-
-	testGlErr("b");
 
     m_renderer.update(); // TODO: shouldn't be here, because it should be frame rate independent
 
@@ -245,12 +225,6 @@ void GlCanvasController::onPaint(wxPaintEvent& evt)
         m_renderer.drawTexturedQuad( texCoord, vertexCoord, "_starfield" );
     }
 
-	testGlErr("c");
-	
-    m_renderer.drawString("hoi", "FontW_m", 1.0f, 1.0f);
-
-	testGlErr("d");
-
     // Weltmodus
     m_renderer.setMatrix(RenderSystem::World);
     m_cameraController.look();
@@ -258,8 +232,6 @@ void GlCanvasController::onPaint(wxPaintEvent& evt)
     m_renderer.drawVisualAnimationComps();
     // Texturen zeichnen
     m_renderer.drawVisualTextureComps();
-
-	testGlErr("e");
 
     if (m_editor.getGuiData().selectedEntity)
     {
@@ -310,22 +282,8 @@ void GlCanvasController::onPaint(wxPaintEvent& evt)
                                  138.0f, 10.0f,
                                  138.0f, 138.0f };
         m_renderer.drawTexturedQuad(texCoord, vertexCoord, m_editor.getGuiData().currentTexture, true);
-        m_renderer.drawString(m_editor.getGuiData().currentTexture, "FontW_m", 10.0f, 138.0f, AlignLeft, AlignBottom);
+        m_renderer.drawString(m_editor.getGuiData().currentTexture, "FontFix", 10.0f, 138.0f, AlignLeft, AlignBottom);
     }
-
-    
-    m_renderer.drawString("hallo", "FontW_m", 1.0f, 1.0f);
-
-    // Create a pixmap font from a TrueType file.
-	FTGLPixmapFont font("data/Fonts/font.ttf");
-
-	// If something went wrong, bail out.
-	if(font.Error())
-		std::cerr << "err\n";
-
-	// Set the font size and render a small text.
-	font.FaceSize(72);
-	font.Render("Hoi!");
 
     glFlush();
 

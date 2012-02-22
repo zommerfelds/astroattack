@@ -8,6 +8,7 @@
 
 #include "Logger.h"
 #include "Renderer.h"
+#include "Foreach.h"
 
 #include <utility>
 #include <FTGL/ftgl.h>
@@ -18,31 +19,57 @@ FontManager::FontManager(const RenderSystem& renderer)
 : m_renderer (renderer)
 {}
 
-void FontManager::loadFont(const std::string& fileName, float size, const FontId& id)
+void FontManager::reloadFonts()
 {
-    loadFontFix(fileName, (unsigned int)(size / 3.0f * m_renderer.getViewPortHeight()), id);
+    foreach (FontMap::value_type& v, m_fonts)
+    {
+        Font& font = v.second;
+        if (!font.fix)
+            loadFontRel(font.fileName, font.sizeF, v.first);
+    }
 }
 
-// .ttf Datei in OpenGL Texturen laden
+
 void FontManager::loadFontFix(const std::string& fileName, unsigned int size, const FontId& id)
 {
-    if ( m_fonts.count( id )==1 )
+    loadFont(fileName, 0.0f, size, id, true);
+}
+
+void FontManager::loadFontRel(const std::string& fileName, float size, const FontId& id)
+{
+    loadFont(fileName, size, 0, id, false);
+}
+
+void FontManager::loadFont(const std::string& fileName, float sizeF, unsigned int sizeI, const FontId& id, bool fix)
+{
+    unsigned int ftglSize = sizeI;
+    if (!fix)
+        ftglSize = (unsigned int)(sizeF / 3.0f * m_renderer.getViewPortHeight());
+
+    /*if ( m_fonts.count( id )==1 )
     {
         log(Warning) << "Loading font: ID '" << id << "' exists already, new font was not loaded\n";
         return;
-    }
+    }*/ // reloadFonts uses this method
 
     // Create a pixmap font from a TrueType file.
-    boost::shared_ptr<FTTextureFont> font = boost::make_shared<FTTextureFont>(fileName.c_str());
+    boost::shared_ptr<FTTextureFont> ftglFont = boost::make_shared<FTTextureFont>(fileName.c_str());
 
     // If something went wrong, return
-    if(font->Error())
+    if(ftglFont->Error())
+    {
+        log(Error) << "Error loading font <" << fileName << ">\n";
         return;
+    }
 
     // textures are generated now
-    font->FaceSize(size);
+    ftglFont->FaceSize(ftglSize);
 
-    m_fonts.insert( std::make_pair(id, font) );
+    if (fix)
+        m_fonts[id] = Font(ftglFont, fileName, sizeI, fix);
+        //m_fonts.insert( std::make_pair(id, Font(ftglFont, fileName, sizeI, fix)) );
+    else
+        m_fonts[id] = Font(ftglFont, fileName, sizeF, fix);
 }
 
 void FontManager::freeFont(const FontId& id)
@@ -52,22 +79,12 @@ void FontManager::freeFont(const FontId& id)
         m_fonts.erase(it);
 }
 
-void testGlErr(const std::string& d) // XXX
-{
-    log(Info) << "Testing for OpenGL error at '" << d << "'\n";
-    GLenum err = glGetError();
-    if (err != GL_NO_ERROR)
-        log(Error) << "OpenGL Error: " << gluErrorString(err) << "\n";
-}
-
 void FontManager::drawString(const std::string &str, const FontId &fontId, float x, float y, Align horizAlign, Align vertAlign, float red, float green, float blue, float alpha )
 {
-    testGlErr("begin drawString");
-
     FontMap::iterator font_it = m_fonts.find( fontId );
     assert ( font_it != m_fonts.end() );
 
-    FTFont* font = font_it->second.get();
+    FTFont* font = font_it->second.font.get();
 
     glColor4f( red, green, blue, alpha );
 
@@ -110,8 +127,6 @@ void FontManager::drawString(const std::string &str, const FontId &fontId, float
         lineY -= lineSpacing;
     }
     glColor4f( 255, 255, 255, 255 );
-
-    testGlErr("end drawString");
 }
 
 void FontManager::getDimensions(const std::string &text, const FontId &fontId, float& w, float& h) const
@@ -123,7 +138,7 @@ void FontManager::getDimensions(const std::string &text, const FontId &fontId, f
         return;
     }
 
-    getDetailedDimensions(text, *font_it->second.get(), &w, &h, NULL, NULL, NULL);
+    getDetailedDimensions(text, *font_it->second.font.get(), &w, &h, NULL, NULL, NULL);
     w = w/m_renderer.getViewPortWidth()*4.0f;
     h = h/m_renderer.getViewPortHeight()*3.0f;
 }
