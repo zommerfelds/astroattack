@@ -64,7 +64,7 @@ void ComponentManager::addEntity(const EntityId& id, ComponentList& components)
 
     // put components in a map
     ComponentMap compMap;
-    foreach(boost::shared_ptr<Component> comp, components)
+    foreach (boost::shared_ptr<Component> comp, components)
     {
         comp->m_entityId = id;
         comp->m_compManager = this;
@@ -74,7 +74,7 @@ void ComponentManager::addEntity(const EntityId& id, ComponentList& components)
     m_entities[id] = compMap; // if there is an entity with the same ID before, it will get deleted
 
     // trigger events
-    foreach(boost::shared_ptr<Component> comp, components)
+    foreach (boost::shared_ptr<Component> comp, components)
     {
         m_gameEvents.newComponent.fire(*comp);
     }
@@ -89,7 +89,7 @@ void ComponentManager::removeEntity(const EntityId& id)
 
     m_gameEvents.deleteEntity.fire( id );
 
-    foreach(ComponentMap::value_type& pair, it->second)
+    foreach (ComponentMap::value_type& pair, it->second)
     {
         Component& comp = *pair.second;
         m_gameEvents.deleteComponent.fire(comp);
@@ -102,6 +102,25 @@ void ComponentManager::removeEntity(const EntityId& id)
 const EntityMap& ComponentManager::getAllEntities() const
 {
     return m_entities;
+}
+
+bool ComponentManager::renameEntity(const EntityId& oldId, const EntityId& newId)
+{
+    if (m_entities.count(newId) > 0)
+        return false;
+    EntityMap::iterator it = m_entities.find(oldId);
+    if (it == m_entities.end())
+        return false;
+
+    foreach (ComponentMap::value_type& v, it->second)
+    {
+        v.second->m_entityId = newId;
+    }
+
+    m_entities[newId] = it->second;
+    m_entities.erase(it);
+
+    return true;
 }
 
 Component* ComponentManager::getComponent(const EntityId& entId, const ComponentType& compType, const ComponentId& compId) const
@@ -117,70 +136,6 @@ Component* ComponentManager::getComponent(const EntityId& entId, const Component
     }
     return NULL;
 }
-/*
-Component* ComponentManager::getComponent(const EntityIdType& entId, const ComponentTypeId& compType)
-{
-    EntityMap::const_iterator eit = m_entities.find(entId);
-    if ( eit == m_entities.end() )
-        return NULL;
-    ComponentMap::const_iterator cit = eit->second.find( compType );
-    if ( cit == eit->second.end() )
-        return NULL;
-    else
-        return cit->second.get();
-}
-const Component* ComponentManager::getComponent(const EntityIdType& entId, const ComponentTypeId& compType) const
-{
-    EntityMap::const_iterator eit = m_entities.find(entId);
-    if ( eit == m_entities.end() )
-        return NULL;
-    ComponentMap::const_iterator cit = eit->second.find( compType );
-    if ( cit == eit->second.end() )
-        return NULL;
-    else
-        return cit->second.get();
-}
-*/
-/*
-Component* ComponentManager::getComponentById(const EntityIdType& id, const ComponentIdType& compId)
-{
-
-}
-
-const Component* ComponentManager::getComponentById(const EntityIdType& id, const ComponentIdType& compId) const
-{
-
-}
-*/
-/*
-std::vector<Component*> ComponentManager::getComponents(const EntityIdType& id, const ComponentTypeId& compType )
-{
-    std::vector<Component*> ret;
-
-    EntityMap::iterator eit = m_entities.find(id);
-    if ( eit == m_entities.end() )
-        return ret;
-    std::pair<ComponentMap::iterator, ComponentMap::iterator> equalRange = eit->second.equal_range(compType);
-
-    for (ComponentMap::iterator it = equalRange.first; it != equalRange.second; ++it )
-        ret.push_back(it->second.get());
-    return ret;
-}
-
-std::vector<const Component*> ComponentManager::getComponents(const EntityIdType& id, const ComponentTypeId& compType ) const
-{
-    std::vector<const Component*> ret;
-
-    EntityMap::const_iterator eit = m_entities.find(id);
-    if ( eit == m_entities.end() )
-        return ret;
-    std::pair<ComponentMap::const_iterator, ComponentMap::const_iterator> equalRange = eit->second.equal_range(compType);
-
-    for (ComponentMap::const_iterator it = equalRange.first; it != equalRange.second; ++it )
-        ret.push_back(it->second.get());
-    return ret;
-}
-*/
 
 void ComponentManager::writeEntitiesToLogger(Logger& logger, LogLevel level)
 {

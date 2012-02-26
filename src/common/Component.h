@@ -30,8 +30,9 @@ public:
     virtual ~Component() {} // Destruktor
 
     static const ComponentType& getTypeIdStatic();
-    virtual const ComponentType& getTypeId() const = 0;   // Komponenttyp -> Name des Komponententyps
-    const ComponentId& getId() const { return m_id; } // Eigener Namen (optional)
+    virtual const ComponentType& getTypeId() const = 0;
+    const ComponentId& getId() const { return m_id; }
+    void setId(const ComponentId& id) { m_id = id; }
 
     const EntityId& getEntityId() { return m_entityId; }
 
@@ -56,7 +57,7 @@ private:
     ComponentManager* m_compManager; // this is used for getting the sibling components
 
     EntityId m_entityId;
-    std::string m_id;
+    ComponentId m_id;
 
     friend class ComponentManager; // ComponentManager will set the entity ID and m_compManager
 };

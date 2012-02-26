@@ -219,11 +219,11 @@ void GlCanvasController::onPaint(wxPaintEvent& evt)
 
     if (m_editor.getGuiData().selectedEntity)
     {
-        foreach(Component* component, m_editor.getGuiData().selectedEntity->second)
+        foreach(const Component* component, m_editor.getGuiData().selectedEntity->second)
         {
             if (component->getTypeId() == CompShape::getTypeIdStatic())
             {
-                const CompShape* compShape = static_cast<CompShape*>(component);
+                const CompShape* compShape = static_cast<const CompShape*>(component);
                 m_renderer.drawShape(*compShape, Color(1.0f, 0.0f, 0.0f, 0.3f), true);
                 break;
             }

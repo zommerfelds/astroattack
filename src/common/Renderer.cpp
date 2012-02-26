@@ -635,6 +635,8 @@ void RenderSystem::drawVisualTextureComps()
             }
             glPopMatrix();
         }
+        else
+            log(Info) << "Error: Trying to draw CompTexture that has no CompPosition in entity '" << texComp->getEntityId() << "'\n";
     }
 }
 

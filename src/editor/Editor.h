@@ -21,17 +21,11 @@ class ComponentManager;
 class PhysicsSystem;
 class Component;
 
-typedef boost::optional<std::pair<EntityId, std::vector<Component*> > > OptEntity;
+typedef boost::optional<std::pair<EntityId, std::vector<const Component*> > > OptEntity;
 
 struct EditorGuiData
 {
-    EditorGuiData() { reset(); }
-    void reset()
-    {
-        indexCurVertex = 0;
-        currentTexture = "";
-        selectedEntity = OptEntity();
-    }
+    EditorGuiData() : indexCurVertex (0), currentTexture ("") {}
 
     Vector2D createdVertices[8];
     int indexCurVertex;
@@ -56,6 +50,8 @@ public:
     void cmdNextTexture();
     void cmdPrevTexture();
     void cmdSelect(const Vector2D& pos);
+    bool cmdSetNewEntityId(const EntityId& id);
+    void cmdSetNewCompId(const ComponentId& id, const Component* comp);
 
     const EditorGuiData& getGuiData();
 

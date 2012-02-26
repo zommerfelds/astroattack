@@ -13,9 +13,9 @@ EditorFrameBase::EditorFrameBase( wxWindow* parent, wxWindowID id, const wxStrin
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 	
-	/*m_toolBar = this->CreateToolBar( wxTB_HORIZONTAL, wxID_ANY ); 
+	m_toolBar = this->CreateToolBar( wxTB_HORIZONTAL, wxID_ANY ); 
 	m_toolBar->AddTool( wxID_ANY, wxT("tool"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString ); 
-	m_toolBar->Realize();*/
+	m_toolBar->Realize();
 	
 	m_statusBar1 = this->CreateStatusBar( 1, wxST_SIZEGRIP, wxID_ANY );
 	m_menubar1 = new wxMenuBar( 0 );
@@ -62,33 +62,100 @@ EditorFrameBase::EditorFrameBase( wxWindow* parent, wxWindowID id, const wxStrin
 	m_splitter1->SetMinimumPaneSize( 50 );
 	
 	m_glpanel = new wxPanel( m_splitter1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	m_panel1 = new wxPanel( m_splitter1, wxID_ANY, wxDefaultPosition, wxSize( 300,-1 ), wxTAB_TRAVERSAL );
-	m_panel1->SetMinSize( wxSize( 200,-1 ) );
+	m_sidePanel = new wxPanel( m_splitter1, wxID_ANY, wxDefaultPosition, wxSize( 300,-1 ), wxTAB_TRAVERSAL );
+	m_sidePanel->SetMinSize( wxSize( 200,-1 ) );
 	
+	wxBoxSizer* bSizer7;
+	bSizer7 = new wxBoxSizer( wxVERTICAL );
+	
+	m_splitter2 = new wxSplitterWindow( m_sidePanel, wxID_ANY, wxDefaultPosition, wxSize( -1,-1 ), wxSP_3D|wxSP_LIVE_UPDATE );
+	m_splitter2->Connect( wxEVT_IDLE, wxIdleEventHandler( EditorFrameBase::m_splitter2OnIdle ), NULL, this );
+	m_splitter2->SetMinimumPaneSize( 100 );
+	
+	m_entityPanel = new wxPanel( m_splitter2, wxID_ANY, wxDefaultPosition, wxSize( -1,-1 ), wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer2;
 	bSizer2 = new wxBoxSizer( wxVERTICAL );
 	
-	m_entityLabel = new wxStaticText( m_panel1, wxID_ANY, wxT("Entity"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_entityLabel->Wrap( -1 );
-	bSizer2->Add( m_entityLabel, 0, wxALL, 5 );
+	wxBoxSizer* bSizer8;
+	bSizer8 = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_compList = new wxListCtrl( m_panel1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_HRULES|wxLC_NO_SORT_HEADER|wxLC_REPORT|wxLC_SINGLE_SEL|wxLC_VRULES );
-	bSizer2->Add( m_compList, 1, wxALL|wxEXPAND, 5 );
+	m_entityLabel = new wxStaticText( m_entityPanel, wxID_ANY, wxT("Entity"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_entityLabel->Wrap( -1 );
+	bSizer8->Add( m_entityLabel, 0, wxALL, 5 );
+	
+	m_entityIdField = new wxTextCtrl( m_entityPanel, ID_ENTITYIDFIELD, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
+	m_entityIdField->Enable( false );
+	
+	bSizer8->Add( m_entityIdField, 1, wxALL, 0 );
+	
+	bSizer2->Add( bSizer8, 0, wxEXPAND, 5 );
+	
+	m_compList = new wxListCtrl( m_entityPanel, ID_COMPLIST, wxDefaultPosition, wxDefaultSize, wxLC_HRULES|wxLC_NO_SORT_HEADER|wxLC_REPORT|wxLC_SINGLE_SEL|wxLC_VRULES );
+	bSizer2->Add( m_compList, 1, wxALL|wxEXPAND, 1 );
 	
 	wxBoxSizer* bSizer4;
 	bSizer4 = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_button1 = new wxButton( m_panel1, wxID_ANY, wxT("New"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer4->Add( m_button1, 0, wxALL|wxEXPAND, 5 );
+	m_butNewComp = new wxButton( m_entityPanel, wxID_ANY, wxT("New"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_butNewComp->Enable( false );
 	
-	m_button4 = new wxButton( m_panel1, wxID_ANY, wxT("Remove"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer4->Add( m_button4, 0, wxALL|wxEXPAND, 5 );
+	bSizer4->Add( m_butNewComp, 0, wxALL|wxEXPAND, 5 );
+	
+	m_butRemoveComp = new wxButton( m_entityPanel, wxID_ANY, wxT("Remove"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_butRemoveComp->Enable( false );
+	
+	bSizer4->Add( m_butRemoveComp, 0, wxALL|wxEXPAND, 5 );
 	
 	bSizer2->Add( bSizer4, 0, wxEXPAND, 5 );
 	
-	m_panel1->SetSizer( bSizer2 );
-	m_panel1->Layout();
-	m_splitter1->SplitVertically( m_glpanel, m_panel1, -1 );
+	m_entityPanel->SetSizer( bSizer2 );
+	m_entityPanel->Layout();
+	bSizer2->Fit( m_entityPanel );
+	m_compPanel = new wxPanel( m_splitter2, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer6;
+	bSizer6 = new wxBoxSizer( wxVERTICAL );
+	
+	wxBoxSizer* bSizer81;
+	bSizer81 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_compLabel = new wxStaticText( m_compPanel, wxID_ANY, wxT("Component"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_compLabel->Wrap( -1 );
+	bSizer81->Add( m_compLabel, 0, wxALL, 5 );
+	
+	m_compIdField = new wxTextCtrl( m_compPanel, ID_COMPIDFIELD, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
+	m_compIdField->Enable( false );
+	
+	bSizer81->Add( m_compIdField, 1, wxALL, 0 );
+	
+	bSizer6->Add( bSizer81, 0, wxEXPAND, 5 );
+	
+	m_propList = new wxListCtrl( m_compPanel, ID_PROPLIST, wxDefaultPosition, wxDefaultSize, wxLC_HRULES|wxLC_NO_SORT_HEADER|wxLC_REPORT|wxLC_SINGLE_SEL|wxLC_VRULES );
+	bSizer6->Add( m_propList, 1, wxALL|wxEXPAND, 1 );
+	
+	wxBoxSizer* bSizer41;
+	bSizer41 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_butNewProp = new wxButton( m_compPanel, wxID_ANY, wxT("New"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_butNewProp->Enable( false );
+	
+	bSizer41->Add( m_butNewProp, 0, wxALL|wxEXPAND, 5 );
+	
+	m_butRemoveProp = new wxButton( m_compPanel, wxID_ANY, wxT("Remove"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_butRemoveProp->Enable( false );
+	
+	bSizer41->Add( m_butRemoveProp, 0, wxALL|wxEXPAND, 5 );
+	
+	bSizer6->Add( bSizer41, 0, wxEXPAND, 5 );
+	
+	m_compPanel->SetSizer( bSizer6 );
+	m_compPanel->Layout();
+	bSizer6->Fit( m_compPanel );
+	m_splitter2->SplitHorizontally( m_entityPanel, m_compPanel, 0 );
+	bSizer7->Add( m_splitter2, 1, wxEXPAND, 0 );
+	
+	m_sidePanel->SetSizer( bSizer7 );
+	m_sidePanel->Layout();
+	m_splitter1->SplitVertically( m_glpanel, m_sidePanel, -1 );
 	bSizer1->Add( m_splitter1, 1, wxEXPAND, 1 );
 	
 	this->SetSizer( bSizer1 );
@@ -96,6 +163,103 @@ EditorFrameBase::EditorFrameBase( wxWindow* parent, wxWindowID id, const wxStrin
 }
 
 EditorFrameBase::~EditorFrameBase()
+{
+}
+
+NewCompDialog::NewCompDialog( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
+{
+	this->SetSizeHints( wxSize( 300,-1 ), wxDefaultSize );
+	
+	wxBoxSizer* bSizer11;
+	bSizer11 = new wxBoxSizer( wxVERTICAL );
+	
+	wxArrayString m_compChoiceChoices;
+	m_compChoice = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_compChoiceChoices, 0 );
+	m_compChoice->SetSelection( 0 );
+	bSizer11->Add( m_compChoice, 0, wxALL|wxEXPAND, 5 );
+	
+	wxBoxSizer* bSizer12;
+	bSizer12 = new wxBoxSizer( wxHORIZONTAL );
+	
+	
+	bSizer12->Add( 0, 0, 1, wxEXPAND, 5 );
+	
+	m_button6 = new wxButton( this, wxID_OK, wxT("Create"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer12->Add( m_button6, 0, wxALL, 5 );
+	
+	m_button7 = new wxButton( this, wxID_ANY, wxT("Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer12->Add( m_button7, 0, wxALL, 5 );
+	
+	
+	bSizer12->Add( 0, 0, 1, wxEXPAND, 5 );
+	
+	bSizer11->Add( bSizer12, 1, wxEXPAND, 5 );
+	
+	this->SetSizer( bSizer11 );
+	this->Layout();
+	bSizer11->Fit( this );
+	
+	this->Centre( wxBOTH );
+}
+
+NewCompDialog::~NewCompDialog()
+{
+}
+
+NewPropDialog::NewPropDialog( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
+{
+	this->SetSizeHints( wxSize( 300,-1 ), wxDefaultSize );
+	
+	wxBoxSizer* bSizer11;
+	bSizer11 = new wxBoxSizer( wxVERTICAL );
+	
+	wxFlexGridSizer* fgSizer1;
+	fgSizer1 = new wxFlexGridSizer( 2, 2, 0, 0 );
+	fgSizer1->AddGrowableCol( 1 );
+	fgSizer1->SetFlexibleDirection( wxBOTH );
+	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	
+	m_staticText4 = new wxStaticText( this, wxID_ANY, wxT("Key"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText4->Wrap( -1 );
+	fgSizer1->Add( m_staticText4, 0, wxALL, 5 );
+	
+	m_textCtrl3 = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer1->Add( m_textCtrl3, 0, wxALL|wxEXPAND, 5 );
+	
+	m_staticText5 = new wxStaticText( this, wxID_ANY, wxT("Value"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText5->Wrap( -1 );
+	fgSizer1->Add( m_staticText5, 0, wxALL, 5 );
+	
+	m_textCtrl4 = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer1->Add( m_textCtrl4, 0, wxALL|wxEXPAND, 5 );
+	
+	bSizer11->Add( fgSizer1, 1, wxEXPAND, 5 );
+	
+	wxBoxSizer* bSizer12;
+	bSizer12 = new wxBoxSizer( wxHORIZONTAL );
+	
+	
+	bSizer12->Add( 0, 0, 1, wxEXPAND, 5 );
+	
+	m_button6 = new wxButton( this, wxID_OK, wxT("Create"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer12->Add( m_button6, 0, wxALL, 5 );
+	
+	m_button7 = new wxButton( this, wxID_ANY, wxT("Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer12->Add( m_button7, 0, wxALL, 5 );
+	
+	
+	bSizer12->Add( 0, 0, 1, wxEXPAND, 5 );
+	
+	bSizer11->Add( bSizer12, 0, wxEXPAND, 5 );
+	
+	this->SetSizer( bSizer11 );
+	this->Layout();
+	bSizer11->Fit( this );
+	
+	this->Centre( wxBOTH );
+}
+
+NewPropDialog::~NewPropDialog()
 {
 }
 

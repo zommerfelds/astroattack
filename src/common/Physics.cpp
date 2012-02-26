@@ -320,11 +320,11 @@ private:
 QueryCallback queryCallback;
 }
 
-boost::optional<std::pair<EntityId, std::vector<Component*> > > PhysicsSystem::selectEntity(const Vector2D& pos)
+boost::optional<std::pair<EntityId, std::vector<const Component*> > > PhysicsSystem::selectEntity(const Vector2D& pos)
 {
     CompShape* comp = queryCallback.query(m_world, *pos.to_b2Vec2());
     if (comp == NULL)
-        return boost::optional<std::pair<EntityId, std::vector<Component*> > >();
+        return boost::optional<std::pair<EntityId, std::vector<const Component*> > >();
     else
-        return boost::optional<std::pair<EntityId, std::vector<Component*> > >(std::make_pair(comp->getEntityId(), comp->getSiblingComponents<Component>()));
+        return boost::optional<std::pair<EntityId, std::vector<const Component*> > >(std::make_pair(comp->getEntityId(), comp->getSiblingComponents<const Component>()));
 }

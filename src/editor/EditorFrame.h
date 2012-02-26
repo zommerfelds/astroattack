@@ -9,9 +9,18 @@
 
 #include "GlCanvasController.h"
 #include "gen/EditorGuiBase.h"
+#include "common/IdTypes.h"
+#include <string>
+#include <vector>
 #include <wx/timer.h>
 
-enum ACC_IDs
+// forward declare ptree (PropertyTree), quite complex but we don't want to include the big header here
+namespace boost { namespace property_tree {
+    template<class Key, class Data, class KeyCompare> class basic_ptree;
+    typedef basic_ptree<std::string, std::string, std::less<std::string> > ptree;
+}}
+
+/*enum ACC_IDs
 {
     ACC_ID_lowest = wxID_HIGHEST+100,
 
@@ -22,7 +31,7 @@ enum ACC_IDs
     ACC_ID_PREVTEXTURE,
 
     ACC_ID_highest
-};
+};*/
 
 class Editor;
 class RenderSystem;
@@ -40,6 +49,7 @@ public:
 };
 
 class GameEvents;
+class Component;
 
 class EditorFrame : public EditorFrameBase {
 public:
@@ -51,17 +61,33 @@ public:
 
     void update();
 
+    int keyEvent(wxKeyEvent&);
+
+private:
+
     void onClose(wxCloseEvent&);
-    void onCustomAccelerator(wxCommandEvent&);
-    void onComponentActivated(wxListEvent&);
+    void onListItemSelected(wxListEvent&);
+    void onListItemDeselected(wxListEvent&);
     void onMenuNew(wxCommandEvent&);
     void onMenuOpen(wxCommandEvent&);
     void onMenuSave(wxCommandEvent&);
     void onMenuSaveAs(wxCommandEvent&);
     void onMenuExit(wxCommandEvent&);
     void onMenuAbout(wxCommandEvent&);
-    
-private:
+    void onEntityIdFieldEnter(wxCommandEvent&);
+    void onCompIdFieldEnter(wxCommandEvent&);
+
+    void enableEntity(const EntityId& id, const std::vector<const Component*>& comps); // an Entity is selected
+    void disableEntity();
+
+    void enableComponent(const Component* comp); // a component is selected
+    void disableComponent();
+
+    void enableProperty(); // a property inside a component is selected
+    void disableProperty();
+
+    int updatePropList(const boost::property_tree::ptree& propTree, int index, std::string prefix);
+
     Editor& m_editor;
     GlCanvasController m_canvas;
     UpdateTimer m_timer;

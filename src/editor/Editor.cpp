@@ -54,7 +54,7 @@ void Editor::clearLevel()
 {
     m_guiData.indexCurVertex = 0;
     m_compMgr.reset(new ComponentManager(m_events));
-    //m_guiData.world = m_world.get();
+    m_guiData.selectedEntity = OptEntity();
 }
 
 void Editor::loadLevel(const std::string& fileName)
@@ -164,6 +164,30 @@ void Editor::cmdPrevTexture()
 void Editor::cmdSelect(const Vector2D& pos)
 {
     m_guiData.selectedEntity = m_physics.selectEntity(pos);
+}
+
+bool Editor::cmdSetNewEntityId(const EntityId& id)
+{
+    if (!m_guiData.selectedEntity || id == m_guiData.selectedEntity->first)
+        return true;
+    // TODO: test if name is valid
+    bool success = m_compMgr->renameEntity(m_guiData.selectedEntity->first, id);
+    if (success)
+        m_guiData.selectedEntity->first = id;
+    return success;
+}
+
+void Editor::cmdSetNewCompId(const ComponentId& id, const Component* comp)
+{
+    if (!m_guiData.selectedEntity) return;
+    foreach (Component* c, m_compMgr->getComponents<Component>(m_guiData.selectedEntity->first))
+    {
+        if (c == comp)
+        {
+            c->setId(id);
+            break;
+        }
+    }
 }
 
 const EditorGuiData& Editor::getGuiData()

@@ -41,6 +41,8 @@ public:
     void removeEntity(const EntityId& id);
     const EntityMap& getAllEntities() const;
 
+    bool renameEntity(const EntityId& oldId, const EntityId& newId);
+
     // use <Component> as template if you don't have the static type
     template <typename CompType>       CompType* getComponent(const EntityId& entId, const ComponentId& compId="");
     template <typename CompType> const CompType* getComponent(const EntityId& entId, const ComponentId& compId="") const;
@@ -48,9 +50,6 @@ public:
     // Returns a vector of all matching components in an entity
     template <typename CompType> std::vector<      CompType*> getComponents(const EntityId& id);
     template <typename CompType> std::vector<const CompType*> getComponents(const EntityId& id) const;
-
-    // Returns all components (regardless of entity)
-    const ComponentMap* getComponents(const EntityId& id);
 
     void writeEntitiesToLogger(Logger& logger, LogLevel level);
 

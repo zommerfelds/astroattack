@@ -29,7 +29,7 @@ public:
     PhysicsSystem(GameEvents& gameEvents);
 
     void update();
-    boost::optional<std::pair<EntityId, std::vector<Component*> > > selectEntity(const Vector2D& pos);
+    boost::optional<std::pair<EntityId, std::vector<const Component*> > > selectEntity(const Vector2D& pos);
 
     void calculateSmoothPositions(float accumulator);
 
