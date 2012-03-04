@@ -13,6 +13,7 @@
 #include <string>
 #include <vector>
 #include <wx/timer.h>
+#include <boost/shared_ptr.hpp>
 
 // forward declare ptree (PropertyTree), quite complex but we don't want to include the big header here
 namespace boost { namespace property_tree {
@@ -50,6 +51,7 @@ public:
 
 class GameEvents;
 class Component;
+class PropTreeElem;
 
 class EditorFrame : public EditorFrameBase {
 public:
@@ -76,22 +78,29 @@ private:
     void onMenuAbout(wxCommandEvent&);
     void onEntityIdFieldEnter(wxCommandEvent&);
     void onCompIdFieldEnter(wxCommandEvent&);
+    void onPropEdit(wxCommandEvent&);
+    void onPropEdit(wxListEvent&);
+    void onPropEdit();
+    void onPropNew(wxCommandEvent&);
 
     void enableEntity(const EntityId& id, const std::vector<const Component*>& comps); // an Entity is selected
     void disableEntity();
 
-    void enableComponent(const Component* comp); // a component is selected
+    void enableComponent(Component* comp); // a component is selected
     void disableComponent();
 
     void enableProperty(); // a property inside a component is selected
     void disableProperty();
 
-    int updatePropList(const boost::property_tree::ptree& propTree, int index, std::string prefix);
+    int updatePropList(boost::property_tree::ptree& propTree, int index, std::string prefix);
 
     Editor& m_editor;
     GlCanvasController m_canvas;
     UpdateTimer m_timer;
     std::string m_fileName;
+    Component* m_selectedComp;
+    boost::shared_ptr<boost::property_tree::ptree> m_propTree;
+    std::vector<boost::shared_ptr<PropTreeElem> > m_propTreeElems;
 
     DECLARE_EVENT_TABLE()
 };

@@ -36,8 +36,7 @@ EditorFrameBase::EditorFrameBase( wxWindow* parent, wxWindowID id, const wxStrin
 	m_menuItemSaveAs = new wxMenuItem( m_menuFile, wxID_SAVEAS, wxString( wxT("Save As") ) , wxT("Save current level with a different file name"), wxITEM_NORMAL );
 	m_menuFile->Append( m_menuItemSaveAs );
 	
-	wxMenuItem* m_separator1;
-	m_separator1 = m_menuFile->AppendSeparator();
+	m_menuFile->AppendSeparator();
 	
 	wxMenuItem* m_menuItemExit;
 	m_menuItemExit = new wxMenuItem( m_menuFile, wxID_EXIT, wxString( wxT("Quit") ) , wxT("Quit AAEditor"), wxITEM_NORMAL );
@@ -59,6 +58,7 @@ EditorFrameBase::EditorFrameBase( wxWindow* parent, wxWindowID id, const wxStrin
 	
 	m_splitter1 = new wxSplitterWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_3D|wxSP_LIVE_UPDATE );
 	m_splitter1->SetSashGravity( 1 );
+	m_splitter1->Connect( wxEVT_IDLE, wxIdleEventHandler( EditorFrameBase::m_splitter1OnIdle ), NULL, this );
 	m_splitter1->SetMinimumPaneSize( 50 );
 	
 	m_glpanel = new wxPanel( m_splitter1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
@@ -96,15 +96,15 @@ EditorFrameBase::EditorFrameBase( wxWindow* parent, wxWindowID id, const wxStrin
 	wxBoxSizer* bSizer4;
 	bSizer4 = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_butNewComp = new wxButton( m_entityPanel, wxID_ANY, wxT("New"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_butNewComp = new wxButton( m_entityPanel, ID_BUTNEWCOMP, wxT("New"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_butNewComp->Enable( false );
 	
-	bSizer4->Add( m_butNewComp, 0, wxALL|wxEXPAND, 5 );
+	bSizer4->Add( m_butNewComp, 1, wxBOTTOM|wxEXPAND|wxRIGHT|wxTOP, 2 );
 	
-	m_butRemoveComp = new wxButton( m_entityPanel, wxID_ANY, wxT("Remove"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_butRemoveComp = new wxButton( m_entityPanel, ID_BUTREMCOMP, wxT("Remove"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_butRemoveComp->Enable( false );
 	
-	bSizer4->Add( m_butRemoveComp, 0, wxALL|wxEXPAND, 5 );
+	bSizer4->Add( m_butRemoveComp, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxTOP, 2 );
 	
 	bSizer2->Add( bSizer4, 0, wxEXPAND, 5 );
 	
@@ -135,17 +135,22 @@ EditorFrameBase::EditorFrameBase( wxWindow* parent, wxWindowID id, const wxStrin
 	wxBoxSizer* bSizer41;
 	bSizer41 = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_butNewProp = new wxButton( m_compPanel, wxID_ANY, wxT("New"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_butNewProp = new wxButton( m_compPanel, ID_BUTNEWPROP, wxT("New"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_butNewProp->Enable( false );
 	
-	bSizer41->Add( m_butNewProp, 0, wxALL|wxEXPAND, 5 );
+	bSizer41->Add( m_butNewProp, 1, wxBOTTOM|wxEXPAND|wxRIGHT|wxTOP, 2 );
 	
-	m_butRemoveProp = new wxButton( m_compPanel, wxID_ANY, wxT("Remove"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_butEditProp = new wxButton( m_compPanel, ID_BUTEDITPROP, wxT("Edit"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_butEditProp->Enable( false );
+	
+	bSizer41->Add( m_butEditProp, 1, wxALL|wxEXPAND, 2 );
+	
+	m_butRemoveProp = new wxButton( m_compPanel, ID_BUTREMPROP, wxT("Remove"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_butRemoveProp->Enable( false );
 	
-	bSizer41->Add( m_butRemoveProp, 0, wxALL|wxEXPAND, 5 );
+	bSizer41->Add( m_butRemoveProp, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxTOP, 2 );
 	
-	bSizer6->Add( bSizer41, 0, wxEXPAND, 5 );
+	bSizer6->Add( bSizer41, 0, wxEXPAND, 0 );
 	
 	m_compPanel->SetSizer( bSizer6 );
 	m_compPanel->Layout();
@@ -155,7 +160,7 @@ EditorFrameBase::EditorFrameBase( wxWindow* parent, wxWindowID id, const wxStrin
 	
 	m_sidePanel->SetSizer( bSizer7 );
 	m_sidePanel->Layout();
-	m_splitter1->SplitVertically( m_glpanel, m_sidePanel, -1 );
+	m_splitter1->SplitVertically( m_glpanel, m_sidePanel, 403 );
 	bSizer1->Add( m_splitter1, 1, wxEXPAND, 1 );
 	
 	this->SetSizer( bSizer1 );
@@ -173,67 +178,30 @@ NewCompDialog::NewCompDialog( wxWindow* parent, wxWindowID id, const wxString& t
 	wxBoxSizer* bSizer11;
 	bSizer11 = new wxBoxSizer( wxVERTICAL );
 	
-	wxArrayString m_compChoiceChoices;
-	m_compChoice = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_compChoiceChoices, 0 );
+	wxFlexGridSizer* fgSizer6;
+	fgSizer6 = new wxFlexGridSizer( 2, 2, 0, 0 );
+	fgSizer6->AddGrowableCol( 1 );
+	fgSizer6->SetFlexibleDirection( wxBOTH );
+	fgSizer6->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	
+	m_staticText14 = new wxStaticText( this, wxID_ANY, wxT("Type"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText14->Wrap( -1 );
+	fgSizer6->Add( m_staticText14, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
+	wxString m_compChoiceChoices[] = { wxT("CompTrigger"), wxT("CompVisualTexture"), wxT("CompPhysics") };
+	int m_compChoiceNChoices = sizeof( m_compChoiceChoices ) / sizeof( wxString );
+	m_compChoice = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_compChoiceNChoices, m_compChoiceChoices, 0 );
 	m_compChoice->SetSelection( 0 );
-	bSizer11->Add( m_compChoice, 0, wxALL|wxEXPAND, 5 );
+	fgSizer6->Add( m_compChoice, 1, wxALL|wxEXPAND, 5 );
 	
-	wxBoxSizer* bSizer12;
-	bSizer12 = new wxBoxSizer( wxHORIZONTAL );
+	m_staticText15 = new wxStaticText( this, wxID_ANY, wxT("ID (optional)"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText15->Wrap( -1 );
+	fgSizer6->Add( m_staticText15, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
+	m_textCtrl13 = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer6->Add( m_textCtrl13, 0, wxALL|wxEXPAND, 5 );
 	
-	bSizer12->Add( 0, 0, 1, wxEXPAND, 5 );
-	
-	m_button6 = new wxButton( this, wxID_OK, wxT("Create"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer12->Add( m_button6, 0, wxALL, 5 );
-	
-	m_button7 = new wxButton( this, wxID_ANY, wxT("Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer12->Add( m_button7, 0, wxALL, 5 );
-	
-	
-	bSizer12->Add( 0, 0, 1, wxEXPAND, 5 );
-	
-	bSizer11->Add( bSizer12, 1, wxEXPAND, 5 );
-	
-	this->SetSizer( bSizer11 );
-	this->Layout();
-	bSizer11->Fit( this );
-	
-	this->Centre( wxBOTH );
-}
-
-NewCompDialog::~NewCompDialog()
-{
-}
-
-NewPropDialog::NewPropDialog( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
-{
-	this->SetSizeHints( wxSize( 300,-1 ), wxDefaultSize );
-	
-	wxBoxSizer* bSizer11;
-	bSizer11 = new wxBoxSizer( wxVERTICAL );
-	
-	wxFlexGridSizer* fgSizer1;
-	fgSizer1 = new wxFlexGridSizer( 2, 2, 0, 0 );
-	fgSizer1->AddGrowableCol( 1 );
-	fgSizer1->SetFlexibleDirection( wxBOTH );
-	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-	
-	m_staticText4 = new wxStaticText( this, wxID_ANY, wxT("Key"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText4->Wrap( -1 );
-	fgSizer1->Add( m_staticText4, 0, wxALL, 5 );
-	
-	m_textCtrl3 = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer1->Add( m_textCtrl3, 0, wxALL|wxEXPAND, 5 );
-	
-	m_staticText5 = new wxStaticText( this, wxID_ANY, wxT("Value"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText5->Wrap( -1 );
-	fgSizer1->Add( m_staticText5, 0, wxALL, 5 );
-	
-	m_textCtrl4 = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer1->Add( m_textCtrl4, 0, wxALL|wxEXPAND, 5 );
-	
-	bSizer11->Add( fgSizer1, 1, wxEXPAND, 5 );
+	bSizer11->Add( fgSizer6, 1, wxEXPAND, 5 );
 	
 	wxBoxSizer* bSizer12;
 	bSizer12 = new wxBoxSizer( wxHORIZONTAL );
@@ -259,7 +227,122 @@ NewPropDialog::NewPropDialog( wxWindow* parent, wxWindowID id, const wxString& t
 	this->Centre( wxBOTH );
 }
 
-NewPropDialog::~NewPropDialog()
+NewCompDialog::~NewCompDialog()
+{
+}
+
+NewPropDialogBase::NewPropDialogBase( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
+{
+	this->SetSizeHints( wxSize( 300,-1 ), wxDefaultSize );
+	
+	wxBoxSizer* bSizer11;
+	bSizer11 = new wxBoxSizer( wxVERTICAL );
+	
+	wxFlexGridSizer* fgSizer1;
+	fgSizer1 = new wxFlexGridSizer( 2, 2, 0, 0 );
+	fgSizer1->AddGrowableCol( 1 );
+	fgSizer1->SetFlexibleDirection( wxBOTH );
+	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	
+	m_staticText4 = new wxStaticText( this, wxID_ANY, wxT("Key"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText4->Wrap( -1 );
+	fgSizer1->Add( m_staticText4, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
+	m_keyText = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer1->Add( m_keyText, 0, wxALL|wxEXPAND, 5 );
+	
+	m_staticText5 = new wxStaticText( this, wxID_ANY, wxT("Value"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText5->Wrap( -1 );
+	fgSizer1->Add( m_staticText5, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
+	m_valueText = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer1->Add( m_valueText, 0, wxALL|wxEXPAND, 5 );
+	
+	bSizer11->Add( fgSizer1, 1, wxEXPAND, 5 );
+	
+	wxBoxSizer* bSizer12;
+	bSizer12 = new wxBoxSizer( wxHORIZONTAL );
+	
+	
+	bSizer12->Add( 0, 0, 1, wxEXPAND, 5 );
+	
+	m_button6 = new wxButton( this, wxID_OK, wxT("Create"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer12->Add( m_button6, 0, wxALL, 5 );
+	
+	m_button7 = new wxButton( this, wxID_CANCEL, wxT("Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer12->Add( m_button7, 0, wxALL, 5 );
+	
+	
+	bSizer12->Add( 0, 0, 1, wxEXPAND, 5 );
+	
+	bSizer11->Add( bSizer12, 0, wxEXPAND, 5 );
+	
+	this->SetSizer( bSizer11 );
+	this->Layout();
+	bSizer11->Fit( this );
+	
+	this->Centre( wxBOTH );
+}
+
+NewPropDialogBase::~NewPropDialogBase()
+{
+}
+
+EditPropDialogBase::EditPropDialogBase( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
+{
+	this->SetSizeHints( wxSize( 300,-1 ), wxDefaultSize );
+	
+	wxBoxSizer* bSizer11;
+	bSizer11 = new wxBoxSizer( wxVERTICAL );
+	
+	wxFlexGridSizer* fgSizer1;
+	fgSizer1 = new wxFlexGridSizer( 2, 2, 0, 0 );
+	fgSizer1->AddGrowableCol( 1 );
+	fgSizer1->SetFlexibleDirection( wxBOTH );
+	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	
+	m_staticText4 = new wxStaticText( this, wxID_ANY, wxT("Key"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText4->Wrap( -1 );
+	fgSizer1->Add( m_staticText4, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
+	m_keyLabel = new wxStaticText( this, wxID_ANY, wxT("###"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_keyLabel->Wrap( -1 );
+	fgSizer1->Add( m_keyLabel, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
+	m_staticText5 = new wxStaticText( this, wxID_ANY, wxT("Value"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText5->Wrap( -1 );
+	fgSizer1->Add( m_staticText5, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
+	m_valueText = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer1->Add( m_valueText, 0, wxALL|wxEXPAND, 5 );
+	
+	bSizer11->Add( fgSizer1, 1, wxEXPAND, 5 );
+	
+	wxBoxSizer* bSizer12;
+	bSizer12 = new wxBoxSizer( wxHORIZONTAL );
+	
+	
+	bSizer12->Add( 0, 0, 1, wxEXPAND, 5 );
+	
+	m_button6 = new wxButton( this, wxID_OK, wxT("OK"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer12->Add( m_button6, 0, wxALL, 5 );
+	
+	m_button7 = new wxButton( this, wxID_CANCEL, wxT("Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer12->Add( m_button7, 0, wxALL, 5 );
+	
+	
+	bSizer12->Add( 0, 0, 1, wxEXPAND, 5 );
+	
+	bSizer11->Add( bSizer12, 0, wxEXPAND, 5 );
+	
+	this->SetSizer( bSizer11 );
+	this->Layout();
+	bSizer11->Fit( this );
+	
+	this->Centre( wxBOTH );
+}
+
+EditPropDialogBase::~EditPropDialogBase()
 {
 }
 

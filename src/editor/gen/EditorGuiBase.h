@@ -34,8 +34,13 @@
 
 #define ID_ENTITYIDFIELD 1000
 #define ID_COMPLIST 1001
-#define ID_COMPIDFIELD 1002
-#define ID_PROPLIST 1003
+#define ID_BUTNEWCOMP 1002
+#define ID_BUTREMCOMP 1003
+#define ID_COMPIDFIELD 1004
+#define ID_PROPLIST 1005
+#define ID_BUTNEWPROP 1006
+#define ID_BUTEDITPROP 1007
+#define ID_BUTREMPROP 1008
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class EditorFrameBase
@@ -65,12 +70,19 @@ class EditorFrameBase : public wxFrame
 		wxTextCtrl* m_compIdField;
 		wxListCtrl* m_propList;
 		wxButton* m_butNewProp;
+		wxButton* m_butEditProp;
 		wxButton* m_butRemoveProp;
 	
 	public:
 		
 		EditorFrameBase( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("AstroAttack Editor"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 700,526 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
 		~EditorFrameBase();
+		
+		void m_splitter1OnIdle( wxIdleEvent& )
+		{
+			m_splitter1->SetSashPosition( 403 );
+			m_splitter1->Disconnect( wxEVT_IDLE, wxIdleEventHandler( EditorFrameBase::m_splitter1OnIdle ), NULL, this );
+		}
 		
 		void m_splitter2OnIdle( wxIdleEvent& )
 		{
@@ -88,7 +100,10 @@ class NewCompDialog : public wxDialog
 	private:
 	
 	protected:
+		wxStaticText* m_staticText14;
 		wxChoice* m_compChoice;
+		wxStaticText* m_staticText15;
+		wxTextCtrl* m_textCtrl13;
 		
 		wxButton* m_button6;
 		wxButton* m_button7;
@@ -102,17 +117,17 @@ class NewCompDialog : public wxDialog
 };
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class NewPropDialog
+/// Class NewPropDialogBase
 ///////////////////////////////////////////////////////////////////////////////
-class NewPropDialog : public wxDialog 
+class NewPropDialogBase : public wxDialog 
 {
 	private:
 	
 	protected:
 		wxStaticText* m_staticText4;
-		wxTextCtrl* m_textCtrl3;
+		wxTextCtrl* m_keyText;
 		wxStaticText* m_staticText5;
-		wxTextCtrl* m_textCtrl4;
+		wxTextCtrl* m_valueText;
 		
 		wxButton* m_button6;
 		wxButton* m_button7;
@@ -120,8 +135,32 @@ class NewPropDialog : public wxDialog
 	
 	public:
 		
-		NewPropDialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Create New Property"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE );
-		~NewPropDialog();
+		NewPropDialogBase( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Create New Property"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE );
+		~NewPropDialogBase();
+	
+};
+
+///////////////////////////////////////////////////////////////////////////////
+/// Class EditPropDialogBase
+///////////////////////////////////////////////////////////////////////////////
+class EditPropDialogBase : public wxDialog 
+{
+	private:
+	
+	protected:
+		wxStaticText* m_staticText4;
+		wxStaticText* m_keyLabel;
+		wxStaticText* m_staticText5;
+		wxTextCtrl* m_valueText;
+		
+		wxButton* m_button6;
+		wxButton* m_button7;
+		
+	
+	public:
+		
+		EditPropDialogBase( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Edit Property"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE );
+		~EditPropDialogBase();
 	
 };
 
