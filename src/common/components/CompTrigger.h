@@ -34,7 +34,7 @@ public:
     CompTrigger(const ComponentId& id, GameEvents& gameEvents);
 
     const ComponentType& getTypeId() const { return getTypeIdStatic(); }
-    static const ComponentType& getTypeIdStatic(); // eindeutige ID für diese Komponentenart (gleich wie Klassennamen, siehe CompCollectable.cpp)
+    static const ComponentType& getTypeIdStatic();
 
     void addCondition( boost::shared_ptr<Condition> );
     void addEffect( boost::shared_ptr<Effect> );
@@ -89,8 +89,6 @@ public:
     virtual EffectId getId() const = 0;
 
     virtual void fire() = 0;
-
-    CompTrigger* m_pCompTrigger;
 };
 
 #endif

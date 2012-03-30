@@ -44,8 +44,8 @@ const GameStateId PlayingState::STATE_ID = "PlayingState";
 
 PlayingState::PlayingState( SubSystems& subSystems, const std::string& levelFileName )
 : GameState( subSystems ),
-  m_components ( getSubSystems().events ),
-  m_cameraController ( getSubSystems().input, getSubSystems().renderer, m_components ),
+  m_compMgr ( getSubSystems().events ),
+  m_cameraController ( getSubSystems().input, getSubSystems().renderer, m_compMgr ),
   m_eventConnection1 (), m_eventConnection2 (),
   m_curentDeleteSet (1), m_wantToEndGame( false ), m_alphaOverlay( 0.0 ),
   m_levelFileName ( levelFileName )
@@ -53,15 +53,15 @@ PlayingState::PlayingState( SubSystems& subSystems, const std::string& levelFile
 
 void PlayingState::init()        // State starten
 {
-    //GetSubSystems().renderer.displayLoadingScreen();
+    //getSubSystems().renderer.displayLoadingScreen();
 
     log(Info) << "Loading world...\n\n";
 
     try
     {
         // Welt von XML-Datei laden
-        DataLoader::loadToWorld( "data/player.info", m_components, getSubSystems().events );
-        DataLoader::loadToWorld( m_levelFileName, m_components, getSubSystems().events );
+        DataLoader::loadToWorld( "data/player.info", m_compMgr, getSubSystems().events );
+        DataLoader::loadToWorld( m_levelFileName, m_compMgr, getSubSystems().events );
     }
     catch (DataLoadException& e)
     {
@@ -72,8 +72,19 @@ void PlayingState::init()        // State starten
         return;
     }
 
-    m_components.getComponent<CompVariable>("Player", "JetpackEnergy")->setValue(1000); // TODO: possible segfault
-    m_components.getComponent<CompVariable>("Player", "Health")->setValue(1000); // TODO: possible segfault
+    CompVariable* varJetpackEnergy = m_compMgr.getComponent<CompVariable>("Player", "JetpackEnergy");
+    CompVariable* varHealth = m_compMgr.getComponent<CompVariable>("Player", "Health");
+    if (varJetpackEnergy && varHealth) {
+        varJetpackEnergy->setValue(1000);
+        varHealth->setValue(1000);
+    }
+    else {
+        log(Error) << "Missing 'JetpackEnergy' or 'Health' CompVariable in Player" << "\n";
+        // TODO: show error
+        boost::shared_ptr<MainMenuState> menuState (new MainMenuState(getSubSystems()));
+        getSubSystems().stateManager.changeState(menuState);
+        return;
+    }
 
     getSubSystems().sound.loadMusic( "data/Music/Aerospace.ogg", "music" );
     getSubSystems().sound.playMusic( "music", true, 0 );
@@ -85,9 +96,9 @@ void PlayingState::init()        // State starten
     boost::shared_ptr<FileHandler> fileHandler = boost::make_shared<FileHandler>(cWordLogFileName);
     logger.addHandler(fileHandler);
     logger << "World Entities:\n\n";
-    m_components.writeEntitiesToLogger(logger, Info);
+    m_compMgr.writeEntitiesToLogger(logger, Info);
 
-    getSubSystems().input.putMouseOnCenter();
+    getSubSystems().input.warpMouseToCenter();
 
     m_cameraController.setFollowPlayer( true );
 
@@ -140,7 +151,7 @@ void PlayingState::update()      // Spiel aktualisieren
         m_curentDeleteSet = 2;
 
         foreach(const EntityId& id, m_entitiesToDelete1)
-            m_components.removeEntity(id);
+            m_compMgr.removeEntity(id);
 
         m_entitiesToDelete1.clear();
     }
@@ -149,7 +160,7 @@ void PlayingState::update()      // Spiel aktualisieren
         m_curentDeleteSet = 1;
 
         foreach(const EntityId& id, m_entitiesToDelete2)
-            m_components.removeEntity(id);
+            m_compMgr.removeEntity(id);
 
         m_entitiesToDelete2.clear();
     }
@@ -189,8 +200,8 @@ void PlayingState::draw( float accumulator )        // Spiel zeichnen
 
     // Draw debug info
 #ifdef DRAW_DEBUG
-    CompPhysics* playerPhys = m_components.getComponent<CompPhysics>("Player");
-    CompPosition* playerPos = m_components.getComponent<CompPosition>("Player");
+    CompPhysics* playerPhys = m_compMgr.getComponent<CompPhysics>("Player");
+    CompPosition* playerPos = m_compMgr.getComponent<CompPosition>("Player");
     if ( playerPhys && playerPos )
     {
         const CompGravField* grav = playerPhys->getActiveGravField();
@@ -224,7 +235,7 @@ void PlayingState::draw( float accumulator )        // Spiel zeichnen
     {
         float x = 0.45f, y = 0.14f;
         float r = 0.2f, g = 0.9f, b = 0.3f;
-        float jetpackEnergy = m_components.getComponent<CompVariable>("Player", "JetpackEnergy")->getValue()/1000.0f;
+        float jetpackEnergy = m_compMgr.getComponent<CompVariable>("Player", "JetpackEnergy")->getValue()/1000.0f;
         float vertexCoord[8] = { x+0.05f, y-0.06f,
                                  x+0.05f, y+0.06f,
                                  x+0.05f + jetpackEnergy, y+0.06f,
@@ -243,7 +254,7 @@ void PlayingState::draw( float accumulator )        // Spiel zeichnen
     {
         float x = 0.45f, y = 0.35f;
         float r = 0.8f, g = 0.2f, b = 0.3f;
-        float health = m_components.getComponent<CompVariable>("Player", "Health")->getValue()/1000.0f;
+        float health = m_compMgr.getComponent<CompVariable>("Player", "Health")->getValue()/1000.0f;
         float vertexCoord[8] = { x+0.05f, y-0.06f,
                                  x+0.05f, y+0.06f,
                                  x+0.05f + health, y+0.06f,

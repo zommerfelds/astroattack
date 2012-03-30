@@ -9,6 +9,7 @@
 #include "Logger.h"
 #include "Exception.h"
 #include "Foreach.h"
+#include "DataLoader.h"
 
 #include <cmath>
 #include <fstream>
@@ -27,13 +28,13 @@ TextureManager::TextureManager()
     if ( il_dynamic_library_version < IL_VERSION )
     {
         // falsche Version
-        throw Exception(std::string() + "DevIL (IL) library is too old!\nFound " + boost::lexical_cast<std::string>(il_dynamic_library_version) + ", need > " + boost::lexical_cast<std::string>(IL_VERSION) + ".");
+        throw Exception("DevIL (IL) library is too old!\nFound " + boost::lexical_cast<std::string>(il_dynamic_library_version) + ", need > " + boost::lexical_cast<std::string>(IL_VERSION) + ".");
     }
     ILint ilu_dynamic_library_version = iluGetInteger(ILU_VERSION_NUM);
     if ( ilu_dynamic_library_version < ILU_VERSION )
     {
         // falsche Version
-        throw Exception(std::string() + "DevIL (ILU) library is too old!\nFound " + boost::lexical_cast<std::string>(ilu_dynamic_library_version) + ", need > " + boost::lexical_cast<std::string>(ILU_VERSION) + ".");
+        throw Exception("DevIL (ILU) library is too old!\nFound " + boost::lexical_cast<std::string>(ilu_dynamic_library_version) + ", need > " + boost::lexical_cast<std::string>(ILU_VERSION) + ".");
     }
 
     ilInit(); // Initialization von DevIL (IL)
@@ -181,7 +182,7 @@ void TextureManager::loadTexture(const std::string& fileName, TextureId id, cons
     catch (...)
     {
         // Error
-        throw Exception(std::string() + "Error while loading the texture \"" + fileName + "\"!\n" + iluErrorString(ilGetError()) + "\n");
+        throw DataLoadException("Error while loading the texture \"" + fileName + "\"!\n" + iluErrorString(ilGetError()) + "\n");
     }
     CheckOpenlGlError();
     if (ilGetError())
@@ -272,7 +273,7 @@ void AnimationManager::loadAnimation(const std::string& fileName, AnimationId id
     input_stream.open(fileName.c_str());
     if( input_stream.fail() ) // Fehler beim Öffnen
     {
-        throw Exception(std::string() + "Animation file '" + fileName + "' could not be opened.\n");
+        throw DataLoadException("Animation file '" + fileName + "' could not be opened.\n");
     }
 
     boost::shared_ptr<AnimInfo> pAnimInfo = boost::make_shared<AnimInfo>();
@@ -336,7 +337,7 @@ void AnimationManager::loadAnimation(const std::string& fileName, AnimationId id
     }
     catch (...)
     {
-        throw Exception(std::string() + "Error loading '" + fileName + "'. (Bad syntax?)\n");
+        throw DataLoadException("Error loading '" + fileName + "'. (Bad syntax?)\n");
     }
 
     input_stream.close();

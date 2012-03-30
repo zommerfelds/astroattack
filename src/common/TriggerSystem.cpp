@@ -32,7 +32,7 @@ void TriggerSystem::onRegisterComp(Component& component)
 
     foreach (boost::shared_ptr<Condition> cond, compTrigg->getConditions())
     {
-        if (cond->getId() == "CompareVariable") // TODO: use static vars
+        if (cond->getId() == ConditionCompareVariable::getIdStatic())
         {
             ConditionCompareVariable& condVar = static_cast<ConditionCompareVariable&>(*cond);
             m_gameEvents.variableModification.fire(condVar.getEntity(), condVar.getVariable(), &identity); // force an update

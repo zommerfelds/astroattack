@@ -34,8 +34,6 @@
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/info_parser.hpp>
 
-// TODO better checking of input data
-
 using boost::property_tree::ptree;
 
 DataLoadException::DataLoadException(const std::string& msg)
@@ -43,9 +41,26 @@ DataLoadException::DataLoadException(const std::string& msg)
 {
 }
 
+namespace
+{
+    template <typename T>
+    T get(const ptree& prop, const std::string& key, const std::string& errorMsg = "")
+    {
+        try
+        {
+            return prop.get<T>(key);
+        }
+        catch (const boost::property_tree::ptree_error& e)
+        {
+            throw DataLoadException(errorMsg + e.what());
+        }
+    }
+}
+
 // Load Level from XML
 void DataLoader::loadToWorld(const std::string& fileName, ComponentManager& compMgr, GameEvents& events)
 {
+    std::string errMsg;
     try
     {
         using boost::shared_ptr;
@@ -59,10 +74,11 @@ void DataLoader::loadToWorld(const std::string& fileName, ComponentManager& comp
         foreach(const ptree::value_type &value1, levelPropTree)
         {
             if (value1.first != "entity")
-                throw DataLoadException(fileName + " - At top level: parse error, expected 'entity', got '" + value1.first + "'");
+                throw DataLoadException(fileName + ": at top level: parse error, expected 'entity', got '" + value1.first + "'");
             const ptree& entityPropTree = value1.second;
 
-            std::string entityId = entityPropTree.get<std::string>("id");
+            EntityId entityId = get<std::string>(entityPropTree, "id", fileName + ": entity must have node 'id'");
+
             ComponentList entity;
             log(Info) << "  Creating entity \"" << entityId << "\"\n";
 
@@ -71,46 +87,53 @@ void DataLoader::loadToWorld(const std::string& fileName, ComponentManager& comp
                 if (value2.first == "id")
                     continue;
                 if (value2.first != "component")
-                    throw DataLoadException(fileName + " - In entity '" + entityId + "': parse error, expected 'component', got '" + value2.first + "'");
+                    throw DataLoadException(fileName + ": in entity '" + entityId + "': parse error, expected 'component', got '" + value2.first + "'");
                 const ptree& compPropTree = value2.second;
 
-                std::string compType = compPropTree.get<std::string>("type");
+                std::string compType = get<std::string>(compPropTree, "type", fileName + ": in entity '"+entityId+"', component missing 'type' node");
                 std::string compId = compPropTree.get("id", "");
                 log(Info) << "    Creating component \"" << compType << "\"... ";
 
                 shared_ptr<Component> component;
 
-                if ( compType == "CompShape" )
+                if ( compType == CompShape::getTypeIdStatic() )
                 {
                     if (compPropTree.count("polygon"))
                         component = boost::shared_ptr<CompShapePolygon>(new CompShapePolygon(compId, events));
                     else
                         component = boost::shared_ptr<CompShapeCircle>(new CompShapeCircle(compId, events));
                 }
-                else if ( compType == "CompPhysics" )
+                else if ( compType == CompPhysics::getTypeIdStatic() )
                     component = boost::shared_ptr<CompPhysics>(new CompPhysics(compId, events));
-                else if ( compType == "CompPlayerController" )
+                else if ( compType == CompPlayerController::getTypeIdStatic() )
                     component = boost::shared_ptr<CompPlayerController>(new CompPlayerController(compId, events));
-                else if ( compType == "CompPosition" )
+                else if ( compType == CompPosition::getTypeIdStatic() )
                     component = boost::shared_ptr<CompPosition>(new CompPosition(compId, events));
-                else if ( compType == "CompVisualAnimation" )
+                else if ( compType == CompVisualAnimation::getTypeIdStatic() )
                     component = boost::shared_ptr<CompVisualAnimation>(new CompVisualAnimation(compId, events));
-                else if ( compType == "CompVisualTexture" )
+                else if ( compType == CompVisualTexture::getTypeIdStatic() )
                     component = boost::shared_ptr<CompVisualTexture>(new CompVisualTexture(compId, events));
-                else if ( compType == "CompVisualMessage" )
+                else if ( compType == CompVisualMessage::getTypeIdStatic() )
                     component = boost::shared_ptr<CompVisualMessage>(new CompVisualMessage(compId, events));
-                else if ( compType == "CompGravField" )
+                else if ( compType == CompGravField::getTypeIdStatic() )
                     component = boost::shared_ptr<CompGravField>(new CompGravField(compId, events));
-                else if ( compType == "CompTrigger" )
+                else if ( compType == CompTrigger::getTypeIdStatic() )
                     component = boost::shared_ptr<CompTrigger>(new CompTrigger(compId, events));
-                else if ( compType == "CompVariable" )
+                else if ( compType == CompVariable::getTypeIdStatic() )
                     component = boost::shared_ptr<CompVariable>(new CompVariable(compId, events));
                 else
-                    throw DataLoadException(fileName + " - In entity '" + entityId + "' component '" + compId + "': invalid component type '" + compType + "'");
+                    throw DataLoadException(fileName + ": in entity '" + entityId + "' component '" + compId + "', invalid component type '" + compType + "'");
 
                 assert(component);
 
-                component->loadFromPropertyTree(compPropTree);
+                try
+                {
+                    component->loadFromPropertyTree(compPropTree);
+                }
+                catch (boost::property_tree::ptree_bad_path& e)
+                {
+                    throw DataLoadException(fileName + ": in " + entityId + "." + compId + "(" + compType + "), " + e.what());
+                }
 
                 entity.push_back(component);
 
@@ -124,7 +147,7 @@ void DataLoader::loadToWorld(const std::string& fileName, ComponentManager& comp
     }
     catch (boost::property_tree::ptree_error& e)
     {
-        throw DataLoadException(std::string("reading file '" + fileName + "': ") + e.what());
+        throw DataLoadException(e.what()); // ptree_error shows filename
     }
 }
 
@@ -296,7 +319,7 @@ void DataLoader::unLoadGraphics( const ResourceIds& resourcesToUnload, TextureMa
 
 void DataLoader::saveWorld(const std::string& fileName, const ComponentManager& compMgr)
 {
-    log(Info) << "Saving XML file \"" << fileName << "\"...\n";
+    log(Info) << "Saving world to file \"" << fileName << "\"...\n";
     
     ptree levelPropTree;
     
@@ -324,5 +347,5 @@ void DataLoader::saveWorld(const std::string& fileName, const ComponentManager& 
     
     write_info(fileName, levelPropTree, std::locale(), boost::property_tree::info_parser::info_writer_settings<char>('\t',1));
 
-    log(Info) << "[ Done saving XML file ]\n\n";
+    log(Info) << "[ Done ]\n\n";
 }

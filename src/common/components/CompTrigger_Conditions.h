@@ -33,7 +33,8 @@ class ConditionCompareVariable : public Condition
 public:
     ConditionCompareVariable(GameEvents& gameEvents, const EntityId& entity, const ComponentId& var, CompareOperator comp, int numToCompareWith);
 
-    ConditionId     getId()          const { return "CompareVariable"; }
+    ConditionId getId()        const { return getIdStatic(); }
+    static ConditionId getIdStatic() { return "CompareVariable"; }
     CompareOperator getCompareType() const { return m_compareType; }
     int             getNum()         const { return m_numToCompareWith; }
     EntityId    getEntity()      const { return m_entity; }
@@ -54,7 +55,8 @@ class ConditionContact : public Condition
 public:
     ConditionContact(GameEvents& gameEvents, const EntityId& entityId1, const EntityId& entityId2);
 
-    ConditionId  getId()      const { return "ConditionContact"; }
+    ConditionId  getId()  const { return getIdStatic(); }
+    static ConditionId getIdStatic() { return "ConditionContact"; }
     EntityId getEntity1() const { return m_entity1; }
     EntityId getEntity2() const { return m_entity2; }
 

@@ -44,7 +44,7 @@ public:
 private:
     static const GameStateId STATE_ID;
     
-    ComponentManager m_components;
+    ComponentManager m_compMgr;
     InputCameraController m_cameraController;        // Kamera
 
     EventConnection m_eventConnection1;

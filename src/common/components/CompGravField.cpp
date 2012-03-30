@@ -5,7 +5,6 @@
  */
 
 #include "CompGravField.h"
-// TODO: find out why you cannot change the order of this #includes
 #include "common/DataLoader.h"
 #include <boost/scoped_ptr.hpp>
 #include <boost/property_tree/ptree.hpp>

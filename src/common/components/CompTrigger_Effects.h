@@ -21,7 +21,8 @@ class EffectKillEntity : public Effect
 {
 public:
     EffectKillEntity(GameEvents& gameEvents, const EntityId& entityToKill);
-    EffectId getId() const { return "KillEntity"; }
+    EffectId        getId() const { return getIdStatic(); }
+    static EffectId getIdStatic() { return "KillEntity"; }
     void fire();
     std::string getEntityId() const { return m_entityToKill; }
 private:
@@ -33,7 +34,8 @@ class EffectDispMessage : public Effect
 {
 public:
     EffectDispMessage(GameEvents& gameEvents, const std::string& message, int timeMs);
-    EffectId getId() const { return "DispMessage"; }
+    EffectId        getId() const { return getIdStatic(); }
+    static EffectId getIdStatic() { return "DispMessage"; }
     void fire();
     std::string getMessage() const { return m_message; }
     int getTotalTime() const { return m_totalTimeMs; }
@@ -47,7 +49,8 @@ class EffectEndLevel : public Effect
 {
 public:
     EffectEndLevel(GameEvents& gameEvents, const std::string& message, bool win);
-    EffectId getId() const { return "EndLevel"; }
+    EffectId        getId() const { return getIdStatic(); }
+    static EffectId getIdStatic() { return "EndLevel"; }
     void fire();
     bool update() { return false; }
     std::string getMessage() const { return m_message; }
@@ -70,7 +73,8 @@ class EffectModifyVariable : public Effect
 {
 public:
     EffectModifyVariable(GameEvents& gameEvents, const EntityId& entity, const ComponentId& var, const ModifyId& changeType, int num);
-    EffectId getId() const { return "ModifyVariable"; }
+    EffectId        getId() const { return getIdStatic(); }
+    static EffectId getIdStatic() { return "ModifyVariable"; }
     void fire();
     int getNum() const { return m_num; }
     EntityId getEntity() const { return m_entity; }

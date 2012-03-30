@@ -88,7 +88,7 @@ public:
     bool getLMouseKeyState( ) const;       // status des linken Mausknopfes
     bool getLMouseKeyStateConsume();       // gleich wie oben, aber der Status der Taste zurückgesetzt (nicht mehr gedrückt)
     const Vector2D& getMousePos() const;   // Mausposition erhalten (0/0 ist oben links, 1/1 ist unten rechts)
-    void putMouseOnCenter();
+    void warpMouseToCenter();
     MouseState getMouseStateInArea( const Rect& rButtonRect ) const;    // Wird die gegebene Fläche gedrückt?
     MouseState getMouseStateInAreaConsume( const Rect& rButtonRect );   // gleich wie oben, aber der Status der Taste zurückgesetzt (nicht mehr gedrückt)
 

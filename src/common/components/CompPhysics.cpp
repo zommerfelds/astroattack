@@ -219,29 +219,29 @@ ContactVector CompPhysics::getContacts(bool getSensors) const
             continue;
         b2WorldManifold worldManifold;
         contactEdge->contact->GetWorldManifold( &worldManifold );
+        const size_t pointCount = contactEdge->contact->GetManifold()->pointCount;
+        Vector2D contactCenter; // average all points
+        for (size_t i=0; i<pointCount; i++)
+            contactCenter += worldManifold.points[i];
+        contactCenter *= (1.0f/pointCount);
 
-        float normalFactor = 1.0f; // TODO is this needed?
-        CompShape* thisShape;
-        CompShape* otherShape;
+        float normalFactor = 1.0f;
+        CompShape* thisShape = static_cast<CompShape*>(contactEdge->contact->GetFixtureA()->GetUserData());
+        CompShape* otherShape = static_cast<CompShape*>(contactEdge->contact->GetFixtureB()->GetUserData());
         if (contactEdge->contact->GetFixtureA()->GetBody() != m_body)
         {
             normalFactor = -1.0f;
-            thisShape = static_cast<CompShape*>(contactEdge->contact->GetFixtureB()->GetUserData());
-            otherShape = static_cast<CompShape*>(contactEdge->contact->GetFixtureA()->GetUserData());
-        }
-        else
-        {
-            thisShape = static_cast<CompShape*>(contactEdge->contact->GetFixtureA()->GetUserData());
-            otherShape = static_cast<CompShape*>(contactEdge->contact->GetFixtureB()->GetUserData());
+            std::swap(thisShape, otherShape);
         }
 
         boost::shared_ptr<ContactInfo> touchInfo = boost::shared_ptr<ContactInfo>(
                 new ContactInfo(*static_cast<CompPhysics*>(contactEdge->other->GetUserData()),
                         *thisShape,
                         *otherShape,
-                        worldManifold.points[0], // TODO: use all points (1 or 2?)
+                        contactCenter,
                         normalFactor * worldManifold.normal
                 ));
+
         vecTouchInfo.push_back(touchInfo);
     }
     return vecTouchInfo;

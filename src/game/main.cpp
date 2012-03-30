@@ -18,7 +18,7 @@ namespace {
 const std::string cConfigFileName = "data/config.info";
 }
 
-#define DONT_CATCH_EXCEPTION
+//#define CATCH_EXCEPTION
 
 // Programmstart!
 int main ( int argc, char* argv[] )
@@ -30,7 +30,9 @@ int main ( int argc, char* argv[] )
 
     putenv(const_cast<char*>("SDL_VIDEO_CENTERED=1"));
 
+#ifdef CATCH_EXCEPTION
     try
+#endif
     {
         bool restart;
         do
@@ -47,11 +49,11 @@ int main ( int argc, char* argv[] )
                 restart = true;
             }
 
-            // args.clear(); ??
+            args.clear();
         }
         while (restart);
     }
-#ifndef DONT_CATCH_EXCEPTION
+#ifdef CATCH_EXCEPTION
     catch ( Exception& e )
     {
         log(Fatal) << e.getMsg() << "\n"; // Diesen anzeigen
@@ -64,11 +66,11 @@ int main ( int argc, char* argv[] )
     {
         log(Fatal) << e.what() << "\n"; // Fehler ausgeben
     }
-#endif
     catch (...)
     {
         assert(false);
     }
+#endif
 
     writeConfig(cConfigFileName, gConfig);
 

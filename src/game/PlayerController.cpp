@@ -112,9 +112,9 @@ void PlayerController::update()
     // normalSteepestRight finden
     if ( isTouchingSth )
     {
-        // TODO: normals should be from ground to player, not from player to ground
         {
             // Normale zur steilsten Anstiegsmöchglichkeit nach rechts
+            // the normal goes away from the player's body
             Vector2D normWalkable( upVector.rotated( -cMaxWalkAngle-cPi/2.0f ) );
 
             float min_angle = 2.0f*cPi;       // kleinster gefundener Winkel
@@ -399,7 +399,7 @@ void PlayerController::update()
                 isIncreasingDeclination = true;
                 directionClw = false;
             }
-            // TODO: same here
+            // TODO: same here (think about that)
             //if ( (!isTouchingSth || usedJetpack) && playerCompPhysics->GetBody()->GetLinearVelocity().x > -maxVelXFly )
             if ( hVel > -maxFlyHVel )
             {

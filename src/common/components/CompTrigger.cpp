@@ -73,7 +73,6 @@ void CompTrigger::addCondition( boost::shared_ptr<Condition> cond )
 
 void CompTrigger::addEffect( boost::shared_ptr<Effect> trig )
 {
-    trig->m_pCompTrigger = this;
     m_effects.push_back(trig);
 }
 
@@ -87,7 +86,7 @@ void CompTrigger::loadFromPropertyTree(const ptree& propTree)
         {
             std::string condId = subPropTree.get<std::string>("id");
 
-            if (condId == "CompareVariable")
+            if (condId == ConditionCompareVariable::getIdStatic())
             {
                 EntityId entityId = subPropTree.get<std::string>("params.entity");
                 ComponentId varName = subPropTree.get<std::string>("params.var");
@@ -111,7 +110,7 @@ void CompTrigger::loadFromPropertyTree(const ptree& propTree)
 
                 addCondition(boost::make_shared<ConditionCompareVariable>(boost::ref(m_gameEvents), entityId, varName, compareType, numToCompare));
             }
-            else if (condId == "ConditionContact")
+            else if (condId == ConditionContact::getIdStatic())
             {
                 EntityId entity1 = subPropTree.get<std::string>("params.entity1");
                 EntityId entity2 = subPropTree.get<std::string>("params.entity2");
@@ -124,25 +123,25 @@ void CompTrigger::loadFromPropertyTree(const ptree& propTree)
         {
             std::string effectId = subPropTree.get<std::string>("id");
 
-            if (effectId == "KillEntity")
+            if (effectId == EffectKillEntity::getIdStatic())
             {
                 std::string entityName = subPropTree.get<std::string>("params.entity");
 
                 addEffect(boost::shared_ptr<EffectKillEntity>(new EffectKillEntity(m_gameEvents, entityName)));
             }
-            else if (effectId == "DispMessage")
+            else if (effectId == EffectDispMessage::getIdStatic())
             {
                 std::string msg = subPropTree.get<std::string>("params.msg");
                 int timems = subPropTree.get("params.timems", -1);
                 addEffect(boost::make_shared<EffectDispMessage>(boost::ref(m_gameEvents), msg, timems));
             }
-            else if (effectId == "EndLevel")
+            else if (effectId == EffectEndLevel::getIdStatic())
             {
                 std::string msg = subPropTree.get<std::string>("params.msg");
                 bool win = subPropTree.get<bool>("params.win");
                 addEffect(boost::make_shared<EffectEndLevel>(boost::ref(m_gameEvents), msg, win));
             }
-            else if (effectId == "ModifyVariable")
+            else if (effectId == EffectModifyVariable::getIdStatic())
             {
                 EntityId entityId = subPropTree.get<std::string>("params.entity");
                 ComponentId varName = subPropTree.get<std::string>("params.var");
@@ -175,7 +174,7 @@ void CompTrigger::writeToPropertyTree(ptree& propTree) const
         ptree condPropTree;
         condPropTree.add("id", cond->getId());
 
-        if (cond->getId() == "CompareVariable")
+        if (cond->getId() == ConditionCompareVariable::getIdStatic())
         {
             ConditionCompareVariable& condComp = static_cast<ConditionCompareVariable&>(*cond);
             condPropTree.add("params.entity", condComp.getEntity());
@@ -203,7 +202,7 @@ void CompTrigger::writeToPropertyTree(ptree& propTree) const
             }
             condPropTree.add("params.num", condComp.getNum());
         }
-        else if (cond->getId() == "ConditionContact")
+        else if (cond->getId() == ConditionContact::getIdStatic())
         {
             ConditionContact& condTouched = static_cast<ConditionContact&>(*cond);
             condPropTree.add("params.entity1", condTouched.getEntity1());
@@ -218,25 +217,25 @@ void CompTrigger::writeToPropertyTree(ptree& propTree) const
         ptree effectPropTree;
         effectPropTree.add("id", effect->getId());
 
-        if (effect->getId() == "KillEntity")
+        if (effect->getId() == EffectKillEntity::getIdStatic())
         {
             EffectKillEntity& effctKill = static_cast<EffectKillEntity&>(*effect);
             effectPropTree.add("params.entity", effctKill.getEntityId());
         }
-        else if (effect->getId() == "DispMessage")
+        else if (effect->getId() == EffectDispMessage::getIdStatic())
         {
             EffectDispMessage& effctMsg = static_cast<EffectDispMessage&>(*effect);
             effectPropTree.add("params.msg", effctMsg.getMessage());
             if (effctMsg.getTotalTime() != -1)
                 effectPropTree.add("params.timems", effctMsg.getTotalTime());
         }
-        else if (effect->getId() == "EndLevel")
+        else if (effect->getId() == EffectEndLevel::getIdStatic())
         {
             EffectEndLevel& effctWin = static_cast<EffectEndLevel&>(*effect);
             effectPropTree.add("params.msg", effctWin.getMessage());
             effectPropTree.add("params.win", effctWin.isWin());
         }
-        else if (effect->getId() == "ModifyVariable")
+        else if (effect->getId() == EffectModifyVariable::getIdStatic())
         {
             EffectModifyVariable& effctChange = static_cast<EffectModifyVariable&>(*effect);
             effectPropTree.add("params.entity", effctChange.getEntity());

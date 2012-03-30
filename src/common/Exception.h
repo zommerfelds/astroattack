@@ -10,22 +10,12 @@
 #include "common/Logger.h"
 #include <string>
 
-/*
-   - Ausnahmeklasse -
-
-   Diese Klasse speichert eine Zeichenkette wenn fehler geschehen.
-
-   So wird mit fatalen Fehlern umgegengen:
-   throw Exception( "Fehlertext" );
-*/
 class Exception : public std::exception
 {
 public:
     Exception ( const std::string &msg ) // std::string als Parameter
     : m_msg ( msg )
-    {
-        log(Error) << msg;
-    }
+    {}
 
     ~Exception() throw() {};
 

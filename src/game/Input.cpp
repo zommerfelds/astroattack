@@ -154,7 +154,7 @@ const Vector2D& InputSubSystem::getMousePos() const
     return m_windowMousePos;
 }
 
-void InputSubSystem::putMouseOnCenter()
+void InputSubSystem::warpMouseToCenter()
 {
     SDL_WarpMouse((Uint16)(gConfig.get<int>("ScreenWidth")/2), (Uint16)(gConfig.get<int>("ScreenHeight")/2));
 }
