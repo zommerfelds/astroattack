@@ -53,7 +53,7 @@ private:
     int m_velocityIterations;
     int m_positionIterations;
 
-    CompGravField m_rootGravField; // TODO: put this component in the manager
+    CompGravField m_rootGravField; // TODO: put this component in the manager?
 };
 
 #endif

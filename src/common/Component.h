@@ -62,6 +62,8 @@ private:
     friend class ComponentManager; // ComponentManager will set the entity ID and m_compManager
 };
 
+// IMPLEMENTATION
+// needs to be implemented here because of templates
 #include "ComponentManager.h"
 
 template <typename CompType>

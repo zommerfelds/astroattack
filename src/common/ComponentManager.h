@@ -61,7 +61,10 @@ private:
     Component* getComponent(const EntityId& entId, const ComponentType& compType, const ComponentId& compId) const;
 };
 
+// IMPLEMENTATION
 // needs to be implemented here because of templates
+
+#include "Component.h"
 template <typename CompType>
 CompType* ComponentManager::getComponent(const EntityId& entId, const ComponentId& compId)
 {
@@ -85,7 +88,7 @@ std::vector<CompType*> ComponentManager::getComponents(const EntityId& id)
 
     ComponentMap::iterator begin;
     ComponentMap::iterator end;
-    if (CompType::getTypeIdStatic() == "Component")
+    if (CompType::getTypeIdStatic() == Component::getTypeIdStatic())
     {
         begin = eit->second.begin();
         end = eit->second.end();
@@ -113,7 +116,7 @@ std::vector<const CompType*> ComponentManager::getComponents(const EntityId& id)
 
     ComponentMap::iterator begin;
     ComponentMap::iterator end;
-    if (CompType::getTypeIdStatic() == "Component")
+    if (CompType::getTypeIdStatic() == Component::getTypeIdStatic())
     {
         begin = eit->second.begin();
         end = eit->second.end();

@@ -6,7 +6,7 @@
 
 * Medium priority *
 
-- do some file input testing
+- Falling player, move cursor out of window, move back, strange behavior of camera
 - rule of three?
 - Fix TODOs
 - Test Init() => DeInit() => Init() on GameApp and SubSystems
