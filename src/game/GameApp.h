@@ -87,7 +87,7 @@ private:
     bool m_startGame; // true if the game should be started (or false if only a message should be printed i.e. '--version')
 
     bool m_fullScreen;         // if the game should be started in full screen mode
-    bool m_overRideFullScreen; // if the variable above should override the full screen option in the configuration file
+    bool m_overrideFullScreen; // if the variable above should override the full screen option in the configuration file
 
     bool m_doRestart;
 

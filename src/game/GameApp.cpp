@@ -41,7 +41,7 @@ GameApp::GameApp(const std::vector<std::string>& args) :
         m_fps ( 0 ),
         m_startGame ( true ),
         m_fullScreen ( false ),
-        m_overRideFullScreen ( false ),
+        m_overrideFullScreen ( false ),
         m_doRestart (false)
 {
     m_eventConnection = m_subSystems.events.quitGame.registerListener( boost::bind( &GameApp::onQuit, this, _1 ) );
@@ -165,6 +165,8 @@ bool GameApp::initVideo()
     SDL_GL_SetAttribute ( SDL_GL_GREEN_SIZE, gConfig.get<int>("ScreenBpp")/4 );  // Grösse der Greenkomponente im Framebuffer, in Bits
     SDL_GL_SetAttribute ( SDL_GL_BLUE_SIZE, gConfig.get<int>("ScreenBpp")/4 );   // Grösse der Blaukomponente im Framebuffer, in Bits
     SDL_GL_SetAttribute ( SDL_GL_ALPHA_SIZE, gConfig.get<int>("ScreenBpp")/4 );  // Grösse der Alphakomponente im Framebuffer, in Bits
+    SDL_GL_SetAttribute ( SDL_GL_DEPTH_SIZE, 16 ); // TODO: what value?
+    //SDL_GL_SetAttribute ( SDL_GL_BUFFER_SIZE, 16 );
     SDL_GL_SetAttribute ( SDL_GL_DOUBLEBUFFER, 1 );                              // Double Buffering aktivieren
     int AA = gConfig.get<int>("AntiAliasing");
     if (AA!=0)
@@ -178,7 +180,7 @@ bool GameApp::initVideo()
 
     // Videomodus einrichten. Überprüfen ob es Fehler gab.
     Uint32 flags = SDL_OPENGL;
-    if ( m_overRideFullScreen )
+    if ( m_overrideFullScreen )
     {
         if ( m_fullScreen )
             flags |= SDL_FULLSCREEN;
@@ -186,9 +188,29 @@ bool GameApp::initVideo()
     else if ( gConfig.get<bool>("FullScreen") )
         flags |= SDL_FULLSCREEN;
 
+    // XXX
+    const SDL_VideoInfo* vinfo = SDL_GetVideoInfo();
+    log(Error) << "hw available = " << vinfo->hw_available << "\n";
+
+    // XXX
+    char buf[100] = {0};
+    SDL_VideoDriverName(buf, 100);
+    log(Error) << "driver = " << buf << "\n";
+
+    if ( !SDL_VideoModeOK( gConfig.get<int>("ScreenWidth"), gConfig.get<int>("ScreenHeight"), gConfig.get<int>("ScreenBpp"), flags ) )
+        log(Error) << "Not OK\n";
+    
     // set up screen
     if ( !SDL_SetVideoMode ( gConfig.get<int>("ScreenWidth"), gConfig.get<int>("ScreenHeight"), gConfig.get<int>("ScreenBpp"), flags ) )
-        return false;
+        return false; // TODO: more info
+
+    GLenum errCode;
+    const GLubyte *errString;
+    if ((errCode = glGetError()) != GL_NO_ERROR)
+    {
+        errString = gluErrorString(errCode);
+        log(Error) << "GameApp::initVideo> OpenGL Error: " << errString << "\n";
+    }
 
     log(Info) << "[ Done ]\n\n";
 
@@ -415,12 +437,12 @@ void GameApp::parseArguments( const std::vector<std::string>& args )
         if ( args[i]=="-f" || args[i]=="--full-screen" )
         {
             m_fullScreen = true;
-            m_overRideFullScreen = true;
+            m_overrideFullScreen = true;
         }
         else if ( args[i]=="-w" || args[i]=="--windowed" )
         {
             m_fullScreen = false;
-            m_overRideFullScreen = true;
+            m_overrideFullScreen = true;
         }
         else if ( (args[i]=="-l" || args[i]=="--level") && i+1<args.size())
         {

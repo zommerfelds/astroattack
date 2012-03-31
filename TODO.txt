@@ -9,7 +9,6 @@
 - Falling player, move cursor out of window, move back, strange behavior of camera
 - rule of three?
 - Fix TODOs
-- Test Init() => DeInit() => Init() on GameApp and SubSystems
 - asynchonous fading out music (separate thread)
 - Test OpenGL error checking (glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR) did not generate error)
 - Kontakt Events nicht für jeden Box2D Kontakt erzeugen, sondern Box2D Kontakte zuerst verarbeiten und zusammenfügen.

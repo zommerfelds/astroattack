@@ -13,9 +13,9 @@ EditorFrameBase::EditorFrameBase( wxWindow* parent, wxWindowID id, const wxStrin
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 	
-	m_toolBar = this->CreateToolBar( wxTB_HORIZONTAL, wxID_ANY ); 
+	/*m_toolBar = this->CreateToolBar( wxTB_HORIZONTAL, wxID_ANY ); 
 	m_toolBar->AddTool( wxID_ANY, wxT("tool"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString ); 
-	m_toolBar->Realize();
+	m_toolBar->Realize();*/
 	
 	m_statusBar1 = this->CreateStatusBar( 1, wxST_SIZEGRIP, wxID_ANY );
 	m_menubar1 = new wxMenuBar( 0 );
