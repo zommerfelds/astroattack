@@ -70,7 +70,7 @@ bool writeConfig(const std::string& fileName, const ptree& config)
         else if (name == "FullScreen")
             comment = "true: full screen, false: windowed";
         else if (name == "MouseSensitivity")
-            comment = "Mouse sensitivity - between 0.0 and 1.0";
+            comment = "Mouse sensitivity - any floating point number";
         else if (name == "ScreenBpp")
             comment = "Bits per pixel";
         else if (name == "ScreenWidth")

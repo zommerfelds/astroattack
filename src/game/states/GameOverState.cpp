@@ -45,7 +45,7 @@ void GameOverState::resume()      // State wiederaufnehmen
 
 void GameOverState::update()      // Spiel aktualisieren
 {
-    if ( getSubSystems().input.getKeyState( Enter ) )
+    if ( getSubSystems().input.isKeyDown( Enter ) )
     {
         boost::shared_ptr<PlayingState> playState (new PlayingState(getSubSystems(), m_levelFileName)); // Zum Spiel-Stadium wechseln
         getSubSystems().stateManager.changeState( playState );

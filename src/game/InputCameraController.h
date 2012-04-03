@@ -24,7 +24,7 @@ class ComponentManager;
 class InputCameraController : public CameraController
 {
 public:
-    InputCameraController(const InputSubSystem& inputSubSystem, RenderSystem& renderSubSystem, ComponentManager& compMgr);
+    InputCameraController(InputSubSystem& inputSubSystem, RenderSystem& renderSubSystem, ComponentManager& compMgr);
 
     void update( float deltaTime ); // Kamarabewegung aktualisieren und auf Eingabe, die die Kamera beeinflusst, reagieren
 
@@ -34,7 +34,7 @@ public:
     }
 
 private:
-    const InputSubSystem& m_inputSubSystem;
+    InputSubSystem& m_inputSubSystem;
     ComponentManager& m_compManager;
 
     bool m_isFollowingPlayer;

@@ -17,7 +17,7 @@ class InputSubSystem;
 class PlayerController {
 
 public:
-    PlayerController(GameEvents&, const InputSubSystem&);
+    PlayerController(GameEvents&, InputSubSystem&);
     void update();
 
 private:
@@ -27,7 +27,7 @@ private:
 
     CompPlayerController* m_compPlayerContrl;
 
-    const InputSubSystem& m_inputSubSystem;
+    InputSubSystem& m_inputSubSystem;
 };
 
 

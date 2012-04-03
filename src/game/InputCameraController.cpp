@@ -34,7 +34,7 @@ const float cMaxZoom = 90000.0f;
 }
 
 // Konstruktor
-InputCameraController::InputCameraController(const InputSubSystem& inputSubSystem, RenderSystem& renderSubSystem, ComponentManager& compMgr)
+InputCameraController::InputCameraController(InputSubSystem& inputSubSystem, RenderSystem& renderSubSystem, ComponentManager& compMgr)
  : CameraController(renderSubSystem, (float(gConfig.get<int>("ScreenWidth")))/gConfig.get<int>("ScreenHeight")),
    m_inputSubSystem (inputSubSystem),
    m_compManager (compMgr),
@@ -52,10 +52,10 @@ void InputCameraController::update( float deltaTime ) // time_span in seconds
     // Zoom
     const float cZoomFactor = 4.0f;
     // Wenn Spieler + oder - gedrückt hat
-    if ( m_inputSubSystem.getKeyState ( CameraZoomIn ) ) // not frame rate independent (?)
+    if ( m_inputSubSystem.isKeyDown( CameraZoomIn ) ) // not frame rate independent (?)
         zoom( pow(1/cZoomFactor, deltaTime) );
         //SetZoom(m_scaleValue - cZoomFactor * deltaTime);
-    else if ( m_inputSubSystem.getKeyState ( CameraZoomOut ) )
+    else if ( m_inputSubSystem.isKeyDown( CameraZoomOut ) )
         zoom( pow(cZoomFactor, deltaTime) );
         //SetZoom(m_scaleValue + cZoomFactor * deltaTime);
 
@@ -64,19 +64,19 @@ void InputCameraController::update( float deltaTime ) // time_span in seconds
         // Wenn die Kamera den Spieler nicht folgt, kann man sie mit den Pfeiltasten bewegen.
         const float cScrollVelMag = 40.0f / getZoom(); // Verschiebungsgrösse
         Vector2D scrollVelocity;
-        if ( m_inputSubSystem.getKeyState ( CameraUp ) )
+        if ( m_inputSubSystem.isKeyDown( CameraUp ) )
             scrollVelocity.set(0, cScrollVelMag);
-        else if ( m_inputSubSystem.getKeyState ( CameraDown ) )
+        else if ( m_inputSubSystem.isKeyDown( CameraDown ) )
             scrollVelocity.set(0, -cScrollVelMag);
 
-        if ( m_inputSubSystem.getKeyState ( CameraLeft ) )
+        if ( m_inputSubSystem.isKeyDown( CameraLeft ) )
             scrollVelocity.set(-cScrollVelMag, 0);
-        else if ( m_inputSubSystem.getKeyState ( CameraRight ) )
+        else if ( m_inputSubSystem.isKeyDown( CameraRight ) )
             scrollVelocity.set(cScrollVelMag, 0);
 
         moveRelative( scrollVelocity.rotated(getCameraAngle()) * deltaTime, 0.0f );
 
-        if ( m_inputSubSystem.getRMouseKeyState() )
+        if ( m_inputSubSystem.isKeyDown(MouseR) )
         {
             moveAbsolute( screenToWorld(m_inputSubSystem.getMousePos()), 1.0f);
         }
@@ -174,12 +174,12 @@ void InputCameraController::update( float deltaTime ) // time_span in seconds
     }
 
     const float cRotVelocity = 2.0f;
-    if ( m_inputSubSystem.getKeyState ( CameraRotateCw ) )
+    if ( m_inputSubSystem.isKeyDown( CameraRotateCw ) )
         rotateRelative( -cRotVelocity * deltaTime, 0.0f);
-    else if ( m_inputSubSystem.getKeyState ( CameraRotateCcw ) )
+    else if ( m_inputSubSystem.isKeyDown( CameraRotateCcw ) )
         rotateRelative( cRotVelocity * deltaTime, 0.0f);
 
-    if ( m_inputSubSystem.getKeyState ( CameraResetAngle ) )
+    if ( m_inputSubSystem.isKeyDown( CameraResetAngle ) )
     {
         const float cRotResetVelocity = 2.0f;
         float angle = getCameraAngle();

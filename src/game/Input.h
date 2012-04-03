@@ -17,6 +17,8 @@
 
 enum Key
 {
+    MouseL,
+    MouseR,
     Up,                     // Spieler nach oben
     Right,                  // Spieler nach rechts
     Down,                   // Spieler nach unten
@@ -49,10 +51,10 @@ enum Key
 
 enum MouseState
 {
+    Away,
     MouseOver,
     PressedL,
-    PressedR,
-    Away
+    PressedR
 };
 
 // Bildschirmrechteck (um Fläche eines Knopfes darzustellen)
@@ -81,23 +83,17 @@ public:
 public:
     void update(); // aktualisieren
 
-    bool getKeyState ( Key key ) const;    // Status der SDL_Key Taste erhalten
-    bool getKeyStateConsume( Key key );    // gleich wie oben, aber der Status der Taste zurückgesetzt (nicht mehr gedrückt)
-    bool getRMouseKeyState( ) const;       // status des rechten Mausknopfes
-    bool getRMouseKeyStateConsume();       // gleich wie oben, aber der Status der Taste zurückgesetzt (nicht mehr gedrückt)
-    bool getLMouseKeyState( ) const;       // status des linken Mausknopfes
-    bool getLMouseKeyStateConsume();       // gleich wie oben, aber der Status der Taste zurückgesetzt (nicht mehr gedrückt)
+    bool isKeyDown(Key key, bool consume=false); // TODO: default consumed?
+    MouseState getMouseStateInArea(const Rect& buttonRect, bool consume=false);
     const Vector2D& getMousePos() const;   // Mausposition erhalten (0/0 ist oben links, 1/1 ist unten rechts)
     void warpMouseToCenter();
-    MouseState getMouseStateInArea( const Rect& rButtonRect ) const;    // Wird die gegebene Fläche gedrückt?
-    MouseState getMouseStateInAreaConsume( const Rect& rButtonRect );   // gleich wie oben, aber der Status der Taste zurückgesetzt (nicht mehr gedrückt)
 
 private:
-    Uint8* m_pKeystates;
-    std::set<Key> m_pKeysConsumed;
-    Uint8 m_mousestates;
-    bool m_RMouseConsumed;
-    bool m_LMouseConsumed;
+    bool testKey(Key key);
+
+    Uint8* m_sdlKeyStates;
+    std::set<Key> m_consumedKeys;
+    Uint8 m_sdlMouseStates;
     Vector2D m_windowMousePos;
     std::map<Key, SDLKey> m_keyMap;
 };

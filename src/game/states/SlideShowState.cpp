@@ -138,7 +138,7 @@ void SlideShowState::update()      // Spiel aktualisieren
         m_textUpdateCounter = 0;
     }
 
-    if ( getSubSystems().input.getKeyState( SlideShowNext ) )
+    if ( getSubSystems().input.isKeyDown( SlideShowNext ) )
     {
         if ( m_nextKeyDownOld == false && m_overlayAlpha == 0.0f )
         {
@@ -164,7 +164,7 @@ void SlideShowState::update()      // Spiel aktualisieren
         m_nextKeyDownOld = false;
     }
 
-    if ( getSubSystems().input.getKeyState( SlideShowBack ) )
+    if ( getSubSystems().input.isKeyDown( SlideShowBack ) )
     {
         if ( m_backKeyDownOld == false && m_overlayAlpha == 0.0f && m_currentSlide != 0 )
         {
@@ -190,7 +190,7 @@ void SlideShowState::update()      // Spiel aktualisieren
         m_backKeyDownOld = false;
     }
 
-    if ( getSubSystems().input.getKeyState( SlideShowSkip ) )
+    if ( getSubSystems().input.isKeyDown( SlideShowSkip ) )
     {
         //boost::shared_ptr<PlayingState> playState ( new PlayingState( GetSubSystems() ) ); // Zum Spiel-Stadium wechseln
         //GetSubSystems().stateManager->ChangeState( playState ); // State wird gewechselt (und diese wird gelöscht)

@@ -136,8 +136,10 @@ bool GameApp::initSDL()
     if ( SDL_Init( SDL_INIT_VIDEO | SDL_INIT_AUDIO ) == -1 )       // SDL initialisieren
         return false;
 
-    SDL_WM_SetCaption( GAME_NAME, NULL ); // Fensterbeschriftung
-    SDL_ShowCursor( SDL_DISABLE ); // Standart SDL Mauszeiger ausblenden
+    SDL_WM_SetCaption(GAME_NAME, NULL); // Fensterbeschriftung
+    SDL_ShowCursor(SDL_DISABLE);
+    if (gConfig.get<bool>("FullScreen")) // TODO: change this on config update
+        SDL_WM_GrabInput(SDL_GRAB_ON); // No cursor + SDL_GRAB_ON = relative mouse
 
     // Events, die ignoriert werden können
     SDL_EventState(SDL_MOUSEMOTION, SDL_IGNORE);
@@ -188,17 +190,10 @@ bool GameApp::initVideo()
     else if ( gConfig.get<bool>("FullScreen") )
         flags |= SDL_FULLSCREEN;
 
-    // XXX
-    const SDL_VideoInfo* vinfo = SDL_GetVideoInfo();
-    log(Error) << "hw available = " << vinfo->hw_available << "\n";
-
-    // XXX
-    char buf[100] = {0};
-    SDL_VideoDriverName(buf, 100);
-    log(Error) << "driver = " << buf << "\n";
-
-    if ( !SDL_VideoModeOK( gConfig.get<int>("ScreenWidth"), gConfig.get<int>("ScreenHeight"), gConfig.get<int>("ScreenBpp"), flags ) )
-        log(Error) << "Not OK\n";
+    if ( !SDL_VideoModeOK( gConfig.get<int>("ScreenWidth"), gConfig.get<int>("ScreenHeight"), gConfig.get<int>("ScreenBpp"), flags ) ) {
+        log(Error) << "Video mode not supported\n";
+        return false;
+    }
     
     // set up screen
     if ( !SDL_SetVideoMode ( gConfig.get<int>("ScreenWidth"), gConfig.get<int>("ScreenHeight"), gConfig.get<int>("ScreenBpp"), flags ) )

@@ -18,7 +18,7 @@ void GuiSystem::update()
         if ( m_groupsToHide.count( it->first ) == 0 )
             for ( std::vector< boost::shared_ptr<Widget> >::iterator it2 = it->second.begin(); it2 != it->second.end(); ++it2 )
             {
-                MouseState newMouseState = m_input.getMouseStateInAreaConsume( (*it2)->m_area );
+                MouseState newMouseState = m_input.getMouseStateInArea((*it2)->m_area, true);
                 if ( (*it2)->m_mouseState != newMouseState )
                     (*it2)->onMouseStateChanged(newMouseState);
                 (*it2)->m_mouseState = newMouseState;

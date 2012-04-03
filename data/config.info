@@ -7,8 +7,8 @@ EditorLevel data/Levels/level_editor.info
 ; true: full screen, false: windowed
 FullScreen false
 
-; Mouse sensitivity - between 0.0 and 1.0
-MouseSensitivity 1.0
+; Mouse sensitivity - any floating point number
+MouseSensitivity 0.8
 
 ; Bits per pixel
 ScreenBpp 32
