@@ -58,7 +58,9 @@ public:
 
     enum MatrixId
     {
-        World, GUI, Text
+        World, // game coordinates
+        GUI,   // (0,0) is top left, (1,1) is bottom right
+        Pixels // coordinates are pixel offset from top left
     };
 
     void setMatrix(MatrixId matrix);
@@ -72,7 +74,7 @@ public:
     void drawTexturedQuad(float texCoord[8], float vertexCoord[8], const std::string& texId, bool border=false, float alpha=1.0f);
     // einen Quadrat zeichnen
     void drawColorQuad(float vertexCoord[8], float r, float g, float b, float a, bool border=false);
-    // Schreibt Text
+    // draw string: only in GUI or Pixels mode
     void drawString(const std::string &str, const FontId &fontId, float x, float y, Align horizAlign=AlignLeft, Align vertAlign=AlignTop, float red=1.0f, float green=1.0f, float blue=1.0f, float alpha=1.0f);
 
     // -------- nur für MatrixWorld Modus --------

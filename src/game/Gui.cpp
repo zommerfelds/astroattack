@@ -62,17 +62,17 @@ WidgetLabel::WidgetLabel( float x, float y, const std::string& text, const FontM
 {
     float w = 0.0f, h = 0.0f;
     fontMngr.getDimensions(text, "FontW_m", w, h);
-    setArea( Rect( x, x+w/4.0f, y, y+h/3.0f ) );
+    setArea( Rect( x, x+w, y, y+h ) );
 }
 
 void WidgetLabel::draw( RenderSystem* pRenderer )
 {
-    /*float vertexCoord[8] = { GetArea().x1*4.0f, GetArea().y1*3.0f,
-                             GetArea().x1*4.0f, GetArea().y2*3.0f,
-                             GetArea().x2*4.0f, GetArea().y2*3.0f,
-                             GetArea().x2*4.0f, GetArea().y1*3.0f };
+    /*float vertexCoord[8] = { GetArea().x1, GetArea().y1,
+                               GetArea().x1, GetArea().y2,
+                               GetArea().x2, GetArea().y2,
+                               GetArea().x2, GetArea().y1 };
     pRenderer->DrawColorQuad( vertexCoord, 0.1f, 0.9f, 0.3f, 0.3f, true );*/
-    pRenderer->drawString( m_text, "FontW_m", getArea().x1*4, getArea().y1*3 );
+    pRenderer->drawString( m_text, "FontW_m", getArea().x1, getArea().y1 );
 }
 
 WidgetLabel::~WidgetLabel() {}
@@ -100,10 +100,10 @@ void WidgetButton::onMouseStateChanged( MouseState newState )
 
 void WidgetButton::draw( RenderSystem* pRenderer )
 {
-    float vertexCoord[8] = { getArea().x1*4.0f, getArea().y1*3.0f,
-                             getArea().x1*4.0f, getArea().y2*3.0f,
-                             getArea().x2*4.0f, getArea().y2*3.0f,
-                             getArea().x2*4.0f, getArea().y1*3.0f };
+    float vertexCoord[8] = { getArea().x1, getArea().y1,
+                             getArea().x1, getArea().y2,
+                             getArea().x2, getArea().y2,
+                             getArea().x2, getArea().y1 };
     pRenderer->drawColorQuad( vertexCoord, 0.1f, 0.9f, 0.3f, (getMouseState()==MouseOver||getMouseState()==PressedL)?0.3f:0.0f, true );
-    pRenderer->drawString( m_caption, "FontW_m", (getArea().x1+getArea().x2)*2.0f /* /2*4 */, (getArea().y1+getArea().y2)*1.5f /* /2*3 */, AlignCenter, AlignCenter, 1.0f, 1.0f, 1.0f, (getMouseState()==MouseOver||getMouseState()==PressedL)?1.0f:0.5f );
+    pRenderer->drawString( m_caption, "FontW_m", (getArea().x1+getArea().x2)*0.5f, (getArea().y1+getArea().y2)*0.5f, AlignCenter, AlignCenter, 1.0f, 1.0f, 1.0f, (getMouseState()==MouseOver||getMouseState()==PressedL)?1.0f:0.5f );
 }

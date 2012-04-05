@@ -44,10 +44,10 @@ const std::string menuNames[] =
     "OptionsMenu",
 };
 
-const float cTitleVertexCoord[8] = { 0.3f, 0.2f,
-                                     0.3f, 0.7f,
-                                     3.5f, 0.7f,
-                                     3.5f, 0.2f };
+const float cTitleVertexCoord[8] = { 0.15f, 0.07f,
+                                     0.15f, 0.2f,
+                                     0.85f, 0.2f,
+                                     0.85f, 0.07f };
 
 MainMenuState::MainMenuState( SubSystems& subSystems, SubMenu startingSubMenu )
 : GameState(subSystems),
@@ -92,15 +92,17 @@ void MainMenuState::init()        // State starten
 
 
     float x = 0.35f;
-    float y = 0.36f;
+    float y = 0.4f;
     float w=0.18f,h=0.05f;
+    float yspacing = 0.07f;
+    float yspacing2 = 0.04f;
 
     getSubSystems().gui.addWidget( menuNames[Main], make_shared<WidgetButton>( Rect(x,x+w,y,y+h), "Play", boost::bind( &MainMenuState::onPressedButPlay, this ), boost::bind( &MainMenuState::onPressedSound, this ) ) );
-    y += 0.07f;
+    y += yspacing;
     getSubSystems().gui.addWidget( menuNames[Main], make_shared<WidgetButton>( Rect(x,x+w,y,y+h), "About", boost::bind( &MainMenuState::onPressedButCredits, this ), boost::bind( &MainMenuState::onPressedSound, this ) ) );
-    y += 0.07f;
+    y += yspacing;
     getSubSystems().gui.addWidget( menuNames[Main], make_shared<WidgetButton>( Rect(x,x+w,y,y+h), "Options", boost::bind( &MainMenuState::onPressedButOptions, this ), boost::bind( &MainMenuState::onPressedSound, this ) ) );
-    y += 0.07f;
+    y += yspacing;
     getSubSystems().gui.addWidget( menuNames[Main], make_shared<WidgetButton>( Rect(x,x+w,y,y+h), "Quit", boost::bind( &MainMenuState::onPressedButExit, this ), boost::bind( &MainMenuState::onPressedSound, this ) ) );
 
     // *** Zurückknöpfe für Untermenüs ***
@@ -133,53 +135,53 @@ void MainMenuState::init()        // State starten
         else if ( value == "slides" )
             getSubSystems().gui.addWidget( menuNames[Play], boost::make_shared<WidgetButton>( Rect(x,x+w,y,y+h), caption, boost::bind( &MainMenuState::onPressedOpenSlideShow, this, file ), boost::bind( &MainMenuState::onPressedSound, this ) ) );
 		// NOTE: needs to specify boost:: because of ADL (see http://www.gamedev.net/topic/619313-visual-studio-namespace-problem-ambiguous-call-to-boostmake-shared/)
-        y += 0.07f;
+        y += yspacing;
     }
 
     // *** Über ***
-    x=0.2f;
+    x=0.15f;
     y=0.25f;
     getSubSystems().gui.addWidget( menuNames[Credits], make_shared<WidgetLabel>( x, y,
                               "== AstroAttack " GAME_VERSION " ==", getSubSystems().renderer.getFontManager() ) );
-    y+=0.05f;
+    y+=yspacing2;
     getSubSystems().gui.addWidget( menuNames[Credits], make_shared<WidgetLabel>( x, y,
                               "by Christian Zommerfelds", getSubSystems().renderer.getFontManager() ) );
-    y+=0.09f;
+    y+=yspacing;
     getSubSystems().gui.addWidget( menuNames[Credits], make_shared<WidgetLabel>( x, y,
                               "* Music *", getSubSystems().renderer.getFontManager() ) );
-    y+=0.04f;
+    y+=yspacing2;
     getSubSystems().gui.addWidget( menuNames[Credits], make_shared<WidgetLabel>( x, y,
                               " - Dj Mitch (SRT-M1tch) -> Menu", getSubSystems().renderer.getFontManager() ) );
-    y+=0.04f;
+    y+=yspacing2;
     getSubSystems().gui.addWidget( menuNames[Credits], make_shared<WidgetLabel>( x, y,
                               " - Sir LardyLarLar AKA Robin (FattysLoyalKnight) -> Intro", getSubSystems().renderer.getFontManager() ) );
-    y+=0.04f;
+    y+=yspacing2;
     getSubSystems().gui.addWidget( menuNames[Credits], make_shared<WidgetLabel>( x, y,
                               " - sr4cld - 4clD -> Spiel", getSubSystems().renderer.getFontManager() ) );
-    y+=0.09f;
+    y+=yspacing;
     getSubSystems().gui.addWidget( menuNames[Credits], make_shared<WidgetLabel>( x, y,
                               "* Sound *", getSubSystems().renderer.getFontManager() ) );
-    y+=0.04f;
+    y+=yspacing2;
     getSubSystems().gui.addWidget( menuNames[Credits], make_shared<WidgetLabel>( x, y,
                               " - soundsnap.com", getSubSystems().renderer.getFontManager() ) );
-    y+=0.09f;
+    y+=yspacing;
     getSubSystems().gui.addWidget( menuNames[Credits], make_shared<WidgetLabel>( x, y,
                               "* Libraries *", getSubSystems().renderer.getFontManager() ) );
-    y+=0.04f;
+    y+=yspacing2;
     getSubSystems().gui.addWidget( menuNames[Credits], make_shared<WidgetLabel>( x, y,
                               " - OpenGL, SDL, DevIL, FTGL, SDL_mixer, Box2D, Boost", getSubSystems().renderer.getFontManager() ) );
-    y+=0.09f;
+    y+=yspacing;
     getSubSystems().gui.addWidget( menuNames[Credits], make_shared<WidgetLabel>( x, y,
                               "Thanks for playing!", getSubSystems().renderer.getFontManager() ) );
 
     // *** Optionen ***
-    getSubSystems().gui.addWidget( menuNames[Options], make_shared<WidgetLabel>(  0.3f, 0.1f, "Screen resolution:", getSubSystems().renderer.getFontManager() ) );
-    getSubSystems().gui.addWidget( menuNames[Options], make_shared<WidgetLabel>(  0.1f, 0.8f, "Please change \"config.info\" for more options.", getSubSystems().renderer.getFontManager() ) );
+    getSubSystems().gui.addWidget( menuNames[Options], make_shared<WidgetLabel>( 0.3f, 0.1f, "Screen resolution:", getSubSystems().renderer.getFontManager() ) );
+    getSubSystems().gui.addWidget( menuNames[Options], make_shared<WidgetLabel>( 0.1f, 0.8f, "Please change \"config.info\" for more options.", getSubSystems().renderer.getFontManager() ) );
     
     x=0.3f;
     y=0.92f;
     getSubSystems().gui.addWidget( menuNames[Options], make_shared<WidgetButton>( Rect(x,x+w,y,y+h), "Cancel", boost::bind( &MainMenuState::onPressedButDiscardConfig, this ), boost::bind( &MainMenuState::onPressedSound, this ) ) );
-    x=0.5f;
+    x=yspacing;
     getSubSystems().gui.addWidget( menuNames[Options], make_shared<WidgetButton>( Rect(x,x+w,y,y+h), "Apply", boost::bind( &MainMenuState::onPressedButApplyConfig, this ), boost::bind( &MainMenuState::onPressedSound, this ) ) );
     
     // Auflösungen
@@ -259,13 +261,10 @@ void MainMenuState::draw( float /*accumulator*/ )        // Spiel zeichnen
     // Menühintergrund zeichnen
     {
         float texCoord[8] = { 0.0f, 0.0f,
-                             0.0f, 1.0f,
-                             1.0f, 1.0f,
-                             1.0f, 0.0f };
-        float vertexCoord[8] = { 0.0f, 0.0f,
-                                 0.0f, 3.0f,
-                                 4.0f, 3.0f,
-                                 4.0f, 0.0f };
+                              0.0f, 1.0f,
+                              1.0f, 1.0f,
+                              1.0f, 0.0f };
+        float* const & vertexCoord = texCoord;
         renderer.drawTexturedQuad( texCoord, vertexCoord, "menu" );
     }
 
@@ -277,7 +276,7 @@ void MainMenuState::draw( float /*accumulator*/ )        // Spiel zeichnen
                               1.0f, 1.0f,
                               1.0f, 0.0f };
         float titleVertexCoord[8] = {0.0f};
-        float offset = sin(m_titleIntensityPhase)*0.03f;
+        float offset = sin(m_titleIntensityPhase)*0.01f;
         titleVertexCoord[0] = cTitleVertexCoord[0] - offset;
         titleVertexCoord[2] = cTitleVertexCoord[2] - offset;
         titleVertexCoord[4] = cTitleVertexCoord[4] + offset;
@@ -301,12 +300,15 @@ void MainMenuState::draw( float /*accumulator*/ )        // Spiel zeichnen
                               0.0f, 1.0f,
                               1.0f, 1.0f,
                               1.0f, 0.0f };
-        float w = 0.04f;
-        float h = 0.05f;
-        float vertexCoord[8] = { mousePos.x      * 4,  mousePos.y      * 3,
-                                 mousePos.x      * 4, (mousePos.y + h) * 3,
-                                (mousePos.x + w) * 4, (mousePos.y + h) * 3,
-                                (mousePos.x + w) * 4,  mousePos.y      * 3 };
+
+        float aspectRatio = (float(gConfig.get<int>("ScreenWidth")))/gConfig.get<int>("ScreenHeight");
+
+        float w = 0.035;
+        float h = 0.035f * aspectRatio;
+        float vertexCoord[8] = { mousePos.x     ,  mousePos.y     ,
+                                 mousePos.x     , (mousePos.y + h),
+                                (mousePos.x + w), (mousePos.y + h),
+                                (mousePos.x + w),  mousePos.y      };
         renderer.drawTexturedQuad( texCoord, vertexCoord, "_cursor" );
     }
 }

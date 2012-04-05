@@ -139,8 +139,8 @@ void FontManager::getDimensions(const std::string &text, const FontId &fontId, f
     }
 
     getDetailedDimensions(text, *font_it->second.ftFont.get(), &w, &h, NULL, NULL, NULL);
-    w = w/m_renderer.getViewPortWidth()*4.0f;
-    h = h/m_renderer.getViewPortHeight()*3.0f;
+    w /= m_renderer.getViewPortWidth();
+    h /= m_renderer.getViewPortHeight();
 }
 
 void FontManager::getDetailedDimensions(const std::string &text, FTFont& font, float* totalWidth, float* totalHeight,

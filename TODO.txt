@@ -6,6 +6,7 @@
 
 * Medium priority *
 
+- Screen resolution/mouse/camera not yet perfect: try it with resolution 1000x400
 - Falling player, move cursor out of window, move back, strange behavior of camera
 - rule of three?
 - Fix TODOs

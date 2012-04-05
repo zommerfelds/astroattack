@@ -127,7 +127,7 @@ void RenderSystem::initOpenGL(int width, int height)
 
     // GUI Matrix aufstellen
     glLoadIdentity(); // Reset
-    gluOrtho2D( 0, 4, 3, 0 ); // orthogonalen 2D-Rendermodus
+    gluOrtho2D( 0, 1, 1, 0 ); // orthogonalen 2D-Rendermodus
     glGetFloatv(GL_PROJECTION_MATRIX, m_matrixGUI); // Matrix wird gespeichert
 
     glMatrixMode( GL_MODELVIEW );
@@ -142,7 +142,7 @@ void RenderSystem::resize(int width, int height)
     m_viewPortHeight = height;
     glViewport(0, 0, width, height);
 
-    setMatrix(Text);
+    setMatrix(Pixels);
 
     glMatrixMode(GL_PROJECTION);
 
@@ -236,11 +236,11 @@ void RenderSystem::setMatrix(MatrixId matrix)
             glLoadMatrixf( m_matrixGUI );
             m_currentMatrix = GUI;
         }
-        else if (matrix == Text)
+        else if (matrix == Pixels)
         {
             // the tex matrix should always stay the same, so just load the dafault numbers
             glLoadMatrixf( m_matrixText );
-            m_currentMatrix = Text;
+            m_currentMatrix = Pixels;
         }
         glMatrixMode ( GL_MODELVIEW );
         glLoadIdentity();
@@ -594,15 +594,15 @@ void RenderSystem::drawString( const std::string &str, const FontId &fontId, flo
     MatrixId stored_matrix = m_currentMatrix;
     if (m_currentMatrix == World)
     {
-        // TODO convert world to text coordinates
+        assert(false);
     }
     else if (m_currentMatrix == GUI)
     {
         // convert GUI to FTGL coordinates
-        x = x / 4.0f * getViewPortWidth();
-        y = (1.0f - y / 3.0f) * getViewPortHeight();
+        x = x * getViewPortWidth();
+        y = (1.0f - y) * getViewPortHeight();
     }
-    setMatrix(Text);
+    setMatrix(Pixels);
     m_fontManager.drawString(str, fontId, x, y, horizAlign, vertAlign, red, green, blue, alpha);
     setMatrix(stored_matrix);
 }
@@ -707,17 +707,18 @@ void RenderSystem::drawVisualAnimationComps()
 
 void RenderSystem::drawVisualMessageComps()
 {
-    int y = 0;
-    float lineHeight = 0.2f;
+    float x = 0.1f, y = 0.2f;
+    int line = 0;
+    float lineHeight = 0.07f;
     foreach(CompVisualMessage* pMsgComp, m_msgComps)
     {
-        drawString( std::string("- ")+pMsgComp->getMsg(), "FontW_m", 0.4f, 0.6f + y*lineHeight );
-        ++y;
+        drawString( std::string("- ")+pMsgComp->getMsg(), "FontW_m", x, y + line*lineHeight );
+        ++line;
     }
     foreach(const MessageAndTimeOut& mt, m_msgCompsManaged)
     {
-        drawString( std::string("- ")+mt.first->getMsg(), "FontW_m", 0.4f, 0.6f + y*lineHeight );
-        ++y;
+        drawString( std::string("- ")+mt.first->getMsg(), "FontW_m", x, y + line*lineHeight );
+        ++line;
     }
 }
 
@@ -753,7 +754,7 @@ void RenderSystem::displayTextScreen( const std::string& text )
 {
     setMatrix(GUI);
     drawOverlay(0.0f, 0.0f, 0.0f, 1.0f);
-    drawString(text, "FontW_m", 2.0f, 1.5f, AlignCenter, AlignCenter);
+    drawString(text, "FontW_m", 0.5f, 0.5f, AlignCenter, AlignCenter);
 
     flipBuffer();
 }

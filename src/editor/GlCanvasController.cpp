@@ -199,13 +199,10 @@ void GlCanvasController::onPaint(wxPaintEvent& evt)
     // Hintergrundbild zeichnen
     {
         float texCoord[8] = { 0.0f, 0.0f,
-                             0.0f, 1.0f,
-                             1.0f, 1.0f,
-                             1.0f, 0.0f };
-        float vertexCoord[8] = { 0.0f, 0.0f,
-                                   0.0f, 3.0f,
-                                 4.0f, 3.0f,
-                                 4.0f, 0.0f };
+                              0.0f, 1.0f,
+                              1.0f, 1.0f,
+                              1.0f, 0.0f };
+        float* const & vertexCoord = texCoord;
         m_renderer.drawTexturedQuad( texCoord, vertexCoord, "_starfield" );
     }
 
@@ -246,14 +243,12 @@ void GlCanvasController::onPaint(wxPaintEvent& evt)
         Vector2D mousePos = m_cameraController.screenToWorld(m_lastCursorPos);
         mousePos = snapToGrid(mousePos);
         mousePos = m_cameraController.worldToScreen(mousePos);
-        mousePos.x = mousePos.x * 4.0f;
-        mousePos.y = mousePos.y * 3.0f;
         m_renderer.drawEditorCursor(mousePos);
     }
 
     //m_renderer.drawVisualMessageComps();
 
-    m_renderer.setMatrix(RenderSystem::Text);
+    m_renderer.setMatrix(RenderSystem::Pixels);
     // draw selected texture
     {
         float texCoord[8] = { 0.0f, 0.0f,

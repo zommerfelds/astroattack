@@ -247,7 +247,7 @@ void SlideShowState::update()      // Spiel aktualisieren
             m_overlayAlpha = 0.0f;
     }
 
-    const float maxOffset = 0.05f;
+    const float maxOffset = 0.01f;
     const int cSteps = 180;
     //const float randMaxOffset = 0.005f;
     const float epsilon = 0.001f;
@@ -297,45 +297,31 @@ void SlideShowState::draw( float /*accumulator*/ )        // Spiel zeichnen
                              0.0f, 1.0f,
                              1.0f, 1.0f,
                              1.0f, 0.0f };
-        float vertexCoord[8] = { 0.3f + m_imageCornerOffsetX[0] + m_imageCornerOffsetMasterX, 0.07f + m_imageCornerOffsetY[0] + m_imageCornerOffsetMasterY,
-                                 0.3f + m_imageCornerOffsetX[1] + m_imageCornerOffsetMasterX, 2.47f + m_imageCornerOffsetY[1] + m_imageCornerOffsetMasterY,
-                                 3.7f + m_imageCornerOffsetX[2] + m_imageCornerOffsetMasterX, 2.47f + m_imageCornerOffsetY[2] + m_imageCornerOffsetMasterY,
-                                 3.7f + m_imageCornerOffsetX[3] + m_imageCornerOffsetMasterX, 0.07f + m_imageCornerOffsetY[3] + m_imageCornerOffsetMasterY };
+        float vertexCoord[8] = { 0.05f + m_imageCornerOffsetX[0] + m_imageCornerOffsetMasterX, 0.02f + m_imageCornerOffsetY[0] + m_imageCornerOffsetMasterY,
+                                 0.05f + m_imageCornerOffsetX[1] + m_imageCornerOffsetMasterX, 0.86f + m_imageCornerOffsetY[1] + m_imageCornerOffsetMasterY,
+                                 0.95f + m_imageCornerOffsetX[2] + m_imageCornerOffsetMasterX, 0.86f + m_imageCornerOffsetY[2] + m_imageCornerOffsetMasterY,
+                                 0.95f + m_imageCornerOffsetX[3] + m_imageCornerOffsetMasterX, 0.02f + m_imageCornerOffsetY[3] + m_imageCornerOffsetMasterY };
         renderer.drawTexturedQuad( texCoord, vertexCoord, m_slideShow.slides[m_currentSlide].imageFileName, true );
     }
     // Text zeichnen
-    renderer.drawString( m_slideShow.slides[m_currentSlide].textPages[m_currentTextPage].substr(0,m_dispCharCount), "FontW_m", 0.3f, 2.55f );
+    renderer.drawString( m_slideShow.slides[m_currentSlide].textPages[m_currentTextPage].substr(0,m_dispCharCount), "FontW_m", 0.15f, 0.875f );
     
-    // Farbe über dem Text (nur Test)
+    // Farbe über den Text (nur Test)
     /*{
         float w=0.0f,h=0.0f;
-        renderer.GetFontManager()->GetDimensionsOfText( m_slideShow.slides[m_currentSlide].text.substr(0,m_dispCharCount), w, h, "FontW_b" );
-        float vertexCoord[8] = { 0.3f, 2.53f,
-                                 0.3f, 2.53f+h,
-                                 0.3f+w, 2.53f+h,
-                                 0.3f+w, 2.53f };
-        renderer.DrawColorQuad( vertexCoord, 0.2f, 0.9f, 0.3f, 0.6f, false );
+        renderer.getFontManager().getDimensions( m_slideShow.slides[m_currentSlide].textPages[0].substr(0,m_dispCharCount), "FontW_m", w, h );
+        float vertexCoord[8] = { 0.15f, 0.8f,
+                                 0.15f, 0.8f+h,
+                                 0.15f+w, 0.8f+h,
+                                 0.15f+w, 0.8f };
+        renderer.drawColorQuad( vertexCoord, 0.2f, 0.9f, 0.3f, 0.6f, false );
     }*/
 
     // schwarze Blendung zeichnen
     renderer.drawOverlay( 0.0f, 0.0f, 0.0f, m_overlayAlpha );
 
     // Info-Text
-    renderer.drawString( "PFEIL NACH RECHTS: weiterfahren   PFEIL NACH LINKS: zurück   DELETE: Intro überspringen", "FontW_s", 0.8f, 2.92f );
-
-    // Maus zeichnen
-    /*{
-        const Vector2D* mousePos = GetSubSystems().input->MousePos();
-        float texCoord[8] = { 0.0f, 0.0f,
-                             0.0f, 1.0f,
-                             1.0f, 1.0f,
-                             1.0f, 0.0f };
-        float vertexCoord[8] = { mousePos->x*4, mousePos->y*3,
-                                 mousePos->x*4, (mousePos->y+0.03f)*3,
-                                 (mousePos->x+0.025f)*4, (mousePos->y+0.03f)*3,
-                                 (mousePos->x+0.025f)*4, mousePos->y*3 };
-        renderer.DrawTexturedQuad( texCoord, vertexCoord, "_cursor" );
-    }*/
+    renderer.drawString( "PFEIL NACH RECHTS: weiterfahren   PFEIL NACH LINKS: zurück   DELETE: Intro überspringen", "FontW_s", 0.5f, 1.0f, AlignCenter, AlignBottom );
 }
 
 void SlideShowState::loadSlideShow()

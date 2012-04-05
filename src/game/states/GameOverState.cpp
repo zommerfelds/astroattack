@@ -63,7 +63,7 @@ void GameOverState::draw( float /*accumulator*/ )        // Spiel zeichnen
     RenderSystem& renderer = getSubSystems().renderer;
 
     renderer.drawOverlay( cBackgroundColor[0], cBackgroundColor[1], cBackgroundColor[2], 1.0f );
-    renderer.drawString( m_stringToShow, "FontW_b", 2.0f, 1.5f, AlignCenter, AlignCenter );
+    renderer.drawString( m_stringToShow, "FontW_b", 0.5f, 0.5f, AlignCenter, AlignCenter );
 
-    renderer.drawString( "ENTER: erneut starten   ESC: abbrechen", "FontW_m", 2.0f, 3.0f, AlignCenter, AlignBottom );
+    renderer.drawString( "ENTER: erneut starten   ESC: abbrechen", "FontW_m", 0.5f, 1.0f, AlignCenter, AlignBottom );
 }

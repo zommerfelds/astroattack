@@ -181,13 +181,10 @@ void PlayingState::draw( float accumulator )        // Spiel zeichnen
     // Hintergrundbild zeichnen
     {
         float texCoord[8] = { 0.0f, 0.0f,
-                             0.0f, 1.0f,
-                             1.0f, 1.0f,
-                             1.0f, 0.0f };
-        float vertexCoord[8] = { 0.0f, 0.0f,
-                                 0.0f, 3.0f,
-                                 4.0f, 3.0f,
-                                 4.0f, 0.0f };
+                              0.0f, 1.0f,
+                              1.0f, 1.0f,
+                              1.0f, 0.0f };
+        float* const & vertexCoord = texCoord;
         renderer.drawTexturedQuad( texCoord, vertexCoord, "_starfield" ); // sky
     }
     // Weltmodus
@@ -233,40 +230,40 @@ void PlayingState::draw( float accumulator )        // Spiel zeichnen
 
     // Jetpack %-display
     {
-        float x = 0.45f, y = 0.14f;
-        float r = 0.2f, g = 0.9f, b = 0.3f;
+        float x = 0.11f, y = 0.04f;
+        float r = 0.2f, g = 0.9f, b = 0.3f, a = 0.6f;
         float jetpackEnergy = m_compMgr.getComponent<CompVariable>("Player", "JetpackEnergy")->getValue()/1000.0f;
-        float vertexCoord[8] = { x+0.05f, y-0.06f,
-                                 x+0.05f, y+0.06f,
-                                 x+0.05f + jetpackEnergy, y+0.06f,
-                                 x+0.05f + jetpackEnergy, y-0.06f };
-        renderer.drawColorQuad( vertexCoord, r, g, b, 0.6f, true );
+        float vertexCoord[8] = { x+0.025f, y-0.02f,
+                                 x+0.025f, y+0.02f,
+                                 x+0.025f + jetpackEnergy * 0.3f, y+0.02f,
+                                 x+0.025f + jetpackEnergy * 0.3f, y-0.02f };
+        renderer.drawColorQuad(vertexCoord, r, g, b, a, true);
 
         std::stringstream ss;
         ss.precision( 1 );
         ss.setf(std::ios::fixed, std::ios::floatfield);
         ss << jetpackEnergy*100 << "%";
         renderer.drawString( "Jetpack", "FontW_m", x, y, AlignRight, AlignCenter, 1.0f, 1.0f, 1.0f, 1.0f );
-        renderer.drawString( ss.str(), "FontW_m", x+0.1f, y, AlignLeft, AlignCenter, 1.0f, 1.0f, 1.0f, 1.0f );
+        renderer.drawString( ss.str(), "FontW_m", x+0.035f, y, AlignLeft, AlignCenter, 1.0f, 1.0f, 1.0f, 1.0f );
     }
 
     // Health %-display
     {
-        float x = 0.45f, y = 0.35f;
-        float r = 0.8f, g = 0.2f, b = 0.3f;
+        float x = 0.11f, y = 0.09f;
+        float r = 0.8f, g = 0.2f, b = 0.3f, a = 0.6f;
         float health = m_compMgr.getComponent<CompVariable>("Player", "Health")->getValue()/1000.0f;
-        float vertexCoord[8] = { x+0.05f, y-0.06f,
-                                 x+0.05f, y+0.06f,
-                                 x+0.05f + health, y+0.06f,
-                                 x+0.05f + health, y-0.06f };
-        renderer.drawColorQuad( vertexCoord, r, g, b, 0.6f, true );
+        float vertexCoord[8] = { x+0.025f, y-0.02f,
+                                 x+0.025f, y+0.02f,
+                                 x+0.025f + health * 0.3f, y+0.02f,
+                                 x+0.025f + health * 0.3f, y-0.02f };
+        renderer.drawColorQuad( vertexCoord, r, g, b, a, true );
 
         std::stringstream ss;
         ss.precision( 1 );
         ss.setf(std::ios::fixed, std::ios::floatfield);
         ss << health*100 << "%";
         renderer.drawString( "Health", "FontW_m", x, y, AlignRight, AlignCenter, 1.0f, 1.0f, 1.0f, 1.0f );
-        renderer.drawString( ss.str(), "FontW_m", x+0.1f, y, AlignLeft, AlignCenter, 1.0f, 1.0f, 1.0f, 1.0f );
+        renderer.drawString( ss.str(), "FontW_m", x+0.037f, y, AlignLeft, AlignCenter, 1.0f, 1.0f, 1.0f, 1.0f );
     }
 
     if ( m_alphaOverlay != 0.0f )
