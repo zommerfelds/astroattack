@@ -7,7 +7,7 @@ AC_LANG(C++)
 # enable compilation of unit tests (needs google test library)
 enabletest=true
 AC_ARG_ENABLE( [test],
-               [  --enable-test    Compile the tests (Requires Google C++ Testing Framework)],
+               [  --disable-test    Compile the tests (Requires Google C++ Testing Framework)],
                [case "${enableval}" in
                yes) enabletest=true ;;
                no)  enabletest=false ;;
@@ -17,14 +17,14 @@ AC_ARG_ENABLE( [test],
              )
 
 AS_VAR_IF(enabletest, true,
-[AC_CHECK_HEADER([gtest/gtest.h],[],[AC_MSG_ERROR([You need the Google C++ Testing Framework])])],
+[AC_CHECK_HEADER([gtest/gtest.h],[],[AC_MSG_ERROR([You need the Google C++ Testing Framework (libgtest). Or use --disable-test to disable unit tests.])])],
 [])
 AM_CONDITIONAL([ENABLETEST], [test x$enabletest = xtrue])
 
 AC_SEARCH_LIBS(tan, m, [], [AC_MSG_ERROR("libm required!")])
 AC_SEARCH_LIBS(SDL_Init, SDL, [], [AC_MSG_ERROR("SDL required!")])
 AC_SEARCH_LIBS(ftglGetFontError, ftgl, [], [AC_MSG_ERROR("FTGL required!")])
-AC_SEARCH_LIBS(b2_version, Box2D, [], [AC_MSG_ERROR("Box2D required!")])
+AC_SEARCH_LIBS(b2_version, Box2D, [], [AC_MSG_ERROR("Box2D required!")]) # Box2D vs box2d?
 AC_SEARCH_LIBS(Mix_OpenAudio, SDL_mixer, [], [AC_MSG_ERROR("SDL_mixer required!")])
 AC_SEARCH_LIBS(glViewport, GL, [], [AC_MSG_ERROR("OpenGL required!")])
 AC_SEARCH_LIBS(gluBuild2DMipmaps, GLU, [], [AC_MSG_ERROR("OpenGL Utility Library (libGLU) required!")])
@@ -40,18 +40,23 @@ AM_OPTIONS_WXCONFIG
 reqwx=2.4.0
 AM_PATH_WXCONFIG($reqwx, wxWin=1)
 if test "$wxWin" != 1; then
-    AC_MSG_ERROR([
-        wxWidgets must be installed on your system.
+	AC_MSG_ERROR([
+		wxWidgets must be installed on your system.
  
-        Please check that wx-config is in path, the directory
-        where wxWidgets libraries are installed (returned by
-        'wx-config --libs' or 'wx-config --static --libs' command)
-        is in LD_LIBRARY_PATH or equivalent variable and
-        wxWidgets version is $reqwx or above.
-        ])
+		Please check that wx-config is in path, the directory
+		where wxWidgets libraries are installed (returned by
+		'wx-config --libs' or 'wx-config --static --libs' command)
+		is in LD_LIBRARY_PATH or equivalent variable and
+		wxWidgets version is $reqwx or above.
+		])
 fi
 
 AC_SUBST(WX_GL_LIBS, `wx-config --gl-libs`)
+
+CPPFLAGS="$CPPFLAGS $WX_CPPFLAGS"
+CXXFLAGS="$CXXFLAGS $WX_CXXFLAGS_ONLY"
+CFLAGS="$CFLAGS $WX_CFLAGS_ONLY"
+LIBS="$LIBS $WX_LIBS"
 
 AC_CONFIG_FILES(Makefile)
 AC_OUTPUT

@@ -78,8 +78,8 @@ private:
     void onMenuAbout(wxCommandEvent&);
     void onEntityIdFieldEnter(wxCommandEvent&);
     void onCompIdFieldEnter(wxCommandEvent&);
-    void onPropEdit(wxCommandEvent&);
-    void onPropEdit(wxListEvent&);
+    void onPropEditBut(wxCommandEvent&);
+    void onPropEditList(wxListEvent&);
     void onPropEdit();
     void onPropNew(wxCommandEvent&);
 

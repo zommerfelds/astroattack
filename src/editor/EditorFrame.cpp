@@ -57,9 +57,9 @@ BEGIN_EVENT_TABLE(EditorFrame, wxFrame)
     EVT_MENU    (wxID_SAVEAS, EditorFrame::onMenuSaveAs)
     EVT_MENU    (wxID_EXIT,   EditorFrame::onMenuExit)
     EVT_MENU    (wxID_ABOUT,  EditorFrame::onMenuAbout)
-    EVT_BUTTON  (ID_BUTEDITPROP, EditorFrame::onPropEdit)
+    EVT_BUTTON  (ID_BUTEDITPROP, EditorFrame::onPropEditBut)
     EVT_BUTTON  (ID_BUTNEWPROP, EditorFrame::onPropNew)
-    EVT_LIST_ITEM_ACTIVATED  (ID_PROPLIST, EditorFrame::onPropEdit)
+    EVT_LIST_ITEM_ACTIVATED  (ID_PROPLIST, EditorFrame::onPropEditList)
     EVT_LIST_ITEM_SELECTED   (wxID_ANY, EditorFrame::onListItemSelected)
     EVT_LIST_ITEM_DESELECTED (wxID_ANY, EditorFrame::onListItemDeselected)
     EVT_TEXT_ENTER (ID_ENTITYIDFIELD, EditorFrame::onEntityIdFieldEnter)
@@ -388,12 +388,12 @@ void EditorFrame::onMenuAbout(wxCommandEvent&)
     dialog.ShowModal();
 }
 
-void EditorFrame::onPropEdit(wxCommandEvent&)
+void EditorFrame::onPropEditBut(wxCommandEvent&)
 {
     onPropEdit();
 }
 
-void EditorFrame::onPropEdit(wxListEvent&)
+void EditorFrame::onPropEditList(wxListEvent&)
 {
     onPropEdit();
 }
