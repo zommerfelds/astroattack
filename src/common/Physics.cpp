@@ -204,7 +204,7 @@ void PhysicsSystem::onUnregisterComp(Component& component)
 
 void PhysicsSystem::onRegisterCompPhys(CompPhysics& compPhys)
 {
-    // get position from CompPosition, if it exists
+    // get position from CompPosition, if it exists, else 0,0/0
     CompPosition* compPos = compPhys.getSiblingComponent<CompPosition>();
     if (compPos)
     {

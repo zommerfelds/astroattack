@@ -26,9 +26,9 @@ class InputCameraController : public CameraController
 public:
     InputCameraController(InputSubSystem& inputSubSystem, RenderSystem& renderSubSystem, ComponentManager& compMgr);
 
-    void update( float deltaTime ); // Kamarabewegung aktualisieren und auf Eingabe, die die Kamera beeinflusst, reagieren
+    void update(float deltaTime); // Kamarabewegung aktualisieren und auf Eingabe, die die Kamera beeinflusst, reagieren
 
-    void setFollowPlayer( bool follow ); // soll die Kamera den Spieles folgen oder nicht?
+    void setFollowPlayer(bool follow); // soll die Kamera den Spieles folgen oder nicht?
     bool isFollowingPlayer() const {
         return m_isFollowingPlayer;
     }

@@ -73,8 +73,6 @@ private:
     unsigned int m_dispCharCount; // Anzahl zu zeichnende Buchstaben vom Text, das momentan angezeigt wird
 
     unsigned int m_textUpdateCounter;
-    bool m_nextKeyDownOld;
-    bool m_backKeyDownOld;
 
     float m_imageCornerOffsetXTarget[4];
     float m_imageCornerOffsetYTarget[4];

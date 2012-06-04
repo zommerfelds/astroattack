@@ -72,7 +72,7 @@ GlCanvasController::GlCanvasController(Editor& editor, wxWindow* parent, EditorF
     m_mouseInWindow (true), // so that the cursor is displayed
     m_isInit (false)
 {
-    SetCursor( wxCursor( wxCURSOR_BLANK ) );
+    showCursor(false);
 
     SetFocus(); // need this, else the global accelerators do not work...
  
@@ -82,6 +82,14 @@ GlCanvasController::GlCanvasController(Editor& editor, wxWindow* parent, EditorF
  
 GlCanvasController::~GlCanvasController()
 {}
+
+void GlCanvasController::showCursor(bool show)
+{
+    if (show)
+        SetCursor( wxCursor( wxCURSOR_ARROW ) );
+    else
+        SetCursor( wxCursor( wxCURSOR_BLANK ) );
+}
 
 void GlCanvasController::resetCamera()
 {

@@ -136,9 +136,7 @@ public:
 
     Vector2D getCenterOfMass() const;
     const Vector2D& getSmoothCenterOfMass() const;
-    Vector2D getPosition() const;
     Vector2D getSmoothPosition() const;
-    float getAngle() const;
     float getSmoothAngle() const { return m_smoothAngle; }
 
     const Vector2D& getLocalGravitationPoint() const { return m_localGravitationPoint; }
@@ -169,6 +167,8 @@ public:
     static const ComponentType& getTypeIdStatic(); // eindeutige ID für diese Komponentenart (gleich wie Klassennamen, siehe CompPhysics.cpp)
 
 private:
+    Vector2D getPosition() const;
+    float getAngle() const;
 
     // Box2D Informationen
     b2Body* m_body;

@@ -283,6 +283,7 @@ void CompPhysics::loadFromPropertyTree(const ptree& propTree)
 
     setLocalGravitationPoint(gravitationPoint);
 
+    m_shapeInfos.clear();
     foreach(const ptree::value_type &v, propTree)
     {
         if (v.first != "shape")

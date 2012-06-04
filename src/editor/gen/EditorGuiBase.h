@@ -72,6 +72,8 @@ class EditorFrameBase : public wxFrame
 		wxButton* m_butNewProp;
 		wxButton* m_butEditProp;
 		wxButton* m_butRemoveProp;
+		wxPanel* m_propWarningPanel;
+		wxStaticText* m_enityOk;
 	
 	public:
 		

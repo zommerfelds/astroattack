@@ -40,9 +40,7 @@ SlideShowState::SlideShowState( SubSystems& subSystems, const std::string& slide
   m_imageCornerOffsetMasterX ( 0.0f ),
   m_imageCornerOffsetMasterY ( 0.0f ),
   m_dispCharCount ( 0 ),
-  m_textUpdateCounter ( 0 ),
-  m_nextKeyDownOld ( false ),
-  m_backKeyDownOld ( false )
+  m_textUpdateCounter ( 0 )
 {
     for (int i=0; i<4; i++)
     {
@@ -138,9 +136,9 @@ void SlideShowState::update()      // Spiel aktualisieren
         m_textUpdateCounter = 0;
     }
 
-    if ( getSubSystems().input.isKeyDown( SlideShowNext ) )
+    if ( getSubSystems().input.isKeyDown(SlideShowNext) )
     {
-        if ( m_nextKeyDownOld == false && m_overlayAlpha == 0.0f )
+        if ( m_overlayAlpha == 0.0f )
         {
             if (m_currentTextPage < m_slideShow.slides[m_currentSlide].textPages.size()-1)
             {
@@ -152,21 +150,15 @@ void SlideShowState::update()      // Spiel aktualisieren
                 getSubSystems().sound.playSound( "sound" );
                 m_fadeOut = true;
                 m_overlayAlpha = OVERLAY_STEP;
-                m_nextKeyDownOld = true;
                 m_goBack = false;
                 return;
             }
         }
-        m_nextKeyDownOld = true;
-    }
-    else
-    {
-        m_nextKeyDownOld = false;
     }
 
-    if ( getSubSystems().input.isKeyDown( SlideShowBack ) )
+    if ( getSubSystems().input.isKeyDown(SlideShowBack) )
     {
-        if ( m_backKeyDownOld == false && m_overlayAlpha == 0.0f && m_currentSlide != 0 )
+        if ( m_overlayAlpha == 0.0f && m_currentSlide != 0 )
         {
             if (m_currentTextPage != 0)
             {
@@ -178,19 +170,13 @@ void SlideShowState::update()      // Spiel aktualisieren
                 getSubSystems().sound.playSound("sound");
                 m_fadeOut = true;
                 m_overlayAlpha = OVERLAY_STEP;
-                m_backKeyDownOld = true;
                 m_goBack = true;
                 return;
             }
         }
-        m_backKeyDownOld = true;
-    }
-    else
-    {
-        m_backKeyDownOld = false;
     }
 
-    if ( getSubSystems().input.isKeyDown( SlideShowSkip ) )
+    if ( getSubSystems().input.isKeyDown(SlideShowSkip) )
     {
         //boost::shared_ptr<PlayingState> playState ( new PlayingState( GetSubSystems() ) ); // Zum Spiel-Stadium wechseln
         //GetSubSystems().stateManager->ChangeState( playState ); // State wird gewechselt (und diese wird gelöscht)

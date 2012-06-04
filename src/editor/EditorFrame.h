@@ -92,6 +92,8 @@ private:
     void enableProperty(); // a property inside a component is selected
     void disableProperty();
 
+    int showDialog(wxDialog&);
+
     int updatePropList(boost::property_tree::ptree& propTree, int index, std::string prefix);
 
     Editor& m_editor;

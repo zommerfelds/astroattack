@@ -24,6 +24,7 @@ public:
     GlCanvasController(Editor& editor, wxWindow* parent, EditorFrame& editorFrame, int* args, RenderSystem& renderer);
     virtual ~GlCanvasController();
     void resetCamera();
+    void showCursor(bool show=true);
 
 private:
     void onPaint(wxPaintEvent& evt);

@@ -52,10 +52,10 @@ void InputCameraController::update( float deltaTime ) // time_span in seconds
     // Zoom
     const float cZoomFactor = 4.0f;
     // Wenn Spieler + oder - gedrückt hat
-    if ( m_inputSubSystem.isKeyDown( CameraZoomIn ) ) // not frame rate independent (?)
+    if ( m_inputSubSystem.isKeyDown(CameraZoomIn, false) ) // not frame rate independent (?)
         zoom( pow(1/cZoomFactor, deltaTime) );
         //SetZoom(m_scaleValue - cZoomFactor * deltaTime);
-    else if ( m_inputSubSystem.isKeyDown( CameraZoomOut ) )
+    else if ( m_inputSubSystem.isKeyDown(CameraZoomOut, false) )
         zoom( pow(cZoomFactor, deltaTime) );
         //SetZoom(m_scaleValue + cZoomFactor * deltaTime);
 
@@ -64,14 +64,14 @@ void InputCameraController::update( float deltaTime ) // time_span in seconds
         // Wenn die Kamera den Spieler nicht folgt, kann man sie mit den Pfeiltasten bewegen.
         const float cScrollVelMag = 40.0f / getZoom(); // Verschiebungsgrösse
         Vector2D scrollVelocity;
-        if ( m_inputSubSystem.isKeyDown( CameraUp ) )
+        if ( m_inputSubSystem.isKeyDown(CameraUp, false) )
             scrollVelocity.set(0, cScrollVelMag);
-        else if ( m_inputSubSystem.isKeyDown( CameraDown ) )
+        else if ( m_inputSubSystem.isKeyDown(CameraDown, false) )
             scrollVelocity.set(0, -cScrollVelMag);
 
-        if ( m_inputSubSystem.isKeyDown( CameraLeft ) )
+        if ( m_inputSubSystem.isKeyDown(CameraLeft, false) )
             scrollVelocity.set(-cScrollVelMag, 0);
-        else if ( m_inputSubSystem.isKeyDown( CameraRight ) )
+        else if ( m_inputSubSystem.isKeyDown(CameraRight, false) )
             scrollVelocity.set(cScrollVelMag, 0);
 
         moveRelative( scrollVelocity.rotated(getCameraAngle()) * deltaTime, 0.0f );
@@ -174,12 +174,12 @@ void InputCameraController::update( float deltaTime ) // time_span in seconds
     }
 
     const float cRotVelocity = 2.0f;
-    if ( m_inputSubSystem.isKeyDown( CameraRotateCw ) )
+    if ( m_inputSubSystem.isKeyDown(CameraRotateCw, false) )
         rotateRelative( -cRotVelocity * deltaTime, 0.0f);
-    else if ( m_inputSubSystem.isKeyDown( CameraRotateCcw ) )
+    else if ( m_inputSubSystem.isKeyDown(CameraRotateCcw, false) )
         rotateRelative( cRotVelocity * deltaTime, 0.0f);
 
-    if ( m_inputSubSystem.isKeyDown( CameraResetAngle ) )
+    if ( m_inputSubSystem.isKeyDown(CameraResetAngle) )
     {
         const float cRotResetVelocity = 2.0f;
         float angle = getCameraAngle();

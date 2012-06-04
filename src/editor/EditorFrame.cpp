@@ -106,6 +106,8 @@ EditorFrame::EditorFrame(Editor& editor, RenderSystem& renderer)
 
     m_sidePanel->SetSize(200, -1);
 
+    m_propWarningPanel->Hide();
+
     /*std::vector<wxAcceleratorEntry> entries;
     entries.push_back(wxAcceleratorEntry(wxACCEL_NORMAL, WXK_RETURN,   ACC_ID_ENTER));
     entries.push_back(wxAcceleratorEntry(wxACCEL_NORMAL, WXK_ESCAPE,   ACC_ID_ESCAPE));
@@ -150,6 +152,9 @@ void EditorFrame::onListItemSelected(wxListEvent& evt)
     {
         enableProperty();
     }
+
+    m_propWarningPanel->Show( !m_propWarningPanel->IsShown() );
+    Layout();
 }
 
 void EditorFrame::onListItemDeselected(wxListEvent& evt)
@@ -321,6 +326,14 @@ void EditorFrame::onCompIdFieldEnter(wxCommandEvent& evt)
     Refresh();
 }*/
 
+int EditorFrame::showDialog(wxDialog& diag)
+{
+    m_canvas.showCursor(true);
+    int result = diag.ShowModal();
+    m_canvas.showCursor(false);
+    return result;
+}
+
 void EditorFrame::onClose(wxCloseEvent& evt)
 {
     m_timer.Stop();
@@ -344,7 +357,7 @@ void EditorFrame::onMenuOpen(wxCommandEvent&)
             wxT("AstroAttack level files (*.lvl)|*.lvl"), wxFD_OPEN|wxFD_FILE_MUST_EXIST);
 
     // show the dialog
-    if (openFileDialog.ShowModal() == wxID_CANCEL)
+    if (showDialog(openFileDialog) == wxID_CANCEL)
         return; // the user changed idea...
 
     m_fileName = (const char*)openFileDialog.GetPath().mb_str(wxConvUTF8);
@@ -370,7 +383,7 @@ void EditorFrame::onMenuSaveAs(wxCommandEvent&)
             wxT("AstroAttack level files (*.lvl)|*.lvl"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
 
     // show the dialog
-    if (saveFileDialog.ShowModal() == wxID_CANCEL)
+    if (showDialog(saveFileDialog) == wxID_CANCEL)
         return; // the user changed idea...
 
     m_fileName = (const char*)saveFileDialog.GetPath().mb_str(wxConvUTF8);
@@ -385,7 +398,7 @@ void EditorFrame::onMenuExit(wxCommandEvent&)
 void EditorFrame::onMenuAbout(wxCommandEvent&)
 {
     AboutDialog dialog(this);
-    dialog.ShowModal();
+    showDialog(dialog);
 }
 
 void EditorFrame::onPropEditBut(wxCommandEvent&)
@@ -406,8 +419,9 @@ void EditorFrame::onPropEdit()
     std::string id = pt.it->first;
 
     EditPropDialog dialog(this, id, pt.it->second.data());
-    if (dialog.ShowModal() == wxID_CANCEL)
+    if (showDialog(dialog) == wxID_CANCEL)
         return;
+    Refresh();
 
     pt.parent.erase(pt.parent.to_iterator(pt.it));
     pt.parent.put(id, dialog.getValue());
@@ -418,8 +432,9 @@ void EditorFrame::onPropEdit()
 void EditorFrame::onPropNew(wxCommandEvent&)
 {
     NewPropDialog dialog(this);
-    if (dialog.ShowModal() == wxID_CANCEL)
+    if (showDialog(dialog) == wxID_CANCEL)
         return;
+    Refresh();
 
     m_propTree->put(dialog.getKey(), dialog.getValue());
     m_selectedComp->loadFromPropertyTree(*m_propTree);

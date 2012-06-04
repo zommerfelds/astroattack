@@ -13,9 +13,9 @@ EditorFrameBase::EditorFrameBase( wxWindow* parent, wxWindowID id, const wxStrin
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 	
-	/*m_toolBar = this->CreateToolBar( wxTB_HORIZONTAL, wxID_ANY ); 
+	m_toolBar = this->CreateToolBar( wxTB_HORIZONTAL, wxID_ANY ); 
 	m_toolBar->AddTool( wxID_ANY, wxT("tool"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString ); 
-	m_toolBar->Realize();*/
+	m_toolBar->Realize();
 	
 	m_statusBar1 = this->CreateStatusBar( 1, wxST_SIZEGRIP, wxID_ANY );
 	m_menubar1 = new wxMenuBar( 0 );
@@ -36,7 +36,8 @@ EditorFrameBase::EditorFrameBase( wxWindow* parent, wxWindowID id, const wxStrin
 	m_menuItemSaveAs = new wxMenuItem( m_menuFile, wxID_SAVEAS, wxString( wxT("Save As") ) , wxT("Save current level with a different file name"), wxITEM_NORMAL );
 	m_menuFile->Append( m_menuItemSaveAs );
 	
-	m_menuFile->AppendSeparator();
+	wxMenuItem* m_separator1;
+	m_separator1 = m_menuFile->AppendSeparator();
 	
 	wxMenuItem* m_menuItemExit;
 	m_menuItemExit = new wxMenuItem( m_menuFile, wxID_EXIT, wxString( wxT("Quit") ) , wxT("Quit AAEditor"), wxITEM_NORMAL );
@@ -157,6 +158,22 @@ EditorFrameBase::EditorFrameBase( wxWindow* parent, wxWindowID id, const wxStrin
 	bSizer6->Fit( m_compPanel );
 	m_splitter2->SplitHorizontally( m_entityPanel, m_compPanel, 0 );
 	bSizer7->Add( m_splitter2, 1, wxEXPAND, 0 );
+	
+	m_propWarningPanel = new wxPanel( m_sidePanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer17;
+	bSizer17 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_enityOk = new wxStaticText( m_propWarningPanel, wxID_ANY, wxT("Properties invalid !"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_enityOk->Wrap( -1 );
+	m_enityOk->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
+	m_enityOk->SetForegroundColour( wxColour( 255, 0, 0 ) );
+	
+	bSizer17->Add( m_enityOk, 0, wxALL, 1 );
+	
+	m_propWarningPanel->SetSizer( bSizer17 );
+	m_propWarningPanel->Layout();
+	bSizer17->Fit( m_propWarningPanel );
+	bSizer7->Add( m_propWarningPanel, 0, wxALL|wxEXPAND, 0 );
 	
 	m_sidePanel->SetSizer( bSizer7 );
 	m_sidePanel->Layout();

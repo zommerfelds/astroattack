@@ -83,8 +83,8 @@ public:
 public:
     void update(); // aktualisieren
 
-    bool isKeyDown(Key key, bool consume=false); // TODO: default consumed?
-    MouseState getMouseStateInArea(const Rect& buttonRect, bool consume=false);
+    bool isKeyDown(Key key, bool consume=true);
+    MouseState getMouseStateInArea(const Rect& buttonRect, bool consume=true);
     const Vector2D& getMousePos() const;   // Mausposition erhalten (0/0 ist oben links, 1/1 ist unten rechts)
     void warpMouseToCenter();
 
