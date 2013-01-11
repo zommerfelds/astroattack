@@ -19,9 +19,9 @@
 using boost::property_tree::ptree;
 
 // ID of this component
-const ComponentType& CompPlayerController::getTypeIdStatic()
+const ComponentTypeId& CompPlayerController::getTypeIdStatic()
 {
-    static boost::scoped_ptr<ComponentType> typeId (new ComponentType("CompPlayerController"));
+    static boost::scoped_ptr<ComponentTypeId> typeId (new ComponentTypeId("CompPlayerController"));
     return *typeId;
 }
 

@@ -79,7 +79,9 @@ public:
 
     // -------- nur für MatrixWorld Modus --------
     void drawShape(const CompShape& shape, const CompVisualTexture& tex, bool border=false);
-    void drawShape(const CompShape& shape, const Color& color, bool border=false);
+    void drawShape(const CompShape& shape, const Color& color,           bool border=false);
+    void drawShape(const CompShape& shape, const CompVisualTexture& tex, const Vector2D& position, float angle, bool border=false);
+    void drawShape(const CompShape& shape, const Color& color,           const Vector2D& position, float angle, bool border=false);
 
     // Draw an edge effect
     void drawEdge(const Vector2D& vertexA, const Vector2D& vertexB, const std::string& tex, float offset = 0.0f, float preCalcEdgeLenght = -1.0f);

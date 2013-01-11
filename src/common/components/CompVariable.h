@@ -13,8 +13,8 @@ class CompVariable : public Component
 {
 public:
     CompVariable(const ComponentId& id, GameEvents& events);
-    const ComponentType& getTypeId() const { return getTypeIdStatic(); }
-    static const ComponentType& getTypeIdStatic();
+    const ComponentTypeId& getTypeId() const { return getTypeIdStatic(); }
+    static const ComponentTypeId& getTypeIdStatic();
 
     int getValue() const;
     void setValue(int val);

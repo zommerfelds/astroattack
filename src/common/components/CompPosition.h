@@ -21,11 +21,11 @@ class CompPhysics;
 class CompPosition : public Component
 {
 public:
-    CompPosition(const ComponentId& id, GameEvents& gameEvents);
+    CompPosition(const ComponentId& id, GameEvents& gameEvents, const Vector2D& pos = Vector2D());
 
     // Base component methods
-    const ComponentType& getTypeId() const { return getTypeIdStatic(); }
-    static const ComponentType& getTypeIdStatic();
+    const ComponentTypeId& getTypeId() const { return getTypeIdStatic(); }
+    static const ComponentTypeId& getTypeIdStatic();
 
     // =========== Getters ==========
     Vector2D getDrawingPosition() const; // get current drawing (smooth) position. If a CampPhysics exist, it gets the position from there.

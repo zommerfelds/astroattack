@@ -18,6 +18,8 @@
 #include "common/components/CompVisualMessage.h"
 #include "common/components/CompVariable.h"
 #include "common/components/CompShape.h"
+#include "common/components/CompPath.h"
+#include "common/components/CompPathMove.h"
 
 #include "common/ComponentManager.h"
 #include "common/Logger.h"
@@ -121,6 +123,10 @@ void DataLoader::loadToWorld(const std::string& fileName, ComponentManager& comp
                     component = boost::shared_ptr<CompTrigger>(new CompTrigger(compId, events));
                 else if ( compType == CompVariable::getTypeIdStatic() )
                     component = boost::shared_ptr<CompVariable>(new CompVariable(compId, events));
+                else if ( compType == CompPath::getTypeIdStatic() )
+                    component = boost::make_shared<CompPath>(compId, boost::ref(events));
+                else if ( compType == CompPathMove::getTypeIdStatic() )
+                    component = boost::make_shared<CompPathMove>(compId, boost::ref(events));
                 else
                     throw DataLoadException(fileName + ": in entity '" + entityId + "' component '" + compId + "', invalid component type '" + compType + "'");
 

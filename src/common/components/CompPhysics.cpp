@@ -18,9 +18,9 @@
 using boost::property_tree::ptree;
 
 // eindeutige ID
-const ComponentType& CompPhysics::getTypeIdStatic()
+const ComponentTypeId& CompPhysics::getTypeIdStatic()
 {
-    static boost::scoped_ptr<ComponentType> typeId (new ComponentType("CompPhysics"));
+    static boost::scoped_ptr<ComponentTypeId> typeId (new ComponentTypeId("CompPhysics"));
     return *typeId;
 }
 
@@ -297,9 +297,6 @@ void CompPhysics::loadFromPropertyTree(const ptree& propTree)
         float restitution = shapeProps.get("restitution", 0.0f);
 
         bool isSensor = shapeProps.get("isSensor", false);
-
-        if (density != 0.0f)
-            body_def.type = BodyDef::dynamicBody;
 
         addShapeDef(boost::make_shared<ShapeDef>(shapeName, density, friction, restitution, isSensor));
     }

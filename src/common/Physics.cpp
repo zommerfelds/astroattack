@@ -10,14 +10,18 @@
 #include "common/components/CompPosition.h"
 #include "common/components/CompPlayerController.h"
 #include "common/components/CompShape.h"
+#include "common/components/CompPath.h"
+#include "common/components/CompPathMove.h"
 
 #include "common/GameEvents.h"
 #include "common/Vector2D.h"
 #include "common/Foreach.h"
+#include "common/Logger.h"
 
 #include <boost/bind.hpp>
 #include <boost/make_shared.hpp>
 #include <Box2D/Box2D.h>
+#include <algorithm>
 
 const float cPhysicsTimeStep = 1.0f/60.0f;
 
@@ -45,8 +49,7 @@ ContactListener contactListener;
 
 PhysicsSystem::PhysicsSystem(GameEvents& gameEvents)
 : m_eventConnection1 (), m_eventConnection2 (), m_gameEvents ( gameEvents ),
-  m_world (b2Vec2(0.0f, 0.0f)), m_timeStep ( cPhysicsTimeStep ),
-  m_velocityIterations ( PHYS_ITERATIONS ), m_positionIterations ( PHYS_ITERATIONS ),
+  m_world (b2Vec2(0.0f, 0.0f)),
   m_rootGravField ("rootGravField", m_gameEvents)
 {
     m_rootGravField.setGravType(CompGravField::Directional);
@@ -70,18 +73,7 @@ boost::shared_ptr<b2BodyDef> convertToB2BodyDef(const BodyDef& bodyDef)
     pB2BodyDef->linearDamping = bodyDef.linearDamping;
     pB2BodyDef->linearVelocity = *bodyDef.linearVelocity.to_b2Vec2();
     pB2BodyDef->position = *bodyDef.position.to_b2Vec2();
-    switch (bodyDef.type)
-    {
-    case BodyDef::staticBody:
-        pB2BodyDef->type = b2_staticBody;
-        break;
-    case BodyDef::dynamicBody:
-        pB2BodyDef->type = b2_dynamicBody;
-        break;
-    case BodyDef::kinematicBody:
-        pB2BodyDef->type = b2_kinematicBody;
-        break;
-    }
+    pB2BodyDef->type = b2_staticBody;
     return pB2BodyDef;
 }
 
@@ -96,7 +88,7 @@ void PhysicsSystem::update()
 
     contactListener.contacts.clear();
     //----Box2D Aktualisieren!----//
-    m_world.Step(m_timeStep, m_velocityIterations, m_positionIterations);
+    m_world.Step(cPhysicsTimeStep, PHYS_ITERATIONS, PHYS_ITERATIONS);
     //----------------------------//
 
 
@@ -157,11 +149,186 @@ void PhysicsSystem::update()
         compPhys->m_nUpdatesSinceGravFieldChange++;
     }
 
+    // update PathMove components
+    for(std::list<CompPathMove*>::iterator it = m_pathMoves.begin(), next; it != m_pathMoves.end(); it = next)
+    {
+        next = it; next++;
+        CompPathMove* compPathMove = *it;
+
+        CompPath* compPath    = compPathMove->getSiblingComponent<CompPath>(compPathMove->getPathId());
+        CompPosition* compPos = compPathMove->getSiblingComponent<CompPosition>();
+        CompPhysics* compPhys = compPathMove->getSiblingComponent<CompPhysics>();
+        if (compPath == NULL)
+        {
+            log(Warning) << "Entity '" << compPathMove->getEntityId() << "': CompPathMove needs CompPath component"
+                         << (compPathMove->getPathId() == "" ? "" : " with ID '" + compPathMove->getPathId() + "'")
+                         << "\n";
+            continue;
+        }
+        else if (compPos == NULL)
+        {
+            log(Warning) << "Entity '" << compPathMove->getEntityId() << "': CompPathMove needs CompPosition component\n";
+            continue;
+        }
+        else if (compPhys == NULL)
+        {
+            log(Warning) << "Entity '" << compPathMove->getEntityId() << "': CompPathMove needs CompPhysics component\n";
+            continue;
+        }
+
+        //std::cerr << "angle = " << compPos->getOrientation() << "\n";
+
+        bool remove = updatePathMove(*compPathMove, *compPhys, *compPos, *compPath);
+        if (remove)
+            m_pathMoves.erase(it);
+    }
+
     std::pair<CompShape*,CompShape*> contact;
     foreach(contact, contactListener.contacts)
     {
         m_gameEvents.newContact.fire(*contact.first, *contact.second);
     }
+}
+
+bool PhysicsSystem::updatePathMove(CompPathMove& compPathMove, CompPhysics& compPhys, const CompPosition& compPos, const CompPath& compPath)
+{
+    compPathMove.m_updateCount++;
+    if (compPathMove.m_updateCount >= compPathMove.m_numUpdatesToNextPoint) // change way-point
+    {
+        size_t next = compPathMove.getCurrentPathPoint() + 1;
+        std::cerr << "next waypoint = " << next << "\n";
+        size_t end = compPath.getNumPathPoints();
+        if (next == end)
+        {
+            if (compPathMove.getRepeat())
+            {
+                next = 0; // restart from zero
+            }
+            else
+            {
+                return true; // yes, PathMove component can be removed because we reached the end of the path
+            }
+        }
+
+        setNewTarget(compPathMove, compPhys, compPos, compPath, next);
+    }
+    else // normal update
+    {
+        switch(compPathMove.getPathPoint(compPathMove.m_currentPathPoint).mode)
+        {
+        case PathMovePoint::Uniform:
+            break; // no need to change velocity in uniform motion
+        case PathMovePoint::Accelerated:
+            if (compPathMove.m_updateCount <= compPathMove.m_numUpdatesToAccelerate) // we are speeding up
+            {
+                compPhys.m_body->SetLinearVelocity(
+                        *(Vector2D(compPhys.m_body->GetLinearVelocity()) + compPathMove.m_detalLinearVelocity).to_b2Vec2()
+                    );
+                compPhys.m_body->SetAngularVelocity(
+                        compPhys.m_body->GetAngularVelocity() + compPathMove.m_detalAngularVelocity
+                    );
+            }
+            else if (compPathMove.m_updateCount >= compPathMove.m_numUpdatesToNextPoint - compPathMove.m_numUpdatesToAccelerate) // we are slowing down
+            {
+                compPhys.m_body->SetLinearVelocity(
+                        *(Vector2D(compPhys.m_body->GetLinearVelocity()) - compPathMove.m_detalLinearVelocity).to_b2Vec2()
+                    );
+                compPhys.m_body->SetAngularVelocity(
+                        compPhys.m_body->GetAngularVelocity() - compPathMove.m_detalAngularVelocity
+                    );
+            }
+            // don't do any velocity changes in case we are in the uniform part
+
+            break;
+        }
+    }
+    return false;
+}
+
+void PhysicsSystem::setNewTarget(CompPathMove& compPathMove, CompPhysics& compPhys, const CompPosition& compPos, const CompPath& compPath, size_t point)
+{
+    compPathMove.m_updateCount = 0;
+
+    compPathMove.m_currentPathPoint = point;
+
+    const PathPoint& target = compPath.getPathPoint(point);
+    const PathMovePoint& move = compPathMove.getPathPoint(point);
+
+    Vector2D posDiff = target.position - compPos.getPosition();
+    float length = posDiff.length();
+    float angleDiff  = target.angle - compPos.getOrientation(); //fmod(target.angle - compPos.getOrientation(), 2*cPi);
+    /*//if      (angleDiff > +cPi) angleDiff -= 2*cPi;
+    //else if (angleDiff < -cPi) angleDiff += 2*cPi;
+    if (compPathMove.getResetAngle() && point == 0)
+    {
+        std::cerr << "angleDiff = " << angleDiff << "\n";
+        float f = fmod(compPos.getOrientation(), 2*cPi);
+        std::cerr << "f = " << f << "\n";
+        angleDiff = target.angle - f;
+    }*/
+
+    float linearVelocity = 0.0f;
+    float angularVelocity = 0.0f;
+    float timeToAccelerate = 0.0f;
+    float timeToFinish = 1.0f;
+
+    // TODO need to handle more cases (angular motion, accelerated motion with only time given)
+    switch(move.mode)
+    {
+    case PathMovePoint::Uniform:
+        if (move.time != 0.0f) // set velocity by given time
+        {
+            linearVelocity = length/move.time;
+            angularVelocity = angleDiff/move.time;
+            timeToFinish = move.time;
+        }
+        else if (move.linVel != 0.0f)
+        {
+            linearVelocity = move.linVel;
+            timeToFinish = length/linearVelocity;
+        }
+        else
+        {
+            angularVelocity = move.angVel;
+            timeToFinish = angleDiff/angularVelocity;
+        }
+        break;
+    case PathMovePoint::Accelerated:
+        if (move.linAccel != 0.0f)
+        {
+            float timeNoMax = sqrt(length/move.linAccel);
+            float topVel = move.linAccel*timeNoMax;
+            if (move.topLinVel != 0.0f)
+                topVel = std::min(topVel, move.topLinVel);
+
+            timeToAccelerate = topVel/move.linAccel;
+
+            float distAccel = move.linAccel * timeToAccelerate * timeToAccelerate; // * 0.5 * 2
+            float distUniform = length - distAccel;
+
+            timeToFinish = 2 * timeToAccelerate + distUniform/topVel;
+
+            compPathMove.m_numUpdatesToAccelerate = timeToAccelerate/cPhysicsTimeStep;
+
+            compPathMove.m_detalLinearVelocity = posDiff.getUnitVector() * (topVel/compPathMove.m_numUpdatesToAccelerate);
+            // TODO angle
+
+            std::cerr << "length  = " << length << "\n"
+                      << "timeNoMax = " << timeNoMax << "\n"
+                      << "topVel = " << topVel << "\n"
+                      << "timeToAccelerate = " << timeToAccelerate << "\n"
+                      << "distAccel = " << distAccel << "\n"
+                      << "distUniform = " << distUniform << "\n"
+                      << "timeToFinish = " << timeToFinish << "\n"
+                      << "move.topLinVel = " << move.topLinVel << "\n";
+        }
+        break;
+    }
+
+    compPhys.m_body->SetLinearVelocity(*(posDiff.getUnitVector()*linearVelocity).to_b2Vec2());
+    compPhys.m_body->SetAngularVelocity(angularVelocity);
+
+    compPathMove.m_numUpdatesToNextPoint = timeToFinish/cPhysicsTimeStep;
 }
 
 void PhysicsSystem::calculateSmoothPositions(float accumulator)
@@ -192,6 +359,8 @@ void PhysicsSystem::onRegisterComp(Component& component)
         onRegisterCompPhys(static_cast<CompPhysics&>(component));
     else if (component.getTypeId() == CompGravField::getTypeIdStatic())
         onRegisterCompGrav(static_cast<CompGravField&>(component));
+    else if (component.getTypeId() == CompPathMove::getTypeIdStatic())
+        onRegisterCompPathMove(static_cast<CompPathMove&>(component));
 }
 
 void PhysicsSystem::onUnregisterComp(Component& component)
@@ -200,6 +369,8 @@ void PhysicsSystem::onUnregisterComp(Component& component)
         onUnregisterCompPhys(static_cast<CompPhysics&>(component));
     else if (component.getTypeId() == CompGravField::getTypeIdStatic())
         onUnregisterCompGrav(static_cast<CompGravField&>(component));
+    else if (component.getTypeId() == CompPathMove::getTypeIdStatic())
+        onUnregisterCompPathMove(static_cast<CompPathMove&>(component));
 }
 
 void PhysicsSystem::onRegisterCompPhys(CompPhysics& compPhys)
@@ -232,6 +403,8 @@ void PhysicsSystem::onRegisterCompPhys(CompPhysics& compPhys)
         boost::shared_ptr<b2Shape> pB2Shape = pCompShape->toB2Shape(); // this object has to live till Box2D has made a copy of it in createFixture
         fixtureDef->shape = pB2Shape.get();
         fixtureDef->density = shapeInfo->density;
+        if (shapeInfo->density != 0.0f)
+            compPhys.m_body->SetType(b2_dynamicBody);
         fixtureDef->friction = shapeInfo->friction;
         fixtureDef->restitution = shapeInfo->restitution;
         fixtureDef->isSensor = shapeInfo->isSensor;
@@ -262,31 +435,36 @@ void PhysicsSystem::onUnregisterCompPhys(CompPhysics& compPhys)
     if (compPos)
         compPos->m_compPhysics = NULL;
 
-    for (size_t i = 0; i < m_physicsComps.size(); i++)
-    {
-        if ( m_physicsComps[i] == &compPhys )
-        {
-            m_physicsComps.erase( m_physicsComps.begin()+i );
-            break;
-        }
-    }
+    m_physicsComps.erase(std::find(m_physicsComps.begin(), m_physicsComps.end(), &compPhys));
 }
 
-void PhysicsSystem::onRegisterCompGrav( CompGravField& compGrav )
+void PhysicsSystem::onRegisterCompGrav(CompGravField& compGrav)
 {
     m_gravFields.push_back( &compGrav );
 }
 
-void PhysicsSystem::onUnregisterCompGrav( CompGravField& compGrav )
+void PhysicsSystem::onUnregisterCompGrav(CompGravField& compGrav)
 {
-    for ( size_t i = 0; i < m_gravFields.size(); ++i )
-    {
-        if ( m_gravFields[i] == &compGrav )
-        {
-            m_gravFields.erase( m_gravFields.begin()+i );
-            break;
-        }
-    }
+    m_gravFields.erase(std::find(m_gravFields.begin(), m_gravFields.end(), &compGrav));
+}
+
+
+void PhysicsSystem::onRegisterCompPathMove(CompPathMove& compPathMove)
+{
+    m_pathMoves.push_back(&compPathMove);
+
+    CompPhysics*  compPhys = compPathMove.getSiblingComponent<CompPhysics>();
+    CompPosition* compPos  = compPathMove.getSiblingComponent<CompPosition>();
+    CompPath*     compPath = compPathMove.getSiblingComponent<CompPath>();
+    assert(compPhys != NULL); assert(compPos  != NULL); assert(compPath != NULL);
+
+    compPhys->m_body->SetType(b2_kinematicBody);
+    setNewTarget(compPathMove, *compPhys, *compPos, *compPath, 0);
+}
+
+void PhysicsSystem::onUnregisterCompPathMove(CompPathMove& compPathMove)
+{
+    m_pathMoves.erase(std::find(m_pathMoves.begin(), m_pathMoves.end(), &compPathMove));
 }
 
 namespace {

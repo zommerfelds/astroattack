@@ -18,9 +18,9 @@ Component::Component(const ComponentId& id, GameEvents& gameEvents)
   m_id (id)
 {}
 
-const ComponentType& Component::getTypeIdStatic()
+const ComponentTypeId& Component::getTypeIdStatic()
 {
-    static boost::scoped_ptr<ComponentType> typeId (new ComponentType("Component"));
+    static boost::scoped_ptr<ComponentTypeId> typeId (new ComponentTypeId("Component"));
     return *typeId;
 }
 

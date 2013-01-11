@@ -15,9 +15,9 @@
 #include <boost/property_tree/ptree.hpp>
 
 // einduetige ID
-const ComponentType& CompVisualAnimation::getTypeIdStatic()
+const ComponentTypeId& CompVisualAnimation::getTypeIdStatic()
 {
-    static boost::scoped_ptr<ComponentType> typeId (new ComponentType("CompVisualAnimation"));
+    static boost::scoped_ptr<ComponentTypeId> typeId (new ComponentTypeId("CompVisualAnimation"));
     return *typeId;
 }
 

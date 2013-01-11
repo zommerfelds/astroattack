@@ -13,9 +13,6 @@
 #include "common/Vector2D.h"
 #include <set>
 
-//--------------------------------------------//
-//--------- CompGravField Klasse -------------//
-//--------------------------------------------//
 class CompGravField : public Component
 {
 public:
@@ -23,8 +20,8 @@ public:
 
     CompGravField(const ComponentId& id, GameEvents& gameEvents);
 
-    const ComponentType& getTypeId() const { return getTypeIdStatic(); }
-    static const ComponentType& getTypeIdStatic(); // eindeutige ID für diese Komponentenart (gleich wie Klassennamen, siehe CompGravField.cpp)
+    const ComponentTypeId& getTypeId() const { return getTypeIdStatic(); }
+    static const ComponentTypeId& getTypeIdStatic(); // eindeutige ID für diese Komponentenart (gleich wie Klassennamen, siehe CompGravField.cpp)
 
     // Setters
     void setGravType( GravType t ) { m_gravType = t; }

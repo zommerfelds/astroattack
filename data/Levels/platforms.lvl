@@ -1,0 +1,205 @@
+entity
+{
+	id Block00000
+	component
+	{
+		type CompPhysics
+		shape
+		{
+			comp_id shape
+			friction 0.3
+		}
+	}
+	component
+	{
+		type CompPosition
+		x -4.5
+		y -2
+		a 0
+	}
+	component
+	{
+		type CompShape
+		id shape
+		polygon
+		{
+			vertex
+			{
+				x 0
+				y 0
+			}
+			vertex
+			{
+				x 0
+				y -1.5
+			}
+			vertex
+			{
+				x 8
+				y -1.5
+			}
+			vertex
+			{
+				x 8
+				y 0
+			}
+		}
+	}
+	component
+	{
+		type CompVisualTexture
+		texture "Ancient Stone Slabs"
+	}
+}
+entity
+{
+    id Block00001
+    component
+    {
+        type CompPhysics
+        shape
+        {
+            comp_id shape
+            friction 0.3
+        }
+    }
+    component
+    {
+        type CompPosition
+        x 20
+        y -2
+        a 0
+    }
+    component
+    {
+        type CompShape
+        id shape
+        polygon
+        {
+            vertex
+            {
+                x 0
+                y 0
+            }
+            vertex
+            {
+                x 0
+                y -1.5
+            }
+            vertex
+            {
+                x 8
+                y -1.5
+            }
+            vertex
+            {
+                x 8
+                y 0
+            }
+        }
+    }
+    component
+    {
+        type CompVisualTexture
+        texture "Ancient Stone Slabs"
+    }
+}
+entity
+{
+	id plat1
+	component
+	{
+	   type CompPath
+	   id path1
+       point
+       {
+           x 15
+           y -3
+           a 0
+       }
+       point
+       {
+           x 7
+           y -3
+           a 0
+       }
+	}
+	component
+	{
+	   type CompPathMove
+       path_id path1
+       repeat true
+       ;resetAngle true
+	   
+       point
+       {
+           mode accelerated
+           linAccel 4
+           topLinVel 5
+       }
+       point
+       {
+           mode accelerated
+           linAccel 4
+       }
+	   point
+	   {
+	       mode uniform
+	       time 2
+	   }
+	   point
+	   {
+	       mode uniform
+	       linVel 3
+	   }
+	}
+	component
+	{
+		type CompPhysics
+		shape
+		{
+			comp_id shape
+			friction 0.3
+		}
+	}
+	component
+	{
+		type CompPosition
+		x 7
+		y -3
+		a 0;6.28319
+	}
+	component
+	{
+		type CompShape
+		id shape
+		polygon
+		{
+			vertex
+			{
+				x -2
+				y 0.5
+			}
+			vertex
+			{
+				x -2
+				y -0.5
+			}
+			vertex
+			{
+				x 2
+				y -0.5
+			}
+			vertex
+			{
+				x 2
+				y 0.5
+			}
+		}
+	}
+	component
+	{
+		type CompVisualTexture
+		texture "Steel Vault"
+	}
+}

@@ -29,8 +29,8 @@ public:
     Component(const ComponentId& id, GameEvents& gameEvents);
     virtual ~Component() {} // Destruktor
 
-    static const ComponentType& getTypeIdStatic();
-    virtual const ComponentType& getTypeId() const = 0;
+    static const ComponentTypeId& getTypeIdStatic();
+    virtual const ComponentTypeId& getTypeId() const = 0;
     const ComponentId& getId() const { return m_id; }
     void setId(const ComponentId& id) { m_id = id; }
 

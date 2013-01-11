@@ -9,9 +9,9 @@
 #include <boost/scoped_ptr.hpp>
 #include <boost/property_tree/ptree.hpp>
 
-const ComponentType& CompVariable::getTypeIdStatic()
+const ComponentTypeId& CompVariable::getTypeIdStatic()
 {
-    static boost::scoped_ptr<ComponentType> typeId (new ComponentType("CompVariable"));
+    static boost::scoped_ptr<ComponentTypeId> typeId (new ComponentTypeId("CompVariable"));
     return *typeId;
 }
 

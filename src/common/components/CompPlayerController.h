@@ -26,8 +26,8 @@ class CompPlayerController : public Component
 public:
     CompPlayerController(const ComponentId& id, GameEvents& gameEvents);
 
-    const ComponentType& getTypeId() const { return getTypeIdStatic(); }
-    static const ComponentType& getTypeIdStatic();
+    const ComponentTypeId& getTypeId() const { return getTypeIdStatic(); }
+    static const ComponentTypeId& getTypeIdStatic();
 
     void loadFromPropertyTree(const boost::property_tree::ptree& propTree);
     void writeToPropertyTree(boost::property_tree::ptree& propTree) const;

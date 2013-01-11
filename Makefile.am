@@ -23,6 +23,8 @@ common_src = \
     src/common/TriggerSystem.cpp \
     src/common/Vector2D.cpp \
     src/common/components/CompGravField.cpp \
+    src/common/components/CompPath.cpp \
+    src/common/components/CompPathMove.cpp \
     src/common/components/CompPhysics.cpp \
     src/common/components/CompPlayerController.cpp \
     src/common/components/CompPosition.cpp \

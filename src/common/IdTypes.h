@@ -12,7 +12,7 @@
 typedef std::string ConditionId;
 typedef std::string EffectId;
 
-typedef std::string ComponentType;
+typedef std::string ComponentTypeId;
 
 typedef std::string EntityId;
 typedef std::string ComponentId;

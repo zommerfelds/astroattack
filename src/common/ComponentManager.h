@@ -21,7 +21,7 @@ class GameEvents;
 class Logger;
 
 typedef std::list< boost::shared_ptr<Component> > ComponentList;
-typedef std::multimap< ComponentType, boost::shared_ptr<Component> > ComponentMap;
+typedef std::multimap< ComponentTypeId, boost::shared_ptr<Component> > ComponentMap;
 typedef std::map< EntityId, ComponentMap > EntityMap;
 
 class Entity
@@ -58,7 +58,7 @@ private:
 
     EntityMap m_entities;
 
-    Component* getComponent(const EntityId& entId, const ComponentType& compType, const ComponentId& compId) const;
+    Component* getComponent(const EntityId& entId, const ComponentTypeId& compType, const ComponentId& compId) const;
 };
 
 // IMPLEMENTATION

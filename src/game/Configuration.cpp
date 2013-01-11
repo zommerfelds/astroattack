@@ -24,8 +24,8 @@ void loadConfig(const std::string& fileName, boost::property_tree::ptree& config
     }
     catch (boost::property_tree::info_parser::info_parser_error& e)
     {
-		std::cerr << "Could not load default configuration file. " << e.what() << std::endl
-			      << "Loading default configuration." << std::endl;
+        std::cerr << "Could not load default configuration file. " << e.what() << std::endl
+                  << "Loading default configuration." << std::endl;
         loadDefaultConfig(config);
     }
 }

@@ -18,9 +18,9 @@
 using boost::property_tree::ptree;
 
 // eindeutige ID
-const ComponentType& CompShape::getTypeIdStatic()
+const ComponentTypeId& CompShape::getTypeIdStatic()
 {
-    static boost::scoped_ptr<ComponentType> typeId (new ComponentType("CompShape"));
+    static boost::scoped_ptr<ComponentTypeId> typeId (new ComponentTypeId("CompShape"));
     return *typeId;
 }
 

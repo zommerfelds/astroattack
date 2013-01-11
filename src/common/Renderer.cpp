@@ -434,6 +434,25 @@ void RenderSystem::drawShape(const CompShape& shape, const Color& color, bool bo
     drawShape(shape, NULL, &color, border);
 }
 
+void RenderSystem::drawShape(const CompShape& shape, const CompVisualTexture& tex, const Vector2D& position, float angle, bool border)
+{
+    glPushMatrix();
+    glTranslatef(position.x, position.y, 0.0f);
+    glRotatef(radToDeg(angle), 0.0, 0.0, 1.0f);
+    drawShape(shape, tex, border);
+    glPopMatrix();
+}
+
+void RenderSystem::drawShape(const CompShape& shape, const Color& color, const Vector2D& position, float angle, bool border)
+{
+    glPushMatrix();
+    glTranslatef(position.x, position.y, 0.0f);
+    glRotatef(radToDeg(angle), 0.0, 0.0, 1.0f);
+    drawShape(shape, color, border);
+    glPopMatrix();
+}
+
+
 void RenderSystem::drawShape(const CompShape& shape, const CompVisualTexture* tex, const Color* color, bool border)
 {
     m_textureManager.clear();
@@ -621,7 +640,7 @@ void RenderSystem::drawVisualTextureComps()
             Vector2D position = compPos->getDrawingPosition();
 
             glTranslatef(position.x, position.y, 0.0f);
-            glRotatef( radToDeg(angle), 0.0, 0.0, 1.0f);
+            glRotatef(radToDeg(angle), 0.0, 0.0, 1.0f);
 
             const std::string& shapeId = texComp->getShapeId();
             bool allShapes = (shapeId == CompVisualTexture::ALL_SHAPES);
@@ -722,7 +741,7 @@ void RenderSystem::drawVisualMessageComps()
     }
 }
 
-void RenderSystem::drawFPS(int fps)
+void RenderSystem::drawFPS(int fps) // XXX
 {
     std::ostringstream oss;
     oss << fps;

@@ -117,11 +117,11 @@ void Editor::cmdCreateBlock()
         boost::shared_ptr<CompShapePolygon> compShape = boost::shared_ptr<CompShapePolygon>(new CompShapePolygon("shape", m_events));
         for ( int i = 0; i < m_guiData.indexCurVertex; ++i )
         {
-            compShape->setVertex(i, m_guiData.createdVertices[i]);
+            compShape->setVertex(i, m_guiData.createdVertices[i] - m_guiData.createdVertices[0]);
         }
         entity.push_back(compShape);
 
-        boost::shared_ptr<CompPosition> compPos = boost::shared_ptr<CompPosition>(new CompPosition(Component::DEFAULT_ID, m_events));
+        boost::shared_ptr<CompPosition> compPos = boost::shared_ptr<CompPosition>(new CompPosition(Component::DEFAULT_ID, m_events, m_guiData.createdVertices[0]));
         entity.push_back(compPos);
 
         TextureId textureName = m_guiData.currentTexture;

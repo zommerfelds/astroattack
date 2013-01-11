@@ -48,8 +48,7 @@ public:
         linearDamping ( 0.0f ),
         angularDamping ( 0.0f ),
         fixedRotation ( false ),
-        bullet ( false ),
-        type ( staticBody )
+        bullet ( false )
     {}
 
     // NOTE: the comments in this class are taken directly from Box2D b2BodyDef structure
@@ -85,14 +84,6 @@ public:
     // kinematic and static bodies. This setting is only considered on dynamic bodies.
     // Warning: You should use this flag sparingly since it increases processing time.
     bool bullet;
-
-    enum BodyType {
-        staticBody,
-        kinematicBody,
-        dynamicBody
-    };
-
-    BodyType type;
 };
 
 class ShapeDef {
@@ -118,7 +109,7 @@ class CompPhysics : public Component
 public:
     CompPhysics(const ComponentId& id, GameEvents& gameEvents, const BodyDef& rBodyDef = BodyDef());
 
-    const ComponentType& getTypeId() const { return getTypeIdStatic(); }
+    const ComponentTypeId& getTypeId() const { return getTypeIdStatic(); }
 
     void setBodyDef(const BodyDef& rBodyDef) { m_bodyDef = rBodyDef; }
 
@@ -164,7 +155,7 @@ public:
     void loadFromPropertyTree(const boost::property_tree::ptree& propTree);
     void writeToPropertyTree(boost::property_tree::ptree& propTree) const;
 
-    static const ComponentType& getTypeIdStatic(); // eindeutige ID für diese Komponentenart (gleich wie Klassennamen, siehe CompPhysics.cpp)
+    static const ComponentTypeId& getTypeIdStatic(); // eindeutige ID für diese Komponentenart (gleich wie Klassennamen, siehe CompPhysics.cpp)
 
 private:
     Vector2D getPosition() const;

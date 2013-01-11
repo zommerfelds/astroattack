@@ -10,9 +10,9 @@
 #include <boost/property_tree/ptree.hpp>
 
 // eindeutige ID
-const ComponentType& CompGravField::getTypeIdStatic()
+const ComponentTypeId& CompGravField::getTypeIdStatic()
 {
-    static boost::scoped_ptr<ComponentType> typeId (new ComponentType("CompGravField"));
+    static boost::scoped_ptr<ComponentTypeId> typeId (new ComponentTypeId("CompGravField"));
     return *typeId;
 }
 

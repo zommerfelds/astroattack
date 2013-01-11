@@ -10,6 +10,7 @@
 #include "EditorFrame.h"
 
 #include "common/components/CompShape.h"
+#include "common/components/CompPosition.h"
 
 #include "common/ComponentManager.h"
 #include "common/GameEvents.h"
@@ -224,15 +225,30 @@ void GlCanvasController::onPaint(wxPaintEvent& evt)
 
     if (m_editor.getGuiData().selectedEntity)
     {
+        const CompShape* compShape = NULL;
+        const CompPosition* compPos = NULL;
         foreach(const Component* component, m_editor.getGuiData().selectedEntity->second)
         {
             if (component->getTypeId() == CompShape::getTypeIdStatic())
             {
-                const CompShape* compShape = static_cast<const CompShape*>(component);
-                m_renderer.drawShape(*compShape, Color(1.0f, 0.0f, 0.0f, 0.3f), true);
-                break;
+                compShape = static_cast<const CompShape*>(component);
+                if (compPos != NULL) break;
+            }
+            else if (component->getTypeId() == CompPosition::getTypeIdStatic())
+            {
+                compPos = static_cast<const CompPosition*>(component);
+                if (compShape != NULL) break;
             }
         }
+        Vector2D position;
+        float angle = 0.0f;
+        if (compPos != NULL)
+        {
+            position = compPos->getDrawingPosition();
+            angle = compPos->getDrawingOrientation();
+        }
+
+        m_renderer.drawShape(*compShape, Color(1.0f, 0.0f, 0.0f, 0.3f), position, angle, true);
     }
 
     m_renderer.getTextureManager().clear();

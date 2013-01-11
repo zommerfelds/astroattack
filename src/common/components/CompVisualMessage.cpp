@@ -10,9 +10,9 @@
 #include <boost/scoped_ptr.hpp>
 
 // eindeutige ID
-const ComponentType& CompVisualMessage::getTypeIdStatic()
+const ComponentTypeId& CompVisualMessage::getTypeIdStatic()
 {
-	static boost::scoped_ptr<ComponentType> typeId (new ComponentType("CompVisualMessage"));
+	static boost::scoped_ptr<ComponentTypeId> typeId (new ComponentTypeId("CompVisualMessage"));
     return *typeId;
 }
 

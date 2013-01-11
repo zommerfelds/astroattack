@@ -9,6 +9,8 @@
 #include "common/components/CompPhysics.h"
 #include "common/components/CompShape.h"
 #include "common/components/CompPosition.h"
+#include "common/components/CompPath.h"
+#include "common/components/CompPathMove.h"
 
 #include "common/GameEvents.h"
 #include "common/Foreach.h"
@@ -36,19 +38,23 @@ ComponentManager::~ComponentManager()
 namespace
 {
 
-// components that have to to be ordered must be placed here
+// Components that have to to be ordered must be placed here
+// Components with lower indices will be initialized first
+// NOTE: it would actually be nice if the order wouldn't matter, but for now this is simpler
 ComponentId order[] = {
     CompShape::getTypeIdStatic(),
     CompPosition::getTypeIdStatic(),
-    CompPhysics::getTypeIdStatic()
+    CompPhysics::getTypeIdStatic(),
+    CompPath::getTypeIdStatic(),
+    CompPathMove::getTypeIdStatic()
 };
 
-const int numOrdered = 3;//sizeof(order) / sizeof (order[0]);
+const int numOrdered = sizeof(order) / sizeof (order[0]);
 
 bool compareComps(boost::shared_ptr<Component> first, boost::shared_ptr<Component> second)
 {
-    ComponentId* pos1 = std::find(order, order+numOrdered, first->getEntityId());
-    ComponentId* pos2 = std::find(order, order+numOrdered, second->getEntityId());
+    ComponentId* pos1 = std::find(order, order+numOrdered, first->getTypeId());
+    ComponentId* pos2 = std::find(order, order+numOrdered, second->getTypeId());
 
     if (pos1 != pos2)
         return pos1 < pos2;
@@ -123,7 +129,7 @@ bool ComponentManager::renameEntity(const EntityId& oldId, const EntityId& newId
     return true;
 }
 
-Component* ComponentManager::getComponent(const EntityId& entId, const ComponentType& compType, const ComponentId& compId) const
+Component* ComponentManager::getComponent(const EntityId& entId, const ComponentTypeId& compType, const ComponentId& compId) const
 {
     EntityMap::const_iterator eit = m_entities.find(entId);
     if ( eit == m_entities.end() )

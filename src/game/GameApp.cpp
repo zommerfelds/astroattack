@@ -346,6 +346,8 @@ void GameApp::mainLoop()
         }
 
         handleSdlQuitEvents(sdlWindowEvent); // check if user wants to close window
+
+        SDL_Delay(0);
     }
 
     ////////////////////////////////////////////////////////

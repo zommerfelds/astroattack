@@ -22,9 +22,9 @@
 using boost::property_tree::ptree;
 
 // eindeutige ID
-const ComponentType& CompTrigger::getTypeIdStatic()
+const ComponentTypeId& CompTrigger::getTypeIdStatic()
 {
-    static boost::scoped_ptr<ComponentType> typeId (new ComponentType("CompTrigger"));
+    static boost::scoped_ptr<ComponentTypeId> typeId (new ComponentTypeId("CompTrigger"));
     return *typeId;
 }
 
