@@ -6,3 +6,5 @@ configure
 depcomp
 install-sh
 missing
+AstroAttack.log
+world.txt
