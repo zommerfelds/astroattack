@@ -1,29 +1,11 @@
-                                                          
-                                 ,d                              
-                                 88                              
-      ,adPPYYba,  ,adPPYba,  MM88MMM  8b,dPPYba,   ,adPPYba,   
-      ""     `Y8  I8[    ""    88     88P'   "Y8  a8"     "8a  
-      ,adPPPPP88   `"Y8ba,     88     88          8b       d8  
-      88,    ,88  aa    ]8I    88,    88          "8a,   ,a8"  
-      `"8bbdP"Y8  `"YbbdP"'    "Y888  88           `"YbbdP"'        
-      
-   ===============================================================   
+AstroAttack
+===========
 
-                 ,d       ,d                             88         
-                 88       88                             88         
-   ,adPPYYba,  MM88MMM  MM88MMM  ,adPPYYba,   ,adPPYba,  88   ,d8   
-   ""     `Y8    88       88     ""     `Y8  a8"     ""  88 ,a8"    
-   ,adPPPPP88    88       88     ,adPPPPP88  8b          8888[      
-   88,    ,88    88,      88,    88,    ,88  "8a,   ,aa  88`"Yba,   
-   `"8bbdP"Y8    "Y888    "Y888  `"8bbdP"Y8   `"Ybbd8"'  88   `Y8a  
-   
- ====================================================================  
-           
-   Game by Christian Zommerfelds
-   aero_super@yahoo.com
-   Copyright (c) 2012
+* Game by Christian Zommerfelds
+* Contact: aero_super \<at\> yahoo \<dot\> com
+* Copyright (c) 2013
 
-Please send me an E-mail if you have any problems/suggestions.
+Please send me an e-mail if you have any problems/suggestions.
 
 Dependencies
 ------------
@@ -71,10 +53,10 @@ Here an example of how you could install Box2D:
 Now, in the terminal, go to the directory where this file is located.
 Type each of the following commands and check the output for errors.
 
-./bootstrap
-./configure
-make
-./AstroAttack
+    ./bootstrap
+    ./configure
+    make
+    ./AstroAttack
 
 
 Troubleshooting
@@ -83,34 +65,25 @@ Troubleshooting
 1) ftheader.h not found
 
 In case of
-/usr/include/ft2build.h:56:38: error: freetype/config/ftheader.h: No such file or directory
+
+    /usr/include/ft2build.h:56:38: error: freetype/config/ftheader.h: No such file or directory
 That means that the FTGL library can't find the freetype library.
 
-Try to add CPPFLAGS=-I/usr/include/freetype2 to the configure command.
-(i.e.: ./configure CPPFLAGS=...)
+Try to add `CPPFLAGS=-I/usr/include/freetype2` to the configure command.
+(i.e.: `./configure CPPFLAGS=...`)
 Alternatively you can add a link to the library:
-sudo ln -s /usr/include/freetype2/freetype /usr/include/freetype
 
-2) others
-
-Send a mail to aero_super@yahoo.com. :-)
+    sudo ln -s /usr/include/freetype2/freetype /usr/include/freetype
 
 
 Development
 -----------
 
-1) SVN
-
-Set the line ending style for all source files:
-find . -name '*.cpp' -not -iwholename '*.svn*' -exec svn ps svn:eol-style LF {} \;
-find . -name '*.h' -not -iwholename '*.svn*' -exec svn ps svn:eol-style LF {} \;
-
-
-2) Useful commands for development
-
 Building with warnings activated:
-../configure CXXFLAGS="-Wall"
+
+    ../configure CXXFLAGS="-Wall"
 
 Building with warnings and debug symbols activated and using colorgcc for color output
-../configure CXX="colorgcc -lstdc++" CXXFLAGS="-Wall -g"
+
+    ../configure CXX="colorgcc -lstdc++" CXXFLAGS="-Wall -g"
 
