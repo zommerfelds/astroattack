@@ -1,6 +1,8 @@
 AstroAttack
 ===========
 
+![](https://raw.github.com/aero-z/astroattack/gh-pages/images/screenshot.jpg)
+
 * Game by Christian Zommerfelds
 * Contact: aero_super \<at\> yahoo \<dot\> com
 * Copyright (c) 2013
