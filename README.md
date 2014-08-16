@@ -43,8 +43,8 @@ Install the following packages:
 * libwxgtk2.8-dev (same thing)
 * libbox2d-dev
 
-AstroAttack needs Box2D 2.3 (as of this writing libbox2d in Debian stable was only 2.0)
-Here an example of how you could install Box2D:
+AstroAttack needs Box2D 2.3 (as of this writing libbox2d in Debian stable was only 2.0, Debian testing/Ubuntu is OK).
+Here's an example of how you could install Box2D:
 
 - Install the packages:
 * cmake (for building Box2D)
