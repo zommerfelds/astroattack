@@ -41,15 +41,16 @@ Install the following packages:
 * libgtest-dev (optional, or use the --disable-test option in the ./configure step)
 * wx-common (for the editor; currently no way to disable the editor)
 * libwxgtk2.8-dev (same thing)
+* libbox2d-dev
 
-AstroAttack needs Box2D 2.1 (as of this writing libbox2d in Debian was only 2.0)
+AstroAttack needs Box2D 2.3 (as of this writing libbox2d in Debian stable was only 2.0)
 Here an example of how you could install Box2D:
 
 - Install the packages:
 * cmake (for building Box2D)
 * libxi-dev (optional; for Box2D with examples)
 - Download Box2D 2.1.x from the box2d.org.
-- Build the Box2D package (see Building.txt) with "cmake -DBOX2D_INSTALL=ON -DBOX2D_BUILD_SHARED=ON -DBOX2D_BUILD_EXAMPLES=OFF .." then "make"
+- Build the Box2D package (see Building.txt) with `cmake -DBOX2D_INSTALL=ON -DBOX2D_BUILD_SHARED=ON -DBOX2D_BUILD_EXAMPLES=OFF ..` then `make`
 - Install the Box2D library (sudo make install)
 
 Now, in the terminal, go to the directory where this file is located.

@@ -144,7 +144,7 @@ void PhysicsSystem::update()
 
         Vector2D gravForce = compPhys->m_gravField->getAcceleration(pBody->GetWorldCenter());
         gravForce *= pBody->GetMass();
-        pBody->ApplyForce( *gravForce.to_b2Vec2(), pBody->GetWorldCenter() );
+        pBody->ApplyForce(*gravForce.to_b2Vec2(), pBody->GetWorldCenter(), true);
 
         compPhys->m_nUpdatesSinceGravFieldChange++;
     }

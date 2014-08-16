@@ -149,7 +149,7 @@ void CompPhysics::applyLinearImpulse(const Vector2D& impulse, const Vector2D& po
         log(Warning) << "applyLinearImpulse: component was not yet initialized by physics system\n";
         return;
     }
-    m_body->ApplyLinearImpulse(*impulse.to_b2Vec2(), *point.to_b2Vec2());
+    m_body->ApplyLinearImpulse(*impulse.to_b2Vec2(), *point.to_b2Vec2(), true);
 }
 
 void CompPhysics::applyForce(const Vector2D& impulse, const Vector2D& point)
@@ -159,7 +159,7 @@ void CompPhysics::applyForce(const Vector2D& impulse, const Vector2D& point)
         log(Warning) << "applyForce: component was not yet initialized by physics system\n";
         return;
     }
-    m_body->ApplyForce(*impulse.to_b2Vec2(), *point.to_b2Vec2());
+    m_body->ApplyForce(*impulse.to_b2Vec2(), *point.to_b2Vec2(), false);
 }
 
 void CompPhysics::rotate( float deltaAngle, const Vector2D& localPoint )
