@@ -33,11 +33,7 @@ private:
     std::string m_msg;
 };
 
-//-------------------------------- Funktionen --------------------------------//
-// TODO: refactor place
-
-// Plattform-übergreifende Dialog-Box Funktion
-// Nur benutzen in schweren Fällen wann die GUI noch nicht bereit ist.
-void OsMsgBox( const std::string& message, const std::string& title ); // in OsMsgBox.cpp
+// TODO: refactor where this is implemented place (OsMsgBox.cpp)
+void OsMsgBox( const std::string& message, const std::string& title );
 
 #endif

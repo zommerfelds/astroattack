@@ -26,8 +26,8 @@ This is the list of what you need to build and run AstroAttack:
  - Google C++ Testing Framework (for unit tests)
 
 
-How to build on Debian based system
------------------------------------
+How to build on a Debian based system
+-------------------------------------
 
 Install the following packages:
 * autoconf
@@ -47,8 +47,8 @@ AstroAttack needs Box2D 2.3 (as of this writing libbox2d in Debian stable was on
 Here's an example of how you could install Box2D:
 
 - Install the packages:
-* cmake (for building Box2D)
-* libxi-dev (optional; for Box2D with examples)
+  - cmake (for building Box2D)
+  - libxi-dev (optional; for Box2D with examples)
 - Download Box2D 2.1.x from the box2d.org.
 - Build the Box2D package (see Building.txt) with `cmake -DBOX2D_INSTALL=ON -DBOX2D_BUILD_SHARED=ON -DBOX2D_BUILD_EXAMPLES=OFF ..` then `make`
 - Install the Box2D library (sudo make install)
@@ -60,6 +60,18 @@ Type each of the following commands and check the output for errors.
     ./configure
     make
     ./AstroAttack
+
+
+How to build on Mac OS X with Homebrew
+--------------------------------------
+
+I was able to build AstroAttack on my Mac with the following commands:
+
+`brew install automake wxwidgets sdl sdl_mixer ftgl box2d gcc devil`
+`CPPFLAGS="`pkg-config --cflags freetype2` `sdl-config --cflags`" LDFLAGS=`sdl-config --libs` ./configure --disable-test`
+`make`
+
+This process could definitely be improved.
 
 
 Troubleshooting

@@ -114,8 +114,8 @@ std::vector<const CompType*> ComponentManager::getComponents(const EntityId& id)
     if (eit == m_entities.end())
         return ret;
 
-    ComponentMap::iterator begin;
-    ComponentMap::iterator end;
+    ComponentMap::const_iterator begin;
+    ComponentMap::const_iterator end;
     if (CompType::getTypeIdStatic() == Component::getTypeIdStatic())
     {
         begin = eit->second.begin();
@@ -123,7 +123,7 @@ std::vector<const CompType*> ComponentManager::getComponents(const EntityId& id)
     }
     else
     {
-        std::pair<ComponentMap::iterator, ComponentMap::iterator> equalRange = eit->second.equal_range(CompType::getTypeIdStatic());
+        std::pair<ComponentMap::const_iterator, ComponentMap::const_iterator> equalRange = eit->second.equal_range(CompType::getTypeIdStatic());
         begin = equalRange.first;
         end = equalRange.second;
     }

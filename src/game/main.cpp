@@ -18,9 +18,8 @@ namespace {
 const std::string cConfigFileName = "data/config.info";
 }
 
-//#define CATCH_EXCEPTION
+#define CATCH_EXCEPTION
 
-// Programmstart!
 int main ( int argc, char* argv[] )
 {
     std::vector<std::string> args (argv+1, argv+argc);
@@ -40,8 +39,8 @@ int main ( int argc, char* argv[] )
             restart = false;
             log(Info).writeHeader(GAME_NAME " " GAME_VERSION);
 
-            GameApp aaApp(args);   // create application object
-            aaApp.run();           // run the game!
+            GameApp aaApp(args);
+            aaApp.run();
 
             if ( aaApp.doRestart() )
             {
@@ -56,7 +55,8 @@ int main ( int argc, char* argv[] )
 #ifdef CATCH_EXCEPTION
     catch ( Exception& e )
     {
-        log(Fatal) << e.getMsg() << "\n"; // Diesen anzeigen
+        log(Fatal) << e.getMsg() << "\n";
+        OsMsgBox(e.getMsg(), "Exception");
     }
     catch ( std::bad_alloc& )
     {
@@ -64,7 +64,7 @@ int main ( int argc, char* argv[] )
     }
     catch ( std::exception& e )
     {
-        log(Fatal) << e.what() << "\n"; // Fehler ausgeben
+        log(Fatal) << e.what() << "\n";
     }
     catch (...)
     {
@@ -74,5 +74,5 @@ int main ( int argc, char* argv[] )
 
     writeConfig(cConfigFileName, gConfig);
 
-    return 0; // Programm beenden!
+    return 0;
 }
