@@ -84,7 +84,7 @@ In case of
     /usr/include/ft2build.h:56:38: error: freetype/config/ftheader.h: No such file or directory
 That means that the FTGL library can't find the freetype library.
 
-Try to add `CPPFLAGS=-I/usr/include/freetype2` to the configure command.
+Try to add ```CPPFLAGS="`pkg-config --cflags freetype2`"``` to the configure command.
 (i.e.: `./configure CPPFLAGS=...`)
 Alternatively you can add a link to the library:
 
