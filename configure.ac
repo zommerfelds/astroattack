@@ -26,8 +26,6 @@ AC_SEARCH_LIBS(SDL_Init, SDL, [], [AC_MSG_ERROR("SDL required!")])
 AC_SEARCH_LIBS(ftglGetFontError, ftgl, [], [AC_MSG_ERROR("FTGL required!")])
 AC_SEARCH_LIBS(b2_version, Box2D, [], [AC_MSG_ERROR("Box2D required!")]) # Box2D vs box2d?
 AC_SEARCH_LIBS(Mix_OpenAudio, SDL_mixer, [], [AC_MSG_ERROR("SDL_mixer required!")])
-#AC_SEARCH_LIBS(glViewport, GL, [], [AC_MSG_ERROR("OpenGL required!")])
-#AC_SEARCH_LIBS(gluBuild2DMipmaps, GLU, [], [AC_MSG_ERROR("OpenGL Utility Library (libGLU) required!")])
 AC_SEARCH_LIBS(ilInit, IL, [], [AC_MSG_ERROR("DevIL (libIL) required!")])
 AC_SEARCH_LIBS(iluInit, ILU, [], [AC_MSG_ERROR("DevIL (libILU) required!")])
 AC_CHECK_HEADER(boost/shared_ptr.hpp, [], [AC_MSG_ERROR("boost/shared_ptr.hpp required!")] )
@@ -35,6 +33,25 @@ AC_CHECK_HEADER(boost/make_shared.hpp, [], [AC_MSG_ERROR("boost/make_shared.hpp 
 AC_CHECK_HEADER(boost/scoped_ptr.hpp, [], [AC_MSG_ERROR("boost/scoped_ptr.hpp required!")] )
 AC_CHECK_HEADER(boost/foreach.hpp, [], [AC_MSG_ERROR("boost/foreach.hpp required!")] )
 AC_CHECK_HEADER(boost/bind.hpp, [], [AC_MSG_ERROR("boost/bind.hpp required!")] )
+
+# Check for OpenGL (Original or Mesa) (or osX-framework)
+AC_CHECK_HEADERS(GL/gl.h GL/glu.h,,
+         [AC_CHECK_HEADERS(OpenGL/gl.h OpenGL/glu.h,,
+           [echo "OpenGL is mandatory";exit 1])]
+)
+
+if test `uname -s` != Darwin;
+then
+AC_CHECK_LIB(GL, glInitNames,,
+     AC_CHECK_LIB(MesaGL,glInitNames,,
+            echo "OpenGL is mandatory";exit 1)
+)
+
+AC_CHECK_LIB(GLU, gluLookAt, ,
+     AC_CHECK_LIB(MesaGLU,gluLookAt,,
+     echo "incomplete OpenGL (no GLU)";exit 1)
+)
+fi
 
 AM_OPTIONS_WXCONFIG
 reqwx=2.4.0

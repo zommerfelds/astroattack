@@ -6,6 +6,8 @@
 
 * Medium priority *
 
+- Clear OS X compiler warnings
+- Mac OS X error: "Loading music: Unrecognized music format"
 - Screen resolution/mouse/camera not yet perfect: try it with resolution 1000x400
 - Falling player, move cursor out of window, move back, strange behavior of camera
 - rule of three?
