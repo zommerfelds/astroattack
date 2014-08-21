@@ -47,7 +47,7 @@ InputSubSystem::InputSubSystem() : m_sdlKeyStates ( NULL ),
     m_keyMap[EditorToggleHelp] = SDLK_h;
     m_keyMap[SlideShowNext] = SDLK_RIGHT;
     m_keyMap[SlideShowBack] = SDLK_LEFT;
-    m_keyMap[SlideShowSkip] = SDLK_DELETE;
+    m_keyMap[SlideShowSkip] = SDLK_TAB;
 }
 
 // Eingabestatus speichern (Maus und Tastatur)

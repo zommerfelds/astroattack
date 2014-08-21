@@ -1,40 +1,41 @@
 music "data/Music/130463___.mp3.ogg"
 slide {
     image "data/Intro/1 Planet.png"
-    text "Auf einem winzigen Planeten irgendwo im riesigen Universum lebt\neine kleine Zivilisation von Menschen."
+    text "On a tiny little planet in the middle of the vast universe\nthere once lived a small civilisation of humans."
+    text "The planet was called PW-47."
 }
 slide {
     image "data/Intro/2 Kristall.png"
-    text "Das Zentrum dieses Planeten ist reich an Xymin-Kristall\neine seltene Kristallsorte, die sehr wertvoll in dieser Galaxie ist."
+    text "The core of that planet was rich in Xymin crystal, a rare\nundiscovered type of mineral that holds a massive amount of energy."
 }
 slide {
     image "data/Intro/3 Monument.png"
-    text "Mit dem Kristall bauten die Bewohner ein grosses Monument,\ndas sehr viel Energie ausstrahlt."
+    text "Unaware of the powers of the crystal, the inhabitants collected all the\nXymin they could find and built a shiny monument out of it."
 }
 slide {
     image "data/Intro/4 Dr Alpha.png"
-    text "Doktor Alpha ist ein galaxieweit bekannter Verbrecher"
+    text "Dr. Alpha was known galaxy-wide as a devious criminal.\nHe knew about the powers of the Xymin crystal."
 }
 slide {
     image "data/Intro/5 Dr Alpha Traum.png"
-    text "Er wollte schon immer das Monument rauben...\nMit dem hätte er genug Energie um die ganze Galaxie zu erobern."
+    text "He carefully planned a way to get his hands on the monument. With the\nmonument, he would have enough energy to take over the whole galaxy."
 }
 slide {
     image "data/Intro/6 Dr Alpha Attack.png"
-    text "Eines Tages kommt Doktor Alpha mit seinem Riesenstaubsauger mit\nSuperkraft."
-    text "Er saugt nicht nur das Xymin-Kristall-Monument, sondern\nauch alle Einwohner des kleinen Planeten..."
+    text "One day, out of nowhere, Dr. Alpha appeared in the sky of the little\nplanet, in a spaceship equipped with a super-force vacuum."
+    text "Dr. Alpha sucked in the Xymin monument, and he didn't stop there;\nhe also captured all the inhabitants of the planet."
 }
 slide {
     image "data/Intro/7 Jack and Prof.png"
-    text "Nur 2 Personen schafften es, nicht gesaugt zu werden:\nJack und Professor Z."
+    text "Only two people could resist the attack of the giant vacuum:\nJack and Professor Z."
 }
 slide {
     image "data/Intro/8 Dr Alpha fliegt.png"
-    text "Dr. Alpha fliegt schwer beladen los -\nmit dem Monument und alle Einwohner im Sack."
+    text "Dr. Alpha's spaceship flew away with its heavy load.\nHe had in his space-bag the extremely valuable monument and the people of PW-47."
 }
 slide {
     image "data/Intro/9 Jack and Prof folgen.png"
-    text "5, 4, 3, 2,...  Jack und Professor Z starten ihre Rakete und folgen\nDr. Alpha."
+    text "5, 4, 3, 2, 1, 0... The courageous Jack and Prof. Z quickly started\ntheir rocket to follow Dr. Alpha and try to save their friends."
 }
 ;slide
 ;{

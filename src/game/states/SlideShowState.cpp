@@ -126,7 +126,8 @@ void SlideShowState::resume()      // State wiederaufnehmen
 void SlideShowState::update()      // Spiel aktualisieren
 {
     ++m_textUpdateCounter;
-    if( m_textUpdateCounter > 1 ) // 1 is the speed (fast)
+    const int framesPerChar = 1;
+    if (m_textUpdateCounter > framesPerChar)
     {
         if ( m_slideShow.slides[m_currentSlide].textPages[m_currentTextPage].size() > m_dispCharCount )
         {
@@ -136,7 +137,7 @@ void SlideShowState::update()      // Spiel aktualisieren
         m_textUpdateCounter = 0;
     }
 
-    if ( getSubSystems().input.isKeyDown(SlideShowNext) )
+    if (getSubSystems().input.isKeyDown(SlideShowNext))
     {
         if ( m_overlayAlpha == 0.0f )
         {
@@ -156,9 +157,9 @@ void SlideShowState::update()      // Spiel aktualisieren
         }
     }
 
-    if ( getSubSystems().input.isKeyDown(SlideShowBack) )
+    if (getSubSystems().input.isKeyDown(SlideShowBack))
     {
-        if ( m_overlayAlpha == 0.0f && m_currentSlide != 0 )
+        if (m_overlayAlpha == 0.0f && !(m_currentSlide == 0 && m_currentTextPage == 0))
         {
             if (m_currentTextPage != 0)
             {
@@ -176,7 +177,7 @@ void SlideShowState::update()      // Spiel aktualisieren
         }
     }
 
-    if ( getSubSystems().input.isKeyDown(SlideShowSkip) )
+    if (getSubSystems().input.isKeyDown(SlideShowSkip))
     {
         //boost::shared_ptr<PlayingState> playState ( new PlayingState( GetSubSystems() ) ); // Zum Spiel-Stadium wechseln
         //GetSubSystems().stateManager->ChangeState( playState ); // State wird gewechselt (und diese wird gelöscht)
@@ -185,11 +186,9 @@ void SlideShowState::update()      // Spiel aktualisieren
         return; // Sofort raus, da dieser State nicht mehr existiert!
     }
 
-    // wenn momentan Bild gewechselt wird
     if ( m_overlayAlpha != 0.0f )
     {
         const float cMasterOffsetStepX = -0.15f;
-        // Schwarze Blende verdunkeln oder aufhellen
         if ( m_fadeOut )
         {
             if ( m_goBack )
@@ -202,7 +201,6 @@ void SlideShowState::update()      // Spiel aktualisieren
         {
             m_overlayAlpha -= OVERLAY_STEP;
         }
-        // Falls Maximaldunkelheit erreicht wurde, Bild wechseln!
         if ( m_overlayAlpha >= 1.0f )
         {
             m_fadeOut = false;
@@ -271,13 +269,10 @@ void SlideShowState::frame( float /*deltaTime*/ )
     getSubSystems().input.update(); // neue Eingaben lesen
 }
 
-void SlideShowState::draw( float /*accumulator*/ )        // Spiel zeichnen
+void SlideShowState::draw( float /*accumulator*/ )
 {
     RenderSystem& renderer = getSubSystems().renderer;
-
     renderer.clearScreen();
-
-    // Bild zeichnen
     {
         float texCoord[8] = { 0.0f, 0.0f,
                              0.0f, 1.0f,
@@ -289,25 +284,9 @@ void SlideShowState::draw( float /*accumulator*/ )        // Spiel zeichnen
                                  0.95f + m_imageCornerOffsetX[3] + m_imageCornerOffsetMasterX, 0.02f + m_imageCornerOffsetY[3] + m_imageCornerOffsetMasterY };
         renderer.drawTexturedQuad( texCoord, vertexCoord, m_slideShow.slides[m_currentSlide].imageFileName, true );
     }
-    // Text zeichnen
-    renderer.drawString( m_slideShow.slides[m_currentSlide].textPages[m_currentTextPage].substr(0,m_dispCharCount), "FontW_m", 0.15f, 0.875f );
-    
-    // Farbe über den Text (nur Test)
-    /*{
-        float w=0.0f,h=0.0f;
-        renderer.getFontManager().getDimensions( m_slideShow.slides[m_currentSlide].textPages[0].substr(0,m_dispCharCount), "FontW_m", w, h );
-        float vertexCoord[8] = { 0.15f, 0.8f,
-                                 0.15f, 0.8f+h,
-                                 0.15f+w, 0.8f+h,
-                                 0.15f+w, 0.8f };
-        renderer.drawColorQuad( vertexCoord, 0.2f, 0.9f, 0.3f, 0.6f, false );
-    }*/
-
-    // schwarze Blendung zeichnen
+    renderer.drawString( m_slideShow.slides[m_currentSlide].textPages[m_currentTextPage].substr(0,m_dispCharCount), "FontW_m", 0.5f, 0.875f, AlignCenter );
     renderer.drawOverlay( 0.0f, 0.0f, 0.0f, m_overlayAlpha );
-
-    // Info-Text
-    renderer.drawString( "PFEIL NACH RECHTS: weiterfahren   PFEIL NACH LINKS: zurück   DELETE: Intro überspringen", "FontW_s", 0.5f, 1.0f, AlignCenter, AlignBottom );
+    renderer.drawString( "[Right]: continue   [Left]: back   [Tab]: skip", "FontW_s", 0.5f, 1.0f, AlignCenter, AlignBottom );
 }
 
 void SlideShowState::loadSlideShow()
