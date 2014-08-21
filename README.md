@@ -64,6 +64,8 @@ make
 ./AstroAttack
 ```
 
+Any suggestions for improvement are welcome. I wasn't yet able to confirm that the editor works on Mac.
+
 
 How to build on Windows with Visual Studio
 ------------------------------------------
