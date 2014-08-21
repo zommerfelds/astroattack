@@ -20,7 +20,6 @@ CameraController::CameraController(RenderSystem& renderSubSystem, float aspectRa
   : m_position (),
     m_zoom ( 1.0f ),
     m_rotation ( 0.0f ),
-    m_rotationVel ( 0.0f ),
     m_minZoom ( FLT_MIN ),
     m_maxZoom ( FLT_MAX ),
     m_viewWidth ( 0.0f ),     // will be set later

@@ -70,7 +70,6 @@ private:
     Vector2D m_position;
     float m_zoom;
     float m_rotation;
-    float m_rotationVel;
 
     float m_minZoom;
     float m_maxZoom;
