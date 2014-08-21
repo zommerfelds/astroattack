@@ -1,7 +1,7 @@
 AstroAttack
 ===========
 
-AstroAttack is a space themed platform and puzzle game in 2D. You live in a small planet that gets attacked by an evil character and your mission is to explore the universe to recover all the stolen resources and captured inhabitants. The game features moveable objects, different forms of gravitation, free-form shapes and interesting graphics. The game is in a very early development stage.
+AstroAttack is a space themed platform and puzzle game in 2D. The player comes from a small planet that was attacked by an evil character and the player's mission is to explore the universe to recover all the stolen resources and captured inhabitants. The game features moveable objects, different forms of gravitation, free-form shapes and interesting graphics. The game is in a very early development stage.
 
 * Game design, programming and most assets by Christian Zommerfelds
 * Copyright © 2014
@@ -61,6 +61,7 @@ brew install automake wxwidgets sdl sdl_mixer ftgl box2d gcc devil
 ./bootstrap
 ./configure --disable-test CPPFLAGS="`pkg-config --cflags freetype2` `sdl-config --cflags`" LDFLAGS="`sdl-config --libs`"
 make
+./AstroAttack
 ```
 
 
