@@ -7,8 +7,7 @@
 #ifndef MAIN_H
 #define MAIN_H
 
-// Version des Spieles
 #define GAME_NAME "AstroAttack"
-#define GAME_VERSION "0.1.0"
+#define GAME_VERSION "0.2.0-SNAPSHOT"
 
 #endif
