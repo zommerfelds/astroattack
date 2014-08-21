@@ -1,7 +1,7 @@
 /*
  * Texture.h
  * This file is part of Astro Attack
- * Copyright 2012 Christian Zommerfelds
+ * Copyright (c) 2014 Christian Zommerfelds
  */
 
 // Verwaltung von Texturen und Animationen

@@ -1,7 +1,7 @@
 /*
  * CompTrigger_Conditions.h
  * This file is part of Astro Attack
- * Copyright 2012 Christian Zommerfelds
+ * Copyright (c) 2014 Christian Zommerfelds
  */
 
 // Enzelne Bedingungen für CompTrigger Komponente
