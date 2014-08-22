@@ -11,6 +11,7 @@
 #define SLIDESHOWSTATE_H
 
 #include "game/GameState.h"
+#include "common/Texture.h"
 
 #include <string>
 #include <vector>
@@ -79,6 +80,7 @@ private:
     float m_imageCornerOffsetXDir[4];
     float m_imageCornerOffsetYDir[4];
 
+    std::vector<TextureId> m_loadedTextures;
 };
 
 #endif

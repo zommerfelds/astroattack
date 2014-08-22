@@ -81,8 +81,10 @@ void SlideShowState::init()        // State starten
     info.wrapModeY = WrapClamp;
     info.scale = 1.0;
     info.quality = (TexQuality) gConfig.get<int>("TexQuality");
-    for ( size_t i = 0; i < m_slideShow.slides.size(); ++i )
+    for ( size_t i = 0; i < m_slideShow.slides.size(); ++i ) {
         getSubSystems().renderer.getTextureManager().loadTexture( m_slideShow.slides[i].imageFileName, m_slideShow.slides[i].imageFileName, info );
+        m_loadedTextures.push_back(m_slideShow.slides[i].imageFileName);
+    }
     
     // GUI modus
     getSubSystems().renderer.setMatrix(RenderSystem::GUI);
@@ -99,19 +101,18 @@ void SlideShowState::init()        // State starten
     log(Info) << "[ Done ]\n";
 }
 
-void SlideShowState::cleanup()     // State abbrechen
+void SlideShowState::cleanup()
 {
-    // wird gebremst...
     getSubSystems().sound.stopMusic( 500 );
     getSubSystems().sound.freeSound( "sound" );
     getSubSystems().sound.freeSound( "write" );
     getSubSystems().sound.freeMusic( "slideShowMusic" );
 
-    // Bilder wieder freisetzen
-    for ( size_t i = 0; i < m_slideShow.slides.size(); ++i )
+    for ( size_t i = 0; i < m_loadedTextures.size(); ++i )
     {
-        getSubSystems().renderer.getTextureManager().freeTexture( m_slideShow.slides[i].imageFileName );
+        getSubSystems().renderer.getTextureManager().freeTexture( m_loadedTextures[i] );
     }
+    m_loadedTextures.clear();
 }
 
 void SlideShowState::pause()       // State anhalten

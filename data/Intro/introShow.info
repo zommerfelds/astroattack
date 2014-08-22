@@ -1,42 +1,44 @@
 music "data/Music/130463___.mp3.ogg"
 slide {
-    image "data/Intro/1 Planet.png"
+    image "data/Intro/1-planet.png"
     text "On a tiny little planet in the middle of the vast universe\nthere once lived a small civilisation of humans."
     text "The planet was called PW-47."
 }
 slide {
-    image "data/Intro/2 Kristall.png"
+    image "data/Intro/2-crystal.png"
     text "The core of that planet was rich in Xymin crystal, a rare\nundiscovered type of mineral that holds a massive amount of energy."
 }
 slide {
-    image "data/Intro/3 Monument.png"
+    image "data/Intro/3-monument.png"
     text "Unaware of the powers of the crystal, the inhabitants collected all the\nXymin they could find and built a shiny monument out of it."
 }
 slide {
-    image "data/Intro/4 Dr Alpha.png"
+    image "data/Intro/4-dr-alpha.png"
     text "Dr. Alpha was known galaxy-wide as a devious criminal.\nHe knew about the powers of the Xymin crystal."
 }
 slide {
-    image "data/Intro/5 Dr Alpha Traum.png"
+    image "data/Intro/5-dr-alphas-plan.png"
     text "He carefully planned a way to get his hands on the monument. With the\nmonument, he would have enough energy to take over the whole galaxy."
 }
 slide {
-    image "data/Intro/6 Dr Alpha Attack.png"
+    image "data/Intro/6-dr-alpha-attacks.png"
     text "One day, out of nowhere, Dr. Alpha appeared in the sky of the little\nplanet, in a spaceship equipped with a super-force vacuum."
     text "Dr. Alpha sucked in the Xymin monument, and he didn't stop there;\nhe also captured all the inhabitants of the planet."
 }
 slide {
-    image "data/Intro/7 Jack and Prof.png"
+    image "data/Intro/7-jack-and-prof-z-survive.png"
     text "Only two people could resist the attack of the giant vacuum:\nJack and Professor Z."
 }
 slide {
-    image "data/Intro/8 Dr Alpha fliegt.png"
+    image "data/Intro/8-dr-alpha-escapes.png"
     text "Dr. Alpha's spaceship flew away with its heavy load.\nHe had in his space-bag the extremely valuable monument and the people of PW-47."
 }
 slide {
-    image "data/Intro/9 Jack and Prof folgen.png"
+    image "data/Intro/9-jack-and-prof-z-rocket.png"
     text "5, 4, 3, 2, 1, 0... The courageous Jack and Prof. Z quickly started\ntheir rocket to follow Dr. Alpha and try to save their friends."
 }
+; The following slides have no images yet and the text is still in German.
+;
 ;slide
 ;{
 ;    image "data/intro/X.png"

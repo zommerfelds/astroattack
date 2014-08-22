@@ -182,7 +182,7 @@ void TextureManager::loadTexture(const std::string& fileName, TextureId id, cons
     catch (...)
     {
         // Error
-        throw DataLoadException("Error while loading the texture \"" + fileName + "\"!\n" + iluErrorString(ilGetError()) + "\n");
+        throw DataLoadException("Error while loading the texture \"" + fileName + "\": " + iluErrorString(ilGetError()) + ".\n");
     }
     CheckOpenlGlError();
     if (ilGetError())
