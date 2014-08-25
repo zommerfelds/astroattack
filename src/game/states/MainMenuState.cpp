@@ -31,10 +31,11 @@
 #include <boost/bind.hpp>
 #include <boost/make_shared.hpp>
 
+const GameStateId MainMenuState::STATE_ID = "MainMenuState";
+
+namespace {
 const std::string cLevelSequenceFileName = "data/levelSequence.xml";
 const std::string cMenuGraphicsFileName = "data/graphicsMenu.info"; // hier sind Menügrafiken angegeben
-
-const GameStateId MainMenuState::STATE_ID = "MainMenuState";
 
 const std::string menuNames[] =
 { 
@@ -44,10 +45,12 @@ const std::string menuNames[] =
     "OptionsMenu",
 };
 
-const float cTitleVertexCoord[8] = { 0.15f, 0.07f,
-                                     0.15f, 0.2f,
-                                     0.85f, 0.2f,
-                                     0.85f, 0.07f };
+const float cTitleVertexCoord[8] = { 0.1f, 0.07f,
+                                     0.1f, 0.25f,
+                                     0.9f, 0.25f,
+                                     0.9f, 0.07f };
+const float cTitleIntensitySpeed = 0.006f;
+}
 
 MainMenuState::MainMenuState( SubSystems& subSystems, SubMenu startingSubMenu )
 : GameState(subSystems),
@@ -88,12 +91,12 @@ void MainMenuState::init()        // State starten
     getSubSystems().gui.showGroup( menuNames[m_subMenu] );
 
     // *** Hauptbildschirm ***
-    getSubSystems().gui.addWidget( menuNames[Main], make_shared<WidgetLabel>( 0.1f, 0.9f, "Welcome to AstroAttack! [v" GAME_VERSION "]", getSubSystems().renderer.getFontManager() ) );
+    getSubSystems().gui.addWidget( menuNames[Main], make_shared<WidgetLabel>( 0.14f, 0.9f, "Welcome to AstroAttack! [v" GAME_VERSION "]", getSubSystems().renderer.getFontManager() ) );
 
 
     float x = 0.35f;
     float y = 0.4f;
-    float w=0.18f,h=0.05f;
+    float w=0.18f,h=0.05f,w2=0.3f;
     float yspacing = 0.07f;
     float yspacing2 = 0.04f;
 
@@ -131,9 +134,9 @@ void MainMenuState::init()        // State starten
         std::string value = node.name();
         std::string file = node.attribute("file").value();
         if ( value == "level" )
-            getSubSystems().gui.addWidget( menuNames[Play], boost::make_shared<WidgetButton>( Rect(x,x+w,y,y+h), caption, boost::bind( &MainMenuState::onPressedOpenLevel, this, file ), boost::bind( &MainMenuState::onPressedSound, this ) ) );
+            getSubSystems().gui.addWidget( menuNames[Play], boost::make_shared<WidgetButton>( Rect(x,x+w2,y,y+h), caption, boost::bind( &MainMenuState::onPressedOpenLevel, this, file ), boost::bind( &MainMenuState::onPressedSound, this ) ) );
         else if ( value == "slides" )
-            getSubSystems().gui.addWidget( menuNames[Play], boost::make_shared<WidgetButton>( Rect(x,x+w,y,y+h), caption, boost::bind( &MainMenuState::onPressedOpenSlideShow, this, file ), boost::bind( &MainMenuState::onPressedSound, this ) ) );
+            getSubSystems().gui.addWidget( menuNames[Play], boost::make_shared<WidgetButton>( Rect(x,x+w2,y,y+h), caption, boost::bind( &MainMenuState::onPressedOpenSlideShow, this, file ), boost::bind( &MainMenuState::onPressedSound, this ) ) );
 		// NOTE: needs to specify boost:: because of ADL (see http://www.gamedev.net/topic/619313-visual-studio-namespace-problem-ambiguous-call-to-boostmake-shared/)
         y += yspacing;
     }
@@ -242,7 +245,7 @@ void MainMenuState::update()      // Spiel aktualisieren
     }
 
     // AstroAttack banner
-    m_titleIntensityPhase += 0.005f;
+    m_titleIntensityPhase += cTitleIntensitySpeed;
     if ( m_titleIntensityPhase > 2*cPi )
         m_titleIntensityPhase -= 2*cPi;
 }

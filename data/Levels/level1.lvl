@@ -80,7 +80,7 @@ entity
 	component
 	{
 		type CompVisualMessage
-		text "Willkommen zu AstroAttack! Mit den Tasten A und D kann der\nAstronaut nach links und rechts bewegen."
+		text "Wellcome to AstroAttack! Move Jack with the A, W, S, D and space keys."
 	}
 	component
 	{

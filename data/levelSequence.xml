@@ -1,13 +1,11 @@
 <?info version="1.0" encoding="UTF-8"?>
 <root>
-  <slides file="data/Intro/introShow.info" name="Intro">Spielintro</slides>
-  <level file="data/Levels/level1.lvl" name="Level #1">Das erste Level</level>
-  <level file="data/Levels/level2.lvl" name="Level #2">Das zweite Level</level>
-  <level file="data/Levels/level3.lvl" name="Level #3">Das dritte Level</level>
-  <level file="data/Levels/level_visita.lvl" name="Visita">Bla bla</level>
-  <level file="data/Levels/level_grav.lvl" name="Grav Test"/>
-  <level file="data/Levels/adjacent_problem.lvl" name="Adjacent Problem">bla bla</level>
-  <level file="data/Levels/level_new.lvl" name="level_new">keine Ahnung</level>
-  <level file="data/Levels/level_editor.lvl" name="editor"/>
-  <level file="data/Levels/platforms.lvl" name="Platforms"/>
+  <slides file="data/Intro/introShow.info" name="Intro"/>
+  <level file="data/Levels/level1.lvl" name="Demo Level 1"/>
+  <level file="data/Levels/level2.lvl" name="Demo Level 2"/>
+  <level file="data/Levels/level3.lvl" name="Demo Level 3"/>
+  <level file="data/Levels/level_grav.lvl" name="Demo Gravitation"/>
+  <level file="data/Levels/planet.lvl" name="Demo Planet"/>
+  <level file="data/Levels/level_editor.lvl" name="Demo Planet 2"/>
+  <level file="data/Levels/platforms.lvl" name="Demo Platforms"/>
 </root>
