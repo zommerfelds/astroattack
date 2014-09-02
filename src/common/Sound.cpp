@@ -150,14 +150,14 @@ void SoundSystem::loadMusic(const std::string& name, MusicId id)
     }
     if ( m_music.count( id )==1 )
     {
-        log(Warning) << "Loading music: Music with ID \"" << id << "\" exists already! (new music was not loaded)\n";
+        log(Warning) << "Error loading music with ID \"" << id << "\" exists already! (new music was not loaded)\n";
         return;
     }
     Mix_Music *music;
     music=Mix_LoadMUS( name.c_str() );
     if( !music )
     {
-        log(Error) << "Loading music: " << Mix_GetError() << "\n";
+        log(Error) << "Loading music '" << name << "': " << Mix_GetError() << "\n";
         return;
     }
 
