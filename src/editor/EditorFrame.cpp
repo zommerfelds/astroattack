@@ -57,6 +57,7 @@ BEGIN_EVENT_TABLE(EditorFrame, wxFrame)
     EVT_MENU    (wxID_SAVEAS, EditorFrame::onMenuSaveAs)
     EVT_MENU    (wxID_EXIT,   EditorFrame::onMenuExit)
     EVT_MENU    (wxID_ABOUT,  EditorFrame::onMenuAbout)
+    EVT_MENU    (wxID_HELP,  EditorFrame::onMenuHelp)
     EVT_BUTTON  (ID_BUTEDITPROP, EditorFrame::onPropEditBut)
     EVT_BUTTON  (ID_BUTNEWPROP, EditorFrame::onPropNew)
     EVT_LIST_ITEM_ACTIVATED  (ID_PROPLIST, EditorFrame::onPropEditList)
@@ -398,6 +399,14 @@ void EditorFrame::onMenuExit(wxCommandEvent&)
 void EditorFrame::onMenuAbout(wxCommandEvent&)
 {
     AboutDialog dialog(this);
+    dialog.m_staticText->SetLabel(wxT("AstroAttack Editor v###\n\nCopyright © Christian Zommerfelds 2014"));
+    dialog.Fit();
+    showDialog(dialog);
+}
+
+void EditorFrame::onMenuHelp(wxCommandEvent&)
+{
+    HelpDialog dialog(this);
     showDialog(dialog);
 }
 

@@ -76,6 +76,7 @@ private:
     void onMenuSaveAs(wxCommandEvent&);
     void onMenuExit(wxCommandEvent&);
     void onMenuAbout(wxCommandEvent&);
+    void onMenuHelp(wxCommandEvent&);
     void onEntityIdFieldEnter(wxCommandEvent&);
     void onCompIdFieldEnter(wxCommandEvent&);
     void onPropEditBut(wxCommandEvent&);
