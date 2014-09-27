@@ -1,0 +1,10 @@
+
+The contrib folder contains copies of third party libraries and source files used by AstroAttack that coudn't be added as a simple external library. This file contains extra information about the third party packages included in this folder. See each subfolder for more information about the package and their licenses.
+
+pugixml
+=======
+
+- License: MIT
+- Website: http://pugixml.org/
+- Version currently used by AstroAttack: 1.4 with foreach.hpp from revision 1026
+  We use a newer foreach.hpp file because the 1.4 version doesn't work with Boost 1.56
