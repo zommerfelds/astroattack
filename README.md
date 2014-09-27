@@ -57,7 +57,7 @@ How to build on Mac OS X with Homebrew
 I was able to build AstroAttack on a Mac with the following commands:
 
 ```
-brew install automake wxwidgets sdl sdl_mixer ftgl box2d gcc devil
+brew install automake wxwidgets sdl sdl_mixer ftgl box2d gcc devil boost
 ./bootstrap
 ./configure --disable-test CPPFLAGS="`pkg-config --cflags freetype2` `sdl-config --cflags`" LDFLAGS="`sdl-config --libs`"
 make
