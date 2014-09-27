@@ -196,7 +196,7 @@ bool PhysicsSystem::updatePathMove(CompPathMove& compPathMove, CompPhysics& comp
     if (compPathMove.m_updateCount >= compPathMove.m_numUpdatesToNextPoint) // change way-point
     {
         size_t next = compPathMove.getCurrentPathPoint() + 1;
-        std::cerr << "next waypoint = " << next << "\n";
+        //std::cerr << "next waypoint = " << next << "\n";
         size_t end = compPath.getNumPathPoints();
         if (next == end)
         {
@@ -312,7 +312,7 @@ void PhysicsSystem::setNewTarget(CompPathMove& compPathMove, CompPhysics& compPh
 
             compPathMove.m_detalLinearVelocity = posDiff.getUnitVector() * (topVel/compPathMove.m_numUpdatesToAccelerate);
             // TODO angle
-
+            /*
             std::cerr << "length  = " << length << "\n"
                       << "timeNoMax = " << timeNoMax << "\n"
                       << "topVel = " << topVel << "\n"
@@ -321,6 +321,7 @@ void PhysicsSystem::setNewTarget(CompPathMove& compPathMove, CompPhysics& compPh
                       << "distUniform = " << distUniform << "\n"
                       << "timeToFinish = " << timeToFinish << "\n"
                       << "move.topLinVel = " << move.topLinVel << "\n";
+            */
         }
         break;
     }
