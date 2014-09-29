@@ -8,4 +8,5 @@
   <level file="data/Levels/planet.lvl" name="Demo Planet"/>
   <level file="data/Levels/level_editor.lvl" name="Demo Planet 2"/>
   <level file="data/Levels/platforms.lvl" name="Demo Platforms"/>
+  <level file="data/Levels/cave.lvl" name="Demo Cave"/>
 </root>
