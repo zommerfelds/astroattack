@@ -132,11 +132,9 @@ TEST(LevelLoadTest, LoadWriteTest)
                               "data/Levels/level2.lvl",
                               "data/Levels/level3.lvl",
                               "data/Levels/level_grav.lvl",
-                              "data/Levels/level_visita.lvl",
-                              "data/Levels/level_new.lvl",
-                              "data/Levels/adjacent_problem.lvl",
-                              "data/player.info",
-                              "data/Levels/platforms.lvl" };
+                              "data/Levels/planet.lvl",
+                              "data/Levels/platforms.lvl",
+                              "data/player.info" };
     string lvlFileNameOut = "tmp_test_write_lvl.lvl";
 
     foreach(string lvlFileName, lvlFileNames)
