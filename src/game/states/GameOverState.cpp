@@ -25,25 +25,25 @@ GameOverState::GameOverState( SubSystems& subSystems, const std::string& stringT
 {
 }
 
-void GameOverState::init()        // State starten
+void GameOverState::init()
 {
     // GUI modus (Graphical User Interface)
     getSubSystems().renderer.setMatrix(RenderSystem::GUI);
 }
 
-void GameOverState::cleanup()     // State abbrechen
+void GameOverState::cleanup()
 {
 }
 
-void GameOverState::pause()       // State anhalten
+void GameOverState::pause()
 {
 }
 
-void GameOverState::resume()      // State wiederaufnehmen
+void GameOverState::resume()
 {
 }
 
-void GameOverState::update()      // Spiel aktualisieren
+void GameOverState::update()
 {
     if ( getSubSystems().input.isKeyDown(Enter) )
     {
@@ -58,12 +58,12 @@ void GameOverState::frame( float /*deltaTime*/ )
     getSubSystems().input.update(); // neue Eingaben lesen
 }
 
-void GameOverState::draw( float /*accumulator*/ )        // Spiel zeichnen
+void GameOverState::draw( float /*accumulator*/ )
 {
     RenderSystem& renderer = getSubSystems().renderer;
 
     renderer.drawOverlay( cBackgroundColor[0], cBackgroundColor[1], cBackgroundColor[2], 1.0f );
     renderer.drawString( m_stringToShow, "FontW_b", 0.5f, 0.5f, AlignCenter, AlignCenter );
 
-    renderer.drawString( "ENTER: erneut starten   ESC: abbrechen", "FontW_m", 0.5f, 1.0f, AlignCenter, AlignBottom );
+    renderer.drawString( "ENTER: play again   ESC: main menu", "FontW_m", 0.5f, 1.0f, AlignCenter, AlignBottom );
 }
